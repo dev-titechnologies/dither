@@ -33,28 +33,59 @@ module.exports = {
                                         //sails.sockets.broadcast('user', { msg: 'signup set ===========' });
                                         //sails.sockets.emit(req.socket.id,'privateMessage', {msg: 'Hi!'});
                                         sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
-                                        // return res.json(200, {status: 1, message: 'Success'});
-                                        //return res.json(200, {status: 1, msg_type: 'Success' , message: 'Successfully created the token'});
-                                        var email_to        = results.email;
-                                        var email_subject   = 'Dither - Signup';
-                                        var email_template  = 'signup';
-                                        var email_context   = {receiverName: results.name};
-                                        EmailService.sendEmail(email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
-                                            if(err)
-                                            {
-                                                    console.log(err);
-                                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
-                                            }else{
-                                                    //console.log(results);
-                                                    console.log(email_to);
-                                                    console.log(email_subject);
-                                                    console.log(email_template);
-                                                    console.log(email_context);
-                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                            }
+
+                                            // Send Email and Sms  Simultaneously
+                                            async.parallel([
+                                                        function(callback) {
+                                                                    var email_to        = results.email;
+                                                                    var email_subject   = 'Dither - Signup';
+                                                                    var email_template  = 'signup';
+                                                                    var email_context   = {receiverName: results.name};
+                                                                    EmailService.sendEmail(email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
+                                                                        if(err)
+                                                                        {
+                                                                                console.log(err);
+                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
+                                                                                 callback();
+                                                                        }else{
+                                                                                //console.log(results);
+                                                                                console.log(email_to);
+                                                                                console.log(email_subject);
+                                                                                console.log(email_template);
+                                                                                console.log(email_context);
+                                                                                callback();
+                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                        }
 
 
-                                        });
+                                                                    });
+
+                                                        },
+                                                        function(callback) {
+                                                                    SmsService.sendSms(function(err, sendSmsResults) {
+                                                                        if(err)
+                                                                        {
+                                                                                console.log(err);
+                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+                                                                                callback();
+                                                                        }else{
+                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                callback();
+                                                                        }
+                                                                    });
+                                                        }
+
+
+                                                   ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                                                    if (err) {
+                                                                        console.log(err);
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup'}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                                                    }else{
+                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                    }
+
+                                            });
+
                                 }
                             });
                     }

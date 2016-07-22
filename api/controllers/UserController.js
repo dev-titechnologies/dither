@@ -10,6 +10,7 @@ module.exports = {
 
     signup: function (req, res) {
             //console.log(req.param('name'));
+
             var values = {
                         name        : req.param('name'),
                         email       : req.param('email'),
@@ -37,11 +38,12 @@ module.exports = {
                                             // Send Email and Sms  Simultaneously
                                             async.parallel([
                                                         function(callback) {
+                                                                    var global_settingsKeyValue = req.options.settingsKeyValue;
                                                                     var email_to        = results.email;
                                                                     var email_subject   = 'Dither - Signup';
                                                                     var email_template  = 'signup';
                                                                     var email_context   = {receiverName: results.name};
-                                                                    EmailService.sendEmail(email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
+                                                                    EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
                                                                         if(err)
                                                                         {
                                                                                 console.log(err);
@@ -62,7 +64,7 @@ module.exports = {
 
                                                         },
                                                         function(callback) {
-                                                                    SmsService.sendSms(function(err, sendSmsResults) {
+                                                                    /*SmsService.sendSms(function(err, sendSmsResults) {
                                                                         if(err)
                                                                         {
                                                                                 console.log(err);
@@ -72,7 +74,8 @@ module.exports = {
                                                                                 //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
                                                                                 callback();
                                                                         }
-                                                                    });
+                                                                    });*/
+                                                                    callback();
                                                         }
 
 
@@ -93,6 +96,8 @@ module.exports = {
     },
 
     checkForNewUser:  function (req, res) {
+
+            console.log(req.options.settingKeyValue);
             console.log(req.param('fbId'));
             User.findOne({fbId: req.param('fbId')}).exec(function (err, results){
                     if (err) {
@@ -117,6 +122,15 @@ module.exports = {
 
 
     selectUser: function (req, res) {
+
+            console.log(req.options.tokenCheck);
+            console.log("selectUser ---------------------------------");
+            console.log(req.options.settingsKeyValue);
+            var commonSettings = req.options.settingsKeyValue;
+            console.log(commonSettings.EMAIL_HOST);
+            //console.log(req.options.settingsKeyValue[0]);
+            //console.log(req.options.settingsKeyValue.EMAIL_HOST);
+
             var query = "Select * from user";
             User.query(query, function(err, results){
                     if(err){

@@ -1,5 +1,4 @@
-io.sails.url = SERVER_BASE_URL;
-
+//io.sails.url = SERVER_BASE_URL;
 io.socket.on('connect', function socketConnected(){
         console.log("socket --- connected");
         /*io.socket.get('/user/signup', function (resData, jwres){

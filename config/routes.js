@@ -36,8 +36,7 @@ module.exports.routes = {
     view: 'first'
   },
 
-  '/user/selectUser'                          :           ['auth.authenticate'],
-  '/email'                                    :           'EmailController.sendEmail'
+  '/user/*'                          :           ['settings.settingsKeyValue'],
 
   /***************************************************************************
   *                                                                          *

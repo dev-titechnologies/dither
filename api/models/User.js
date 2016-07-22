@@ -23,15 +23,12 @@ module.exports = {
                 //required: true,
                 //unique: true
             },
-        gender: {
-                type: 'string',
-            },
-        birthdate: {
-                type: 'string',
-            },
         emailVerificationStatus: {
                 type: 'boolean',
                 defaultsTo: false
+            },
+        emailVerificationKey: {
+                type: 'string',
             },
         profilePic: {
                 type: 'string',

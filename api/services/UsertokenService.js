@@ -40,7 +40,7 @@ module.exports = {
     },
     // Function to delete a token
     deleteToken: function (token, callback) {
-        User_token.destroy({token: token}).exec(function (err, result) {
+        User_token.destroy({token: token}).exec(function (err, results) {
 
             if (err) {
 
@@ -59,7 +59,12 @@ module.exports = {
     checkToken: function (token, callback) {
         var today = new Date();
         console.log("Before query");
-        var query = "SELECT * FROM userToken WHERE token = '"+token+"'";
+        //var query = "SELECT * FROM userToken WHERE token = '"+token+"'";
+        var query = " SELECT usr.id, usr.name, usr.email, usrtkn.token, usrtkn.expiryDate"+
+                    " FROM"+
+                    " userToken usrtkn"+
+                    " INNER JOIN user usr ON usr.id = usrtkn.userId"+
+                    " WHERE token = '"+token+"'";
         console.log(query);
         User_token.query(query, function (err, results) {
             if (err) {

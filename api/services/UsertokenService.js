@@ -26,13 +26,14 @@ module.exports = {
             if (err) {
                 //console.log(err);
                 //console.log("Token Error");
-                callback(true, err);
+                //callback(true, err);
+                callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in craete token service', error_details: err});
 
             } else {
                 //console.log("resultToken  --> STARTS");
                 console.log(resultToken);
 
-                callback(false, {status: 1, message: 'success', token: resultToken});
+                callback(false, {status: 1, status_type: "Success", message: 'CreateToken service success', token: resultToken});
             }
 
         });
@@ -43,12 +44,11 @@ module.exports = {
         User_token.destroy({token: token}).exec(function (err, results) {
 
             if (err) {
-
-                callback(true, err);
-
+                //callback(true, err);
+                callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in delete token query', error_details: err});
             } else {
                 console.log("deleted Successfully");
-                callback(false, {message: 'success'});
+                callback(false, {status: 1, status_type: "Success", message: 'DeleteToken service success'});
             }
 
         });
@@ -60,7 +60,7 @@ module.exports = {
         var today = new Date();
         console.log("Before query");
         //var query = "SELECT * FROM userToken WHERE token = '"+token+"'";
-        var query = " SELECT usr.id, usr.name, usr.email, usrtkn.token, usrtkn.expiryDate"+
+        var query = " SELECT usr.id, usr.name, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.expiryDate"+
                     " FROM"+
                     " userToken usrtkn"+
                     " INNER JOIN user usr ON usr.id = usrtkn.userId"+
@@ -69,13 +69,13 @@ module.exports = {
         User_token.query(query, function (err, results) {
             if (err) {
                         console.log(err);
-                        callback(true, err);
+                        callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in check token query', error_details: err});
             } else {
                    if(results.length == 0){
                             //console.log("Length ==== 0");
-                            callback(false, {status: 2, message: 'Token expired'});
+                            callback(false, {status: 2, status_type: "Failure", message: 'Token expired', error_details: err});
                    }else{
-                            callback(false, {status: 1, message: 'Valid token', tokenDetails: results[0]});
+                            callback(false, {status: 1, status_type: "Success", message: 'Valid token', tokenDetails: results[0]});
                    }
             }
 

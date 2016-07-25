@@ -1,5 +1,5 @@
 /**
- * Settings.js
+ * CollageDetails.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
@@ -7,21 +7,30 @@
 
 module.exports = {
 
-  tableName : 'settings',
+  tableName : 'collageDetails',
   attributes: {
+
+
         id: {
             type: 'integer',
             primaryKey: true,
             autoIncrement: true
         },
 
-        key: {
+        image: {
             type: 'string',
-            unique: true,
         },
 
-        value: {
+        position: {
             type: 'string',
+        },
+
+        collageId: {
+            type: 'integer',
+        },
+
+        totalVote: {
+            type: 'integer',
         },
 
         createdAt: {
@@ -31,7 +40,6 @@ module.exports = {
         updatedAt: {
             type: 'datetime',
         },
-
   }
 };
 

@@ -40,6 +40,8 @@ module.exports.routes = {
   '/user/checkForNewUser'                 :           ['auth.authenticate', 'settings.settingsKeyValue'],
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
 
+  '/collage/*'                            :           ['auth.authenticate'],
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

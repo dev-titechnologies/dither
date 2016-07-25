@@ -8,6 +8,9 @@
 //var io = require('sails.io.js')( require('socket.io-client') );
 module.exports = {
 
+ /* ==================================================================================================================================
+               To signup
+     ==================================================================================================================================== */
     signup: function (req, res) {
             //console.log(req.param('name'));
 
@@ -21,13 +24,13 @@ module.exports = {
             User.create(values).exec(function(err, results){
                     if(err){
                             console.log(err);
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation'});
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
                     }
                     else{
                             // Create new access token on login
                             UsertokenService.createToken(results.id, function (err, userTokenDetails) {
                                 if (err) {
-                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation'});
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                 } else {
                                         //User.publishCreate(result);
                                         //User.subscribe(req.socket,result);
@@ -82,7 +85,7 @@ module.exports = {
                                                    ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                     if (err) {
                                                                         console.log(err);
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup'}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                     }else{
                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
                                                                     }
@@ -95,6 +98,9 @@ module.exports = {
             });
     },
 
+ /* ==================================================================================================================================
+               To check for a new User
+     ==================================================================================================================================== */
     checkForNewUser:  function (req, res) {
 
             console.log(req.options.settingKeyValue);
@@ -102,14 +108,14 @@ module.exports = {
             User.findOne({fbId: req.param('fbId')}).exec(function (err, results){
                     if (err) {
                            console.log(err);
-                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId'});
+                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                     }
                     else{
 
                             if(typeof(results) == 'undefined'){
-                                  return res.json(200, {status: 1, status_type: 'Success' ,  isNewUser: true});
+                                  return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                             }else{
-                                  return res.json(200, {status: 1, status_type: 'Success' ,  email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false});
+                                  return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false});
                             }
                           //console.log(results);
                     }

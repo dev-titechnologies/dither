@@ -16,7 +16,7 @@ module.exports = {
             UsertokenService.checkToken(req.body.token, function(err, tokenCheck) {
                 if(err)
                 {
-                    return res.json(200, { status: false, message: 'some error occured' });
+                    return res.json(200, { status: false, status_type: 'Failure' , message: 'Some error occured in checkToken' , error_details: err});
                 }
                 else
                 {
@@ -29,7 +29,7 @@ module.exports = {
                     }
                     else
                     {
-                        return res.json(200, {status: false, message: 'token expired'});
+                        return res.json(200, {status: false, status_type: 'Failure' , message: 'Token expired'});
                     }
                 }
             });

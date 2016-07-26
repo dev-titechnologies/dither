@@ -41,6 +41,7 @@ module.exports.routes = {
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
 
   '/collage/*'                            :           ['auth.authenticate'],
+  '/addressBook/*'                        :           ['auth.authenticate'],
 
   /***************************************************************************
   *                                                                          *

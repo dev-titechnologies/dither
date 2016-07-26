@@ -143,14 +143,29 @@ module.exports = {
         create_collage:  function (req, res) {
 
                     console.log("create collage");
+                    //console.log(req.body.tagged_user);
+                    //console.log(req.params("tagged_user"));
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var imageUploadDirectoryPath   =     '../../assets/images/collage'
                     console.log(tokenCheck);
                     console.log(userId);
+                    var concatUploadImgArray ;
+
+
+                    var uploadedImgResult_1;
+                    var uploadedImgResult_2;
+                    var uploadedImgResult_3;
+                    var uploadedImgResult_4;
+
+
 
                     function commonCollageUpload(fileName,collageUploadResults, callback){
-                            if(req.file(fileName)){
+                            console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                            console.log(fileName);
+                            console.log(req.file(fileName)._files.length);
+                            console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                            if(req.file(fileName)._files.length != 0){
                                 req.file(fileName).upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults) {
                                             if (err)
                                             {
@@ -161,6 +176,27 @@ module.exports = {
                                             {
                                                console.log(fileName+"collageImages   ------->>> Uploaded");
                                                console.log(collageUploadResults);
+                                               console.log(fileName);
+                                                /*if(fileName === "collageImages1"){
+                                                    uploadedImgResult_1 =   collageUploadResults;
+                                                    console.log(uploadedImgResult_1);
+                                                    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                                                }
+                                                if(fileName === "collageImages2"){
+                                                    uploadedImgResult_2 =   collageUploadResults;
+                                                    console.log(uploadedImgResult_2);
+                                                    console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+                                                }
+                                                if(fileName === "collageImages3"){
+                                                    uploadedImgResult_3 =   collageUploadResults;
+                                                    console.log(uploadedImgResult_3);
+                                                    console.log("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc")
+                                                }
+                                                if(fileName === "collageImages4"){
+                                                    uploadedImgResult_4 =   collageUploadResults;
+                                                    console.log(uploadedImgResult_4);
+                                                    console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
+                                                }*/
                                                callback();
                                             }
                                 });
@@ -176,37 +212,133 @@ module.exports = {
 
                                         async.parallel([
                                                         function(callback) {
-                                                                var fileName = "collageImages1";
-                                                                var collageUploadResults = "uploadedCollageFiles_1";
-                                                                commonCollageUpload(fileName, collageUploadResults, callback);
+                                                                //console.log(req.file("collageImages1")._files.length);
+                                                                //console.log(req.file("collageImages1"));
+                                                                /*if(req.file("collageImages1")._files.length != 0){
+                                                                    var fileName = "collageImages1";
+                                                                    var collageUploadResults = "uploadedCollageFiles_1";
+                                                                    commonCollageUpload(fileName, collageUploadResults, callback);
+                                                                    console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
+                                                                    console.log(collageUploadResults);
+                                                                    console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
+                                                                }else{
+                                                                    callback();
+
+                                                                }*/
+
+
+
+                                                                req.file("collageImages1").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_1) {
+                                                                                if (err)
+                                                                                {
+                                                                                    console.log(err);
+                                                                                    callback();
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                   uploadedImgResult_1 = collageUploadResults_1;
+                                                                                   //console.log(collageUploadResults_1);
+                                                                                   callback();
+                                                                                }
+                                                                });
                                                         },
                                                         function(callback) {
-                                                                var fileName = "collageImages2";
-                                                                var collageUploadResults = "uploadedCollageFiles_2";
-                                                                commonCollageUpload(fileName, collageUploadResults, callback);
+                                                            //console.log(req.file("collageImages2")._files.length);
+                                                            //console.log(req.file("collageImages2"));
+                                                                /*if(req.file("collageImages2")._files.length != 0){
+                                                                    var fileName = "collageImages2";
+                                                                    var collageUploadResults = "uploadedCollageFiles_2";
+                                                                    commonCollageUpload(fileName, collageUploadResults, callback);
+                                                                    console.log("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+                                                                    console.log(commonCollageUpload(fileName, collageUploadResults, callback));
+                                                                     console.log("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+                                                                }else{
+                                                                    callback();
+                                                                }*/
+
+                                                                req.file("collageImages2").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_2) {
+                                                                                if (err)
+                                                                                {
+                                                                                    console.log(err);
+                                                                                    callback();
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                   uploadedImgResult_2 = collageUploadResults_2;
+                                                                                   //console.log(collageUploadResults_2);
+                                                                                   callback();
+                                                                                }
+                                                                });
+
                                                         },
                                                         function(callback) {
-                                                                var fileName = "collageImages3";
-                                                                var collageUploadResults = "uploadedCollageFiles_3";
-                                                                commonCollageUpload(fileName, collageUploadResults, callback);
+                                                                /*if(req.file("collageImages3")._files.length != 0){
+                                                                    var fileName = "collageImages3";
+                                                                    var collageUploadResults = "uploadedCollageFiles_3";
+                                                                    commonCollageUpload(fileName, collageUploadResults, callback);
+                                                                }else{
+                                                                   callback();
+                                                                }*/
+                                                                req.file("collageImages3").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_3) {
+                                                                                if (err)
+                                                                                {
+                                                                                    console.log(err);
+                                                                                    callback();
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                   uploadedImgResult_3 = collageUploadResults_3;
+                                                                                   //console.log(collageUploadResults_3);
+                                                                                   callback();
+                                                                                }
+                                                                });
                                                         },
                                                         function(callback) {
-                                                                var fileName = "collageImages4";
-                                                                var collageUploadResults = "uploadedCollageFiles_4";
-                                                                commonCollageUpload(fileName, collageUploadResults, callback);
+                                                                /*if(req.file("collageImages4")._files.length != 0){
+                                                                    var fileName = "collageImages4";
+                                                                    var collageUploadResults = "uploadedCollageFiles_4";
+                                                                    commonCollageUpload(fileName, collageUploadResults, callback);
+                                                                }else{
+                                                                    callback();
+                                                                }*/
+                                                                req.file("collageImages4").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_4) {
+                                                                                if (err)
+                                                                                {
+                                                                                    console.log(err);
+                                                                                    callback();
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                   uploadedImgResult_4 = collageUploadResults_4;
+                                                                                   //console.log(collageUploadResults_4);
+                                                                                   callback();
+                                                                                }
+                                                                });
                                                         }
                                                    ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                     if (err) {
                                                                         console.log(err);
                                                                         callback();
                                                                     }else{
+                                                                        console.log("111111111111111111111111111111111111111111111111111111");
+                                                                        console.log(uploadedImgResult_1);
+                                                                        console.log("22222222222222222222222222222222222222222222222222222222");
+                                                                        console.log(uploadedImgResult_2);
+                                                                        console.log("3333333333333333333333333333333333333333333333333333");
+                                                                        console.log(uploadedImgResult_3);
+                                                                        console.log("4444444444444444444444444444444444444444444444444444");
+                                                                        console.log(uploadedImgResult_4);
+
+                                                                        concatUploadImgArray = uploadedImgResult_1.concat(uploadedImgResult_2, uploadedImgResult_3, uploadedImgResult_4);
+                                                                        console.log(concatUploadImgArray);
+
                                                                         callback();
                                                                     }
 
                                         });
                                 },
                                 function(callback) {
-                                            req.file('collageImages').upload({dirname: imageUploadDirectoryPath, maxBytes: 10000000},function (err, files) {
+                                            req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 10000000},function (err, files) {
                                                     if (err)
                                                     {
                                                         console.log(err);
@@ -214,9 +346,17 @@ module.exports = {
                                                     }
                                                     else
                                                     {
+                                                            if(files.length != 0){
+                                                                collage_imageName = files[0].fd.split('/');
+                                                                collage_imageName = collage_imageName[collage_imageName.length-1];
+                                                                console.log("collage_imageName =--------------------");
+                                                                console.log(files);
+                                                                console.log(collage_imageName);
+
+
                                                                 var values = {
                                                                     imgTitle        : req.param('img_caption'),
-                                                                    image           : 'img---1',
+                                                                    image           : collage_imageName,
                                                                     location        : req.param('location'),
                                                                     latitude        : req.param('latitude'),
                                                                     longitude       : req.param('longitude'),
@@ -225,12 +365,14 @@ module.exports = {
                                                             Collage.create(values).exec(function(err, results){
                                                                     if(err){
                                                                             console.log(err);
-                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
+                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
+                                                                            callback();
                                                                     }
                                                                     else{
 
                                                                                 console.log("results ----------------------------------------------------");
-                                                                                console.log(results);
+                                                                                console.log(concatUploadImgArray);
+                                                                                //console.log(results);
                                                                                 var collageDetailImgArray = [];
                                                                                 /*files.forEach(function(factor, index){
                                                                                      console.log(factor);
@@ -242,12 +384,34 @@ module.exports = {
                                                                                             collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
                                                                                      }
                                                                                 });*/
+                                                                                concatUploadImgArray.forEach(function(factor, index){
+                                                                                     console.log("factor");
+                                                                                     console.log(factor);
+                                                                                     filename = factor.fd.split('/');
+                                                                                     filename = filename[filename.length-1];
+                                                                                     console.log(filename);
+
+                                                                                     var switchKey = factor.field;
+                                                                                     var position;
+                                                                                     switch(switchKey){
+                                                                                            case "collageImages1":    position = "position_1";
+                                                                                            break;
+                                                                                            case "collageImages2":    position = "position_2";
+                                                                                            break;
+                                                                                            case "collageImages3":    position = "position_3";
+                                                                                            break;
+                                                                                            case "collageImages4":    position = "position_4";
+                                                                                            break;
+                                                                                     }
+
+                                                                                     collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
+                                                                                });
                                                                                 console.log("uploadedCollageFiles_1 -------------------");
-                                                                                console.log(uploadedCollageFiles_1);
+                                                                                //console.log(uploadedCollageFiles_1);
                                                                                 var query = "INSERT INTO collageDetails"+
                                                                                             " (image, position, collageId, createdAt, updatedAt)"+
-                                                                                            //" VALUES"+collageDetailImgArray;
-                                                                                            " VALUES ('filename','position',"+results.id+", now(), now())";
+                                                                                            " VALUES"+collageDetailImgArray;
+                                                                                            //" VALUES ('filename','position',"+results.id+", now(), now())";
 
                                                                                 console.log("collage Details ------------------------------------ ===================================");
                                                                                 console.log(query);
@@ -255,14 +419,11 @@ module.exports = {
                                                                                         if(err)
                                                                                         {
                                                                                             console.log(err);
-                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                            callback();
                                                                                         }
                                                                                         else
                                                                                         {
-
-
-
-
                                                                                             var taggedUserArray = [{user_id: 3},{user_id: 6}];
                                                                                             console.log(taggedUserArray);
                                                                                             var tagCollageArray = [];
@@ -281,11 +442,13 @@ module.exports = {
                                                                                                     if(err)
                                                                                                     {
                                                                                                         console.log(err);
-                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                        callback();
                                                                                                     }
                                                                                                     else
                                                                                                     {
                                                                                                         console.log(createdCollageTags);
+                                                                                                        callback();
                                                                                                     }
                                                                                             });
 
@@ -299,7 +462,12 @@ module.exports = {
                                                                     }
                                                             });
 
-                                                    }
+                                                        }
+                                                        else{
+
+                                                            callback();
+                                                        }
+                                                }
                                             });
                                 },
 

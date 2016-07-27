@@ -28,7 +28,7 @@ module.exports = {
                 console.log(err);
                 //console.log("Token Error");
                 //callback(true, err);
-                callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in craete token service', error_details: err});
+                callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in create token service', error_details: err});
 
             } else {
                 //console.log("resultToken  --> STARTS");
@@ -77,11 +77,32 @@ module.exports = {
                         console.log(err);
                         callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in check token query', error_details: err});
             } else {
+                console.log("results ===========================");
+                console.log(results);
                    if(results.length == 0){
                             //console.log("Length ==== 0");
-                            callback(false, {status: 2, status_type: "Failure", message: 'Token expired', error_details: err});
+                            callback(false, {status: 2, status_type: "Failure", message: 'token'});
                    }else{
-                            callback(false, {status: 1, status_type: "Success", message: 'Valid token', tokenDetails: results[0]});
+
+
+                        User.findOne({id: results[0].userId}).exec(function (err, statusResults){
+                                if (err) {
+                                       console.log(err);
+                                       callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in checking user status', error_details: err});
+                                }
+                                else{
+                                        console.log("statusResults ===========");
+                                        console.log(statusResults);
+                                        if(statusResults.status == 'active'){
+                                                callback(false, {status: 1, status_type: "Success", message: 'Valid token and active user', tokenDetails: results[0]});
+                                        }else{
+                                                callback(false, {status: 2, status_type: "Failure", message: 'status'});
+                                                //return res.json(200, {status: 1, status_type: "Success", message: 'Valid token and InActive user'});
+                                        }
+
+                                }
+                        });
+                            //callback(false, {status: 1, status_type: "Success", message: 'Valid token', tokenDetails: results[0]});
                    }
             }
 

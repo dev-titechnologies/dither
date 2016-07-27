@@ -1,8 +1,10 @@
 var crypto = require('crypto');
 //var userConstants = sails.config.constants.user;
 module.exports = {
-    // Function to create new token
-    createToken: function (userId, callback) {
+/*  =================================================================================================================================
+            Function to create new token
+    ================================================================================================================================== */
+    createToken: function (userId, deviceId, callback) {
         console.log("user token >>>>>>>>>>");
         //Get token expiry time from datatbase
         var param = 3600;
@@ -19,12 +21,11 @@ module.exports = {
         //console.log("Token Starts ====>");
         //console.log(token);
         //console.log("Token Ends ====>");
-        var tokenValues = {userId: userId, token: token, expiryDate: expiry_date};
-
+        var tokenValues = {userId: userId, token: token, deviceId: deviceId, expiryDate: expiry_date};
 
         User_token.create(tokenValues).exec(function (err, resultToken) {
             if (err) {
-                //console.log(err);
+                console.log(err);
                 //console.log("Token Error");
                 //callback(true, err);
                 callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in craete token service', error_details: err});
@@ -39,8 +40,11 @@ module.exports = {
         });
 
     },
-    // Function to delete a token
-    deleteToken: function (token, callback) {
+
+/*  =================================================================================================================================
+            Function to delete a token
+    ================================================================================================================================== */
+    deleteToken: function (token, deviceId, callback) {
         User_token.destroy({token: token}).exec(function (err, results) {
 
             if (err) {
@@ -55,16 +59,18 @@ module.exports = {
     },
 
 
-    // Function to check whether a token is expired or not
-    checkToken: function (token, callback) {
+/*  =================================================================================================================================
+        Function to check whether a token is expired or not
+    ================================================================================================================================== */
+    checkToken: function (token, deviceId, callback) {
         var today = new Date();
         console.log("Before query");
         //var query = "SELECT * FROM userToken WHERE token = '"+token+"'";
-        var query = " SELECT usr.id, usr.name, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.expiryDate"+
+        var query = " SELECT usr.id, usr.name, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                     " FROM"+
                     " userToken usrtkn"+
                     " INNER JOIN user usr ON usr.id = usrtkn.userId"+
-                    " WHERE token = '"+token+"' AND usrtkn.expiryDate > NOW()";
+                    " WHERE token = '"+token+"' AND deviceId = "+deviceId+" AND usrtkn.expiryDate > NOW()";
         console.log(query);
         User_token.query(query, function (err, results) {
             if (err) {

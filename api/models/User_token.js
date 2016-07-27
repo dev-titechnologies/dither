@@ -27,6 +27,11 @@ module.exports = {
                 unique: true,
         },
 
+        deviceId: {
+                type: 'string',
+                required: true,
+        },
+
         expiryDate: {
                 type: 'datetime',
         },

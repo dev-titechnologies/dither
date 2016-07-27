@@ -23,11 +23,11 @@ module.exports = {
                 //required: true,
                 //unique: true
             },
-        emailVerificationStatus: {
+        mobileVerificationStatus: {
                 type: 'boolean',
                 defaultsTo: false
             },
-        emailVerificationKey: {
+        mobileVerificationKey: {
                 type: 'string',
             },
         profilePic: {

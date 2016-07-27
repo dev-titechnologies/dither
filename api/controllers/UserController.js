@@ -107,7 +107,7 @@ module.exports = {
             console.log(req.param('fbId'));
             User.findOne({fbId: req.param('fbId')}).exec(function (err, results){
                     if (err) {
-                           console.log(err);
+                           sails.log("jguguu"+err);
                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                     }
                     else{
@@ -115,8 +115,35 @@ module.exports = {
                             if(typeof(results) == 'undefined'){
                                   return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                             }else{
-                                  return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false});
-                            }
+								 
+								   //delete existing token
+								    sails.log("SELECT token from userToken where userId = '"+results.id+"'")
+								    
+								     User_token.query("DELETE from userToken where userId = '"+results.id+"'", function (err, result) {
+										if (err) {
+										}
+										else
+										{
+										    sails.log("deletion success")
+								        }
+									});
+								   
+								   // Create new access token on login
+								   
+									UsertokenService.createToken(results.id, function (err, userTokenDetails) 
+									{
+										if (err) 
+										{
+											return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+										} 
+										else
+										{
+											
+											return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false});
+										}
+                                    });
+                                  
+                                }
                           //console.log(results);
                     }
 
@@ -129,6 +156,7 @@ module.exports = {
 
     selectUser: function (req, res) {
 
+			sails.log("select User")
             console.log(req.options.tokenCheck);
             console.log("selectUser ---------------------------------");
             console.log(req.options.settingsKeyValue);
@@ -149,7 +177,49 @@ module.exports = {
                     }
 
             });
-    }
+    },
+    
+    
+    
+    /* ==================================================================================================================================
+               To test Profile Pic upload in signup
+     ==================================================================================================================================== */
+     
+     signupTest: function (req, res) {
+		 
+		       var fs = require('fs');
+		       var request = require('request');
+			   var path 			 = require('path');
+				sails.log("j")	
+				
+				var download = function(uri, filename, callback)
+				{
+						request.head(uri, function(err, res, body){
+						sails.log('content-type:', res.headers['content-type']);
+						sails.log('content-length:', res.headers['content-length']);
+
+						var name = request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+						
+						sails.log(name.path)
+						
+						
+					});
+				};
+				
+				var imagename = new Date().getTime() +"google.png";
+
+				download('https://www.google.com/images/srpr/logo3w.png', 'upload/'+imagename, function()
+				{
+					sails.log('done');
+				
+					return res.json(200, {status: 1, message: 'Success'});
+				});
+
+					
+				
+	}	
+     
+     
 
 
 };

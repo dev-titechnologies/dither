@@ -37,7 +37,7 @@ module.exports.routes = {
   },
 
   '/user/signup'                          :           ['settings.settingsKeyValue'],
-  '/user/checkForNewUser'                 :           ['auth.authenticate', 'settings.settingsKeyValue'],
+  //'/user/checkForNewUser'                 :           ['auth.authenticate', 'settings.settingsKeyValue'],
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
 
   '/collage/*'                            :           ['auth.authenticate'],

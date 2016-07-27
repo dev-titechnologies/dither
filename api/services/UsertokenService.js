@@ -62,7 +62,7 @@ module.exports = {
 /*  =================================================================================================================================
         Function to check whether a token is expired or not
     ================================================================================================================================== */
-    checkToken: function (token, deviceId, callback) {
+    checkToken: function (token, callback) {
         var today = new Date();
         console.log("Before query");
         //var query = "SELECT * FROM userToken WHERE token = '"+token+"'";
@@ -70,7 +70,7 @@ module.exports = {
                     " FROM"+
                     " userToken usrtkn"+
                     " INNER JOIN user usr ON usr.id = usrtkn.userId"+
-                    " WHERE usrtkn.token = '"+token+"' AND usrtkn.deviceId = '"+deviceId+"' AND usrtkn.expiryDate > NOW()";
+                    " WHERE usrtkn.token = '"+token+"' AND usrtkn.expiryDate > NOW()";
         console.log(query);
         User_token.query(query, function (err, results) {
             if (err) {

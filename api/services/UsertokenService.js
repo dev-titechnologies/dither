@@ -70,7 +70,7 @@ module.exports = {
                     " FROM"+
                     " userToken usrtkn"+
                     " INNER JOIN user usr ON usr.id = usrtkn.userId"+
-                    " WHERE token = '"+token+"' AND deviceId = "+deviceId+" AND usrtkn.expiryDate > NOW()";
+                    " WHERE usrtkn.token = '"+token+"' AND usrtkn.deviceId = '"+deviceId+"' AND usrtkn.expiryDate > NOW()";
         console.log(query);
         User_token.query(query, function (err, results) {
             if (err) {

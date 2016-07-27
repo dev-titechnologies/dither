@@ -153,10 +153,10 @@ module.exports = {
                     var concatUploadImgArray ;
 
 
-                    var uploadedImgResult_1;
-                    var uploadedImgResult_2;
-                    var uploadedImgResult_3;
-                    var uploadedImgResult_4;
+                    var uploadedImgResult_1,
+                        uploadedImgResult_2,
+                        uploadedImgResult_3,
+                        uploadedImgResult_4;
 
 
 
@@ -482,32 +482,15 @@ module.exports = {
 
                 });
 
-        }
+        },
+/* ==================================================================================================================================
+               To Get Feed
+     ==================================================================================================================================== */
+    getFeed  :  function (req, res) {
 
-         /*create_collage:  function (req, res) {
+     console.log("Get Feed  -------------------- ================================================");
+     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the feed'});
 
-                    console.log("create collage");
-                    var tokenCheck                  =     req.options.tokenCheck;
-                    var userId                      =     tokenCheck.tokenDetails.userId;
-                    console.log(tokenCheck);
-                    console.log(userId);
-                    var values = {
-                        imgTitle        : req.param('img_caption'),
-                        location        : req.param('location'),
-                        latitude        : req.param('latitude'),
-                        longitude       : req.param('longitude'),
-                        userId          : userId,
-                };
-                Collage.create(values).exec(function(err, results){
-                        if(err){
-                                console.log(err);
-                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
-                        }
-                        else{
-                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the collage creation'});
-                        }
-                });
-
-        }*/
+    }
 };
 

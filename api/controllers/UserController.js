@@ -28,7 +28,7 @@ module.exports = {
                     }
                     else{
                             // Create new access token on login
-                            UsertokenService.createToken(results.id, function (err, userTokenDetails) {
+                            UsertokenService.createToken(results.id, req.param('device_id'), function (err, userTokenDetails) {
                                 if (err) {
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                 } else {

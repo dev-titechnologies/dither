@@ -13,7 +13,7 @@ module.exports = {
  ====================================================================================================================================*/
 
     authenticate : function(req, res, next) {
-            UsertokenService.checkToken(req.param("token"), req.param("device_id"), function(err, tokenCheck) {
+            UsertokenService.checkToken(req.param("token"), function(err, tokenCheck) {
                 if(err)
                 {
                     return res.json(200, { status: false, status_type: 'Failure' , message: 'Some error occured in checkToken' , error_details: err});
@@ -29,7 +29,13 @@ module.exports = {
                     }
                     else
                     {
-                        return res.json(200, {status: false, status_type: 'Failure' , message: 'Token expired'});
+                        if(tokenCheck.message == 'token'){
+                            return res.json(200, {status: false, status_type: 'Failure' , message: 'Token expired'});
+                        }
+                        else if(tokenCheck.message == 'status'){
+                            return res.json(200, {status: false, status_type: 'Failure' , message: 'Not an active user'});
+                        }
+
                     }
                 }
             });

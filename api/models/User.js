@@ -41,9 +41,10 @@ module.exports = {
                 type: 'integer',
                 //unique: true
             },
-        notificationStatus: {
-                type: 'boolean',
-                defaultsTo: true
+        status: {
+                type: 'string',
+                enum: ['active', 'inactive', 'delete'],
+                defaultsTo: 'active'
             },
         createdAt: {
                 type: 'datetime',

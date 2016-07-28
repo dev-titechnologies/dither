@@ -6,6 +6,9 @@
  */
 
 //var io = require('sails.io.js')( require('socket.io-client') );
+ var fs		 	 = require('fs');
+ var request	 = require('request');
+ var path 		 = require('path');
 module.exports = {
 
  /* ==================================================================================================================================
@@ -14,14 +17,46 @@ module.exports = {
     signup: function (req, res) {
             //console.log(req.param('name'));
 
-            var values = {
+            
+           //profilePic Upload
+				
+			   var imgUrl	 	= req.param('url') ;
+			   var filename  	= imgUrl.substring(imgUrl.lastIndexOf('/')+1); 
+			   var imagename 	= new Date().getTime() +filename;
+			  
+				
+				var download = function(uri, filename, callback)
+				{
+						request.head(uri, function(err, res, body){
+						sails.log('content-type:', res.headers['content-type']);
+						sails.log('content-length:', res.headers['content-length']);
+
+						var name = request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+						
+						sails.log(name.path)
+						
+						
+					});
+				};
+				download(imgUrl, 'assets/images/ProfilePics/'+imagename, function()
+				{
+					sails.log('done');
+					
+				});
+				
+			//--end of upload--------
+				
+			var values = {
                         name        : req.param('name'),
                         email       : req.param('email'),
                         fbId        : req.param('fbId'),
                         phoneNumber : req.param('phoneNumber'),
-                        profilePic  : req.param('profilePic'),
-                };
-            User.create(values).exec(function(err, results){
+                        profilePic  : imagename,
+                };	
+           
+           
+                
+             User.create(values).exec(function(err, results){
                     if(err){
                             console.log(err);
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
@@ -30,7 +65,18 @@ module.exports = {
                             // Create new access token on login
                             UsertokenService.createToken(results.id, req.param('device_id'), function (err, userTokenDetails) {
                                 if (err) {
-                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+											
+											User_token.query("DELETE from user where id = '"+results.id+"'", function (err, result) {
+											if (err) {
+														sails.log("deletion error")
+													 }
+											else
+												{
+													sails.log("deletion success")
+												}
+											});
+									
+											return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                 } else {
                                         //User.publishCreate(result);
                                         //User.subscribe(req.socket,result);
@@ -111,13 +157,12 @@ module.exports = {
                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                     }
                     else{
-
+							sails.log(results)
                             if(typeof(results) == 'undefined'){
                                   return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                             }else{
 								 
-								   //delete existing token
-								    sails.log("SELECT token from userToken where userId = '"+results.id+"'")
+								   //delete existing token 
 								    
 								     User_token.query("DELETE from userToken where userId = '"+results.id+"'", function (err, result) {
 										if (err) {
@@ -179,48 +224,60 @@ module.exports = {
             });
     },
     
-    
-    
-    /* ==================================================================================================================================
-               To test Profile Pic upload in signup
-     ==================================================================================================================================== */
-     
-     signupTest: function (req, res) {
-		 
-		       var fs = require('fs');
-		       var request = require('request');
-			   var path 			 = require('path');
-				sails.log("j")	
-				
-				var download = function(uri, filename, callback)
-				{
-						request.head(uri, function(err, res, body){
-						sails.log('content-type:', res.headers['content-type']);
-						sails.log('content-length:', res.headers['content-length']);
+   /* ==================================================================================================================================
+               To Edit Profile
+     ==================================================================================================================================== */ 
 
-						var name = request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-						
-						sails.log(name.path)
-						
-						
-					});
-				};
+	  editProfile:  function (req, res) {
+		  
+				var edit_type 		= req.param('edit-type');
+				var profile_Image   = req.param('file');
+				var token			= req.param('token');
 				
-				var imagename = new Date().getTime() +"google.png";
-
-				download('https://www.google.com/images/srpr/logo3w.png', 'upload/'+imagename, function()
-				{
-					sails.log('done');
 				
-					return res.json(200, {status: 1, message: 'Success'});
-				});
-
+				
+				User_token.findOne({token: req.param('token')}).exec(function (err, results){
+                   if (err) 
+                    {
+						sails.log(err)
+					}
+					else
+					{
+						sails.log(results)
+						if(edit_type==1)
+						{
+							//Change ProfilePic
+						}
+						
+						
+						if(edit_type==2)
+						{
+								//Remove ProfilePic
+								sails.log(results.userId)
+								
+								var query = "UPDATE user SET profilePic=null where id='"+results.userId+"'";
+								User.query(query, function(err, data){
+									if(err)
+									{
+										sails.log(err)
+										return res.json(200, {status: 2, message: 'failure'});
+									}
+									else
+									{
+										//fs.unlink("/assets/images/ProfilePics/"+profile_Image);
+										return res.json(200, {status: 1, message: 'Success'});
+									}
+							});
 					
+						}		
+					}
+				});	
+								
 				
-	}	
-     
-     
-
+	  },
+	  
+	  
+	 
 
 };
 

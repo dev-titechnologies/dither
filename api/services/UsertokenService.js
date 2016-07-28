@@ -22,7 +22,7 @@ module.exports = {
         //console.log(token);
         //console.log("Token Ends ====>");
         var tokenValues = {userId: userId, token: token, deviceId: deviceId, expiryDate: expiry_date};
-
+		sails.log(tokenValues)
         User_token.create(tokenValues).exec(function (err, resultToken) {
             if (err) {
                 console.log(err);

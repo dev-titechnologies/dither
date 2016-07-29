@@ -44,7 +44,7 @@ module.exports = {
 /*  =================================================================================================================================
             Function to delete a token
     ================================================================================================================================== */
-    deleteToken: function (token, deviceId, callback) {
+    deleteToken: function (token, callback) {
         User_token.destroy({token: token}).exec(function (err, results) {
 
             if (err) {

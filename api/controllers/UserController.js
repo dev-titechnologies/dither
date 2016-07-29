@@ -17,6 +17,7 @@ module.exports = {
     signup: function (req, res) {
             //console.log(req.param('name'));
 
+
             
            //profilePic Upload
 			  
@@ -45,7 +46,10 @@ module.exports = {
 				
 			//--end of upload--------
 				
-			var values = {
+			
+            var deviceId = req.get('device_id');
+            var values = {
+
                         name        : req.param('name'),
                         email       : req.param('email'),
                         fbId        : req.param('fbId'),
@@ -62,7 +66,7 @@ module.exports = {
                     }
                     else{
                             // Create new access token on login
-                            UsertokenService.createToken(results.id, req.param('device_id'), function (err, userTokenDetails) {
+                            UsertokenService.createToken(results.id, deviceId, function (err, userTokenDetails) {
                                 if (err) {
 											
 											User_token.query("DELETE from user where id = '"+results.id+"'", function (err, result) {
@@ -164,16 +168,15 @@ module.exports = {
                             else
                             {
 								
-								/*User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
+								User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
 										if (err) {
 										}
 										else
 										{
 											console.log(result)
-											//console.log(result[0].deviceId)
 											//delete existing token 
 								    
-											User_token.query("DELETE from userToken where deviceId = '"+result[0].deviceId+"'", function (err, result) {
+											/*User_token.query("DELETE from userToken where deviceId = '"+result[0].deviceId+"'", function (err, result) {
 												if (err) {
 														}
 												else
@@ -196,18 +199,12 @@ module.exports = {
 													});
 													
 												 }
-											});
-										    
+											});*/
+											
+										    return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:results.profilePic});
 								        }
 									});
-								
-
-								 /*  
-								   
-								  */
-                                    
-                                 return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:results.profilePic});
-
+					
                                   
                                 }
                           //console.log(results);
@@ -218,7 +215,26 @@ module.exports = {
 
     },
 
+ /* ==================================================================================================================================
+               To Logout user
+     ==================================================================================================================================== */
+// Logout action.
+    logout: function(req, res){
+        var userToken = req.get('token');
+        if(userToken){
+                TokenService.deleteToken(req.body.token, function(err, result) {
+                    if(err) {
+                         return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
+                    } else {
 
+                        return res.json(200, {status: 1,  status_type: 'Success' , message: 'success'});
+                    }
+                });
+        }else{
+                return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token'});
+        }
+
+    },
 
 
     selectUser: function (req, res) {
@@ -238,7 +254,11 @@ module.exports = {
                         console.log(err);
                     }
                     else{
-                        console.log('signup Part');
+                        console.log('Select USer');
+                        var d = new Date();
+                        var n = d.getTime();
+                        console.log(new Date().getTime());
+                         console.log(parseInt(new Date().getTime()));
                         //console.log(result);
                         return res.json(200, {status: 1, message: 'Success'});
                     }

@@ -21,14 +21,15 @@ module.exports = {
                                 if (err) {
                                     console.log(err);
                                     console.error('Text failed because: '+err.message);
-                                    callback(false, {status: 2, message: 'email not reachable'});
+                                    callback(false, {status: 2, status_type: 'Failure' , message: 'email not reachable'});
                                 } else {
                                     console.log('Text sent! Message SID: '+message.sid);
                                     console.log("smsFrom ====================== +++++++++++++++++++++++");
                                     console.log(smsFrom);
                                     console.log("smsTo ======================== +++++++++++++++++++++++");
                                     console.log(smsTo);
-                                    callback(false, {status: 1, message: 'success'});
+                                    callback(false, {status: 1, status_type: 'Success' , message: 'success'});
+                                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully send the sms'});
                                 }
                         });
             },

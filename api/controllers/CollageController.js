@@ -10,6 +10,26 @@ module.exports = {
     /* ==================================================================================================================================
                To Upload Images
      ==================================================================================================================================== */
+        upload: function (req, res) {
+
+                /*req.file(fileList[0]).upload({dirname: '../../assets/images/test', maxBytes: 10000000},function (err, results) {
+                            if (err)
+                            {
+                                console.log(err);
+                                callback();
+                            }
+                            else
+                            {
+
+                               console.log(results);
+                               //callback();
+                            }
+                });*/
+                /*var fs = require('file-system');
+                fs.unlink("assets/images/test/4aff474e-1577-4780-b46e-d031afccdf68.jpg");*/
+        },
+
+
         uploadimage: function (req, res) {
                 console.log("upload ---------- Image");
                 var tokenCheck                  =     req.options.tokenCheck;
@@ -137,11 +157,18 @@ module.exports = {
 
 
     /* ==================================================================================================================================
-               To create collage
+               To create Dither (collage)
      ==================================================================================================================================== */
 
-        create_collage:  function (req, res) {
-
+        createDither:  function (req, res) {
+                    //console.log(req.file('collageImages1'));
+                    //console.log(req.file('collageImages1')._files);
+                    //console.log(req.file('collageImages1')._files[0].stream.filename);
+                    /*console.log(req.file('collageImages1')._files).length;
+                    console.log(req.file('collage_image')._files[0]);
+                    console.log(req.file('collage_image')._files.length);*/
+                    console.log(req.body);
+                    console.log(req.body.REQUEST)
                     console.log("create collage");
                     //console.log(req.body.tagged_user);
                     //console.log(req.params("tagged_user"));
@@ -205,7 +232,9 @@ module.exports = {
                                             callback();
                             }
                     }
+            //if(req.file('collage_image') !== 'undefined'){
 
+                //if(req.file('collageImages1') !== 'undefined'){
                     async.series([
 
                                 function(callback) {
@@ -346,7 +375,7 @@ module.exports = {
                                                     }
                                                     else
                                                     {
-                                                            if(files.length != 0){
+                                                        if(files.length != 0){
                                                                 collage_imageName = files[0].fd.split('/');
                                                                 collage_imageName = collage_imageName[collage_imageName.length-1];
                                                                 console.log("collage_imageName =--------------------");
@@ -394,13 +423,13 @@ module.exports = {
                                                                                      var switchKey = factor.field;
                                                                                      var position;
                                                                                      switch(switchKey){
-                                                                                            case "collageImages1":    position = "position_1";
+                                                                                            case "collageImages1":    position = "image_one";
                                                                                             break;
-                                                                                            case "collageImages2":    position = "position_2";
+                                                                                            case "collageImages2":    position = "image_two";
                                                                                             break;
-                                                                                            case "collageImages3":    position = "position_3";
+                                                                                            case "collageImages3":    position = "image_three";
                                                                                             break;
-                                                                                            case "collageImages4":    position = "position_4";
+                                                                                            case "collageImages4":    position = "image_four";
                                                                                             break;
                                                                                      }
 
@@ -441,13 +470,27 @@ module.exports = {
                                                                                             Tags.query(query, function(err, createdCollageTags) {
                                                                                                     if(err)
                                                                                                     {
-                                                                                                        console.log(err);
+                                                                                                        //console.log(err);
                                                                                                         //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
                                                                                                         callback();
                                                                                                     }
                                                                                                     else
                                                                                                     {
                                                                                                         console.log(createdCollageTags);
+                                                                                                        /*SmsService.sendSms(function(err, sendSmsResults) {
+                                                                                                                if(err)
+                                                                                                                {
+                                                                                                                        console.log(err);
+                                                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+                                                                                                                        //callback();
+                                                                                                                        callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
+                                                                                                                }else{
+                                                                                                                    consol.log("-----------------");
+                                                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                                        //callback();
+                                                                                                                        //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
+                                                                                                                }
+                                                                                                        });*/
                                                                                                         callback();
                                                                                                     }
                                                                                             });
@@ -465,7 +508,8 @@ module.exports = {
                                                         }
                                                         else{
 
-                                                            callback();
+                                                            //callback();
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Image found to add', error_details: err});
                                                         }
                                                 }
                                             });
@@ -475,22 +519,22 @@ module.exports = {
                     ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                             if (err) {
                                                 console.log(err);
-                                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in creating Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                             }else{
-                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully uploaded collage'});
+                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully created dither'});
                                             }
 
                 });
+              //}
+             // else{
+              //      return res.json(200, {status: 2, status_type: 'Failure' , message: 'Atleast 1 image needed'});
+              //}
+            //}
+            //else{
+            //        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Collage image is missing'});
+            //}
 
-        },
-/* ==================================================================================================================================
-               To Get Feed
-     ==================================================================================================================================== */
-    getFeed  :  function (req, res) {
+        }
 
-     console.log("Get Feed  -------------------- ================================================");
-     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the feed'});
-
-    }
 };
 

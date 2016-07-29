@@ -46,6 +46,23 @@ module.exports = {
                 enum: ['active', 'inactive', 'delete'],
                 defaultsTo: 'active'
             },
+        notifyOpinion: {
+                type: 'boolean',
+                defaultsTo: 'false'
+            },
+        notifyVote: {
+                type: 'boolean',
+                defaultsTo: 'false'
+            },
+        notifyComment: {
+                type: 'boolean',
+                defaultsTo: 'false'
+            }, 
+        notifyFB: {
+                type: 'boolean',
+                defaultsTo: 'false'
+            },
+            
         createdAt: {
                 type: 'datetime',
             },

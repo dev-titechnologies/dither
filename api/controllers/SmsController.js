@@ -32,7 +32,7 @@
 			
 			//Send an SMS text message
 			
-			SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err,sendSmsResults)  {
+			SmsService.sendSmsOTP(smsAccountSid, smsAuthToken, smsFrom, function(err,sendSmsResults)  {
                                        if(err)
                                         {
                                                 console.log(err);

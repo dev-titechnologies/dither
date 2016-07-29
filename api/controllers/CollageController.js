@@ -542,8 +542,6 @@ module.exports = {
         getDither:  function (req, res) {
 
                     console.log("get--- Dither");
-/* ################################################################################################################### */
-
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var userId                      =     tokenCheck.tokenDetails.userId;
@@ -660,8 +658,28 @@ module.exports = {
 
                                 }
                         });
+        },
 
-/* ################################################################################################################### */
+/* ==================================================================================================================================
+               SMS TEST
+     ==================================================================================================================================== */
+        smsda:  function (req, res) {
+                var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
+                console.log(req.options.settingsKeyValue);
+
+                SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
+                        if(err)
+                        {
+                                console.log(err);
+                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+                                //callback();
+                        }else{
+                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                //callback();
+                        }
+                    });
         },
 };
 

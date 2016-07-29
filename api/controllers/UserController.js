@@ -116,7 +116,12 @@ module.exports = {
 
                                                         },
                                                         function(callback) {
-                                                                    /*SmsService.sendSms(function(err, sendSmsResults) {
+                                                                    var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                                                                    var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                                                                    var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
+                                                                    console.log(req.options.settingsKeyValue);
+
+                                                                    /*SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
                                                                         if(err)
                                                                         {
                                                                                 console.log(err);

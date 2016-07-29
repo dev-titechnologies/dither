@@ -32,95 +32,99 @@ module.exports = {
                                 else
                                 {
                                     console.log(results);
-                                    console.log(results[0].id);
-                                    console.log(results[1].id);
-                                    console.log(results[2].id);
-                                    console.log(results.length);
-                                    var resultsPushArray = [];
-                                    results.forEach(function(factor, index){
-                                            console.log("factor");
-                                            console.log(factor);
-                                            resultsPushArray.push(factor.id);
-                                    });
-                                    console.log(resultsPushArray);
+                                    if(results.length == 0){
+                                            return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', recent: []});
+                                    }else{
+                                        console.log(results.length);
+                                        var resultsPushArray = [];
+                                        results.forEach(function(factor, index){
+                                                console.log("factor");
+                                                console.log(factor);
+                                                resultsPushArray.push(factor.id);
+                                        });
+                                        console.log(resultsPushArray);
 
-                                    query = " SELECT clgdt.collageId, clgdt.position, clgdt.vote, clg.userId, clg.image AS collage_image, clg.createdAt,"+
-                                            " usr.profilePic, usr.name"+
-                                            " FROM collage clg"+
-                                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                            " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            " WHERE clg.id"+
-                                            " IN ("+resultsPushArray+")"+
-                                            " ORDER BY clg.createdAt";
-                                    console.log(query);
-                                    Collage.query(query, function(err, allCollageImgResults) {
-                                            if(err)
-                                            {
-                                                console.log(err);
-                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in grtting Images in collage of logged user', error_details: err});
-                                            }
-                                            else
-                                            {
-                                                console.log(allCollageImgResults);
-                                                var dataResults = allCollageImgResults;
-                                                var key = [];
-                                                var dataResultsKeys = [];
-                                                for (var i = dataResults.length - 1; i >= 0; i--) {
-                                                    var dataResultsObj = new Object();
-                                                    var collageId_val =dataResults[i]["collageId"];
-                                                    //console.log(data[i]);
-                                                    if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
-                                                    {
-                                                        var imagesPositionArray =[];
-                                                        var voteArray =[];
-                                                        for (var j = dataResults.length - 1; j >= 0; j--)
-                                                        {
-                                                            if(dataResults[j]["collageId"]==collageId_val)
+                                        query = " SELECT clgdt.collageId, clgdt.position, clgdt.vote, clg.userId, clg.image AS collage_image, clg.createdAt,"+
+                                                " usr.profilePic, usr.name"+
+                                                " FROM collage clg"+
+                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " WHERE clg.id"+
+                                                " IN ("+resultsPushArray+")"+
+                                                " ORDER BY clg.createdAt";
+                                        console.log(query);
+                                        Collage.query(query, function(err, allCollageImgResults) {
+                                                if(err)
+                                                {
+                                                    console.log(err);
+                                                    return res.json(200, {status: 1, status_type: 'Success' ,message: 'Some error occured in grtting Images in collage of logged user', error_details: err});
+                                                }
+                                                else
+                                                {
+                                                    console.log(allCollageImgResults);
+                                                    if(allCollageImgResults.length == 0){
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent: []});
+                                                    }else{
+                                                        var dataResults = allCollageImgResults;
+                                                        var key = [];
+                                                        var dataResultsKeys = [];
+                                                        for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                            var dataResultsObj = new Object();
+                                                            var collageId_val =dataResults[i]["collageId"];
+                                                            //console.log(data[i]);
+                                                            if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
                                                             {
-                                                                imagesPositionArray.push(dataResults[j]["position"]) ;
-                                                                voteArray.push(dataResults[j]["vote"]) ;
+                                                                var imagesPositionArray =[];
+                                                                var voteArray =[];
+                                                                for (var j = dataResults.length - 1; j >= 0; j--)
+                                                                {
+                                                                    if(dataResults[j]["collageId"]==collageId_val)
+                                                                    {
+                                                                        imagesPositionArray.push(dataResults[j]["position"]) ;
+                                                                        voteArray.push(dataResults[j]["vote"]) ;
+
+                                                                    }
+                                                                }
+                                                                //To combine images and vote into single Array (key - value pair)
+                                                                var combineImgVoteArray = {};
+                                                                for (var k = 0; k < imagesPositionArray.length; k++)
+                                                                {
+                                                                     combineImgVoteArray[imagesPositionArray[k]] = voteArray[k];
+                                                                }
+                                                                console.log("combine_array ========================================");
+                                                                console.log(combineImgVoteArray);
+                                                                console.log(imagesPositionArray);
+                                                                if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
+                                                                            dataResultsObj.profile_image = "";
+                                                                }else{
+
+                                                                            dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
+                                                                }
+
+                                                                dataResultsObj.user_name=dataResults[i]["name"];
+                                                                dataResultsObj.user_id=dataResults[i]["userId"];
+                                                                dataResultsObj.date_time=dataResults[i]["createdAt"];
+                                                                dataResultsObj.collage_id=collageId_val;
+                                                                dataResultsObj.collage_image = collageImg_path + dataResults[i]["collage_image"];
+                                                                //dataResultsObj.image=imagesArray;
+                                                                //dataResultsObj.vote=items2;
+                                                                dataResultsObj.vote=combineImgVoteArray;
+
+                                                                key.push(dataResultsObj);
+                                                                dataResultsKeys.push(collageId_val);
+
+                                                                var recent = key.reverse();
 
                                                             }
                                                         }
-                                                        //To combine images and vote into single Array (key - value pair)
-                                                        var combineImgVoteArray = {};
-                                                        for (var k = 0; k < imagesPositionArray.length; k++)
-                                                        {
-                                                             combineImgVoteArray[imagesPositionArray[k]] = voteArray[k];
-                                                        }
-                                                        console.log("combine_array ========================================");
-                                                        console.log(combineImgVoteArray);
-                                                        console.log(imagesPositionArray);
-                                                        if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
-                                                                    dataResultsObj.profile_image = "";
-                                                        }else{
-
-                                                                    dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
-                                                        }
-
-                                                        dataResultsObj.user_name=dataResults[i]["name"];
-                                                        dataResultsObj.user_id=dataResults[i]["userId"];
-                                                        dataResultsObj.date_time=dataResults[i]["createdAt"];
-                                                        dataResultsObj.collage_id=collageId_val;
-                                                        dataResultsObj.collage_image = collageImg_path + dataResults[i]["collage_image"];
-                                                        //dataResultsObj.image=imagesArray;
-                                                        //dataResultsObj.vote=items2;
-                                                        dataResultsObj.vote=combineImgVoteArray;
-
-                                                        key.push(dataResultsObj);
-                                                        dataResultsKeys.push(collageId_val);
-
-                                                        var recent = key.reverse();
-
-                                                    }
+                                                        //console.log(key);
+                                                        //console.log(key.reverse());
+                                                        console.log(JSON.stringify(key.reverse()));
+                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds', recent: recent});
+                                                    }//allCollageImgResults length check
                                                 }
-                                                //console.log(key);
-                                                //console.log(key.reverse());
-                                                console.log(JSON.stringify(key.reverse()));
-                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds', recent: recent});
-                                            }
-                                    });
-
+                                        });
+                                    }//results length check
                                 }
                         });
 

@@ -64,21 +64,21 @@ module.exports = {
     ================================================================================================================================== */
     checkToken: function (token, callback) {
         var today = new Date();
-        console.log("Before query");
+        //console.log("Before query");
         //var query = "SELECT * FROM userToken WHERE token = '"+token+"'";
         var query = " SELECT usr.id, usr.name, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                     " FROM"+
                     " userToken usrtkn"+
                     " INNER JOIN user usr ON usr.id = usrtkn.userId"+
                     " WHERE usrtkn.token = '"+token+"' AND usrtkn.expiryDate > NOW()";
-        console.log(query);
+        //console.log(query);
         User_token.query(query, function (err, results) {
             if (err) {
                         console.log(err);
                         callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in check token query', error_details: err});
             } else {
-                console.log("results ===========================");
-                console.log(results);
+                //console.log("results ===========================");
+                //console.log(results);
                    if(results.length == 0){
                             //console.log("Length ==== 0");
                             callback(false, {status: 2, status_type: "Failure", message: 'token'});
@@ -91,8 +91,8 @@ module.exports = {
                                        callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in checking user status', error_details: err});
                                 }
                                 else{
-                                        console.log("statusResults ===========");
-                                        console.log(statusResults);
+                                        //console.log("statusResults ===========");
+                                        //console.log(statusResults);
                                         if(statusResults.status == 'active'){
                                                 callback(false, {status: 1, status_type: "Success", message: 'Valid token and active user', tokenDetails: results[0]});
                                         }else{

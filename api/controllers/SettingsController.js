@@ -14,7 +14,7 @@ module.exports = {
                             callback(true, err);
                         }
                         else {
-                                console.log(results);
+                                //console.log(results);
                                 var count = 0;
                                 var keyArray = [];
                                 var valueArray = [];
@@ -32,8 +32,8 @@ module.exports = {
                                 for (i = 0; i < keys.length; i++) {
                                     keyValue[keys[i]] = values[i];
                                 }
-                                console.log("Key Value");
-                                console.log(keyValue);
+                                //console.log("Key Value");
+                                //console.log(keyValue);
 
                                 req.options.settingsKeyValue = keyValue;
                                 next();

@@ -45,7 +45,7 @@ module.exports = {
             sendSmsOTP: function (smsAccountSid, smsAuthToken, smsFrom, callback) {
 
 
-
+                        console.log("service")
                         var twilio = require('twilio');
                         var client = twilio(smsAccountSid, smsAuthToken);
 

@@ -42,7 +42,7 @@ module.exports.routes = {
 
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
   '/user/editProfile'                     :           ['auth.authenticate','settings.settingsKeyValue'],
-  '/smsDetails/*'                   	  :           ['settings.settingsKeyValue'],
+  '/sms/*'                   	  		  :           		  ['settings.settingsKeyValue'],
 
   '/collage/*'                            :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
   '/addressBook/*'                        :           ['auth.authenticate'],

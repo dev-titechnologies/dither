@@ -17,10 +17,11 @@
 
       sendOTP:  function (req, res) {
            console.log("guytguyguy");
+           console.log(req.options)
 		    var smsAccountSid	= req.options.settingsKeyValue.SMS_ACCOUNT_SID;
 			var smsAuthToken 	= req.options.settingsKeyValue.SMS_AUTH_TOKEN;
 			var smsFrom 		= req.options.settingsKeyValue.SMS_FROM;
-			var client 		    = require('twilio')(smsAccountSid, smsAuthToken); //API_KEY and TOCKEN from TWILIO
+			//var client 		    = require('twilio')(smsAccountSid, smsAuthToken); //API_KEY and TOCKEN from TWILIO
 			
 
 			

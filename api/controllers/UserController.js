@@ -59,6 +59,17 @@ module.exports = {
                 };
 			
 			
+			//--------OTP CHECKING----------------------
+			
+			Sms.query("SELECT * FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"'", function (err, result) {
+				
+				
+				
+				
+				
+			});
+			
+			
 			
 
              User.create(values).exec(function(err, results){
@@ -157,7 +168,7 @@ module.exports = {
             
             var deviceId	= req.get('device_id');
             console.log(deviceId)
-            User.findOne({fbId: req.param('fbId')}).exec(function (err, results){
+            User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
                     if (err) {
                            sails.log("jguguu"+err);
                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});

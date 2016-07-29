@@ -1,5 +1,4 @@
 var crypto = require('crypto');
-//var userConstants = sails.config.constants.user;
 module.exports = {
 /*  =================================================================================================================================
             Function to create new token
@@ -8,7 +7,6 @@ module.exports = {
         console.log("user token >>>>>>>>>>");
         //Get token expiry time from datatbase
         var param = 3600;
-
         var expHours = param / 60;
 
         //Get expiry date
@@ -17,23 +15,13 @@ module.exports = {
 
         //Generate token
         var token = crypto.randomBytes(12).toString('hex');
-
-        //console.log("Token Starts ====>");
-        //console.log(token);
-        //console.log("Token Ends ====>");
         var tokenValues = {userId: userId, token: token, deviceId: deviceId, expiryDate: expiry_date};
-		sails.log(tokenValues)
         User_token.create(tokenValues).exec(function (err, resultToken) {
             if (err) {
                 console.log(err);
-                //console.log("Token Error");
-                //callback(true, err);
                 callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in create token service', error_details: err});
 
             } else {
-                //console.log("resultToken  --> STARTS");
-                console.log(resultToken);
-
                 callback(false, {status: 1, status_type: "Success", message: 'CreateToken service success', token: resultToken});
             }
 
@@ -48,7 +36,6 @@ module.exports = {
         User_token.destroy({token: token}).exec(function (err, results) {
 
             if (err) {
-                //callback(true, err);
                 callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in delete token query', error_details: err});
             } else {
                 console.log("deleted Successfully");
@@ -63,24 +50,19 @@ module.exports = {
         Function to check whether a token is expired or not
     ================================================================================================================================== */
     checkToken: function (token, callback) {
-        var today = new Date();
-        console.log("Before query");
-        //var query = "SELECT * FROM userToken WHERE token = '"+token+"'";
-        var query = " SELECT usr.id, usr.name, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
+
+        var query = " SELECT usr.id, usr.name, usr.profilePic, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                     " FROM"+
                     " userToken usrtkn"+
                     " INNER JOIN user usr ON usr.id = usrtkn.userId"+
                     " WHERE usrtkn.token = '"+token+"' AND usrtkn.expiryDate > NOW()";
-        console.log(query);
+
         User_token.query(query, function (err, results) {
             if (err) {
                         console.log(err);
                         callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in check token query', error_details: err});
             } else {
-                console.log("results ===========================");
-                console.log(results);
                    if(results.length == 0){
-                            //console.log("Length ==== 0");
                             callback(false, {status: 2, status_type: "Failure", message: 'token'});
                    }else{
 
@@ -91,8 +73,6 @@ module.exports = {
                                        callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in checking user status', error_details: err});
                                 }
                                 else{
-                                        console.log("statusResults ===========");
-                                        console.log(statusResults);
                                         if(statusResults.status == 'active'){
                                                 callback(false, {status: 1, status_type: "Success", message: 'Valid token and active user', tokenDetails: results[0]});
                                         }else{
@@ -102,15 +82,11 @@ module.exports = {
 
                                 }
                         });
-                            //callback(false, {status: 1, status_type: "Success", message: 'Valid token', tokenDetails: results[0]});
+
                    }
             }
 
         });
     }
-    
-    
-    
-    
 
 };

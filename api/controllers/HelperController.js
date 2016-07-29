@@ -13,6 +13,19 @@ module.exports = {
                         console.log(baseUrl);
                         req.options.server_baseUrl = baseUrl;
                         next();
-        }
+        },
+
+        file_path : function(req, res, next) {
+
+                        var profilePic_path         = "images/profilePics/";
+                        var collageImg_path         = "images/collage/";
+                        req.options.file_path = {
+                                                    profilePic_path     : profilePic_path,
+                                                    collageImg_path     : collageImg_path,
+                                                };
+                        next();
+        },
+
+
 };
 

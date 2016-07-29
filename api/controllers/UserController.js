@@ -9,7 +9,8 @@
  var fs		 	 = require('fs');
  var request	 = require('request');
  var path 		 = require('path');
- var client 					= require('twilio')('AC2ec983e569a4af9bf32c5f30d2a042b3', '723a9827da60ce0721b043f4c93be852'); //API_KEY and TOCKEN from TWILIO
+ var client 					= require('twilio')('AC834e9d9c31bd1e8a5965f7f25f2b1250', '29f2e106b68b5aa5b7f2c2e9dcf935e5'); //API_KEY and TOCKEN from TWILIO
+
 
 module.exports = {
 
@@ -20,35 +21,35 @@ module.exports = {
             //console.log(req.param('name'));
 
 
-            
-           //profilePic Upload
-			  
-			   var imgUrl	 	= req.param('url') ;
-			   var filename  	=  "image.png"; 
-			   var imagename 	= new Date().getTime() + filename;
-			  
-				
-			var download = function(uri, filename, callback)
-				{
-						request.head(uri, function(err, res, body){
-						sails.log('content-type:', res.headers['content-type']);
-						sails.log('content-length:', res.headers['content-length']);
 
-						request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-					
-						
-						
-					});
-				};
-				download(imgUrl, 'assets/images/ProfilePics/'+imagename, function()
-				{
-					sails.log('done');
-					
-				});
-				
-			//--end of upload--------
-				
-			
+           //profilePic Upload
+
+               var imgUrl       = req.param('url');
+               var filename     =  "image.png";
+               var imagename    = new Date().getTime() + filename;
+
+
+            /*var download = function(uri, filename, callback)
+                {
+                        request.head(uri, function(err, res, body){
+                        sails.log('content-type:', res.headers['content-type']);
+                        sails.log('content-length:', res.headers['content-length']);
+
+                        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+
+
+
+                    });
+                };
+                download(imgUrl, 'assets/images/ProfilePics/'+imagename, function()
+                {
+                    sails.log('done');
+
+                });*/
+
+            //--end of upload--------
+
+
             var deviceId = req.get('device_id');
             var values = {
 
@@ -57,10 +58,10 @@ module.exports = {
                         fbId        : req.param('fbId'),
                         phoneNumber : req.param('phoneNumber'),
                         profilePic  : imagename,
-                };	
-           
-           
-                
+                };
+
+
+
              User.create(values).exec(function(err, results){
                     if(err){
                             console.log(err);
@@ -70,18 +71,18 @@ module.exports = {
                             // Create new access token on login
                             UsertokenService.createToken(results.id, deviceId, function (err, userTokenDetails) {
                                 if (err) {
-											
-											User_token.query("DELETE from user where id = '"+results.id+"'", function (err, result) {
-											if (err) {
-														sails.log("deletion error")
-													 }
-											else
-												{
-													sails.log("deletion success")
-												}
-											});
-									
-											return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+
+                                            User_token.query("DELETE from user where id = '"+results.id+"'", function (err, result) {
+                                            if (err) {
+                                                        sails.log("deletion error")
+                                                     }
+                                            else
+                                                {
+                                                    sails.log("deletion success")
+                                                }
+                                            });
+
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                 } else {
                                         //User.publishCreate(result);
                                         //User.subscribe(req.socket,result);
@@ -167,13 +168,14 @@ module.exports = {
                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                     }
                     else{
-							sails.log(results)
+                            sails.log(results)
                             if(typeof(results) == 'undefined')
                             {
                                   return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                             }
                             else
                             {
+
 								
 								User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
 										if (err) {
@@ -204,6 +206,7 @@ module.exports = {
 															var url 	    = protocol + '://' + req.headers.host + '/';
 															var profile_image 	=  url+"/images/ProfilePics/"+results.profilePic;
 															sails.log(profile_image)
+															console.log(req.)
 															return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image});
 														}
 													});
@@ -215,9 +218,10 @@ module.exports = {
 									});
 					
                                   
+
                                 }
                           //console.log(results);
-                          
+
                     }
 
             });
@@ -248,12 +252,8 @@ module.exports = {
 
     selectUser: function (req, res) {
 
-			sails.log("select User")
-            console.log(req.options.tokenCheck);
-            console.log("selectUser ---------------------------------");
-            console.log(req.options.settingsKeyValue);
             var commonSettings = req.options.settingsKeyValue;
-            console.log(commonSettings.EMAIL_HOST);
+            //console.log(commonSettings.EMAIL_HOST);
             //console.log(req.options.settingsKeyValue[0]);
             //console.log(req.options.settingsKeyValue.EMAIL_HOST);
 
@@ -274,44 +274,44 @@ module.exports = {
 
             });
     },
-    
+
    /* ==================================================================================================================================
                To Edit Profile
-     ==================================================================================================================================== */ 
+     ==================================================================================================================================== */
 
-	  editProfile:  function (req, res) {
-		  
-				var fs = require('file-system');
-			    sails.log(req.param('token'))
-				var edit_type 					= req.param('edit-type');
-				var fileName  			    	= req.param('file');
-				var token						= req.param('token');
-				var imageUploadDirectoryPath    = '../../assets/images/ProfilePics';
-				
-				User_token.findOne({token: req.param('token')}).exec(function (err, results){
-                   if (err) 
+      editProfile:  function (req, res) {
+
+                var fs = require('file-system');
+                sails.log(req.param('token'))
+                var edit_type                   = req.param('edit-type');
+                var fileName                    = req.param('file');
+                var token                       = req.param('token');
+                var imageUploadDirectoryPath    = '../../assets/images/ProfilePics';
+
+                User_token.findOne({token: req.param('token')}).exec(function (err, results){
+                   if (err)
                     {
-						sails.log(err)
-					}
-					else
-					{
-						sails.log(results)
-						if(edit_type==1)
-						{
-								//Change ProfilePic
-								
-								var imageName = req.file('file')._files[0].stream.filename;
-								if(req.file('file'))
-								{
-									req.file('file').upload({dirname: '../../assets/images/ProfilePics', maxBytes: 10000000},function (err, profileUploadResults) {
-										if (err)
-										{
+                        sails.log(err)
+                    }
+                    else
+                    {
+                        sails.log(results)
+                        if(edit_type==1)
+                        {
+                                //Change ProfilePic
+
+                                var imageName = req.file('file')._files[0].stream.filename;
+                                if(req.file('file'))
+                                {
+                                    req.file('file').upload({dirname: '../../assets/images/ProfilePics', maxBytes: 10000000},function (err, profileUploadResults) {
+                                        if (err)
+                                        {
                                             console.log(err)
                                             return res.json(200, {status: 2, message: 'Updateion failure'});
 
-										}
-										else
-										{
+                                        }
+                                        else
+                                        {
                                            console.log(fileName+"profileImages   ------->>> Uploaded");
                                            console.log(profileUploadResults[0].fd);
                                            imageName = profileUploadResults[0].fd.split('/');
@@ -319,57 +319,58 @@ module.exports = {
                                            console.log(imageName)
                                            //imageName = profileUploadResults
                                            var query = "UPDATE user SET profilePic='"+ imageName +"' where id='"+results.userId+"'";
-											User.query(query, function(err, data){
-												if(err)
-												{
-													sails.log(err)
-												}
-												else
-												{
-										
-													return res.json(200, {status: 1, message: 'Updation Success'});
-												}
-								
-								
-												});
-                                          
-										}
-									});
-								}
-								
-						}
-						
-						if(edit_type==2)
-						{
-								//Remove ProfilePic
-								sails.log(results.userId)
-								
-								var query = "UPDATE user SET profilePic=null where id='"+results.userId+"'";
-								User.query(query, function(err, data){
-									if(err)
-									{
-										sails.log(err)
-										return res.json(200, {status: 2, message: 'failure'});
-									}
-									else
-									{
-										fs.unlink("assets/images/ProfilePics/"+profile_Image);
-										return res.json(200, {status: 1, message: 'Success'});
-									}
-							    });
-					
-						 }		
-					}
-				});	
-					
-				
-	  },
+                                            User.query(query, function(err, data){
+                                                if(err)
+                                                {
+                                                    sails.log(err)
+                                                }
+                                                else
+                                                {
+
+                                                    return res.json(200, {status: 1, message: 'Updation Success'});
+                                                }
+
+
+                                                });
+
+                                        }
+                                    });
+                                }
+
+                        }
+
+                        if(edit_type==2)
+                        {
+                                //Remove ProfilePic
+                                sails.log(results.userId)
+
+                                var query = "UPDATE user SET profilePic=null where id='"+results.userId+"'";
+                                User.query(query, function(err, data){
+                                    if(err)
+                                    {
+                                        sails.log(err)
+                                        return res.json(200, {status: 2, message: 'failure'});
+                                    }
+                                    else
+                                    {
+                                        fs.unlink("assets/images/ProfilePics/"+profile_Image);
+                                        return res.json(200, {status: 1, message: 'Success'});
+                                    }
+                                });
+
+                         }
+                    }
+                });
+
+
+      },
 
    /* ==================================================================================================================================
                To send OTP-Mobile verifictaion
-     ==================================================================================================================================== */ 
-     
+     ==================================================================================================================================== */
+
       sendOTP:  function (req, res) {
+
 		  
 			var mobile	= req.get("mobile");
 			
@@ -386,7 +387,7 @@ module.exports = {
 			client.sendMessage({
 
 								to:mobile, // Any number Twilio can deliver to
-								from: '+18583527598', // A number you bought from Twilio and can use for outbound communications
+								from: '+12403564607', // A number you bought from Twilio and can use for outbound communications
 								body: 'Your Verification Code is'+ verification_code// body of the SMS message
 
 							 }, function(err, responseData) { //this function is executed when a response is received from Twilio
@@ -429,6 +430,7 @@ module.exports = {
      
 	  
 	 
+
 
 };
 

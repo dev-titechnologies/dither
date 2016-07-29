@@ -43,9 +43,9 @@ module.exports.routes = {
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
   '/user/editProfile'                     :           ['auth.authenticate','settings.settingsKeyValue'],
 
-  '/collage/*'                            :           ['auth.authenticate'],
+  '/collage/*'                            :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
   '/addressBook/*'                        :           ['auth.authenticate'],
-  '/feed/*'                               :           ['auth.authenticate', 'helper.server_baseUrl'],
+  '/feed/*'                               :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
 
   /***************************************************************************
   *                                                                          *

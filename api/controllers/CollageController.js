@@ -168,7 +168,7 @@ module.exports = {
                     console.log(req.file('collage_image')._files[0]);
                     console.log(req.file('collage_image')._files.length);*/
                     console.log(req.body);
-                    console.log(req.body.REQUEST)
+                    console.log(req.body.REQUEST);
                     console.log("create collage");
                     //console.log(req.body.tagged_user);
                     //console.log(req.params("tagged_user"));
@@ -534,7 +534,134 @@ module.exports = {
             //        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Collage image is missing'});
             //}
 
-        }
+        },
 
+ /* ==================================================================================================================================
+               To get Dither (collage)
+     ==================================================================================================================================== */
+        getDither:  function (req, res) {
+
+                    console.log("get--- Dither");
+/* ################################################################################################################### */
+
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var server_baseUrl              =     req.options.server_baseUrl;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var userName                    =     tokenCheck.tokenDetails.name;
+                    var userProfilePic              =     server_baseUrl + req.options.file_path.profilePic_path + tokenCheck.tokenDetails.profilePic;
+                    var query;
+                    console.log("Get Feed  -------------------- ================================================");
+                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the feed'});
+                        query = " SELECT clg.id FROM collage clg WHERE clg.userId = "+userId;
+                                //" UNION"+
+                                //" SELECT tg.collageId FROM tags tg WHERE tg.userId = "+userId;
+                        console.log(query);
+                        Collage.query(query, function(err, results) {
+                                if(err)
+                                {
+                                    console.log(err);
+                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting collages of logged user', error_details: err});
+                                }
+                                else
+                                {
+                                    console.log(results);
+                                    console.log(results[0].id);
+                                    console.log(results[1].id);
+                                    console.log(results[2].id);
+                                    console.log(results.length);
+                                    var resultsPushArray = [];
+                                    results.forEach(function(factor, index){
+                                            console.log("factor");
+                                            console.log(factor);
+                                            resultsPushArray.push(factor.id);
+                                    });
+                                    console.log(resultsPushArray);
+                                    query = " SELECT clgdt.collageId, clgdt.position, clgdt.vote, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt,"+
+                                            " usr.profilePic, usr.name"+
+                                            " FROM collage clg"+
+                                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                            " INNER JOIN user usr ON usr.id = clg.userId"+
+                                            " WHERE clg.id"+
+                                            " IN ("+resultsPushArray+")"+
+                                            " ORDER BY clg.createdAt";
+                                    console.log(query);
+                                    Collage.query(query, function(err, allCollageImgResults) {
+                                            if(err)
+                                            {
+                                                console.log(err);
+                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in grtting Images in collage of logged user', error_details: err});
+                                            }
+                                            else
+                                            {
+                                                console.log(allCollageImgResults);
+                                                var dataResults = allCollageImgResults;
+                                                var key = [];
+                                                var dataResultsKeys = [];
+                                                for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                    var dataResultsObj = new Object();
+                                                    var collageId_val =dataResults[i]["collageId"];
+                                                    //console.log(data[i]);
+                                                    if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
+                                                    {
+                                                        var imagesPositionArray =[];
+                                                        var voteArray =[];
+                                                        for (var j = dataResults.length - 1; j >= 0; j--)
+                                                        {
+                                                            if(dataResults[j]["collageId"]==collageId_val)
+                                                            {
+                                                                imagesPositionArray.push(dataResults[j]["position"]) ;
+                                                                voteArray.push(dataResults[j]["vote"]) ;
+
+                                                            }
+                                                        }
+                                                        //To combine images and vote into single Array (key - value pair)
+                                                        var combineImgVoteArray = {};
+                                                        for (var k = 0; k < imagesPositionArray.length; k++)
+                                                        {
+                                                             combineImgVoteArray[imagesPositionArray[k]] = voteArray[k];
+                                                        }
+                                                        //console.log("combine_array ========================================");
+                                                        //console.log(combineImgVoteArray);
+                                                        //console.log(imagesPositionArray);
+                                                        dataResultsObj.date_time=dataResults[i]["createdAt"];
+                                                        dataResultsObj.collage_id=collageId_val;
+                                                        dataResultsObj.collage_image = server_baseUrl+"images/collage/"+dataResults[i]["collage_image"];
+                                                        //dataResultsObj.image=imagesArray;
+                                                        //dataResultsObj.vote=items2;
+                                                        dataResultsObj.totalVote =dataResults[i]["totalVote"];
+                                                        dataResultsObj.vote=combineImgVoteArray;
+
+                                                        key.push(dataResultsObj);
+                                                        dataResultsKeys.push(collageId_val);
+
+                                                        var recent_dithers              =       key.reverse();
+                                                        function predicatBy(prop){
+                                                           return function(a,b){
+                                                              if( a[prop] > b[prop]){
+                                                                  return 1;
+                                                              }else if( a[prop] < b[prop] ){
+                                                                  return -1;
+                                                              }
+                                                              return 0;
+                                                           }
+                                                        }
+                                                        var dithers_with_max_votes      =       key.reverse().sort( predicatBy("totalVote") );
+
+
+                                                    }
+                                                }
+                                                //console.log(key);
+                                                //console.log(key.reverse());
+                                                console.log(JSON.stringify(key.reverse()));
+                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers', username: userName, user_profile_image: userProfilePic, recent_dithers: recent_dithers, dithers_with_max_votes: dithers_with_max_votes });
+                                            }
+                                    });
+
+
+                                }
+                        });
+
+/* ################################################################################################################### */
+        },
 };
 

@@ -42,6 +42,10 @@ module.exports = {
             type: 'integer',
         },
 
+        totalVote: {
+            type: 'integer',
+        },
+
         createdAt: {
             type: 'datetime',
         },

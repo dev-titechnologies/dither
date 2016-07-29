@@ -2,6 +2,7 @@ module.exports = {
             sendSms: function (smsAccountSid, smsAuthToken, smsFrom, callback) {
 
 
+
                         var twilio = require('twilio');
                         var client = twilio(smsAccountSid, smsAuthToken);
 
@@ -13,6 +14,7 @@ module.exports = {
 							verification_code += possible.charAt(Math.floor(Math.random()*possible.length)); // usertocken generation
 							sails.log()
 						}
+
                         client.sendMessage({
 
 								to:mobile, // Any number Twilio can deliver to

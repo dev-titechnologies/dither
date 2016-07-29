@@ -5,189 +5,35 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return 1;
+      }else if( a[prop] < b[prop] ){
+          return -1;
+      }
+      return 0;
+   }
+}
 module.exports = {
-
-    /* ==================================================================================================================================
-               To Upload Images
-     ==================================================================================================================================== */
-        upload: function (req, res) {
-
-                /*req.file(fileList[0]).upload({dirname: '../../assets/images/test', maxBytes: 10000000},function (err, results) {
-                            if (err)
-                            {
-                                console.log(err);
-                                callback();
-                            }
-                            else
-                            {
-
-                               console.log(results);
-                               //callback();
-                            }
-                });*/
-                /*var fs = require('file-system');
-                fs.unlink("assets/images/test/4aff474e-1577-4780-b46e-d031afccdf68.jpg");*/
-        },
-
-
-        uploadimage: function (req, res) {
-                console.log("upload ---------- Image");
-                var tokenCheck                  =     req.options.tokenCheck;
-                var userId                      =     tokenCheck.tokenDetails.userId;
-                var fullName                    =     tokenCheck.tokenDetails.name;
-                var fbId                        =     tokenCheck.tokenDetails.fbId;
-                var imageUploadDirectoryPath    =     '../../assets/images/collage';
-
-                console.log(tokenCheck);
-                //console.log(req.file('collageImages1'));
-               // console.log(req.file('collageImages2'));
-                //console.log(req.file('collageImages3'));
-
-                //console.log(req.file('collageImages')._files);
-                console.log("collage Images 0th =====================================.");
-               // console.log(req.file('collageImages')._files[0]);
-                console.log(req.file('collageImages1')._files[0].stream.filename);
-                //console.log(req.file('collageImages2')._files[0].stream.filename);
-                //console.log(req.file('collageImages3')._files[0].stream.filename);
-
-                function commonCollageUpload(fileName,collageUploadResults, callback){
-                        if(req.file(fileName)){
-                            req.file(fileName).upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults) {
-                                        if (err)
-                                        {
-                                            console.log(err);
-                                            callback();
-                                        }
-                                        else
-                                        {
-                                           console.log(fileName+"collageImages   ------->>> Uploaded");
-                                           console.log(collageUploadResults);
-                                           callback();
-                                        }
-                            });
-                        }
-                        else{
-                                        callback();
-                        }
-                }
-                async.parallel([
-                                function(callback) {
-                                        var fileName = "collageImages1";
-                                        var collageUploadResults = "uploadedCollageFiles_1";
-                                        commonCollageUpload(fileName, collageUploadResults, callback);
-                                },
-                                function(callback) {
-                                        var fileName = "collageImages2";
-                                        var collageUploadResults = "uploadedCollageFiles_2";
-                                        commonCollageUpload(fileName, collageUploadResults, callback);
-                                },
-                                function(callback) {
-                                        var fileName = "collageImages3";
-                                        var collageUploadResults = "uploadedCollageFiles_3";
-                                        commonCollageUpload(fileName, collageUploadResults, callback);
-                                },
-                                function(callback) {
-                                        var fileName = "collageImages4";
-                                        var collageUploadResults = "uploadedCollageFiles_4";
-                                        commonCollageUpload(fileName, collageUploadResults, callback);
-                                }
-                           ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                            if (err) {
-                                                console.log(err);
-                                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
-                                            }else{
-                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully uploaded collage'});
-                                            }
-
-                });
-               /* req.file('collageImages1').upload({dirname: '../../assets/images/collage/collageImages1', maxBytes: 10000000},function (err, files1) {
-                        if (err)
-                        {
-                            console.log(err);
-                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage image', error_details: err});
-                        }
-                        else
-                        {
-                           console.log("After upload -------------------");
-                           console.log(files1);
-                           return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the collage Upload'});
-                        }
-                });
-                req.file('collageImages2').upload({dirname: '../../assets/images/collage/collageImages2', maxBytes: 10000000},function (err, files2) {
-                        if (err)
-                        {
-                            console.log(err);
-                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage image', error_details: err});
-                        }
-                        else
-                        {
-                           console.log("After upload -------------------");
-                           console.log(files2);
-                           return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the collage Upload'});
-                        }
-                });*/
-               /* req.file('collageImages3').upload({dirname: '../../assets/images/collage/collageImages3', maxBytes: 10000000},function (err, files3) {
-                        if (err)
-                        {
-                            console.log(err);
-                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage image', error_details: err});
-                        }
-                        else
-                        {
-                           console.log("After upload -------------------");
-                           console.log(files);
-                           return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the collage Upload'});
-                        }
-                });*/
-
-                /*req.file('collageImages').upload({
-                        // don't allow the total upload size to exceed ~10MB
-                        maxBytes: 10000000
-                    },function whenDone(err, uploadedFiles) {
-                        if (err) {
-                          //return res.negotiate(err);
-                          console.log(err);
-                        }else{
-                            console.log(uploadedFiles);
-                        }
-                    });*/
-
-
-        },
-
 
     /* ==================================================================================================================================
                To create Dither (collage)
      ==================================================================================================================================== */
 
         createDither:  function (req, res) {
-                    //console.log(req.file('collageImages1'));
-                    //console.log(req.file('collageImages1')._files);
-                    //console.log(req.file('collageImages1')._files[0].stream.filename);
-                    /*console.log(req.file('collageImages1')._files).length;
-                    console.log(req.file('collage_image')._files[0]);
-                    console.log(req.file('collage_image')._files.length);*/
-                    console.log(req.body);
+
                     console.log(req.body.REQUEST);
-                    console.log("create collage");
-                    //console.log(req.body.tagged_user);
-                    //console.log(req.params("tagged_user"));
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var imageUploadDirectoryPath   =     '../../assets/images/collage'
-                    console.log(tokenCheck);
-                    console.log(userId);
                     var concatUploadImgArray ;
-
-
                     var uploadedImgResult_1,
                         uploadedImgResult_2,
                         uploadedImgResult_3,
                         uploadedImgResult_4;
 
-
-
-                    function commonCollageUpload(fileName,collageUploadResults, callback){
+                    /*function commonCollageUpload(fileName,collageUploadResults, callback){
                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                             console.log(fileName);
                             console.log(req.file(fileName)._files.length);
@@ -204,7 +50,7 @@ module.exports = {
                                                console.log(fileName+"collageImages   ------->>> Uploaded");
                                                console.log(collageUploadResults);
                                                console.log(fileName);
-                                                /*if(fileName === "collageImages1"){
+                                                if(fileName === "collageImages1"){
                                                     uploadedImgResult_1 =   collageUploadResults;
                                                     console.log(uploadedImgResult_1);
                                                     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
@@ -223,7 +69,7 @@ module.exports = {
                                                     uploadedImgResult_4 =   collageUploadResults;
                                                     console.log(uploadedImgResult_4);
                                                     console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
-                                                }*/
+                                                }
                                                callback();
                                             }
                                 });
@@ -231,31 +77,14 @@ module.exports = {
                             else{
                                             callback();
                             }
-                    }
+                    }*/
             //if(req.file('collage_image') !== 'undefined'){
 
                 //if(req.file('collageImages1') !== 'undefined'){
                     async.series([
-
                                 function(callback) {
-
                                         async.parallel([
                                                         function(callback) {
-                                                                //console.log(req.file("collageImages1")._files.length);
-                                                                //console.log(req.file("collageImages1"));
-                                                                /*if(req.file("collageImages1")._files.length != 0){
-                                                                    var fileName = "collageImages1";
-                                                                    var collageUploadResults = "uploadedCollageFiles_1";
-                                                                    commonCollageUpload(fileName, collageUploadResults, callback);
-                                                                    console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
-                                                                    console.log(collageUploadResults);
-                                                                    console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
-                                                                }else{
-                                                                    callback();
-
-                                                                }*/
-
-
 
                                                                 req.file("collageImages1").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_1) {
                                                                                 if (err)
@@ -266,25 +95,12 @@ module.exports = {
                                                                                 else
                                                                                 {
                                                                                    uploadedImgResult_1 = collageUploadResults_1;
-                                                                                   //console.log(collageUploadResults_1);
+                                                                                   console.log(collageUploadResults_1);
                                                                                    callback();
                                                                                 }
                                                                 });
                                                         },
                                                         function(callback) {
-                                                            //console.log(req.file("collageImages2")._files.length);
-                                                            //console.log(req.file("collageImages2"));
-                                                                /*if(req.file("collageImages2")._files.length != 0){
-                                                                    var fileName = "collageImages2";
-                                                                    var collageUploadResults = "uploadedCollageFiles_2";
-                                                                    commonCollageUpload(fileName, collageUploadResults, callback);
-                                                                    console.log("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
-                                                                    console.log(commonCollageUpload(fileName, collageUploadResults, callback));
-                                                                     console.log("]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
-                                                                }else{
-                                                                    callback();
-                                                                }*/
-
                                                                 req.file("collageImages2").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_2) {
                                                                                 if (err)
                                                                                 {
@@ -294,20 +110,13 @@ module.exports = {
                                                                                 else
                                                                                 {
                                                                                    uploadedImgResult_2 = collageUploadResults_2;
-                                                                                   //console.log(collageUploadResults_2);
+                                                                                   console.log(collageUploadResults_2);
                                                                                    callback();
                                                                                 }
                                                                 });
 
                                                         },
                                                         function(callback) {
-                                                                /*if(req.file("collageImages3")._files.length != 0){
-                                                                    var fileName = "collageImages3";
-                                                                    var collageUploadResults = "uploadedCollageFiles_3";
-                                                                    commonCollageUpload(fileName, collageUploadResults, callback);
-                                                                }else{
-                                                                   callback();
-                                                                }*/
                                                                 req.file("collageImages3").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_3) {
                                                                                 if (err)
                                                                                 {
@@ -317,19 +126,12 @@ module.exports = {
                                                                                 else
                                                                                 {
                                                                                    uploadedImgResult_3 = collageUploadResults_3;
-                                                                                   //console.log(collageUploadResults_3);
+                                                                                   console.log(collageUploadResults_3);
                                                                                    callback();
                                                                                 }
                                                                 });
                                                         },
                                                         function(callback) {
-                                                                /*if(req.file("collageImages4")._files.length != 0){
-                                                                    var fileName = "collageImages4";
-                                                                    var collageUploadResults = "uploadedCollageFiles_4";
-                                                                    commonCollageUpload(fileName, collageUploadResults, callback);
-                                                                }else{
-                                                                    callback();
-                                                                }*/
                                                                 req.file("collageImages4").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_4) {
                                                                                 if (err)
                                                                                 {
@@ -339,7 +141,7 @@ module.exports = {
                                                                                 else
                                                                                 {
                                                                                    uploadedImgResult_4 = collageUploadResults_4;
-                                                                                   //console.log(collageUploadResults_4);
+                                                                                   console.log(collageUploadResults_4);
                                                                                    callback();
                                                                                 }
                                                                 });
@@ -394,25 +196,10 @@ module.exports = {
                                                             Collage.create(values).exec(function(err, results){
                                                                     if(err){
                                                                             console.log(err);
-                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
                                                                             callback();
                                                                     }
                                                                     else{
-
-                                                                                console.log("results ----------------------------------------------------");
-                                                                                console.log(concatUploadImgArray);
-                                                                                //console.log(results);
                                                                                 var collageDetailImgArray = [];
-                                                                                /*files.forEach(function(factor, index){
-                                                                                     console.log(factor);
-                                                                                     filename = factor.fd.split('/');
-                                                                                     filename = filename[filename.length-1];
-                                                                                     var position = "left";
-                                                                                     console.log(index);
-                                                                                     if(index != 0){
-                                                                                            collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
-                                                                                     }
-                                                                                });*/
                                                                                 concatUploadImgArray.forEach(function(factor, index){
                                                                                      console.log("factor");
                                                                                      console.log(factor);
@@ -635,16 +422,7 @@ module.exports = {
                                                                     dataResultsKeys.push(collageId_val);
 
                                                                     var recent_dithers              =       key.reverse();
-                                                                    function predicatBy(prop){
-                                                                       return function(a,b){
-                                                                          if( a[prop] > b[prop]){
-                                                                              return 1;
-                                                                          }else if( a[prop] < b[prop] ){
-                                                                              return -1;
-                                                                          }
-                                                                          return 0;
-                                                                       }
-                                                                    }
+
                                                                     var dithers_with_max_votes      =       key.reverse().sort( predicatBy("totalVote") );
 
 
@@ -674,6 +452,7 @@ module.exports = {
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var other_userId                =     req.param("user_id");
+                    var other_userName, other_userProfilePic;
                     //var userName                    =     tokenCheck.tokenDetails.name;
                     //var userProfilePic              =     server_baseUrl + req.options.file_path.profilePic_path + tokenCheck.tokenDetails.profilePic;
                     var query;
@@ -731,7 +510,7 @@ module.exports = {
                                                                 return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', recent_dithers: [], dithers_with_max_votes: []});
                                                         }else{
                                                                 console.log(allCollageImgResults);
-                                                                /*var dataResults = allCollageImgResults;
+                                                                var dataResults = allCollageImgResults;
                                                                 var key = [];
                                                                 var dataResultsKeys = [];
                                                                 for (var i = dataResults.length - 1; i >= 0; i--) {
@@ -757,41 +536,26 @@ module.exports = {
                                                                         {
                                                                              combineImgVoteArray[imagesPositionArray[k]] = voteArray[k];
                                                                         }
-                                                                        //console.log("combine_array ========================================");
-                                                                        //console.log(combineImgVoteArray);
-                                                                        //console.log(imagesPositionArray);
-                                                                        dataResultsObj.date_time=dataResults[i]["createdAt"];
-                                                                        dataResultsObj.collage_id=collageId_val;
-                                                                        dataResultsObj.collage_image = server_baseUrl+"images/collage/"+dataResults[i]["collage_image"];
-                                                                        //dataResultsObj.image=imagesArray;
-                                                                        //dataResultsObj.vote=items2;
-                                                                        dataResultsObj.totalVote =dataResults[i]["totalVote"];
-                                                                        dataResultsObj.vote=combineImgVoteArray;
+
+                                                                        other_userName                          =       dataResults[i]["name"];
+                                                                        other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
+                                                                        dataResultsObj.date_time                =       dataResults[i]["createdAt"];
+                                                                        dataResultsObj.collage_id               =       collageId_val;
+                                                                        dataResultsObj.collage_image            =       server_baseUrl+"images/collage/"+dataResults[i]["collage_image"];
+                                                                        dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
+                                                                        dataResultsObj.vote                     =       combineImgVoteArray;
 
                                                                         key.push(dataResultsObj);
                                                                         dataResultsKeys.push(collageId_val);
-
                                                                         var recent_dithers              =       key.reverse();
-                                                                        function predicatBy(prop){
-                                                                           return function(a,b){
-                                                                              if( a[prop] > b[prop]){
-                                                                                  return 1;
-                                                                              }else if( a[prop] < b[prop] ){
-                                                                                  return -1;
-                                                                              }
-                                                                              return 0;
-                                                                           }
-                                                                        }
                                                                         var dithers_with_max_votes      =       key.reverse().sort( predicatBy("totalVote") );
-
-
                                                                     }
                                                                 }
                                                                 //console.log(key);
                                                                 //console.log(key.reverse());
                                                                 console.log(JSON.stringify(key.reverse()));
-                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers', username: userName, user_profile_image: userProfilePic, recent_dithers: recent_dithers, dithers_with_max_votes: dithers_with_max_votes });
-                                                                */
+                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers', username: other_userName, user_profile_image: other_userProfilePic, recent_dithers: recent_dithers, dithers_with_max_votes: dithers_with_max_votes });
+
                                                         }//allCollageImgResults length check else
                                                     }
                                             });
@@ -801,26 +565,5 @@ module.exports = {
                         });
         },
 
-/* ==================================================================================================================================
-               SMS TEST
-     ==================================================================================================================================== */
-        smsda:  function (req, res) {
-                var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
-                var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
-                var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
-                console.log(req.options.settingsKeyValue);
-
-                SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
-                        if(err)
-                        {
-                                console.log(err);
-                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                //callback();
-                        }else{
-                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                //callback();
-                        }
-                    });
-        },
 };
 

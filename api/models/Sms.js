@@ -23,10 +23,7 @@ module.exports = {
                 defaultsTo: false
             },
         OTPCode: {
-                type: 'string',
-            },
-        profilePic: {
-                type: 'string',
+                type: 'integer',
             },
        
   }

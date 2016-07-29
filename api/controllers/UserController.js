@@ -9,6 +9,8 @@
  var fs		 	 = require('fs');
  var request	 = require('request');
  var path 		 = require('path');
+ var client 					= require('twilio')('AC2ec983e569a4af9bf32c5f30d2a042b3', '723a9827da60ce0721b043f4c93be852'); //API_KEY and TOCKEN from TWILIO
+
 module.exports = {
 
  /* ==================================================================================================================================
@@ -151,9 +153,14 @@ module.exports = {
                To check for a new User
      ==================================================================================================================================== */
     checkForNewUser:  function (req, res) {
-
+			
+			
+			
             console.log(req.options.settingKeyValue);
             console.log(req.param('fbId'));
+            
+            var deviceId	= req.get('device_id');
+            console.log(deviceId)
             User.findOne({fbId: req.param('fbId')}).exec(function (err, results){
                     if (err) {
                            sails.log("jguguu"+err);
@@ -176,7 +183,7 @@ module.exports = {
 											console.log(result)
 											//delete existing token 
 								    
-											/*User_token.query("DELETE from userToken where deviceId = '"+result[0].deviceId+"'", function (err, result) {
+											User_token.query("DELETE from userToken where deviceId = '"+deviceId+"'", function (err, result) {
 												if (err) {
 														}
 												else
@@ -185,7 +192,7 @@ module.exports = {
 													console.log(result.deviceId)
 													 //Create new access token on login
 								   
-													UsertokenService.createToken(results.id,result[0].deviceId, function (err, userTokenDetails) 
+													UsertokenService.createToken(results.id,deviceId, function (err, userTokenDetails) 
 													{
 														if (err) 
 														{
@@ -193,15 +200,17 @@ module.exports = {
 														} 
 														else
 														{
-											
-															return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:results.profilePic});
+															var protocol 	= req.connection.encrypted?'https':'http';
+															var url 	    = protocol + '://' + req.headers.host + '/';
+															var profile_image 	=  url+"/images/ProfilePics/"+results.profilePic;
+															sails.log(profile_image)
+															return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image});
 														}
 													});
 													
 												 }
-											});*/
+											});
 											
-										    return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:results.profilePic});
 								        }
 									});
 					
@@ -362,13 +371,59 @@ module.exports = {
      
       sendOTP:  function (req, res) {
 		  
-			var mobile	= req.param("mobile");
+			var mobile	= req.get("mobile");
 			
 			//---------SMS SENDING-------------
+			var possible = "0123456789"; 
+			var verification_code	= "";
+			for(var i=0;i<6;i++)
+			{
+				verification_code += possible.charAt(Math.floor(Math.random()*possible.length)); // usertocken generation
+			}
 			
-			//---
 			
+			//Send an SMS text message
+			client.sendMessage({
+
+								to:mobile, // Any number Twilio can deliver to
+								from: '+18583527598', // A number you bought from Twilio and can use for outbound communications
+								body: 'Your Verification Code is'+ verification_code// body of the SMS message
+
+							 }, function(err, responseData) { //this function is executed when a response is received from Twilio
+
+								if (!err) { 
+					        
+											console.log(responseData.body)
+											return res.json(200, {status: 1, message: 'Success'});
 			
+									      }		
+								else
+								{
+										console.log(err)
+										
+								}	      
+							});		      			
+		   //-----end of SMS-------------------
+			
+		 /*  var values = {
+
+							OTPCode:4251
+								
+						};	
+           
+           Sms.query("INSERT INTO smsDetails(OTPCode) values('4256')",function(err, results){
+                    if(err)
+                    {
+						sails.log("eror")
+					}
+					else
+					{
+						sails.log("suceess")
+						return res.json(200, {status: 1, message: 'Success'});
+
+					}
+			});		*/
+            
 		  
 	  }
      

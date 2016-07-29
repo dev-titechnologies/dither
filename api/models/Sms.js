@@ -26,6 +26,9 @@ module.exports = {
         OTPCode: {
                 type: 'integer',
             },
+        mobile_no:{
+			type: 'integer',	
+		},    
         createdAt: {
                 type: 'datetime',
             },

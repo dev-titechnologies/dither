@@ -9,7 +9,7 @@
  var fs		 	 = require('fs');
  var request	 = require('request');
  var path 		 = require('path');
- var client 					= require('twilio')('AC834e9d9c31bd1e8a5965f7f25f2b1250', '29f2e106b68b5aa5b7f2c2e9dcf935e5'); //API_KEY and TOCKEN from TWILIO
+ //var client 	 = require('twilio')('AC834e9d9c31bd1e8a5965f7f25f2b1250', '29f2e106b68b5aa5b7f2c2e9dcf935e5'); //API_KEY and TOCKEN from TWILIO
 
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
 
 
            //profilePic Upload
-
+			
                var imgUrl       = req.param('profilepic');
                var filename     =  "image.png";
                var imagename    = new Date().getTime() + filename;
@@ -32,9 +32,7 @@ module.exports = {
             var download = function(uri, filename, callback)
                 {
                         request.head(uri, function(err, res, body){
-                        sails.log('content-type:', res.headers['content-type']);
-                        sails.log('content-length:', res.headers['content-length']);
-
+                        
                         request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
 
 
@@ -59,8 +57,9 @@ module.exports = {
                         phoneNumber : req.param('mobile_number'),
                         profilePic  : imagename,
                 };
-
-
+			
+			
+			
 
              User.create(values).exec(function(err, results){
                     if(err){
@@ -135,7 +134,7 @@ module.exports = {
                                                                         console.log(err);
                                                                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                     }else{
-                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token});
                                                                     }
 
                                             });
@@ -198,11 +197,12 @@ module.exports = {
 														} 
 														else
 														{
+															console.log(userTokenDetails.token)
 															var protocol 	= req.connection.encrypted?'https':'http';
 															var url 	    = protocol + '://' + req.headers.host + '/';
 															var profile_image 	=  url+"/images/ProfilePics/"+results.profilePic;
 															sails.log(profile_image)
-															return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image});
+															return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image,token:userTokenDetails.token.token});
 														}
 													});
 													

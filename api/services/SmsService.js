@@ -31,7 +31,7 @@ module.exports = {
 											
 											var OTPCode = verification_code;
 											
-											Sms.query("INSERT INTO smsDetails(OTPCode) values('"+OTPCode+"')",function(err, results){
+											Sms.query("INSERT INTO smsDetails(OTPCode,mobile_no) values('"+OTPCode+"','"+mobile+"')",function(err, results){
 												if(err)
 													{
 														sails.log("eror")

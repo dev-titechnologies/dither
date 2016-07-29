@@ -29,7 +29,7 @@ module.exports = {
             type: 'integer',
         },
 
-        totalVote: {
+        vote: {
             type: 'integer',
         },
 

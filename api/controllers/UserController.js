@@ -21,12 +21,12 @@ module.exports = {
 
            //profilePic Upload
 
-               var imgUrl       = req.param('url') ;
+               var imgUrl       = req.param('url');
                var filename     =  "image.png";
                var imagename    = new Date().getTime() + filename;
 
 
-            var download = function(uri, filename, callback)
+            /*var download = function(uri, filename, callback)
                 {
                         request.head(uri, function(err, res, body){
                         sails.log('content-type:', res.headers['content-type']);
@@ -42,7 +42,7 @@ module.exports = {
                 {
                     sails.log('done');
 
-                });
+                });*/
 
             //--end of upload--------
 

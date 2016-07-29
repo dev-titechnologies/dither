@@ -57,12 +57,12 @@ module.exports = {
         notifyComment: {
                 type: 'boolean',
                 defaultsTo: 'false'
-            }, 
+            },
         notifyFB: {
                 type: 'boolean',
                 defaultsTo: 'false'
             },
-            
+
         createdAt: {
                 type: 'datetime',
             },

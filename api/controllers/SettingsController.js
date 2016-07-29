@@ -8,6 +8,7 @@
 module.exports = {
 
     settingsKeyValue: function (req, res, next) {
+		       console.log("ghuihg")
                 var query = "SELECT * FROM settings";
                 Settings.query(query, function (err, results) {
                         if (err) {

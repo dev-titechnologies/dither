@@ -48,21 +48,21 @@ module.exports = {
             },
         notifyOpinion: {
                 type: 'boolean',
-                defaultsTo: false
+                defaultsTo: true
             },
         notifyVote: {
                 type: 'boolean',
-                defaultsTo: false
+                defaultsTo: true
             },
         notifyComment: {
                 type: 'boolean',
 
-                defaultsTo: false
+                defaultsTo: true
             }, 
 
         notifyFB: {
                 type: 'boolean',
-                defaultsTo: false
+                defaultsTo: true
             },
 
         createdAt: {

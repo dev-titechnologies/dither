@@ -1,34 +1,49 @@
 module.exports = {
-            sendSms: function (callback) {
+            sendSms: function (smsAccountSid, smsAuthToken, smsFrom, callback) {
+
 
                         var twilio = require('twilio');
-                        var client = twilio(accountSid, authToken);
+                        var client = twilio(smsAccountSid, smsAuthToken);
 
                         //Twilio Test Account Credentials
-                        var accountSid = "AC5652cf99b933599eec08782c90d4f0dd";
-                        var authToken  = "9a4ae2f86e7b3b272541f0c8aef8e2a7";
-                        var smsFrom    = '+15005550006';
-                        var smsTo      = '+919746354170'; //Airtel
-                        //var smsTo      = '+919746354170'; Bsnl
-                        //var smsTo      = '+919809502603'; Vodafone
-                        //var smsTo      = '+919526132793'; Idea
-
+                       
+					   var verification_code	= "";
+						for(var i=0;i<4;i++)
+						{
+							verification_code += possible.charAt(Math.floor(Math.random()*possible.length)); // usertocken generation
+							sails.log()
+						}
                         client.sendMessage({
-                            to          :   smsTo,
-                            from        :   smsFrom,
-                            body        :   'Hi Just Testing The Sms From Dither'
-                        }, function(err, message) {
+
+								to:mobile, // Any number Twilio can deliver to
+								from: smsFrom, // A number you bought from Twilio and can use for outbound communications
+								body: 'Your Verification Code is'+ verification_code// body of the SMS message
+
+							 }, function(err, message) {
                                 if (err) {
                                     console.log(err);
                                     console.error('Text failed because: '+err.message);
-                                    callback(false, {status: 2, status_type: 'Failure' , message: 'email not reachable'});
+                                    callback(false, {status: 2, status_type: 'Failure' , message: 'sms not reachable'});
                                 } else {
-                                    console.log('Text sent! Message SID: '+message.sid);
-                                    console.log("smsFrom ====================== +++++++++++++++++++++++");
-                                    console.log(smsFrom);
-                                    console.log("smsTo ======================== +++++++++++++++++++++++");
-                                    console.log(smsTo);
-                                    callback(false, {status: 1, status_type: 'Success' , message: 'success'});
+                                    console.log(responseData.body)
+											
+											var OTPCode = verification_code;
+											
+											Sms.query("INSERT INTO smsDetails(OTPCode) values('"+OTPCode+"')",function(err, results){
+												if(err)
+													{
+														sails.log("eror")
+													}
+												else
+													{
+														sails.log(results)
+														callback(true, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+
+														
+
+													}
+												});	
+												
                                     //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully send the sms'});
                                 }
                         });

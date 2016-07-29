@@ -18,6 +18,7 @@ module.exports = {
         ditherId: {
                 type: 'integer',
             },
+            
         smsVerified: {
                 type: 'boolean',
                 defaultsTo: false
@@ -25,7 +26,12 @@ module.exports = {
         OTPCode: {
                 type: 'integer',
             },
-       
+        createdAt: {
+                type: 'datetime',
+            },
+        updatedAt: {
+                type: 'datetime',
+            },
   }
 };
 

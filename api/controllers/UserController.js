@@ -24,12 +24,12 @@ module.exports = {
 
            //profilePic Upload
 
-               var imgUrl       = req.param('url');
+               var imgUrl       = req.param('profilepic');
                var filename     =  "image.png";
                var imagename    = new Date().getTime() + filename;
+               
 
-
-            /*var download = function(uri, filename, callback)
+            var download = function(uri, filename, callback)
                 {
                         request.head(uri, function(err, res, body){
                         sails.log('content-type:', res.headers['content-type']);
@@ -45,18 +45,18 @@ module.exports = {
                 {
                     sails.log('done');
 
-                });*/
+                });
 
             //--end of upload--------
 
-
+			var OTPCode	 = req.param('otp');
             var deviceId = req.get('device_id');
             var values = {
 
-                        name        : req.param('name'),
-                        email       : req.param('email'),
-                        fbId        : req.param('fbId'),
-                        phoneNumber : req.param('phoneNumber'),
+                        name        : req.param('username'),
+                        email       : req.param('email_id'),
+                        fbId        : req.param('fb_uid'),
+                        phoneNumber : req.param('mobile_number'),
                         profilePic  : imagename,
                 };
 
@@ -72,16 +72,7 @@ module.exports = {
                             UsertokenService.createToken(results.id, deviceId, function (err, userTokenDetails) {
                                 if (err) {
 
-                                            User_token.query("DELETE from user where id = '"+results.id+"'", function (err, result) {
-                                            if (err) {
-                                                        sails.log("deletion error")
-                                                     }
-                                            else
-                                                {
-                                                    sails.log("deletion success")
-                                                }
-                                            });
-
+											sails.log(userTokenDetails)
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                 } else {
                                         //User.publishCreate(result);
@@ -206,7 +197,6 @@ module.exports = {
 															var url 	    = protocol + '://' + req.headers.host + '/';
 															var profile_image 	=  url+"/images/ProfilePics/"+results.profilePic;
 															sails.log(profile_image)
-															console.log(req.)
 															return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image});
 														}
 													});
@@ -307,7 +297,7 @@ module.exports = {
                                         if (err)
                                         {
                                             console.log(err)
-                                            return res.json(200, {status: 2, message: 'Updateion failure'});
+                                            return res.json(200, {status: 2,status_type: 'Failure', message: 'Updateion failure'});
 
                                         }
                                         else
@@ -327,7 +317,7 @@ module.exports = {
                                                 else
                                                 {
 
-                                                    return res.json(200, {status: 1, message: 'Updation Success'});
+                                                    return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success'});
                                                 }
 
 
@@ -365,45 +355,7 @@ module.exports = {
 
       },
 
-   /* ==================================================================================================================================
-               To send OTP-Mobile verifictaion
-     ==================================================================================================================================== */
-
-      sendOTP:  function (req, res) {
-
-		  
-			var mobile	= req.get("mobile");
-			
-			//---------SMS SENDING-------------
-			var possible = "0123456789"; 
-			var verification_code	= "";
-			for(var i=0;i<6;i++)
-			{
-				verification_code += possible.charAt(Math.floor(Math.random()*possible.length)); // usertocken generation
-			}
-			
-			
-			//Send an SMS text message
-			client.sendMessage({
-
-								to:mobile, // Any number Twilio can deliver to
-								from: '+12403564607', // A number you bought from Twilio and can use for outbound communications
-								body: 'Your Verification Code is'+ verification_code// body of the SMS message
-
-							 }, function(err, responseData) { //this function is executed when a response is received from Twilio
-
-								if (!err) { 
-					        
-											console.log(responseData.body)
-											return res.json(200, {status: 1, message: 'Success'});
-			
-									      }		
-								else
-								{
-										console.log(err)
-										
-								}	      
-							});		      			
+      			
 		   //-----end of SMS-------------------
 			
 		 /*  var values = {
@@ -412,21 +364,10 @@ module.exports = {
 								
 						};	
            
-           Sms.query("INSERT INTO smsDetails(OTPCode) values('4256')",function(err, results){
-                    if(err)
-                    {
-						sails.log("eror")
-					}
-					else
-					{
-						sails.log("suceess")
-						return res.json(200, {status: 1, message: 'Success'});
-
-					}
-			});		*/
+           	*/
             
 		  
-	  }
+	  
      
 	  
 	 

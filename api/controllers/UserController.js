@@ -13,7 +13,7 @@ module.exports = {
      ==================================================================================================================================== */
     signup: function (req, res) {
             //console.log(req.param('name'));
-
+            var deviceId = req.get('device_id');
             var values = {
                         name        : req.param('name'),
                         email       : req.param('email'),
@@ -28,7 +28,7 @@ module.exports = {
                     }
                     else{
                             // Create new access token on login
-                            UsertokenService.createToken(results.id, req.param('device_id'), function (err, userTokenDetails) {
+                            UsertokenService.createToken(results.id, deviceId, function (err, userTokenDetails) {
                                 if (err) {
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                 } else {
@@ -124,7 +124,26 @@ module.exports = {
 
     },
 
+ /* ==================================================================================================================================
+               To Logout user
+     ==================================================================================================================================== */
+// Logout action.
+    logout: function(req, res){
+        var userToken = req.get('token');
+        if(userToken){
+                TokenService.deleteToken(req.body.token, function(err, result) {
+                    if(err) {
+                         return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
+                    } else {
 
+                        return res.json(200, {status: 1,  status_type: 'Success' , message: 'success'});
+                    }
+                });
+        }else{
+                return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token'});
+        }
+
+    },
 
 
     selectUser: function (req, res) {
@@ -143,7 +162,11 @@ module.exports = {
                         console.log(err);
                     }
                     else{
-                        console.log('signup Part');
+                        console.log('Select USer');
+                        var d = new Date();
+                        var n = d.getTime();
+                        console.log(new Date().getTime());
+                         console.log(parseInt(new Date().getTime()));
                         //console.log(result);
                         return res.json(200, {status: 1, message: 'Success'});
                     }

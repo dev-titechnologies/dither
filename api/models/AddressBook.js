@@ -18,14 +18,14 @@ module.exports = {
         userId: {
                 type: 'integer',
             },
-        ditherId: {
+        ditherUserId: {
                 type: 'integer',
             },
         ditherUserName: {
                 type: 'string',
             },
-        ditherPhoneNumber: {
-                type: 'integer',
+        ditherUserPhoneNumber: {
+                type: 'string',
             },
         createdAt: {
                 type: 'datetime',

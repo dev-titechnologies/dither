@@ -25,16 +25,16 @@ module.exports = {
                                                 {ditherUserName: 'fb_sasi 3',fbId: 'ggggggggggg'},
                                               ];
                 var phonecontacts           = [
-                        {ditherUserName: 'sasi 1',ditherPhoneNumber: 98455454},
-                        {ditherUserName: 'sasi 2',ditherPhoneNumber: 98455454},
-                        {ditherUserName: 'sasi 3',ditherPhoneNumber: 98455454},
+                        {ditherUserName: 'sasi 1',ditherUserPhoneNumber: 98455454},
+                        {ditherUserName: 'sasi 2',ditherUserPhoneNumber: 98455454},
+                        {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
                         ];
 
 
                 phonecontacts.forEach(function(factor, index){
                      console.log("factor");
                      console.log(factor);
-                     phoneContactsArray.push("("+userId+",'"+factor.ditherUserName+"', "+factor.ditherPhoneNumber+", now(), now())");
+                     phoneContactsArray.push("("+userId+",'"+factor.ditherUserName+"', "+factor.ditherUserPhoneNumber+", now(), now())");
                 });
 
                 fbUser.forEach(function(factor, index){
@@ -55,7 +55,7 @@ module.exports = {
                                     function(callback) {
                                                 if(phonecontacts.length != 0){
                                                         var query = "INSERT INTO addressBook"+
-                                                                    " (userId,  ditherUserName, ditherPhoneNumber, createdAt, updatedAt)"+
+                                                                    " (userId,  ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
                                                                     " VALUES"+phoneContactsArray;
 
                                                         console.log(query);
@@ -132,9 +132,9 @@ module.exports = {
 
                                                         query = " SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
                                                                     " FROM addressBook adb"+
-                                                                    " INNER JOIN user usr ON usr.id = adb.ditherId"+
+                                                                    " INNER JOIN user usr ON usr.id = adb.ditherUserId"+
                                                                     " WHERE adb.userId = "+userId+
-                                                                    " AND adb.ditherId IS NOT NULL";
+                                                                    " AND adb.ditherUserId IS NOT NULL";
                                                         AddressBook.query(query, function(err, selectedDitherAdb) {
                                                                 if(err)
                                                                 {
@@ -155,9 +155,9 @@ module.exports = {
                                             function(callback) {
                                                     query = " SELECT fbf.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
                                                             " FROM fbFriends fbf"+
-                                                            " INNER JOIN user usr ON usr.id = fbf.ditherId"+
+                                                            " INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
                                                             " WHERE fbf.userId = "+userId+
-                                                            " AND fbf.ditherId IS NOT NULL";
+                                                            " AND fbf.ditherUserId IS NOT NULL";
                                                     console.log(query);
                                                     FbFriends.query(query, function(err, selectedDitherFbf) {
                                                             if(err)
@@ -204,17 +204,17 @@ module.exports = {
                 });
 
         },
-        
+
    /* ==================================================================================================================================
          To get addressbook Contacts
      ==================================================================================================================================== */
-     
-     
-     
-     
-     
-     
-     
-     
+
+
+
+
+
+
+
+
 };
 

@@ -12,6 +12,8 @@ module.exports = {
   ==================================================================================================================================== */
         getDitherDetail: function (req, res) {
                 var server_baseUrl              =     req.options.server_baseUrl;
+                var tokenCheck                  =     req.options.tokenCheck;
+                var userId                      =     tokenCheck.tokenDetails.userId;
                 var get_collage_id = req.param("dither_id");
                 var query;
 
@@ -58,22 +60,61 @@ module.exports = {
                                             {
                                                 console.log(collageCommentResults);
                                                 var commentArray = [];
-                                                collageCommentResults.forEach(function(factor, index){
-                                                        console.log("factor");
-                                                        console.log(factor);
-                                                        commentArray.push({user_name: factor.name,  user_profile_pic_url : server_baseUrl + req.options.file_path.profilePic_path + factor.profilePic, message: factor.comment});
-                                                });
-                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'No collage Found by this Id',
-                                                             dither_desc                : results[0].imgTitle,
-                                                             dither_created_date        : results[0].createdAt,
-                                                             dither_id                  : results[0].collageId,
-                                                             dither_created_username    : results[0].collageCreator,
-                                                             dither_created_userID      : results[0].collageCreatorId,
-                                                             dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
-                                                             dithers                    : imageArray,
-                                                             ditherCount                : imageArray.length,
-                                                             comments                   : commentArray,
+                                                if(collageCommentResults.length !== 0){
+                                                    collageCommentResults.forEach(function(factor, index){
+                                                            console.log("factor");
+                                                            console.log(factor);
+                                                            commentArray.push({user_name: factor.name,  user_profile_pic_url : server_baseUrl + req.options.file_path.profilePic_path + factor.profilePic, message: factor.comment});
+                                                    });
+                                                }
+
+                                                values = {
+                                                            collageId : get_collage_id,
+                                                            userId    : userId,
+                                                        };
+                                                CollageLikes.findOne(values).exec(function (err, collageLikeResults){
+                                                    if (err) {
+                                                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in checking logged users collage like status', error_details: err});
+                                                    }
+                                                    else{
+                                                            console.log(collageLikeResults);
+
+                                                            values = {
+                                                            collageId : get_collage_id,
+                                                                    };
+                                                            Tags.find(values).exec(function (err, tagResults){
+                                                                if (err) {
+                                                                       return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding collage tagged Users', error_details: err});
+                                                                }
+                                                                else{
+                                                                    console.log("tagResults ===============================");
+                                                                    console.log(tagResults);
+                                                                    taggedUserArray = [];
+                                                                    if(tagResults != 0){
+                                                                        tagResults.forEach(function(factor, index){
+                                                                                console.log("factor");
+                                                                                console.log(factor);
+                                                                                taggedUserArray.push(factor.userId);
                                                                         });
+
+                                                                    }
+
+                                                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'No collage Found by this Id',
+                                                                         dither_desc                : results[0].imgTitle,
+                                                                         dither_created_date        : results[0].createdAt,
+                                                                         dither_like_status         : collageLikeResults.likeStatus,
+                                                                         dither_id                  : results[0].collageId,
+                                                                         dither_created_username    : results[0].collageCreator,
+                                                                         dither_created_userID      : results[0].collageCreatorId,
+                                                                         dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
+                                                                         dithers                    : imageArray,
+                                                                         ditherCount                : imageArray.length,
+                                                                         comments                   : commentArray,
+                                                                    });
+                                                                }
+                                                            });
+                                                    }
+                                                });
                                             }
                                     });
                             }

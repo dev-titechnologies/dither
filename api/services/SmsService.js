@@ -1,6 +1,10 @@
 module.exports = {
 
-            sendSms: function (smsAccountSid, smsAuthToken, smsFrom, callback) {
+            sendSms: function (smsAccountSid, smsAuthToken, smsFrom,mobile, callback) {
+
+						sails.log("In sms Service");
+						sails.log(smsAccountSid);
+						sails.log(smsAuthToken);
 
                         var twilio = require('twilio');
 
@@ -20,7 +24,7 @@ module.exports = {
                         var client = twilio(accountSid, authToken);
                         //var client = require('twilio')('AC834e9d9c31bd1e8a5965f7f25f2b1250', '29f2e106b68b5aa5b7f2c2e9dcf935e5'); //API_KEY and TOCKEN from TWILIO
                         client.sendMessage({
-                            to          :   smsTo,
+                            to          :   mobile,
                             from        :   smsFrom,
                             body        :   'Hi Just Testing The Sms From Dither'
                         }, function(err, message) {
@@ -42,27 +46,22 @@ module.exports = {
 
 
 
-            sendSmsOTP: function (smsAccountSid, smsAuthToken, smsFrom, callback) {
+            sendSmsOTP: function (smsAccountSid, smsAuthToken, smsFrom,mobile,verification_code, callback) {
 
-
+						sails.log(smsAccountSid);
+						sails.log(smsAuthToken);
                         console.log("service")
                         var twilio = require('twilio');
                         var client = twilio(smsAccountSid, smsAuthToken);
 
                         //Twilio Test Account Credentials
-
-                       var verification_code    = "";
-                        for(var i=0;i<4;i++)
-                        {
-                            //verification_code += possible.charAt(Math.floor(Math.random()*possible.length)); // usertocken generation
-                            verification_code +="123";
-                            sails.log()
-                        }
+					  
+                      
 
                         client.sendMessage({
 
                                 //to:mobile, // Any number Twilio can deliver to
-                                to: 1222222,
+                                to: mobile,
                                 from: smsFrom, // A number you bought from Twilio and can use for outbound communications
                                 body: 'Your Verification Code is'+ verification_code// body of the SMS message
 
@@ -72,27 +71,11 @@ module.exports = {
                                     console.error('Text failed because: '+err.message);
                                     callback(false, {status: 2, status_type: 'Failure' , message: 'sms not reachable'});
                                 } else {
-                                    console.log(responseData.body)
-
-                                            var OTPCode = verification_code;
-
-                                            Sms.query("INSERT INTO smsDetails(OTPCode,mobile_no) values('"+OTPCode+"','"+mobile+"')",function(err, results){
-                                                if(err)
-                                                    {
-                                                        sails.log("eror")
-                                                    }
-                                                else
-                                                    {
-                                                        sails.log(results)
-                                                        callback(true, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
-
-
-
-                                                    }
-                                                });
-
-                                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully send the sms'});
-                                }
+											//console.log(responseData.body
+											sails.log("sucessssssssssssssss")
+											callback(true, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+											
+                                       }
                         });
             },
 };

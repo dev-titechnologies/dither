@@ -27,7 +27,7 @@ module.exports = {
                 type: 'integer',
             },
         mobile_no:{
-			type: 'integer',	
+			type: 'string',	
 		},    
         createdAt: {
                 type: 'datetime',

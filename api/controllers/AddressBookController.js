@@ -7,12 +7,15 @@
 
 module.exports = {
 /* ==================================================================================================================================
-               To Upload Images
+               To Upload Contacts
      ==================================================================================================================================== */
         addUserContacts: function (req, res) {
-
+			    
+			    console.log(req.options.tokenCheck)
+			    console.log(req.options.tokenCheck.tokenDetails.userId)
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
+                console.log(tokenCheck)
                 console.log("addUserContacts=-=============");
                 var query,
                     ditherUserInAddressBook,

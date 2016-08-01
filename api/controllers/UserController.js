@@ -60,16 +60,36 @@ module.exports = {
 			
 			
 			//--------OTP CHECKING----------------------
-			
-			Sms.query("SELECT * FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"'", function (err, result) {
+		/*if(OTPCode)	
+		{	
+			//sails.log("OTP match success")
+			Sms.query("SELECT OTPCode FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"' AND Id = (SELECT MAX(Id) FROM smsDetails) ", function (err, details) {
 				
 				
+				sails.log("OTP match success")
+				sails.log(details[0].OTPCode)
+				
+				if(details[0].OTPCode==OTPCode)
+				{
+					//save signup details
+					sails.log("OTP match success")
+					/*Sms.query("UPDATE smsDetails SET ditherId	 = '"+result.insertId+"',smsVerified=1 where mobile_no = '"+req.param('mobile_number')+"' ", function (err, data) {						
+					});
+					
+					
+				}
+				else
+				{
+				
+				   //mobile verification failed	
+					
+				}
 				
 				
 				
 			});
 			
-			
+		} */
 			
 
              User.create(values).exec(function(err, results){
@@ -291,7 +311,7 @@ module.exports = {
                 sails.log(req.param('token'))
                 var edit_type                   = req.param('edit-type');
                 var fileName                    = req.param('file');
-                var token                       = req.param('token');
+                var token                       = req.get('token');
                 var imageUploadDirectoryPath    = '../../assets/images/ProfilePics';
 
                 User_token.findOne({token: req.param('token')}).exec(function (err, results){

@@ -16,6 +16,8 @@ module.exports = {
 
             console.log(req.get('token'));
             var userToken = req.get('token');
+            //var userToken = req.body.token;
+            console.log(userToken);
             if(userToken){
                     UsertokenService.checkToken(userToken, function(err, tokenCheck) {
                         if(err)

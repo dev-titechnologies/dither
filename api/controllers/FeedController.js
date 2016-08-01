@@ -33,7 +33,7 @@ module.exports = {
                                 {
                                     console.log(results);
                                     if(results.length == 0){
-                                            return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', recent: []});
+                                            return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', feeds: []});
                                     }else{
                                         console.log(results.length);
                                         var resultsPushArray = [];
@@ -63,7 +63,7 @@ module.exports = {
                                                 {
                                                     console.log(allCollageImgResults);
                                                     if(allCollageImgResults.length == 0){
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent: []});
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', feeds: []});
                                                     }else{
                                                         var dataResults = allCollageImgResults;
                                                         var key = [];
@@ -113,14 +113,14 @@ module.exports = {
                                                                 key.push(dataResultsObj);
                                                                 dataResultsKeys.push(collageId_val);
 
-                                                                var recent = key.reverse();
+                                                                var feeds = key.reverse();
 
                                                             }
                                                         }
                                                         //console.log(key);
                                                         //console.log(key.reverse());
                                                         console.log(JSON.stringify(key.reverse()));
-                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds', recent: recent});
+                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds', feeds: feeds});
                                                     }//allCollageImgResults length check
                                                 }
                                         });

@@ -69,7 +69,9 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-    // bodyParser: require('skipper')
+    // bodyParser: require('skipper-s3')({maxTimeToWaitForFirstFile:60000})
+   // bodyParser: require('skipper-s3')
+    //{strict: true}
 
   // },
 

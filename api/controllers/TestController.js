@@ -16,7 +16,7 @@ module.exports = {
         },
         upload: function (req, res) {
 
-                /*req.file(fileList[0]).upload({dirname: '../../assets/images/test', maxBytes: 10000000},function (err, results) {
+                /*req.file('image').upload({dirname: '../../assets/images/test', maxBytes: 10000000},function (err, results) {
                             if (err)
                             {
                                 console.log(err);
@@ -31,6 +31,28 @@ module.exports = {
                 });*/
                 /*var fs = require('file-system');
                 fs.unlink("assets/images/test/4aff474e-1577-4780-b46e-d031afccdf68.jpg");*/
+                /*adapter:require('skipper-s3'),
+                key: 'thekyehthethaeiaghadkthtekey'
+                secret: 'AB2g1939eaGAdesoccertournament'
+                bucket: 'my_stuff'
+                req.file('avatar')*/
+
+
+                            req.file('image').upload({
+                                          adapter: require('skipper-s3'),
+                                          key: 'thekyehthethaeiaghadkthtekey',
+                                          secret: 'AB2g1939eaGAdesoccertournament',
+                                          bucket: 'my_stuff'
+                                        }, function whenDone(err, uploadedFiles) {
+                                          if (err) {
+                                              //return res.negotiate(err);
+                                              console.log(err);
+                                              }
+                                          else return res.ok({
+                                            files: uploadedFiles,
+                                            textParams: req.params.all()
+                                          });
+                                        });
         },
 
 

@@ -6,10 +6,10 @@
  */
 
 //var io = require('sails.io.js')( require('socket.io-client') );
- var fs		 	 = require('fs');
- var request	 = require('request');
- var path 		 = require('path');
- //var client 	 = require('twilio')('AC834e9d9c31bd1e8a5965f7f25f2b1250', '29f2e106b68b5aa5b7f2c2e9dcf935e5'); //API_KEY and TOCKEN from TWILIO
+ var fs          = require('fs');
+ var request     = require('request');
+ var path        = require('path');
+ //var client    = require('twilio')('AC834e9d9c31bd1e8a5965f7f25f2b1250', '29f2e106b68b5aa5b7f2c2e9dcf935e5'); //API_KEY and TOCKEN from TWILIO
 
 
 module.exports = {
@@ -23,16 +23,18 @@ module.exports = {
 
 
            //profilePic Upload
-			
+
                var imgUrl       = req.param('profilepic');
                var filename     =  "image.png";
                var imagename    = new Date().getTime() + filename;
-               
-
+  console.log("imgUrl+++++++++++++++++++++++++++++++++++");
+  console.log(req.param('profilepic'));
+   console.log(req.body.profilepic);
+console.log(imgUrl);
             var download = function(uri, filename, callback)
                 {
                         request.head(uri, function(err, res, body){
-                        
+
                         request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
 
 
@@ -47,7 +49,7 @@ module.exports = {
 
             //--end of upload--------
 
-			var OTPCode	 = req.param('otp');
+            var OTPCode  = req.param('otp');
             var deviceId = req.get('device_id');
             var values = {
 
@@ -57,20 +59,20 @@ module.exports = {
                         phoneNumber : req.param('mobile_number'),
                         profilePic  : imagename,
                 };
-			
-			
-			//--------OTP CHECKING----------------------
-			
-			Sms.query("SELECT * FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"'", function (err, result) {
-				
-				
-				
-				
-				
-			});
-			
-			
-			
+
+
+            //--------OTP CHECKING----------------------
+
+            Sms.query("SELECT * FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"'", function (err, result) {
+
+
+
+
+
+            });
+
+
+
 
              User.create(values).exec(function(err, results){
                     if(err){
@@ -82,7 +84,7 @@ module.exports = {
                             UsertokenService.createToken(results.id, deviceId, function (err, userTokenDetails) {
                                 if (err) {
 
-											sails.log(userTokenDetails)
+                                            sails.log(userTokenDetails)
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                 } else {
                                         //User.publishCreate(result);
@@ -160,13 +162,13 @@ module.exports = {
                To check for a new User
      ==================================================================================================================================== */
     checkForNewUser:  function (req, res) {
-			
-			
-			
+
+
+
             console.log(req.options.settingKeyValue);
             console.log(req.param('fbId'));
-            
-            var deviceId	= req.get('device_id');
+
+            var deviceId    = req.get('device_id');
             console.log(deviceId)
             User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
                     if (err) {
@@ -182,48 +184,48 @@ module.exports = {
                             else
                             {
 
-								
-								User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
-										if (err) {
-										}
-										else
-										{
-											console.log(result)
-											//delete existing token 
-								    
-											User_token.query("DELETE from userToken where deviceId = '"+deviceId+"'", function (err, result) {
-												if (err) {
-														}
-												else
-												{
-													sails.log("deletion success")
-													console.log(result.deviceId)
-													 //Create new access token on login
-								   
-													UsertokenService.createToken(results.id,deviceId, function (err, userTokenDetails) 
-													{
-														if (err) 
-														{
-															return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
-														} 
-														else
-														{
-															console.log(userTokenDetails.token)
-															var protocol 	= req.connection.encrypted?'https':'http';
-															var url 	    = protocol + '://' + req.headers.host + '/';
-															var profile_image 	=  url+"/images/ProfilePics/"+results.profilePic;
-															sails.log(profile_image)
-															return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image,token:userTokenDetails.token.token});
-														}
-													});
-													
-												 }
-											});
-											
-								        }
-									});
-					
-                                  
+
+                                User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
+                                        if (err) {
+                                        }
+                                        else
+                                        {
+                                            console.log(result)
+                                            //delete existing token
+
+                                            User_token.query("DELETE from userToken where deviceId = '"+deviceId+"'", function (err, result) {
+                                                if (err) {
+                                                        }
+                                                else
+                                                {
+                                                    sails.log("deletion success")
+                                                    console.log(result.deviceId)
+                                                     //Create new access token on login
+
+                                                    UsertokenService.createToken(results.id,deviceId, function (err, userTokenDetails)
+                                                    {
+                                                        if (err)
+                                                        {
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+                                                        }
+                                                        else
+                                                        {
+                                                            console.log(userTokenDetails.token)
+                                                            var protocol    = req.connection.encrypted?'https':'http';
+                                                            var url         = protocol + '://' + req.headers.host + '/';
+                                                            var profile_image   =  url+"/images/ProfilePics/"+results.profilePic;
+                                                            sails.log(profile_image)
+                                                            return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image,token:userTokenDetails.token.token});
+                                                        }
+                                                    });
+
+                                                 }
+                                            });
+
+                                        }
+                                    });
+
+
 
                                 }
                           //console.log(results);
@@ -371,22 +373,22 @@ module.exports = {
 
       },
 
-      			
-		   //-----end of SMS-------------------
-			
-		 /*  var values = {
 
-							OTPCode:4251
-								
-						};	
-           
-           	*/
-            
-		  
-	  
-     
-	  
-	 
+           //-----end of SMS-------------------
+
+         /*  var values = {
+
+                            OTPCode:4251
+
+                        };
+
+            */
+
+
+
+
+
+
 
 
 };

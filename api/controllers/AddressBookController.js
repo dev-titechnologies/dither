@@ -11,10 +11,13 @@ module.exports = {
      ==================================================================================================================================== */
         addUserContacts: function (req, res) {
 			    
-			    console.log(req.options.tokenCheck)
+			    console.log(req.options.server_baseUrl)
+			    
 			    console.log(req.options.tokenCheck.tokenDetails.userId)
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
+                var server_baseUrl              =     req.options.server_baseUrl;
+
                 console.log(tokenCheck)
                 console.log("addUserContacts=-=============");
                 var query,
@@ -50,12 +53,83 @@ module.exports = {
                 console.log(phoneContactsArray);
 
             async.series([
- 
-                      function(callback) {
-                                           console.log("###############################################ser1");
+            
+					  function(callback) {
+						  console.log("deletion**************************************************")
+						 
 
                             //Parallel for insert users in addressBook and in fbFriends simultaneously
                             async.parallel([
+                                     // Clear the old details
+									function(callback) {
+                                                if(phonecontacts.length != 0){
+                                                        var query = "DELETE FROM addressBook where userId = '"+userId+"'";
+
+                                                        console.log(query);
+                                                        AddressBook.query(query, function(err, deleteAddressBook) {
+                                                                if(err)
+                                                                {
+                                                                    console.log(err);
+                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                    //callback();
+                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
+                                                                }
+                                                                else
+                                                                {
+																	 
+                                                                    console.log("deleteAddressBook ?????????????????????????????????????????????");
+                                                                    callback();
+                                                                }
+                                                        });
+                                                }else{
+                                                            callback();
+                                                }
+                                    },
+									function(callback) {
+                                                if(fbUser.length != 0){
+                                                        var query = "DELETE FROM fbFriends where userId = '"+userId+"'";
+
+                                                        console.log(query);
+                                                        FbFriends.query(query, function(err, deleteFBFriends) {
+                                                                if(err)
+                                                                {
+                                                                    console.log(err);
+                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                    //callback();
+                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
+                                                                }
+                                                                else
+                                                                {
+																	 
+                                                                    console.log("deleteFBfriends ?????????????????????????????????????????????");
+                                                                    callback();
+                                                                }
+                                                        });
+                                                }else{
+                                                            callback();
+                                                     }
+                                    }
+						
+						  
+						  ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                        if (err) {
+                                                console.log(err);
+                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in add User contact', error_details: err});
+                                                callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in address book creation or in fbFriend creation', error_details: err});
+                                        }else{
+                                                //return res.json(200, {status: 1, status_type: 'Success' ,message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends'});
+                                                callback();
+                                        }
+
+                            });
+						  
+					  },function(callback) {
+
+ 
+                                    console.log("Series  -- 3rd ");
+                                    //Parallel  select users in addressBook and in fbFriends simultaneously
+                                    async.parallel([
+ 
                                     function(callback) {
                                                 if(phonecontacts.length != 0){
                                                         var query = "INSERT INTO addressBook"+
@@ -116,24 +190,8 @@ module.exports = {
                                                 }
 
 
-                                    }
-                               ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                        if (err) {
-                                                console.log(err);
-                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in add User contact', error_details: err});
-                                                callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in address book creation or in fbFriend creation', error_details: err});
-                                        }else{
-                                                //return res.json(200, {status: 1, status_type: 'Success' ,message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends'});
-                                                callback();
-                                        }
-
-                            });
-                    },
-                    function(callback) {
-				                                           console.log("###############################################ser2");
-
-                            //Parallel for insert users in addressBook and in fbFriends simultaneously
-                            async.parallel([
+                                    },
+                                    
                                     function(callback) {
 										 console.log("Series  -- 2nd ");
 										 //Parallel update ditherUsers in addressBook and in fbFriends simultaneously
@@ -149,8 +207,6 @@ module.exports = {
 															{
 																
 																//updation 
-																
-															
 																
 																AddressBook.query("UPDATE addressBook SET ditherUserId = '"+selectDContacts[0].id+"' where ditherUserPhoneNumber = '"+factor.ditherUserPhoneNumber+"'", function(err, updateDContacts) {
 																																	
@@ -193,7 +249,10 @@ module.exports = {
 											
 									}
                                     
-								], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                    
+                                    
+                                    
+                               ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                         if (err) {
                                                 console.log(err);
                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in add User contact', error_details: err});
@@ -204,7 +263,7 @@ module.exports = {
                                         }
 
                             });
-					},			
+                    },			
 										
                     function(callback) {
 
@@ -234,14 +293,27 @@ module.exports = {
                                                                 else
                                                                 {
 
-                                                                        console.log(selectedDitherAdb);
+                                                                        console.log(selectedDitherAdb);                                                                   
                                                                         ditherUserInAddressBook = selectedDitherAdb;
+                                                                        ditherUserInAddressBook.forEach(function(factor, index){
+																		  if(factor.profilePic=='')	
+																			{
+																				factor.profilePic='';
+																			}
+																			else
+																			{
+																				console.log("dddddddddddddddddddddddddddddd")
+																				factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
+																				console.log(factor.profilePic)
+																			}
+																		});
+                                                                        
                                                                         callback();
                                                                 }
                                                         });
                                             },
                                             function(callback) {
-                                                    query = " SELECT fbf.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
+                                                    query = " SELECT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
                                                             " FROM fbFriends fbf"+
                                                             " INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
                                                             " WHERE fbf.userId = "+userId+
@@ -260,6 +332,22 @@ module.exports = {
 
                                                                    console.log(selectedDitherFbf);
                                                                    ditherUserInFbFriends = selectedDitherFbf;
+                                                                   
+                                                                   ditherUserInFbFriends.forEach(function(factor, index){
+																			
+																			if(factor.profilePic=='')	
+																			{
+																				factor.profilePic='';
+																			}
+																			else
+																			{
+																				console.log("dddddddddddddddddddddddddddddd")
+																				factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
+																				console.log(factor.profilePic)
+																			}
+																			
+																		});
+                                                                   
                                                                    console.log("selectedDitherFbf ++++++++++++++++++++++++++++++++++++++++++++++++");
                                                                    callback();
                                                             }

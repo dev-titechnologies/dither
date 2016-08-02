@@ -26,7 +26,7 @@ module.exports = {
                         }
                         else
                         {
-                            if(tokenCheck.status == 1)
+                             if(tokenCheck.status == 1)
                             {
                                 req.options.tokenCheck = tokenCheck;
                                 next();
@@ -44,7 +44,7 @@ module.exports = {
                         }
                     });
             }else{
-                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass a token'});
+                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass a token'});
             }
     }
 };

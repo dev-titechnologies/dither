@@ -23,7 +23,7 @@ module.exports = {
 
         createDither:  function (req, res) {
 
-                    console.log(req.body.REQUEST);
+                    //console.log(req.body.REQUEST);
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var imageUploadDirectoryPath   =     '../../assets/images/collage'
@@ -81,235 +81,242 @@ module.exports = {
             //if(req.file('collage_image') !== 'undefined'){
 
                 //if(req.file('collageImages1') !== 'undefined'){
-                    async.series([
-                                function(callback) {
-                                        async.parallel([
-                                                        function(callback) {
 
-                                                                req.file("collageImages1").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_1) {
-                                                                                if (err)
-                                                                                {
-                                                                                    console.log(err);
-                                                                                    callback();
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                   uploadedImgResult_1 = collageUploadResults_1;
-                                                                                   console.log(collageUploadResults_1);
-                                                                                   callback();
-                                                                                }
-                                                                });
-                                                        },
-                                                        function(callback) {
-                                                                req.file("collageImages2").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_2) {
-                                                                                if (err)
-                                                                                {
-                                                                                    console.log(err);
-                                                                                    callback();
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                   uploadedImgResult_2 = collageUploadResults_2;
-                                                                                   console.log(collageUploadResults_2);
-                                                                                   callback();
-                                                                                }
-                                                                });
+                                req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 10000000},function (err, files) {
+                                        if (err)
+                                        {
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage image', error_details: err});
+                                        }
+                                        else
+                                        {
+                                            console.log("files   collage upload");
+                                            console.log(files);
+                                                if(files.length != 0){
 
-                                                        },
-                                                        function(callback) {
-                                                                req.file("collageImages3").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_3) {
-                                                                                if (err)
-                                                                                {
-                                                                                    console.log(err);
-                                                                                    callback();
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                   uploadedImgResult_3 = collageUploadResults_3;
-                                                                                   console.log(collageUploadResults_3);
-                                                                                   callback();
-                                                                                }
-                                                                });
-                                                        },
-                                                        function(callback) {
-                                                                req.file("collageImages4").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_4) {
-                                                                                if (err)
-                                                                                {
-                                                                                    console.log(err);
-                                                                                    callback();
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                   uploadedImgResult_4 = collageUploadResults_4;
-                                                                                   console.log(collageUploadResults_4);
-                                                                                   callback();
-                                                                                }
-                                                                });
-                                                        }
-                                                   ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                                                    if (err) {
-                                                                        console.log(err);
-                                                                        callback();
-                                                                    }else{
-                                                                        console.log("111111111111111111111111111111111111111111111111111111");
-                                                                        console.log(uploadedImgResult_1);
-                                                                        console.log("22222222222222222222222222222222222222222222222222222222");
-                                                                        console.log(uploadedImgResult_2);
-                                                                        console.log("3333333333333333333333333333333333333333333333333333");
-                                                                        console.log(uploadedImgResult_3);
-                                                                        console.log("4444444444444444444444444444444444444444444444444444");
-                                                                        console.log(uploadedImgResult_4);
+                                                        async.series([
+                                                                function(callback) {
+                                                                        async.series([
+                                                                                        function(callback) {
+                                                                                             console.log("Entered ------ 1");
 
-                                                                        concatUploadImgArray = uploadedImgResult_1.concat(uploadedImgResult_2, uploadedImgResult_3, uploadedImgResult_4);
-                                                                        console.log(concatUploadImgArray);
+                                                                                                req.file("collageImages1").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_1) {
+                                                                                                                if (err)
+                                                                                                                {
+                                                                                                                    console.log(err);
+                                                                                                                    callback();
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                   uploadedImgResult_1 = collageUploadResults_1;
+                                                                                                                   console.log(collageUploadResults_1);
+                                                                                                                   callback();
+                                                                                                                }
+                                                                                                });
+                                                                                        },
+                                                                                        function(callback) {
+                                                                                            console.log("Entered ------ 2");
+                                                                                                req.file("collageImages2").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_2) {
+                                                                                                                if (err)
+                                                                                                                {
+                                                                                                                    console.log(err);
+                                                                                                                    callback();
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                   uploadedImgResult_2 = collageUploadResults_2;
+                                                                                                                   console.log(collageUploadResults_2);
+                                                                                                                   callback();
+                                                                                                                }
+                                                                                                });
 
-                                                                        callback();
-                                                                    }
-
-                                        });
-                                },
-                                function(callback) {
-                                            req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 10000000},function (err, files) {
-                                                    if (err)
-                                                    {
-                                                        console.log(err);
-                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage image', error_details: err});
-                                                    }
-                                                    else
-                                                    {
-                                                        if(files.length != 0){
-                                                                collage_imageName = files[0].fd.split('/');
-                                                                collage_imageName = collage_imageName[collage_imageName.length-1];
-                                                                console.log("collage_imageName =--------------------");
-                                                                console.log(files);
-                                                                console.log(collage_imageName);
-
-
-                                                                var values = {
-                                                                    imgTitle        : req.param('img_caption'),
-                                                                    image           : collage_imageName,
-                                                                    location        : req.param('location'),
-                                                                    latitude        : req.param('latitude'),
-                                                                    longitude       : req.param('longitude'),
-                                                                    userId          : userId,
-                                                                };
-                                                            Collage.create(values).exec(function(err, results){
-                                                                    if(err){
-                                                                            console.log(err);
-                                                                            callback();
-                                                                    }
-                                                                    else{
-                                                                                var collageDetailImgArray = [];
-                                                                                concatUploadImgArray.forEach(function(factor, index){
-                                                                                     console.log("factor");
-                                                                                     console.log(factor);
-                                                                                     filename = factor.fd.split('/');
-                                                                                     filename = filename[filename.length-1];
-                                                                                     console.log(filename);
-
-                                                                                     var switchKey = factor.field;
-                                                                                     var position;
-                                                                                     switch(switchKey){
-                                                                                            case "collageImages1":    position = "image_one";
-                                                                                            break;
-                                                                                            case "collageImages2":    position = "image_two";
-                                                                                            break;
-                                                                                            case "collageImages3":    position = "image_three";
-                                                                                            break;
-                                                                                            case "collageImages4":    position = "image_four";
-                                                                                            break;
-                                                                                     }
-
-                                                                                     collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
-                                                                                });
-                                                                                console.log("uploadedCollageFiles_1 -------------------");
-                                                                                //console.log(uploadedCollageFiles_1);
-                                                                                var query = "INSERT INTO collageDetails"+
-                                                                                            " (image, position, collageId, createdAt, updatedAt)"+
-                                                                                            " VALUES"+collageDetailImgArray;
-                                                                                            //" VALUES ('filename','position',"+results.id+", now(), now())";
-
-                                                                                console.log("collage Details ------------------------------------ ===================================");
-                                                                                console.log(query);
-                                                                                CollageDetails.query(query, function(err, createdCollageDetails) {
-                                                                                        if(err)
-                                                                                        {
-                                                                                            console.log(err);
-                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                                            callback();
+                                                                                        },
+                                                                                        function(callback) {
+                                                                                            console.log("Entered ------ 3");
+                                                                                                req.file("collageImages3").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_3) {
+                                                                                                                if (err)
+                                                                                                                {
+                                                                                                                    console.log(err);
+                                                                                                                    callback();
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                   uploadedImgResult_3 = collageUploadResults_3;
+                                                                                                                   console.log(collageUploadResults_3);
+                                                                                                                   callback();
+                                                                                                                }
+                                                                                                });
+                                                                                        },
+                                                                                        function(callback) {
+                                                                                            console.log("Entered ------ 4");
+                                                                                                req.file("collageImages4").upload({dirname: '../../assets/images/collage', maxBytes: 10000000},function (err, collageUploadResults_4) {
+                                                                                                                if (err)
+                                                                                                                {
+                                                                                                                    console.log(err);
+                                                                                                                    callback();
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                   uploadedImgResult_4 = collageUploadResults_4;
+                                                                                                                   console.log(collageUploadResults_4);
+                                                                                                                   callback();
+                                                                                                                }
+                                                                                                });
                                                                                         }
-                                                                                        else
-                                                                                        {
-                                                                                            var taggedUserArray = [{user_id: 3},{user_id: 6}];
-                                                                                            console.log(taggedUserArray);
-                                                                                            var tagCollageArray = [];
-                                                                                            taggedUserArray.forEach(function(factor, index){
+                                                                                   ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                                                                                    if (err) {
+                                                                                                        console.log(err);
+                                                                                                        callback();
+                                                                                                    }else{
+                                                                                                        console.log("111111111111111111111111111111111111111111111111111111");
+                                                                                                        console.log(uploadedImgResult_1);
+                                                                                                        console.log("22222222222222222222222222222222222222222222222222222222");
+                                                                                                        console.log(uploadedImgResult_2);
+                                                                                                        console.log("3333333333333333333333333333333333333333333333333333");
+                                                                                                        console.log(uploadedImgResult_3);
+                                                                                                        console.log("4444444444444444444444444444444444444444444444444444");
+                                                                                                        console.log(uploadedImgResult_4);
+
+                                                                                                        concatUploadImgArray = uploadedImgResult_1.concat(uploadedImgResult_2, uploadedImgResult_3, uploadedImgResult_4);
+                                                                                                        console.log(concatUploadImgArray);
+
+                                                                                                        callback();
+                                                                                                    }
+
+                                                                        });
+                                                                },
+                                                                function(callback) {
+
+                                                                            collage_imageName = files[0].fd.split('/');
+                                                                            collage_imageName = collage_imageName[collage_imageName.length-1];
+                                                                            console.log("collage_imageName =--------------------");
+                                                                            console.log(files);
+                                                                            console.log(collage_imageName);
+
+
+                                                                            var values = {
+                                                                                imgTitle        : req.param('img_caption'),
+                                                                                image           : collage_imageName,
+                                                                                location        : req.param('location'),
+                                                                                latitude        : req.param('latitude'),
+                                                                                longitude       : req.param('longitude'),
+                                                                                userId          : userId,
+                                                                            };
+                                                                        Collage.create(values).exec(function(err, results){
+                                                                                if(err){
+                                                                                        console.log(err);
+                                                                                        callback();
+                                                                                }
+                                                                                else{
+                                                                                            var collageDetailImgArray = [];
+                                                                                            concatUploadImgArray.forEach(function(factor, index){
+                                                                                                 console.log("factor");
                                                                                                  console.log(factor);
-                                                                                                 console.log(index);
-                                                                                                 tagCollageArray.push("("+results.id+","+factor.user_id+", now(), now())");
+                                                                                                 filename = factor.fd.split('/');
+                                                                                                 filename = filename[filename.length-1];
+                                                                                                 console.log(filename);
+
+                                                                                                 var switchKey = factor.field;
+                                                                                                 var position;
+                                                                                                 switch(switchKey){
+                                                                                                        case "collageImages1":    position = "image_one";
+                                                                                                        break;
+                                                                                                        case "collageImages2":    position = "image_two";
+                                                                                                        break;
+                                                                                                        case "collageImages3":    position = "image_three";
+                                                                                                        break;
+                                                                                                        case "collageImages4":    position = "image_four";
+                                                                                                        break;
+                                                                                                 }
+
+                                                                                                 collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
                                                                                             });
-                                                                                           var query = "INSERT INTO tags"+
-                                                                                                        " (collageId, userId, createdAt, updatedAt)"+
-                                                                                                        " VALUES"+tagCollageArray;
+                                                                                            console.log("uploadedCollageFiles_1 -------------------");
+                                                                                            //console.log(uploadedCollageFiles_1);
+                                                                                            var query = "INSERT INTO collageDetails"+
+                                                                                                        " (image, position, collageId, createdAt, updatedAt)"+
+                                                                                                        " VALUES"+collageDetailImgArray;
+                                                                                                        //" VALUES ('filename','position',"+results.id+", now(), now())";
 
                                                                                             console.log("collage Details ------------------------------------ ===================================");
                                                                                             console.log(query);
-                                                                                            Tags.query(query, function(err, createdCollageTags) {
+                                                                                            CollageDetails.query(query, function(err, createdCollageDetails) {
                                                                                                     if(err)
                                                                                                     {
-                                                                                                        //console.log(err);
+                                                                                                        console.log(err);
                                                                                                         //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
                                                                                                         callback();
                                                                                                     }
                                                                                                     else
                                                                                                     {
-                                                                                                        console.log(createdCollageTags);
-                                                                                                        /*SmsService.sendSms(function(err, sendSmsResults) {
+                                                                                                        var taggedUserArray = [{user_id: 3},{user_id: 6}];
+                                                                                                        console.log(taggedUserArray);
+                                                                                                        var tagCollageArray = [];
+                                                                                                        taggedUserArray.forEach(function(factor, index){
+                                                                                                             console.log(factor);
+                                                                                                             console.log(index);
+                                                                                                             tagCollageArray.push("("+results.id+","+factor.user_id+", now(), now())");
+                                                                                                        });
+                                                                                                       var query = "INSERT INTO tags"+
+                                                                                                                    " (collageId, userId, createdAt, updatedAt)"+
+                                                                                                                    " VALUES"+tagCollageArray;
+
+                                                                                                        console.log("collage Details ------------------------------------ ===================================");
+                                                                                                        console.log(query);
+                                                                                                        Tags.query(query, function(err, createdCollageTags) {
                                                                                                                 if(err)
                                                                                                                 {
-                                                                                                                        console.log(err);
-                                                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                                                                                                        //callback();
-                                                                                                                        callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
-                                                                                                                }else{
-                                                                                                                    consol.log("-----------------");
-                                                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                                                                                                        //callback();
-                                                                                                                        //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
+                                                                                                                    //console.log(err);
+                                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                                    callback();
                                                                                                                 }
-                                                                                                        });*/
-                                                                                                        callback();
+                                                                                                                else
+                                                                                                                {
+                                                                                                                    console.log(createdCollageTags);
+                                                                                                                    /*SmsService.sendSms(function(err, sendSmsResults) {
+                                                                                                                            if(err)
+                                                                                                                            {
+                                                                                                                                    console.log(err);
+                                                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+                                                                                                                                    //callback();
+                                                                                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
+                                                                                                                            }else{
+                                                                                                                                consol.log("-----------------");
+                                                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                                                    //callback();
+                                                                                                                                    //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
+                                                                                                                            }
+                                                                                                                    });*/
+                                                                                                                    callback();
+                                                                                                                }
+                                                                                                        });
+
+
+
+
+
+                                                                                                        //return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage'});
                                                                                                     }
                                                                                             });
+                                                                                }
+                                                                        });
 
-
-
-
-
-                                                                                            //return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage'});
+                                                                    },
+                                                                ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                                                                        if (err) {
+                                                                                            console.log(err);
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in creating Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                                                                        }else{
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully created dither'});
                                                                                         }
-                                                                                });
-                                                                    }
-                                                            });
-
-                                                        }
-                                                        else{
-
-                                                            //callback();
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Image found to add', error_details: err});
-                                                        }
+                                                                });
                                                 }
-                                            });
-                                },
+                                                else{
 
-
-                    ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                            if (err) {
-                                                console.log(err);
-                                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in creating Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
-                                            }else{
-                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully created dither'});
-                                            }
+                                                    //callback();
+                                                    return res.json(200, {status: 2, status_type: 'Success' ,message: 'No collage Image found to add'});
+                                                }
+                                    }
 
                 });
               //}

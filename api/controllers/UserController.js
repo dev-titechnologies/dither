@@ -23,11 +23,13 @@ module.exports = {
 
 
            //profilePic Upload
-			
+           console.log("signuppppppppppppp")
+			   
                var imgUrl       = req.param('profilepic');
                var filename     =  "image.png";
                var imagename    = new Date().getTime() + filename;
-               
+                console.log(imgUrl)
+
 
             var download = function(uri, filename, callback)
                 {

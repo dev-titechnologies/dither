@@ -45,7 +45,7 @@
                        if(!err)
                         {
 								console.log(err);
-                               return res.json(200, {status: 2, status_type: 'Failure' , message: 'sms not reachable', error_details: sendSmsResults});
+                               return res.json(200, {status: 2, status_type: 'Failure' , msg: 'mobile number is not valid', error_details: sendSmsResults});
 
                         }else{
 							   sails.log(req.param("mobile"))
@@ -59,7 +59,7 @@
                                                 else
                                                     {
                                                         sails.log("result"+results)
-														return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+														return res.json(200, {status: 1, status_type: 'Success' , msg: 'OTP send Successfully'});
                                                     }
 									});
 				

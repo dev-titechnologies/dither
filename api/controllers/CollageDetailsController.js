@@ -12,6 +12,7 @@ module.exports = {
   ==================================================================================================================================== */
         getDitherDetail: function (req, res) {
                 var server_baseUrl              =     req.options.server_baseUrl;
+                var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 console.log(req.param("dither_id"));
@@ -145,6 +146,8 @@ module.exports = {
                                                                                              dither_created_username    : results[0].collageCreator,
                                                                                              dither_created_userID      : results[0].collageCreatorId,
                                                                                              dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
+                                                                                             dither_location            : results[0].location,
+                                                                                             dither_image               : collageImg_path + results[0].collageImage,
                                                                                              dithers                    : imageArray,
                                                                                              ditherCount                : imageArray.length,
                                                                                              taggedUsers                : taggedUserArrayFinal,

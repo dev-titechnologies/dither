@@ -45,12 +45,12 @@ module.exports = {
                                         //console.log(resultsPushArray);
 
                                         query = " SELECT clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote, clg.userId, clg.image AS collage_image, clg.createdAt,"+
-                                                " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " usr.profilePic, usr.name"+
+                                                //" clglk.likeStatus"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                                " INNER JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                                //" INNER JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " WHERE clg.id"+
                                                 " IN ("+resultsPushArray+")"+
                                                 " ORDER BY clg.createdAt";
@@ -88,7 +88,7 @@ module.exports = {
                                                                         imgDetailsArray.push({
                                                                                             image_id        : dataResults[j]["imgId"],
                                                                                             position        : dataResults[j]["position"],
-                                                                                            like_status     : dataResults[j]["likeStatus"],
+                                                                                            //like_status     : dataResults[j]["likeStatus"],
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
                                                                         //imagesPositionArray.push(dataResults[j]["position"]);

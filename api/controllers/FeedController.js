@@ -88,7 +88,7 @@ module.exports = {
                                                                         imgDetailsArray.push({
                                                                                             image_id        : dataResults[j]["imgId"],
                                                                                             position        : dataResults[j]["position"],
-                                                                                            //like_status     : dataResults[j]["likeStatus"],
+                                                                                            like_status     : 0,
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
                                                                         //imagesPositionArray.push(dataResults[j]["position"]);

@@ -13,6 +13,8 @@ module.exports = {
         test: function (req, res) {
                console.log("22222222222222");
                 console.log(req.param('array'));
+
+
         },
         upload: function (req, res) {
 

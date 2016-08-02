@@ -81,7 +81,15 @@ module.exports = {
                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in checking logged users collage like status', error_details: err});
                                                         }
                                                         else{
-                                                                console.log(collageLikeResults);
+                                                                //console.log("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}");
+                                                                //console.log(collageLikeResults);
+                                                                console.log(collageLikeResults.length);
+                                                                var likeStatus;
+                                                                if(!collageLikeResults.likeStatus){
+                                                                        likeStatus = false;
+                                                                }else{
+                                                                        likeStatus = true;
+                                                                }
 
                                                                 values = {
                                                                 collageId : get_collage_id,
@@ -141,7 +149,7 @@ module.exports = {
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                              dither_desc                : results[0].imgTitle,
                                                                                              dither_created_date        : results[0].createdAt,
-                                                                                             dither_like_status         : collageLikeResults.likeStatus,
+                                                                                             dither_like_status         : likeStatus,
                                                                                              dither_id                  : results[0].collageId,
                                                                                              dither_created_username    : results[0].collageCreator,
                                                                                              dither_created_userID      : results[0].collageCreatorId,

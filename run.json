@@ -2,7 +2,8 @@
 "apps" : [{
     "name"        : "Dither",
     "script"      : "app.js",
-    "ignoreWatch" : ["[\\/\\\\]\\./", "node_modules", ".tmp", "views", "assets", ".idea"],
-    "watch"       : true
+    "ignore_watch" : ["[\\/\\\\]\\./", "node_modules", ".tmp", "views", "assets", ".idea",".git"],
+    "watch"       : "../",
 }]
+}
 

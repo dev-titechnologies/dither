@@ -27,7 +27,7 @@ module.exports = {
                 var fbUserArray             = [];
                 var fbUser                  = [
                                                 {ditherUserName: 'ann',fbId: 'maeewelutest123'},
-                                                {ditherUserName: 'fb_sasi 2',fbId: 'eeeeeeeeeee'},
+                                                {ditherUserName: 'Testers TiTech',fbId: '172318546464606058'},
                                                 {ditherUserName: 'fb_sasi 3',fbId: 'ggggggggggg'},
                                               ];
                 var phonecontacts           = [

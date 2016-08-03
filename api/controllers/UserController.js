@@ -40,7 +40,7 @@ module.exports = {
 
                     });
                 };
-                download(imgUrl, 'assets/images/ProfilePics/'+imagename, function()
+                download(imgUrl, 'assets/images/profilePics/'+imagename, function()
                 {
                     sails.log('done');
 
@@ -257,7 +257,7 @@ module.exports = {
                                                             console.log(userTokenDetails.token)
                                                             var protocol    = req.connection.encrypted?'https':'http';
                                                             var url         = protocol + '://' + req.headers.host + '/';
-                                                            var profile_image   =  url+"/images/ProfilePics/"+results.profilePic;
+                                                            var profile_image   =  url+"/images/profilePics/"+results.profilePic;
                                                             sails.log(profile_image)
                                                             return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image,token:userTokenDetails.token.token});
                                                         }
@@ -348,7 +348,7 @@ module.exports = {
                 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
                 console.log(req.file('profile_image'))
                 var server_baseUrl              =     req.options.server_baseUrl;
-                var imageUploadDirectoryPath    = '../../assets/images/ProfilePics';
+                var imageUploadDirectoryPath    = '../../assets/images/profilePics';
 
                 User_token.findOne({token: req.get('token')}).exec(function (err, results){
                    if (err)
@@ -365,7 +365,7 @@ module.exports = {
                                 var imageName = req.file('profile_image')._files[0].stream.filename;
                                 if(req.file('profile_image'))
                                 {
-                                    req.file('profile_image').upload({dirname: '../../assets/images/ProfilePics', maxBytes: 10000000},function (err, profileUploadResults) {
+                                    req.file('profile_image').upload({dirname: '../../assets/images/profilePics'},function (err, profileUploadResults) {
                                         if (err)
                                         {
                                             console.log(err)
@@ -388,7 +388,7 @@ module.exports = {
                                                 }
                                                 else
                                                 {  
-													var profileImage = server_baseUrl + "images/ProfilePics/"+imageName;
+													var profileImage = server_baseUrl + "images/profilePics/"+imageName;
 
                                                     return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success',profile_image:profileImage});
                                                 }
@@ -418,9 +418,9 @@ module.exports = {
                                     else
                                     {
 										console.log(data)
-										var profileImage = server_baseUrl + "images/ProfilePics/"+data[0].profilePic;
+										var profileImage = server_baseUrl + "images/profilePics/"+data[0].profilePic;
 										console.log(profileImage)
-                                       fs.unlink(profileImage);
+                                        fs.unlink("assets/images/profilePics/"+data[0].profilePic);
                                         return res.json(200, {status: 1, message: 'Success'});
                                     }
                                 });

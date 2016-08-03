@@ -23,10 +23,12 @@ module.exports = {
                 }else{
                     query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt,"+
                                 " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
-                                " usr.name AS collageCreator, usr.profilePic"+
+                                " usr.name AS collageCreator, usr.profilePic,"+
+                                 " clglk.likeStatus"+
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                 " INNER JOIN user usr ON usr.id = clg.userId"+
+                                " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                 " WHERE clg.id = "+get_collage_id;
                     console.log(query);
                     Collage.query(query, function(err, results) {
@@ -44,7 +46,18 @@ module.exports = {
                                         results.forEach(function(factor, index){
                                                 console.log("factor");
                                                 console.log(factor);
-                                                imageArray.push({imageUrl : server_baseUrl + req.options.file_path.profilePic_path + factor.image, like_count: factor.vote, id: factor.imageId});
+                                                var like_status;
+                                                if(factor.likeStatus == null || factor.likeStatus == ""){
+                                                        like_status = 0;
+                                                }else{
+                                                        like_status = 1;
+                                                }
+                                                imageArray.push({
+                                                                imageUrl : server_baseUrl + req.options.file_path.profilePic_path + factor.image,
+                                                                like_count: factor.vote,
+                                                                like_status: like_status,
+                                                                id: factor.imageId
+                                                                });
                                         });
 
 
@@ -72,24 +85,6 @@ module.exports = {
                                                         });
                                                     }
 
-                                                    values = {
-                                                                collageId : get_collage_id,
-                                                                userId    : userId,
-                                                            };
-                                                    CollageLikes.findOne(values).exec(function (err, collageLikeResults){
-                                                        if (err) {
-                                                               return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in checking logged users collage like status', error_details: err});
-                                                        }
-                                                        else{
-                                                                //console.log("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}");
-                                                                //console.log(collageLikeResults);
-                                                                console.log(collageLikeResults.length);
-                                                                var likeStatus;
-                                                                if(!collageLikeResults.likeStatus){
-                                                                        likeStatus = false;
-                                                                }else{
-                                                                        likeStatus = true;
-                                                                }
 
                                                                 values = {
                                                                 collageId : get_collage_id,
@@ -149,7 +144,7 @@ module.exports = {
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                              dither_desc                : results[0].imgTitle,
                                                                                              dither_created_date        : results[0].createdAt,
-                                                                                             dither_like_status         : likeStatus,
+                                                                                             //dither_like_status         : likeStatus,
                                                                                              dither_id                  : results[0].collageId,
                                                                                              dither_created_username    : results[0].collageCreator,
                                                                                              dither_created_userID      : results[0].collageCreatorId,
@@ -171,8 +166,6 @@ module.exports = {
 
                                                                     }
                                                                 });
-                                                        }
-                                                    });
                                                 }
                                         });
                                 }

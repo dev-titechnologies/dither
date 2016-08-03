@@ -45,12 +45,12 @@ module.exports = {
                                         //console.log(resultsPushArray);
 
                                         query = " SELECT clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote, clg.userId, clg.image AS collage_image, clg.createdAt,"+
-                                                " usr.profilePic, usr.name"+
-                                                //" clglk.likeStatus"+
+                                                " usr.profilePic, usr.name,"+
+                                                " clglk.likeStatus"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                                //" INNER JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " WHERE clg.id"+
                                                 " IN ("+resultsPushArray+")"+
                                                 " ORDER BY clg.createdAt";
@@ -85,10 +85,16 @@ module.exports = {
                                                                 {
                                                                     if(dataResults[j]["collageId"]==collageId_val)
                                                                     {
+                                                                        var likeStatus;
+                                                                        if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                                likeStatus = 0;
+                                                                        }else{
+                                                                                likeStatus = 1;
+                                                                        }
                                                                         imgDetailsArray.push({
                                                                                             image_id        : dataResults[j]["imgId"],
                                                                                             position        : dataResults[j]["position"],
-                                                                                            //like_status     : dataResults[j]["likeStatus"],
+                                                                                            like_status     : likeStatus,
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
                                                                         //imagesPositionArray.push(dataResults[j]["position"]);

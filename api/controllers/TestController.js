@@ -10,9 +10,26 @@ module.exports = {
      /* ==================================================================================================================================
                To Upload Images
      ==================================================================================================================================== */
+        collage_image: function (req, res) {
+                var imageUploadDirectoryPath =  '../../assets/images/collage_test';
+                //var imageUploadDirectoryPath =  'http://assets/images/collage';
+                req.file('collage_image').upload({dirname: imageUploadDirectoryPath,maxBytes: 100 * 1000 * 1000},function (err, files) {
+                if (err)
+                return res.serverError(err);
+
+
+
+                return res.json({
+                message: files.length + ' file(s) uploaded successfully!',
+                files: files
+                });
+                });
+        },
         test: function (req, res) {
                console.log("22222222222222");
                 console.log(req.param('array'));
+
+
         },
         upload: function (req, res) {
 

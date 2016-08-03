@@ -18,9 +18,14 @@ module.exports = {
         collageId: {
                 type: 'integer',
             },
+        //Id of a single image in a collage
+        imageId: {
+                type: 'integer',
+            },
         userId: {
                 type: 'integer',
             },
+
         likeStatus: {
                 type: 'boolean',
                 defaultsTo: false

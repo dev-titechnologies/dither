@@ -78,17 +78,17 @@ module.exports = {
                                                                                  var switchKey = factor.filename;
                                                                                  var position;
                                                                                  switch(switchKey){
-                                                                                        case "image_1.jpg":    position = "image_one";
+                                                                                        case "image_1":    position = "image_one";
                                                                                         break;
-                                                                                        case "image_2.jpg":    position = "image_two";
+                                                                                        case "image_2":    position = "image_two";
                                                                                         break;
-                                                                                        case "image_3.jpg":    position = "image_three";
+                                                                                        case "image_3":    position = "image_three";
                                                                                         break;
-                                                                                        case "image_4.jpg":    position = "image_four";
+                                                                                        case "image_4":    position = "image_four";
                                                                                         break;
                                                                                  }
                                                                                  //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
-                                                                                if(factor.filename != "image_0.jpg"){
+                                                                                if(factor.filename != "image_0"){
                                                                                         collageDetailImgArray.push({image: filename, position: position, collageId: results.id});
                                                                                 }
                                                                             });
@@ -203,7 +203,7 @@ module.exports = {
  /* ==================================================================================================================================
                To get Dither (collage)[My dithers]
      ==================================================================================================================================== */
-        getDither:  function (req, res) {
+        getMyDither:  function (req, res) {
 
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;

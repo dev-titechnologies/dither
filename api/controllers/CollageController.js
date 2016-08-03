@@ -24,9 +24,12 @@ module.exports = {
         createDither:  function (req, res) {
 
                     //console.log(req.body.REQUEST);
+                    var server_baseUrl              =     req.options.server_baseUrl;
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
-                    var imageUploadDirectoryPath   =     '../../assets/images/collage';
+                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var imageUploadDirectoryPath    =     '../../assets/images/collage';
                     var concatUploadImgArray;
 
                 req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
@@ -75,23 +78,22 @@ module.exports = {
                                                                                  var switchKey = factor.filename;
                                                                                  var position;
                                                                                  switch(switchKey){
-                                                                                        case "image_1":    position = "image_one";
+                                                                                        case "image_1.jpg":    position = "image_one";
                                                                                         break;
-                                                                                        case "image_2":    position = "image_two";
+                                                                                        case "image_2.jpg":    position = "image_two";
                                                                                         break;
-                                                                                        case "image_3":    position = "image_three";
+                                                                                        case "image_3.jpg":    position = "image_three";
                                                                                         break;
-                                                                                        case "image_4":    position = "image_four";
+                                                                                        case "image_4.jpg":    position = "image_four";
                                                                                         break;
                                                                                  }
-
-                                                                                 collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
+                                                                                 //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
+                                                                                if(factor.filename != "image_0.jpg"){
+                                                                                        collageDetailImgArray.push({image: filename, position: position, collageId: results.id});
+                                                                                }
                                                                             });
-                                                                            var query = "INSERT INTO collageDetails"+
-                                                                                        " (image, position, collageId, createdAt, updatedAt)"+
-                                                                                        " VALUES"+collageDetailImgArray;
-                                                                            console.log(query);
-                                                                            CollageDetails.query(query, function(err, createdCollageDetails) {
+
+                                                                            CollageDetails.create(collageDetailImgArray, function(err, createdCollageDetails) {
                                                                                     if(err)
                                                                                     {
                                                                                         console.log(err);
@@ -156,7 +158,26 @@ module.exports = {
                                                                                                                                 //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
                                                                                                                         }
                                                                                                                 });*/
-                                                                                                                return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage', dither_id: results.id});
+                                                                                                                console.log("-----------------------------------");
+                                                                                                                console.log(createdCollageDetails);
+                                                                                                                var vote = [];
+                                                                                                                createdCollageDetails.forEach(function(factor, index){
+                                                                                                                        console.log("factor");
+                                                                                                                        console.log(factor);
+                                                                                                                        vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
+                                                                                                                });
+                                                                                                                console.log("Predicated -------------------------");
+                                                                                                                //console.log(vote.sort( predicatBy("image_id") ));
+                                                                                                                sortedVote = vote.sort( predicatBy("image_id") );
+                                                                                                                return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
+                                                                                                                                      profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
+                                                                                                                                      user_name          :     tokenCheck.tokenDetails.name,
+                                                                                                                                      user_id            :     tokenCheck.tokenDetails.userId,
+                                                                                                                                      date_time          :     results.createdAt,
+                                                                                                                                      collage_id         :     results.id,
+                                                                                                                                      collage_image      :     collageImg_path + results.image,
+                                                                                                                                      vote               :     sortedVote
+                                                                                                                                      });
                                                                                                             }
 
                                                                                                         }

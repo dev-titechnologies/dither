@@ -8,14 +8,16 @@ module.exports = {
         //Get token expiry time from datatbase
         var param = 3600;
         var expHours = param / 60;
-
+console.log("Before Expiry Date-------------------------");
         //Get expiry date
         var expiry_date = new Date();
         expiry_date.setHours(expiry_date.getHours() + expHours);
-
+console.log("Before Generate Token");
         //Generate token
         var token = crypto.randomBytes(12).toString('hex');
         var tokenValues = {userId: userId, token: token, deviceId: deviceId, expiryDate: expiry_date};
+        console.log("tokenValues------------------------------------------" );
+        console.log(tokenValues);
         User_token.create(tokenValues).exec(function (err, resultToken) {
             if (err) {
 				console.log("Error Create Token Response");

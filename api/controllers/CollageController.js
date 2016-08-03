@@ -203,7 +203,7 @@ module.exports = {
  /* ==================================================================================================================================
                To get Dither (collage)[My dithers]
      ==================================================================================================================================== */
-        getDither:  function (req, res) {
+        getMyDither:  function (req, res) {
 
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;

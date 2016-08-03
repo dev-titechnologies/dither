@@ -124,10 +124,11 @@ module.exports = {
                                         //sails.sockets.broadcast('user', { msg: 'signup set ===========' });
                                         //sails.sockets.emit(req.socket.id,'privateMessage', {msg: 'Hi!'});
                                         sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
-
+                                    console.log("Before async parallel in Sign up ===============================================");
                                             // Send Email and Sms  Simultaneously
                                             async.parallel([
                                                         function(callback) {
+															        console.log("async parallel in Mailpart ===============================================");
                                                                     var global_settingsKeyValue = req.options.settingsKeyValue;
                                                                     var email_to        = results.email;
                                                                     var email_subject   = 'Dither - Signup';
@@ -137,6 +138,7 @@ module.exports = {
                                                                         if(err)
                                                                         {
                                                                                 console.log(err);
+                                                                                console.log("async parallel in Mailpart Error");
                                                                                 //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
                                                                                  callback();
                                                                         }else{
@@ -144,7 +146,8 @@ module.exports = {
                                                                                 console.log(email_to);
                                                                                 console.log(email_subject);
                                                                                 console.log(email_template);
-                                                                                console.log(email_context);
+                                                                                console.log(email_context
+                                                                                console.log("async parallel in Mailpart Success");
                                                                                 callback();
                                                                                 //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
                                                                         }
@@ -170,15 +173,18 @@ module.exports = {
                                                                                 callback();
                                                                         }
                                                                     });*/
+                                                                    console.log("async parallel in Sms Part");
                                                                     callback();
                                                         }
 
 
                                                    ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                     if (err) {
+																		console.log("async parallel in Sms Part Failure --------------------");
                                                                         console.log(err);
                                                                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                     }else{
+																		console.log("async parallel in Sms Part Success --------------------");
                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token});
                                                                     }
 
@@ -194,7 +200,7 @@ module.exports = {
         else
         {
 			console.log("no parammmmmm")
-			return res.json(200, {status: 2, status_type: 'Failure' , message: 'Parameter missing'}); //If an error occured, we let express/connect handle it by calling the "next" function
+			return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id'}); //If an error occured, we let express/connect handle it by calling the "next" function
 
 		}
     },

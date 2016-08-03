@@ -18,10 +18,12 @@ module.exports = {
         var tokenValues = {userId: userId, token: token, deviceId: deviceId, expiryDate: expiry_date};
         User_token.create(tokenValues).exec(function (err, resultToken) {
             if (err) {
+				console.log("Error Create Token Response");
                 console.log(err);
                 callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in create token service', error_details: err});
 
             } else {
+				console.log("Success Create Token Response");
                 callback(false, {status: 1, status_type: "Success", message: 'CreateToken service success', token: resultToken});
             }
 

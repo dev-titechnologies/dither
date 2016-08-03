@@ -31,21 +31,21 @@ module.exports = {
                 type: 'integer',
             },
        tagged_users:{
-			    type:'string'
+			    type:'string',
 		   } ,          
        readStatus:{
-					type:'string'
+					type:'string',
 		   } ,
 	   description:{
-			      type:'string'
+			      type:'string',
 		   } ,	   
 	   createdAt:{
 				
-				type:'datetime'
+				type:'datetime',
 			},    
 	   updatedAt:{
 		   
-				type:'datetime'	
+				type:'datetime',	
 			},		
   }
 };

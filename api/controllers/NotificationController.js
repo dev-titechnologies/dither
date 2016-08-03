@@ -9,7 +9,10 @@ var util = require('util');
 
 module.exports = {
 	
-	
+	 /* ==================================================================================================================================
+                Notification API
+	   ==================================================================================================================================== */
+		
 		notification: function(req, res) {
 			
 			
@@ -23,19 +26,18 @@ module.exports = {
 					}
 					else
 					{ 
-						User_token.findOne({token: req.get('token')}).exec(function (err, results){
-							if (err) 
-							{
-								sails.log(err)
-							}
-							else
-							{
-								sails.log(results)
-								return res.json(200, {status: 1, msg: 'success'});
-							}
-						});
+						
+						
 						
 					}
+					
+					
+				 //-----------Notification For Tagged In Users----------------------------------
+				 
+					
+				 
+				 
+				 	
 					
 				});	
 			

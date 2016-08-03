@@ -20,7 +20,8 @@ module.exports = {
             //console.log(req.param('name'));
             
 				console.log("signuppppppppppppp")
-				console.log(req.body)
+				console.log(req.body);
+				console.log(req.get('device_id'));
 
 				//profilePic Upload
 

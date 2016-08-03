@@ -59,7 +59,7 @@
                                                 else
                                                     {
                                                         sails.log("result"+results)
-														return res.json(200, {status: 1, status_type: 'Success' , msg: 'OTP send Successfully'});
+														return res.json(200, {status: 1, status_type: 'Success' , msg: 'OTP send Successfully',otp:verification_code});
                                                     }
 									});
 				

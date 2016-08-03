@@ -75,7 +75,7 @@ module.exports = {
 				{
 					//save signup details
 					sails.log("OTP match success")
-					/*Sms.query("UPDATE smsDetails SET ditherId	 = '"+result.insertId+"',smsVerified=1 where mobile_no = '"+req.param('mobile_number')+"' ", function (err, data) {						
+					Sms.query("UPDATE smsDetails SET ditherId	 = '"+result.insertId+"',smsVerified=1 where mobile_no = '"+req.param('mobile_number')+"' ", function (err, data) {						
 					});
 					
 					
@@ -103,9 +103,6 @@ module.exports = {
 			}
 		  else
 		  {
-
-				
-
 
              User.create(values).exec(function(err, results){
                     if(err){

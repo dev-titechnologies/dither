@@ -22,7 +22,7 @@ module.exports = {
      ==================================================================================================================================== */
 
         createDither:  function (req, res) {
-
+console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++");
                     //console.log(req.body.REQUEST);
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var tokenCheck                  =     req.options.tokenCheck;
@@ -43,154 +43,184 @@ module.exports = {
                             console.log(files);
                                 if(files.length != 0){
 
-                                                            console.log(files);
-                                                            //if(files[0].filename === "image_0"){
+                                            console.log(files);
+                                            var collage_imageName = "";
+                                            files.forEach(function(factor, index){
+                                                         var filename = factor.fd.split('/');
+                                                         filename = filename[filename.length-1];
+                                                         //console.log(filename);
+                                                         //sum = sum + factor.size;
+
+                                                         var filename_without_extension         =   factor.filename.split('.');
+                                                         filename_without_extension             =   filename_without_extension[0];
+                                                         if(filename_without_extension === "image_0"){
+                                                                console.log("filename_without_extension >>>>>>>>>>>>>>>>>>>>>>>");
+                                                                console.log(filename_without_extension);
                                                                 collage_imageName = files[0].fd.split('/');
                                                                 collage_imageName = collage_imageName[collage_imageName.length-1];
-                                                           // }
-                                                            console.log("collage_imageName =--------------------");
-                                                            console.log(collage_imageName);
+                                                         }
+                                            });
+                                            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                                            console.log(collage_imageName);
+                                            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                                            /*if(files[0].filename === "image_0"){
+                                                collage_imageName = files[0].fd.split('/');
+                                                collage_imageName = collage_imageName[collage_imageName.length-1];
+                                            }*/
+                                            console.log("collage_imageName =--------------------");
+                                            console.log(collage_imageName);
 
 
-                                                            var values = {
-                                                                imgTitle        : req.param('img_caption'),
-                                                                image           : collage_imageName,
-                                                                location        : req.param('location'),
-                                                                latitude        : req.param('latitude'),
-                                                                longitude       : req.param('longitude'),
-                                                                userId          : userId,
-                                                            };
-                                                        Collage.create(values).exec(function(err, results){
-                                                                if(err){
-                                                                        console.log(err);
-                                                                        callback();
+                                            var values = {
+                                                imgTitle        : req.param('img_caption'),
+                                                image           : collage_imageName,
+                                                location        : req.param('location'),
+                                                latitude        : req.param('latitude'),
+                                                longitude       : req.param('longitude'),
+                                                userId          : userId,
+                                                vote            : 0,
+                                            };
+                                        Collage.create(values).exec(function(err, results){
+                                                if(err){
+                                                        console.log(err);
+                                                        callback();
+                                                }
+                                                else{
+                                                            var sum = 0;
+                                                            var collageDetailImgArray = [];
+                                                            files.forEach(function(factor, index){
+                                                                 console.log("factor +++++++++++++++++++++++++++++++++++++++++");
+                                                                 console.log(factor);
+                                                                 var filename = factor.fd.split('/');
+                                                                 filename = filename[filename.length-1];
+                                                                 //console.log(filename);
+                                                                 //sum = sum + factor.size;
+
+                                                                 var filename_without_extension         =   factor.filename.split('.');
+                                                                 //console.log(filename_without_extension);
+                                                                 //console.log(filename_without_extension[0]);
+                                                                 filename_without_extension             =   filename_without_extension[0];
+
+                                                                 var switchKey = filename_without_extension;
+                                                                 var position;
+                                                                 switch(switchKey){
+                                                                        case "image_1":    position = "image_one";
+                                                                        break;
+                                                                        case "image_2":    position = "image_two";
+                                                                        break;
+                                                                        case "image_3":    position = "image_three";
+                                                                        break;
+                                                                        case "image_4":    position = "image_four";
+                                                                        break;
+                                                                 }
+                                                                 //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
+                                                                if(filename_without_extension != "image_0"){
+                                                                        collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
                                                                 }
-                                                                else{       var sum = 0;
-                                                                            var collageDetailImgArray = [];
-                                                                            files.forEach(function(factor, index){
-                                                                                 //console.log("factor");
-                                                                                 //console.log(factor);
-                                                                                 filename = factor.fd.split('/');
-                                                                                 filename = filename[filename.length-1];
-                                                                                 //console.log(filename);
-                                                                                 sum = sum + factor.size;
+                                                            });
+                                                            console.log("collash Is not there ================");
+                                                            console.log(collageDetailImgArray);
+                                                            console.log("Sum of size ===================");
+                                                            console.log(sum);
 
-                                                                                 var switchKey = factor.filename;
-                                                                                 var position;
-                                                                                 switch(switchKey){
-                                                                                        case "image_1":    position = "image_one";
-                                                                                        break;
-                                                                                        case "image_2":    position = "image_two";
-                                                                                        break;
-                                                                                        case "image_3":    position = "image_three";
-                                                                                        break;
-                                                                                        case "image_4":    position = "image_four";
-                                                                                        break;
-                                                                                 }
-                                                                                 //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
-                                                                                if(factor.filename != "image_0"){
-                                                                                        collageDetailImgArray.push({image: filename, position: position, collageId: results.id});
-                                                                                }
-                                                                            });
-                                                                            console.log(sum);
+                                                            CollageDetails.create(collageDetailImgArray, function(err, createdCollageDetails) {
+                                                                    if(err)
+                                                                    {
+                                                                        console.log(err);
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var taggedUserArray = [{user_id: 3},{user_id: 6}];
+                                                                        //var taggedUserArray = [];
+                                                                        console.log(taggedUserArray.length);
+                                                                        if(taggedUserArray.length == 0){
+                                                                                    return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage'});
+                                                                        }else{
+                                                                                console.log(taggedUserArray);
+                                                                                var tagCollageArray = [];
+                                                                                taggedUserArray.forEach(function(factor, index){
+                                                                                     console.log(factor);
+                                                                                     console.log(index);
+                                                                                     tagCollageArray.push("("+results.id+","+factor.user_id+", now(), now())");
+                                                                                });
+                                                                               var query = "INSERT INTO tags"+
+                                                                                            " (collageId, userId, createdAt, updatedAt)"+
+                                                                                            " VALUES"+tagCollageArray;
+                                                                                console.log(query);
+                                                                                Tags.query(query, function(err, createdCollageTags) {
+                                                                                        if(err)
+                                                                                        {
+                                                                                            console.log(err);
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            //console.log(createdCollageTags);
+                                                                                            //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
+                                                                                            console.log(results);
+                                                                                            //req.param('Invite_friends_NUM');
+                                                                                            var inviteFriends = [{user_id: 3},{user_id: 6}];
+                                                                                            //var inviteFriends  = [];
+                                                                                            if(inviteFriends.length == 0){
+                                                                                                        return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage', dither_id: results.id});
+                                                                                            }else{
+                                                                                                    /*var inviteFriendsArray = [];
+                                                                                                    taggedUserArray.forEach(function(factor, index){
+                                                                                                         console.log(factor);
+                                                                                                         console.log(index);
 
-                                                                            CollageDetails.create(collageDetailImgArray, function(err, createdCollageDetails) {
-                                                                                    if(err)
-                                                                                    {
-                                                                                        console.log(err);
-                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        var taggedUserArray = [{user_id: 3},{user_id: 6}];
-                                                                                        //var taggedUserArray = [];
-                                                                                        console.log(taggedUserArray.length);
-                                                                                        if(taggedUserArray.length == 0){
-                                                                                                    return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage'});
-                                                                                        }else{
-                                                                                                console.log(taggedUserArray);
-                                                                                                var tagCollageArray = [];
-                                                                                                taggedUserArray.forEach(function(factor, index){
-                                                                                                     console.log(factor);
-                                                                                                     console.log(index);
-                                                                                                     tagCollageArray.push("("+results.id+","+factor.user_id+", now(), now())");
-                                                                                                });
-                                                                                               var query = "INSERT INTO tags"+
-                                                                                                            " (collageId, userId, createdAt, updatedAt)"+
-                                                                                                            " VALUES"+tagCollageArray;
-                                                                                                console.log(query);
-                                                                                                Tags.query(query, function(err, createdCollageTags) {
+                                                                                                    });*/
+
+
+
+                                                                                                /*SmsService.sendSms(function(err, sendSmsResults) {
                                                                                                         if(err)
                                                                                                         {
-                                                                                                            console.log(err);
-                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                                                console.log(err);
+                                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+                                                                                                                //callback();
+                                                                                                                callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
+                                                                                                        }else{
+                                                                                                            consol.log("-----------------");
+                                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                                //callback();
+                                                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
                                                                                                         }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            //console.log(createdCollageTags);
-                                                                                                            //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
-                                                                                                            console.log(results);
-                                                                                                            //req.param('Invite_friends_NUM');
-                                                                                                            var inviteFriends = [{user_id: 3},{user_id: 6}];
-                                                                                                            //var inviteFriends  = [];
-                                                                                                            if(inviteFriends.length == 0){
-                                                                                                                        return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage', dither_id: results.id});
-                                                                                                            }else{
-                                                                                                                    /*var inviteFriendsArray = [];
-                                                                                                                    taggedUserArray.forEach(function(factor, index){
-                                                                                                                         console.log(factor);
-                                                                                                                         console.log(index);
-
-                                                                                                                    });*/
-
-
-
-                                                                                                                /*SmsService.sendSms(function(err, sendSmsResults) {
-                                                                                                                        if(err)
-                                                                                                                        {
-                                                                                                                                console.log(err);
-                                                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                                                                                                                //callback();
-                                                                                                                                callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
-                                                                                                                        }else{
-                                                                                                                            consol.log("-----------------");
-                                                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                                                                                                                //callback();
-                                                                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
-                                                                                                                        }
-                                                                                                                });*/
-                                                                                                                //console.log("-----------------------------------");
-                                                                                                                //console.log(createdCollageDetails);
-                                                                                                                var vote = [];
-                                                                                                                createdCollageDetails.forEach(function(factor, index){
-                                                                                                                        console.log("factor");
-                                                                                                                        console.log(factor);
-                                                                                                                        vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
-                                                                                                                });
-                                                                                                                console.log("Predicated -------------------------");
-                                                                                                                //console.log(vote.sort( predicatBy("image_id") ));
-                                                                                                                sortedVote = vote.sort( predicatBy("image_id") );
-                                                                                                                return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
-                                                                                                                                      profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
-                                                                                                                                      user_name          :     tokenCheck.tokenDetails.name,
-                                                                                                                                      user_id            :     tokenCheck.tokenDetails.userId,
-                                                                                                                                      date_time          :     results.createdAt,
-                                                                                                                                      collage_id         :     results.id,
-                                                                                                                                      collage_image      :     collageImg_path + results.image,
-                                                                                                                                      vote               :     sortedVote
-                                                                                                                                      });
-                                                                                                            }
-
-                                                                                                        }
+                                                                                                });*/
+                                                                                                //console.log("-----------------------------------");
+                                                                                                //console.log(createdCollageDetails);
+                                                                                                var vote = [];
+                                                                                                createdCollageDetails.forEach(function(factor, index){
+                                                                                                        console.log("factor");
+                                                                                                        console.log(factor);
+                                                                                                        vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
                                                                                                 });
-                                                                                        }//tagged user Array length check
+                                                                                                console.log("craeted in collage Details=====");
+                                                                                                console.log(vote);
+                                                                                                console.log("Predicated -------------------------");
 
-                                                                                    }
-                                                                            });
-                                                                }
-                                                        });
+                                                                                                //console.log(vote.sort( predicatBy("image_id") ));
+                                                                                                sortedVote = vote.sort( predicatBy("image_id") );
+                                                                                                return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
+                                                                                                                      profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
+                                                                                                                      user_name          :     tokenCheck.tokenDetails.name,
+                                                                                                                      user_id            :     tokenCheck.tokenDetails.userId,
+                                                                                                                      date_time          :     results.createdAt,
+                                                                                                                      collage_id         :     results.id,
+                                                                                                                      collage_image      :     collageImg_path + results.image,
+                                                                                                                      vote               :     sortedVote
+                                                                                                                      });
+                                                                                            }
 
+                                                                                        }
+                                                                                });
+                                                                        }//tagged user Array length check
 
+                                                                    }
+                                                            });
+                                                }
+                                        });
                                 }
                                 else{
                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Image found to add'});

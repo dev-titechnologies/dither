@@ -254,11 +254,11 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var received_userId             =     parseInt(req.param("user_id"));
+                    var received_userId             =     req.param("user_id");
                     var other_userName, other_userProfilePic;
                     var query;
                     console.log("Get Dither Other Profile  -------------------- ================================================");
-                    if(received_userId === parseInt(userId)){
+                    if(received_userId == userId){
                             console.log("Same Id ----------------------------------------------------");
                             query = "SELECT"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+

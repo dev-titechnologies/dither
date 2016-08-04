@@ -2,13 +2,19 @@ module.exports = {
             sendEmail: function (global_settingsKeyValue, email_to, email_subject, email_template, email_context, callback) {
 
                     //Email credentials from settings table
+                    console.log("Email Service")
                     var host        = global_settingsKeyValue.EMAIL_HOST;
                     var port        = parseInt(global_settingsKeyValue.EMAIL_PORT);
                     var user        = global_settingsKeyValue.EMAIL_AUTH_USERNAME;
                     var pass        = global_settingsKeyValue.EMAIL_AUTH_PASSWORD;
                     var from        = global_settingsKeyValue.EMAIL_FROM;
-
+                    console.log(host)
+                    console.log(port)
+                    console.log(user)
+                    console.log(pass)
+                    console.log(from)
                     var nodemailer = require('nodemailer');
+                    console.log("require nodemailer")
                     var smtpTransport = require('nodemailer-smtp-transport');
                     var hbs = require('nodemailer-express-handlebars');
                     var options = {

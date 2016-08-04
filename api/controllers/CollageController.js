@@ -211,7 +211,7 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var received_userId                =     req.param("user_id");
+                    var received_userId             =     req.param("user_id");
                     var other_userName, other_userProfilePic;
                     var query;
                     console.log("Get Dither Other Profile  -------------------- ================================================");
@@ -336,10 +336,13 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var received_userId                =     req.param("user_id");
+                    var received_userId             =     req.param("user_id");
+                    var received_dither_type        =     req.param("type");
                     var other_userName, other_userProfilePic;
                     var query;
                     console.log("Get Dither Other Profile  -------------------- ================================================");
+                    console.log(received_userId);
+                    console.log(received_dither_type);
                     query = " SELECT"+
                             " clg.id, clg.userId"+
                             " FROM"+
@@ -437,11 +440,21 @@ module.exports = {
                                                             //console.log(key);
                                                             //console.log(key.reverse());
                                                             console.log(JSON.stringify(key.reverse()));
-                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
+                                                            if(received_dither_type == "popular"){
+                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
+                                                                                    username: other_userName,
+                                                                                    user_profile_image: other_userProfilePic,
+                                                                                    popular_dithers: dithers_with_max_votes });
+
+                                                            }else{
+
+                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                     username: other_userName,
                                                                                     user_profile_image: other_userProfilePic,
                                                                                     recent_dithers: recent_dithers,
-                                                                                    dithers_with_max_votes: dithers_with_max_votes });
+                                                                                    });
+                                                            }
+
 
                                                     }//allCollageImgResults length check else
                                                 }

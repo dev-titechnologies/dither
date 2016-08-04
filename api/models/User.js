@@ -60,7 +60,7 @@ module.exports = {
                 defaultsTo: true
             }, 
 
-        notifyFB: {
+        notifyContact: {
                 type: 'boolean',
                 defaultsTo: true
             },

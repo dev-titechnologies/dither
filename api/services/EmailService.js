@@ -13,6 +13,7 @@ module.exports = {
                     console.log(user)
                     console.log(pass)
                     console.log(from)
+                    console.log(email_to)
                     var nodemailer = require('nodemailer');
                     console.log("require nodemailer")
                     var smtpTransport = require('nodemailer-smtp-transport');
@@ -30,6 +31,7 @@ module.exports = {
                     var sgTransport = require('nodemailer-sendgrid-transport');
                     //using sendgrid as transport, but can use any transport.
                     //var transporter = nodemailer.createTransport();
+                    console.log("require nodemailer-transport")
                     var transporter = nodemailer.createTransport(smtpTransport({
                         host: host,
                         secureConnection: false, // use SSL
@@ -39,6 +41,7 @@ module.exports = {
                             pass: pass
                         }
                       }));
+                      console.log("require nodemailer-transport2")
                      /* var transporter = nodemailer.createTransport(
                           smtpTransport('smtps://testteamti@gmail.com :ti!@#$%^')
                        );*/

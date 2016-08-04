@@ -208,9 +208,10 @@ module.exports = {
 																
 																//updation 
 																
-																AddressBook.query("UPDATE addressBook SET ditherUserId = '"+selectDContacts[0].id+"' where ditherUserPhoneNumber = '"+factor.ditherUserPhoneNumber+"'", function(err, updateDContacts) {
-																																	
-																});
+																 AddressBook.update({ditherUserId: selectDContacts[0].id},{ditherUserPhoneNumber: factor.ditherUserPhoneNumber}).exec(function(err, updatedRecords) {
+                
+																  });
+																
 															 }
 															
 															
@@ -234,9 +235,11 @@ module.exports = {
 															if(selectFBContacts.length!=0)
 															{
 																
-																FbFriends.query("UPDATE fbFriends SET ditherUserId = '"+selectFBContacts[0].id+"' where fbId = '"+factor.fbId+"'", function(err, updateFBContacts) {
-																																
+																
+																FbFriends.update({ditherUserId: selectFBContacts[0].id},{fbId: factor.fbId}).exec(function(err, updatedRecords) {
+                
 																});
+																
 															 }
 															
 															

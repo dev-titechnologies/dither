@@ -132,7 +132,7 @@ module.exports = {
 															        console.log("async parallel in Mailpart ===============================================");
                                                                     var global_settingsKeyValue = req.options.settingsKeyValue;
                                                                     var email_to        = results.email;
-                                                                    var email_subject   = 'Dither - Signup';
+                                                                    var email_subject   = 'Welcome to Dither';
                                                                     var email_template  = 'signup';
                                                                     var email_context   = {receiverName: results.name};
                                                                     EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {

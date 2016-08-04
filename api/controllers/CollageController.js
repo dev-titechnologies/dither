@@ -286,7 +286,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                     " UNION"+
                                     " SELECT tg.collageId"+
                                     " FROM tags tg"+
-                                    " INNER JOIN collage clg ON clg.id = tg.collageId"+
+                                    " LEFT JOIN collage clg ON clg.id = tg.collageId"+
                                     " WHERE tg.userId = "+received_userId+
                                     " ) AS temp_union"+
                                     " INNER JOIN collage clg ON clg.id = temp_union.id"+

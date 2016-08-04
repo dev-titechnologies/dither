@@ -94,7 +94,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                         break;
                                                                  }
                                                                  //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
-                                                                if(factor.filename != "image_0"){
+                                                                if(filename_without_extension != "image_0"){
                                                                         collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
                                                                 }
                                                             });

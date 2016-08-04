@@ -252,63 +252,66 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                     console.log("get--- Dither");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                     var received_userId             =     req.param("user_id");
                     var other_userName, other_userProfilePic;
                     var query;
                     console.log("Get Dither Other Profile  -------------------- ================================================");
-                    query = " SELECT"+
-                            " clg.id, clg.userId"+
-                            " FROM"+
-                            " collage clg"+
-                            " INNER JOIN user usr ON usr.id = clg.userId"+
-                            " WHERE"+
-                            " usr.status = 'active' AND"+
-                            " clg.id IN (SELECT tg.collageId FROM tags tg WHERE tg.userId = "+received_userId+" )";
+                    if(parseInt(received_userId) === parseInt(userId)){
+                            console.log("Same Id ----------------------------------------------------");
+                            query = "SELECT"+
+                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                    " clg.userId, clg.image AS collage_image, clg.totalVote, clg.updatedAt,"+
+                                    " usr.profilePic, usr.name,"+
+                                    " clglk.likeStatus"+
+                                    " FROM collage clg"+
+                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                    " INNER JOIN user usr ON usr.id = clg.userId"+
+                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                    " WHERE"+
+                                    " usr.id = "+received_userId+
+                                    " ORDER BY clg.updatedAt DESC";
+                    }else{
+                            console.log("Not a logged User ----------------------------------------------------");
+                            query = "SELECT"+
+                                    " temp_union.id, clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.updatedAt,"+
+                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                    " usr.profilePic, usr.name,"+
+                                    " clglk.likeStatus"+
+                                    " FROM ("+
+                                    " SELECT clg.id"+
+                                    " FROM collage clg"+
+                                    " WHERE clg.userId = "+received_userId+
+                                    " UNION"+
+                                    " SELECT tg.collageId"+
+                                    " FROM tags tg"+
+                                    " INNER JOIN collage clg ON clg.id = tg.collageId"+
+                                    " WHERE tg.userId = "+received_userId+
+                                    " ) AS temp_union"+
+                                    " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                    " INNER JOIN user usr ON usr.id = clg.userId"+
+                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                    " ORDER BY clg.updatedAt DESC";
+                    }
+
                     console.log(query);
                     Collage.query(query, function(err, results) {
                             if(err)
                             {
                                 console.log(err);
-                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting collages of Other user', error_details: err});
+                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting collages of the user', error_details: err});
                             }
                             else
                             {
-                                console.log(results);
+                                //console.log(results);
                                 if(results.length == 0){
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent_dithers: [], dithers_with_max_votes: []});
                                 }else{
-                                        var resultsPushArray = [];
-                                        results.forEach(function(factor, index){
-                                                console.log("factor");
-                                                console.log(factor);
-                                                resultsPushArray.push(factor.id);
-                                        });
-                                        console.log(resultsPushArray);
-                                        query = " SELECT clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt,"+
-                                                " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
-                                                " FROM collage clg"+
-                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                                " INNER JOIN user usr ON usr.id = clg.userId"+
-                                                " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                                " WHERE clg.id"+
-                                                " IN ("+resultsPushArray+")"+
-                                                " ORDER BY clg.createdAt";
-                                        console.log(query);
-                                        Collage.query(query, function(err, allCollageImgResults) {
-                                                if(err)
-                                                {
-                                                    console.log(err);
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting Images in collage of other user'});
-                                                }
-                                                else
-                                                {
-                                                    if(allCollageImgResults.length == 0){
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent_dithers: [], dithers_with_max_votes: []});
-                                                    }else{
-                                                            console.log(allCollageImgResults);
-                                                            var dataResults = allCollageImgResults;
+
+                                                            //console.log(results);
+                                                            var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
@@ -339,7 +342,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                     var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                                     other_userName                          =       dataResults[i]["name"];
                                                                     other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
-                                                                    dataResultsObj.date_time                =       dataResults[i]["createdAt"];
+                                                                    dataResultsObj.date_time                =       dataResults[i]["updatedAt"];
                                                                     dataResultsObj.collage_id               =       collageId_val;
                                                                     dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
@@ -347,24 +350,20 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
 
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
-                                                                    var recent_dithers                      =       key.reverse();
-                                                                    var dithers_with_max_votes              =       key.reverse().sort( predicatBy("totalVote") );
+                                                                    //var recent_dithers                      =       key.reverse();
+                                                                    var recent_dithers                      =       key;
+                                                                    var dithers_with_max_votes              =       key.sort( predicatBy("totalVote") );
                                                                 }
                                                             }
                                                             //console.log(key);
                                                             //console.log(key.reverse());
-                                                            console.log(JSON.stringify(key.reverse()));
+                                                            //console.log(JSON.stringify(key.reverse()));
                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                     username: other_userName,
                                                                                     user_profile_image: other_userProfilePic,
                                                                                     recent_dithers: recent_dithers,
                                                                                     dithers_with_max_votes: dithers_with_max_votes });
-
-                                                    }//allCollageImgResults length check else
-                                                }
-                                        });
-
-                               }//Results length check else
+                                }//Results length check else
                             }
                     });
         },
@@ -392,7 +391,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                             " INNER JOIN user usr ON usr.id = clg.userId"+
                             " WHERE"+
                             " usr.status = 'active' AND"+
-                            " clg.id IN (SELECT tg.collageId FROM tags tg WHERE tg.userId = "+received_userId+" )";
+                            " clg.id IN (SELECT clg.id FROM collage clg WHERE clg.userId = "+received_userId+" )";
                     console.log(query);
                     Collage.query(query, function(err, results) {
                             if(err)

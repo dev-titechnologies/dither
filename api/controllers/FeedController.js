@@ -35,24 +35,24 @@ module.exports = {
                     console.log("focus_limit_id ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     console.log(focus_limit_id);
 
-                    query = " SELECT temp_union.id, clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote,"+
+                    query = " SELECT temp_union.id, clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.updatedAt"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                             " usr.profilePic, usr.name,"+
                             " clglk.likeStatus"+
                             " FROM ("+
                             " SELECT clg.id"+
                             " FROM collage clg"+
-                            " WHERE clg.userId =1"+
+                            " WHERE clg.userId ="+userId+
                             " UNION"+
                             " SELECT tg.collageId"+
                             " FROM tags tg"+
-                            " WHERE tg.userId =1"+
+                            " WHERE tg.userId = "+userId+
                             " ) AS temp_union"+
                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                             " INNER JOIN user usr ON usr.id = clg.userId"+
                             " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                            " ORDER BY clg.updatedAt";
+                            " ORDER BY clg.updatedAt DESC";
                     console.log(query);
                     Collage.query(query, function(err, results) {
                             if(err)
@@ -109,7 +109,7 @@ module.exports = {
 
                                                             dataResultsObj.user_name=dataResults[i]["name"];
                                                             dataResultsObj.user_id=dataResults[i]["userId"];
-                                                            dataResultsObj.date_time=dataResults[i]["createdAt"];
+                                                            dataResultsObj.date_time=dataResults[i]["updatedAt"];
                                                             dataResultsObj.collage_id=collageId_val;
                                                             dataResultsObj.collage_image = collageImg_path + dataResults[i]["collage_image"];
                                                             dataResultsObj.vote = imgDetailsArrayOrder;
@@ -117,8 +117,8 @@ module.exports = {
                                                             key.push(dataResultsObj);
                                                             dataResultsKeys.push(collageId_val);
 
-                                                            //var feeds = key.reverse();
-                                                            var feeds = key;
+                                                            var feeds = key.reverse();
+                                                            //var feeds = key;
 
                                                         }
                                                     }

@@ -261,7 +261,7 @@ module.exports = {
                                                             console.log(userTokenDetails.token)
                                                             var protocol    = req.connection.encrypted?'https':'http';
                                                             var url         = protocol + '://' + req.headers.host + '/';
-                                                            var profile_image   =  url+"/images/profilePics/"+results.profilePic;
+                                                            var profile_image   =  url+"images/profilePics/"+results.profilePic;
                                                             sails.log(profile_image)
                                                             return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image,token:userTokenDetails.token.token});
                                                         }

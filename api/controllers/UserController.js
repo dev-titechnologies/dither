@@ -124,7 +124,7 @@ module.exports = {
                                         //sails.sockets.broadcast('user', { msg: 'signup set ===========' });
                                         //sails.sockets.emit(req.socket.id,'privateMessage', {msg: 'Hi!'});
                                         sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
-                                    console.log("Before async parallel in Sign up ===============================================");
+										console.log("Before async parallel in Sign up ===============================================");
                                             // Send Email and Sms  Simultaneously
                                             async.parallel([
                                                         function(callback) {
@@ -146,7 +146,7 @@ module.exports = {
                                                                                 console.log(email_to);
                                                                                 console.log(email_subject);
                                                                                 console.log(email_template);
-                                                                                console.log(email_context
+                                                                                console.log(email_context);
                                                                                 console.log("async parallel in Mailpart Success");
                                                                                 callback();
                                                                                 //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
@@ -189,13 +189,12 @@ module.exports = {
                                                                     }
 
                                             });
-
-                                }
-                            });
-                    }
-            });
-		}
-	    });
+                                        }
+                                    });          
+		                        }
+	                     });
+	                    }
+					}); 
         }
         else
         {

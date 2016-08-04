@@ -43,7 +43,7 @@
 										sails.log(req.param("mobile"))
 										var values = {
 											OTPCode       	 : verification_code,
-											mobile_no        : req.param("mobile"),									
+											mobile_no        : req.param("mobile")									
 										};	 								
 										Sms.create(values).exec(function(err, results){
 											if(err)

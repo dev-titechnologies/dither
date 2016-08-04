@@ -44,10 +44,29 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                 if(files.length != 0){
 
                                             console.log(files);
-                                            //if(files[0].filename === "image_0"){
+                                            var collage_imageName = "";
+                                            files.forEach(function(factor, index){
+                                                         var filename = factor.fd.split('/');
+                                                         filename = filename[filename.length-1];
+                                                         //console.log(filename);
+                                                         //sum = sum + factor.size;
+
+                                                         var filename_without_extension         =   factor.filename.split('.');
+                                                         filename_without_extension             =   filename_without_extension[0];
+                                                         if(filename_without_extension === "image_0"){
+                                                                console.log("filename_without_extension >>>>>>>>>>>>>>>>>>>>>>>");
+                                                                console.log(filename_without_extension);
+                                                                collage_imageName = files[0].fd.split('/');
+                                                                collage_imageName = collage_imageName[collage_imageName.length-1];
+                                                         }
+                                            });
+                                            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                                            console.log(collage_imageName);
+                                            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                                            /*if(files[0].filename === "image_0"){
                                                 collage_imageName = files[0].fd.split('/');
                                                 collage_imageName = collage_imageName[collage_imageName.length-1];
-                                           // }
+                                            }*/
                                             console.log("collage_imageName =--------------------");
                                             console.log(collage_imageName);
 
@@ -66,15 +85,16 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                         console.log(err);
                                                         callback();
                                                 }
-                                                else{       var sum = 0;
+                                                else{
+                                                            var sum = 0;
                                                             var collageDetailImgArray = [];
                                                             files.forEach(function(factor, index){
                                                                  console.log("factor +++++++++++++++++++++++++++++++++++++++++");
                                                                  console.log(factor);
-                                                                 filename = factor.fd.split('/');
+                                                                 var filename = factor.fd.split('/');
                                                                  filename = filename[filename.length-1];
                                                                  //console.log(filename);
-                                                                 sum = sum + factor.size;
+                                                                 //sum = sum + factor.size;
 
                                                                  var filename_without_extension         =   factor.filename.split('.');
                                                                  //console.log(filename_without_extension);

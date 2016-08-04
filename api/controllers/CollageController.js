@@ -56,7 +56,8 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                          if(filename_without_extension === "image_0"){
                                                                 console.log("filename_without_extension >>>>>>>>>>>>>>>>>>>>>>>");
                                                                 console.log(filename_without_extension);
-                                                                collage_imageName = files[0].fd.split('/');
+                                                                collage_imageName = factor.fd.split('/');
+                                                                console.log(collage_imageName);
                                                                 collage_imageName = collage_imageName[collage_imageName.length-1];
                                                          }
                                             });
@@ -114,8 +115,18 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                         break;
                                                                  }
                                                                  //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
-                                                                if(filename_without_extension != "image_0"){
-                                                                        collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
+                                                                //if(filename_without_extension != "image_0"){
+                                                                        //collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
+                                                                //}
+                                                                var switchKey = filename_without_extension;
+                                                                switch(switchKey){
+                                                                        case 'image_0':
+
+                                                                        break;
+
+                                                                        default:
+                                                                                collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
+                                                                        break;
                                                                 }
                                                             });
                                                             console.log("collash Is not there ================");
@@ -202,6 +213,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
 
                                                                                                 //console.log(vote.sort( predicatBy("image_id") ));
                                                                                                 sortedVote = vote.sort( predicatBy("image_id") );
+                                                                                                console.log(results);
                                                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
                                                                                                                       profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
                                                                                                                       user_name          :     tokenCheck.tokenDetails.name,

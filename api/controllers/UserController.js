@@ -97,7 +97,7 @@ module.exports = {
 		 {
 		  User.find({fbId:req.param('fb_uid')}).exec(function (err, resultData){
 			  
-            console.log(resultData)
+
 			if(resultData.length>0)
 			{
 			return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User', error_details: err});

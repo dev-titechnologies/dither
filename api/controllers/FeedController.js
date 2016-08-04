@@ -19,6 +19,22 @@ module.exports = {
                     var query;
                     console.log("Get Feed  -------------------- ================================================");
 
+console.log(req.param("page_no"));
+console.log(req.param("page_type"));
+console.log(req.param("focus_id"));
+var focus_limit_id;
+var no_of_data_per_page     =   3;
+var page_no                 =   req.param("page_no");
+var page_type               =   req.param("page_type");
+var focus_id                =   req.param("focus_id");
+if(page_type == "new"){
+            focus_limit_id = parseInt(focus_id) + parseInt(no_of_data_per_page);
+}else{
+            focus_limit_id = parseInt(focus_id) - parseInt(no_of_data_per_page);
+}
+console.log("focus_limit_id ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+console.log(focus_limit_id);
+
                     query = " SELECT clg.id FROM collage clg WHERE clg.userId = "+userId+
                             " UNION"+
                             " SELECT tg.collageId FROM tags tg WHERE tg.userId = "+userId;

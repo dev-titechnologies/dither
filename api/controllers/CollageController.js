@@ -270,8 +270,8 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                     " WHERE"+
-                                    " usr.id = "+received_userId+
-                                    " ORDER BY clg.updatedAt DESC";
+                                    " usr.id = '"+received_userId+
+                                    "' ORDER BY clg.updatedAt DESC";
                     }else{
                             console.log("Not a logged User ----------------------------------------------------");
                             query = "SELECT"+
@@ -282,13 +282,13 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                     " FROM ("+
                                     " SELECT clg.id"+
                                     " FROM collage clg"+
-                                    " WHERE clg.userId = "+received_userId+
-                                    " UNION"+
+                                    " WHERE clg.userId = '"+received_userId+
+                                    "' UNION"+
                                     " SELECT tg.collageId"+
                                     " FROM tags tg"+
                                     " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                    " WHERE tg.userId = "+received_userId+
-                                    " ) AS temp_union"+
+                                    " WHERE tg.userId = '"+received_userId+
+                                    "' ) AS temp_union"+
                                     " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                     " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                     " INNER JOIN user usr ON usr.id = clg.userId"+

@@ -19,25 +19,40 @@ module.exports = {
                     var query;
                     console.log("Get Feed  -------------------- ================================================");
 
-console.log(req.param("page_no"));
-console.log(req.param("page_type"));
-console.log(req.param("focus_id"));
-var focus_limit_id;
-var no_of_data_per_page     =   3;
-var page_no                 =   req.param("page_no");
-var page_type               =   req.param("page_type");
-var focus_id                =   req.param("focus_id");
-if(page_type == "new"){
-            focus_limit_id = parseInt(focus_id) + parseInt(no_of_data_per_page);
-}else{
-            focus_limit_id = parseInt(focus_id) - parseInt(no_of_data_per_page);
-}
-console.log("focus_limit_id ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-console.log(focus_limit_id);
+                    console.log(req.param("page_no"));
+                    console.log(req.param("page_type"));
+                    console.log(req.param("focus_id"));
+                    var focus_limit_id;
+                    var no_of_data_per_page     =   3;
+                    var page_no                 =   req.param("page_no");
+                    var page_type               =   req.param("page_type");
+                    var focus_id                =   req.param("focus_id");
+                    if(page_type == "new"){
+                                focus_limit_id = parseInt(focus_id) + parseInt(no_of_data_per_page);
+                    }else{
+                                focus_limit_id = parseInt(focus_id) - parseInt(no_of_data_per_page);
+                    }
+                    console.log("focus_limit_id ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    console.log(focus_limit_id);
 
-                    query = " SELECT clg.id FROM collage clg WHERE clg.userId = "+userId+
+                    query = " SELECT temp_union.id, clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote,"+
+                            " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                            " usr.profilePic, usr.name,"+
+                            " clglk.likeStatus"+
+                            " FROM ("+
+                            " SELECT clg.id"+
+                            " FROM collage clg"+
+                            " WHERE clg.userId =1"+
                             " UNION"+
-                            " SELECT tg.collageId FROM tags tg WHERE tg.userId = "+userId;
+                            " SELECT tg.collageId"+
+                            " FROM tags tg"+
+                            " WHERE tg.userId =1"+
+                            " ) AS temp_union"+
+                            " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                            " INNER JOIN user usr ON usr.id = clg.userId"+
+                            " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                            " ORDER BY clg.updatedAt";
                     console.log(query);
                     Collage.query(query, function(err, results) {
                             if(err)
@@ -50,36 +65,8 @@ console.log(focus_limit_id);
                                 if(results.length == 0){
                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', feeds: []});
                                 }else{
-                                    //console.log(results.length);
-                                    var resultsPushArray = [];
-                                    results.forEach(function(factor, index){
-                                            resultsPushArray.push(factor.id);
-                                    });
 
-                                    query = " SELECT clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote, clg.userId, clg.image AS collage_image, clg.createdAt,"+
-                                            " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus"+
-                                            " FROM collage clg"+
-                                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                            " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                            " WHERE clg.id"+
-                                            " IN ("+resultsPushArray+")"+
-                                            " ORDER BY clg.createdAt";
-                                    console.log(query);
-                                    Collage.query(query, function(err, allCollageImgResults) {
-                                            if(err)
-                                            {
-                                                console.log(err);
-                                                return res.json(200, {status: 1, status_type: 'Success' ,message: 'Some error occured in grtting Images in collage of logged user', error_details: err});
-                                            }
-                                            else
-                                            {
-                                                //console.log(allCollageImgResults);
-                                                if(allCollageImgResults.length == 0){
-                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', feeds: []});
-                                                }else{
-                                                    var dataResults = allCollageImgResults;
+                                                    var dataResults = results;
                                                     var key = [];
                                                     var dataResultsKeys = [];
                                                     for (var i = dataResults.length - 1; i >= 0; i--) {
@@ -111,6 +98,7 @@ console.log(focus_limit_id);
                                                                                         });
                                                                 }
                                                             }
+                                                            //var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                             var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                             if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                         dataResultsObj.profile_image = "";
@@ -129,7 +117,8 @@ console.log(focus_limit_id);
                                                             key.push(dataResultsObj);
                                                             dataResultsKeys.push(collageId_val);
 
-                                                            var feeds = key.reverse();
+                                                            //var feeds = key.reverse();
+                                                            var feeds = key;
 
                                                         }
                                                     }
@@ -137,9 +126,6 @@ console.log(focus_limit_id);
                                                     //console.log(key.reverse());
                                                     //console.log(JSON.stringify(key.reverse()));
                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds', feeds: feeds});
-                                                }//allCollageImgResults length check
-                                            }
-                                    });
                                 }//results length check
                             }
                     });

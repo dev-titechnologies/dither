@@ -186,7 +186,7 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                     }else{
 																		console.log("async parallel in Sms Part Success --------------------");
-                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token});
+                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,userId:results.id});
                                                                     }
 
                                             });

@@ -76,7 +76,12 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                  //console.log(filename);
                                                                  sum = sum + factor.size;
 
-                                                                 var switchKey = factor.filename;
+                                                                 var filename_without_extension         =   factor.filename.split('.');
+                                                                 //console.log(filename_without_extension);
+                                                                 //console.log(filename_without_extension[0]);
+                                                                 filename_without_extension             =   filename_without_extension[0];
+
+                                                                 var switchKey = filename_without_extension;
                                                                  var position;
                                                                  switch(switchKey){
                                                                         case "image_1":    position = "image_one";

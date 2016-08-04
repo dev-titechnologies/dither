@@ -62,7 +62,7 @@ module.exports = {
 					else
 					{
 						console.log("token required")
-						return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Token Missing in Request', error_details: err});
+						return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Token Missing in Request'});
 					}
 					
 			  

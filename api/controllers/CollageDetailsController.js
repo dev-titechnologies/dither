@@ -164,6 +164,7 @@ module.exports = {
                     console.log("Single Dither Details api==================");
                     var server_baseUrl                           =     req.options.server_baseUrl;
                     var collageImg_path                          =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path                          =     server_baseUrl + req.options.file_path.profilePic_path;
                     var received_collage_id                      =     req.param("dither_id");
                     var received_single_image_id                 =     req.param("dither_single_id");
                     var query;

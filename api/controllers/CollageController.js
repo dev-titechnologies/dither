@@ -73,9 +73,9 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
 
 
                                             var values = {
-                                                imgTitle        : req.param('img_caption'),
+                                                imgTitle        : req.param('dither_title'),
                                                 image           : collage_imageName,
-                                                location        : req.param('location'),
+                                                location        : req.param('dither_location'),
                                                 latitude        : req.param('latitude'),
                                                 longitude       : req.param('longitude'),
                                                 userId          : userId,
@@ -306,6 +306,10 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                     var other_userName, other_userProfilePic;
                     var query;
                     console.log("Get Dither Other Profile  -------------------- ================================================");
+                    console.log("received_userId ------------------------------");
+                    console.log(received_userId);
+                    console.log("userId ------------------------------");
+                    console.log(userId);
                     if(received_userId == userId){
                             console.log("Same Id ----------------------------------------------------");
                             query = "SELECT"+
@@ -318,8 +322,8 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                     " WHERE"+
-                                    " usr.id = '"+received_userId+
-                                    "' ORDER BY clg.updatedAt DESC";
+                                    " usr.id = "+received_userId+
+                                    " ORDER BY clg.updatedAt DESC";
                     }else{
                             console.log("Not a logged User ----------------------------------------------------");
                             query = "SELECT"+
@@ -330,13 +334,13 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                     " FROM ("+
                                     " SELECT clg.id"+
                                     " FROM collage clg"+
-                                    " WHERE clg.userId = '"+received_userId+
-                                    "' UNION"+
+                                    " WHERE clg.userId = "+received_userId+
+                                    " UNION"+
                                     " SELECT tg.collageId"+
                                     " FROM tags tg"+
                                     " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                    " WHERE tg.userId = '"+received_userId+
-                                    "' ) AS temp_union"+
+                                    " WHERE tg.userId = "+received_userId+
+                                    " ) AS temp_union"+
                                     " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                     " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                     " INNER JOIN user usr ON usr.id = clg.userId"+

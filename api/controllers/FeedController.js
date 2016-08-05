@@ -5,6 +5,17 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+//Function to get ordered, by value, in json array key value pair
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return 1;
+      }else if( a[prop] < b[prop] ){
+          return -1;
+      }
+      return 0;
+   }
+}
 module.exports = {
 
     /* ==================================================================================================================================
@@ -62,6 +73,8 @@ module.exports = {
                             }
                             else
                             {
+                                console.log("results ----------------->>>>>>>>>>>>>>");
+                                console.log(results);
                                 if(results.length == 0){
                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', feeds: []});
                                 }else{
@@ -99,7 +112,10 @@ module.exports = {
                                                                 }
                                                             }
                                                             //var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                            var imgDetailsArrayOrder = imgDetailsArray.reverse();
+                                                           // var imgDetailsArrayOrder = imgDetailsArray.reverse();
+                                                           var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+console.log("imgDetailsArrayOrder ====================================================+++++++++++++++++++++++++++++++++++++++++++++");
+console.log(imgDetailsArrayOrder);
                                                             if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                         dataResultsObj.profile_image = "";
                                                             }else{
@@ -125,7 +141,9 @@ module.exports = {
                                                     //console.log(key);
                                                     //console.log(key.reverse());
                                                     //console.log(JSON.stringify(key.reverse()));
-                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds', feeds: feeds});
+                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds',
+                                                                        feeds: feeds
+                                                    });
                                 }//results length check
                             }
                     });

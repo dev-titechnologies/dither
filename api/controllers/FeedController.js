@@ -114,8 +114,7 @@ module.exports = {
                                                             //var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                            // var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                            var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
-console.log("imgDetailsArrayOrder ====================================================+++++++++++++++++++++++++++++++++++++++++++++");
-console.log(imgDetailsArrayOrder);
+
                                                             if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                         dataResultsObj.profile_image = "";
                                                             }else{

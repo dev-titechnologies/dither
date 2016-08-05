@@ -105,13 +105,13 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                  var switchKey = filename_without_extension;
                                                                  var position;
                                                                  switch(switchKey){
-                                                                        case "image_1":    position = "image_one";
+                                                                        case "image_1":    position = 1;
                                                                         break;
-                                                                        case "image_2":    position = "image_two";
+                                                                        case "image_2":    position = 2;
                                                                         break;
-                                                                        case "image_3":    position = "image_three";
+                                                                        case "image_3":    position = 3;
                                                                         break;
-                                                                        case "image_4":    position = "image_four";
+                                                                        case "image_4":    position = 4;
                                                                         break;
                                                                  }
                                                                  //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
@@ -212,17 +212,65 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                                                 console.log("Predicated -------------------------");
 
                                                                                                 //console.log(vote.sort( predicatBy("image_id") ));
-                                                                                                sortedVote = vote.sort( predicatBy("image_id") );
+                                                                                                sortedVote = vote.sort( predicatBy("position") );
                                                                                                 console.log(results);
-                                                                                                return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
-                                                                                                                      profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
-                                                                                                                      user_name          :     tokenCheck.tokenDetails.name,
-                                                                                                                      user_id            :     tokenCheck.tokenDetails.userId,
-                                                                                                                      date_time          :     results.createdAt,
-                                                                                                                      collage_id         :     results.id,
-                                                                                                                      collage_image      :     collageImg_path + results.image,
-                                                                                                                      vote               :     sortedVote
-                                                                                                                      });
+
+                                                                                                //Query to get tagged users from both addressBook and fbFriends
+                                                                                                query = " SELECT"+
+                                                                                                        " adb.userId, adb.ditherUsername, usr.name"+
+                                                                                                        " FROM addressBook adb"+
+                                                                                                        " INNER JOIN user usr ON usr.id = adb.userId"+
+                                                                                                        " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                                                                        " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                                                        " WHERE"+
+                                                                                                        " tg.collageId = "+results.id+" AND clg.userId = "+userId+
+                                                                                                        " GROUP BY adb.userId"+
+                                                                                                        " UNION"+
+                                                                                                        " SELECT"+
+                                                                                                        " fbf.userId, fbf.ditherUsername, usr.name"+
+                                                                                                        " FROM addressBook fbf"+
+                                                                                                        " INNER JOIN user usr ON usr.id = fbf.userId"+
+                                                                                                        " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                                                                        " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                                                        " WHERE"+
+                                                                                                        " tg.collageId = "+results.id+" AND clg.userId = "+userId+
+                                                                                                        " GROUP BY fbf.userId";
+
+                                                                                                AddressBook.query(query, function(err, taggedUsersFinalResults) {
+                                                                                                        if(err)
+                                                                                                        {
+                                                                                                            console.log(err);
+                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+
+                                                                                                            console.log(query);
+                                                                                                            console.log(taggedUsersFinalResults);
+                                                                                                            var taggedUserArrayFinal = [];
+                                                                                                            if(taggedUsersFinalResults != 0){
+                                                                                                                taggedUsersFinalResults.forEach(function(factor, index){
+                                                                                                                        console.log("factor");
+                                                                                                                        console.log(factor);
+                                                                                                                        taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                                                                                });
+                                                                                                            }
+
+                                                                                                                            return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
+                                                                                                                                                  profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
+                                                                                                                                                  user_name          :     tokenCheck.tokenDetails.name,
+                                                                                                                                                  user_id            :     tokenCheck.tokenDetails.userId,
+                                                                                                                                                  date_time          :     results.createdAt,
+                                                                                                                                                  collage_id         :     results.id,
+                                                                                                                                                  collage_image      :     collageImg_path + results.image,
+                                                                                                                                                  location           :     results.location,
+                                                                                                                                                  caption            :     results.imgTitle,
+                                                                                                                                                  vote               :     sortedVote,
+                                                                                                                                                  dither_count       :     sortedVote.length,
+                                                                                                                                                  taggedUsers        :     taggedUserArrayFinal
+                                                                                                                                                  });
+                                                                                                            }
+                                                                                                        });
                                                                                             }
 
                                                                                         }

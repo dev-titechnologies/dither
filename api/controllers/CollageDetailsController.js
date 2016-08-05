@@ -84,61 +84,46 @@ module.exports = {
                                                                     commentArray.push({user_name: factor.name,  user_profile_pic_url : server_baseUrl + req.options.file_path.profilePic_path + factor.profilePic, message: factor.comment});
                                                             });
                                                         }
-                                                        values = {
-                                                        collageId : get_collage_id,
-                                                                };
-                                                        Tags.find(values).exec(function (err, tagResults){
-                                                            if (err) {
-                                                                   return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding collage tagged Users', error_details: err});
-                                                            }
-                                                            else{
+                                                        //Query to get tagged users from both addressBook and fbFriends
+                                                            query = " SELECT"+
+                                                                    " adb.userId, adb.ditherUsername, usr.name"+
+                                                                    " FROM addressBook adb"+
+                                                                    " INNER JOIN user usr ON usr.id = adb.userId"+
+                                                                    " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                                    " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                    " WHERE"+
+                                                                    " tg.collageId = "+get_collage_id+" AND clg.userId = "+userId+
+                                                                    " GROUP BY adb.userId"+
+                                                                    " UNION"+
+                                                                    " SELECT"+
+                                                                    " fbf.userId, fbf.ditherUsername, usr.name"+
+                                                                    " FROM addressBook fbf"+
+                                                                    " INNER JOIN user usr ON usr.id = fbf.userId"+
+                                                                    " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                                    " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                    " WHERE"+
+                                                                    " tg.collageId = "+get_collage_id+" AND clg.userId = "+userId+
+                                                                    " GROUP BY fbf.userId";
 
-                                                                var taggedUserArray = [];
-                                                                    if(tagResults != 0){
-                                                                        tagResults.forEach(function(factor, index){
-                                                                                console.log("factor");
-                                                                                console.log(factor);
-                                                                                taggedUserArray.push(factor.userId);
-                                                                        });
-                                                                    }else{
-                                                                        taggedUserArray = ['0'];
+                                                            AddressBook.query(query, function(err, taggedUsersFinalResults) {
+                                                                    if(err)
+                                                                    {
+                                                                        console.log(err);
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
                                                                     }
-                                                                    //Query to get tagged users from both addressBook and fbFriends
-                                                                    query = " SELECT adb.userId, adb.ditherUsername, usr.name"+
-                                                                            " FROM addressBook adb"+
-                                                                            " INNER JOIN user usr ON usr.id = adb.userId"+
-                                                                            " WHERE adb.userId"+
-                                                                            " IN ( "+taggedUserArray+" )"+
-                                                                            " GROUP BY adb.userId"+
-                                                                            " UNION"+
-                                                                            " SELECT fbf.userId, fbf.ditherUsername, usr.name"+
-                                                                            " FROM addressBook fbf"+
-                                                                            " INNER JOIN user usr ON usr.id = fbf.userId"+
-                                                                            " WHERE fbf.userId"+
-                                                                            " IN ( "+taggedUserArray+" )"+
-                                                                            " GROUP BY fbf.userId";
+                                                                    else
+                                                                    {
 
-                                                                    AddressBook.query(query, function(err, taggedUsersFinalResults) {
-                                                                            if(err)
-                                                                            {
-                                                                                console.log(err);
-                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
-                                                                            }
-                                                                            else
-                                                                            {
-
-                                                                                console.log(query);
-                                                                                console.log(taggedUsersFinalResults);
-                                                                                var taggedUserArrayFinal = [];
-                                                                                if(taggedUsersFinalResults != 0){
-                                                                                    taggedUsersFinalResults.forEach(function(factor, index){
-                                                                                            console.log("factor");
-                                                                                            console.log(factor);
-                                                                                            taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
-                                                                                    });
-                                                                                }else{
-                                                                                    taggedUserArrayFinal = [];
-                                                                                }
+                                                                        console.log(query);
+                                                                        console.log(taggedUsersFinalResults);
+                                                                        var taggedUserArrayFinal = [];
+                                                                        if(taggedUsersFinalResults != 0){
+                                                                            taggedUsersFinalResults.forEach(function(factor, index){
+                                                                                    console.log("factor");
+                                                                                    console.log(factor);
+                                                                                    taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                                            });
+                                                                        }
                                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                      dither_desc                : results[0].imgTitle,
                                                                                      dither_created_date        : results[0].createdAt,
@@ -154,11 +139,9 @@ module.exports = {
                                                                                      comments                   : commentArray,
                                                                                 });
 
-                                                                            }
-                                                                    });
+                                                                    }
+                                                            });
 
-                                                            }
-                                                        });
                                                 }
                                         });
                                 }

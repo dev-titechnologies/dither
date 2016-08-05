@@ -46,7 +46,7 @@ module.exports = {
                     console.log("focus_limit_id ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     console.log(focus_limit_id);
 
-                    query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                    query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                             " usr.profilePic, usr.name,"+
                             " clglk.likeStatus"+
@@ -73,8 +73,8 @@ module.exports = {
                             }
                             else
                             {
-                                console.log("results ----------------->>>>>>>>>>>>>>");
-                                console.log(results);
+                                //console.log("results ----------------->>>>>>>>>>>>>>");
+                                //console.log(results);
                                 if(results.length == 0){
                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', feeds: []});
                                 }else{
@@ -126,6 +126,7 @@ module.exports = {
                                                             dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                             dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
                                                             dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
+                                                            dataResultsObj.dither_like_position         =       dataResults[i]["likePosition"];
                                                             dataResultsObj.collage_id                   =       collageId_val;
                                                             dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                             dataResultsObj.vote                         =       imgDetailsArrayOrder;

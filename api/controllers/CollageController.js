@@ -207,7 +207,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                                                         console.log(factor);
                                                                                                         vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
                                                                                                 });
-                                                                                                console.log("craeted in collage Details=====");
+                                                                                                console.log("created in collage Details=====");
                                                                                                 console.log(vote);
                                                                                                 console.log("Predicated -------------------------");
 
@@ -260,7 +260,8 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                                                                                                   profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
                                                                                                                                                   user_name          :     tokenCheck.tokenDetails.name,
                                                                                                                                                   user_id            :     tokenCheck.tokenDetails.userId,
-                                                                                                                                                  date_time          :     results.createdAt,
+                                                                                                                                                  created_date_time  :     results.createdAt,
+                                                                                                                                                  updated_date_time  :     results.updatedAt,
                                                                                                                                                   collage_id         :     results.id,
                                                                                                                                                   collage_image      :     collageImg_path + results.image,
                                                                                                                                                   location           :     results.location,
@@ -314,7 +315,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                             console.log("Same Id ----------------------------------------------------");
                             query = "SELECT"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                    " clg.userId, clg.image AS collage_image, clg.totalVote, clg.updatedAt,"+
+                                    " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                     " usr.profilePic, usr.name,"+
                                     " clglk.likeStatus"+
                                     " FROM collage clg"+
@@ -322,24 +323,24 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                     " WHERE"+
-                                    " usr.id = "+received_userId+
+                                    " usr.id = '"+received_userId+"'"+
                                     " ORDER BY clg.updatedAt DESC";
                     }else{
                             console.log("Not a logged User ----------------------------------------------------");
                             query = "SELECT"+
-                                    " temp_union.id, clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.updatedAt,"+
+                                    " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
                                     " clglk.likeStatus"+
                                     " FROM ("+
                                     " SELECT clg.id"+
                                     " FROM collage clg"+
-                                    " WHERE clg.userId = "+received_userId+
+                                    " WHERE clg.userId = '"+received_userId+"'"+
                                     " UNION"+
                                     " SELECT tg.collageId"+
                                     " FROM tags tg"+
                                     " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                    " WHERE tg.userId = "+received_userId+
+                                    " WHERE tg.userId = '"+received_userId+"'"+
                                     " ) AS temp_union"+
                                     " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                     " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
@@ -394,7 +395,8 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                                                                     var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                                     other_userName                          =       dataResults[i]["name"];
                                                                     other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
-                                                                    dataResultsObj.date_time                =       dataResults[i]["updatedAt"];
+                                                                    dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
+                                                                    dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
                                                                     dataResultsObj.collage_id               =       collageId_val;
                                                                     dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.totalVote                =       dataResults[i]["totalVote"];

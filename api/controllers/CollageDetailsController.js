@@ -16,12 +16,12 @@ module.exports = {
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 console.log(req.param("dither_id"));
-                var get_collage_id = req.param("dither_id");
+                var get_collage_id              =     req.param("dither_id");
                 var query;
                 if(!get_collage_id){
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the Dither Id'});
                 }else{
-                    query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt,"+
+                    query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                 " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
                                 " usr.name AS collageCreator, usr.profilePic,"+
                                  " clglk.likeStatus"+
@@ -126,7 +126,8 @@ module.exports = {
                                                                         }
                                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                      dither_desc                : results[0].imgTitle,
-                                                                                     dither_created_date        : results[0].createdAt,
+                                                                                     dither_created_date_time   : results[0].createdAt,
+                                                                                     dither_updated_date_time   : results[0].updatedAt,
                                                                                      dither_id                  : results[0].collageId,
                                                                                      dither_created_username    : results[0].collageCreator,
                                                                                      dither_created_userID      : results[0].collageCreatorId,

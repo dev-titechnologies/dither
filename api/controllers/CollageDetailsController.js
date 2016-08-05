@@ -14,6 +14,7 @@ module.exports = {
                 console.log("collage details api==================");
                 var server_baseUrl              =     req.options.server_baseUrl;
                 var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 console.log(req.param("dither_id"));

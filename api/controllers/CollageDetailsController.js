@@ -169,9 +169,11 @@ module.exports = {
 
                     query = " SELECT"+
                             " clgdt.id as single_image_id, clgdt.image, clgdt.vote,"+
+                            " clg.image as collageImage, clg.imgTitle,"+
                             " usr.id as user_id, usr.name, usr.profilePic"+
                             " FROM"+
                             " collageDetails clgdt"+
+                            " INNER JOIN collage clg ON clg.id = clgdt.collageId"+
                             " LEFT JOIN collageLikes clglk ON clglk.collageId = clgdt.collageId"+
                             " INNER JOIN user usr ON usr.id = clglk.userId"+
                             " WHERE"+
@@ -189,15 +191,24 @@ module.exports = {
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No users voted to this image'});
                                 }else{
                                         var votedUsersArray = [];
+                                        var profile_image;
                                         results.forEach(function(factor, index){
+                                                if(factor.profilePic == null || factor.profilePic == ""){
+                                                            profile_image = "";
+                                                }else{
+
+                                                            profile_image = profilePic_path + factor.profilePic;
+                                                }
                                                 votedUsersArray.push({
                                                                     user_id : factor.user_id,
                                                                     user_name : factor.name,
-                                                                    user_pic : factor.profilePic
+                                                                    user_pic : profile_image
                                                                     });
                                         });
                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
                                                               single_image_url              :   collageImg_path + results[0].image,
+                                                              dither_title                  :   results[0].imgTitle,
+                                                              dither_image                  :   collageImg_path + results[0].collageImage,
                                                               total_vote                    :   results[0].vote,
                                                               single_dither_id              :   results[0].single_image_id,
                                                               voted_users                   :   votedUsersArray,

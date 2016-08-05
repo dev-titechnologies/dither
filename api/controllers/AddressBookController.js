@@ -12,12 +12,16 @@ module.exports = {
         addUserContacts: function (req, res) {
 			
 			
-				console.log(JSON.stringify(req.body.fb_friends))
-				console.log(JSON.stringify(req.body.contact))
-                 var FBs 	= JSON.stringify(req.body.fb_friends);
-			     var Cusers = JSON.stringify(req.body.contact);
-			    
-			   console.log(req.options.server_baseUrl)
+			   var FBs			=	[];
+			   var Cusers		=	[];
+			   console.log("333333333333333333333333333333333333")
+			   console.log(req.body)
+               var FBs 		= JSON.stringify(req.body.fb_array);
+			    var Cusers 		= JSON.stringify(req.body.contact_array);
+			    console.log(FBs)
+			    console.log(Cusers)
+                
+			    console.log(req.options.server_baseUrl)
 			    
 			    console.log(req.options.tokenCheck.tokenDetails.userId)
 
@@ -75,6 +79,25 @@ module.exports = {
 									function(callback) {
                                                 if(phonecontacts.length != 0){
                                                         var query = "DELETE FROM addressBook where userId = '"+userId+"'";
+                                                        
+                                                        var criteria	=	{userId:userId}
+                                                       /* AddressBook.destroy(criteria).exec(function (err,deleteAddressBook) {
+															
+															if(err)
+                                                                {
+                                                                    console.log(err);
+                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                    //callback();
+                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
+                                                                }
+                                                                else
+                                                                {
+																	 
+                                                                    console.log("deleteAddressBook ?????????????????????????????????????????????");
+                                                                    callback();
+                                                                }
+
+														 });*/
 
                                                         console.log(query);
                                                         AddressBook.query(query, function(err, deleteAddressBook) {
@@ -99,7 +122,26 @@ module.exports = {
 									function(callback) {
                                                 if(fbUser.length != 0){
                                                         var query = "DELETE FROM fbFriends where userId = '"+userId+"'";
+                                                        var criteria	=	{userId:userId}
+														
+														 /* FbFriends.destroy(criteria).exec(function (err,deleteAddressBook) {
+															
+															if(err)
+                                                                {
+                                                                    console.log(err);
+                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                    //callback();
+                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
+                                                                }
+                                                                else
+                                                                {
+																	 
+                                                                    console.log("deleteAddressBook ?????????????????????????????????????????????");
+                                                                    callback();
+                                                                }
 
+														 });*/
+														
                                                         console.log(query);
                                                         FbFriends.query(query, function(err, deleteFBFriends) {
                                                                 if(err)
@@ -219,9 +261,15 @@ module.exports = {
 																
 																//updation 
 																
-																 AddressBook.update({ditherUserId: selectDContacts[0].id},{ditherUserPhoneNumber: factor.ditherUserPhoneNumber}).exec(function(err, updatedRecords) {
-                
+																 var data     = {ditherUserId:selectDContacts[0].id};
+																 var criteria = {ditherUserPhoneNumber: factor.ditherUserPhoneNumber};
+																
+																 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+																								
 																  });
+																
+	
+																  
 																
 															 }
 															
@@ -243,13 +291,19 @@ module.exports = {
                      
 														
 														User.find({fbId:factor.fbId}).exec(function (err, selectFBContacts){
+															console.log()
 															if(selectFBContacts.length!=0)
 															{
 																
+																var data     = {ditherUserId:selectFBContacts[0].id};
+																var criteria = {fbId:factor.fbId};
 																
-																FbFriends.update({ditherUserId: selectFBContacts[0].id},{fbId: factor.fbId}).exec(function(err, updatedRecords) {
+																	FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
                 
-																});
+																	});
+																	
+																	
+																	
 																
 															 }
 															
@@ -392,7 +446,6 @@ module.exports = {
                                             }
 
                 });
-
         },
 
    /* ==================================================================================================================================

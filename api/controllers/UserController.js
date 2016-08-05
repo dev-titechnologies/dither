@@ -186,7 +186,7 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                     }else{
 																		console.log("async parallel in Sms Part Success --------------------");
-                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,userId:results.id});
+                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
                                                                     }
 
                                             });
@@ -263,7 +263,7 @@ module.exports = {
                                                             var url         = protocol + '://' + req.headers.host + '/';
                                                             var profile_image   =  url+"images/profilePics/"+results.profilePic;
                                                             sails.log(profile_image)
-                                                            return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image,token:userTokenDetails.token.token,userId:results.id});
+                                                            return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image,token:userTokenDetails.token.token,user_id:results.id});
                                                         }
                                                     });
 

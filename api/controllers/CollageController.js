@@ -428,6 +428,7 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                     var received_userId             =     req.param("user_id");
                     var received_dither_type        =     req.param("type");
                     var other_userName, other_userProfilePic;

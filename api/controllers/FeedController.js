@@ -5,6 +5,17 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+//Function to get ordered, by value, in json array key value pair
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return 1;
+      }else if( a[prop] < b[prop] ){
+          return -1;
+      }
+      return 0;
+   }
+}
 module.exports = {
 
     /* ==================================================================================================================================
@@ -35,7 +46,7 @@ module.exports = {
                     console.log("focus_limit_id ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     console.log(focus_limit_id);
 
-                    query = " SELECT temp_union.id, clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.updatedAt,"+
+                    query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                             " usr.profilePic, usr.name,"+
                             " clglk.likeStatus"+
@@ -62,6 +73,8 @@ module.exports = {
                             }
                             else
                             {
+                                console.log("results ----------------->>>>>>>>>>>>>>");
+                                console.log(results);
                                 if(results.length == 0){
                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', feeds: []});
                                 }else{
@@ -75,11 +88,11 @@ module.exports = {
                                                         //console.log(data[i]);
                                                         if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
                                                         {
-                                                            var imagesPositionArray =[];
-                                                            var voteArray =[];
-                                                            var likeStatusArray =[];
-                                                            var imgIdArray =[];
-                                                            var imgDetailsArray = [];
+                                                            var imagesPositionArray         = [];
+                                                            var voteArray                   = [];
+                                                            var likeStatusArray             = [];
+                                                            var imgIdArray                  = [];
+                                                            var imgDetailsArray             = [];
                                                             for (var j = dataResults.length - 1; j >= 0; j--)
                                                             {
                                                                 if(dataResults[j]["collageId"]==collageId_val)
@@ -99,7 +112,9 @@ module.exports = {
                                                                 }
                                                             }
                                                             //var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                            var imgDetailsArrayOrder = imgDetailsArray.reverse();
+                                                           // var imgDetailsArrayOrder = imgDetailsArray.reverse();
+                                                           var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+
                                                             if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                         dataResultsObj.profile_image = "";
                                                             }else{
@@ -107,12 +122,13 @@ module.exports = {
                                                                         dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
                                                             }
 
-                                                            dataResultsObj.user_name=dataResults[i]["name"];
-                                                            dataResultsObj.user_id=dataResults[i]["userId"];
-                                                            dataResultsObj.date_time=dataResults[i]["updatedAt"];
-                                                            dataResultsObj.collage_id=collageId_val;
-                                                            dataResultsObj.collage_image = collageImg_path + dataResults[i]["collage_image"];
-                                                            dataResultsObj.vote = imgDetailsArrayOrder;
+                                                            dataResultsObj.user_name                    =       dataResults[i]["name"];
+                                                            dataResultsObj.user_id                      =       dataResults[i]["userId"];
+                                                            dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
+                                                            dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
+                                                            dataResultsObj.collage_id                   =       collageId_val;
+                                                            dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
+                                                            dataResultsObj.vote                         =       imgDetailsArrayOrder;
 
                                                             key.push(dataResultsObj);
                                                             dataResultsKeys.push(collageId_val);
@@ -125,7 +141,9 @@ module.exports = {
                                                     //console.log(key);
                                                     //console.log(key.reverse());
                                                     //console.log(JSON.stringify(key.reverse()));
-                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds', feeds: feeds});
+                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds',
+                                                                        feeds: feeds
+                                                    });
                                 }//results length check
                             }
                     });

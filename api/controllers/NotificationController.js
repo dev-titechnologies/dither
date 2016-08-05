@@ -22,12 +22,13 @@ module.exports = {
 					var notifyContact	=	req.param('contact');
 					
 					var token			= 	req.get('token');
+					console.log(token)
 					console.log(req.param('opinion'))
 					console.log(req.param('vote'))
 					console.log(req.param('comment'))
 					console.log(req.param('contact'))
-					console.log(req.get.token)
-					if(req.get('token'))
+					
+					if(token)
 					{
 						User_token.findOne({token: token}).exec(function (err, results){
 							if (err) {

@@ -45,6 +45,10 @@ module.exports = {
         totalVote: {
             type: 'integer',
         },
+        //0 for not liked, 1 - 1st position , 2 - 2nd position etc .....
+        likePosition: {
+            type: 'integer',
+        },
 
         createdAt: {
             type: 'datetime',

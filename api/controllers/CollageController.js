@@ -43,7 +43,7 @@ module.exports = {
                             console.log(files);
                                 if(files.length != 0){
 
-                                            console.log(files);
+                                            //console.log(files);
                                             var collage_imageName = "";
                                             files.forEach(function(factor, index){
                                                          var filename = factor.fd.split('/');
@@ -61,16 +61,6 @@ module.exports = {
                                                                 collage_imageName = collage_imageName[collage_imageName.length-1];
                                                          }
                                             });
-                                            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                                            console.log(collage_imageName);
-                                            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                                            /*if(files[0].filename === "image_0"){
-                                                collage_imageName = files[0].fd.split('/');
-                                                collage_imageName = collage_imageName[collage_imageName.length-1];
-                                            }*/
-                                            console.log("collage_imageName =--------------------");
-                                            console.log(collage_imageName);
-
 
                                             var values = {
                                                 imgTitle        : req.param('dither_title'),
@@ -84,14 +74,14 @@ module.exports = {
                                         Collage.create(values).exec(function(err, results){
                                                 if(err){
                                                         console.log(err);
-                                                        callback();
+                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
                                                 }
                                                 else{
                                                             var sum = 0;
                                                             var collageDetailImgArray = [];
                                                             files.forEach(function(factor, index){
-                                                                 console.log("factor +++++++++++++++++++++++++++++++++++++++++");
-                                                                 console.log(factor);
+                                                                 //console.log("factor +++++++++++++++++++++++++++++++++++++++++");
+                                                                 //console.log(factor);
                                                                  var filename = factor.fd.split('/');
                                                                  filename = filename[filename.length-1];
                                                                  //console.log(filename);
@@ -129,10 +119,6 @@ module.exports = {
                                                                         break;
                                                                 }
                                                             });
-                                                            console.log("collash Is not there ================");
-                                                            console.log(collageDetailImgArray);
-                                                            console.log("Sum of size ===================");
-                                                            console.log(sum);
 
                                                             CollageDetails.create(collageDetailImgArray, function(err, createdCollageDetails) {
                                                                     if(err)
@@ -148,11 +134,11 @@ module.exports = {
                                                                         if(taggedUserArray.length == 0){
                                                                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage'});
                                                                         }else{
-                                                                                console.log(taggedUserArray);
+                                                                                //console.log(taggedUserArray);
                                                                                 var tagCollageArray = [];
                                                                                 taggedUserArray.forEach(function(factor, index){
-                                                                                     console.log(factor);
-                                                                                     console.log(index);
+                                                                                     //console.log(factor);
+                                                                                     //console.log(index);
                                                                                      tagCollageArray.push("("+results.id+","+factor.user_id+", now(), now())");
                                                                                 });
                                                                                var query = "INSERT INTO tags"+
@@ -169,7 +155,7 @@ module.exports = {
                                                                                         {
                                                                                             //console.log(createdCollageTags);
                                                                                             //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
-                                                                                            console.log(results);
+                                                                                            //console.log(results);
                                                                                             //req.param('Invite_friends_NUM');
                                                                                             var inviteFriends = [{user_id: 3},{user_id: 6}];
                                                                                             //var inviteFriends  = [];
@@ -203,17 +189,17 @@ module.exports = {
                                                                                                 //console.log(createdCollageDetails);
                                                                                                 var vote = [];
                                                                                                 createdCollageDetails.forEach(function(factor, index){
-                                                                                                        console.log("factor");
-                                                                                                        console.log(factor);
+                                                                                                        //console.log("factor");
+                                                                                                        //console.log(factor);
                                                                                                         vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
                                                                                                 });
-                                                                                                console.log("created in collage Details=====");
-                                                                                                console.log(vote);
+                                                                                                //console.log("created in collage Details=====");
+                                                                                                //console.log(vote);
                                                                                                 console.log("Predicated -------------------------");
 
                                                                                                 //console.log(vote.sort( predicatBy("image_id") ));
                                                                                                 sortedVote = vote.sort( predicatBy("position") );
-                                                                                                console.log(results);
+                                                                                                //console.log(results);
 
                                                                                                 //Query to get tagged users from both addressBook and fbFriends
                                                                                                 query = " SELECT"+
@@ -246,12 +232,12 @@ module.exports = {
                                                                                                         {
 
                                                                                                             console.log(query);
-                                                                                                            console.log(taggedUsersFinalResults);
+                                                                                                            //console.log(taggedUsersFinalResults);
                                                                                                             var taggedUserArrayFinal = [];
                                                                                                             if(taggedUsersFinalResults != 0){
                                                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
-                                                                                                                        console.log("factor");
-                                                                                                                        console.log(factor);
+                                                                                                                        //console.log("factor");
+                                                                                                                        //console.log(factor);
                                                                                                                         taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
                                                                                                                 });
                                                                                                             }
@@ -315,7 +301,7 @@ module.exports = {
                             console.log("Same Id ----------------------------------------------------");
                             query = "SELECT"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                    " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                                    " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
                                     " usr.profilePic, usr.name,"+
                                     " clglk.likeStatus"+
                                     " FROM collage clg"+
@@ -364,9 +350,10 @@ module.exports = {
                                 }else{
 
                                                             //console.log(results);
-                                                            var dataResults = results;
-                                                            var key = [];
-                                                            var dataResultsKeys = [];
+                                                            var dataResults         = results;
+                                                            var key                 = [];
+                                                            var dataResultsKeys     = [];
+                                                            var opinionArray        = [];
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj      =  new Object();
                                                                 var collageId_val       =  dataResults[i]["collageId"];
@@ -397,6 +384,7 @@ module.exports = {
                                                                     other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
                                                                     dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                                                     dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
+                                                                    dataResultsObj.dither_like_position     =       dataResults[i]["likePosition"];
                                                                     dataResultsObj.collage_id               =       collageId_val;
                                                                     dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
@@ -404,18 +392,28 @@ module.exports = {
 
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
+                                                                    opinionArray.push(dataResults[i]["totalVote"]);
                                                                     var recent_dithers                      =       key.reverse();
                                                                     var dithers_with_max_votes              =       key.sort( predicatBy("totalVote") );
                                                                 }
                                                             }
+                                                            console.log("Opinion ==============");
+                                                            console.log(opinionArray);
+                                                            var total_opinion = 0;
+                                                            opinionArray.forEach(function(factor, index){
+                                                                            console.log(factor);
+                                                                            total_opinion += factor;
+                                                            });
+                                                            console.log(total_opinion);
                                                             //console.log(key);
                                                             //console.log(key.reverse());
                                                             //console.log(JSON.stringify(key.reverse()));
                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
-                                                                                    username: other_userName,
-                                                                                    user_profile_image: other_userProfilePic,
-                                                                                    recent_dithers: recent_dithers,
-                                                                                    dithers_with_max_votes: dithers_with_max_votes });
+                                                                                    username                : other_userName,
+                                                                                    user_profile_image      : other_userProfilePic,
+                                                                                    total_opinion           : total_opinion,
+                                                                                    recent_dithers          : recent_dithers,
+                                                                                    popular_dithers         : dithers_with_max_votes });
                                 }//Results length check else
                             }
                     });
@@ -424,12 +422,13 @@ module.exports = {
 /* ==================================================================================================================================
                To get All Dithers
      ==================================================================================================================================== */
-        dithers:  function (req, res) {
+        allTypeDithers:  function (req, res) {
 
                     console.log("dithers ===== api");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                     var received_userId             =     req.param("user_id");
                     var received_dither_type        =     req.param("type");
                     var other_userName, other_userProfilePic;
@@ -438,7 +437,7 @@ module.exports = {
                     console.log(received_userId);
                     console.log(received_dither_type);
 
-                    query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                    query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                             " usr.profilePic, usr.name,"+
                             " clglk.likeStatus"+
@@ -502,15 +501,33 @@ module.exports = {
                                                     }
                                                 }
                                                 //var imgDetailsArrayOrder                =       imgDetailsArray.reverse();
-                                                var imgDetailsArrayOrder                =       imgDetailsArray.sort(predicatBy("position"));
+                                                var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+                                                if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
+                                                            dataResultsObj.profile_image = "";
+                                                }else{
+
+                                                            dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
+                                                }
+
+                                                dataResultsObj.user_name                    =       dataResults[i]["name"];
+                                                dataResultsObj.user_id                      =       dataResults[i]["userId"];
+                                                dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
+                                                dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
+                                                dataResultsObj.dither_like_position         =       dataResults[i]["likePosition"];
+                                                dataResultsObj.collage_id                   =       collageId_val;
+                                                dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
+                                                dataResultsObj.vote                         =       imgDetailsArrayOrder;
+
+                                                /*var imgDetailsArrayOrder                =       imgDetailsArray.sort(predicatBy("position"));
                                                 other_userName                          =       dataResults[i]["name"];
                                                 other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
                                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                                 dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
+                                                dataResultsObj.dither_like_position     =       dataResults[i]["likePosition"];
                                                 dataResultsObj.collage_id               =       collageId_val;
                                                 dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                                 dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
-                                                dataResultsObj.vote                     =       imgDetailsArrayOrder;
+                                                dataResultsObj.vote                     =       imgDetailsArrayOrder;*/
 
                                                 key.push(dataResultsObj);
                                                 dataResultsKeys.push(collageId_val);

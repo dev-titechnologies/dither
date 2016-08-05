@@ -15,6 +15,7 @@ module.exports = {
 	
 	      notificationSettings: function(req, res) {
 			  
+                    console.log("Notification Settingssssssssssss")
 					var notifyOpinion	=	req.param('opinion');
 					var notifyVote		=	req.param('vote');
 					var notifyComment	=	req.param('comment');
@@ -25,8 +26,7 @@ module.exports = {
 					console.log(req.param('vote'))
 					console.log(req.param('comment'))
 					console.log(req.param('contact'))
-					
-					console.log(token)
+					console.log(req.get.token)
 					if(req.get('token'))
 					{
 						User_token.findOne({token: token}).exec(function (err, results){
@@ -36,7 +36,7 @@ module.exports = {
 									}
 									else{
 										
-											sails.log(results)
+											sails.log(results.userId)
 										
 											var data     = {notifyOpinion:notifyOpinion, notifyVote:notifyVote,notifyComment:notifyComment,notifyContact:notifyContact};
 											var criteria = {id: results.userId};
@@ -91,6 +91,7 @@ module.exports = {
 					{ 
 						
 						
+						return res.json(200, {status: 1, msg: 'Success',etails: tokenCheck});
 						
 					}
 					

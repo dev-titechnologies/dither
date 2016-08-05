@@ -350,9 +350,10 @@ module.exports = {
                                 }else{
 
                                                             //console.log(results);
-                                                            var dataResults = results;
-                                                            var key = [];
-                                                            var dataResultsKeys = [];
+                                                            var dataResults         = results;
+                                                            var key                 = [];
+                                                            var dataResultsKeys     = [];
+                                                            var opinionArray        = [];
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj      =  new Object();
                                                                 var collageId_val       =  dataResults[i]["collageId"];
@@ -391,18 +392,28 @@ module.exports = {
 
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
+                                                                    opinionArray.push(dataResults[i]["totalVote"]);
                                                                     var recent_dithers                      =       key.reverse();
                                                                     var dithers_with_max_votes              =       key.sort( predicatBy("totalVote") );
                                                                 }
                                                             }
+                                                            console.log("Opinion ==============");
+                                                            console.log(opinionArray);
+                                                            var total_opinion = 0;
+                                                            opinionArray.forEach(function(factor, index){
+                                                                            console.log(factor);
+                                                                            total_opinion += factor;
+                                                            });
+                                                            console.log(total_opinion);
                                                             //console.log(key);
                                                             //console.log(key.reverse());
                                                             //console.log(JSON.stringify(key.reverse()));
                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
-                                                                                    username: other_userName,
-                                                                                    user_profile_image: other_userProfilePic,
-                                                                                    recent_dithers: recent_dithers,
-                                                                                    dithers_with_max_votes: dithers_with_max_votes });
+                                                                                    username                : other_userName,
+                                                                                    user_profile_image      : other_userProfilePic,
+                                                                                    total_opinion           : total_opinion,
+                                                                                    recent_dithers          : recent_dithers,
+                                                                                    popular_dithers         : dithers_with_max_votes });
                                 }//Results length check else
                             }
                     });
@@ -411,7 +422,7 @@ module.exports = {
 /* ==================================================================================================================================
                To get All Dithers
      ==================================================================================================================================== */
-        dithers:  function (req, res) {
+        allTypeDithers:  function (req, res) {
 
                     console.log("dithers ===== api");
                     var tokenCheck                  =     req.options.tokenCheck;
@@ -489,7 +500,24 @@ module.exports = {
                                                     }
                                                 }
                                                 //var imgDetailsArrayOrder                =       imgDetailsArray.reverse();
-                                                var imgDetailsArrayOrder                =       imgDetailsArray.sort(predicatBy("position"));
+                                                var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+                                                if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
+                                                            dataResultsObj.profile_image = "";
+                                                }else{
+
+                                                            dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
+                                                }
+
+                                                dataResultsObj.user_name                    =       dataResults[i]["name"];
+                                                dataResultsObj.user_id                      =       dataResults[i]["userId"];
+                                                dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
+                                                dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
+                                                dataResultsObj.dither_like_position         =       dataResults[i]["likePosition"];
+                                                dataResultsObj.collage_id                   =       collageId_val;
+                                                dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
+                                                dataResultsObj.vote                         =       imgDetailsArrayOrder;
+
+                                                /*var imgDetailsArrayOrder                =       imgDetailsArray.sort(predicatBy("position"));
                                                 other_userName                          =       dataResults[i]["name"];
                                                 other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
                                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
@@ -498,7 +526,7 @@ module.exports = {
                                                 dataResultsObj.collage_id               =       collageId_val;
                                                 dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                                 dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
-                                                dataResultsObj.vote                     =       imgDetailsArrayOrder;
+                                                dataResultsObj.vote                     =       imgDetailsArrayOrder;*/
 
                                                 key.push(dataResultsObj);
                                                 dataResultsKeys.push(collageId_val);

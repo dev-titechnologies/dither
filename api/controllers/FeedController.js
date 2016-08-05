@@ -35,7 +35,7 @@ module.exports = {
                     console.log("focus_limit_id ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     console.log(focus_limit_id);
 
-                    query = " SELECT temp_union.id, clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.updatedAt"+
+                    query = " SELECT temp_union.id, clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.updatedAt,"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                             " usr.profilePic, usr.name,"+
                             " clglk.likeStatus"+

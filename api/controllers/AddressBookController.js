@@ -10,11 +10,18 @@ module.exports = {
                To Upload Contacts
      ==================================================================================================================================== */
         addUserContacts: function (req, res) {
+			
+			
+				console.log(JSON.stringify(req.body.fb_friends))
+				console.log(JSON.stringify(req.body.contact))
+                 var FBs 	= JSON.stringify(req.body.fb_friends);
+			     var Cusers = JSON.stringify(req.body.contact);
 			    
-			    console.log(req.options.server_baseUrl)
+			   console.log(req.options.server_baseUrl)
 			    
 			    console.log(req.options.tokenCheck.tokenDetails.userId)
-                var tokenCheck                  =     req.options.tokenCheck;
+
+				var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var server_baseUrl              =     req.options.server_baseUrl;
 

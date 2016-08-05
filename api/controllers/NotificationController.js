@@ -28,7 +28,7 @@ module.exports = {
 					console.log(req.param('comment'))
 					console.log(req.param('contact'))
 					
-					if(token)
+					if(token!=undefined)
 					{
 						User_token.findOne({token: token}).exec(function (err, results){
 							if (err) {

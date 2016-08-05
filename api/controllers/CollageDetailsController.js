@@ -11,6 +11,7 @@ module.exports = {
                To get a single Dither Details (For Both logged User and Other User)
   ==================================================================================================================================== */
         getDitherDetail: function (req, res) {
+                console.log("collage details api==================");
                 var server_baseUrl              =     req.options.server_baseUrl;
                 var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                 var tokenCheck                  =     req.options.tokenCheck;

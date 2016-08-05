@@ -22,7 +22,7 @@ module.exports = {
      ==================================================================================================================================== */
 
         createDither:  function (req, res) {
-console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++");
+                    console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++");
                     //console.log(req.body.REQUEST);
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var tokenCheck                  =     req.options.tokenCheck;
@@ -298,7 +298,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
      ==================================================================================================================================== */
         getProfileDithers:  function (req, res) {
 
-                    console.log("get--- Dither");
+                    console.log("get Profile Dithers ===================");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var userId                      =     tokenCheck.tokenDetails.userId;
@@ -426,7 +426,7 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
      ==================================================================================================================================== */
         dithers:  function (req, res) {
 
-                    console.log("get--- Dither");
+                    console.log("dithers ===== api");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
@@ -445,11 +445,11 @@ console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++")
                             " FROM ("+
                             " SELECT clg.id"+
                             " FROM collage clg"+
-                            " WHERE clg.userId = "+received_userId+
+                            " WHERE clg.userId = '"+received_userId+"'"+
                             " UNION"+
                             " SELECT tg.collageId"+
                             " FROM tags tg"+
-                            " WHERE tg.userId = "+received_userId+
+                            " WHERE tg.userId = '"+received_userId+"'"+
                             " ) AS temp_union"+
                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+

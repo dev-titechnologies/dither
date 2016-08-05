@@ -152,9 +152,59 @@ module.exports = {
                     });
                 }
 
+        },
 
 
 
+ /* ==================================================================================================================================
+               To get a single Dither Details (For Both logged User and Other User)
+  ==================================================================================================================================== */
+        getSingleDitherDetails: function (req, res) {
+                    console.log("Single Dither Details api==================");
+                    var server_baseUrl                           =     req.options.server_baseUrl;
+                    var collageImg_path                          =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var received_collage_id                      =     req.param("dither_id");
+                    var received_single_image_id                 =     req.param("dither_single_id");
+                    var query;
+
+                    query = " SELECT"+
+                            " clgdt.id as single_image_id, clgdt.image, clgdt.vote,"+
+                            " usr.id as user_id, usr.name, usr.profilePic"+
+                            " FROM"+
+                            " collageDetails clgdt"+
+                            " LEFT JOIN collageLikes clglk ON clglk.collageId = clgdt.collageId"+
+                            " INNER JOIN user usr ON usr.id = clglk.userId"+
+                            " WHERE"+
+                            " clgdt.collageId = '"+received_collage_id+"' AND clgdt.id = '"+received_single_image_id+"'";
+                    console.log(query);
+                    CollageDetails.query(query, function(err, results) {
+                            if(err)
+                            {
+                                console.log(err);
+                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting Single Dither Details'});
+                            }
+                            else
+                            {
+                                if(results.length == 0){
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No users voted to this image'});
+                                }else{
+                                        var votedUsersArray = [];
+                                        results.forEach(function(factor, index){
+                                                votedUsersArray.push({
+                                                                    user_id : factor.user_id,
+                                                                    user_name : factor.name,
+                                                                    user_pic : factor.profilePic
+                                                                    });
+                                        });
+                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
+                                                              single_image_url              :   collageImg_path + results[0].image,
+                                                              total_vote                    :   results[0].vote,
+                                                              single_dither_id              :   results[0].single_image_id,
+                                                              voted_users                   :   votedUsersArray,
+                                                        });
+                                }
+                            }
+                    });
         },
 };
 

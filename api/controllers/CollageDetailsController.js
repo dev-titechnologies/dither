@@ -22,7 +22,7 @@ module.exports = {
                 if(!get_collage_id){
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the Dither Id'});
                 }else{
-                    query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                    query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
                                 " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
                                 " usr.name AS collageCreator, usr.profilePic,"+
                                  " clglk.likeStatus"+
@@ -45,8 +45,8 @@ module.exports = {
                                 }else{
                                         var imageArray = [];
                                         results.forEach(function(factor, index){
-                                                console.log("factor");
-                                                console.log(factor);
+                                                //console.log("factor");
+                                                //console.log(factor);
                                                 var like_status;
                                                 if(factor.likeStatus == null || factor.likeStatus == ""){
                                                         like_status = 0;
@@ -76,12 +76,12 @@ module.exports = {
                                                 }
                                                 else
                                                 {
-                                                        console.log(collageCommentResults);
+                                                        //console.log(collageCommentResults);
                                                         var commentArray = [];
                                                         if(collageCommentResults.length !== 0){
                                                             collageCommentResults.forEach(function(factor, index){
-                                                                    console.log("factor");
-                                                                    console.log(factor);
+                                                                    //console.log("factor");
+                                                                    //console.log(factor);
                                                                     commentArray.push({user_name: factor.name,  user_profile_pic_url : server_baseUrl + req.options.file_path.profilePic_path + factor.profilePic, message: factor.comment});
                                                             });
                                                         }
@@ -116,12 +116,12 @@ module.exports = {
                                                                     {
 
                                                                         console.log(query);
-                                                                        console.log(taggedUsersFinalResults);
+                                                                        //console.log(taggedUsersFinalResults);
                                                                         var taggedUserArrayFinal = [];
                                                                         if(taggedUsersFinalResults != 0){
                                                                             taggedUsersFinalResults.forEach(function(factor, index){
-                                                                                    console.log("factor");
-                                                                                    console.log(factor);
+                                                                                    //console.log("factor");
+                                                                                    //console.log(factor);
                                                                                     taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
                                                                             });
                                                                         }
@@ -135,6 +135,7 @@ module.exports = {
                                                                                      dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
                                                                                      dither_location            : results[0].location,
                                                                                      dither_image               : collageImg_path + results[0].collageImage,
+                                                                                     dither_like_position       : results[0].likePosition,
                                                                                      dithers                    : imageArray,
                                                                                      ditherCount                : imageArray.length,
                                                                                      taggedUsers                : taggedUserArrayFinal,

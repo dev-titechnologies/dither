@@ -440,7 +440,7 @@ module.exports = {
      ==================================================================================================================================== */
         allTypeDithers:  function (req, res) {
 
-                  /*  console.log("dithers ===== api");
+                    console.log("dithers ===== api");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
@@ -449,7 +449,7 @@ module.exports = {
                     var received_userId             =     req.param("user_id");
                     var received_dither_type        =     req.param("type");
                     var other_userName, other_userProfilePic;
-                    var query;
+                    var query = "";
                     console.log("Get all Type Dither  -------------------- ================================================");
                     console.log(received_userId);
                     console.log(received_dither_type);
@@ -468,7 +468,7 @@ module.exports = {
                                     " WHERE"+
                                     " usr.id = '"+received_userId+"'"+
                                     " GROUP BY clgdt.id";
-                                    //" ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+                                    " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
 
 
                     }else{
@@ -489,17 +489,12 @@ module.exports = {
                                     " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                     " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id""+
+                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                     " GROUP BY clgdt.id";
-                                    //" ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+                                    " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+
                     }
-                            //if(received_dither_type == "recent"){
-                                    //query += " ORDER BY clg.updatedAt DESC";
-                                   //query +=  " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
-                            //}
-                            //else if(received_dither_type == "popular"){
-                               //     query += " ORDER BY clg.totalVote DESC, temp_union.id DESC";
-                            //}
+
                             console.log(query);
                             Collage.query(query, function(err, results) {
                                     if(err)
@@ -585,7 +580,7 @@ module.exports = {
                                                 }
                                        }//Results length check else
                                     }
-                            });*/
+                            });
         },
 
 /* ==================================================================================================================================

@@ -46,6 +46,8 @@ module.exports.routes = {
   '/collageDetails/*'                     :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
   '/addressBook/*'                        :           ['auth.authenticate','helper.server_baseUrl'],
   '/feed/*'                               :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
+  '/collageLikes/*'                       :           ['auth.authenticate'],
+  '/collageComments/*'                    :           ['auth.authenticate'],
 
   /***************************************************************************
   *                                                                          *

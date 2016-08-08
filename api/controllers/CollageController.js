@@ -120,7 +120,7 @@ module.exports = {
                                                                 }
                                                             });
 
-                                                            CollageDetails.create(collageDetailImgArray, function(err, createdCollageDetails) {
+                                                            CollageDetails.create(collageDetailImgArray).exec(function(err, createdCollageDetails) {
                                                                     if(err)
                                                                     {
                                                                         console.log(err);
@@ -137,15 +137,12 @@ module.exports = {
                                                                                 //console.log(taggedUserArray);
                                                                                 var tagCollageArray = [];
                                                                                 taggedUserArray.forEach(function(factor, index){
-                                                                                     //console.log(factor);
-                                                                                     //console.log(index);
-                                                                                     tagCollageArray.push("("+results.id+","+factor.user_id+", now(), now())");
+
+                                                                                     tagCollageArray.push({collageId: results.id, userId: factor.user_id});
                                                                                 });
-                                                                               var query = "INSERT INTO tags"+
-                                                                                            " (collageId, userId, createdAt, updatedAt)"+
-                                                                                            " VALUES"+tagCollageArray;
-                                                                                console.log(query);
-                                                                                Tags.query(query, function(err, createdCollageTags) {
+
+                                                                                Tags.create(tagCollageArray).exec(function(err, createdCollageTags) {
+
                                                                                         if(err)
                                                                                         {
                                                                                             console.log(err);

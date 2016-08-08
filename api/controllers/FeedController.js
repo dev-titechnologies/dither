@@ -39,14 +39,14 @@ module.exports = {
                     var page_type               =   req.param("page_type");
                     var focus_dither_id         =   req.param("focus_dither_id");
 
-                    if(page_type == "new"){
+                   /* if(page_type == "new"){
                             offset_data_view_limit1 =  ">"+focus_dither_id;
                     }else if(page_type == "old"){
                             offset_data_view_limit1 =  "<"+focus_dither_id;
-                    }
+                    }*/
 
-                    console.log("offset_data_view_limit ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                    console.log(offset_data_view_limit);
+                    //console.log("offset_data_view_limit ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    //console.log(offset_data_view_limit);
 
                     query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+

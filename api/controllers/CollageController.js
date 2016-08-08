@@ -307,7 +307,9 @@ module.exports = {
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                     " WHERE"+
                                     " usr.id = '"+received_userId+"'"+
+                                    " GROUP BY clgdt.id"+
                                     " ORDER BY clg.updatedAt DESC";
+
                     }else{
                             console.log("Not a logged User ----------------------------------------------------");
                             query = "SELECT"+
@@ -329,7 +331,9 @@ module.exports = {
                                     " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                    " GROUP BY clgdt.id"+
                                     " ORDER BY clg.updatedAt DESC";
+
                     }
 
                     console.log(query);
@@ -391,7 +395,7 @@ module.exports = {
                                                                     dataResultsKeys.push(collageId_val);
                                                                     opinionArray.push(dataResults[i]["totalVote"]);
                                                                     var recent_dithers                      =       key.reverse();
-                                                                    var dithers_with_max_votes              =       key.sort( predicatBy("totalVote") );
+                                                                    var popular_dithers                     =       key.sort( predicatBy("totalVote") );
                                                                 }
                                                             }
                                                             console.log("Opinion ==============");
@@ -405,12 +409,27 @@ module.exports = {
                                                             //console.log(key);
                                                             //console.log(key.reverse());
                                                             //console.log(JSON.stringify(key.reverse()));
+                                                            var recent_dithers_Array_4      =   [];
+                                                            var popular_dithers_Array_4     =   [];
+                                                            recent_dithers.forEach(function(factor, index){
+                                                                            console.log(factor);
+                                                                            if(index < 4){
+                                                                                recent_dithers_Array_4.push(factor);
+                                                                            }
+                                                            });
+                                                            popular_dithers.forEach(function(factor, index){
+                                                                            console.log(factor);
+                                                                            if(index < 4){
+                                                                                popular_dithers_Array_4.push(factor);
+                                                                            }
+                                                            });
+
                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                     username                : other_userName,
                                                                                     user_profile_image      : other_userProfilePic,
                                                                                     total_opinion           : total_opinion,
-                                                                                    recent_dithers          : recent_dithers,
-                                                                                    popular_dithers         : dithers_with_max_votes });
+                                                                                    recent_dithers          : recent_dithers_Array_4,
+                                                                                    popular_dithers         : popular_dithers_Array_4 });
                                 }//Results length check else
                             }
                     });
@@ -431,7 +450,7 @@ module.exports = {
                     var received_dither_type        =     req.param("type");
                     var other_userName, other_userProfilePic;
                     var query;
-                    console.log("Get Dither Other Profile  -------------------- ================================================");
+                    console.log("Get all Type Dither  -------------------- ================================================");
                     console.log(received_userId);
                     console.log(received_dither_type);
 
@@ -447,7 +466,9 @@ module.exports = {
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                     " WHERE"+
-                                    " usr.id = '"+received_userId+"'";
+                                    " usr.id = '"+received_userId+"'"+
+                                    " GROUP BY clgdt.id";
+
 
                     }else{
                             console.log("Not a logged User ----------------------------------------------------");
@@ -467,14 +488,16 @@ module.exports = {
                                     " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                     " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id";
+                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id""+
+                                    " GROUP BY clgdt.id";
                     }
-                            if(received_dither_type == "recent"){
-                                    query += " ORDER BY clg.updatedAt DESC";
-                            }
-                            else if(received_dither_type == "popular"){
-                                    query += " ORDER BY clg.totalVote DESC";
-                            }
+                            //if(received_dither_type == "recent"){
+                                    //query += " ORDER BY clg.updatedAt DESC";
+                                    query +=  " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+                            //}
+                            /*else if(received_dither_type == "popular"){
+                                    query += " ORDER BY clg.totalVote DESC, temp_union.id DESC";
+                            }*/
                             console.log(query);
                             Collage.query(query, function(err, results) {
                                     if(err)
@@ -515,8 +538,9 @@ module.exports = {
 
                                                             }
                                                         }
-                                                        //var imgDetailsArrayOrder                =       imgDetailsArray.reverse();
-                                                        var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+                                                        console.log(imgDetailsArray);
+                                                        var imgDetailsArrayOrder                =       imgDetailsArray.reverse();
+                                                        //var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
 
                                                         /*if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                     dataResultsObj.profile_image = "";
@@ -555,6 +579,7 @@ module.exports = {
                                                         var dithers_with_max_votes              =       key.sort( predicatBy("totalVote") );
                                                     }
                                                 }
+
                                                 //console.log(key);
                                                 //console.log(key.reverse());
                                                 //console.log(JSON.stringify(key.reverse()));

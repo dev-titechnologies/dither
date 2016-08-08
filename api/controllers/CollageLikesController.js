@@ -14,17 +14,18 @@ module.exports = {
 
                     console.log("Like  Dithers ===== api");
                     console.log(req.param("dither_id"));
-                    console.log(req.param("user_id"));
+                    //console.log(req.param("user_id"));
                     console.log(req.param("dither_like_image_id"));
-
-                    var collageId           = req.param("dither_id");
-                    var likedUserId         = req.param("user_id");
-                    var likedImageId        = req.param("dither_like_image_id");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var collageId                   =     req.param("dither_id");
+                    //var likedUserId               =     req.param("user_id");
+                    var likedImageId                =     req.param("dither_like_image_id");
 
                     var values = {
                         collageId       :       collageId,
                         imageId         :       likedImageId,
-                        userId          :       likedUserId,
+                        userId          :       userId,
                         likeStatus      :       1,
                     };
                     CollageLikes.create(values).exec(function(err, results){

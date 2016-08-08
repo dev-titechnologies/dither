@@ -390,11 +390,12 @@ module.exports = {
                                                                     dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
                                                                     dataResultsObj.vote                     =       imgDetailsArrayOrder;
+                                                                    dataResultsObj.mainOrder                =       i;
 
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
                                                                     opinionArray.push(dataResults[i]["totalVote"]);
-                                                                    var recent_dithers                      =       key.reverse();
+                                                                    var recent_dithers                      =       key;
                                                                     var popular_dithers                     =       key.sort( predicatBy("totalVote") );
                                                                 }
                                                             }
@@ -424,6 +425,7 @@ module.exports = {
                                                                             }
                                                             });
 
+                                                            recent_dithers_Array_4 = recent_dithers_Array_4.sort( predicatBy("mainOrder") );
                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                     username                : other_userName,
                                                                                     user_profile_image      : other_userProfilePic,
@@ -550,14 +552,15 @@ module.exports = {
                                                         dataResultsObj.collage_id                   =       collageId_val;
                                                         dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                         dataResultsObj.vote                         =       imgDetailsArrayOrder;
+                                                        dataResultsObj.mainOrder                    =       i;
 
 
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
                                                         //console.log("+++++++++++++++++++++++++++key+++++++++++++++++++++++++++++++++++");
                                                         //console.log(key.reverse());
-                                                        var recent_dithers                      =       key.reverse();
-                                                        var dithers_with_max_votes              =       key.sort( predicatBy("totalVote") );
+                                                        var recent_dithers                          =       key.sort( predicatBy("mainOrder") );
+                                                        var popular_dithers                         =       key.sort( predicatBy("totalVote") );
                                                     }
                                                 }
 
@@ -568,7 +571,7 @@ module.exports = {
                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
                                                                         username                : other_userName,
                                                                         user_profile_image      : other_userProfilePic,
-                                                                        popular_dithers         : dithers_with_max_votes });
+                                                                        popular_dithers         : popular_dithers });
 
                                                 }else if(received_dither_type == "recent"){
 

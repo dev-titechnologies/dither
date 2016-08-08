@@ -98,8 +98,11 @@ module.exports = {
 						var user_id	= tokenCheck.tokenDetails.id;
 						if(tokenCheck.tokenDetails.notifyOpinion==true)
 						{
-							
-							var query="SELECT"
+
+
+
+
+							//var query="SELECT"
 							
 							return res.json(200, {status: 1, msg: 'Success',error_details: tokenCheck});
 						}

@@ -16,8 +16,8 @@ module.exports = {
 			   var Cusers		=	[];
 			   console.log("333333333333333333333333333333333333")
 			   console.log(req.body)
-               var FBs 		= JSON.stringify(req.body.fb_array);
-			   var Cusers 		= JSON.stringify(req.body.contact_array);
+              /* var FBs 		= JSON.stringify(req.body.fb_array);
+			    var Cusers 		= JSON.stringify(req.body.contact_array);
 			    console.log(FBs)
 			    console.log(Cusers)
                 
@@ -50,6 +50,10 @@ module.exports = {
                         {ditherUserName: 'sasi 2',ditherUserPhoneNumber: 98455454},
                         {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
                         ];
+                        
+                         
+                        
+                        
 
 				var data_check1 = "";
                 phonecontacts.forEach(function(factor, index){
@@ -81,23 +85,7 @@ module.exports = {
                                                         var query = "DELETE FROM addressBook where userId = '"+userId+"'";
                                                         
                                                         var criteria	=	{userId:userId}
-                                                       /* AddressBook.destroy(criteria).exec(function (err,deleteAddressBook) {
-															
-															if(err)
-                                                                {
-                                                                    console.log(err);
-                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                    //callback();
-                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
-                                                                }
-                                                                else
-                                                                {
-																	 
-                                                                    console.log("deleteAddressBook ?????????????????????????????????????????????");
-                                                                    callback();
-                                                                }
-
-														 });*/
+                                                       
 
                                                         console.log(query);
                                                         AddressBook.query(query, function(err, deleteAddressBook) {
@@ -124,23 +112,7 @@ module.exports = {
                                                         var query = "DELETE FROM fbFriends where userId = '"+userId+"'";
                                                         var criteria	=	{userId:userId}
 														
-														 /* FbFriends.destroy(criteria).exec(function (err,deleteAddressBook) {
-															
-															if(err)
-                                                                {
-                                                                    console.log(err);
-                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                    //callback();
-                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
-                                                                }
-                                                                else
-                                                                {
-																	 
-                                                                    console.log("deleteAddressBook ?????????????????????????????????????????????");
-                                                                    callback();
-                                                                }
-
-														 });*/
+														 
 														
                                                         console.log(query);
                                                         FbFriends.query(query, function(err, deleteFBFriends) {
@@ -200,8 +172,11 @@ module.exports = {
                                                                 }
                                                                 else
                                                                 {
-																	 data_check1 = createdAddressBook;
-                                                                    console.log(createdAddressBook);
+																	data_check1 = createdAddressBook;
+                                                                    console.log(createdAddressBook.insertId);
+                                                                     //Notification Log Insertion
+                                                                    
+
                                                                     console.log("createdAddressBook ?????????????????????????????????????????????");
                                                                     callback();
                                                                 }
@@ -254,8 +229,9 @@ module.exports = {
 														
 														
 														User.find({phoneNumber:factor.ditherUserPhoneNumber}).exec(function (err, selectDContacts){
-  
-														
+                                                            
+                                                            console.log("#########################################")
+														    console.log(selectDContacts)
 															if(selectDContacts.length!=0)
 															{
 																
@@ -268,8 +244,19 @@ module.exports = {
 																								
 																  });
 																
-	
-																  
+																 //invitation table Insertion
+                                                                    
+                                                                    var value={
+																				userId		: userId,
+																				collageId	: selectDContacts[0].id,
+																				phoneNumber	: selectDContacts[0].phoneNumber,
+																				fbId		: selectDContacts[0].fbId
+																			  }	
+																	
+																     invitation.create(values).exec(function(err, createdInvitation) {
+
+                                                                           console.log(createdInvitation)
+																	 });
 																
 															 }
 															
@@ -445,7 +432,7 @@ module.exports = {
                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
                                             }
 
-                });
+                });*/
         },
 
    /* ==================================================================================================================================

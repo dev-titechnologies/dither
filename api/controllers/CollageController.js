@@ -150,6 +150,29 @@ module.exports = {
                                                                                         }
                                                                                         else
                                                                                         {
+																							/*Notification Log Insertion
+																							
+																							var tagNotifyArray = [];
+																								
+																							taggedUserArray.forEach(function(factor, index){
+		 
+																								tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
+																							});
+																							
+																							 NotificationLog.create(tagNotifyArray).exec(function(err, createdNotificationTags) {
+
+																								if(err)
+																								{
+																									console.log(err);
+																									return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+																								}
+																								else
+																								{
+																									console.log(createdNotificationTags)
+																								}
+																							});*/
+																							
+																							
                                                                                             //console.log(createdCollageTags);
                                                                                             //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
                                                                                             //console.log(results);

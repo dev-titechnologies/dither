@@ -31,7 +31,8 @@ module.exports = {
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                 " INNER JOIN user usr ON usr.id = clg.userId"+
                                 " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                " WHERE clg.id = "+get_collage_id;
+                                " WHERE clg.id = "+get_collage_id+
+                                " GROUP BY clgdt.id";
                     console.log(query);
                     Collage.query(query, function(err, results) {
                             if(err)

@@ -55,7 +55,7 @@ console.log("Before Generate Token");
     ================================================================================================================================== */
     checkToken: function (token, callback) {
 
-        var query = " SELECT usr.id, usr.name, usr.profilePic, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
+        var query = " SELECT usr.id, usr.name,usr.notifyOpinion	,usr.profilePic, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                     " FROM"+
                     " userToken usrtkn"+
                     " INNER JOIN user usr ON usr.id = usrtkn.userId"+

@@ -17,7 +17,7 @@ module.exports = {
 			   console.log("333333333333333333333333333333333333")
 			   console.log(req.body)
                var FBs 		= JSON.stringify(req.body.fb_array);
-			    var Cusers 		= JSON.stringify(req.body.contact_array);
+			   var Cusers 		= JSON.stringify(req.body.contact_array);
 			    console.log(FBs)
 			    console.log(Cusers)
                 

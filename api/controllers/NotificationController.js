@@ -76,7 +76,9 @@ module.exports = {
 	 /* ==================================================================================================================================
                 Notification API
 	   ==================================================================================================================================== */
-		
+
+		//---Notification-tagged---
+
 		notification: function(req, res) {
 			
 			
@@ -91,9 +93,20 @@ module.exports = {
 					else
 					{ 
 						
-						
-						return res.json(200, {status: 1, msg: 'Success',etails: tokenCheck});
-						
+						console.log("+++++++++++++++++++++++++")
+						console.log(tokenCheck.tokenDetails.id)
+						var user_id	= tokenCheck.tokenDetails.id;
+						if(tokenCheck.tokenDetails.notifyOpinion==true)
+						{
+							
+							var query="SELECT"
+							
+							return res.json(200, {status: 1, msg: 'Success',error_details: tokenCheck});
+						}
+						else
+						{
+							return res.json(200, {status: 1, msg: 'No need to send notification',error_details: tokenCheck});
+						}
 					}
 					
 					

@@ -16,7 +16,7 @@ function predicatBy(prop){
       return 0;
    }
 }
-var data_view_limit = 20;
+var data_view_limit = 5;
 var offset_data_view_limit;
 
 module.exports = {
@@ -106,7 +106,7 @@ module.exports = {
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                     " GROUP BY clgdt.id"+
-                                    " ORDER BY clg.updatedAt DESC , temp_union.id DESC";
+                                    " ORDER BY clg.updatedAt DESC";
                     }else{
                             query  = " SELECT"+
                                     " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
@@ -135,7 +135,7 @@ module.exports = {
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                     " GROUP BY clgdt.id"+
-                                    " ORDER BY clg.updatedAt DESC , temp_union.id DESC";
+                                    " ORDER BY clg.updatedAt DESC";
                     }
                     console.log(query);
 
@@ -148,7 +148,7 @@ module.exports = {
                             else
                             {
                                 //console.log("results ----------------->>>>>>>>>>>>>>");
-                                //console.log(results);
+                                console.log(results);
                                 if(results.length == 0){
                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', feeds: []});
                                 }else{
@@ -204,13 +204,19 @@ module.exports = {
                                                             dataResultsObj.collage_id                   =       collageId_val;
                                                             dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                             dataResultsObj.vote                         =       imgDetailsArrayOrder;
-
+                                                            dataResultsObj.mainOrder                    =       i;
+                                                            console.log("dataResultsObj====================");
+                                                            console.log(dataResultsObj);
+                                                            console.log("dataResultsObj====================");
                                                             key.push(dataResultsObj);
                                                             dataResultsKeys.push(collageId_val);
 
-                                                            var feeds = key.reverse();
+                                                            console.log(key);
+                                                            //var feeds = key.reverse();
                                                             //var feeds = key;
-
+                                                            var feeds              =       key.sort( predicatBy("mainOrder") );
+                                                            console.log("Final Key -----------------------------------------------------------------");
+                                                            console.log(feeds);
                                                         }
                                                     }
                                                     //console.log(key);

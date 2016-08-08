@@ -440,7 +440,7 @@ module.exports = {
      ==================================================================================================================================== */
         allTypeDithers:  function (req, res) {
 
-                    console.log("dithers ===== api");
+                  /*  console.log("dithers ===== api");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
@@ -468,6 +468,7 @@ module.exports = {
                                     " WHERE"+
                                     " usr.id = '"+received_userId+"'"+
                                     " GROUP BY clgdt.id";
+                                    //" ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
 
 
                     }else{
@@ -490,14 +491,15 @@ module.exports = {
                                     " INNER JOIN user usr ON usr.id = clg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id""+
                                     " GROUP BY clgdt.id";
+                                    //" ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
                     }
                             //if(received_dither_type == "recent"){
                                     //query += " ORDER BY clg.updatedAt DESC";
-                                    query +=  " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+                                   //query +=  " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
                             //}
-                            /*else if(received_dither_type == "popular"){
-                                    query += " ORDER BY clg.totalVote DESC, temp_union.id DESC";
-                            }*/
+                            //else if(received_dither_type == "popular"){
+                               //     query += " ORDER BY clg.totalVote DESC, temp_union.id DESC";
+                            //}
                             console.log(query);
                             Collage.query(query, function(err, results) {
                                     if(err)
@@ -538,16 +540,10 @@ module.exports = {
 
                                                             }
                                                         }
-                                                        console.log(imgDetailsArray);
-                                                        var imgDetailsArrayOrder                =       imgDetailsArray.reverse();
-                                                        //var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+                                                        //console.log(imgDetailsArray);
+                                                        //var imgDetailsArrayOrder                =       imgDetailsArray.reverse();
+                                                        var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
 
-                                                        /*if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
-                                                                    dataResultsObj.profile_image = "";
-                                                        }else{
-
-                                                                    dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
-                                                        }*/
 
                                                         other_userName                              =       dataResults[i]["name"];
                                                         other_userProfilePic                        =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
@@ -560,16 +556,6 @@ module.exports = {
                                                         dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                         dataResultsObj.vote                         =       imgDetailsArrayOrder;
 
-                                                        /*var imgDetailsArrayOrder                =       imgDetailsArray.sort(predicatBy("position"));
-                                                        other_userName                          =       dataResults[i]["name"];
-                                                        other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
-                                                        dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
-                                                        dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
-                                                        dataResultsObj.dither_like_position     =       dataResults[i]["likePosition"];
-                                                        dataResultsObj.collage_id               =       collageId_val;
-                                                        dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
-                                                        dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
-                                                        dataResultsObj.vote                     =       imgDetailsArrayOrder;*/
 
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
@@ -599,7 +585,7 @@ module.exports = {
                                                 }
                                        }//Results length check else
                                     }
-                            });
+                            });*/
         },
 
 /* ==================================================================================================================================

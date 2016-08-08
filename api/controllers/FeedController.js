@@ -39,16 +39,16 @@ module.exports = {
                     var page_type               =   req.param("page_type");
                     var focus_dither_id         =   req.param("focus_dither_id");
 
-                   /* if(page_type == "new"){
+                    if(page_type == "new"){
                             offset_data_view_limit1 =  ">"+focus_dither_id;
                     }else if(page_type == "old"){
                             offset_data_view_limit1 =  "<"+focus_dither_id;
-                    }*/
+                    }
 
-                    //console.log("offset_data_view_limit ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                    //console.log(offset_data_view_limit);
+                    console.log("offset_data_view_limit ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    console.log(offset_data_view_limit1);
 
-                    query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                    /*query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                             " usr.profilePic, usr.name,"+
                             " clglk.likeStatus"+
@@ -66,7 +66,8 @@ module.exports = {
                             " INNER JOIN user usr ON usr.id = clg.userId"+
                             " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                             " ORDER BY clg.updatedAt DESC";
-                   /* query  = " SELECT"+
+                    console.log(query);*/
+                    query  = " SELECT"+
                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                             " usr.profilePic, usr.name,"+
@@ -84,15 +85,17 @@ module.exports = {
                             " WHERE tg.userId = "+userId+
                             " )"+
                             " ) AS temp1"+
-                            " WHERE temp1.id "+offset_data_view_limit+
+                            " WHERE temp1.id "+offset_data_view_limit1+
                             " ORDER BY temp1.updatedAt DESC"+
                             " LIMIT "+data_view_limit+
                             " ) AS temp_union"+
                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                             " INNER JOIN user usr ON usr.id = clg.userId"+
-                            " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id";*/
+                            " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                            " ORDER BY clg.updatedAt DESC , temp_union.id DESC";
                     console.log(query);
+
                     Collage.query(query, function(err, results) {
                             if(err)
                             {

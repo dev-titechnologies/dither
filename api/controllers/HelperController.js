@@ -26,6 +26,15 @@ module.exports = {
                         next();
         },
 
+        global : function(req, res, next) {
+
+                        var data_view_limit         = 5;
+                        req.options.global = {
+                                                    data_view_limit     : data_view_limit,
+                                             };
+                        next();
+        },
+
 
 };
 

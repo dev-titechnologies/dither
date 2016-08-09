@@ -294,67 +294,230 @@ module.exports = {
                     console.log(received_userId);
                     console.log("userId ------------------------------");
                     console.log(userId);
-                    if(received_userId == userId){
-                            console.log("Same Id ----------------------------------------------------");
-                            query = "SELECT"+
-                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                    " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
-                                    " usr.profilePic, usr.name,"+
-                                    " clglk.likeStatus"+
-                                    " FROM collage clg"+
-                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                    " INNER JOIN user usr ON usr.id = clg.userId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                    " WHERE"+
-                                    " usr.id = '"+received_userId+"'"+
-                                    " GROUP BY clgdt.id"+
-                                    " ORDER BY clg.updatedAt DESC";
-
+                    if(!received_userId){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass user_id'});
                     }else{
-                            console.log("Not a logged User ----------------------------------------------------");
-                            query = "SELECT"+
-                                    " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
-                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                    " usr.profilePic, usr.name,"+
-                                    " clglk.likeStatus"+
-                                    " FROM ("+
-                                    " SELECT clg.id"+
-                                    " FROM collage clg"+
-                                    " WHERE clg.userId = '"+received_userId+"'"+
-                                    " UNION"+
-                                    " SELECT tg.collageId as id"+
-                                    " FROM tags tg"+
-                                    //" LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                    " WHERE tg.userId = '"+received_userId+"'"+
-                                    " ) AS temp_union"+
-                                    " INNER JOIN collage clg ON clg.id = temp_union.id"+
-                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                    " INNER JOIN user usr ON usr.id = clg.userId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                    " GROUP BY clgdt.id"+
-                                    " ORDER BY clg.updatedAt DESC";
+                                if(received_userId == userId){
+                                        console.log("Same Id ----------------------------------------------------");
+                                        query = "SELECT"+
+                                                " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                                " usr.profilePic, usr.name,"+
+                                                " clglk.likeStatus"+
+                                                " FROM collage clg"+
+                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                                " WHERE"+
+                                                " usr.id = '"+received_userId+"'"+
+                                                " GROUP BY clgdt.id"+
+                                                " ORDER BY clg.updatedAt DESC";
 
-                    }
-
-                    console.log(query);
-                    Collage.query(query, function(err, results) {
-                            if(err)
-                            {
-                                console.log(err);
-                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting collages of the user', error_details: err});
-                            }
-                            else
-                            {
-                                //console.log(results);
-                                if(results.length == 0){
-                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent_dithers: [], dithers_with_max_votes: []});
                                 }else{
+                                        console.log("Not a logged User ----------------------------------------------------");
+                                        query = "SELECT"+
+                                                " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                                                " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                                " usr.profilePic, usr.name,"+
+                                                " clglk.likeStatus"+
+                                                " FROM ("+
+                                                " SELECT clg.id"+
+                                                " FROM collage clg"+
+                                                " WHERE clg.userId = '"+received_userId+"'"+
+                                                " UNION"+
+                                                " SELECT tg.collageId as id"+
+                                                " FROM tags tg"+
+                                                //" LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                " WHERE tg.userId = '"+received_userId+"'"+
+                                                " ) AS temp_union"+
+                                                " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                                " GROUP BY clgdt.id"+
+                                                " ORDER BY clg.updatedAt DESC";
 
-                                                            //console.log(results);
-                                                            var dataResults         = results;
-                                                            var key                 = [];
-                                                            var dataResultsKeys     = [];
-                                                            var opinionArray        = [];
+                                }
+
+                                console.log(query);
+                                Collage.query(query, function(err, results) {
+                                        if(err)
+                                        {
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting collages of the user', error_details: err});
+                                        }
+                                        else
+                                        {
+                                            //console.log(results);
+                                            if(results.length == 0){
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent_dithers: [], dithers_with_max_votes: []});
+                                            }else{
+
+                                                                        //console.log(results);
+                                                                        var dataResults         = results;
+                                                                        var key                 = [];
+                                                                        var dataResultsKeys     = [];
+                                                                        var opinionArray        = [];
+                                                                        for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                                            var dataResultsObj      =  new Object();
+                                                                            var collageId_val       =  dataResults[i]["collageId"];
+                                                                            if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
+                                                                            {
+                                                                                var imgDetailsArray = [];
+                                                                                for (var j = dataResults.length - 1; j >= 0; j--)
+                                                                                {
+                                                                                    if(dataResults[j]["collageId"]==collageId_val)
+                                                                                    {
+                                                                                        var likeStatus;
+                                                                                        if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                                                    likeStatus = 0;
+                                                                                        }else{
+                                                                                                likeStatus = 1;
+                                                                                        }
+                                                                                        imgDetailsArray.push({
+                                                                                                        image_id        : dataResults[j]["imgId"],
+                                                                                                        position        : dataResults[j]["position"],
+                                                                                                        like_status     : likeStatus,
+                                                                                                        vote            : dataResults[j]["vote"]
+                                                                                                        });
+
+                                                                                    }
+                                                                                }
+                                                                                var imgDetailsArrayOrder = imgDetailsArray.reverse();
+                                                                                other_userName                          =       dataResults[i]["name"];
+                                                                                other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
+                                                                                dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
+                                                                                dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
+                                                                                dataResultsObj.dither_like_position     =       dataResults[i]["likePosition"];
+                                                                                dataResultsObj.collage_id               =       collageId_val;
+                                                                                dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
+                                                                                dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
+                                                                                dataResultsObj.vote                     =       imgDetailsArrayOrder;
+                                                                                dataResultsObj.mainOrder                =       i;
+
+                                                                                key.push(dataResultsObj);
+                                                                                dataResultsKeys.push(collageId_val);
+                                                                                opinionArray.push(dataResults[i]["totalVote"]);
+                                                                                var recent_dithers                      =       key;
+                                                                                var popular_dithers                     =       key.sort( predicatBy("totalVote") );
+                                                                            }
+                                                                        }
+                                                                        console.log("Opinion ==============");
+                                                                        console.log(opinionArray);
+                                                                        var total_opinion = 0;
+                                                                        opinionArray.forEach(function(factor, index){
+                                                                                        console.log(factor);
+                                                                                        total_opinion += factor;
+                                                                        });
+                                                                        console.log(total_opinion);
+                                                                        //console.log(key);
+                                                                        //console.log(key.reverse());
+                                                                        //console.log(JSON.stringify(key.reverse()));
+                                                                        var recent_dithers_Array_4      =   [];
+                                                                        var popular_dithers_Array_4     =   [];
+                                                                        recent_dithers.forEach(function(factor, index){
+                                                                                        console.log(factor);
+                                                                                        if(index < 4){
+                                                                                            recent_dithers_Array_4.push(factor);
+                                                                                        }
+                                                                        });
+                                                                        popular_dithers.forEach(function(factor, index){
+                                                                                        console.log(factor);
+                                                                                        if(index < 4){
+                                                                                            popular_dithers_Array_4.push(factor);
+                                                                                        }
+                                                                        });
+
+                                                                        recent_dithers_Array_4 = recent_dithers_Array_4.sort( predicatBy("mainOrder") );
+                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
+                                                                                                username                : other_userName,
+                                                                                                user_profile_image      : other_userProfilePic,
+                                                                                                total_opinion           : total_opinion,
+                                                                                                recent_dithers          : recent_dithers_Array_4,
+                                                                                                popular_dithers         : popular_dithers_Array_4 });
+                                            }//Results length check else
+                                        }
+                                });
+                    }
+        },
+
+/* ==================================================================================================================================
+               To get All Dithers
+     ==================================================================================================================================== */
+        allTypeDithers:  function (req, res) {
+
+                    console.log("dithers ===== api");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var server_baseUrl              =     req.options.server_baseUrl;
+                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var received_userId             =     req.param("user_id");
+                    var received_dither_type        =     req.param("type");
+                    var other_userName, other_userProfilePic;
+                    var query = "";
+                    console.log("Get all Type Dither  -------------------- ================================================");
+                    console.log(received_userId);
+                    console.log(received_dither_type);
+                    if(!received_userId || !received_dither_type){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both user_id and type'});
+                    }else{
+                                if(received_userId == userId){
+                                        console.log("Same Id ----------------------------------------------------");
+                                        query = "SELECT"+
+                                                " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                                " usr.profilePic, usr.name,"+
+                                                " clglk.likeStatus"+
+                                                " FROM collage clg"+
+                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                                " WHERE"+
+                                                " usr.id = '"+received_userId+"'"+
+                                                " GROUP BY clgdt.id";
+                                                " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+
+
+                                }else{
+                                        console.log("Not a logged User ----------------------------------------------------");
+                                        query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                                " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                                " usr.profilePic, usr.name,"+
+                                                " clglk.likeStatus"+
+                                                " FROM ("+
+                                                " SELECT clg.id"+
+                                                " FROM collage clg"+
+                                                " WHERE clg.userId = '"+received_userId+"'"+
+                                                " UNION"+
+                                                " SELECT tg.collageId as id"+
+                                                " FROM tags tg"+
+                                                " WHERE tg.userId = '"+received_userId+"'"+
+                                                " ) AS temp_union"+
+                                                " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                                " GROUP BY clgdt.id";
+                                                " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+
+                                }
+
+                                        console.log(query);
+                                        Collage.query(query, function(err, results) {
+                                                if(err)
+                                                {
+                                                    console.log(err);
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting dithers with type', error_details: err});
+                                                }
+                                                else
+                                                {
+                                                    if(results.length == 0){
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent_dithers: [], dithers_with_max_votes: []});
+                                                    }else{
+                                                            var dataResults = results;
+                                                            var key = [];
+                                                            var dataResultsKeys = [];
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj      =  new Object();
                                                                 var collageId_val       =  dataResults[i]["collageId"];
@@ -380,210 +543,54 @@ module.exports = {
 
                                                                         }
                                                                     }
-                                                                    var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                                    other_userName                          =       dataResults[i]["name"];
-                                                                    other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
-                                                                    dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
-                                                                    dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
-                                                                    dataResultsObj.dither_like_position     =       dataResults[i]["likePosition"];
-                                                                    dataResultsObj.collage_id               =       collageId_val;
-                                                                    dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
-                                                                    dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
-                                                                    dataResultsObj.vote                     =       imgDetailsArrayOrder;
-                                                                    dataResultsObj.mainOrder                =       i;
+                                                                    //console.log(imgDetailsArray);
+                                                                    //var imgDetailsArrayOrder                =       imgDetailsArray.reverse();
+                                                                    var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+
+
+                                                                    other_userName                              =       dataResults[i]["name"];
+                                                                    other_userProfilePic                        =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
+                                                                    //dataResultsObj.user_name                    =       dataResults[i]["name"];
+                                                                    //dataResultsObj.user_id                      =       dataResults[i]["userId"];
+                                                                    dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
+                                                                    dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
+                                                                    dataResultsObj.dither_like_position         =       dataResults[i]["likePosition"];
+                                                                    dataResultsObj.collage_id                   =       collageId_val;
+                                                                    dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
+                                                                    dataResultsObj.vote                         =       imgDetailsArrayOrder;
+                                                                    dataResultsObj.mainOrder                    =       i;
+
 
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
-                                                                    opinionArray.push(dataResults[i]["totalVote"]);
-                                                                    var recent_dithers                      =       key;
-                                                                    var popular_dithers                     =       key.sort( predicatBy("totalVote") );
+                                                                    //console.log("+++++++++++++++++++++++++++key+++++++++++++++++++++++++++++++++++");
+                                                                    //console.log(key.reverse());
+                                                                    var recent_dithers                          =       key.sort( predicatBy("mainOrder") );
+                                                                    var popular_dithers                         =       key.sort( predicatBy("totalVote") );
                                                                 }
                                                             }
-                                                            console.log("Opinion ==============");
-                                                            console.log(opinionArray);
-                                                            var total_opinion = 0;
-                                                            opinionArray.forEach(function(factor, index){
-                                                                            console.log(factor);
-                                                                            total_opinion += factor;
-                                                            });
-                                                            console.log(total_opinion);
+
                                                             //console.log(key);
                                                             //console.log(key.reverse());
                                                             //console.log(JSON.stringify(key.reverse()));
-                                                            var recent_dithers_Array_4      =   [];
-                                                            var popular_dithers_Array_4     =   [];
-                                                            recent_dithers.forEach(function(factor, index){
-                                                                            console.log(factor);
-                                                                            if(index < 4){
-                                                                                recent_dithers_Array_4.push(factor);
-                                                                            }
-                                                            });
-                                                            popular_dithers.forEach(function(factor, index){
-                                                                            console.log(factor);
-                                                                            if(index < 4){
-                                                                                popular_dithers_Array_4.push(factor);
-                                                                            }
-                                                            });
-
-                                                            recent_dithers_Array_4 = recent_dithers_Array_4.sort( predicatBy("mainOrder") );
-                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
+                                                            if(received_dither_type == "popular"){
+                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
                                                                                     username                : other_userName,
                                                                                     user_profile_image      : other_userProfilePic,
-                                                                                    total_opinion           : total_opinion,
-                                                                                    recent_dithers          : recent_dithers_Array_4,
-                                                                                    popular_dithers         : popular_dithers_Array_4 });
-                                }//Results length check else
-                            }
-                    });
-        },
+                                                                                    popular_dithers         : popular_dithers });
 
-/* ==================================================================================================================================
-               To get All Dithers
-     ==================================================================================================================================== */
-        allTypeDithers:  function (req, res) {
+                                                            }else if(received_dither_type == "recent"){
 
-                    console.log("dithers ===== api");
-                    var tokenCheck                  =     req.options.tokenCheck;
-                    var server_baseUrl              =     req.options.server_baseUrl;
-                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
-                    var userId                      =     tokenCheck.tokenDetails.userId;
-                    var received_userId             =     req.param("user_id");
-                    var received_dither_type        =     req.param("type");
-                    var other_userName, other_userProfilePic;
-                    var query = "";
-                    console.log("Get all Type Dither  -------------------- ================================================");
-                    console.log(received_userId);
-                    console.log(received_dither_type);
-
-                    if(received_userId == userId){
-                            console.log("Same Id ----------------------------------------------------");
-                            query = "SELECT"+
-                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                    " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
-                                    " usr.profilePic, usr.name,"+
-                                    " clglk.likeStatus"+
-                                    " FROM collage clg"+
-                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                    " INNER JOIN user usr ON usr.id = clg.userId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                    " WHERE"+
-                                    " usr.id = '"+received_userId+"'"+
-                                    " GROUP BY clgdt.id";
-                                    " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
-
-
-                    }else{
-                            console.log("Not a logged User ----------------------------------------------------");
-                            query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
-                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                    " usr.profilePic, usr.name,"+
-                                    " clglk.likeStatus"+
-                                    " FROM ("+
-                                    " SELECT clg.id"+
-                                    " FROM collage clg"+
-                                    " WHERE clg.userId = '"+received_userId+"'"+
-                                    " UNION"+
-                                    " SELECT tg.collageId as id"+
-                                    " FROM tags tg"+
-                                    " WHERE tg.userId = '"+received_userId+"'"+
-                                    " ) AS temp_union"+
-                                    " INNER JOIN collage clg ON clg.id = temp_union.id"+
-                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                    " INNER JOIN user usr ON usr.id = clg.userId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                    " GROUP BY clgdt.id";
-                                    " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
-
-                    }
-
-                            console.log(query);
-                            Collage.query(query, function(err, results) {
-                                    if(err)
-                                    {
-                                        console.log(err);
-                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting dithers with type', error_details: err});
-                                    }
-                                    else
-                                    {
-                                        if(results.length == 0){
-                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent_dithers: [], dithers_with_max_votes: []});
-                                        }else{
-                                                var dataResults = results;
-                                                var key = [];
-                                                var dataResultsKeys = [];
-                                                for (var i = dataResults.length - 1; i >= 0; i--) {
-                                                    var dataResultsObj      =  new Object();
-                                                    var collageId_val       =  dataResults[i]["collageId"];
-                                                    if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
-                                                    {
-                                                        var imgDetailsArray = [];
-                                                        for (var j = dataResults.length - 1; j >= 0; j--)
-                                                        {
-                                                            if(dataResults[j]["collageId"]==collageId_val)
-                                                            {
-                                                                var likeStatus;
-                                                                if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
-                                                                            likeStatus = 0;
-                                                                }else{
-                                                                        likeStatus = 1;
-                                                                }
-                                                                imgDetailsArray.push({
-                                                                                image_id        : dataResults[j]["imgId"],
-                                                                                position        : dataResults[j]["position"],
-                                                                                like_status     : likeStatus,
-                                                                                vote            : dataResults[j]["vote"]
-                                                                                });
-
+                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the recent Dithers',
+                                                                                    username                : other_userName,
+                                                                                    user_profile_image      : other_userProfilePic,
+                                                                                    recent_dithers          : recent_dithers,
+                                                                                    });
                                                             }
-                                                        }
-                                                        //console.log(imgDetailsArray);
-                                                        //var imgDetailsArrayOrder                =       imgDetailsArray.reverse();
-                                                        var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
-
-
-                                                        other_userName                              =       dataResults[i]["name"];
-                                                        other_userProfilePic                        =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
-                                                        //dataResultsObj.user_name                    =       dataResults[i]["name"];
-                                                        //dataResultsObj.user_id                      =       dataResults[i]["userId"];
-                                                        dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
-                                                        dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
-                                                        dataResultsObj.dither_like_position         =       dataResults[i]["likePosition"];
-                                                        dataResultsObj.collage_id                   =       collageId_val;
-                                                        dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
-                                                        dataResultsObj.vote                         =       imgDetailsArrayOrder;
-                                                        dataResultsObj.mainOrder                    =       i;
-
-
-                                                        key.push(dataResultsObj);
-                                                        dataResultsKeys.push(collageId_val);
-                                                        //console.log("+++++++++++++++++++++++++++key+++++++++++++++++++++++++++++++++++");
-                                                        //console.log(key.reverse());
-                                                        var recent_dithers                          =       key.sort( predicatBy("mainOrder") );
-                                                        var popular_dithers                         =       key.sort( predicatBy("totalVote") );
-                                                    }
+                                                   }//Results length check else
                                                 }
-
-                                                //console.log(key);
-                                                //console.log(key.reverse());
-                                                //console.log(JSON.stringify(key.reverse()));
-                                                if(received_dither_type == "popular"){
-                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
-                                                                        username                : other_userName,
-                                                                        user_profile_image      : other_userProfilePic,
-                                                                        popular_dithers         : popular_dithers });
-
-                                                }else if(received_dither_type == "recent"){
-
-                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the recent Dithers',
-                                                                        username                : other_userName,
-                                                                        user_profile_image      : other_userProfilePic,
-                                                                        recent_dithers          : recent_dithers,
-                                                                        });
-                                                }
-                                       }//Results length check else
-                                    }
-                            });
+                                        });
+                    }
         },
 
 /* ==================================================================================================================================

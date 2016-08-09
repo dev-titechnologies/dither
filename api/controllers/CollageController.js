@@ -71,6 +71,8 @@ module.exports = {
                                                 userId          : userId,
                                                 vote            : 0,
                                             };
+                                        console.log("values---------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                                        console.log(values);
                                         Collage.create(values).exec(function(err, results){
                                                 if(err){
                                                         console.log(err);
@@ -602,15 +604,42 @@ module.exports = {
                     console.log("Get Updated Dithers ===== api");
                     //console.log(dither_data);
                     var dither_data = [
-                                        {dither_id: 15, dither_local_time: 22},
-                                        {dither_id: 16, dither_local_time: 22},
-                                        {dither_id: 17, dither_local_time: 22}
+                                        {dither_id: 15, dither_local_time: '2016-08-04 18:37:52'},
+                                        {dither_id: 16, dither_local_time: '2016-08-04 18:40:50'},
+                                        {dither_id: 17, dither_local_time: '2016-08-09T10:22:55.991Z'}
                                       ];
-
+                    var pushArray = [];
                     dither_data.forEach(function(factor, index){
                             console.log("factor==================");
                             console.log(factor);
+                            Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollageComment){
+                                if(err){
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                }else{
+
+                                            if(foundCollageComment){
+                                                pushArray.push(foundCollageComment.id);
+                                                console.log(foundCollageComment);
+                                                console.log("LoopfoundCollageComment ---------------------------------------");
+                                                console.log("push");
+
+                                            }
+                                }
+                            });
+                            console.log(pushArray);
+
                     });
+
+                    /*Collage.findOne({id: 15}).exec(function (err, foundCollageComment){
+                                if(err){
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                }else{
+                                            console.log(foundCollageComment);
+                                            console.log("LoopfoundCollageComment ---------------------------------------");
+                                }
+                    });*/
 
         },
 /* ==================================================================================================================================

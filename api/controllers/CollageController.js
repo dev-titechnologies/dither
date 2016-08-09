@@ -594,6 +594,26 @@ module.exports = {
         },
 
 /* ==================================================================================================================================
+               To get Updated Dithers
+     ==================================================================================================================================== */
+
+        getUpdatedDithers:  function (req, res) {
+
+                    console.log("Get Updated Dithers ===== api");
+                    //console.log(dither_data);
+                    var dither_data = [
+                                        {dither_id: 15, dither_local_time: 22},
+                                        {dither_id: 16, dither_local_time: 22},
+                                        {dither_id: 17, dither_local_time: 22}
+                                      ];
+
+                    dither_data.forEach(function(factor, index){
+                            console.log("factor==================");
+                            console.log(factor);
+                    });
+
+        },
+/* ==================================================================================================================================
                To Edit Dither
      ==================================================================================================================================== */
         editDither:  function (req, res) {
@@ -703,6 +723,8 @@ module.exports = {
                     }//Passed details check else
 
         },
+
+
 
 
 };

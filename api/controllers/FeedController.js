@@ -40,9 +40,9 @@ module.exports = {
                     var page_type               =   req.param("page_type");
                     var focus_dither_id         =   req.param("focus_dither_id");
 
-                    if(!page_type || !focus_dither_id){
+                    /*if(!page_type || !focus_dither_id){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_dither_id'});
-                    }else{
+                    }else{*/
                             switch(page_type){
 
                                         case 'new' :
@@ -227,7 +227,7 @@ module.exports = {
                                         }//results length check
                                     }
                             });
-                    }
+                    //}
 
     }
 };

@@ -12,16 +12,28 @@ module.exports = {
         addUserContacts: function (req, res) {
 			
 			
-			   var FBs			=	[];
-			   var Cusers		=	[];
-			   console.log("333333333333333333333333333333333333")
+			  /* var FBs				=	[];
+			   var CusersArray1		=	[];
+			   var CusersArray2		=	[];
+			   
 			   console.log(req.body)
-               var FBs 		= JSON.stringify(req.body.fb_array);
-			    var Cusers 		= JSON.stringify(req.body.contact_array);
-			    console.log(FBs)
-			    console.log(Cusers)
-                
-			    console.log(req.options.server_baseUrl)
+			  // console.log(req.body.contact_array) 
+			   var phones	=	req.body.contact_array;
+			  // console.log(JSON.parse(req.body.contact_array))
+			   //For each array
+			   
+			   
+			  phones.forEach(function(factor, index){
+				   console.log("sssssssssssssssssssssss")
+				   console.log(factor.name)
+				   console.log("sssssssssssssssssssssss")
+				   console.log(factor.number)	   
+				   console.log(index)	
+				   CusersArray1.push(factor.name);
+				   CusersArray2.push(factor.number);
+                });*/
+			   
+			  
 			    
 			    console.log(req.options.tokenCheck.tokenDetails.userId)
 
@@ -41,7 +53,7 @@ module.exports = {
                 
                 
                 var fbUser                  = [
-                                                {ditherUserName: 'ann',fbId: 'maeewelutest123'},
+                                                {ditherUserName: 'malu',fbId: 'malutest123'},
                                                 {ditherUserName: 'Testers TiTech',fbId: '172318546464606058'},
                                                 {ditherUserName: 'fb_sasi 3',fbId: 'ggggggggggg'},
                                               ];
@@ -50,6 +62,10 @@ module.exports = {
                         {ditherUserName: 'sasi 2',ditherUserPhoneNumber: 98455454},
                         {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
                         ];
+                        
+                         
+                        
+                        
 
 				var data_check1 = "";
                 phonecontacts.forEach(function(factor, index){
@@ -81,23 +97,7 @@ module.exports = {
                                                         var query = "DELETE FROM addressBook where userId = '"+userId+"'";
                                                         
                                                         var criteria	=	{userId:userId}
-                                                       /* AddressBook.destroy(criteria).exec(function (err,deleteAddressBook) {
-															
-															if(err)
-                                                                {
-                                                                    console.log(err);
-                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                    //callback();
-                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
-                                                                }
-                                                                else
-                                                                {
-																	 
-                                                                    console.log("deleteAddressBook ?????????????????????????????????????????????");
-                                                                    callback();
-                                                                }
-
-														 });*/
+                                                       
 
                                                         console.log(query);
                                                         AddressBook.query(query, function(err, deleteAddressBook) {
@@ -124,23 +124,7 @@ module.exports = {
                                                         var query = "DELETE FROM fbFriends where userId = '"+userId+"'";
                                                         var criteria	=	{userId:userId}
 														
-														 /* FbFriends.destroy(criteria).exec(function (err,deleteAddressBook) {
-															
-															if(err)
-                                                                {
-                                                                    console.log(err);
-                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                    //callback();
-                                                                    callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
-                                                                }
-                                                                else
-                                                                {
-																	 
-                                                                    console.log("deleteAddressBook ?????????????????????????????????????????????");
-                                                                    callback();
-                                                                }
-
-														 });*/
+														 
 														
                                                         console.log(query);
                                                         FbFriends.query(query, function(err, deleteFBFriends) {
@@ -200,8 +184,11 @@ module.exports = {
                                                                 }
                                                                 else
                                                                 {
-																	 data_check1 = createdAddressBook;
-                                                                    console.log(createdAddressBook);
+																	data_check1 = createdAddressBook;
+                                                                    console.log(createdAddressBook.insertId);
+                                                                     //Notification Log Insertion
+                                                                    
+
                                                                     console.log("createdAddressBook ?????????????????????????????????????????????");
                                                                     callback();
                                                                 }
@@ -252,10 +239,30 @@ module.exports = {
 											 
 												phonecontacts.forEach(function(factor, index){
 														
+																var values={
+																				userId		: userId,
+																				phoneNumber	: factor.ditherUserPhoneNumber,
+																			  }	
+																			  
+																			  console.log(values)
+																	
+																				invitation.create(values).exec(function(err, createdInvitation) {
+																					if(err)
+																					{
+																						console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+																						console.log(err)
+																					}
+																					else
+																					{
+																						console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+																						console.log(createdInvitation)
+																					}
+																				});
 														
 														User.find({phoneNumber:factor.ditherUserPhoneNumber}).exec(function (err, selectDContacts){
-  
-														
+                                                            
+                                                            console.log("#########################################")
+														    console.log(selectDContacts)
 															if(selectDContacts.length!=0)
 															{
 																
@@ -265,11 +272,18 @@ module.exports = {
 																 var criteria = {ditherUserPhoneNumber: factor.ditherUserPhoneNumber};
 																
 																 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+																							
+																		if(!err)
+																		{
+																			
+																		}					
+																		
 																								
 																  });
 																
-	
-																  
+																 //invitation table Insertion
+                                                                    
+                                                                    
 																
 															 }
 															

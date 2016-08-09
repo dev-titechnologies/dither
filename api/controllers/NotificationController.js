@@ -76,6 +76,7 @@ module.exports = {
 	 /* ==================================================================================================================================
                 Notification API
 	   ==================================================================================================================================== */
+
 		
 		notification: function(req, res) {
 			
@@ -91,23 +92,82 @@ module.exports = {
 					else
 					{ 
 						
+						console.log("+++++++++++++++++++++++++")
+						console.log(tokenCheck.tokenDetails.id)
+						var user_id	= tokenCheck.tokenDetails.id;
 						
-						return res.json(200, {status: 1, msg: 'Success',etails: tokenCheck});
+						//---Notification-signup---
+
+						var query	=  "SELECT N.ditherUserId,U.name,U.profilePic,U.phoneNumber,U.email,U.fbId from notificationLog as N LEFT JOIN user as U ON N.ditherUserId = U.id where N.ditherUserId='"+user_id+"'";
+
+
+						NotificationLog.query(query, function(err, NtfnResult) {
+							
+							console.log("hhhhhhhhhhhh")
+							if(err)
+							{
+								console.log(err)
+								return res.json(200, {status:2, status_type: 'Failure',msg:"Notification Not found"});
+							}
+							else
+							{
+								if(NtfnResult.length!=0)
+								{
+									console.log("Notification Found")
+                                    console.log(NtfnResult)		
+                                    var username		= NtfnResult[0].name;
+                                    var profile_image	= NtfnResult[0].profilePic;
+                                    var phoneNumber		= NtfnResult[0].phoneNumber;
+                                    var email			= NtfnResult[0].email;
+                                    var fbId			= NtfnResult[0].fbId;
+                                    NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
+										console.log("00000000000000000000000000000000000000000")
+										if(err)
+										{		
+											console.log(err)
+										}	
+										else
+										{
+											console.log(ntfnTypeFound)
+											var notification	= ntfnTypeFound[0].body;
+											console.log(notification)
+											var ntfn_body  = util.format(notification,username);
+											console.log(ntfn_body)
+										    return res.json(200, {status:1, status_type: 'Success',msg:"Notifications found",data:{name:username,profile_image:profile_image,phoneNumber:phoneNumber,email:email,fbId:fbId}});							
+
+										}
+										
+									});
+                                    
+                                    									
+								}
+							}
+							
+						});
 						
+						//-----------Notification For Tagged In Users----------------------------------
+						
+						/*var query	=  "SELECT `tagged_users` FROM `notificationLog` where `ditherUserId` = 7 OR ditherUserId in (SELECT `tagged_users` from `notificationLog`)";
+						NotificationLog.query(query, function(err, NtfnTagResult) {
+							
+							if(err)
+							{
+								return res.json(200, {status:2, status_type: 'Failure',msg:"Notification Not found"});
+							}
+							else
+							{
+								console.log(NtfnTagResult)
+								return res.json(200, {status:1, status_type: 'success',msg:"Notification found"});
+							}
+						});*/
+						
+					
 					}
-					
-					
-				 //-----------Notification For Tagged In Users----------------------------------
-				 
-					
-				 
-				 
-				 	
 					
 				});	
 			
 		},
-
+		
 
 
 };

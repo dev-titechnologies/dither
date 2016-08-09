@@ -152,6 +152,50 @@ module.exports = {
                                                                                         }
                                                                                         else
                                                                                         {
+																							//------------Notification Log Insertion-------------------
+																							
+																							var tagNotifyArray = [];
+																							
+																							taggedUserArray.forEach(function(factor, index){
+
+																									//tagNotifyArray.push({id:factor.user_id});
+																									tagNotifyArray.push(factor.user_id)
+																							 });
+																							 
+																							 
+																							 console.log(tagNotifyArray)
+																							
+																										var values ={
+																								
+																														notificationTypeId	:	1,
+																														userId				:   userId,
+																														ditherUserId		:	userId,
+																														collage_id			:	results.id,
+																														tagged_users		:   tagNotifyArray
+																														
+																													}
+																													
+																										
+																										NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+
+																											if(err)
+																											{
+																												console.log(err);
+																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+																											}
+																											else
+																											{
+																												console.log(createdNotificationTags)
+																											}
+																										});
+																							
+		 
+																								//tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
+
+																							
+																							 
+																							
+																							
                                                                                             //console.log(createdCollageTags);
                                                                                             //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
                                                                                             //console.log(results);
@@ -752,6 +796,23 @@ module.exports = {
                     }//Passed details check else
 
         },
+
+/* ==================================================================================================================================
+               To Edit Dither
+     ==================================================================================================================================== */
+        editDither:  function (req, res) {
+
+                    console.log("Edit Dithers ===== api");
+                    /*var tokenCheck                  =     req.options.tokenCheck;
+                    var server_baseUrl              =     req.options.server_baseUrl;
+                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var received_userId             =     req.param("user_id");
+                    var received_dither_type        =     req.param("type");
+                    var other_userName, other_userProfilePic;*/
+
+    },
 
 
 

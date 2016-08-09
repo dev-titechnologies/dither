@@ -16,7 +16,7 @@ function predicatBy(prop){
       return 0;
    }
 }
-var data_view_limit = 5;
+//var data_view_limit = 5;
 var offset_data_view_limit;
 
 module.exports = {
@@ -31,6 +31,8 @@ module.exports = {
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var data_view_limit             =     req.options.global.data_view_limit;
+                    console.log("Feed ============>>>");
                     var query;
                     console.log("Get Feed  -------------------- ================================================");
 
@@ -147,7 +149,7 @@ module.exports = {
                                     else
                                     {
                                         //console.log("results ----------------->>>>>>>>>>>>>>");
-                                        console.log(results);
+                                        //console.log(results);
                                         if(results.length == 0){
                                                 return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', feeds: []});
                                         }else{

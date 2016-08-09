@@ -16,9 +16,9 @@ function predicatBy(prop){
       return 0;
    }
 }
-var data_view_limit = 2;
-var offset_data_view_limit1;
-var offset_data_view_limit2;
+var data_view_limit = 20;
+var offset_data_view_limit;
+
 module.exports = {
 
     /* ==================================================================================================================================
@@ -39,14 +39,24 @@ module.exports = {
                     var page_type               =   req.param("page_type");
                     var focus_dither_id         =   req.param("focus_dither_id");
 
-                    if(page_type == "new"){
-                            offset_data_view_limit1 =  ">"+focus_dither_id;
+                   /* if(page_type == "new"){
+                            offset_data_view_limit1 =  " > "+focus_dither_id;
                     }else if(page_type == "old"){
-                            offset_data_view_limit1 =  "<"+focus_dither_id;
+                            offset_data_view_limit1 =  " < "+focus_dither_id;
+                    }*/
+                    switch(page_type){
+
+                                case 'new' :
+                                            offset_data_view_limit =  "> "+focus_dither_id;
+                                break;
+
+                                case 'old' :
+                                            offset_data_view_limit =  "< "+focus_dither_id;
+                                break;
                     }
 
                     console.log("offset_data_view_limit ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                    console.log(offset_data_view_limit1);
+                    console.log(offset_data_view_limit);
 
                     /*query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
@@ -67,33 +77,66 @@ module.exports = {
                             " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                             " ORDER BY clg.updatedAt DESC";
                     console.log(query);*/
-                    query  = " SELECT"+
-                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
-                            " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                            " usr.profilePic, usr.name,"+
-                            " clglk.likeStatus"+
-                            " FROM ("+
-                            " SELECT temp1.*"+
-                            " FROM ("+
-                            " SELECT clg.id, clg.updatedAt"+
-                            " FROM collage clg"+
-                            " WHERE clg.userId = "+userId+
-                            " UNION ("+
-                            " SELECT tg.collageId AS id, clg.updatedAt"+
-                            " FROM tags tg"+
-                            " INNER JOIN collage clg ON clg.id = tg.collageId"+
-                            " WHERE tg.userId = "+userId+
-                            " )"+
-                            " ) AS temp1"+
-                            " WHERE temp1.id "+offset_data_view_limit1+
-                            " ORDER BY temp1.updatedAt DESC"+
-                            " LIMIT "+data_view_limit+
-                            " ) AS temp_union"+
-                            " INNER JOIN collage clg ON clg.id = temp_union.id"+
-                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                            " INNER JOIN user usr ON usr.id = clg.userId"+
-                            " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                            " ORDER BY clg.updatedAt DESC , temp_union.id DESC";
+
+                    if(focus_dither_id == 0){
+                             query  = " SELECT"+
+                                    " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                    " usr.profilePic, usr.name,"+
+                                    " clglk.likeStatus"+
+                                    " FROM ("+
+                                    " SELECT temp1.*"+
+                                    " FROM ("+
+                                    " SELECT clg.id, clg.updatedAt"+
+                                    " FROM collage clg"+
+                                    " WHERE clg.userId = "+userId+
+                                    " UNION ("+
+                                    " SELECT tg.collageId AS id, clg.updatedAt"+
+                                    " FROM tags tg"+
+                                    " INNER JOIN collage clg ON clg.id = tg.collageId"+
+                                    " WHERE tg.userId = "+userId+
+                                    " )"+
+                                    " ) AS temp1"+
+                                    //" WHERE temp1.id "+offset_data_view_limit+
+                                    " ORDER BY temp1.updatedAt DESC"+
+                                    " LIMIT "+data_view_limit+
+                                    " ) AS temp_union"+
+                                    " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                    " INNER JOIN user usr ON usr.id = clg.userId"+
+                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                    " GROUP BY clgdt.id"+
+                                    " ORDER BY clg.updatedAt DESC , temp_union.id DESC";
+                    }else{
+                            query  = " SELECT"+
+                                    " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                    " usr.profilePic, usr.name,"+
+                                    " clglk.likeStatus"+
+                                    " FROM ("+
+                                    " SELECT temp1.*"+
+                                    " FROM ("+
+                                    " SELECT clg.id, clg.updatedAt"+
+                                    " FROM collage clg"+
+                                    " WHERE clg.userId = "+userId+
+                                    " UNION ("+
+                                    " SELECT tg.collageId AS id, clg.updatedAt"+
+                                    " FROM tags tg"+
+                                    " INNER JOIN collage clg ON clg.id = tg.collageId"+
+                                    " WHERE tg.userId = "+userId+
+                                    " )"+
+                                    " ) AS temp1"+
+                                    " WHERE temp1.id "+offset_data_view_limit+
+                                    " ORDER BY temp1.updatedAt DESC"+
+                                    " LIMIT "+data_view_limit+
+                                    " ) AS temp_union"+
+                                    " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                    " INNER JOIN user usr ON usr.id = clg.userId"+
+                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                    " GROUP BY clgdt.id"+
+                                    " ORDER BY clg.updatedAt DESC , temp_union.id DESC";
+                    }
                     console.log(query);
 
                     Collage.query(query, function(err, results) {

@@ -93,11 +93,11 @@ module.exports = {
 			});
 			
 		} */
-		if(req.param('fb_uid')|| req.get('device_id'))
+		if(req.param('fb_uid') && req.get('device_id'))
 		 {
 		  User.find({fbId:req.param('fb_uid')}).exec(function (err, resultData){
 			  
-
+			console.log(resultData)
 			if(resultData.length>0)
 			{
 			return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User', error_details: err});
@@ -176,7 +176,67 @@ module.exports = {
                                                                     });*/
                                                                     console.log("async parallel in Sms Part");
                                                                     callback();
-                                                        }
+                                                        },
+                                                        function(callback) {
+																	//Notification Log insertion
+																	
+																	invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
+                                                            
+																			if(err)
+																			{
+																				console.log(err)
+																			}
+																			else
+																			{
+																				console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+																				console.log(selectContacts[0].userId)
+																				if(selectContacts.length>0)
+																				{
+																				
+																					var data     = {userId:results.id,ditherUserId:selectContacts[0].userId,fbId:req.param('fb_uid')};
+																					var criteria = {phoneNumber: req.param('mobile_number')};
+																
+																					invitation.update(criteria,data).exec(function(err, updatedRecords) {
+																						if(!err)
+																						{
+																							
+																							//Notification Log Insertion
+																							
+																							var values ={
+																								
+																											notificationTypeId	: 4,
+																											userId				: results.id,
+																											ditherUserId		: selectContacts.userId,
+																											
+																										}
+
+																							
+																							 NotificationLog.create(values).exec(function(err, createdNotification) {
+
+																								if(err)
+																								{
+																									console.log(err);
+																									return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
+																								}
+																								else
+																								{
+																									console.log(createdNotification)
+																								}
+																							});
+
+																							
+																							
+																						}
+																											
+																					});
+																				}
+																				
+																			}
+																			console.log("#########################################")
+																	});
+                                                                    callback();
+                                                        },
+                                                        
 
 
                                                    ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
@@ -349,7 +409,6 @@ module.exports = {
                 var edit_type                   = req.param('edit_type');
                 var fileName                    = req.file('profile_image');
                 var token                       = req.get('token');
-                console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
                 console.log(req.file('profile_image'))
                 var server_baseUrl              =     req.options.server_baseUrl;
                 var imageUploadDirectoryPath    = '../../assets/images/profilePics';

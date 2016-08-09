@@ -12,16 +12,28 @@ module.exports = {
         addUserContacts: function (req, res) {
 			
 			
-			   var FBs			=	[];
-			   var Cusers		=	[];
-			   console.log("333333333333333333333333333333333333")
+			  /* var FBs				=	[];
+			   var CusersArray1		=	[];
+			   var CusersArray2		=	[];
+			   
 			   console.log(req.body)
-              /* var FBs 		= JSON.stringify(req.body.fb_array);
-			    var Cusers 		= JSON.stringify(req.body.contact_array);
-			    console.log(FBs)
-			    console.log(Cusers)
-                
-			    console.log(req.options.server_baseUrl)
+			  // console.log(req.body.contact_array) 
+			   var phones	=	req.body.contact_array;
+			  // console.log(JSON.parse(req.body.contact_array))
+			   //For each array
+			   
+			   
+			  phones.forEach(function(factor, index){
+				   console.log("sssssssssssssssssssssss")
+				   console.log(factor.name)
+				   console.log("sssssssssssssssssssssss")
+				   console.log(factor.number)	   
+				   console.log(index)	
+				   CusersArray1.push(factor.name);
+				   CusersArray2.push(factor.number);
+                });*/
+			   
+			  
 			    
 			    console.log(req.options.tokenCheck.tokenDetails.userId)
 
@@ -41,7 +53,7 @@ module.exports = {
                 
                 
                 var fbUser                  = [
-                                                {ditherUserName: 'ann',fbId: 'maeewelutest123'},
+                                                {ditherUserName: 'malu',fbId: 'malutest123'},
                                                 {ditherUserName: 'Testers TiTech',fbId: '172318546464606058'},
                                                 {ditherUserName: 'fb_sasi 3',fbId: 'ggggggggggg'},
                                               ];
@@ -227,6 +239,25 @@ module.exports = {
 											 
 												phonecontacts.forEach(function(factor, index){
 														
+																var values={
+																				userId		: userId,
+																				phoneNumber	: factor.ditherUserPhoneNumber,
+																			  }	
+																			  
+																			  console.log(values)
+																	
+																				invitation.create(values).exec(function(err, createdInvitation) {
+																					if(err)
+																					{
+																						console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+																						console.log(err)
+																					}
+																					else
+																					{
+																						console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+																						console.log(createdInvitation)
+																					}
+																				});
 														
 														User.find({phoneNumber:factor.ditherUserPhoneNumber}).exec(function (err, selectDContacts){
                                                             
@@ -241,22 +272,18 @@ module.exports = {
 																 var criteria = {ditherUserPhoneNumber: factor.ditherUserPhoneNumber};
 																
 																 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+																							
+																		if(!err)
+																		{
+																			
+																		}					
+																		
 																								
 																  });
 																
 																 //invitation table Insertion
                                                                     
-                                                                    var value={
-																				userId		: userId,
-																				collageId	: selectDContacts[0].id,
-																				phoneNumber	: selectDContacts[0].phoneNumber,
-																				fbId		: selectDContacts[0].fbId
-																			  }	
-																	
-																     invitation.create(values).exec(function(err, createdInvitation) {
-
-                                                                           console.log(createdInvitation)
-																	 });
+                                                                    
 																
 															 }
 															
@@ -432,7 +459,7 @@ module.exports = {
                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
                                             }
 
-                });*/
+                });
         },
 
    /* ==================================================================================================================================

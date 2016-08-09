@@ -39,27 +39,30 @@ module.exports = {
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding image from Image Details', error_details: err});
                                         }else{
-
-                                            var criteria = {id: foundImgResults.id};
-                                            var values   = {vote: parseInt(foundImgResults.vote) + 1};
-                                            CollageDetails.update(criteria, values).exec(function(err, updatedVoteCount) {
-                                                if(err)
-                                                {
-                                                    console.log(err);
-                                                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating vote count of a single image'});
+                                                if(!foundImgResults){
+                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No Dither Found by this id'});
+                                                }else{
+                                                        var criteria = {id: foundImgResults.id};
+                                                        var values   = {vote: parseInt(foundImgResults.vote) + 1};
+                                                        CollageDetails.update(criteria, values).exec(function(err, updatedVoteCount) {
+                                                            if(err)
+                                                            {
+                                                                console.log(err);
+                                                                return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating vote count of a single image'});
+                                                            }
+                                                            else
+                                                            {
+                                                                    /*console.log(foundImgResults);
+                                                                    console.log(foundImgResults.vote);
+                                                                    console.log("Success");
+                                                                    console.log(updatedVoteCount[0]);*/
+                                                                    console.log(updatedVoteCount);
+                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                        total_like_count       :  updatedVoteCount[0].vote,
+                                                                                    });
+                                                            }
+                                                        });
                                                 }
-                                                else
-                                                {
-                                                        /*console.log(foundImgResults);
-                                                        console.log(foundImgResults.vote);
-                                                        console.log("Success");
-                                                        console.log(updatedVoteCount[0]);*/
-                                                        console.log(updatedVoteCount);
-                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                            total_like_count       :  updatedVoteCount[0].vote,
-                                                                        });
-                                                }
-                                            });
 
                                         }
 

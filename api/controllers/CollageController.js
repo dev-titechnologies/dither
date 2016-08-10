@@ -31,6 +31,18 @@ module.exports = {
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                     var imageUploadDirectoryPath    =     '../../assets/images/collage';
                     var concatUploadImgArray;
+                    var request                     =     req.param("REQUEST");
+
+                    console.log("request Using Param-----------------------------------------");
+                    console.log(request);
+                    console.log(request.dither_title);
+                    console.log(request.dither_location);
+
+                    var request                     =     req.body.REQUEST;
+                    console.log("request Using Body-----------------------------------------");
+                    console.log(request);
+                    console.log(request.dither_title);
+                    console.log(request.dither_location);
 
                 req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
                         if (err)
@@ -62,12 +74,13 @@ module.exports = {
                                                          }
                                             });
 
+                                            console.log(request);
                                             var values = {
-                                                imgTitle        : req.param('dither_title'),
+                                                imgTitle        : request.dither_title,
                                                 image           : collage_imageName,
-                                                location        : req.param('dither_location'),
-                                                latitude        : req.param('latitude'),
-                                                longitude       : req.param('longitude'),
+                                                location        : request.dither_location,
+                                                latitude        : request.latitude,
+                                                longitude       : request.longitude,
                                                 userId          : userId,
                                                 vote            : 0,
                                             };

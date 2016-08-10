@@ -38,11 +38,17 @@ module.exports = {
                     console.log(request.dither_title);
                     console.log(request.dither_location);
 
-                    var request                     =     req.body.REQUEST;
+                    /*var request                     =     req.body.REQUEST;
                     console.log("request Using Body-----------------------------------------");
                     console.log(request);
                     console.log(request.dither_title);
-                    console.log(request.dither_location);
+                    console.log(request.dither_location);*/
+
+
+
+                    console.log(request);
+                    console.log("json parse====>>>>");
+                    console.log(JSON.parse(request));
 
                 req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
                         if (err)

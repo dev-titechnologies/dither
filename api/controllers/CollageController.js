@@ -33,7 +33,8 @@ module.exports = {
                     var concatUploadImgArray;
                     var request                     =     req.param("REQUEST");
 
-                    console.log(req.param("REQUEST"));
+                    console.log("request -----------------------------------------");
+                    console.log(request);
                     console.log(req.param("dither_title"));
                     console.log(req.param("dither_location"));
 

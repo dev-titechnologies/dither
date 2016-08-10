@@ -155,14 +155,14 @@ module.exports = {
 																							//------------Notification Log Insertion-------------------
 																							
 																							var tagNotifyArray = [];
-																							
 																							taggedUserArray.forEach(function(factor, index){
 
 																									//tagNotifyArray.push({id:factor.user_id});
 																									tagNotifyArray.push(factor.user_id)
+																									
 																							 });
 																							 
-																							 
+																							 console.log(tagNotifyArray.length)
 																							 console.log(tagNotifyArray)
 																							
 																										var values ={
@@ -171,7 +171,8 @@ module.exports = {
 																														userId				:   userId,
 																														ditherUserId		:	userId,
 																														collage_id			:	results.id,
-																														tagged_users		:   tagNotifyArray
+																														tagged_users		:   tagNotifyArray,
+																														description			:	tagNotifyArray.length
 																														
 																													}
 																													

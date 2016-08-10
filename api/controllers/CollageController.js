@@ -32,6 +32,9 @@ module.exports = {
                     var imageUploadDirectoryPath    =     '../../assets/images/collage';
                     var concatUploadImgArray;
 
+                    console.log(req.param("dither_title"));
+                    console.log(req.param("dither_location"));
+
                 req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
                         if (err)
                         {
@@ -63,11 +66,11 @@ module.exports = {
                                             });
 
                                             var values = {
-                                                imgTitle        : req.param('dither_title'),
+                                                imgTitle        : req.param("dither_title"),
                                                 image           : collage_imageName,
-                                                location        : req.param('dither_location'),
-                                                latitude        : req.param('latitude'),
-                                                longitude       : req.param('longitude'),
+                                                location        : req.param("dither_location"),
+                                                latitude        : req.param("latitude"),
+                                                longitude       : req.param("longitude"),
                                                 userId          : userId,
                                                 vote            : 0,
                                             };
@@ -152,50 +155,50 @@ module.exports = {
                                                                                         }
                                                                                         else
                                                                                         {
-																							//------------Notification Log Insertion-------------------
-																							
-																							var tagNotifyArray = [];
-																							
-																							taggedUserArray.forEach(function(factor, index){
+                                                                                            //------------Notification Log Insertion-------------------
 
-																									//tagNotifyArray.push({id:factor.user_id});
-																									tagNotifyArray.push(factor.user_id)
-																							 });
-																							 
-																							 
-																							 console.log(tagNotifyArray)
-																							
-																										var values ={
-																								
-																														notificationTypeId	:	1,
-																														userId				:   userId,
-																														ditherUserId		:	userId,
-																														collage_id			:	results.id,
-																														tagged_users		:   tagNotifyArray
-																														
-																													}
-																													
-																										
-																										NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+                                                                                            var tagNotifyArray = [];
 
-																											if(err)
-																											{
-																												console.log(err);
-																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
-																											}
-																											else
-																											{
-																												console.log(createdNotificationTags)
-																											}
-																										});
-																							
-		 
-																								//tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
+                                                                                            taggedUserArray.forEach(function(factor, index){
 
-																							
-																							 
-																							
-																							
+                                                                                                    //tagNotifyArray.push({id:factor.user_id});
+                                                                                                    tagNotifyArray.push(factor.user_id)
+                                                                                             });
+
+
+                                                                                             console.log(tagNotifyArray)
+
+                                                                                                        var values ={
+
+                                                                                                                        notificationTypeId  :   1,
+                                                                                                                        userId              :   userId,
+                                                                                                                        ditherUserId        :   userId,
+                                                                                                                        collage_id          :   results.id,
+                                                                                                                        tagged_users        :   tagNotifyArray
+
+                                                                                                                    }
+
+
+                                                                                                        NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+
+                                                                                                            if(err)
+                                                                                                            {
+                                                                                                                console.log(err);
+                                                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                console.log(createdNotificationTags)
+                                                                                                            }
+                                                                                                        });
+
+
+                                                                                                //tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
+
+
+
+
+
                                                                                             //console.log(createdCollageTags);
                                                                                             //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
                                                                                             //console.log(results);

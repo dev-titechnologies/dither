@@ -81,10 +81,10 @@ module.exports = {
 
                             if(focus_dither_id == 0){
                                      query  = " SELECT"+
-                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus"+
+                                            " clglk.likeStatus, clglk.likePosition"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
@@ -110,10 +110,10 @@ module.exports = {
                                             " ORDER BY clg.updatedAt DESC";
                             }else{
                                     query  = " SELECT"+
-                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus"+
+                                            " clglk.likeStatus, clglk.likePosition"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+

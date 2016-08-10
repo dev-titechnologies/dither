@@ -215,7 +215,7 @@ module.exports = {
 																							 
 																							
 																							
-=                                                                                            //console.log(createdCollageTags);
+																							//console.log(createdCollageTags);
                                                                                             //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
                                                                                             //console.log(results);
                                                                                             //req.param('Invite_friends_NUM');

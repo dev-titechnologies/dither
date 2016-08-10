@@ -48,11 +48,13 @@ module.exports = {
                                         var imageArray = [];
                                         console.log("results  ---------- getLike .....................++++++++++++++++++++");
                                         console.log(results);
+                                        var like_position;
                                         results.forEach(function(factor, index){
                                                 //console.log("factor");
                                                 console.log(factor.likeStatus);
                                                 var like_status;
-                                                if(factor.likeStatus == null || factor.likeStatus == ""){
+
+                                                if(factor.likeStatus == null || factor.likeStatus == "" || factor.likeStatus == 0){
                                                         like_status = 0;
                                                 }else{
                                                         like_status = 1;
@@ -63,8 +65,12 @@ module.exports = {
                                                                 like_status: like_status,
                                                                 id: factor.imageId
                                                                 });
+                                                if(factor.likePosition != null || factor.likeStatus != "" || factor.likeStatus != 0){
+                                                        like_position = factor.likePosition;
+                                                }
                                         });
-
+                                        console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                                        console.log(like_position);
 
 
                                         query = " SELECT clgcmt.comment, usr.name, usr.profilePic, usr.id userId"+
@@ -139,7 +145,7 @@ module.exports = {
                                                                                      dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
                                                                                      dither_location            : results[0].location,
                                                                                      dither_image               : collageImg_path + results[0].collageImage,
-                                                                                     dither_like_position       : results[0].likePosition,
+                                                                                     dither_like_position       : like_position,
                                                                                      dithers                    : imageArray,
                                                                                      ditherCount                : imageArray.length,
                                                                                      taggedUsers                : taggedUserArrayFinal,

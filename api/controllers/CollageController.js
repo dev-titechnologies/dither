@@ -367,9 +367,9 @@ module.exports = {
                                         console.log("Same Id ----------------------------------------------------");
                                         query = "SELECT"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " clglk.likeStatus, clglk.likePosition"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
@@ -532,9 +532,9 @@ module.exports = {
                                         console.log("Same Id ----------------------------------------------------");
                                         query = "SELECT"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " clglk.likeStatus, clglk.likePosition"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
@@ -547,10 +547,10 @@ module.exports = {
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
-                                        query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                        query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " clglk.likeStatus, clglk.likePosition"+
                                                 " FROM ("+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+
@@ -670,77 +670,56 @@ module.exports = {
                     var dither_data = [
                                         {dither_id: 15, dither_local_time: '2016-08-04 18:37:52'},
                                         {dither_id: 16, dither_local_time: '2016-08-04 18:40:50'},
-                                        {dither_id: 17, dither_local_time: '2016-08-09T10:22:55.991Z'}
+                                        {dither_id: 17, dither_local_time: '2016-08-05 18:41:41'}
                                       ];
-                    var pushArray = [];
+                    var push_Request_Array   = [];
+                    var push_Result_Array     = [];
                     console.log("dither_data=======================>>>>>>>>>>>>>>");
                     console.log(dither_data);
                     console.log(dither_data.length);
+                    var foundCollageArray;
                     dither_data.forEach(function(factor, index){
+                            console.log(factor);
+                            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             console.log(index);
-                            var foundCollageArray;
+                            push_Request_Array.push(factor.dither_id);
                             Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollage){
                                 if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
                                 }else{
 
-                                            /*if(foundCollageComment){
-                                                pushArray.push(foundCollageComment.id);
-                                                console.log(foundCollageComment);
-                                                console.log("LoopfoundCollageComment ---------------------------------------");
-                                                console.log("push");
-
-                                            }*/
                                             if(foundCollage){
-                                                    pushArray.push(foundCollage.id);
+                                                    push_Result_Array.push(foundCollage.id);
                                                     //console.log("factor==================");
                                                     //console.log(factor);
                                                     console.log("foundCollage==================");
                                                     console.log(foundCollage);
-                                                    foundCollageArray = foundCollage;
-                                                    if (index == dither_data.length - 1) {
+                                                    //foundCollageArray = foundCollage;
+                                            }
+
+                                            if (index == dither_data.length - 1) {
                                                             console.log("index last array");
-                                                            console.log(pushArray);
-                                                            completeSend(pushArray);
-                                                    }
+                                                            console.log(push_Result_Array);
+                                                            console.log("Request   index last array");
+                                                            console.log(push_Request_Array);
+                                                            completeSend(push_Request_Array, push_Result_Array);
+                                                            //foundCollageArray = pushResultArray;
                                             }
 
                                 }
                             });
-                            //console.log("In loop Out ===================");
-                            //console.log(foundCollageArray);
-                           // console.log(pushArray);
                     });
-                    function completeSend (results) {
-                            console.log("I am in complete send method"  + results)
+                    function completeSend (resultsRequest, results) {
+
+                            var results             = "["+results+"]";
+                            var resultsRequest      = "["+resultsRequest+"]";
+
+                            console.log("11111111111111111111111111111"  + resultsRequest);
+                            console.log("2222222222222222222222222222"  + results);
                             //return res.send(results, 200);
                     }
-                    /*Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollageComment){
-                                if(err){
-                                            console.log(err);
-                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
-                                }else{
 
-                                            if(foundCollageComment){
-                                                pushArray.push(foundCollageComment.id);
-                                                console.log(foundCollageComment);
-                                                console.log("LoopfoundCollageComment ---------------------------------------");
-                                                console.log("push");
-
-                                            }
-                                }
-                    });*/
-
-                    /*Collage.findOne({id: 15}).exec(function (err, foundCollageComment){
-                                if(err){
-                                            console.log(err);
-                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
-                                }else{
-                                            console.log(foundCollageComment);
-                                            console.log("LoopfoundCollageComment ---------------------------------------");
-                                }
-                    });*/
 
         },
 /* ==================================================================================================================================
@@ -854,7 +833,45 @@ module.exports = {
 
         },
 
+findallStudents: function(req, res) {
+    var id = req.param('id');
+    Student.findOne({ stdid: id })
+        .then(function(stdData) {
+            //If no student found
+            if (stdData === undefined)
+                return res.json({ notFound: true });
+            // Store Class Data
+            var classData = Classroom.findOne({ classid: stdData.classroom })
+                .then(function(classData) {
 
+                    var new_data = classData;
+                    delete new_data.createdAt;
+                    delete new_data.updatedAt;
+                    return new_data;
+
+                });
+            var std_data = Student.find({ classroom: stdData.classroom })
+                .then(function(allData) {
+                    var new_data = allData;
+                    delete new_data.createdAt;
+                    delete new_data.updatedAt;
+                    return new_data;
+                });
+            return [classData, std_data];
+        })
+        .spread(function(classData, stdData) {
+
+            var newJson = {};
+            newJson.classname = classData.name;
+            newJson.students = stdData;
+            return res.json({ notFound: false, data: newJson });
+        })
+        .fail(function(err) {
+            console.log(err);
+            res.json({ notFound: true, error: err });
+        });
+
+}
 
 };
 

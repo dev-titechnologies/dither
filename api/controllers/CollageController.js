@@ -334,7 +334,7 @@ module.exports = {
                                 else{
                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Image found to add'});
                                 }
-                    }
+                        }
 
                 });
 
@@ -839,46 +839,6 @@ module.exports = {
                     }//Passed details check else
 
         },
-
-findallStudents: function(req, res) {
-    var id = req.param('id');
-    Student.findOne({ stdid: id })
-        .then(function(stdData) {
-            //If no student found
-            if (stdData === undefined)
-                return res.json({ notFound: true });
-            // Store Class Data
-            var classData = Classroom.findOne({ classid: stdData.classroom })
-                .then(function(classData) {
-
-                    var new_data = classData;
-                    delete new_data.createdAt;
-                    delete new_data.updatedAt;
-                    return new_data;
-
-                });
-            var std_data = Student.find({ classroom: stdData.classroom })
-                .then(function(allData) {
-                    var new_data = allData;
-                    delete new_data.createdAt;
-                    delete new_data.updatedAt;
-                    return new_data;
-                });
-            return [classData, std_data];
-        })
-        .spread(function(classData, stdData) {
-
-            var newJson = {};
-            newJson.classname = classData.name;
-            newJson.students = stdData;
-            return res.json({ notFound: false, data: newJson });
-        })
-        .fail(function(err) {
-            console.log(err);
-            res.json({ notFound: true, error: err });
-        });
-
-}
 
 };
 

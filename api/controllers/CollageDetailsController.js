@@ -65,7 +65,7 @@ module.exports = {
                                                                 like_status: like_status,
                                                                 id: factor.imageId
                                                                 });
-                                                if(factor.likePosition != null || factor.likeStatus != "" || factor.likeStatus != 0){
+                                                if(factor.likePosition != null || factor.likePosition != "" || factor.likePosition != 0){
                                                         like_position = factor.likePosition;
                                                 }
                                         });

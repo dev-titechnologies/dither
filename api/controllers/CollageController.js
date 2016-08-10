@@ -31,7 +31,7 @@ module.exports = {
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                     var imageUploadDirectoryPath    =     '../../assets/images/collage';
                     var concatUploadImgArray;
-                    var request                     =     req.param("REQUEST");
+                    var request                     =     JSON.parse(req.param("REQUEST"));
 
                     console.log("request Using Param-----------------------------------------");
                     console.log(request);
@@ -48,7 +48,7 @@ module.exports = {
 
                     console.log(request);
                     console.log("json parse====>>>>");
-                    console.log(JSON.parse(request));
+                    //console.log(JSON.parse(request));
 
                 req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
                         if (err)

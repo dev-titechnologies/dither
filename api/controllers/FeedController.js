@@ -206,18 +206,18 @@ module.exports = {
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                                     dataResultsObj.mainOrder                    =       i;
-                                                                    console.log("dataResultsObj====================");
-                                                                    console.log(dataResultsObj);
-                                                                    console.log("dataResultsObj====================");
+                                                                    //console.log("dataResultsObj====================");
+                                                                    //console.log(dataResultsObj);
+                                                                    //console.log("dataResultsObj====================");
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
 
-                                                                    console.log(key);
+                                                                    //console.log(key);
                                                                     //var feeds = key.reverse();
                                                                     //var feeds = key;
                                                                     var feeds              =       key.sort( predicatBy("mainOrder") );
-                                                                    console.log("Final Key -----------------------------------------------------------------");
-                                                                    console.log(feeds);
+                                                                    //console.log("Final Key -----------------------------------------------------------------");
+                                                                    //console.log(feeds);
                                                                 }
                                                             }
                                                             //console.log(key);

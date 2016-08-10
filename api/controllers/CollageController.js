@@ -188,11 +188,10 @@ module.exports = {
 																								
 																														notificationTypeId	:	1,
 																														userId				:   userId,
-																														ditherUserId		:	userId,
+																				 										ditherUserId		:	userId,
 																														collage_id			:	results.id,
 																														tagged_users		:   tagNotifyArray,
 																														description			:	tagNotifyArray.length
-																														
 																													}
 																													
 																										

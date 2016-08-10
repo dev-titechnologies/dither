@@ -171,51 +171,51 @@ module.exports = {
                                                                                         }
                                                                                         else
                                                                                         {
-																							//------------Notification Log Insertion-------------------
-																							
-																							var tagNotifyArray = [];
-																							taggedUserArray.forEach(function(factor, index){
+                                                                                            //------------Notification Log Insertion-------------------
 
-																									//tagNotifyArray.push({id:factor.user_id});
-																									tagNotifyArray.push(factor.user_id)
-																									
-																							 });
-																							 
-																							 console.log(tagNotifyArray.length)
-																							 console.log(tagNotifyArray)
-																							
-																										var values ={
-																								
-																														notificationTypeId	:	1,
-																														userId				:   userId,
-																														ditherUserId		:	userId,
-																														collage_id			:	results.id,
-																														tagged_users		:   tagNotifyArray,
-																														description			:	tagNotifyArray.length
-																														
-																													}
-																													
-																										
-																										NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+                                                                                            var tagNotifyArray = [];
+                                                                                            taggedUserArray.forEach(function(factor, index){
 
-																											if(err)
-																											{
-																												console.log(err);
-																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
-																											}
-																											else
-																											{
-																												console.log(createdNotificationTags)
-																											}
-																										});
-																							
-		 
-																								//tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
+                                                                                                    //tagNotifyArray.push({id:factor.user_id});
+                                                                                                    tagNotifyArray.push(factor.user_id)
 
-																							
-																							 
-																							
-																							
+                                                                                             });
+
+                                                                                             console.log(tagNotifyArray.length)
+                                                                                             console.log(tagNotifyArray)
+
+                                                                                                        var values ={
+
+                                                                                                                        notificationTypeId  :   1,
+                                                                                                                        userId              :   userId,
+                                                                                                                        ditherUserId        :   userId,
+                                                                                                                        collage_id          :   results.id,
+                                                                                                                        tagged_users        :   tagNotifyArray,
+                                                                                                                        description         :   tagNotifyArray.length
+
+                                                                                                                    }
+
+
+                                                                                                        NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+
+                                                                                                            if(err)
+                                                                                                            {
+                                                                                                                console.log(err);
+                                                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                console.log(createdNotificationTags)
+                                                                                                            }
+                                                                                                        });
+
+
+                                                                                                //tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
+
+
+
+
+
                                                                                             //console.log(createdCollageTags);
                                                                                             //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
                                                                                             //console.log(results);
@@ -673,10 +673,50 @@ module.exports = {
                                         {dither_id: 17, dither_local_time: '2016-08-09T10:22:55.991Z'}
                                       ];
                     var pushArray = [];
+                    console.log("dither_data=======================>>>>>>>>>>>>>>");
+                    console.log(dither_data);
+                    console.log(dither_data.length);
                     dither_data.forEach(function(factor, index){
-                            console.log("factor==================");
-                            console.log(factor);
-                            Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollageComment){
+                            console.log(index);
+                            var foundCollageArray;
+                            Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollage){
+                                if(err){
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                }else{
+
+                                            /*if(foundCollageComment){
+                                                pushArray.push(foundCollageComment.id);
+                                                console.log(foundCollageComment);
+                                                console.log("LoopfoundCollageComment ---------------------------------------");
+                                                console.log("push");
+
+                                            }*/
+                                            if(foundCollage){
+                                                    pushArray.push(foundCollage.id);
+                                                    //console.log("factor==================");
+                                                    //console.log(factor);
+                                                    console.log("foundCollage==================");
+                                                    console.log(foundCollage);
+                                                    foundCollageArray = foundCollage;
+                                                    if (index == dither_data.length - 1) {
+                                                            console.log("index last array");
+                                                            console.log(pushArray);
+                                                            completeSend(pushArray);
+                                                    }
+                                            }
+
+                                }
+                            });
+                            //console.log("In loop Out ===================");
+                            //console.log(foundCollageArray);
+                           // console.log(pushArray);
+                    });
+                    function completeSend (results) {
+                            console.log("I am in complete send method"  + results)
+                            //return res.send(results, 200);
+                    }
+                    /*Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollageComment){
                                 if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
@@ -690,10 +730,7 @@ module.exports = {
 
                                             }
                                 }
-                            });
-                            console.log(pushArray);
-
-                    });
+                    });*/
 
                     /*Collage.findOne({id: 15}).exec(function (err, foundCollageComment){
                                 if(err){
@@ -816,24 +853,6 @@ module.exports = {
                     }//Passed details check else
 
         },
-
-/* ==================================================================================================================================
-               To Edit Dither
-     ==================================================================================================================================== */
-        editDither:  function (req, res) {
-
-                    console.log("Edit Dithers ===== api");
-                    /*var tokenCheck                  =     req.options.tokenCheck;
-                    var server_baseUrl              =     req.options.server_baseUrl;
-                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
-                    var userId                      =     tokenCheck.tokenDetails.userId;
-                    var received_userId             =     req.param("user_id");
-                    var received_dither_type        =     req.param("type");
-                    var other_userName, other_userProfilePic;*/
-
-    },
-
 
 
 

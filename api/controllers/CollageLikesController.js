@@ -30,9 +30,10 @@ module.exports = {
                                     collageId       :       collageId,
                                     imageId         :       likedImageId,
                                     userId          :       userId,
-                                    likeStatus      :       1,
+                                    likeStatus      :       true,
                                     likePosition    :       imgPosition,
                                 };
+                                console.log(values);
                                 CollageLikes.create(values).exec(function(err, results){
                                         if(err){
                                                 console.log(err);
@@ -62,14 +63,11 @@ module.exports = {
                                                                         }
                                                                         else
                                                                         {
-                                                                                /*console.log(foundImgResults);
-                                                                                console.log(foundImgResults.vote);
-                                                                                console.log("Success");
-                                                                                console.log(updatedVoteCount[0]);*/
-                                                                                console.log(updatedVoteCount);
-                                                                                return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+
+
+                                                                               /* return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                     total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                });
+                                                                                                });*/
                                                                         }
                                                                     });
                                                             }
@@ -82,5 +80,5 @@ module.exports = {
                                 });
                     }
 
-    },
+        },
 };

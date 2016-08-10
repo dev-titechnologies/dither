@@ -424,6 +424,7 @@ module.exports = {
                                                                         var key                 = [];
                                                                         var dataResultsKeys     = [];
                                                                         var opinionArray        = [];
+                                                                        var like_position;
                                                                         for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                             var dataResultsObj      =  new Object();
                                                                             var collageId_val       =  dataResults[i]["collageId"];
@@ -435,7 +436,7 @@ module.exports = {
                                                                                     if(dataResults[j]["collageId"]==collageId_val)
                                                                                     {
                                                                                         var likeStatus;
-                                                                                        if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                                        if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                                     likeStatus = 0;
                                                                                         }else{
                                                                                                 likeStatus = 1;
@@ -446,6 +447,9 @@ module.exports = {
                                                                                                         like_status     : likeStatus,
                                                                                                         vote            : dataResults[j]["vote"]
                                                                                                         });
+                                                                                        if(factor.likePosition != null || factor.likeStatus != "" || factor.likeStatus != 0){
+                                                                                                like_position = factor.likePosition;
+                                                                                        }
 
                                                                                     }
                                                                                 }
@@ -454,7 +458,7 @@ module.exports = {
                                                                                 other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
                                                                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                                                                 dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
-                                                                                dataResultsObj.dither_like_position     =       dataResults[i]["likePosition"];
+                                                                                dataResultsObj.dither_like_position     =       like_position;
                                                                                 dataResultsObj.collage_id               =       collageId_val;
                                                                                 dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                                                                 dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
@@ -584,6 +588,7 @@ module.exports = {
                                                             var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
+                                                            var like_position;
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj      =  new Object();
                                                                 var collageId_val       =  dataResults[i]["collageId"];
@@ -595,7 +600,7 @@ module.exports = {
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
                                                                             var likeStatus;
-                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                         likeStatus = 0;
                                                                             }else{
                                                                                     likeStatus = 1;
@@ -606,6 +611,9 @@ module.exports = {
                                                                                             like_status     : likeStatus,
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
+                                                                            if(factor.likePosition != null || factor.likeStatus != "" || factor.likeStatus != 0){
+                                                                                    like_position = factor.likePosition;
+                                                                            }
 
                                                                         }
                                                                     }
@@ -620,7 +628,7 @@ module.exports = {
                                                                     //dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
                                                                     dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
-                                                                    dataResultsObj.dither_like_position         =       dataResults[i]["likePosition"];
+                                                                    dataResultsObj.dither_like_position         =       like_position;
                                                                     dataResultsObj.collage_id                   =       collageId_val;
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;

@@ -447,8 +447,8 @@ module.exports = {
                                                                                                         like_status     : likeStatus,
                                                                                                         vote            : dataResults[j]["vote"]
                                                                                                         });
-                                                                                        if(factor.likePosition != null || factor.likeStatus != "" || factor.likeStatus != 0){
-                                                                                                like_position = factor.likePosition;
+                                                                                        if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
+                                                                                                like_position = dataResults[j]["likePosition"];
                                                                                         }
 
                                                                                     }
@@ -611,8 +611,8 @@ module.exports = {
                                                                                             like_status     : likeStatus,
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
-                                                                            if(factor.likePosition != null || factor.likeStatus != "" || factor.likeStatus != 0){
-                                                                                    like_position = factor.likePosition;
+                                                                            if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
+                                                                                            like_position = dataResults[j]["likePosition"];
                                                                             }
 
                                                                         }

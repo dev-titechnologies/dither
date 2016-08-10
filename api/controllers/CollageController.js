@@ -35,8 +35,8 @@ module.exports = {
 
                     console.log("request -----------------------------------------");
                     console.log(request);
-                    console.log(req.param("dither_title"));
-                    console.log(req.param("dither_location"));
+                    console.log(request.dither_title);
+                    console.log(request.dither_location);
 
                 req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
                         if (err)
@@ -68,6 +68,7 @@ module.exports = {
                                                          }
                                             });
 
+                                            console.log(request);
                                             var values = {
                                                 imgTitle        : request.dither_title,
                                                 image           : collage_imageName,

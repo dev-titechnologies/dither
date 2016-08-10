@@ -185,8 +185,11 @@ module.exports = {
                                                                                                 like_status     : likeStatus,
                                                                                                 vote            : dataResults[j]["vote"]
                                                                                                 });
-                                                                            if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
-                                                                                                like_position = dataResults[j]["likePosition"];
+
+                                                                            if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
+                                                                                    like_position = 0;
+                                                                            }else{
+                                                                                    like_position = dataResults[j]["likePosition"];
                                                                             }
                                                                         }
                                                                     }

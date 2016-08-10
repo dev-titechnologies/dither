@@ -171,50 +171,51 @@ module.exports = {
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            //------------Notification Log Insertion-------------------
+																							//------------Notification Log Insertion-------------------
+																							
+																							var tagNotifyArray = [];
+																							taggedUserArray.forEach(function(factor, index){
 
-                                                                                            var tagNotifyArray = [];
+																									//tagNotifyArray.push({id:factor.user_id});
+																									tagNotifyArray.push(factor.user_id)
+																									
+																							 });
+																							 
+																							 console.log(tagNotifyArray.length)
+																							 console.log(tagNotifyArray)
+																							
+																										var values ={
+																								
+																														notificationTypeId	:	1,
+																														userId				:   userId,
+																														ditherUserId		:	userId,
+																														collage_id			:	results.id,
+																														tagged_users		:   tagNotifyArray,
+																														description			:	tagNotifyArray.length
+																														
+																													}
+																													
+																										
+																										NotificationLog.create(values).exec(function(err, createdNotificationTags) {
 
-                                                                                            taggedUserArray.forEach(function(factor, index){
+																											if(err)
+																											{
+																												console.log(err);
+																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+																											}
+																											else
+																											{
+																												console.log(createdNotificationTags)
+																											}
+																										});
+																							
+		 
+																								//tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
 
-                                                                                                    //tagNotifyArray.push({id:factor.user_id});
-                                                                                                    tagNotifyArray.push(factor.user_id)
-                                                                                             });
-
-
-                                                                                             console.log(tagNotifyArray)
-
-                                                                                                        var values ={
-
-                                                                                                                        notificationTypeId  :   1,
-                                                                                                                        userId              :   userId,
-                                                                                                                        ditherUserId        :   userId,
-                                                                                                                        collage_id          :   results.id,
-                                                                                                                        tagged_users        :   tagNotifyArray
-
-                                                                                                                    }
-
-
-                                                                                                        NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-
-                                                                                                            if(err)
-                                                                                                            {
-                                                                                                                console.log(err);
-                                                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
-                                                                                                            }
-                                                                                                            else
-                                                                                                            {
-                                                                                                                console.log(createdNotificationTags)
-                                                                                                            }
-                                                                                                        });
-
-
-                                                                                                //tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
-
-
-
-
-
+																							
+																							 
+																							
+																							
                                                                                             //console.log(createdCollageTags);
                                                                                             //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
                                                                                             //console.log(results);

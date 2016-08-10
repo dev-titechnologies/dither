@@ -93,12 +93,13 @@ module.exports = {
 					{ 
 						
 						console.log("+++++++++++++++++++++++++")
+						console.log(tokenCheck)
 						console.log(tokenCheck.tokenDetails.id)
 						var user_id	= tokenCheck.tokenDetails.id;
 						
 						//---Notification-signup---
 
-						var query	=  "SELECT N.ditherUserId,U.name,U.profilePic,U.phoneNumber,U.email,U.fbId from notificationLog as N LEFT JOIN user as U ON N.ditherUserId = U.id where N.ditherUserId='"+user_id+"'";
+						/*var query	=  "SELECT N.ditherUserId,U.name,U.profilePic,U.phoneNumber,U.email,U.fbId,N.createdAt,N.updatedAt from notificationLog as N LEFT JOIN user as U ON N.ditherUserId = U.id where N.ditherUserId='"+user_id+"'";
 
 
 						NotificationLog.query(query, function(err, NtfnResult) {
@@ -143,23 +144,52 @@ module.exports = {
 								}
 							}
 							
-						});
+						});*/
 						
 						//-----------Notification For Tagged In Users----------------------------------
 						
-						/*var query	=  "SELECT `tagged_users` FROM `notificationLog` where `ditherUserId` = 7 OR ditherUserId in (SELECT `tagged_users` from `notificationLog`)";
+						var query = "SELECT N.`tagged_users`,N.`collage_id`,N.description,N.createdAt,N.updatedAt FROM `notificationLog` as N INNER JOIN user as U ON U.id =N.ditherUserId where N.`ditherUserId` = '"+user_id+"' and N.`ditherUserId` in (SELECT tagged_users from notificationLog where  N.`ditherUserId` = '"+user_id+"')";
+						console.log(query)
 						NotificationLog.query(query, function(err, NtfnTagResult) {
 							
 							if(err)
-							{
+							{		
+								
 								return res.json(200, {status:2, status_type: 'Failure',msg:"Notification Not found"});
 							}
 							else
 							{
+								console.log("************************************************")
+
 								console.log(NtfnTagResult)
-								return res.json(200, {status:1, status_type: 'success',msg:"Notification found"});
+								
+							    NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
+									
+										console.log("00000000000000000000000000000000000000000")
+										if(err)
+										{		
+											console.log(err)
+										}	
+										else
+										{
+											console.log(ntfnTypeFound)
+											/*var notification	= ntfnTypeFound[0].body;
+											console.log(notification)
+											var ntfn_body  = util.format(notification,);
+											console.log(ntfn_body)*/
+										    return res.json(200, {status:1, status_type: 'Success',msg:"Notifications found"});							
+
+										}
+										
+								});
+								
+								
+								
+								
+								
+								
 							}
-						});*/
+						});
 						
 					
 					}

@@ -88,18 +88,18 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
-                                            " SELECT clg.id, clg.updatedAt"+
+                                            " SELECT clg.id, clg.createdAt"+
                                             " FROM collage clg"+
                                             " WHERE clg.userId = "+userId+
                                             " UNION ("+
-                                            " SELECT tg.collageId AS id, clg.updatedAt"+
+                                            " SELECT tg.collageId AS id, clg.createdAt"+
                                             " FROM tags tg"+
                                             " INNER JOIN collage clg ON clg.id = tg.collageId"+
                                             " WHERE tg.userId = "+userId+
                                             " )"+
                                             " ) AS temp1"+
                                             //" WHERE temp1.id "+offset_data_view_limit+
-                                            " ORDER BY temp1.updatedAt DESC"+
+                                            " ORDER BY temp1.createdAt DESC"+
                                             " LIMIT "+data_view_limit+
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
@@ -107,7 +107,7 @@ module.exports = {
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                             " GROUP BY clgdt.id"+
-                                            " ORDER BY clg.updatedAt DESC";
+                                            " ORDER BY clg.createdAt DESC";
                             }else{
                                     query  = " SELECT"+
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
@@ -117,18 +117,18 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
-                                            " SELECT clg.id, clg.updatedAt"+
+                                            " SELECT clg.id, clg.createdAt"+
                                             " FROM collage clg"+
                                             " WHERE clg.userId = "+userId+
                                             " UNION ("+
-                                            " SELECT tg.collageId AS id, clg.updatedAt"+
+                                            " SELECT tg.collageId AS id, clg.createdAt"+
                                             " FROM tags tg"+
                                             " INNER JOIN collage clg ON clg.id = tg.collageId"+
                                             " WHERE tg.userId = "+userId+
                                             " )"+
                                             " ) AS temp1"+
                                             " WHERE temp1.id "+offset_data_view_limit+
-                                            " ORDER BY temp1.updatedAt DESC"+
+                                            " ORDER BY temp1.createdAt DESC"+
                                             " LIMIT "+data_view_limit+
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
@@ -136,7 +136,7 @@ module.exports = {
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                             " GROUP BY clgdt.id"+
-                                            " ORDER BY clg.updatedAt DESC";
+                                            " ORDER BY clg.createdAt DESC";
                             }
                             console.log(query);
 

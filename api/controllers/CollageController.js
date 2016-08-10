@@ -377,7 +377,7 @@ module.exports = {
                                                 " WHERE"+
                                                 " usr.id = '"+received_userId+"'"+
                                                 " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.updatedAt DESC";
+                                                " ORDER BY clg.createdAt DESC";
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
@@ -401,7 +401,7 @@ module.exports = {
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.updatedAt DESC";
+                                                " ORDER BY clg.createdAt DESC";
 
                                 }
 
@@ -541,8 +541,8 @@ module.exports = {
                                                 " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " WHERE"+
                                                 " usr.id = '"+received_userId+"'"+
-                                                " GROUP BY clgdt.id";
-                                                " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+                                                " GROUP BY clgdt.id"+
+                                                " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
 
 
                                 }else{
@@ -564,8 +564,8 @@ module.exports = {
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                                " GROUP BY clgdt.id";
-                                                " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+                                                " GROUP BY clgdt.id"+
+                                                " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
 
                                 }
 

@@ -31,7 +31,9 @@ module.exports = {
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                     var imageUploadDirectoryPath    =     '../../assets/images/collage';
                     var concatUploadImgArray;
+                    var request                     =     req.param("REQUEST");
 
+                    console.log(req.param("REQUEST"));
                     console.log(req.param("dither_title"));
                     console.log(req.param("dither_location"));
 
@@ -66,11 +68,11 @@ module.exports = {
                                             });
 
                                             var values = {
-                                                imgTitle        : req.param("dither_title"),
+                                                imgTitle        : request.dither_title,
                                                 image           : collage_imageName,
-                                                location        : req.param("dither_location"),
-                                                latitude        : req.param("latitude"),
-                                                longitude       : req.param("longitude"),
+                                                location        : request.dither_location,
+                                                latitude        : request.latitude,
+                                                longitude       : request.longitude,
                                                 userId          : userId,
                                                 vote            : 0,
                                             };

@@ -81,25 +81,25 @@ module.exports = {
 
                             if(focus_dither_id == 0){
                                      query  = " SELECT"+
-                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus"+
+                                            " clglk.likeStatus, clglk.likePosition"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
-                                            " SELECT clg.id, clg.updatedAt"+
+                                            " SELECT clg.id, clg.createdAt"+
                                             " FROM collage clg"+
                                             " WHERE clg.userId = "+userId+
                                             " UNION ("+
-                                            " SELECT tg.collageId AS id, clg.updatedAt"+
+                                            " SELECT tg.collageId AS id, clg.createdAt"+
                                             " FROM tags tg"+
                                             " INNER JOIN collage clg ON clg.id = tg.collageId"+
                                             " WHERE tg.userId = "+userId+
                                             " )"+
                                             " ) AS temp1"+
                                             //" WHERE temp1.id "+offset_data_view_limit+
-                                            " ORDER BY temp1.updatedAt DESC"+
+                                            " ORDER BY temp1.createdAt DESC"+
                                             " LIMIT "+data_view_limit+
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
@@ -107,28 +107,28 @@ module.exports = {
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                             " GROUP BY clgdt.id"+
-                                            " ORDER BY clg.updatedAt DESC";
+                                            " ORDER BY clg.createdAt DESC";
                             }else{
                                     query  = " SELECT"+
-                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus"+
+                                            " clglk.likeStatus, clglk.likePosition"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
-                                            " SELECT clg.id, clg.updatedAt"+
+                                            " SELECT clg.id, clg.createdAt"+
                                             " FROM collage clg"+
                                             " WHERE clg.userId = "+userId+
                                             " UNION ("+
-                                            " SELECT tg.collageId AS id, clg.updatedAt"+
+                                            " SELECT tg.collageId AS id, clg.createdAt"+
                                             " FROM tags tg"+
                                             " INNER JOIN collage clg ON clg.id = tg.collageId"+
                                             " WHERE tg.userId = "+userId+
                                             " )"+
                                             " ) AS temp1"+
                                             " WHERE temp1.id "+offset_data_view_limit+
-                                            " ORDER BY temp1.updatedAt DESC"+
+                                            " ORDER BY temp1.createdAt DESC"+
                                             " LIMIT "+data_view_limit+
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
@@ -136,7 +136,7 @@ module.exports = {
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                             " GROUP BY clgdt.id"+
-                                            " ORDER BY clg.updatedAt DESC";
+                                            " ORDER BY clg.createdAt DESC";
                             }
                             console.log(query);
 
@@ -157,6 +157,7 @@ module.exports = {
                                                             var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
+                                                            var like_position;
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj = new Object();
                                                                 var collageId_val =dataResults[i]["collageId"];
@@ -173,7 +174,7 @@ module.exports = {
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
                                                                             var likeStatus;
-                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                     likeStatus = 0;
                                                                             }else{
                                                                                     likeStatus = 1;
@@ -184,6 +185,9 @@ module.exports = {
                                                                                                 like_status     : likeStatus,
                                                                                                 vote            : dataResults[j]["vote"]
                                                                                                 });
+                                                                            if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
+                                                                                                like_position = dataResults[j]["likePosition"];
+                                                                            }
                                                                         }
                                                                     }
                                                                     //var imgDetailsArrayOrder = imgDetailsArray.reverse();
@@ -201,7 +205,7 @@ module.exports = {
                                                                     dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
                                                                     dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
-                                                                    dataResultsObj.dither_like_position         =       dataResults[i]["likePosition"];
+                                                                    dataResultsObj.dither_like_position         =       like_position;
                                                                     dataResultsObj.collage_id                   =       collageId_val;
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;

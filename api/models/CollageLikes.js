@@ -30,6 +30,12 @@ module.exports = {
                 type: 'boolean',
                 defaultsTo: false
             },
+
+        likePosition: {
+                type: 'integer',
+                defaultsTo: 0
+            },
+
         createdAt: {
                 type: 'datetime',
             },

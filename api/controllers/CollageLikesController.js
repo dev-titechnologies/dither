@@ -21,15 +21,17 @@ module.exports = {
                     var collageId                   =     req.param("dither_id");
                     //var likedUserId               =     req.param("user_id");
                     var likedImageId                =     req.param("dither_like_image_id");
+                    var imgPosition                 =     req.param("image_position");
 
-                    if(!collageId || !likedImageId){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and dither_like_image_id'});
+                    if(!collageId || !likedImageId || !imgPosition){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and dither_like_image_id and position'});
                     }else{
                                 var values = {
                                     collageId       :       collageId,
                                     imageId         :       likedImageId,
                                     userId          :       userId,
                                     likeStatus      :       1,
+                                    likePosition    :       imgPosition,
                                 };
                                 CollageLikes.create(values).exec(function(err, results){
                                         if(err){
@@ -37,13 +39,18 @@ module.exports = {
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Vote Creation', error_details: err});
                                         }
                                         else{
-                                            CollageDetails.findOne({collageId: results.collageId,id: results.imageId}).exec(function (err, foundImgResults){
+                                            console.log("results ======================");
+                                            console.log(results);
+                                            console.log(results.collageId);
+                                            console.log(results.imageId);
+                                            CollageDetails.findOne({id: results.imageId, collageId: results.collageId}).exec(function (err, foundImgResults){
                                                     if(err){
                                                         console.log(err);
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding image from Image Details', error_details: err});
                                                     }else{
+                                                        console.log(foundImgResults);
                                                             if(!foundImgResults){
-                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No Dither Found by this id'});
+                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No Image of the Dither Found by this id'});
                                                             }else{
                                                                     var criteria = {id: foundImgResults.id};
                                                                     var values   = {vote: parseInt(foundImgResults.vote) + 1};

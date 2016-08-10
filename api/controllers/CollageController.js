@@ -31,7 +31,7 @@ module.exports = {
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                     var imageUploadDirectoryPath    =     '../../assets/images/collage';
                     var concatUploadImgArray;
-                    var request                     =     req.param("REQUEST");
+                    var request                     =     JSON.parse(req.param("REQUEST"));
 
                     console.log("request Using Param-----------------------------------------");
                     console.log(request);
@@ -48,7 +48,7 @@ module.exports = {
 
                     console.log(request);
                     console.log("json parse====>>>>");
-                    console.log(JSON.parse(request));
+                    //console.log(JSON.parse(request));
 
                 req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
                         if (err)
@@ -215,7 +215,7 @@ module.exports = {
 																							 
 																							
 																							
-                                                                                            //console.log(createdCollageTags);
+=                                                                                            //console.log(createdCollageTags);
                                                                                             //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++   -------------------------------------------");
                                                                                             //console.log(results);
                                                                                             //req.param('Invite_friends_NUM');
@@ -366,9 +366,9 @@ module.exports = {
                                         console.log("Same Id ----------------------------------------------------");
                                         query = "SELECT"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " clglk.likeStatus, clglk.likePosition"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
@@ -376,7 +376,7 @@ module.exports = {
                                                 " WHERE"+
                                                 " usr.id = '"+received_userId+"'"+
                                                 " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.updatedAt DESC";
+                                                " ORDER BY clg.createdAt DESC";
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
@@ -400,7 +400,7 @@ module.exports = {
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.updatedAt DESC";
+                                                " ORDER BY clg.createdAt DESC";
 
                                 }
 
@@ -423,6 +423,7 @@ module.exports = {
                                                                         var key                 = [];
                                                                         var dataResultsKeys     = [];
                                                                         var opinionArray        = [];
+                                                                        var like_position;
                                                                         for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                             var dataResultsObj      =  new Object();
                                                                             var collageId_val       =  dataResults[i]["collageId"];
@@ -434,7 +435,7 @@ module.exports = {
                                                                                     if(dataResults[j]["collageId"]==collageId_val)
                                                                                     {
                                                                                         var likeStatus;
-                                                                                        if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                                        if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                                     likeStatus = 0;
                                                                                         }else{
                                                                                                 likeStatus = 1;
@@ -445,6 +446,9 @@ module.exports = {
                                                                                                         like_status     : likeStatus,
                                                                                                         vote            : dataResults[j]["vote"]
                                                                                                         });
+                                                                                        if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
+                                                                                                like_position = dataResults[j]["likePosition"];
+                                                                                        }
 
                                                                                     }
                                                                                 }
@@ -453,7 +457,7 @@ module.exports = {
                                                                                 other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
                                                                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                                                                 dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
-                                                                                dataResultsObj.dither_like_position     =       dataResults[i]["likePosition"];
+                                                                                dataResultsObj.dither_like_position     =       like_position;
                                                                                 dataResultsObj.collage_id               =       collageId_val;
                                                                                 dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                                                                 dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
@@ -531,25 +535,25 @@ module.exports = {
                                         console.log("Same Id ----------------------------------------------------");
                                         query = "SELECT"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " clglk.likeStatus, clglk.likePosition"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " WHERE"+
                                                 " usr.id = '"+received_userId+"'"+
-                                                " GROUP BY clgdt.id";
-                                                " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+                                                " GROUP BY clgdt.id"+
+                                                " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
 
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
-                                        query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
+                                        query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " clglk.likeStatus, clglk.likePosition"+
                                                 " FROM ("+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+
@@ -563,8 +567,8 @@ module.exports = {
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                                " GROUP BY clgdt.id";
-                                                " ORDER BY clg.updatedAt DESC, clgdt.collageId DESC";
+                                                " GROUP BY clgdt.id"+
+                                                " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
 
                                 }
 
@@ -583,6 +587,7 @@ module.exports = {
                                                             var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
+                                                            var like_position;
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj      =  new Object();
                                                                 var collageId_val       =  dataResults[i]["collageId"];
@@ -594,7 +599,7 @@ module.exports = {
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
                                                                             var likeStatus;
-                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                         likeStatus = 0;
                                                                             }else{
                                                                                     likeStatus = 1;
@@ -605,6 +610,9 @@ module.exports = {
                                                                                             like_status     : likeStatus,
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
+                                                                            if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
+                                                                                            like_position = dataResults[j]["likePosition"];
+                                                                            }
 
                                                                         }
                                                                     }
@@ -619,7 +627,7 @@ module.exports = {
                                                                     //dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
                                                                     dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
-                                                                    dataResultsObj.dither_like_position         =       dataResults[i]["likePosition"];
+                                                                    dataResultsObj.dither_like_position         =       like_position;
                                                                     dataResultsObj.collage_id                   =       collageId_val;
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
@@ -669,40 +677,56 @@ module.exports = {
                     var dither_data = [
                                         {dither_id: 15, dither_local_time: '2016-08-04 18:37:52'},
                                         {dither_id: 16, dither_local_time: '2016-08-04 18:40:50'},
-                                        {dither_id: 17, dither_local_time: '2016-08-09T10:22:55.991Z'}
+                                        {dither_id: 17, dither_local_time: '2016-08-05 18:41:41'}
                                       ];
-                    var pushArray = [];
+                    var push_Request_Array   = [];
+                    var push_Result_Array     = [];
+                    console.log("dither_data=======================>>>>>>>>>>>>>>");
+                    console.log(dither_data);
+                    console.log(dither_data.length);
+                    var foundCollageArray;
                     dither_data.forEach(function(factor, index){
-                            console.log("factor==================");
                             console.log(factor);
-                            Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollageComment){
+                            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                            console.log(index);
+                            push_Request_Array.push(factor.dither_id);
+                            Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollage){
                                 if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
                                 }else{
 
-                                            if(foundCollageComment){
-                                                pushArray.push(foundCollageComment.id);
-                                                console.log(foundCollageComment);
-                                                console.log("LoopfoundCollageComment ---------------------------------------");
-                                                console.log("push");
-
+                                            if(foundCollage){
+                                                    push_Result_Array.push(foundCollage.id);
+                                                    //console.log("factor==================");
+                                                    //console.log(factor);
+                                                    console.log("foundCollage==================");
+                                                    console.log(foundCollage);
+                                                    //foundCollageArray = foundCollage;
                                             }
+
+                                            if (index == dither_data.length - 1) {
+                                                            console.log("index last array");
+                                                            console.log(push_Result_Array);
+                                                            console.log("Request   index last array");
+                                                            console.log(push_Request_Array);
+                                                            completeSend(push_Request_Array, push_Result_Array);
+                                                            //foundCollageArray = pushResultArray;
+                                            }
+
                                 }
                             });
-                            console.log(pushArray);
-
                     });
+                    function completeSend (resultsRequest, results) {
 
-                    /*Collage.findOne({id: 15}).exec(function (err, foundCollageComment){
-                                if(err){
-                                            console.log(err);
-                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
-                                }else{
-                                            console.log(foundCollageComment);
-                                            console.log("LoopfoundCollageComment ---------------------------------------");
-                                }
-                    });*/
+                            var results             = "["+results+"]";
+                            var resultsRequest      = "["+resultsRequest+"]";
+
+                            console.log("11111111111111111111111111111"  + resultsRequest);
+                            console.log("2222222222222222222222222222"  + results);
+                            //return res.send(results, 200);
+                    }
+
 
         },
 /* ==================================================================================================================================
@@ -816,25 +840,45 @@ module.exports = {
 
         },
 
-/* ==================================================================================================================================
-               To Edit Dither
-     ==================================================================================================================================== */
-        editDither:  function (req, res) {
+findallStudents: function(req, res) {
+    var id = req.param('id');
+    Student.findOne({ stdid: id })
+        .then(function(stdData) {
+            //If no student found
+            if (stdData === undefined)
+                return res.json({ notFound: true });
+            // Store Class Data
+            var classData = Classroom.findOne({ classid: stdData.classroom })
+                .then(function(classData) {
 
-                    console.log("Edit Dithers ===== api");
-                    /*var tokenCheck                  =     req.options.tokenCheck;
-                    var server_baseUrl              =     req.options.server_baseUrl;
-                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
-                    var userId                      =     tokenCheck.tokenDetails.userId;
-                    var received_userId             =     req.param("user_id");
-                    var received_dither_type        =     req.param("type");
-                    var other_userName, other_userProfilePic;*/
+                    var new_data = classData;
+                    delete new_data.createdAt;
+                    delete new_data.updatedAt;
+                    return new_data;
 
-    },
+                });
+            var std_data = Student.find({ classroom: stdData.classroom })
+                .then(function(allData) {
+                    var new_data = allData;
+                    delete new_data.createdAt;
+                    delete new_data.updatedAt;
+                    return new_data;
+                });
+            return [classData, std_data];
+        })
+        .spread(function(classData, stdData) {
 
+            var newJson = {};
+            newJson.classname = classData.name;
+            newJson.students = stdData;
+            return res.json({ notFound: false, data: newJson });
+        })
+        .fail(function(err) {
+            console.log(err);
+            res.json({ notFound: true, error: err });
+        });
 
-
+}
 
 };
 

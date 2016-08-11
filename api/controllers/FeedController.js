@@ -217,7 +217,7 @@ module.exports = {
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                                     dataResultsObj.mainOrder                    =       i;
                                                                     console.log("vote =================");
-                                                                    console.log(vote);
+                                                                    console.log(dataResultsObj.vote);
                                                                     //console.log("dataResultsObj====================");
                                                                     //console.log(dataResultsObj);
                                                                     //console.log("dataResultsObj====================");

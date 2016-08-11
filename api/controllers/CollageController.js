@@ -714,6 +714,8 @@ module.exports = {
                                                             console.log(err);
                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
                                                 }else{
+                                                        console.log("factor Find dithers==================");
+                                                        console.log(factor);
 
                                                             if(foundCollage){
                                                                     push_Result_Array.push(foundCollage.id);

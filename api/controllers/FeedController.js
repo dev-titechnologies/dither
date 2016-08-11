@@ -162,6 +162,7 @@ module.exports = {
                                                                 var dataResultsObj = new Object();
                                                                 var collageId_val =dataResults[i]["collageId"];
                                                                 //console.log(data[i]);
+                                                                console.log("For loop--------------->>>>>>>>>>>>>>>>>");
                                                                 if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
                                                                 {
                                                                     var imagesPositionArray         = [];
@@ -215,6 +216,8 @@ module.exports = {
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                                     dataResultsObj.mainOrder                    =       i;
+                                                                    console.log("vote =================");
+                                                                    console.log(vote);
                                                                     //console.log("dataResultsObj====================");
                                                                     //console.log(dataResultsObj);
                                                                     //console.log("dataResultsObj====================");

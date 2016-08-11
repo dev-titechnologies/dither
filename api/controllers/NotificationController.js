@@ -171,7 +171,7 @@ module.exports = {
 													{
 
 														console.log(NtfnTagResult[0].description)
-								
+														
 														NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
 									
 																if(err)
@@ -199,9 +199,62 @@ module.exports = {
 												});
 													
 															
-											}
+											},
+											
+											function(callback) {
 													
-										  
+													//-----------Notification For UserVotes----------------------------------
+													
+													var query ="SELECT  N.userId,N.ditherUserId,N.description,N.collage_id,U.name FROM `notificationLog` as N LEFT JOIN user as U ON N.userId = U.id WHERE N.ditherUserId = '"+user_id+"'"
+													NotificationLog.query(query, function(err, NtfnVoteResult) {
+														
+														
+														if(err)
+														{		
+															console.log(err)
+															callback(true, {status: 2, status_type: 'Failure' ,message: 'Notification Not found'});
+														}
+														else
+														{
+															console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+															console.log(NtfnVoteResult[0].name)
+														   
+														   
+														
+														
+														
+															NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
+									
+																if(err)
+																{		
+																	console.log(err)
+																}	
+																else
+																{
+											
+																	console.log(NtfnVoteResult[0].description)
+																	console.log(ntfnTypeFound)
+																	var notification	= ntfnTypeFound[0].body;
+																	console.log(notification)
+																	var ntfn_body  		= util.format(notification,NtfnVoteResult[0].name,NtfnVoteResult[0].description);
+																	console.log(ntfn_body)
+																	notificationVoted  =  ntfn_body;
+																	callback();						
+
+																}
+										
+															});
+								
+								
+														}
+														
+														
+
+													});
+													
+													
+													
+										   }
 										  ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
 													if (err) {
 																console.log(err);
@@ -221,7 +274,7 @@ module.exports = {
                                                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Notification Not Found', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                             }else{
                                                 console.log("Success -----------------------------------------");
-                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Notifications Found',dataSignUp:notificationSignup,dataTag:notificationTagged});
+                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Notifications Found',dataSignUp:notificationSignup,dataTag:notificationTagged,dataVote:notificationVoted});
                                             }
 
                           });	

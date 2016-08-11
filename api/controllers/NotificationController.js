@@ -87,6 +87,8 @@ module.exports = {
 						var user_id				= 	  tokenCheck.tokenDetails.id;
 						notificationVoted = "";
 						notificationCommented = "";
+						notifyVoteArray	   = [];
+						notifyCmntArray		=[];
 						var query = "SELECT U.name,N.notificationTypeId,N.userId,N.ditherUserId,N.collage_id,N.image_id,N.tagged_users,N.description,N.updatedAt from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
 						NotificationLog.query(query, function(err,results) {
 							
@@ -131,6 +133,10 @@ module.exports = {
 														else
 														{
 														 notificationCommented =  ntfn_body;
+														 notifyCmntArray	   = [];
+														 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+														 console.log(notifyCmntArray)
+														 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
 													    }
 														
 														callback();						
@@ -169,8 +175,12 @@ module.exports = {
 															 else
 															 {
 																notificationVoted  =  ntfn_body;
+																notifyVoteArray	   = [];
+																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																console.log(notifyCmntArray)
+																//notifyVoteArray.push(ditherId:item.collage_id,userId:ditherUserId)
 															 }
-															
+															 
 															callback();						
 
 														}
@@ -215,7 +225,7 @@ module.exports = {
 										
 									}, function(err) {
 								
-										return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_vote:notificationVoted,notification_comment:notificationCommented});
+										return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_vote:notifyVoteArray,notification_comment:notifyCmntArray,});
 									});
 								
 							}

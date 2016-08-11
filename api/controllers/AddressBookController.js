@@ -10,34 +10,34 @@ module.exports = {
                To Upload Contacts
      ==================================================================================================================================== */
         addUserContacts: function (req, res) {
-			
-			
-			  /* var FBs				=	[];
-			   var CusersArray1		=	[];
-			   var CusersArray2		=	[];
-			   
-			   console.log(req.body)
-			  // console.log(req.body.contact_array) 
-			   var phones	=	req.body.contact_array;
-			  // console.log(JSON.parse(req.body.contact_array))
-			   //For each array
-			   
-			   
-			  phones.forEach(function(factor, index){
-				   console.log("sssssssssssssssssssssss")
-				   console.log(factor.name)
-				   console.log("sssssssssssssssssssssss")
-				   console.log(factor.number)	   
-				   console.log(index)	
-				   CusersArray1.push(factor.name);
-				   CusersArray2.push(factor.number);
-                });*/
-			   
-			  
-			    
-			    console.log(req.options.tokenCheck.tokenDetails.userId)
 
-				var tokenCheck                  =     req.options.tokenCheck;
+
+              /* var FBs                =   [];
+               var CusersArray1     =   [];
+               var CusersArray2     =   [];
+
+               console.log(req.body)
+              // console.log(req.body.contact_array)
+               var phones   =   req.body.contact_array;
+              // console.log(JSON.parse(req.body.contact_array))
+               //For each array
+
+
+              phones.forEach(function(factor, index){
+                   console.log("sssssssssssssssssssssss")
+                   console.log(factor.name)
+                   console.log("sssssssssssssssssssssss")
+                   console.log(factor.number)
+                   console.log(index)
+                   CusersArray1.push(factor.name);
+                   CusersArray2.push(factor.number);
+                });*/
+
+
+
+                console.log(req.options.tokenCheck.tokenDetails.userId)
+
+                var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var server_baseUrl              =     req.options.server_baseUrl;
 
@@ -48,10 +48,10 @@ module.exports = {
                     ditherUserInFbFriends;
                 var phoneContactsArray      = [];
                 var fbUserArray             = [];
-                
-                
-                
-                
+
+
+
+
                 var fbUser                  = [
                                                 {ditherUserName: 'malu',fbId: 'malutest123'},
                                                 {ditherUserName: 'Testers TiTech',fbId: '172318546464606058'},
@@ -62,12 +62,12 @@ module.exports = {
                         {ditherUserName: 'sasi 2',ditherUserPhoneNumber: 98455454},
                         {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
                         ];
-                        
-                         
-                        
-                        
 
-				var data_check1 = "";
+
+
+
+
+                var data_check1 = "";
                 phonecontacts.forEach(function(factor, index){
                      console.log("factor");
                      console.log(factor);
@@ -84,20 +84,20 @@ module.exports = {
                 console.log(phoneContactsArray);
 
             async.series([
-            
-					  function(callback) {
-						  console.log("deletion**************************************************")
-						 
+
+                      function(callback) {
+                          console.log("deletion**************************************************")
+
 
                             //Parallel for insert users in addressBook and in fbFriends simultaneously
                             async.parallel([
                                      // Clear the old details
-									function(callback) {
+                                    function(callback) {
                                                 if(phonecontacts.length != 0){
                                                         var query = "DELETE FROM addressBook where userId = '"+userId+"'";
-                                                        
-                                                        var criteria	=	{userId:userId}
-                                                       
+
+                                                        var criteria    =   {userId:userId}
+
 
                                                         console.log(query);
                                                         AddressBook.query(query, function(err, deleteAddressBook) {
@@ -110,7 +110,7 @@ module.exports = {
                                                                 }
                                                                 else
                                                                 {
-																	 
+
                                                                     console.log("deleteAddressBook ?????????????????????????????????????????????");
                                                                     callback();
                                                                 }
@@ -119,13 +119,13 @@ module.exports = {
                                                             callback();
                                                 }
                                     },
-									function(callback) {
+                                    function(callback) {
                                                 if(fbUser.length != 0){
                                                         var query = "DELETE FROM fbFriends where userId = '"+userId+"'";
-                                                        var criteria	=	{userId:userId}
-														
-														 
-														
+                                                        var criteria    =   {userId:userId}
+
+
+
                                                         console.log(query);
                                                         FbFriends.query(query, function(err, deleteFBFriends) {
                                                                 if(err)
@@ -137,7 +137,7 @@ module.exports = {
                                                                 }
                                                                 else
                                                                 {
-																	 
+
                                                                     console.log("deleteFBfriends ?????????????????????????????????????????????");
                                                                     callback();
                                                                 }
@@ -146,9 +146,9 @@ module.exports = {
                                                             callback();
                                                      }
                                     }
-						
-						  
-						  ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+
+
+                          ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                         if (err) {
                                                 console.log(err);
                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in add User contact', error_details: err});
@@ -159,14 +159,14 @@ module.exports = {
                                         }
 
                             });
-						  
-					  },function(callback) {
 
- 
+                      },function(callback) {
+
+
                                     console.log("Series  -- 3rd ");
                                     //Parallel  select users in addressBook and in fbFriends simultaneously
                                     async.parallel([
- 
+
                                     function(callback) {
                                                 if(phonecontacts.length != 0){
                                                         var query = "INSERT INTO addressBook"+
@@ -184,10 +184,10 @@ module.exports = {
                                                                 }
                                                                 else
                                                                 {
-																	data_check1 = createdAddressBook;
+                                                                    data_check1 = createdAddressBook;
                                                                     console.log(createdAddressBook.insertId);
                                                                      //Notification Log Insertion
-                                                                    
+
 
                                                                     console.log("createdAddressBook ?????????????????????????????????????????????");
                                                                     callback();
@@ -198,9 +198,9 @@ module.exports = {
                                                 }
                                     },
                                     function(callback) {
-										console.log("data_check1 -------------------------------------------------------");
-										console.log(data_check1);
-										
+                                        console.log("data_check1 -------------------------------------------------------");
+                                        console.log(data_check1);
+
                                                 if(fbUser.length != 0){
                                                         var query = "INSERT INTO fbFriends"+
                                                                     " (userId,  ditherUserName, fbId, createdAt, updatedAt)"+
@@ -231,109 +231,109 @@ module.exports = {
 
 
                                     },
-                                    
+
                                     function(callback) {
-										 console.log("Series  -- 2nd ");
-										 //Parallel update ditherUsers in addressBook and in fbFriends simultaneously
-										 if(phonecontacts.length != 0){
-											 
-												phonecontacts.forEach(function(factor, index){
-														
-																var values={
-																				userId		: userId,
-																				phoneNumber	: factor.ditherUserPhoneNumber,
-																			  }	
-																			  
-																			  console.log(values)
-																	
-																				invitation.create(values).exec(function(err, createdInvitation) {
-																					if(err)
-																					{
-																						console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
-																						console.log(err)
-																					}
-																					else
-																					{
-																						console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
-																						console.log(createdInvitation)
-																					}
-																				});
-														
-														User.find({phoneNumber:factor.ditherUserPhoneNumber}).exec(function (err, selectDContacts){
-                                                            
+                                         console.log("Series  -- 2nd ");
+                                         //Parallel update ditherUsers in addressBook and in fbFriends simultaneously
+                                         if(phonecontacts.length != 0){
+
+                                                phonecontacts.forEach(function(factor, index){
+
+                                                                var values={
+                                                                                userId      : userId,
+                                                                                phoneNumber : factor.ditherUserPhoneNumber,
+                                                                              }
+
+                                                                              console.log(values)
+
+                                                                                Invitation.create(values).exec(function(err, createdInvitation) {
+                                                                                    if(err)
+                                                                                    {
+                                                                                        console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+                                                                                        console.log(err)
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+                                                                                        console.log(createdInvitation)
+                                                                                    }
+                                                                                });
+
+                                                        User.find({phoneNumber:factor.ditherUserPhoneNumber}).exec(function (err, selectDContacts){
+
                                                             console.log("#########################################")
-														    console.log(selectDContacts)
-															if(selectDContacts.length!=0)
-															{
-																
-																//updation 
-																
-																 var data     = {ditherUserId:selectDContacts[0].id};
-																 var criteria = {ditherUserPhoneNumber: factor.ditherUserPhoneNumber};
-																
-																 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
-																							
-																		if(!err)
-																		{
-																			
-																		}					
-																		
-																								
-																  });
-																
-																 //invitation table Insertion
-                                                                    
-                                                                    
-																
-															 }
-															
-															
-														  });    
-														
-												});
-												
-											 callback();	
-										  }
-											
-									},
-									function(callback) {
-										 console.log("Series  -- 2nd 2nd ");
-										 //Parallel update ditherUsers in addressBook and in fbFriends simultaneously
-										 if(fbUser.length != 0){
-											 
-												fbUser.forEach(function(factor, index){
-                     
-														
-														User.find({fbId:factor.fbId}).exec(function (err, selectFBContacts){
-															console.log()
-															if(selectFBContacts.length!=0)
-															{
-																
-																var data     = {ditherUserId:selectFBContacts[0].id};
-																var criteria = {fbId:factor.fbId};
-																
-																	FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
-                
-																	});
-																	
-																	
-																	
-																
-															 }
-															
-															
-														  });    
-														
-												});
-												callback();	
-											 
-										  }
-											
-									}
-                                    
-                                    
-                                    
-                                    
+                                                            console.log(selectDContacts)
+                                                            if(selectDContacts.length!=0)
+                                                            {
+
+                                                                //updation
+
+                                                                 var data     = {ditherUserId:selectDContacts[0].id};
+                                                                 var criteria = {ditherUserPhoneNumber: factor.ditherUserPhoneNumber};
+
+                                                                 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+
+                                                                        if(!err)
+                                                                        {
+
+                                                                        }
+
+
+                                                                  });
+
+                                                                 //invitation table Insertion
+
+
+
+                                                             }
+
+
+                                                          });
+
+                                                });
+
+                                             callback();
+                                          }
+
+                                    },
+                                    function(callback) {
+                                         console.log("Series  -- 2nd 2nd ");
+                                         //Parallel update ditherUsers in addressBook and in fbFriends simultaneously
+                                         if(fbUser.length != 0){
+
+                                                fbUser.forEach(function(factor, index){
+
+
+                                                        User.find({fbId:factor.fbId}).exec(function (err, selectFBContacts){
+                                                            console.log()
+                                                            if(selectFBContacts.length!=0)
+                                                            {
+
+                                                                var data     = {ditherUserId:selectFBContacts[0].id};
+                                                                var criteria = {fbId:factor.fbId};
+
+                                                                    FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
+
+                                                                    });
+
+
+
+
+                                                             }
+
+
+                                                          });
+
+                                                });
+                                                callback();
+
+                                          }
+
+                                    }
+
+
+
+
                                ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                         if (err) {
                                                 console.log(err);
@@ -345,16 +345,16 @@ module.exports = {
                                         }
 
                             });
-                    },			
-										
+                    },
+
                     function(callback) {
 
- 
+
                                     console.log("Series  -- 3rd ");
                                     //Parallel  select users in addressBook and in fbFriends simultaneously
                                     async.parallel([
                                             function(callback) {
-														console.log(userId)
+                                                        console.log(userId)
                                                         query = "SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
                                                                     " FROM addressBook adb"+
                                                                     " INNER JOIN user usr ON usr.id = adb.ditherUserId"+
@@ -363,8 +363,8 @@ module.exports = {
                                                               console.log(query);
 
                                                         AddressBook.query(query, function(err, selectedDitherAdb) {
-															console.log("ttttttttttttttttttttttttttttttttttttttttttttttttttt")
-															console.log(selectedDitherAdb)
+                                                            console.log("ttttttttttttttttttttttttttttttttttttttttttttttttttt")
+                                                            console.log(selectedDitherAdb)
                                                                 if(err)
                                                                 {
                                                                         console.log(err);
@@ -375,21 +375,21 @@ module.exports = {
                                                                 else
                                                                 {
 
-                                                                        console.log(selectedDitherAdb);                                                                   
+                                                                        console.log(selectedDitherAdb);
                                                                         ditherUserInAddressBook = selectedDitherAdb;
                                                                         ditherUserInAddressBook.forEach(function(factor, index){
-																		  if(factor.profilePic=='')	
-																			{
-																				factor.profilePic='';
-																			}
-																			else
-																			{
-																				console.log("dddddddddddddddddddddddddddddd")
-																				factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
-																				console.log(factor.profilePic)
-																			}
-																		});
-                                                                        
+                                                                          if(factor.profilePic=='')
+                                                                            {
+                                                                                factor.profilePic='';
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                console.log("dddddddddddddddddddddddddddddd")
+                                                                                factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
+                                                                                console.log(factor.profilePic)
+                                                                            }
+                                                                        });
+
                                                                         callback();
                                                                 }
                                                         });
@@ -414,22 +414,22 @@ module.exports = {
 
                                                                    console.log(selectedDitherFbf);
                                                                    ditherUserInFbFriends = selectedDitherFbf;
-                                                                   
+
                                                                    ditherUserInFbFriends.forEach(function(factor, index){
-																			
-																			if(factor.profilePic=='')	
-																			{
-																				factor.profilePic='';
-																			}
-																			else
-																			{
-																				console.log("dddddddddddddddddddddddddddddd")
-																				factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
-																				console.log(factor.profilePic)
-																			}
-																			
-																		});
-                                                                   
+
+                                                                            if(factor.profilePic=='')
+                                                                            {
+                                                                                factor.profilePic='';
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                console.log("dddddddddddddddddddddddddddddd")
+                                                                                factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
+                                                                                console.log(factor.profilePic)
+                                                                            }
+
+                                                                        });
+
                                                                    console.log("selectedDitherFbf ++++++++++++++++++++++++++++++++++++++++++++++++");
                                                                    callback();
                                                             }

@@ -156,7 +156,7 @@ module.exports = {
                                                                             },
                                                                             function(callback) {
                                                                                         //Notification Log insertion
-                                                                                        invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
+                                                                                        Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
                                                                                                 if(err)
                                                                                                 {
                                                                                                     console.log(err);
@@ -177,7 +177,7 @@ module.exports = {
                                                                                                                         fbId                :       req.param('fb_uid'),
                                                                                                                         };
                                                                                                         var criteria = {phoneNumber: req.param('mobile_number')};
-                                                                                                        invitation.update(criteria,data).exec(function(err, updatedRecords) {
+                                                                                                        Invitation.update(criteria,data).exec(function(err, updatedRecords) {
                                                                                                             if(err){
                                                                                                                         callback();
                                                                                                             }else{

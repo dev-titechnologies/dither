@@ -48,6 +48,10 @@ module.exports.routes = {
   '/feed/*'                               :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageLikes/*'                       :           ['auth.authenticate'],
   '/collageComments/*'                    :           ['auth.authenticate'],
+  '/report/*'                             :           ['auth.authenticate'],
+
+
+
 
   /***************************************************************************
   *                                                                          *

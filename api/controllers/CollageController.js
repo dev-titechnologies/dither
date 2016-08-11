@@ -677,58 +677,278 @@ module.exports = {
         getUpdatedDithers:  function (req, res) {
 
                     console.log("Get Updated Dithers ===== api");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var server_baseUrl              =     req.options.server_baseUrl;
+                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var getCollageData              =     req.param("dither_data");
                     //console.log(dither_data);
-                    var dither_data = [
+                    /*var dither_data = [
                                         {dither_id: 15, dither_local_time: '2016-08-04 18:37:52'},
                                         {dither_id: 16, dither_local_time: '2016-08-04 18:40:50'},
                                         {dither_id: 17, dither_local_time: '2016-08-05 18:41:41'}
-                                      ];
-                    var push_Request_Array   = [];
-                    var push_Result_Array     = [];
-                    console.log("dither_data=======================>>>>>>>>>>>>>>");
-                    console.log(dither_data);
-                    console.log(dither_data.length);
-                    var foundCollageArray;
-                    dither_data.forEach(function(factor, index){
-                            console.log(factor);
-                            console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                            console.log(index);
-                            push_Request_Array.push(factor.dither_id);
-                            Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollage){
-                                if(err){
-                                            console.log(err);
-                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
-                                }else{
+                                      ];*/
+                    if(!getCollageData){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_data'});
+                    }else{
+                            console.log("get collage data=======================>>>>>>>>>>>>>>");
+                            console.log(getCollageData);
+                            var dither_data                 =     JSON.parse(getCollageData);
+                            if(dither_data.length == 0){
+                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'dither_data is an empty array'});
+                            }else{
+                                    var push_Request_Array          =     [];
+                                    var push_Result_Array           =     [];
+                                    console.log("dither_data=======================>>>>>>>>>>>>>>");
+                                    console.log(dither_data);
+                                    console.log(dither_data.length);
+                                    var foundCollageArray;
+                                    dither_data.forEach(function(factor, index){
+                                            //console.log(factor);
+                                            //console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                                            //console.log(index);
+                                            push_Request_Array.push(factor.dither_id);
+                                            Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollage){
+                                                if(err){
+                                                            console.log(err);
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                                }else{
 
-                                            if(foundCollage){
-                                                    push_Result_Array.push(foundCollage.id);
-                                                    //console.log("factor==================");
-                                                    //console.log(factor);
-                                                    console.log("foundCollage==================");
-                                                    console.log(foundCollage);
-                                                    //foundCollageArray = foundCollage;
+                                                            if(foundCollage){
+                                                                    push_Result_Array.push(foundCollage.id);
+                                                                    //console.log("factor==================");
+                                                                    //console.log(factor);
+                                                                    //console.log("foundCollage==================");
+                                                                    //console.log(foundCollage);
+                                                                    //foundCollageArray = foundCollage;
+                                                            }
+
+                                                            if (index == dither_data.length - 1) {
+                                                                    setTimeout(function() {
+                                                                            console.log("Result Push array ++++++++++++++");
+                                                                            console.log(push_Result_Array);
+                                                                            console.log("Request Push array +++++++++++++");
+                                                                            console.log(push_Request_Array);
+                                                                            console.log('Blah blah blah blah extra-blah');
+                                                                            console.log(push_Result_Array.length);
+                                                                            if(push_Result_Array.length == push_Request_Array){
+                                                                                        return res.json(200, {status: 1, status_type: 'Success' ,message: 'Given Dithers are not updated', feeds: []});
+                                                                            }else{
+                                                                                        //return res.json(200, {status: 1, status_type: 'Success' ,message: 'ha ha ha ha ha ha hah hahah h', feeds: []});
+                                                                                        uniqueDither(push_Request_Array, push_Result_Array);
+                                                                            }
+
+                                                                    }, 1000);
+                                                            }
+
+                                                }
+                                            });
+                                    });
+
+                                    function uniqueDither(resultsRequest, results){
+
+                                            //var results             = "["+results+"]";
+                                            //var resultsRequest      = "["+resultsRequest+"]";
+                                            console.log("11111111111111111111111111111+++++++++++ get"  + resultsRequest);
+                                            console.log("2222222222222222222222222222 +++++++++ get"  + results);
+
+                                            console.log(results.length);
+                                            console.log(resultsRequest.length);
+
+                                            var results               = results.toString().split(',');
+                                            var resultsRequest        = resultsRequest.toString().split(',');
+                                            var index;
+                                            var unique_push_array     = [];
+                                            var results_array         = [];
+                                            var resultsRequest_array  = [];
+
+                                            console.log("11111111111111111111111111111"  + resultsRequest);
+                                            console.log("2222222222222222222222222222"  + results);
+                                            //return res.send(results, 200);
+                                            console.log("concat ----------------------------");
+
+                                            //console.log(results_array.length);
+                                            results.forEach(function(factor, index){
+                                                        console.log("factor  ========>>>>>>>> results");
+                                                        console.log(factor);
+                                                        if(factor != "" || factor != null){
+                                                            results_array.push(factor);
+                                                        }
+                                            });
+                                            resultsRequest.forEach(function(factor, index){
+                                                        console.log("factor ========>>>>>>>>> resultsRequest");
+                                                        console.log(factor);
+                                                        if(factor != "" || factor != null){
+                                                            resultsRequest_array.push(factor);
+                                                        }
+                                            });
+                                            //console.log(results_array);
+                                            //console.log(resultsRequest_array);
+
+                                            console.log("8888888888888888888888888888888");
+                                            console.log(results_array.length);
+                                            //if(results_array.length != 0){
+                                            for (var i=0; i<resultsRequest_array.length; i++) {
+                                                    index = results_array.indexOf(resultsRequest_array[i]);
+                                                    console.log("index===========");
+                                                    console.log(resultsRequest_array[i]+"------------------------------------------>>>>>>>>>>"+index);
+                                                    //Removing the Duplicate Values
+                                                    if(index != -1){
+                                                            unique_push_array.push(resultsRequest_array[i]);
+                                                    }
                                             }
+                                            //}else{
 
-                                            if (index == dither_data.length - 1) {
-                                                            console.log("index last array");
-                                                            console.log(push_Result_Array);
-                                                            console.log("Request   index last array");
-                                                            console.log(push_Request_Array);
-                                                            completeSend(push_Request_Array, push_Result_Array);
-                                                            //foundCollageArray = pushResultArray;
-                                            }
+                                                   // unique_push_array   = resultsRequest_array;
+                                                    //console.log("unique_push_array-------------------------------");
 
-                                }
-                            });
-                    });
-                    function completeSend (resultsRequest, results) {
+                                            //}
+                                            console.log("++++++++++++++++unique_push_array++++++++++++++++");
+                                            console.log(unique_push_array);
 
-                            var results             = "["+results+"]";
-                            var resultsRequest      = "["+resultsRequest+"]";
 
-                            console.log("11111111111111111111111111111"  + resultsRequest);
-                            console.log("2222222222222222222222222222"  + results);
-                            //return res.send(results, 200);
+                                            /* ##################################### */
+
+                                                        /*var array1 = ['A', 'B', 'C', 'D', 'D', 'E'];
+                                                        var array2 = ['D', 'E', 'R' , 'T', 'A'];
+                                                        var index;
+
+                                                        for (var i=0; i<array2.length; i++) {
+                                                            index = array1.indexOf(array2[i]);
+                                                            console.log("index===========");
+                                                            console.log(array2[i]+"------------------------------------------>>>>>>>>>>"+index);
+                                                            if(index == -1) {
+
+                                                            }
+                                                        }
+                                                        console.log("2nd For looop==========================");
+                                                        for (var j=0; j<array1.length; j++) {
+                                                            index = array2.indexOf(array1[j]);
+                                                            console.log("index===========");
+                                                            console.log(array1[j]+"------------------------------------------>>>>>>>>>>"+index);
+                                                            if(index == -1) {
+
+                                                            }
+                                                        }*/
+                                            /* #################################### */
+
+
+                                            query = " SELECT"+
+                                                    " clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                                    " usr.profilePic, usr.name,"+
+                                                    " clglk.likeStatus, clglk.likePosition"+
+                                                    " FROM collage clg"+
+                                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                                    " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                                    " WHERE clg.id"+
+                                                    " IN ( "+unique_push_array+" )"+
+                                                    " GROUP BY clgdt.id"+
+                                                    " ORDER BY clg.createdAt DESC";
+                                            console.log(query);
+                                            Collage.query(query, function(err, results) {
+                                                    if(err)
+                                                    {
+                                                        console.log(err);
+                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting updated dithers', error_details: err});
+                                                    }
+                                                    else
+                                                    {
+                                                        console.log("results _++++++++++++++++++++++++++++__________________");
+                                                        console.log(results);
+                                                        /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
+                                                        if(results.length == 0){
+                                                                    return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found', feeds: []});
+                                                        }else{
+                                                                    console.log("else part =================");
+                                                                    var dataResults = results;
+                                                                    var key = [];
+                                                                    var dataResultsKeys = [];
+                                                                    var like_position;
+                                                                    for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                                        var dataResultsObj = new Object();
+                                                                        var collageId_val =dataResults[i]["collageId"];
+                                                                        //console.log(data[i]);
+                                                                        if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
+                                                                        {
+                                                                            var imagesPositionArray         = [];
+                                                                            var voteArray                   = [];
+                                                                            var likeStatusArray             = [];
+                                                                            var imgIdArray                  = [];
+                                                                            var imgDetailsArray             = [];
+                                                                            for (var j = dataResults.length - 1; j >= 0; j--)
+                                                                            {
+                                                                                if(dataResults[j]["collageId"]==collageId_val)
+                                                                                {
+                                                                                    var likeStatus;
+                                                                                    if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
+                                                                                            likeStatus = 0;
+                                                                                    }else{
+                                                                                            likeStatus = 1;
+                                                                                    }
+                                                                                    imgDetailsArray.push({
+                                                                                                        image_id        : dataResults[j]["imgId"],
+                                                                                                        position        : dataResults[j]["position"],
+                                                                                                        like_status     : likeStatus,
+                                                                                                        vote            : dataResults[j]["vote"]
+                                                                                                        });
+
+                                                                                    if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
+                                                                                            like_position = 0;
+                                                                                    }else{
+                                                                                            like_position = dataResults[j]["likePosition"];
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            //var imgDetailsArrayOrder = imgDetailsArray.reverse();
+                                                                           // var imgDetailsArrayOrder = imgDetailsArray.reverse();
+                                                                           var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+
+                                                                            if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
+                                                                                        dataResultsObj.profile_image = "";
+                                                                            }else{
+
+                                                                                        dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
+                                                                            }
+
+                                                                            dataResultsObj.user_name                    =       dataResults[i]["name"];
+                                                                            dataResultsObj.user_id                      =       dataResults[i]["userId"];
+                                                                            dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
+                                                                            dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
+                                                                            dataResultsObj.dither_like_position         =       like_position;
+                                                                            dataResultsObj.collage_id                   =       collageId_val;
+                                                                            dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
+                                                                            dataResultsObj.vote                         =       imgDetailsArrayOrder;
+                                                                            dataResultsObj.mainOrder                    =       i;
+                                                                            //console.log("dataResultsObj====================");
+                                                                            //console.log(dataResultsObj);
+                                                                            //console.log("dataResultsObj====================");
+                                                                            key.push(dataResultsObj);
+                                                                            dataResultsKeys.push(collageId_val);
+
+                                                                            //console.log(key);
+                                                                            //var feeds = key.reverse();
+                                                                            //var feeds = key;
+                                                                            var feeds              =       key.sort( predicatBy("mainOrder") );
+                                                                            //console.log("Final Key -----------------------------------------------------------------");
+                                                                            //console.log(feeds);
+                                                                        }
+                                                                    }
+                                                                    //console.log(key);
+                                                                    //console.log(key.reverse());
+                                                                    //console.log(JSON.stringify(key.reverse()));
+                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the updated Feeds',
+                                                                                        feeds: feeds
+                                                                    });
+                                                        }//results length check
+
+                                                        /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
+                                                    }
+                                            });
+                                    }
+                            }
                     }
 
 

@@ -732,7 +732,7 @@ module.exports = {
                                                                             console.log(push_Request_Array);
                                                                             console.log('Blah blah blah blah extra-blah');
                                                                             console.log(push_Result_Array.length);
-                                                                            if(push_Result_Array.length == push_Request_Array){
+                                                                            if(push_Result_Array.length == push_Request_Array || push_Result_Array.length == 0){
                                                                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'Given Dithers are not updated', feeds: []});
                                                                             }else{
                                                                                         //return res.json(200, {status: 1, status_type: 'Success' ,message: 'ha ha ha ha ha ha hah hahah h', feeds: []});

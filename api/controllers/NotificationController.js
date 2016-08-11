@@ -102,9 +102,9 @@ module.exports = {
 							}
 							else
 							{
-								console.log(results)
+								console.log(results.length)
 								
-								if(typeof results != 'undefined')
+								if(typeof results != 'undefined' && results.length!=0)
 								{
 								    
 									async.forEach(results, function (item, callback){ 

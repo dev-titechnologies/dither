@@ -93,7 +93,7 @@ module.exports = {
 					{ 
 						var user_id	= tokenCheck.tokenDetails.id;
 						
-						var query = "SELECT U.name,N.notificationTypeId,N.userId,N.ditherUserId,N.collage_id,N.image_id,N.tagged_users,N.description,N.updatedAt from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId=127 AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
+						var query = "SELECT U.name,N.notificationTypeId,N.userId,N.ditherUserId,N.collage_id,N.image_id,N.tagged_users,N.description,N.updatedAt from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
 						NotificationLog.query(query, function(err,results) {
 							
 							if(err)

@@ -224,6 +224,8 @@ module.exports = {
                SOCKET
      ==================================================================================================================================== */
         socketTest:  function (req, res) {
+                //sails.sockets.join(req.socket, "1");
+                console.log(req.socket);
                 sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
         },
 

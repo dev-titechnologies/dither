@@ -91,8 +91,126 @@ module.exports = {
 					}
 					else
 					{ 
+						var user_id	= tokenCheck.tokenDetails.id;
 						
-						console.log("+++++++++++++++++++++++++")
+						var query = "SELECT U.name,N.notificationTypeId,N.userId,N.ditherUserId,N.collage_id,N.image_id,N.tagged_users,N.description,N.updatedAt from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId=127 AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4) AND N.description=(SELECT MAX(description) from notificationLog where notificationTypeId=2 OR notificationTypeId=3)"
+						NotificationLog.query(query, function(err,results) {
+							
+							if(err)
+							{
+								console.log(err)
+							}
+							else
+							{
+								console.log(results)
+								
+								if(typeof results != 'undefined')
+								{
+								    
+									async.forEach(results, function (item, callback){ 
+										
+										  if(item.notificationTypeId==3)
+										  {
+											  
+											//  console.log(item.description)
+											  NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
+									
+													if(err)
+													{		
+														console.log(err)
+													}	
+													else
+													{
+														console.log(item)
+														console.log("77777777777777777777777777777777777777777777777")
+														console.log(ntfnTypeFound)
+														var notification	= ntfnTypeFound[0].body;
+														item.description = item.description - 1;
+														console.log(notification)
+													    ntfn_body  		= util.format(notification,item.name,item.description);
+														
+														notificationCommented =  ntfn_body;
+														console.log(notificationCommented)
+
+														callback();						
+
+													}
+							
+												});
+										  }
+										  else if(item.notificationTypeId==2)
+										      {
+												  
+												  NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
+									
+														if(err)
+														{		
+															console.log(err)
+														}	
+														else
+														{
+									
+															console.log(item.description)
+															console.log(ntfnTypeFound)
+															var notification	= ntfnTypeFound[0].body;
+															console.log(notification)
+															item.description = item.description - 1;
+															ntfn_body  		= util.format(notification,item.name,item.description);
+															console.log(ntfn_body)
+										
+															
+															notificationVoted  =  ntfn_body;
+															
+															callback();						
+
+														}
+										
+													});
+												  
+												  
+											  }
+											  else if(item.notificationTypeId==4)
+											  {
+												  console.log("signuppp")
+												  NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
+										
+														if(err)
+															{		
+																console.log(err)
+															}	
+														else
+															{
+																	console.log(ntfnTypeFound)
+																	var notification	= ntfnTypeFound[0].body;
+																	console.log(notification)
+																	ntfn_body  		= util.format(notification,item.name);
+																	console.log(ntfn_body)
+																	notificationSignup  =  ntfn_body;
+																	callback();							
+
+															}
+										
+													});
+												  
+												  
+											  }
+											
+											
+										
+									}, function(err) {
+								
+										return res.json(200, {status: 1, msg: 'success',notification_vote:notificationVoted,notification_comment:notificationCommented});
+									});
+								
+							}
+							else
+								{
+									return res.json(200, {status: 2, msg: 'No notification found'});
+								}
+							}
+						});
+						
+						/*console.log("+++++++++++++++++++++++++")
 						console.log(tokenCheck)
 						console.log(tokenCheck.tokenDetails.id)
 						var user_id	= tokenCheck.tokenDetails.id;
@@ -205,7 +323,7 @@ module.exports = {
 													
 													//-----------Notification For UserVotes----------------------------------
 													
-													var query ="SELECT  N.userId,N.ditherUserId,N.description,N.collage_id,U.name FROM `notificationLog` as N LEFT JOIN user as U ON N.userId = U.id WHERE N.ditherUserId = '"+user_id+"'"
+													var query ="SELECT  N.userId,N.ditherUserId,N.description,N.collage_id,U.name FROM `notificationLog` as N LEFT JOIN user as U ON N.userId = U.id WHERE N.ditherUserId = '"+user_id+"' AND N.id=(SELECT MAX(id) from notificationLog)"
 													NotificationLog.query(query, function(err, NtfnVoteResult) {
 														
 														
@@ -236,9 +354,17 @@ module.exports = {
 																	console.log(ntfnTypeFound)
 																	var notification	= ntfnTypeFound[0].body;
 																	console.log(notification)
-																	var ntfn_body  		= util.format(notification,NtfnVoteResult[0].name,NtfnVoteResult[0].description);
+																	var ntfn_body  		= util.format(notification,NtfnVoteResult[0].name,NtfnVoteResult[0].description-1);
 																	console.log(ntfn_body)
-																	notificationVoted  =  ntfn_body;
+												
+																	if(NtfnVoteResult[0].description!=1)
+																	{
+																		notificationVoted  =  ntfn_body;
+																	}
+																	else
+																	{
+																		notificationVoted = NtfnVoteResult[0].name +" likes your Dither";
+																	}
 																	callback();						
 
 																}
@@ -254,7 +380,75 @@ module.exports = {
 													
 													
 													
-										   }
+										   },
+										    
+										   function(callback) {
+													
+													//-----------Notification For UserComments----------------------------------
+													
+													var query ="SELECT  N.userId,N.ditherUserId,N.description,N.collage_id,U.name FROM `notificationLog` as N LEFT JOIN user as U ON N.userId = U.id WHERE N.ditherUserId = '"+user_id+"'AND N.id=(SELECT MAX(id) from notificationLog)"
+													NotificationLog.query(query, function(err, NtfnCommentResult) {
+														
+														
+														if(err)
+														{		
+															console.log(err)
+															callback(true, {status: 2, status_type: 'Failure' ,message: 'Notification Not found'});
+														}
+														else
+														{
+															console.log("6666666666666666666666666666666666666666666666")
+															console.log(NtfnCommentResult)
+														   
+														   
+														
+														
+														
+															NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
+									
+																if(err)
+																{		
+																	console.log(err)
+																}	
+																else
+																{
+																	
+																	console.log("77777777777777777777777777777777777777777777777")
+																	console.log(NtfnCommentResult)
+																	console.log(NtfnCommentResult[0].description)
+																	console.log(ntfnTypeFound)
+																	var notification	= ntfnTypeFound[0].body;
+																	console.log(notification)
+																	var ntfn_body  		= util.format(notification,NtfnCommentResult[0].name,NtfnCommentResult[0].description-1);
+																	console.log(ntfn_body)
+												
+																	if(NtfnCommentResult[0].description!=1)
+																	{
+																		notificationCommented =  ntfn_body;
+																	}
+																	else
+																	{
+																		notificationCommented = NtfnCommentResult[0].name +" commented on your Dither";
+																	}
+																	callback();						
+
+																}
+										
+															});
+								
+								
+														}
+														
+														
+
+													});
+													
+													
+													
+										   }, 
+										    
+										    
+										   
 										  ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
 													if (err) {
 																console.log(err);
@@ -274,10 +468,10 @@ module.exports = {
                                                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Notification Not Found', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                             }else{
                                                 console.log("Success -----------------------------------------");
-                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Notifications Found',dataSignUp:notificationSignup,dataTag:notificationTagged,dataVote:notificationVoted});
+                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Notifications Found',dataSignUp:notificationSignup,dataTag:notificationTagged,dataVote:notificationVoted,dataComment:notificationCommented});
                                             }
 
-                          });	
+                          });	*/
 						
 						
 							

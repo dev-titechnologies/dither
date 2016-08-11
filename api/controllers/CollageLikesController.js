@@ -97,13 +97,69 @@ module.exports = {
                                                                                                                             }
                                                                                                                             else
                                                                                                                             {
+																															  //-----------Notification log Insertion----------------
+																																console.log("88888888888888888888888888888")
+																																Collage.find({id:collageId}).exec(function(err, userDetails){
+									
+																																if(err)
+																																{		
+																																	console.log(err)
+																																}	
+																																else
+																																{
+																																  
+																																  CollageLikes.find({collageId:collageId}).exec(function(err, likeDetails){
+																																	   if(err)
+																																	   {
+																																			console.log(err)
+																																	   }
+																																	   else
+																																	   {
+																																				   console.log(likeDetails.length)
+																																  
+																																					console.log("999999999999999999999999999999999")
+																																					console.log(results)
+																																					var values ={
+																															
+																																									notificationTypeId	:	2,
+																																									userId				:   userId,
+																																									ditherUserId		:	userDetails[0].userId,
+																																									collage_id			:	collageId,
+																																									image_id			:	results.imageId,
+																																									description			:	likeDetails.length
+																																								}
+																																				
+																		
+																																					NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+
+																																						if(err)
+																																						{
+																																							console.log(err);
+																																							return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+																																						}
+																																						else
+																																						{
+																																							console.log(createdNotificationTags)
+																																						}
+																																					});
+																												
+																																		//-----------------------------End OF NotificationLog---------------------------------
+
+																																
+																																
                                                                                                                                   return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                                             total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                                     });
-                                                                                                                            }
-                                                                                                                    });
+                                                                                                                                    
+                                                                                                                                  }
+																															  });
+																														  }  
+																														});     
+                                                                                                                    }
+                                                                                                                    
+                                                                                                             });
 
-                                                                                                                }
+                                                                                                        }
                                                                                                     }
                                                                                             });
 

@@ -732,7 +732,8 @@ module.exports = {
                                                                             console.log(push_Request_Array);
                                                                             console.log('Blah blah blah blah extra-blah');
                                                                             console.log(push_Result_Array.length);
-                                                                            if(push_Result_Array.length == push_Request_Array || push_Result_Array.length == 0){
+                                                                            //if(push_Result_Array.length == push_Request_Array || push_Result_Array.length == 0){
+                                                                            if(push_Result_Array.length == push_Request_Array){
                                                                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'Given Dithers are not updated', feeds: []});
                                                                             }else{
                                                                                         //return res.json(200, {status: 1, status_type: 'Success' ,message: 'ha ha ha ha ha ha hah hahah h', feeds: []});
@@ -833,7 +834,11 @@ module.exports = {
                                                         }*/
                                             /* #################################### */
 
-
+                                            if(unique_push_array.length == 0){
+                                                    unique_push_array  =  resultsRequest_array;
+                                                    console.log("unique_push_array length = 0");
+                                                    console.log(unique_push_array);
+                                            }
                                             query = " SELECT"+
                                                     " clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+

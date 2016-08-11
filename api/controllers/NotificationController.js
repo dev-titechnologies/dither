@@ -81,18 +81,12 @@ module.exports = {
 		notification: function(req, res) {
 			
 			
-				console.log("Notification API")
-				console.log(req.get('token'))
-				UsertokenService.checkToken(req.get('token'), function(err, tokenCheck) {
-			
-					if(err) 
-					{	
-						return res.json(200, {status: 2, msg: 'some error occured', error_details: tokenCheck});
-					}
-					else
-					{ 
-						var user_id	= tokenCheck.tokenDetails.id;
-						
+						console.log("Notification API")
+
+						var tokenCheck          =     req.options.tokenCheck;
+						var user_id				= 	  tokenCheck.tokenDetails.id;
+						notificationVoted = "";
+						notificationCommented = "";
 						var query = "SELECT U.name,N.notificationTypeId,N.userId,N.ditherUserId,N.collage_id,N.image_id,N.tagged_users,N.description,N.updatedAt from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
 						NotificationLog.query(query, function(err,results) {
 							
@@ -118,10 +112,12 @@ module.exports = {
 													if(err)
 													{		
 														console.log(err)
+														callback(true,ntfnTypeFound );
 													}	
 													else
 													{
 														console.log(item)
+														notificationCommented = "No notification Found for comments";
 														console.log("77777777777777777777777777777777777777777777777")
 														console.log(ntfnTypeFound)
 														var notification	= ntfnTypeFound[0].body;
@@ -136,8 +132,7 @@ module.exports = {
 														{
 														 notificationCommented =  ntfn_body;
 													    }
-														console.log(notificationCommented)
-
+														
 														callback();						
 
 													}
@@ -147,23 +142,27 @@ module.exports = {
 										  else if(item.notificationTypeId==2)
 										      {
 												  
+												  console.log("vote?????????")
 												  NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
 									
 														if(err)
 														{		
 															console.log(err)
+															callback(true,ntfnTypeFound );
 														}	
 														else
 														{
 									
 															console.log(item.description)
+															
 															console.log(ntfnTypeFound)
 															var notification	= ntfnTypeFound[0].body;
 															console.log(notification)
 															item.description = item.description - 1;
 															ntfn_body  		= util.format(notification,item.name,item.description);
 															console.log(ntfn_body)
-										                     if(item.description==0)
+															
+															 if(item.description==0)
 															 {
 																 notificationVoted = item.name + " voted your Dither";
 															 }
@@ -171,6 +170,7 @@ module.exports = {
 															 {
 																notificationVoted  =  ntfn_body;
 															 }
+															
 															callback();						
 
 														}
@@ -187,6 +187,7 @@ module.exports = {
 														if(err)
 															{		
 																console.log(err)
+																callback(true,ntfnTypeFound );
 															}	
 														else
 															{
@@ -204,18 +205,23 @@ module.exports = {
 												  
 												  
 											  }
+											  else
+											  {
+												  
+												  callback();
+											  }
 											
 											
 										
 									}, function(err) {
 								
-										return res.json(200, {status: 1, msg: 'success',notification_vote:notificationVoted,notification_comment:notificationCommented});
+										return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_vote:notificationVoted,notification_comment:notificationCommented});
 									});
 								
 							}
 							else
 								{
-									return res.json(200, {status: 2, msg: 'No notification found'});
+									return res.json(200, {status: 2,status_type:"Failure",msg: 'No notification found'});
 								}
 							}
 						});
@@ -486,9 +492,9 @@ module.exports = {
 						
 							
 					
-					}
 					
-				});	
+					
+				
 			
 		},
 		

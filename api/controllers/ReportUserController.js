@@ -1,12 +1,11 @@
 /**
- * ReportUserController
+ * ReportDitherController
  *
- * @description :: Server-side logic for managing reportusers
+ * @description :: Server-side logic for managing reportdithers
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
-
 
 /* ==================================================================================================================================
          To report against a User
@@ -45,6 +44,7 @@ module.exports = {
                     }
 
         },
+
 
 };
 

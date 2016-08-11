@@ -173,11 +173,13 @@ module.exports = {
                                                                     {
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
+                                                                            console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ------------------ dataResults[j]["likeStatus"]');
+                                                                            console.log(dataResults[j]["likeStatus"]);
                                                                             var likeStatus;
-                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
+                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
                                                                                     likeStatus = 0;
                                                                             }else{
-                                                                                    likeStatus = 1;
+                                                                                    likeStatus = dataResults[j]["likeStatus"];
                                                                             }
                                                                             imgDetailsArray.push({
                                                                                                 image_id        : dataResults[j]["imgId"],

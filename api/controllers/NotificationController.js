@@ -93,7 +93,7 @@ module.exports = {
 					{ 
 						var user_id	= tokenCheck.tokenDetails.id;
 						
-						var query = "SELECT U.name,N.notificationTypeId,N.userId,N.ditherUserId,N.collage_id,N.image_id,N.tagged_users,N.description,N.updatedAt from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId=127 AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4) AND N.description=(SELECT MAX(description) from notificationLog where notificationTypeId=2 OR notificationTypeId=3)"
+						var query = "SELECT U.name,N.notificationTypeId,N.userId,N.ditherUserId,N.collage_id,N.image_id,N.tagged_users,N.description,N.updatedAt from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId=127 AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
 						NotificationLog.query(query, function(err,results) {
 							
 							if(err)
@@ -128,8 +128,14 @@ module.exports = {
 														item.description = item.description - 1;
 														console.log(notification)
 													    ntfn_body  		= util.format(notification,item.name,item.description);
-														
-														notificationCommented =  ntfn_body;
+														if(item.description==0)
+													    {
+															notificationCommented = item.name + " commented on your Dither";
+														}
+														else
+														{
+														 notificationCommented =  ntfn_body;
+													    }
 														console.log(notificationCommented)
 
 														callback();						
@@ -157,10 +163,14 @@ module.exports = {
 															item.description = item.description - 1;
 															ntfn_body  		= util.format(notification,item.name,item.description);
 															console.log(ntfn_body)
-										
-															
-															notificationVoted  =  ntfn_body;
-															
+										                     if(item.description==0)
+															 {
+																 notificationVoted = item.name + " voted your Dither";
+															 }
+															 else
+															 {
+																notificationVoted  =  ntfn_body;
+															 }
 															callback();						
 
 														}

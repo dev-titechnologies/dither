@@ -11,31 +11,21 @@ module.exports = {
      ==================================================================================================================================== */
         addUserContacts: function (req, res) {
 			
-			
-			  /* var FBs				=	[];
+			  //console.log(req.param('contact_array'))
+			  console.log("??????????????????????????????????????????????????")
+			  //console.log(JSON.parse(req.param('contact_array')))
+			  
+			  
+			   var FBs				=	[];
 			   var CusersArray1		=	[];
 			   var CusersArray2		=	[];
 			   
-			   console.log(req.body)
-			  // console.log(req.body.contact_array) 
-			   var phones	=	req.body.contact_array;
-			  // console.log(JSON.parse(req.body.contact_array))
-			   //For each array
-			   
-			   
-			  phones.forEach(function(factor, index){
-				   console.log("sssssssssssssssssssssss")
-				   console.log(factor.name)
-				   console.log("sssssssssssssssssssssss")
-				   console.log(factor.number)	   
-				   console.log(index)	
-				   CusersArray1.push(factor.name);
-				   CusersArray2.push(factor.number);
-                });*/
+			   //console.log(req.body)
+			 
 			   
 			  
 			    
-			    console.log(req.options.tokenCheck.tokenDetails.userId)
+			    //console.log(req.options.tokenCheck.tokenDetails.userId)
 
 				var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
@@ -50,18 +40,25 @@ module.exports = {
                 var fbUserArray             = [];
                 
                 
+				var fbUser = [
+							{fb_name: 'malu',fb_userid: 'malutest123'},
+							{fb_name: 'Testers TiTech',fb_userid: '172318546464606058'},
+							{fb_name: 'fb_sasi 3',fb_userid: 'ggggggggggg'},
+							];
+				var phonecontacts = [
+							{name: 'gayu',number: 7897979799},
+							{name: 'sasi 2',number: 123456},
+							{name: 'sasi 3',number: 98455454},
+							];  
+                
+                //var fbUser                  = req.body.fb_array
+				/*
+				 * var fbUser                  = [ { fb_name: 'ARDRA', fb_userid: '6777' } ] ;
                 
                 
-                var fbUser                  = [
-                                                {ditherUserName: 'malu',fbId: 'malutest123'},
-                                                {ditherUserName: 'Testers TiTech',fbId: '172318546464606058'},
-                                                {ditherUserName: 'fb_sasi 3',fbId: 'ggggggggggg'},
-                                              ];
-                var phonecontacts           = [
-                        {ditherUserName: 'gayu',ditherUserPhoneNumber: 7897979799},
-                        {ditherUserName: 'sasi 2',ditherUserPhoneNumber: 98455454},
-                        {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
-                        ];
+                
+                
+                var phonecontacts           = JSON.parse(req.param('contact_array'));*/
                         
                          
                         
@@ -69,18 +66,18 @@ module.exports = {
 
 				var data_check1 = "";
                 phonecontacts.forEach(function(factor, index){
-                     console.log("factor");
-                     console.log(factor);
-                     phoneContactsArray.push("("+userId+",'"+factor.ditherUserName+"', "+factor.ditherUserPhoneNumber+", now(), now())");
+                     console.log("phone   factor");
+                     //console.log(factor);
+                     phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
                 });
 
                 fbUser.forEach(function(factor, index){
-                     console.log("factor");
-                     console.log(factor);
-                     fbUserArray.push("("+userId+",'"+factor.ditherUserName+"', '"+factor.fbId+"', now(), now())");
+                     console.log("FBBBBBBBB  factor");
+                     //console.log(factor);
+                     fbUserArray.push("("+userId+",'"+factor.fb_name+"', '"+factor.fb_userid+"', now(), now())");
                 });
 
-
+              console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                 console.log(phoneContactsArray);
 
             async.series([
@@ -241,12 +238,12 @@ module.exports = {
 														
 																var values={
 																				userId		: userId,
-																				phoneNumber	: factor.ditherUserPhoneNumber,
+																				phoneNumber	: factor.number,
 																			  }	
 																			  
 																			  console.log(values)
 																	
-																				invitation.create(values).exec(function(err, createdInvitation) {
+																				/*invitation.create(values).exec(function(err, createdInvitation) {
 																					if(err)
 																					{
 																						console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
@@ -254,14 +251,18 @@ module.exports = {
 																					}
 																					else
 																					{
-																						console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+																						//console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
 																						console.log(createdInvitation)
 																					}
-																				});
+																				});*/
 														
-														User.find({phoneNumber:factor.ditherUserPhoneNumber}).exec(function (err, selectDContacts){
-                                                            
-                                                            console.log("#########################################")
+														User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+														 if(err)	
+														 {
+                                                            console.log(err)
+														}
+														else
+														{
 														    console.log(selectDContacts)
 															if(selectDContacts.length!=0)
 															{
@@ -269,14 +270,10 @@ module.exports = {
 																//updation 
 																
 																 var data     = {ditherUserId:selectDContacts[0].id};
-																 var criteria = {ditherUserPhoneNumber: factor.ditherUserPhoneNumber};
+																 var criteria = {ditherUserPhoneNumber: factor.number};
 																
 																 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
 																							
-																		if(!err)
-																		{
-																			
-																		}					
 																		
 																								
 																  });
@@ -286,9 +283,14 @@ module.exports = {
                                                                     
 																
 															 }
+															 else
+															 {
+																 selectDContacts = [];
+														     }
+														 }
 															
 															
-														  });    
+													});    
 														
 												});
 												
@@ -310,7 +312,7 @@ module.exports = {
 															{
 																
 																var data     = {ditherUserId:selectFBContacts[0].id};
-																var criteria = {fbId:factor.fbId};
+																var criteria = {fbId:factor.fb_userid};
 																
 																	FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
                 

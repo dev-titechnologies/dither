@@ -154,7 +154,7 @@ module.exports = {
 							
 												});
 										  }
-										  if(item.notificationTypeId==2)
+										  else if(item.notificationTypeId==2)
 										      {
 												  
 												  console.log("vote?????????")
@@ -194,7 +194,7 @@ module.exports = {
 												  
 												  
 											  }
-											  if(item.notificationTypeId==4)
+											  else if(item.notificationTypeId==4)
 											  {
 												  console.log("signuppp")
 												  NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
@@ -223,6 +223,12 @@ module.exports = {
 												  
 												  
 											  }
+											  else if(item.notificationTypeId==1)
+											 {
+												 callback();
+												 
+											 }
+											  
 											  
 										}	
 										else

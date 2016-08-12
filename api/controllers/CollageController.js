@@ -323,6 +323,7 @@ module.exports = {
                                                                                 var taggedUserArrayFinal = [];
                                                                                 console.log("taggedUserArray ++++++++++++++++++++");
                                                                                 console.log(taggedUserArray);
+                                                                                console.log(taggedUserArray.length);
                                                                                 /*if(taggedUserArray.length != 0){
                                                                                         var tagCollageArray = [];
                                                                                         taggedUserArray.forEach(function(factor, index){
@@ -422,8 +423,13 @@ module.exports = {
                                                                                         });
 
                                                                                 }*/
-                                                                                var inviteFriends       =  req.param('invite_friends_NUM');
+                                                                                //var inviteFriends       =  req.param('invite_friends_NUM');
+                                                                                var inviteFriends       =  request.invite_friends_NUM;
+
+                                                                                console.log(req.param('invite_friends_NUM'));
+                                                                                console.log("inviteFriends =========================");
                                                                                 console.log(inviteFriends);
+                                                                                console.log(inviteFriends.length);
                                                                                 var inviteFinalArray    =  [];
                                                                                 /*if(inviteFriends.length != 0){
                                                                                     //phoneNumber

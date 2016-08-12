@@ -352,7 +352,7 @@ module.exports = {
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                     var received_userId             =     req.param("user_id");
-                    var other_userName, other_userProfilePic;
+                    var received_userName, received_userProfilePic;
                     var query;
                     console.log("Get Dither Other Profile  -------------------- ================================================");
                     console.log("received_userId ------------------------------");
@@ -415,7 +415,19 @@ module.exports = {
                                         {
                                             //console.log(results);
                                             if(results.length == 0){
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user', recent_dithers: [], dithers_with_max_votes: []});
+                                                    User.findOne({id: received_userId, status: 'active'}).exec(function (err, foundUserDetails){
+                                                            if (err) {
+                                                                console.log(err);
+                                                                   return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
+                                                            }else{
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
+                                                                                            username                : foundUserDetails.name,
+                                                                                            user_profile_image      : foundUserDetails.profilePic,
+                                                                                            recent_dithers          : [],
+                                                                                            dithers_with_max_votes  : []
+                                                                        });
+                                                            }
+                                                    });
                                             }else{
 
                                                                         //console.log(results);
@@ -455,8 +467,8 @@ module.exports = {
                                                                                     }
                                                                                 }
                                                                                 var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                                                other_userName                          =       dataResults[i]["name"];
-                                                                                other_userProfilePic                    =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
+                                                                                received_userName                       =       dataResults[i]["name"];
+                                                                                received_userProfilePic                 =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
                                                                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                                                                 dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
                                                                                 dataResultsObj.dither_like_position     =       like_position;
@@ -501,8 +513,8 @@ module.exports = {
 
                                                                         recent_dithers_Array_4 = recent_dithers_Array_4.sort( predicatBy("mainOrder") );
                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
-                                                                                                username                : other_userName,
-                                                                                                user_profile_image      : other_userProfilePic,
+                                                                                                username                : received_userName,
+                                                                                                user_profile_image      : received_userProfilePic,
                                                                                                 total_opinion           : total_opinion,
                                                                                                 recent_dithers          : recent_dithers_Array_4,
                                                                                                 popular_dithers         : popular_dithers_Array_4 });

@@ -20,12 +20,12 @@ console.log("Before Generate Token");
         console.log(tokenValues);
         User_token.create(tokenValues).exec(function (err, resultToken) {
             if (err) {
-				console.log("Error Create Token Response");
+                console.log("Error Create Token Response");
                 console.log(err);
                 callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in create token service', error_details: err});
 
             } else {
-				console.log("Success Create Token Response");
+                console.log("Success Create Token Response");
                 callback(false, {status: 1, status_type: "Success", message: 'CreateToken service success', token: resultToken});
             }
 
@@ -55,7 +55,7 @@ console.log("Before Generate Token");
     ================================================================================================================================== */
     checkToken: function (token, callback) {
 
-        var query = " SELECT usr.id, usr.name,usr.notifyOpinion	,usr.profilePic, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
+        var query = " SELECT usr.id, usr.name,usr.notifyOpinion,usr.profilePic, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                     " FROM"+
                     " userToken usrtkn"+
                     " INNER JOIN user usr ON usr.id = usrtkn.userId"+

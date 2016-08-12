@@ -22,11 +22,10 @@ module.exports = {
      ==================================================================================================================================== */
 
         createDither:  function (req, res) {
-                    console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++");
-                    //console.log(req.body.REQUEST);
-                    var request                     =     JSON.parse(req.param("REQUEST"));
-                    if(!request.dither_title || !req.param('collage_image')){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both dither_title and collage_image'});
+                    console.log("createDither   api ++++++++++++++++++++++++++++++++++++++++++");
+
+                    if(!req.param("REQUEST") || !req.param('collage_image')){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both REQUEST and collage_image'});
                     }else{
                             var server_baseUrl              =     req.options.server_baseUrl;
                             var tokenCheck                  =     req.options.tokenCheck;
@@ -35,6 +34,8 @@ module.exports = {
                             var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                             var imageUploadDirectoryPath    =     '../../assets/images/collage';
                             var concatUploadImgArray;
+                            var request                     =     JSON.parse(req.param("REQUEST"));
+                            console.log(request);
 
 
                             console.log("request Using Param-----------------------------------------");
@@ -159,9 +160,9 @@ module.exports = {
                                                                                 var taggedUserArray     =   tagged_fbUser.concat(tagged_contactUser);
                                                                                 //var taggedUserArray = [];
                                                                                 console.log(taggedUserArray.length);
-                                                                                //if(taggedUserArray.length == 0){
+                                                                                if(taggedUserArray.length == 0){
                                                                                            // return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage but no tagged users found'});
-                                                                                //}else{
+                                                                                }else{
                                                                                         //console.log(taggedUserArray);
                                                                                         var tagCollageArray = [];
                                                                                         taggedUserArray.forEach(function(factor, index){
@@ -328,7 +329,7 @@ module.exports = {
 
                                                                                                 }
                                                                                         });
-                                                                                //}//tagged user Array length check
+                                                                                }//tagged user Array length check
 
                                                                             }
                                                                     });

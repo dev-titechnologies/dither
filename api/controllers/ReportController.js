@@ -18,11 +18,11 @@ module.exports = {
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var reportType                  =     req.param('report_type');
                     var report                      =     req.param('description');
-                    var other_user_id               =     req.param('user_id');
+                    var received_userId             =     req.param('user_id');
                     console.log(reportType);
                     console.log(report);
 
-                    if(!reportType || !report || !other_user_id){
+                    if(!reportType || !received_userId){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the report_type and description and user_id'});
 
                     }else{
@@ -30,7 +30,7 @@ module.exports = {
                                     report                  :           report,
                                     reportType              :           reportType,
                                     reporterId              :           userId,
-                                    userId                  :           other_user_id,
+                                    userId                  :           received_userId,
                             };
                             ReportUser.create(values).exec(function(err, results){
                                     if(err){
@@ -61,7 +61,7 @@ module.exports = {
                     console.log(reportType);
                     console.log(report);
 
-                    if(!reportType || !report || !collageId){
+                    if(!reportType || !collageId){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the report_type and description and dither_id'});
 
                     }else{

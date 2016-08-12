@@ -24,7 +24,8 @@ module.exports = {
         createDither:  function (req, res) {
                     console.log("createDither   Entered ++++++++++++++++++++++++++++++++++++++++++");
                     //console.log(req.body.REQUEST);
-                    if(!req.param('dither_title') || !req.param('collage_image')){
+                    var request                     =     JSON.parse(req.param("REQUEST"));
+                    if(!request.dither_title || !req.param('collage_image')){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both dither_title and collage_image'});
                     }else{
                             var server_baseUrl              =     req.options.server_baseUrl;
@@ -34,7 +35,7 @@ module.exports = {
                             var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                             var imageUploadDirectoryPath    =     '../../assets/images/collage';
                             var concatUploadImgArray;
-                            var request                     =     JSON.parse(req.param("REQUEST"));
+
 
                             console.log("request Using Param-----------------------------------------");
                             console.log(request);

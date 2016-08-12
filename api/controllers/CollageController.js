@@ -428,7 +428,7 @@ module.exports = {
                                                             }else{
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                             username                : foundUserDetails.name,
-                                                                                            user_profile_image      : foundUserDetails.profilePic,
+                                                                                            user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
                                                                                             recent_dithers          : [],
                                                                                             popular_dithers         : []
                                                                         });
@@ -609,7 +609,7 @@ module.exports = {
                                                                     }else{
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                                     username                : foundUserDetails.name,
-                                                                                                    user_profile_image      : foundUserDetails.profilePic,
+                                                                                                    user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
                                                                                                     recent_dithers          : [],
                                                                                                     popular_dithers         : []
                                                                                 });

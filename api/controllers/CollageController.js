@@ -162,6 +162,7 @@ module.exports = {
                                                                                         //console.log(factor);
                                                                                         vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
                                                                                 });
+                                                                                sortedVote                  = vote.sort( predicatBy("position") );
                                                                                 var tagged_fbUser       =   request.tagged_fb_user;
                                                                                 var tagged_contactUser  =   request.tagged_user;
                                                                                 var taggedUserArray     =   tagged_fbUser.concat(tagged_contactUser);
@@ -349,7 +350,7 @@ module.exports = {
                                                                                                         console.log("Predicated -------------------------");
 
                                                                                                         //console.log(vote.sort( predicatBy("image_id") ));
-                                                                                                        sortedVote = vote.sort( predicatBy("position") );
+
                                                                                                         //console.log(results);
 
                                                                                                         //Query to get tagged users from both addressBook and fbFriends

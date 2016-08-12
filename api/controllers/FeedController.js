@@ -162,6 +162,7 @@ module.exports = {
                                                                 var dataResultsObj = new Object();
                                                                 var collageId_val =dataResults[i]["collageId"];
                                                                 //console.log(data[i]);
+                                                                console.log("For loop--------------->>>>>>>>>>>>>>>>>");
                                                                 if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
                                                                 {
                                                                     var imagesPositionArray         = [];
@@ -173,11 +174,13 @@ module.exports = {
                                                                     {
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
+                                                                            console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ------------------ dataResults[j]["likeStatus"]');
+                                                                            console.log(dataResults[j]["likeStatus"]);
                                                                             var likeStatus;
-                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
+                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
                                                                                     likeStatus = 0;
                                                                             }else{
-                                                                                    likeStatus = 1;
+                                                                                    likeStatus = dataResults[j]["likeStatus"];
                                                                             }
                                                                             imgDetailsArray.push({
                                                                                                 image_id        : dataResults[j]["imgId"],
@@ -213,6 +216,8 @@ module.exports = {
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                                     dataResultsObj.mainOrder                    =       i;
+                                                                    console.log("vote =================");
+                                                                    console.log(dataResultsObj.vote);
                                                                     //console.log("dataResultsObj====================");
                                                                     //console.log(dataResultsObj);
                                                                     //console.log("dataResultsObj====================");

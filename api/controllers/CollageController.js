@@ -155,6 +155,8 @@ module.exports = {
                                                                             else
                                                                             {
                                                                                 //var taggedUserArray = [{user_id: 3},{user_id: 6}];
+                                                                                var vote                = [];
+                                                                                var sortedVote           = [];
                                                                                 var tagged_fbUser       =   request.tagged_fb_user;
                                                                                 var tagged_contactUser  =   request.tagged_user;
                                                                                 var taggedUserArray     =   tagged_fbUser.concat(tagged_contactUser);

@@ -157,6 +157,11 @@ module.exports = {
                                                                                 //var taggedUserArray = [{user_id: 3},{user_id: 6}];
                                                                                 var vote                = [];
                                                                                 var sortedVote           = [];
+                                                                                createdCollageDetails.forEach(function(factor, index){
+                                                                                        //console.log("factor");
+                                                                                        //console.log(factor);
+                                                                                        vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
+                                                                                });
                                                                                 var tagged_fbUser       =   request.tagged_fb_user;
                                                                                 var tagged_contactUser  =   request.tagged_user;
                                                                                 var taggedUserArray     =   tagged_fbUser.concat(tagged_contactUser);
@@ -338,12 +343,7 @@ module.exports = {
                                                                                                 }
                                                                                                 else
                                                                                                 {
-                                                                                                        var vote = [];
-                                                                                                        createdCollageDetails.forEach(function(factor, index){
-                                                                                                                //console.log("factor");
-                                                                                                                //console.log(factor);
-                                                                                                                vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
-                                                                                                        });
+
                                                                                                         //console.log("created in collage Details=====");
                                                                                                         //console.log(vote);
                                                                                                         console.log("Predicated -------------------------");

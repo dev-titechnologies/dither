@@ -430,7 +430,7 @@ module.exports = {
                                                                                 console.log(req.param('invite_friends_NUM'));
                                                                                 console.log("inviteFriends =========================");
                                                                                 console.log(inviteFriends);
-                                                                                var inviteFriends           = inviteFriends.toString().split(',');
+                                                                                //var inviteFriends           = inviteFriends.split(',');
                                                                                 inviteFriends.forEach(function(factor, index){
                                                                                             console.log("factor  ========>>>>>>>> results");
                                                                                             console.log(factor);

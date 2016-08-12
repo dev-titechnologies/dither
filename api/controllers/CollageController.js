@@ -24,9 +24,9 @@ module.exports = {
         createDither:  function (req, res) {
                     console.log("createDither   api ++++++++++++++++++++++++++++++++++++++++++");
 
-                    if(!req.param("REQUEST") || !req.param('collage_image')){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both REQUEST and collage_image'});
-                    }else{
+                    //if(!req.param("REQUEST") || !req.param('collage_image')){
+                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both REQUEST and collage_image'});
+                    //}else{
                             var server_baseUrl              =     req.options.server_baseUrl;
                             var tokenCheck                  =     req.options.tokenCheck;
                             var userId                      =     tokenCheck.tokenDetails.userId;
@@ -160,9 +160,12 @@ module.exports = {
                                                                                 var taggedUserArray     =   tagged_fbUser.concat(tagged_contactUser);
                                                                                 //var taggedUserArray = [];
                                                                                 console.log(taggedUserArray.length);
-                                                                                if(taggedUserArray.length == 0){
+                                                                                /* *****************************************************************************************
+                                                                                       ***************************************************************************************** */
+                                                                                /*if(taggedUserArray.length == 0){
                                                                                            // return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage but no tagged users found'});
                                                                                 }else{
+
                                                                                         //console.log(taggedUserArray);
                                                                                         var tagCollageArray = [];
                                                                                         taggedUserArray.forEach(function(factor, index){
@@ -258,25 +261,10 @@ module.exports = {
                                                                                                                             {
                                                                                                                                     //tagNotifyArray.push("(1,"+userId+","+factor.user_id+","+results.id+","+factor.user_id+" ,"'false'","'count'",now(), now())");
                                                                                                                                     //------------Notification Log Insertion ENDS-------------------
-                                                                                                                                    /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+                                                                                                                                    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                                                                                                                                     //var inviteFriends = [{user_id: 3},{user_id: 6}];
                                                                                                                                     var inviteFriends       =  req.param('invite_friends_NUM');
-                                                                                                                                    //if(inviteFriends.length == 0){
-                                                                                                                                                    /*return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
-                                                                                                                                                                              profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
-                                                                                                                                                                              user_name          :     tokenCheck.tokenDetails.name,
-                                                                                                                                                                              user_id            :     tokenCheck.tokenDetails.userId,
-                                                                                                                                                                              created_date_time  :     results.createdAt,
-                                                                                                                                                                              updated_date_time  :     results.updatedAt,
-                                                                                                                                                                              collage_id         :     results.id,
-                                                                                                                                                                              collage_image      :     collageImg_path + results.image,
-                                                                                                                                                                              location           :     results.location,
-                                                                                                                                                                              caption            :     results.imgTitle,
-                                                                                                                                                                              vote               :     sortedVote,
-                                                                                                                                                                              dither_count       :     sortedVote.length,
-                                                                                                                                                                              taggedUsers        :     taggedUserArrayFinal
-                                                                                                                                                    });*/
-                                                                                                                                    //}else{
+
 
                                                                                                                                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
                                                                                                                                                                               profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
@@ -292,31 +280,24 @@ module.exports = {
                                                                                                                                                                               dither_count       :     sortedVote.length,
                                                                                                                                                                               taggedUsers        :     taggedUserArrayFinal
                                                                                                                                                     });
-                                                                                                                                            /*var inviteFriendsArray = [];
-                                                                                                                                            inviteFriends.forEach(function(factor, index){
-                                                                                                                                                 console.log(factor);
-                                                                                                                                                 console.log(index);
-
-                                                                                                                                            });*/
 
 
-
-                                                                                                                                        /*SmsService.sendSms(function(err, sendSmsResults) {
-                                                                                                                                                if(err)
-                                                                                                                                                {
-                                                                                                                                                        console.log(err);
+                                                                                                                                        //SmsService.sendSms(function(err, sendSmsResults) {
+                                                                                                                                               // if(err)
+                                                                                                                                                //{
+                                                                                                                                                       // console.log(err);
                                                                                                                                                         //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
                                                                                                                                                         //callback();
-                                                                                                                                                        callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
-                                                                                                                                                }else{
-                                                                                                                                                    consol.log("-----------------");
-                                                                                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                                                                        //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
+                                                                                                                                                //}else{
+                                                                                                                                                   // consol.log("-----------------");
+                                                                                                                                                      //  return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
                                                                                                                                                         //callback();
                                                                                                                                                         //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Sms Send to invite', error_details: err});
-                                                                                                                                                }
-                                                                                                                                        });*/
+                                                                                                                                               // }
+                                                                                                                                        //});
 
-                                                                                                                                    /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+                                                                                                                                    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
                                                                                                                                     //}
@@ -329,7 +310,148 @@ module.exports = {
 
                                                                                                 }
                                                                                         });
-                                                                                }//tagged user Array length check
+                                                                                }//tagged user Array length check*/
+
+                                                                                /* *****************************************************************************************
+                                                                                       ***************************************************************************************** */
+                                                                                var taggedUserArrayFinal = [];
+                                                                                if(taggedUserArray.length != 0){
+                                                                                        var tagCollageArray = [];
+                                                                                        taggedUserArray.forEach(function(factor, index){
+                                                                                             tagCollageArray.push({collageId: results.id, userId: factor});
+                                                                                        });
+
+                                                                                        Tags.create(tagCollageArray).exec(function(err, createdCollageTags) {
+                                                                                                if(err)
+                                                                                                {
+                                                                                                    console.log(err);
+                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                        var vote = [];
+                                                                                                        createdCollageDetails.forEach(function(factor, index){
+                                                                                                                //console.log("factor");
+                                                                                                                //console.log(factor);
+                                                                                                                vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
+                                                                                                        });
+                                                                                                        //console.log("created in collage Details=====");
+                                                                                                        //console.log(vote);
+                                                                                                        console.log("Predicated -------------------------");
+
+                                                                                                        //console.log(vote.sort( predicatBy("image_id") ));
+                                                                                                        sortedVote = vote.sort( predicatBy("position") );
+                                                                                                        //console.log(results);
+
+                                                                                                        //Query to get tagged users from both addressBook and fbFriends
+                                                                                                        query = " SELECT"+
+                                                                                                                " adb.userId, adb.ditherUsername, usr.name"+
+                                                                                                                " FROM addressBook adb"+
+                                                                                                                " INNER JOIN user usr ON usr.id = adb.userId"+
+                                                                                                                " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                                                                " WHERE"+
+                                                                                                                " tg.collageId = "+results.id+" AND clg.userId = "+userId+
+                                                                                                                " GROUP BY adb.userId"+
+                                                                                                                " UNION"+
+                                                                                                                " SELECT"+
+                                                                                                                " fbf.userId, fbf.ditherUsername, usr.name"+
+                                                                                                                " FROM addressBook fbf"+
+                                                                                                                " INNER JOIN user usr ON usr.id = fbf.userId"+
+                                                                                                                " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                                                                " WHERE"+
+                                                                                                                " tg.collageId = "+results.id+" AND clg.userId = "+userId+
+                                                                                                                " GROUP BY fbf.userId";
+
+                                                                                                        AddressBook.query(query, function(err, taggedUsersFinalResults) {
+                                                                                                                if(err)
+                                                                                                                {
+                                                                                                                    console.log(err);
+                                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                    console.log(query);
+                                                                                                                    //console.log(taggedUsersFinalResults);
+
+                                                                                                                    if(taggedUsersFinalResults != 0){
+                                                                                                                        taggedUsersFinalResults.forEach(function(factor, index){
+                                                                                                                                //console.log("factor");
+                                                                                                                                //console.log(factor);
+                                                                                                                                taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                                                                                        });
+                                                                                                                    }
+                                                                                                                    var tagNotifyArray = [];
+                                                                                                                    taggedUserArray.forEach(function(factor, index){
+                                                                                                                            //tagNotifyArray.push({id:factor.user_id});
+                                                                                                                            tagNotifyArray.push(factor.user_id)
+
+                                                                                                                    });
+                                                                                                                    console.log(tagNotifyArray.length)
+                                                                                                                    console.log(tagNotifyArray)
+                                                                                                                    var values ={
+                                                                                                                                    notificationTypeId  :   1,
+                                                                                                                                    userId              :   userId,
+                                                                                                                                    collage_id          :   results.id,
+                                                                                                                                    tagged_users        :   tagNotifyArray,
+                                                                                                                                    description         :   tagNotifyArray.length
+                                                                                                                                }
+                                                                                                                    NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+                                                                                                                        if(err)
+                                                                                                                        {
+                                                                                                                            console.log(err);
+                                                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                                                        }else{
+                                                                                                                                console.log("Successfully Inserted to---->>. NotificationLog table");
+
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                }
+
+                                                                                                        });
+                                                                                                }
+                                                                                        });
+
+                                                                                }
+                                                                                var inviteFriends       =  req.param('invite_friends_NUM');
+                                                                                var inviteFinalArray    =  [];
+                                                                                if(inviteFriends.length != 0){
+                                                                                    //phoneNumber
+                                                                                    //userId
+
+                                                                                    inviteFriends.forEach(function(factor, index){
+                                                                                             inviteFinalArray.push({userId: userId, phoneNumber: factor});
+                                                                                    });
+                                                                                    Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
+                                                                                            if(err)
+                                                                                            {
+                                                                                                console.log(err);
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                            }else{
+                                                                                                    console.log("Successfully inserted Invitation");
+                                                                                            }
+                                                                                    });
+
+                                                                                }
+                                                                                        /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
+
+                                                                                return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
+                                                                                                          profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
+                                                                                                          user_name          :     tokenCheck.tokenDetails.name,
+                                                                                                          user_id            :     tokenCheck.tokenDetails.userId,
+                                                                                                          created_date_time  :     results.createdAt,
+                                                                                                          updated_date_time  :     results.updatedAt,
+                                                                                                          collage_id         :     results.id,
+                                                                                                          collage_image      :     collageImg_path + results.image,
+                                                                                                          location           :     results.location,
+                                                                                                          caption            :     results.imgTitle,
+                                                                                                          vote               :     sortedVote,
+                                                                                                          dither_count       :     sortedVote.length,
+                                                                                                          taggedUsers        :     taggedUserArrayFinal
+                                                                                });
+
+
 
                                                                             }
                                                                     });
@@ -342,7 +464,7 @@ module.exports = {
                                 }
 
                         });
-                    }
+                    //}
 
         },
 

@@ -20,7 +20,6 @@ module.exports = {
 					var notifyVote		=	req.param('vote');
 					var notifyComment	=	req.param('comment');
 					var notifyContact	=	req.param('contact');
-					
 					var token			= 	req.get('token');
 					console.log(token)
 					console.log(req.param('opinion'))
@@ -82,15 +81,18 @@ module.exports = {
 			
 			
 						console.log("Notification API")
-
+						console.log(req.options.file_path.profilePic_path)
 						var tokenCheck          =     req.options.tokenCheck;
 						var user_id				= 	  tokenCheck.tokenDetails.id;
-						notificationVoted = "";
-						notificationCommented = "";
-						notificationSignup	="";
-						notifyVoteArray	   = [];
-						notifyCmntArray		=[];
-						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
+						var server_baseUrl  	=     req.options.server_baseUrl;
+						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
+						
+						notificationVoted 		= "";
+						notificationCommented 	= "";
+						notificationSignup		= "";
+						notifyVoteArray	   		= [];
+						notifyCmntArray			= [];
+						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
 						NotificationLog.query(query, function(err,results) {
 							
 							if(err)
@@ -120,6 +122,7 @@ module.exports = {
 													}	
 													else
 													{
+														
 														console.log(item)
 														notificationCommented = "No notification Found for comments";
 														console.log("77777777777777777777777777777777777777777777777")
@@ -127,9 +130,10 @@ module.exports = {
 														var notification	= ntfnTypeFound[0].body;
 														item.description 	= item.description - 1;
 														console.log(notification)
-													    ntfn_body  			= util.format(notification,item.name,item.description);
+													    ntfn_body  			= 	util.format(notification,item.name,item.description);
 													    item.ntfn_body		=	ntfn_body;
 													    item.type			=	ntfnTypeFound[0].type;
+													    item.profile_image	=	profilePic_path + item.profile_image;
 														if(item.description==0)
 													    {
 															notificationCommented = item.name + " commented on your Dither";
@@ -173,6 +177,7 @@ module.exports = {
 															ntfn_body  			= util.format(notification,item.name,item.description);
 															item.ntfn_body		=	ntfn_body;
 															item.type			=	ntfnTypeFound[0].type;
+															item.profile_image	=	profilePic_path + item.profile_image;
 															notificationVoted  	=  ntfn_body;
 															notifyVoteArray	    = [];
 															notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
@@ -207,6 +212,7 @@ module.exports = {
 																	ntfn_body  			= util.format(notification,item.name);
 																	item.ntfn_body		=	ntfn_body;
 																	item.type			=	ntfnTypeFound[0].type;
+																	item.profile_image	=	profilePic_path + item.profile_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
 																	callback();							

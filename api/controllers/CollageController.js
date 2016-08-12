@@ -159,6 +159,10 @@ module.exports = {
                                                                                 var tagged_contactUser  =   request.tagged_user;
                                                                                 var taggedUserArray     =   tagged_fbUser.concat(tagged_contactUser);
                                                                                 //var taggedUserArray = [];
+                                                                                console.log("tagged_fbUser ++++++++++++++++++++");
+                                                                                console.log(tagged_fbUser);
+                                                                                console.log("tagged_contactUser ++++++++++++++++++++");
+                                                                                console.log(tagged_contactUser);
                                                                                 console.log(taggedUserArray.length);
                                                                                 /* *****************************************************************************************
                                                                                        ***************************************************************************************** */
@@ -315,7 +319,9 @@ module.exports = {
                                                                                 /* *****************************************************************************************
                                                                                        ***************************************************************************************** */
                                                                                 var taggedUserArrayFinal = [];
-                                                                                if(taggedUserArray.length != 0){
+                                                                                console.log("taggedUserArray ++++++++++++++++++++");
+                                                                                console.log(taggedUserArray);
+                                                                                /*if(taggedUserArray.length != 0){
                                                                                         var tagCollageArray = [];
                                                                                         taggedUserArray.forEach(function(factor, index){
                                                                                              tagCollageArray.push({collageId: results.id, userId: factor});
@@ -413,10 +419,11 @@ module.exports = {
                                                                                                 }
                                                                                         });
 
-                                                                                }
+                                                                                }*/
                                                                                 var inviteFriends       =  req.param('invite_friends_NUM');
+                                                                                console.log(inviteFriends);
                                                                                 var inviteFinalArray    =  [];
-                                                                                if(inviteFriends.length != 0){
+                                                                                /*if(inviteFriends.length != 0){
                                                                                     //phoneNumber
                                                                                     //userId
 
@@ -433,7 +440,7 @@ module.exports = {
                                                                                             }
                                                                                     });
 
-                                                                                }
+                                                                                }*/
                                                                                         /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
 
                                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',

@@ -20,7 +20,6 @@ module.exports = {
 					var notifyVote		=	req.param('vote');
 					var notifyComment	=	req.param('comment');
 					var notifyContact	=	req.param('contact');
-					
 					var token			= 	req.get('token');
 					console.log(token)
 					console.log(req.param('opinion'))
@@ -82,14 +81,18 @@ module.exports = {
 			
 			
 						console.log("Notification API")
-
+						console.log(req.options.file_path.profilePic_path)
 						var tokenCheck          =     req.options.tokenCheck;
 						var user_id				= 	  tokenCheck.tokenDetails.id;
-						notificationVoted = "";
-						notificationCommented = "";
-						notifyVoteArray	   = [];
-						notifyCmntArray		=[];
-						var query = "SELECT U.name,N.notificationTypeId,N.userId,N.ditherUserId,N.collage_id,N.image_id,N.tagged_users,N.description,N.updatedAt from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
+						var server_baseUrl  	=     req.options.server_baseUrl;
+						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
+						
+						notificationVoted 		= "";
+						notificationCommented 	= "";
+						notificationSignup		= "";
+						notifyVoteArray	   		= [];
+						notifyCmntArray			= [];
+						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
 						NotificationLog.query(query, function(err,results) {
 							
 							if(err)
@@ -104,7 +107,8 @@ module.exports = {
 								{
 								    
 									async.forEach(results, function (item, callback){ 
-										
+									if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4)	
+										{
 										  if(item.notificationTypeId==3)
 										  {
 											  
@@ -118,14 +122,18 @@ module.exports = {
 													}	
 													else
 													{
+														
 														console.log(item)
 														notificationCommented = "No notification Found for comments";
 														console.log("77777777777777777777777777777777777777777777777")
 														console.log(ntfnTypeFound)
 														var notification	= ntfnTypeFound[0].body;
-														item.description = item.description - 1;
+														item.description 	= item.description - 1;
 														console.log(notification)
-													    ntfn_body  		= util.format(notification,item.name,item.description);
+													    ntfn_body  			= 	util.format(notification,item.name,item.description);
+													    item.ntfn_body		=	ntfn_body;
+													    item.type			=	ntfnTypeFound[0].type;
+													    item.profile_image	=	profilePic_path + item.profile_image;
 														if(item.description==0)
 													    {
 															notificationCommented = item.name + " commented on your Dither";
@@ -136,6 +144,7 @@ module.exports = {
 														 notifyCmntArray	   = [];
 														 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
 														 console.log(notifyCmntArray)
+														 
 														 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
 													    }
 														
@@ -145,7 +154,7 @@ module.exports = {
 							
 												});
 										  }
-										  else if(item.notificationTypeId==2)
+										  if(item.notificationTypeId==2)
 										      {
 												  
 												  console.log("vote?????????")
@@ -164,24 +173,20 @@ module.exports = {
 															console.log(ntfnTypeFound)
 															var notification	= ntfnTypeFound[0].body;
 															console.log(notification)
-															item.description = item.description - 1;
-															ntfn_body  		= util.format(notification,item.name,item.description);
-															console.log(ntfn_body)
+															item.description	= item.description - 1;
+															ntfn_body  			= util.format(notification,item.name,item.description);
+															item.ntfn_body		=	ntfn_body;
+															item.type			=	ntfnTypeFound[0].type;
+															item.profile_image	=	profilePic_path + item.profile_image;
+															notificationVoted  	=  ntfn_body;
+															notifyVoteArray	    = [];
+															notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+															console.log(notifyVoteArray)
+															//notifyVoteArray.push(ditherId:item.collage_id,userId:ditherUserId)
+															callback();	
 															
-															 if(item.description==0)
-															 {
-																 notificationVoted = item.name + " voted your Dither";
-															 }
-															 else
-															 {
-																notificationVoted  =  ntfn_body;
-																notifyVoteArray	   = [];
-																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																console.log(notifyCmntArray)
-																//notifyVoteArray.push(ditherId:item.collage_id,userId:ditherUserId)
-															 }
 															 
-															callback();						
+																				
 
 														}
 										
@@ -189,7 +194,7 @@ module.exports = {
 												  
 												  
 											  }
-											  else if(item.notificationTypeId==4)
+											  if(item.notificationTypeId==4)
 											  {
 												  console.log("signuppp")
 												  NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
@@ -204,28 +209,30 @@ module.exports = {
 																	console.log(ntfnTypeFound)
 																	var notification	= ntfnTypeFound[0].body;
 																	console.log(notification)
-																	ntfn_body  		= util.format(notification,item.name);
+																	ntfn_body  			= util.format(notification,item.name);
+																	item.ntfn_body		=	ntfn_body;
+																	item.type			=	ntfnTypeFound[0].type;
+																	item.profile_image	=	profilePic_path + item.profile_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
 																	callback();							
 
 															}
-										
+															
 													});
 												  
 												  
 											  }
-											  else
-											  {
-												  
-												  callback();
-											  }
-											
-											
+											  
+										}	
+										else
+										{
+											callback();
+										}
 										
 									}, function(err) {
 								
-										return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_vote:notifyVoteArray,notification_comment:notifyCmntArray,});
+										return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
 									});
 								
 							}

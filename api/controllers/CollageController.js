@@ -424,7 +424,7 @@ module.exports = {
 
                                                                                 }*/
                                                                                 //var inviteFriends       =  req.param('invite_friends_NUM');
-                                                                                var inviteFriends           =  request.invite_friends_NUM;
+                                                                                /*var inviteFriends           =  request.invite_friends_NUM;
                                                                                 var inviteFriendsArray      =  [];
 
                                                                                 console.log(req.param('invite_friends_NUM'));
@@ -437,7 +437,7 @@ module.exports = {
                                                                                             inviteFriendsArray.push(factor);
                                                                                 });
                                                                                 console.log(inviteFriendsArray.length);
-                                                                                var inviteFinalArray    =  [];
+                                                                                var inviteFinalArray    =  [];*/
 
                                                                                 /*if(inviteFriends.length != 0){
                                                                                     //phoneNumber

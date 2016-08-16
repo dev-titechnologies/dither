@@ -35,23 +35,12 @@ module.exports = {
                             var imageUploadDirectoryPath    =     '../../assets/images/collage';
                             var concatUploadImgArray;
                             var request                     =     JSON.parse(req.param("REQUEST"));
-                            console.log(request);
-
 
                             console.log("request Using Param-----------------------------------------");
                             console.log(request);
                             console.log(request.dither_title);
                             console.log(request.dither_location);
 
-                            /*var request                     =     req.body.REQUEST;
-                            console.log("request Using Body-----------------------------------------");
-                            console.log(request);
-                            console.log(request.dither_title);
-                            console.log(request.dither_location);*/
-
-
-
-                            console.log(request);
                             console.log("json parse====>>>>");
                             //console.log(JSON.parse(request));
 
@@ -330,16 +319,25 @@ module.exports = {
                                                                                 console.log("taggedUserArray ++++++++++++++++++++");
                                                                                 console.log(taggedUserArray);
                                                                                 console.log(taggedUserArray.length);
-                                                                                /*if(taggedUserArray.length != 0){
+                                                                                if(taggedUserArray.length != 0){
+                                                                                        console.log(results);
+                                                                                        console.log("results.id+++++++++++++++++");
+                                                                                        console.log(results.id);
+
                                                                                         var tagCollageArray = [];
                                                                                         taggedUserArray.forEach(function(factor, index){
-                                                                                             tagCollageArray.push({collageId: results.id, userId: factor});
+                                                                                            console.log("Refy tagged User ======>>>>> factor");
+                                                                                            console.log(factor);
+                                                                                            tagCollageArray.push({collageId: results.id, userId: factor});
                                                                                         });
+                                                                                        console.log("tagCollageArray }}}}}}}}}}}}}}}}}}}}}}}}");
+                                                                                        console.log(tagCollageArray);
 
                                                                                         Tags.create(tagCollageArray).exec(function(err, createdCollageTags) {
                                                                                                 if(err)
                                                                                                 {
                                                                                                     console.log(err);
+                                                                                                    console.log("+++++++++++++++++++++++++");
                                                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                                                 }
                                                                                                 else
@@ -423,29 +421,28 @@ module.exports = {
                                                                                                 }
                                                                                         });
 
-                                                                                }*/
+                                                                                }
                                                                                 //var inviteFriends       =  req.param('invite_friends_NUM');
-                                                                                /*var inviteFriends           =  request.invite_friends_NUM;
+                                                                                var inviteFriends           =  request.invite_friends_NUM;
                                                                                 var inviteFriendsArray      =  [];
-
-                                                                                console.log(req.param('invite_friends_NUM'));
+                                                                               console.log(req.param('invite_friends_NUM'));
                                                                                 console.log("inviteFriends =========================");
                                                                                 console.log(inviteFriends);
                                                                                 //var inviteFriends           = inviteFriends.split(',');
                                                                                 inviteFriends.forEach(function(factor, index){
                                                                                             console.log("factor  ========>>>>>>>> results");
                                                                                             console.log(factor);
-                                                                                            inviteFriendsArray.push(factor);
+                                                                                            inviteFriendsArray.push(factor.phone_number);
                                                                                 });
                                                                                 console.log(inviteFriendsArray.length);
-                                                                                var inviteFinalArray    =  [];*/
+                                                                                var inviteFinalArray    =  [];
 
-                                                                                /*if(inviteFriends.length != 0){
+                                                                                if(inviteFriends.length != 0){
                                                                                     //phoneNumber
                                                                                     //userId
-
+                                                                                    console.log(userId);
                                                                                     inviteFriends.forEach(function(factor, index){
-                                                                                             inviteFinalArray.push({userId: userId, phoneNumber: factor});
+                                                                                             inviteFinalArray.push({userId: parseInt(userId), collageId: results.id, phoneNumber: factor.phone_number});
                                                                                     });
                                                                                     Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
                                                                                             if(err)
@@ -454,10 +451,12 @@ module.exports = {
                                                                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                                             }else{
                                                                                                     console.log("Successfully inserted Invitation");
+
+                                                                                                    //SMS HERE
                                                                                             }
                                                                                     });
 
-                                                                                }*/
+                                                                                }
                                                                                         /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
 
                                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',

@@ -588,8 +588,8 @@ module.exports = {
 
                                                                                     if(!foundUserDetails){
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
-                                                                                                                username                : foundUserDetails.name,
-                                                                                                                user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                                                username                : "",
+                                                                                                                user_profile_image      : "",
                                                                                                                 recent_dithers          : [],
                                                                                                                 popular_dithers         : []
                                                                                             });
@@ -792,15 +792,15 @@ module.exports = {
                                                                                 });*/
                                                                                 if(received_dither_type == "popular"){
                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
-                                                                                                        username                : foundUserDetails.name,
-                                                                                                        user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                                        username                : "",
+                                                                                                        user_profile_image      : "",
                                                                                                         popular_dithers         : popular_dithers });
 
                                                                                 }else if(received_dither_type == "recent"){
 
                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
-                                                                                                        username                : foundUserDetails.name,
-                                                                                                        user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                                        username                : "",
+                                                                                                        user_profile_image      : "",
                                                                                                         recent_dithers          : recent_dithers,
                                                                                                         });
                                                                                 }

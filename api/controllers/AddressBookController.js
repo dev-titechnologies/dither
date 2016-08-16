@@ -11,11 +11,7 @@ module.exports = {
      ==================================================================================================================================== */
         addUserContacts: function (req, res) {
 			
-			
-			 
-			   
-			  
-			    
+
 			    console.log(req.options.tokenCheck.tokenDetails.userId)
 
 				var tokenCheck                  =     req.options.tokenCheck;
@@ -54,7 +50,7 @@ module.exports = {
                 phonecontacts.forEach(function(factor, index){
                      console.log("factor");
                      console.log(factor);
-                     phoneContactsArray.push("("+userId+",'"+factor.name+"', '"+factor.number+"', now(), now())");
+                     phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
                 });
 
 				console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")

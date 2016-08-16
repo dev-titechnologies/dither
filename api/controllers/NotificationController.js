@@ -92,7 +92,20 @@ module.exports = {
 						notificationSignup		= "";
 						notifyVoteArray	   		= [];
 						notifyCmntArray			= [];
-						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"
+						
+							/*var query = "(SELECT 
+									N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,
+									U.name,U.profilePic as profile_image,
+									FROM
+									notificationLog as N LEFT JOIN user as U ON U.id = N.userId 
+									WHERE
+									N.ditherUserId='"+user_id+"' AND
+									(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)
+									OR 
+									FIND_IN_SET('"+user_id+"', N.tagged_users))"*/
+						
+						
+						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
 						NotificationLog.query(query, function(err,results) {
 							
 							if(err)
@@ -225,8 +238,32 @@ module.exports = {
 											  }
 											  else if(item.notificationTypeId==1)
 											 {
-												 callback();
 												 
+												 
+												 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
+									
+															if(err)
+															{		
+																console.log(err)
+															}	
+															else
+															{
+										
+																console.log(item.description)
+																console.log(ntfnTypeFound)
+																var notification	= ntfnTypeFound[0].body;
+																console.log(notification)
+																var ntfn_body  		= util.format(notification,item.description);
+																item.type			=	ntfnTypeFound[0].type;
+																console.log(ntfn_body)
+																notificationTagged  =  ntfn_body;
+																callback();						
+
+															}
+										
+												});
+												 
+									
 											 }
 											  
 											  

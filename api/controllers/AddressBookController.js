@@ -58,11 +58,13 @@ module.exports = {
 					
 						if(device_type=='android')
 						{
+							 console.log("android contacts")
 							 phonecontacts           = req.param('contact_array');
 							 //fbUser 				 = req.param('fb_array');
 						}
 						else
 						{	
+							 console.log("iosss contacts")
 							 phonecontacts           = JSON.parse(req.param('contact_array'));
 							 //fbUser 				 = JSON.parse(req.param('fb_array'));
 						}	

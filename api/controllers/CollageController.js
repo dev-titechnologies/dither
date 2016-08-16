@@ -595,8 +595,8 @@ module.exports = {
                                                                                             });
                                                                                     }else{
                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
-                                                                                                                username                : received_userName,
-                                                                                                                user_profile_image      : received_userProfilePic,
+                                                                                                                username                : foundUserDetails.name,
+                                                                                                                user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
                                                                                                                 total_opinion           : total_opinion,
                                                                                                                 recent_dithers          : recent_dithers_Array_4,
                                                                                                                 popular_dithers         : popular_dithers_Array_4 });

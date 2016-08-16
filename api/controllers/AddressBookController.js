@@ -40,9 +40,17 @@ module.exports = {
                         {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
                         ];*/
                         
-				var phonecontacts           = req.param('contact_array');
+                console.log(req.param('contact_array'))  
+                
+               if(req.param('contact_array')== undefined || req.param('contact_array')== '')  
+                {
+					return res.json(200, {status: 2, status_type: 'Failure' , message: 'Request Data Missing'}); //If an error occured, we let express/connect handle it by calling the "next" function
+				}
+				else
+				{
+				var phonecontacts           = JSON.parse(req.param('contact_array'));
 				//var phonecontacts           = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
-				var fbUser                  = [ { fb_name: 'ARDRA', fb_userid: '6777' } ] ;
+				var fbUser                  = [ { fb_name: 'malu', fb_userid: 'malutest123' } ] ;
                         
                         
                 console.log(phonecontacts)
@@ -50,7 +58,7 @@ module.exports = {
                 phonecontacts.forEach(function(factor, index){
                      console.log("factor");
                      console.log(factor);
-                     phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
+                     phoneContactsArray.push("("+userId+",'"+factor.name+"', '"+factor.number+"', now(), now())");
                 });
 
 				console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
@@ -293,9 +301,19 @@ module.exports = {
 																
 																var data     = {ditherUserId:selectFBContacts[0].id};
 																var criteria = {fbId:factor.fb_userid};
-																
+																console.log("fbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+																console.log(data)
 																	FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
-                
+																		if(err)
+																		{
+																			console.log("fbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+																			console.log(err)
+																		}
+																		else
+																		{
+																			console.log(updatedRecords)
+																		}
+																		
 																	});
 																	
 																	
@@ -442,6 +460,7 @@ module.exports = {
                                             }
 
                 });
+            }    
         },
 
    

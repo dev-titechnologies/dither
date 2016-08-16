@@ -50,7 +50,7 @@ module.exports = {
 												else
 												{
 													console.log(updatedUser[0])
-													return res.json(200, {status: 1, status_type: 'Success' ,msg: 'Settings updated Successfully',opinion:updatedUser[0].notifyOpinion,vote:updatedUser[0].notifyVote,comment:updatedUser[0].notifyComment,contact:updatedUser[0].notifyContact});
+													return res.json(200, {status: 1, status_type: 'Success' ,msg: 'Settings updated Successfully',opinion:updatsssedUser[0].notifyOpinion,vote:updatedUser[0].notifyVote,comment:updatedUser[0].notifyComment,contact:updatedUser[0].notifyContact});
 													
 												}
 										    });
@@ -106,6 +106,7 @@ module.exports = {
 						
 						
 						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
+						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
 						console.log(query)
 						NotificationLog.query(query, function(err,results) {
 							

@@ -423,11 +423,19 @@ module.exports = {
 
                                                                                 }
                                                                                 //var inviteFriends       =  req.param('invite_friends_NUM');
+
                                                                                 var inviteFriends           =  request.invite_friends_NUM;
+                                                                                console.log("Without  parse inviteFriends =========================");
+                                                                                console.log(inviteFriends);
+                                                                                inviteFriends               = JSON.parse(inviteFriends);
                                                                                 var inviteFriendsArray      =  [];
                                                                                console.log(req.param('invite_friends_NUM'));
                                                                                 console.log("inviteFriends =========================");
                                                                                 console.log(inviteFriends);
+
+                                                                               // var parseJson = JSON.parse(inviteFriends);
+                                                                                //console.log("parseJson >>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                                                                                //console.log(parseJson);
                                                                                 //var inviteFriends           = inviteFriends.split(',');
                                                                                 inviteFriends.forEach(function(factor, index){
                                                                                             console.log("factor  ========>>>>>>>> results");

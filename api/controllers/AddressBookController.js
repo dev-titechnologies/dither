@@ -48,8 +48,8 @@ module.exports = {
 				}
 				else
 				{
-				//ar phonecontacts           = JSON.parse(req.param('contact_array'));
-				var phonecontacts           = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
+				var phonecontacts           = JSON.parse(req.param('contact_array'));
+				//var phonecontacts           = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
 				var fbUser                  = [ { fb_name: 'malu', fb_userid: 'malutest123' } ] ;
                         
                         

@@ -105,7 +105,7 @@ module.exports = {
 									FIND_IN_SET('"+user_id+"', N.tagged_users))"*/
 						
 						
-						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
+						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,C.image as dither_image from notificationLog as N LEFT JOIN user as U ON U.id = N.userId LEFT JOIN collage as C ON C.id = N.collage_id where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
 						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
 						console.log(query)
 						NotificationLog.query(query, function(err,results) {
@@ -149,6 +149,7 @@ module.exports = {
 													    item.ntfn_body		=	ntfn_body;
 													    item.type			=	ntfnTypeFound[0].type;
 													    item.profile_image	=	profilePic_path + item.profile_image;
+													    item.dither_image	=	profilePic_path + item.dither_image;
 														if(item.description==0)
 													    {
 															notificationCommented = item.name + " commented on your Dither";
@@ -193,6 +194,7 @@ module.exports = {
 															item.ntfn_body		=	ntfn_body;
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
+															item.dither_image	=	profilePic_path + item.dither_image;
 															notificationVoted  	=  ntfn_body;
 															notifyVoteArray	    = [];
 															notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
@@ -228,6 +230,7 @@ module.exports = {
 																	item.ntfn_body		=	ntfn_body;
 																	item.type			=	ntfnTypeFound[0].type;
 																	item.profile_image	=	profilePic_path + item.profile_image;
+																	item.dither_image	=	profilePic_path + item.dither_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
 																	callback();							
@@ -272,6 +275,7 @@ module.exports = {
 																item.type			=	ntfnTypeFound[0].type;
 																item.ntfn_body		=	ntfn_body;
 																item.profile_image	=	profilePic_path + item.profile_image;
+																item.dither_image	=	profilePic_path + item.dither_image;
 																console.log(item.profile_image)
 																console.log(ntfn_body)
 																notificationTagged  =  ntfn_body;

@@ -105,7 +105,8 @@ module.exports = {
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                            //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
                             }else{
@@ -134,7 +135,8 @@ module.exports = {
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                            //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
                             }

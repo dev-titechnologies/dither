@@ -30,7 +30,8 @@ module.exports = {
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
+                                " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
                                 " WHERE clg.id = "+get_collage_id+
                                 " GROUP BY clgdt.id";
                     console.log(query);

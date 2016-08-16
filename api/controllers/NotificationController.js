@@ -106,6 +106,7 @@ module.exports = {
 						
 						
 						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
+						console.log(query)
 						NotificationLog.query(query, function(err,results) {
 							
 							if(err)
@@ -238,8 +239,21 @@ module.exports = {
 											  }
 											  else if(item.notificationTypeId==1)
 											 {
-												 
-												 
+												
+												//var query = "SELECT * FROM `notificationLog` WHERE `ditherUserId`='"+user_id+"' AND FIND_IN_SET('"+user_id+"', `tagged_users`)"
+												
+												NotificationLog.query(query, function(err,data) {
+													if(err)
+													{
+														console("error")
+													}
+													else
+													{
+														console.log(data)
+													}
+												});
+												
+												
 												 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
 									
 															if(err)

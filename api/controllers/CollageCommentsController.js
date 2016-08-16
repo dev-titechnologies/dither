@@ -63,6 +63,8 @@ module.exports = {
 											  
 																console.log("999999999999999999999999999999999")
 																console.log(results)
+														if(userId!=collageResult[0].userId)
+														{		
 																var values ={
 										
 																				notificationTypeId	:	3,
@@ -71,6 +73,7 @@ module.exports = {
 																				collage_id			:	collageId,
 																				description			:	commentDetails.length
 																			}
+																
 															
 
 																NotificationLog.create(values).exec(function(err, createdNotificationTags) {
@@ -85,6 +88,9 @@ module.exports = {
 																		console.log(createdNotificationTags)
 																	}
 																});
+															
+														}
+															
 							
 															//-----------------------------End OF NotificationLog---------------------------------
 													
@@ -96,7 +102,9 @@ module.exports = {
 																						comment_msg                     :    results.msg,
 																						comment_created_date_time       :    results.createdAt,
 																				});
-															});
+															
+																	
+														});
 														}
 													});						
 												 }

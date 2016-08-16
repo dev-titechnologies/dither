@@ -86,6 +86,8 @@ module.exports = {
 						var user_id				= 	  tokenCheck.tokenDetails.id;
 						var server_baseUrl  	=     req.options.server_baseUrl;
 						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
+						var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
+
 						
 						notificationVoted 		= "";
 						notificationCommented 	= "";
@@ -149,7 +151,7 @@ module.exports = {
 													    item.ntfn_body		=	ntfn_body;
 													    item.type			=	ntfnTypeFound[0].type;
 													    item.profile_image	=	profilePic_path + item.profile_image;
-													    item.dither_image	=	profilePic_path + item.dither_image;
+													    item.dither_image	=	collageImg_path + item.dither_image;
 														if(item.description==0)
 													    {
 															notificationCommented = item.name + " commented on your Dither";
@@ -194,7 +196,7 @@ module.exports = {
 															item.ntfn_body		=	ntfn_body;
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
-															item.dither_image	=	profilePic_path + item.dither_image;
+															item.dither_image	=	collageImg_path + item.dither_image;
 															notificationVoted  	=  ntfn_body;
 															notifyVoteArray	    = [];
 															notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
@@ -230,7 +232,7 @@ module.exports = {
 																	item.ntfn_body		=	ntfn_body;
 																	item.type			=	ntfnTypeFound[0].type;
 																	item.profile_image	=	profilePic_path + item.profile_image;
-																	item.dither_image	=	profilePic_path + item.dither_image;
+																	item.dither_image	=	collageImg_path + item.dither_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
 																	callback();							
@@ -275,7 +277,7 @@ module.exports = {
 																item.type			=	ntfnTypeFound[0].type;
 																item.ntfn_body		=	ntfn_body;
 																item.profile_image	=	profilePic_path + item.profile_image;
-																item.dither_image	=	profilePic_path + item.dither_image;
+																item.dither_image	=	collageImg_path + item.dither_image;
 																console.log(item.profile_image)
 																console.log(ntfn_body)
 																notificationTagged  =  ntfn_body;

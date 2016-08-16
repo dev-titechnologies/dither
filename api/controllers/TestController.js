@@ -229,6 +229,26 @@ module.exports = {
                 sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
         },
 
+        invite: function (req, res) {
+                console.log("Request-1 >>>>>>>>>>>>>>>>>>>> in Test");
+                console.log(req.param("request1"));
+
+
+                console.log("Request-2 >>>>>>>>>>>>>>>>>>>> in Test");
+                console.log(req.param("request2"));
+
+
+                console.log("Request Json parse>>>>>>>>>>>>>>>>>>>> in Test");
+                console.log(JSON.parse(req.param("request1")));
+
+                console.log("Request Json parse>>>>>>>>>>>>>>>>>>>> in Test");
+                console.log(JSON.parse(req.param("request2")));
+
+                console.log("Request Length>>>>>>>>>>>>>>>>>>>> in Test");
+                console.log(JSON.parse(req.param("request1").length));
+                console.log(JSON.parse(req.param("request2").length));
+        }
+
 
 };
 

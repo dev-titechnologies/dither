@@ -18,7 +18,7 @@ module.exports = {
         userId: {
                 type: 'integer',
             },
-        ditherId: {
+        ditherUserId: {
                 type: 'integer',
             },
         ditherUserName: {

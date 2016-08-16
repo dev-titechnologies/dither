@@ -10,28 +10,31 @@ module.exports = {
   tableName : 'invitation',
   attributes: {
 
-       id: {
+        id: {
                 type: 'integer',
                 primaryKey: true,
                 autoIncrement: true
             },
-       userId: {
+        collageId: {
                 type: 'integer',
             },
-       ditherUserId : {
+        userId: {
                 type: 'integer',
             },
-       phoneNumber  : {
+        ditherUserId : {
+                type: 'integer',
+            },
+        phoneNumber  : {
                 type: 'string',
             },
-       fbId:{
+        fbId:{
                   type:'string',
            } ,
-       createdAt:{
+        createdAt:{
 
                 type:'datetime',
             },
-       updatedAt:{
+        updatedAt:{
 
                 type:'datetime',
             },

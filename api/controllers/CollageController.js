@@ -472,12 +472,22 @@ module.exports = {
                                                                 console.log(err);
                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                             }else{
+
+                                                                if(!foundUserDetails){
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
+                                                                                            username                : foundUserDetails.name,
+                                                                                            user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                            recent_dithers          : [],
+                                                                                            popular_dithers         : []
+                                                                        });
+                                                                }else{
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                             username                : foundUserDetails.name,
                                                                                             user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
                                                                                             recent_dithers          : [],
                                                                                             popular_dithers         : []
                                                                         });
+                                                                }
                                                             }
                                                     });
                                             }else{
@@ -564,12 +574,36 @@ module.exports = {
                                                                         });
 
                                                                         recent_dithers_Array_4 = recent_dithers_Array_4.sort( predicatBy("mainOrder") );
-                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
+                                                                        /*return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                 username                : received_userName,
                                                                                                 user_profile_image      : received_userProfilePic,
                                                                                                 total_opinion           : total_opinion,
                                                                                                 recent_dithers          : recent_dithers_Array_4,
-                                                                                                popular_dithers         : popular_dithers_Array_4 });
+                                                                                                popular_dithers         : popular_dithers_Array_4 });*/
+                                                                        User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
+                                                                                if (err) {
+                                                                                    console.log(err);
+                                                                                       return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
+                                                                                }else{
+
+                                                                                    if(!foundUserDetails){
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
+                                                                                                                username                : foundUserDetails.name,
+                                                                                                                user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                                                recent_dithers          : [],
+                                                                                                                popular_dithers         : []
+                                                                                            });
+                                                                                    }else{
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
+                                                                                                                username                : received_userName,
+                                                                                                                user_profile_image      : received_userProfilePic,
+                                                                                                                total_opinion           : total_opinion,
+                                                                                                                recent_dithers          : recent_dithers_Array_4,
+                                                                                                                popular_dithers         : popular_dithers_Array_4 });
+                                                                                    }
+                                                                                }
+                                                                        });
+
                                             }//Results length check else
                                         }
                                 });

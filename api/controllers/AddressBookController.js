@@ -61,8 +61,8 @@ module.exports = {
 						 phonecontacts           = JSON.parse(req.param('contact_array'));
 						 //fbUser 				 = JSON.parse(req.param('fb_array'));
 					
-						//var phonecontacts           = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
-						var fbUser                  = [ { fb_name: 'malu', fb_userid: 'malutest123' } ] ;
+						//var phonecontacts      = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
+						var fbUser               = JSON.parse(req.param('fb_array'));
 								
 								
 						console.log(phonecontacts)
@@ -468,6 +468,8 @@ module.exports = {
 														return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
 													}else{
 														console.log("Success -----------------------------------------");
+														console.log(ditherUserInAddressBook)
+														console.log(ditherUserInFbFriends)
 														return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
 													}
 

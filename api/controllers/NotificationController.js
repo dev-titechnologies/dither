@@ -270,6 +270,7 @@ module.exports = {
 																console.log(notification)
 																var ntfn_body  		= util.format(notification,item.description);
 																item.type			=	ntfnTypeFound[0].type;
+																item.ntfn_body		=	ntfn_body;
 																item.profile_image	=	profilePic_path + item.profile_image;
 																console.log(item.profile_image)
 																console.log(ntfn_body)

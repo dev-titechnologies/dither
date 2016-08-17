@@ -463,10 +463,18 @@ module.exports = {
                                 console.log("type 2")
                                 //sails.log(results.userId)
                                 User.query("SELECT profilePic from user where id='"+userId+"'", function(err, data){
-
+									if(err)
+									{
+										console.log(err)
+									}
+									else
+									{
+									 if(data[0].profilePic!=null)	
+									 {	
 										var data     = {profilePic:null};
 										var criteria = {id: userId};
-
+										console.log("profile picccccccccccccccc")
+										console.log(data)
 									   // var query = "UPDATE user SET profilePic=null where id='"+userId+"'";
 									   User.update(criteria,data).exec(function(err, datas) {
 										//User.query(query, function(err, datas){
@@ -484,6 +492,13 @@ module.exports = {
 												return res.json(200, {status: 1, message: 'Success'});
 											}
 										});
+									  }
+									  else
+									  {
+										  console.log("gggggggggggggggggg")
+										  return res.json(200, {status: 1, message: 'Success'});
+									  }	
+									}	
                             });
 
                          }

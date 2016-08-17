@@ -138,25 +138,50 @@ module.exports = {
                                                                                     taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
                                                                             });
                                                                         }
-                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
-                                                                                     dither_desc                : results[0].imgTitle,
-                                                                                     dither_created_date_time   : results[0].createdAt,
-                                                                                     dither_updated_date_time   : results[0].updatedAt,
-                                                                                     dither_id                  : results[0].collageId,
-                                                                                     dither_created_username    : results[0].collageCreator,
-                                                                                     dither_created_userID      : results[0].collageCreatorId,
-                                                                                     dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
-                                                                                     dither_location            : results[0].location,
-                                                                                     dither_image               : collageImg_path + results[0].collageImage,
-                                                                                     dither_like_position       : like_position,
-                                                                                     dithers                    : imageArray,
-                                                                                     ditherCount                : imageArray.length,
-                                                                                     taggedUsers                : taggedUserArrayFinal,
-                                                                                     comments                   : commentArray,
-                                                                                });
+
+                                                                        query = " SELECT invt.phoneNumber, invt.invitee"+
+                                                                                " FROM invitation invt"+
+                                                                                " WHERE invt.collageId = "+get_collage_id;
+                                                                        console.log(query);
+                                                                        Invitation.query(query, function(err, invitedUsersFinalResults){
+                                                                                if(err)
+                                                                                {
+                                                                                    console.log(err);
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting invited users'});
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    console.log("Invited Users =============>>>>>>>>>>>>>>>>>>   ");
+                                                                                    var inviteeArray;
+                                                                                    if(invitedUsersFinalResults.length != 0){
+
+                                                                                            inviteeArray = invitedUsersFinalResults;
+                                                                                    }else{
+
+                                                                                            inviteeArray = [];
+                                                                                    }
+                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
+                                                                                                 dither_desc                : results[0].imgTitle,
+                                                                                                 dither_created_date_time   : results[0].createdAt,
+                                                                                                 dither_updated_date_time   : results[0].updatedAt,
+                                                                                                 dither_id                  : results[0].collageId,
+                                                                                                 dither_created_username    : results[0].collageCreator,
+                                                                                                 dither_created_userID      : results[0].collageCreatorId,
+                                                                                                 dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
+                                                                                                 dither_location            : results[0].location,
+                                                                                                 dither_image               : collageImg_path + results[0].collageImage,
+                                                                                                 dither_like_position       : like_position,
+                                                                                                 dithers                    : imageArray,
+                                                                                                 ditherCount                : imageArray.length,
+                                                                                                 taggedUsers                : taggedUserArrayFinal,
+                                                                                                 comments                   : commentArray,
+                                                                                                 invite_friends_NUM         : inviteeArray,
+                                                                                    });
+                                                                                }
+                                                                        });
 
                                                                     }
-                                                            });
+                                                            });//Selecting Tagged Users from both contact List and FB Friends
 
                                                 }
                                         });

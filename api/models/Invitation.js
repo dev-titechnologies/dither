@@ -29,7 +29,10 @@ module.exports = {
             },
         fbId:{
                   type:'string',
-           } ,
+           },
+        invitee : {
+                type: 'string',
+            },
         createdAt:{
 
                 type:'datetime',

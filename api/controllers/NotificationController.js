@@ -201,10 +201,18 @@ module.exports = {
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
 															item.dither_image	=	collageImg_path + item.dither_image;
-															notificationVoted  	=  ntfn_body;
-															notifyVoteArray	    = [];
-															notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-															console.log(notifyVoteArray)
+															if(item.description==0)
+															{
+															  notificationVoted = item.name + " voted on your Dither";
+															  item.ntfn_body	= notificationVoted;
+															}
+															else
+															{
+																notificationVoted  	=  ntfn_body;
+																notifyVoteArray	    = [];
+																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																console.log(notifyVoteArray)
+															}	
 															//notifyVoteArray.push(ditherId:item.collage_id,userId:ditherUserId)
 															callback();	
 															

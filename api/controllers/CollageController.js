@@ -885,7 +885,7 @@ module.exports = {
                             console.log(getCollageData);
                             var dither_data                 =     JSON.parse(getCollageData);
                             if(dither_data.length == 0){
-                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'dither_data is an empty array'});
+                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No Dithers yet'});
                             }else{
                                     var push_Request_Array          =     [];
                                     var push_Result_Array           =     [];

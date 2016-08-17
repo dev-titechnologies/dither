@@ -66,7 +66,7 @@ module.exports = {
 														if(userId!=collageResult[0].userId)
 														{
 															
-																console.log()
+																console.log("own comment not included")
 																var values ={
 										
 																				notificationTypeId	:	3,

@@ -126,7 +126,9 @@ module.exports = {
 									async.forEach(results, function (item, callback){ 
 									if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4)	
 										{
-										  if(item.notificationTypeId==3)
+										  //----------Comment Notification---------------------------
+										  
+										  if(item.notificationTypeId==3) 
 										  {
 											  
 											//  console.log(item.description)
@@ -154,7 +156,9 @@ module.exports = {
 													    item.dither_image	=	collageImg_path + item.dither_image;
 														if(item.description==0)
 													    {
+															console.log("commenteddd")
 															notificationCommented = item.name + " commented on your Dither";
+															item.ntfn_body		  =	notificationCommented;
 														}
 														else
 														{

@@ -347,7 +347,7 @@ module.exports = {
                                                                         taggedUsersFinalResults.forEach(function(factor, index){
                                                                                 console.log("factor ------------))))))))))))))))======================");
                                                                                 console.log(factor);
-                                                                                taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                                                taggedUserArrayFinal.push({name: factor.name,userId: factor.ditherUserId});
                                                                         });
                                                                     }
 
@@ -1198,22 +1198,36 @@ module.exports = {
      ==================================================================================================================================== */
         editDither:  function (req, res) {
 
-                    console.log("Edit Dithers ===== api");
+                  /*  console.log("Edit Dithers ===== api");
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
                     console.log(req.param("dither_location"));
                     var collageId                   =      req.param("dither_id");
                     var imgTitle                    =      req.param("dither_desc");
                     var location                    =      req.param("dither_location");
-                    var taggedUsers                 =      req.param("tagged_users");
+                    //var taggedUsers                 =      req.param("tagged_users");
+                    var tagged_fbUser               =      req.param("tagged_fb_user");
+                    var tagged_contactUser          =      req.param("tagged_user");
+                    //var taggedUserArray               =   tagged_fbUser.concat(tagged_contactUser);
+                    var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
+                    var taggedUserArrayFinal        =      [];
+                    var inviteFriends               =      req.param("invite_friends_NUM");
+                    var inviteFriendsArray          =      [];
 
                     if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
                     }else{
-                            Collage.findOne({id: collageId}).exec(function (err, foundCollage){
+
+
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                async.series([
+                    function(callback) {
+                                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                Collage.findOne({id: collageId}).exec(function (err, foundCollage){
                                                 if(err){
                                                             console.log(err);
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                                            callback();
                                                 }else{
 
                                                     if(!foundCollage){
@@ -1228,138 +1242,19 @@ module.exports = {
                                                                 if(err)
                                                                 {
                                                                     console.log(err);
-                                                                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating the Dither'});
+                                                                    //return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating the Dither'});
+                                                                    callback();
                                                                 }
                                                                 else
                                                                 {
                                                                     console.log("Successfully updated =======================");
                                                                     console.log(updatedCollage);
-                                                                    /*if(){
-                                                                    }*/
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-               /* async.series([
-                    function(callback) {
-                                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                req.file('collage_image').upload({dirname: imageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
-                                        if (err)
-                                        {
-                                            console.log(err);
-                                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage image', error_details: err});
-                                        }
-                                        else
-                                        {
-                                            console.log(files);
-                                                if(files.length != 0){
+                                                                    callback();
 
-                                                            //console.log(files);
-                                                            var collage_imageName = "";
-                                                            files.forEach(function(factor, index){
-                                                                         var filename = factor.fd.split('/');
-                                                                         filename = filename[filename.length-1];
-                                                                         //console.log(filename);
-                                                                         //sum = sum + factor.size;
-
-                                                                         var filename_without_extension         =   factor.filename.split('.');
-                                                                         filename_without_extension             =   filename_without_extension[0];
-                                                                         if(filename_without_extension === "image_0"){
-                                                                                console.log("filename_without_extension >>>>>>>>>>>>>>>>>>>>>>>");
-                                                                                console.log(filename_without_extension);
-                                                                                collage_imageName = factor.fd.split('/');
-                                                                                console.log(collage_imageName);
-                                                                                collage_imageName = collage_imageName[collage_imageName.length-1];
-                                                                         }
-                                                            });
-
-                                                            console.log(request);
-                                                            var values = {
-                                                                imgTitle        : request.dither_title,
-                                                                image           : collage_imageName,
-                                                                location        : request.dither_location,
-                                                                latitude        : request.latitude,
-                                                                longitude       : request.longitude,
-                                                                userId          : userId,
-                                                                vote            : 0,
-                                                            };
-                                                        console.log("values---------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                                                        console.log(values);
-                                                        Collage.create(values).exec(function(err, results){
-                                                                if(err){
-                                                                        console.log(err);
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
                                                                 }
-                                                                else{
-                                                                            var sum = 0;
-                                                                            var collageDetailImgArray = [];
-                                                                            files.forEach(function(factor, index){
-                                                                                 //console.log("factor +++++++++++++++++++++++++++++++++++++++++");
-                                                                                 //console.log(factor);
-                                                                                 var filename = factor.fd.split('/');
-                                                                                 filename = filename[filename.length-1];
-                                                                                 //console.log(filename);
-                                                                                 //sum = sum + factor.size;
-
-                                                                                 var filename_without_extension         =   factor.filename.split('.');
-                                                                                 //console.log(filename_without_extension);
-                                                                                 //console.log(filename_without_extension[0]);
-                                                                                 filename_without_extension             =   filename_without_extension[0];
-
-                                                                                 var switchKey = filename_without_extension;
-                                                                                 var position;
-                                                                                 switch(switchKey){
-                                                                                        case "image_1":    position = 1;
-                                                                                        break;
-                                                                                        case "image_2":    position = 2;
-                                                                                        break;
-                                                                                        case "image_3":    position = 3;
-                                                                                        break;
-                                                                                        case "image_4":    position = 4;
-                                                                                        break;
-                                                                                 }
-                                                                                 //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
-                                                                                //if(filename_without_extension != "image_0"){
-                                                                                        //collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
-                                                                                //}
-                                                                                var switchKey = filename_without_extension;
-                                                                                switch(switchKey){
-                                                                                        case 'image_0':
-
-                                                                                        break;
-
-                                                                                        default:
-                                                                                                collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
-                                                                                        break;
-                                                                                }
-                                                                            });
-
-                                                                            CollageDetails.create(collageDetailImgArray).exec(function(err, createdCollageDetails) {
-                                                                                    if(err)
-                                                                                    {
-                                                                                        console.log(err);
-                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        createdCollageDetails.forEach(function(factor, index){
-                                                                                                //console.log("factor");
-                                                                                                //console.log(factor);
-                                                                                                vote.push({image_id: factor.id, position: factor.position, like_status: 0, vote: 0});
-                                                                                        });
-                                                                                        sortedVote                  = vote.sort( predicatBy("position") );
-
-                                                                                        collage_results             = results;
-                                                                                        callback();
-
-
-                                                                                    }
-                                                                            });
-                                                                }
-                                                        });
+                                                            }):
+                                                    }
                                                 }
-                                                else{
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Image found to add'});
-                                                }
-                                        }
-
                                 });
                     },
                     function(callback) {
@@ -1383,7 +1278,8 @@ module.exports = {
                                                 {
                                                     console.log(err);
                                                     console.log("+++++++++++++++++++++++++");
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                    callback();
+                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                 }
                                                 else
                                                 {
@@ -1424,6 +1320,7 @@ module.exports = {
                                                                 if(err)
                                                                 {
                                                                     console.log(err);
+                                                                    callback();
                                                                     //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
                                                                 }
                                                                 else
@@ -1460,6 +1357,7 @@ module.exports = {
                                                                                 if(err)
                                                                                 {
                                                                                     console.log(err);
+                                                                                    callback();
                                                                                     //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                                 }else{
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
@@ -1517,40 +1415,22 @@ module.exports = {
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                 if (err) {
                                     console.log(err);
-                                    //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Edit Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                 }else{
-                                    console.log("Create Dither =============>>>>>>>>>>>>>>");
-                                    console.log(sortedVote);
-                                    console.log(taggedUserArrayFinal);
+                                    console.log("Edit Dither =============>>>>>>>>>>>>>>");
+                                    //console.log(sortedVote);
+                                    //console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);
-                                    return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
-                                                              profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
-                                                              user_name          :     tokenCheck.tokenDetails.name,
-                                                              user_id            :     tokenCheck.tokenDetails.userId,
-                                                              created_date_time  :     collage_results.createdAt,
-                                                              updated_date_time  :     collage_results.updatedAt,
-                                                              collage_id         :     collage_results.id,
-                                                              collage_image      :     collageImg_path + collage_results.image,
-                                                              location           :     collage_results.location,
-                                                              caption            :     collage_results.imgTitle,
-                                                              vote               :     sortedVote,
-                                                              dither_count       :     sortedVote.length,
-                                                              taggedUsers        :     taggedUserArrayFinal,
-                                                              invite_friends_NUM :     request.invite_friends_NUM,
-                                    });
+                                    return res.json(200, {status: 1, status_type: 'Success', message: 'Succesfully updated the Dither'});
                                     //return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
                                 }
             });
-*/
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully updated the Dither'});
-                                                                }
-                                                            });
-                                                    }
-                                                }
-                            });
 
-                    }
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                                                                   // return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully updated the Dither'});
+
+
+                    }*/
 
         },
 

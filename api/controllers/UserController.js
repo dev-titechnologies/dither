@@ -261,8 +261,8 @@ module.exports = {
                             else
                             {
 
-
-                                User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
+								Collage.find({userId:results.id}).exec(function(err, result){	
+                               // User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
                                         if (err) {
 											console.log(err)
 											
@@ -271,8 +271,8 @@ module.exports = {
                                         {
                                             console.log(result)
                                             //delete existing token
-
-                                            User_token.query("DELETE from userToken where userId = '"+results.id+"'", function (err, result) {
+											User_token.destroy({userId: results.id}).exec(function (err, result) {
+                                           // User_token.query("DELETE from userToken where userId = '"+results.id+"'", function (err, result) {
                                                 if (err) {
 															return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                         }

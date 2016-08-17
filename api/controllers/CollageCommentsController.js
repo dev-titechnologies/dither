@@ -53,6 +53,7 @@ module.exports = {
 												   if(err)
 												   {
 														console.log(err)
+														return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Comments not found!!', error_details: err});
 												   }
 												   else
 												   {

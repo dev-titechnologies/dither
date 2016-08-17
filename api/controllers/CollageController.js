@@ -734,7 +734,7 @@ module.exports = {
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
                                                 " GROUP BY clgdt.id"+
@@ -1198,7 +1198,7 @@ module.exports = {
      ==================================================================================================================================== */
         editDither:  function (req, res) {
 
-                  /*  console.log("Edit Dithers ===== api");
+                    /*console.log("Edit Dithers ===== api");
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
                     console.log(req.param("dither_location"));
@@ -1224,37 +1224,37 @@ module.exports = {
                     function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 Collage.findOne({id: collageId}).exec(function (err, foundCollage){
-                                                if(err){
+                                        if(err){
+                                                    console.log(err);
+                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                                    callback();
+                                        }else{
+
+                                            if(!foundCollage){
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
+                                            }else{
+                                                    var criteria    =   {id: foundCollage.id};
+                                                    var values      =   {
+                                                                            imgTitle           :    imgTitle,
+                                                                            location           :    location,
+                                                                        };
+                                                    Collage.update(criteria, values).exec(function(err, updatedCollage) {
+                                                        if(err)
+                                                        {
                                                             console.log(err);
-                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                                            //return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating the Dither'});
                                                             callback();
-                                                }else{
+                                                        }
+                                                        else
+                                                        {
+                                                            console.log("Successfully updated =======================");
+                                                            console.log(updatedCollage);
+                                                            callback();
 
-                                                    if(!foundCollage){
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
-                                                    }else{
-                                                            var criteria    =   {id: foundCollage.id};
-                                                            var values      =   {
-                                                                                    imgTitle           :    imgTitle,
-                                                                                    location           :    location,
-                                                                                };
-                                                            Collage.update(criteria, values).exec(function(err, updatedCollage) {
-                                                                if(err)
-                                                                {
-                                                                    console.log(err);
-                                                                    //return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating the Dither'});
-                                                                    callback();
-                                                                }
-                                                                else
-                                                                {
-                                                                    console.log("Successfully updated =======================");
-                                                                    console.log(updatedCollage);
-                                                                    callback();
-
-                                                                }
-                                                            }):
-                                                    }
-                                                }
+                                                        }
+                                                    });
+                                            }
+                                        }
                                 });
                     },
                     function(callback) {

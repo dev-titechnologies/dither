@@ -99,7 +99,7 @@ module.exports = {
                                                             });
                                                         }
                                                         //Query to get tagged users from both addressBook and fbFriends
-                                                            query = " SELECT"+
+                                                            /*query = " SELECT"+
                                                                     " adb.userId, adb.ditherUsername, usr.name"+
                                                                     " FROM addressBook adb"+
                                                                     " INNER JOIN user usr ON usr.id = adb.userId"+
@@ -117,6 +117,28 @@ module.exports = {
                                                                     " LEFT JOIN tags tg ON tg.userId = usr.id"+
                                                                     " WHERE"+
                                                                     " tg.collageId = "+get_collage_id+" AND clg.userId = "+userId+
+                                                                    " GROUP BY fbf.userId";*/
+                                                            query = " SELECT"+
+                                                                    " adb.userId, adb.ditherUsername, usr.name"+
+                                                                    " FROM addressBook adb"+
+                                                                    " INNER JOIN user usr ON usr.id = adb.userId"+
+                                                                    " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                    " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                    " WHERE"+
+                                                                    //" tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
+                                                                    " tg.collageId = "+collage_results.id+
+                                                                    " GROUP BY adb.userId"+
+                                                                    " UNION"+
+                                                                    " SELECT"+
+                                                                    " fbf.userId, fbf.ditherUsername, usr.name"+
+                                                                    " FROM addressBook fbf"+
+                                                                    " INNER JOIN user usr ON usr.id = fbf.userId"+
+                                                                   // " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                                    " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                    " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                    " WHERE"+
+                                                                    //" tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
+                                                                    " tg.collageId = "+collage_results.id+
                                                                     " GROUP BY fbf.userId";
 
                                                             AddressBook.query(query, function(err, taggedUsersFinalResults) {

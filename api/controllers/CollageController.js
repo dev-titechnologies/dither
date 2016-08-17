@@ -404,6 +404,7 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var userId                      =     tokenCheck.tokenDetails.userId;
+                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                     var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
                     var received_userId             =     req.param("user_id");
                     var received_userName, received_userProfilePic;
@@ -487,7 +488,7 @@ module.exports = {
                                                                 }else{
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                             username                : foundUserDetails.name,
-                                                                                            user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                            user_profile_image      : profilePic_path + foundUserDetails.profilePic,
                                                                                             recent_dithers          : [],
                                                                                             popular_dithers         : []
                                                                         });
@@ -534,7 +535,7 @@ module.exports = {
                                                                                 }
                                                                                 var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                                                 received_userName                       =       dataResults[i]["name"];
-                                                                                received_userProfilePic                 =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
+                                                                                received_userProfilePic                 =       profilePic_path + dataResults[i]["profilePic"];
                                                                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                                                                 dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
                                                                                 dataResultsObj.dither_like_position     =       like_position;
@@ -600,7 +601,7 @@ module.exports = {
                                                                                     }else{
                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                                 username                : foundUserDetails.name,
-                                                                                                                user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                                                user_profile_image      : profilePic_path + foundUserDetails.profilePic,
                                                                                                                 total_opinion           : total_opinion,
                                                                                                                 recent_dithers          : recent_dithers_Array_4,
                                                                                                                 popular_dithers         : popular_dithers_Array_4 });
@@ -695,7 +696,7 @@ module.exports = {
                                                                     }else{
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                                     username                : foundUserDetails.name,
-                                                                                                    user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                                    user_profile_image      : profilePic_path + foundUserDetails.profilePic,
                                                                                                     recent_dithers          : [],
                                                                                                     popular_dithers         : []
                                                                                 });
@@ -743,7 +744,7 @@ module.exports = {
 
 
                                                                     received_userName                           =       dataResults[i]["name"];
-                                                                    received_userProfilePic                     =       server_baseUrl + req.options.file_path.profilePic_path + dataResults[i]["profilePic"];
+                                                                    received_userProfilePic                     =       profilePic_path + dataResults[i]["profilePic"];
                                                                     //dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                                     //dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
@@ -818,14 +819,14 @@ module.exports = {
                                                                                 if(received_dither_type == "popular"){
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
                                                                                                         username                : foundUserDetails.name,
-                                                                                                        user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                                        user_profile_image      : profilePic_path + foundUserDetails.profilePic,
                                                                                                         popular_dithers         : popular_dithers });
 
                                                                                 }else if(received_dither_type == "recent"){
 
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the recent Dithers',
                                                                                                         username                : foundUserDetails.name,
-                                                                                                        user_profile_image      : server_baseUrl + req.options.file_path.profilePic_path + foundUserDetails.profilePic,
+                                                                                                        user_profile_image      : profilePic_path + foundUserDetails.profilePic,
                                                                                                         recent_dithers          : recent_dithers,
                                                                                                         });
                                                                                 }
@@ -1349,25 +1350,39 @@ module.exports = {
                                                     //Deleting from collage Table
                                                     Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
                                                             if (err){
+                                                                    console.log(err);
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
                                                             }else {
                                                                     //Deleting from collage Details Table
                                                                     CollageDetails.destroy({collageId: collageId}).exec(function (err, deleteCollageDetails) {
                                                                         if (err){
+                                                                                console.log(err);
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Single Dithers', error_details: err});
                                                                         }else{
                                                                                 //Deleting from collage Likes Table
                                                                                 CollageLikes.destroy({collageId: collageId}).exec(function (err, deleteCollageLikes) {
                                                                                     if (err){
+                                                                                            console.log(err);
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Votes', error_details: err});
                                                                                     }else {
                                                                                             //Deleting from collage Comments Table
                                                                                             CollageComments.destroy({collageId: collageId}).exec(function (err, deleteCollageComments) {
                                                                                                 if (err){
+                                                                                                        console.log(err);
                                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Comments', error_details: err});
                                                                                                 }else {
                                                                                                         //console.log("Deleted Single Dither");
-                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
+                                                                                                            //Deleting from invitation Table
+                                                                                                            Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
+                                                                                                                if (err){
+                                                                                                                        console.log(err);
+                                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
+                                                                                                                }else {
+                                                                                                                        //console.log("Deleted Single Dither");
+                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
+                                                                                                                }
+                                                                                                            });
+
                                                                                                 }
                                                                                             });
                                                                                     }

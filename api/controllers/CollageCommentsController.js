@@ -64,7 +64,9 @@ module.exports = {
 																console.log("999999999999999999999999999999999")
 																console.log(results)
 														if(userId!=collageResult[0].userId)
-														{		
+														{
+															
+																console.log()
 																var values ={
 										
 																				notificationTypeId	:	3,

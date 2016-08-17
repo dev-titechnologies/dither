@@ -53,19 +53,21 @@ module.exports = {
 				//if(!req.param('contact_array') || !req.param('fb_array'))	
 					//{	
 						 console.log("iosss contacts")
-						 phonecontacts           = JSON.parse(req.param('contact_array'));
+						 
+						 console.log(req.param('contact_array'))
+						 
+						phonecontacts           = JSON.parse(req.param('contact_array'));
 						 //fbUser 				 = JSON.parse(req.param('fb_array'));
 					
 						//var phonecontacts      = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
 						var fbUser               = JSON.parse(req.param('fb_array'));
 								
-								
-						//console.log(phonecontacts)
+							
 						var data_check1 = "";
 						phonecontacts.forEach(function(factor, index){
 							 console.log("factor");
-							 //console.log(factor);
-							 phoneContactsArray.push("("+userId+",'"+factor.name+"', '"+factor.number+"', now(), now())");
+							// phoneContactsArray.push("("+userId+",'"+factor.name+"', '"+factor.number+"', now(), now())");
+							phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
 						});
 
 						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
@@ -74,11 +76,9 @@ module.exports = {
 						fbUser.forEach(function(factor, index){
 							 console.log("factor");
 							// console.log(factor);
-							 fbUserArray.push("("+userId+",'"+factor.fb_name+"', '"+factor.fb_userid+"', now(), now())");
+							// fbUserArray.push("("+userId+",'"+factor.fb_name+"', '"+factor.fb_userid+"', now(), now())");
+							 fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
 						});
-
-
-						//console.log(phoneContactsArray);
 
 					async.series([
 						
@@ -89,18 +89,16 @@ module.exports = {
 							  function(callback) {
 											  console.log("deletion**************************************************")
 
-												//Parallel for insert users in addressBook and in fbFriends simultaneously
-												//async.parallel([
-														 // Clear the old details
-												//function(callback) {
-												//if(phonecontacts.length != 0){
-															var query = "DELETE FROM addressBook where userId = '"+userId+"'";
+												
+															/*var query = "DELETE FROM addressBook where userId = '"+userId+"'";
 															
 															var criteria	=	{userId:userId}
 														   
 
-															console.log(query);
-															AddressBook.query(query, function(err, deleteAddressBook) {
+															console.log(query);*/
+															AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
+				
+															//AddressBook.query(query, function(err, deleteAddressBook) {
 																	if(err)
 																	{
 																		console.log("delete address"+err);
@@ -118,12 +116,16 @@ module.exports = {
 								},
 											
 								 function(callback) {							
-															var query = "INSERT INTO addressBook"+
+															/*var query = "INSERT INTO addressBook"+
 																			" (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
 																			" VALUES"+phoneContactsArray;
 
-																console.log(query);
-																AddressBook.query(query, function(err, createdAddressBook) {
+																console.log(query);*/
+																
+																AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook){
+																
+																
+																//AddressBook.query(query, function(err, createdAddressBook) {
 																		if(err)
 																		{
 																			console.log(err);
@@ -213,11 +215,14 @@ module.exports = {
 											
 					
 											//	if(fbUser.length != 0){
-													var query = "DELETE FROM fbFriends where userId = '"+userId+"'";
+													/*var query = "DELETE FROM fbFriends where userId = '"+userId+"'";
 													var criteria	=	{userId:userId}
 													
-													console.log(query);
-													FbFriends.query(query, function(err, deleteFBFriends) {
+													console.log(query);*/
+													
+													FbFriends.destroy({userId: userId}).exec(function (err, deleteFBFriends) {
+													
+													//FbFriends.query(query, function(err, deleteFBFriends) {
 															if(err)
 															{
 																console.log("fb friends deletion"+err);
@@ -242,12 +247,13 @@ module.exports = {
 											 		
 												console.log("insertion fb friendssssssssssssssssssssss")
 													
-													var query = "INSERT INTO fbFriends"+
+													/*var query = "INSERT INTO fbFriends"+
 																			" (userId,  ditherUserName, fbId, createdAt, updatedAt)"+
 																			" VALUES"+fbUserArray;
 
-																console.log(query);
-																FbFriends.query(query, function(err, createdFbFriends) {
+																console.log(query);*/
+																FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
+																//FbFriends.create(query, function(err, createdFbFriends) {
 																		if(err)
 																		{
 																			console.log("insertion fbfriends error"+err);

@@ -119,6 +119,11 @@ module.exports = {
 																																  
 																																					console.log("999999999999999999999999999999999")
 																																					console.log(results)
+																																					
+																																					console.log(results)
+																																				if(userId!=userDetails[0].userId)
+																																				{		
+																																				
 																																					var values ={
 																															
 																																									notificationTypeId	:	2,
@@ -142,7 +147,7 @@ module.exports = {
 																																							console.log(createdNotificationTags)
 																																						}
 																																					});
-																												
+																																				}
 																																		//-----------------------------End OF NotificationLog---------------------------------
 
 																																

@@ -126,7 +126,7 @@ module.exports = {
                                                                     " LEFT JOIN collage clg ON clg.id = tg.collageId"+
                                                                     " WHERE"+
                                                                     //" tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
-                                                                    " tg.collageId = "+collage_results.id+
+                                                                    " tg.collageId = "+get_collage_id+
                                                                     " GROUP BY adb.userId"+
                                                                     " UNION"+
                                                                     " SELECT"+
@@ -138,7 +138,7 @@ module.exports = {
                                                                     " LEFT JOIN collage clg ON clg.id = tg.collageId"+
                                                                     " WHERE"+
                                                                     //" tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
-                                                                    " tg.collageId = "+collage_results.id+
+                                                                    " tg.collageId = "+get_collage_id+
                                                                     " GROUP BY fbf.userId";
 
                                                             AddressBook.query(query, function(err, taggedUsersFinalResults) {

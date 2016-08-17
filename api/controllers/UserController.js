@@ -461,7 +461,7 @@ module.exports = {
                         {
                                 //Remove ProfilePic
                                 console.log("type 2")
-                                sails.log(results.userId)
+                                //sails.log(results.userId)
                                 User.query("SELECT profilePic from user where id='"+userId+"'", function(err, data){
 
 										var data     = {profilePic:null};

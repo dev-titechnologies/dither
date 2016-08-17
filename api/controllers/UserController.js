@@ -400,7 +400,7 @@ module.exports = {
                         if(edit_type==1)
                         {
                                 //Change ProfilePic
-								console("type 1")
+								console.log("type 1")
                                // var imageName = req.file('profile_image')._files[0].stream.filename;
                                 var imageName ;
                                // if(req.file('profile_image'))
@@ -460,7 +460,7 @@ module.exports = {
                         if(edit_type==2)
                         {
                                 //Remove ProfilePic
-                                console("type 2")
+                                console.log("type 2")
                                 sails.log(results.userId)
                                 User.query("SELECT profilePic from user where id='"+userId+"'", function(err, data){
 

@@ -61,7 +61,7 @@ module.exports = {
                                                         like_status = 1;
                                                 }
                                                 imageArray.push({
-                                                                imageUrl : server_baseUrl + req.options.file_path.profilePic_path + factor.image,
+                                                                imageUrl : collageImg_path + factor.image,
                                                                 like_count: factor.vote,
                                                                 like_status: like_status,
                                                                 id: factor.imageId
@@ -95,7 +95,7 @@ module.exports = {
                                                             collageCommentResults.forEach(function(factor, index){
                                                                     //console.log("factor");
                                                                     //console.log(factor);
-                                                                    commentArray.push({comment_id: factor.id, user_id: factor.userId, user_name: factor.name,  user_profile_pic_url : server_baseUrl + req.options.file_path.profilePic_path + factor.profilePic, message: factor.comment});
+                                                                    commentArray.push({comment_id: factor.id, user_id: factor.userId, user_name: factor.name,  user_profile_pic_url : profilePic_path + factor.profilePic, message: factor.comment});
                                                             });
                                                         }
                                                         //Query to get tagged users from both addressBook and fbFriends

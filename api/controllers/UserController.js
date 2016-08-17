@@ -462,43 +462,50 @@ module.exports = {
                                 //Remove ProfilePic
                                 console.log("type 2")
                                 //sails.log(results.userId)
-                                User.query("SELECT profilePic from user where id='"+userId+"'", function(err, data){
+                                //User.query("SELECT profilePic from user where id='"+userId+"'", function(err, resultData){
+                                User.findOne({id:userId}).exec(function (err, resultData){
 									if(err)
 									{
 										console.log(err)
 									}
 									else
 									{
-									 if(data[0].profilePic!=null)	
+										
+									  if(!resultData)	
 									 {	
-										var data     = {profilePic:null};
-										var criteria = {id: userId};
-										console.log("profile picccccccccccccccc")
-										console.log(data)
-									   // var query = "UPDATE user SET profilePic=null where id='"+userId+"'";
-									   User.update(criteria,data).exec(function(err, datas) {
-										//User.query(query, function(err, datas){
-											if(err)
-											{
-												sails.log(err)
-												return res.json(200, {status: 2, message: 'failure'});
-											}
-											else
-											{
-												console.log(data)
-												var profileImage = server_baseUrl + "images/profilePics/"+data[0].profilePic;
-												console.log(profileImage)
-												fs.unlink("assets/images/profilePics/"+data[0].profilePic);
-												return res.json(200, {status: 1, message: 'Success'});
-											}
-										});
-									  }
-									  else
-									  {
-										  console.log("gggggggggggggggggg")
-										  return res.json(200, {status: 1, message: 'Success'});
-									  }	
+										 
+										 return res.json(200, {status: 2, message: 'Failure'});
+										
+									}
+									else
+									{
+											console.log("hhhhhhhhhhhhhhhhhhhhhhhhhh")
+											//console.log(data)	
+											console.log(resultData)
+											var data     = {profilePic:null};
+											var criteria = {id: userId};
+											console.log("profile picccccccccccccccc")
+											console.log(resultData)
+										   
+										   User.update(criteria,data).exec(function(err, datas) {
+											
+												if(err)
+												{
+													sails.log(err)
+													return res.json(200, {status: 2, status_type: 'Failure', message: 'profile image deletion failure'});
+												}
+												else
+												{
+													console.log(datas)
+													var profileImage = server_baseUrl + "images/profilePics/"+resultData.profilePic;
+													console.log(profileImage)
+													fs.unlink("assets/images/profilePics/"+resultData.profilePic);
+													return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
+												}
+											});
 									}	
+									  
+								  }	
                             });
 
                          }

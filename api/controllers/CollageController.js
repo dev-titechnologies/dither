@@ -1432,6 +1432,53 @@ module.exports = {
 
                     }*/
 
+
+                    console.log("Edit Dithers ===== api");
+                    console.log(req.param("dither_id"));
+                    console.log(req.param("dither_desc"));
+                    console.log(req.param("dither_location"));
+                    var collageId                   =      req.param("dither_id");
+                    var imgTitle                    =      req.param("dither_desc");
+                    var location                    =      req.param("dither_location");
+                    var taggedUsers                 =      req.param("tagged_users");
+
+                    if(!imgTitle || !location || !collageId){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
+                    }else{
+                            Collage.findOne({id: collageId}).exec(function (err, foundCollage){
+                                                if(err){
+                                                            console.log(err);
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                                }else{
+
+                                                    if(!foundCollage){
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
+                                                    }else{
+                                                            var criteria    =   {id: foundCollage.id};
+                                                            var values      =   {
+                                                                                    imgTitle           :    imgTitle,
+                                                                                    location           :    location,
+                                                                                };
+                                                            Collage.update(criteria, values).exec(function(err, updatedCollage) {
+                                                                if(err)
+                                                                {
+                                                                    console.log(err);
+                                                                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating the Dither'});
+                                                                }
+                                                                else
+                                                                {
+                                                                    console.log("Successfully updated =======================");
+                                                                    console.log(updatedCollage);
+                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully updated the Dither'});
+                                                                }
+                                                            });
+                                                    }
+                                                }
+                            });
+
+                    }
+
+
         },
 
 /* ==================================================================================================================================

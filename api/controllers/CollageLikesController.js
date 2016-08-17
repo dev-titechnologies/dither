@@ -121,8 +121,7 @@ module.exports = {
 																																					console.log(results)
 																																					
 																																					console.log(results)
-																																				if(userId!=userDetails[0].userId)
-																																				{		
+																																						
 																																				
 																																					var values ={
 																															
@@ -147,7 +146,7 @@ module.exports = {
 																																							console.log(createdNotificationTags)
 																																						}
 																																					});
-																																				}
+																																				
 																																		//-----------------------------End OF NotificationLog---------------------------------
 
 																																

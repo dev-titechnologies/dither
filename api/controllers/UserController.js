@@ -81,6 +81,7 @@ module.exports = {
                         } */
 
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
+							console.log("fbid checkinggggggggggg")
                             console.log(resultData);
                             if(resultData){
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User', error_details: err});
@@ -101,11 +102,12 @@ module.exports = {
                                                             //User.subscribe(req.socket,result);
                                                             //sails.sockets.broadcast('user', { msg: 'signup set ===========' });
                                                             //sails.sockets.emit(req.socket.id,'privateMessage', {msg: 'Hi!'});
-                                                            sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
+                                                            //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
                                                             console.log("Before async parallel in Sign up ===============================================");
                                                                 // Send Email and Sms  Simultaneously
                                                                 async.parallel([
                                                                             function(callback) {
+																						console.log("parallel 1")
                                                                                         console.log("async parallel in Mailpart ===============================================");
                                                                                         var global_settingsKeyValue = req.options.settingsKeyValue;
                                                                                         var email_to        = results.email;
@@ -135,6 +137,7 @@ module.exports = {
 
                                                                             },
                                                                             function(callback) {
+																				        console.log("parallel 2")
                                                                                         var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
                                                                                         var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
                                                                                         var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
@@ -156,6 +159,7 @@ module.exports = {
                                                                             },
                                                                             function(callback) {
                                                                                         //Notification Log insertion
+                                                                                        console.log("parallel 3")
                                                                                         Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
                                                                                                 if(err)
                                                                                                 {
@@ -260,6 +264,8 @@ module.exports = {
 
                                 User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
                                         if (err) {
+											console.log(err)
+											
                                         }
                                         else
                                         {
@@ -268,6 +274,7 @@ module.exports = {
 
                                             User_token.query("DELETE from userToken where userId = '"+results.id+"'", function (err, result) {
                                                 if (err) {
+															return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                         }
                                                 else
                                                 {
@@ -373,27 +380,32 @@ module.exports = {
                 sails.log(req.get('token'))
                 var edit_type                   = req.param('edit_type');
                 var fileName                    = req.file('profile_image');
-                var token                       = req.get('token');
+               // var token                       = req.get('token');
+                var tokenCheck                  =     req.options.tokenCheck;
+                var userId                      =     tokenCheck.tokenDetails.userId;
+               
+               
                 console.log(req.file('profile_image'))
                 var server_baseUrl              =     req.options.server_baseUrl;
                 var imageUploadDirectoryPath    = '../../assets/images/profilePics';
 
-                User_token.findOne({token: req.get('token')}).exec(function (err, results){
+               /* User_token.findOne({token: req.get('token')}).exec(function (err, results){
                    if (err)
                     {
                         sails.log(err)
                     }
                     else
-                    {
-                        sails.log(results)
+                    {*/
+                        //sails.log(results)
                         if(edit_type==1)
                         {
                                 //Change ProfilePic
-
-                                var imageName = req.file('profile_image')._files[0].stream.filename;
-                                if(req.file('profile_image'))
-                                {
-                                    req.file('profile_image').upload({dirname: '../../assets/images/profilePics'},function (err, profileUploadResults) {
+								console("type 1")
+                               // var imageName = req.file('profile_image')._files[0].stream.filename;
+                                var imageName ;
+                               // if(req.file('profile_image'))
+                                //{
+                                    req.file('profile_image').upload({dirname: '../../assets/images/profilePics',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults) {
                                         if (err)
                                         {
                                             console.log(err)
@@ -402,61 +414,81 @@ module.exports = {
                                         }
                                         else
                                         {
-                                           console.log("profileImages   ------->>> Uploaded");
-                                          console.log(profileUploadResults)
-                                           imageName = profileUploadResults[0].fd.split('/');
-                                           imageName = imageName[imageName.length-1];
-                                           console.log(imageName)
-                                           //imageName = profileUploadResults
-                                           var query = "UPDATE user SET profilePic='"+ imageName +"' where id='"+results.userId+"'";
-                                            User.query(query, function(err, data){
-                                                if(err)
-                                                {
-                                                    sails.log(err)
-                                                }
-                                                else
-                                                {
-                                                    var profileImage = server_baseUrl + "images/profilePics/"+imageName;
+											
+										 if(profileUploadResults.length==0)	
+										 {
+											 return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
 
-                                                    return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success',profile_image:profileImage});
-                                                }
+										 }
+										 else
+										 {
+											
+												  console.log("profileImages   ------->>> Uploaded");
+												  console.log(profileUploadResults)
+												   imageName = profileUploadResults[0].fd.split('/');
+												   imageName = imageName[imageName.length-1];
+												   console.log(imageName)
+												   //imageName = profileUploadResults
+												   
+												   var data     = {profilePic:imageName};
+												   var criteria = {id: userId};
+												   
+												  // var query = "UPDATE user SET profilePic='"+ imageName +"' where id='"+userId+"'";
+												   User.update(criteria,data).exec(function(err, data) {
+												   // User.query(query, function(err, data){
+														if(err)
+														{
+															sails.log(err)
+														}
+														else
+														{
+															var profileImage = server_baseUrl + "images/profilePics/"+imageName;
+
+															return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success',profile_image:profileImage});
+														}
 
 
-                                                });
+													});
+                                            }    
 
                                         }
                                     });
-                                }
+                               // }
 
                         }
 
                         if(edit_type==2)
                         {
                                 //Remove ProfilePic
+                                console("type 2")
                                 sails.log(results.userId)
-                                User.query("SELECT profilePic from user where id='"+results.userId+"'", function(err, data){
+                                User.query("SELECT profilePic from user where id='"+userId+"'", function(err, data){
 
-                                var query = "UPDATE user SET profilePic=null where id='"+results.userId+"'";
-                                User.query(query, function(err, datas){
-                                    if(err)
-                                    {
-                                        sails.log(err)
-                                        return res.json(200, {status: 2, message: 'failure'});
-                                    }
-                                    else
-                                    {
-                                        console.log(data)
-                                        var profileImage = server_baseUrl + "images/profilePics/"+data[0].profilePic;
-                                        console.log(profileImage)
-                                        fs.unlink("assets/images/profilePics/"+data[0].profilePic);
-                                        return res.json(200, {status: 1, message: 'Success'});
-                                    }
-                                });
+										var data     = {profilePic:null};
+										var criteria = {id: userId};
+
+									   // var query = "UPDATE user SET profilePic=null where id='"+userId+"'";
+									   User.update(criteria,data).exec(function(err, datas) {
+										//User.query(query, function(err, datas){
+											if(err)
+											{
+												sails.log(err)
+												return res.json(200, {status: 2, message: 'failure'});
+											}
+											else
+											{
+												console.log(data)
+												var profileImage = server_baseUrl + "images/profilePics/"+data[0].profilePic;
+												console.log(profileImage)
+												fs.unlink("assets/images/profilePics/"+data[0].profilePic);
+												return res.json(200, {status: 1, message: 'Success'});
+											}
+										});
                             });
 
                          }
-                    }
-                });
+                  //  }
+              //  });
 
 
       },

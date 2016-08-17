@@ -81,11 +81,7 @@ module.exports = {
 						});
 
 					async.series([
-						
-						//function(callback) {
-							
-						//async.series([
-							
+					
 							  function(callback) {
 											  console.log("deletion**************************************************")
 

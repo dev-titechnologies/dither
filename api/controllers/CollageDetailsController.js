@@ -176,7 +176,7 @@ module.exports = {
                                                                             taggedUsersFinalResults.forEach(function(factor, index){
                                                                                     //console.log("factor");
                                                                                     //console.log(factor);
-                                                                                    taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                                                    taggedUserArrayFinal.push({name: factor.name,userId: factor.ditherUserId});
                                                                             });
                                                                         }
 

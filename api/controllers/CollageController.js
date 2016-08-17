@@ -370,7 +370,8 @@ module.exports = {
                                                                                                           caption            :     results.imgTitle,
                                                                                                           vote               :     sortedVote,
                                                                                                           dither_count       :     sortedVote.length,
-                                                                                                          taggedUsers        :     taggedUserArrayFinal
+                                                                                                          taggedUsers        :     taggedUserArrayFinal,
+                                                                                                          invite_friends_NUM :    request.invite_friends_NUM,
                                                                                 });
 
 
@@ -1137,6 +1138,7 @@ module.exports = {
                     var collageId                   =      req.param("dither_id");
                     var imgTitle                    =      req.param("dither_desc");
                     var location                    =      req.param("dither_location");
+                    var taggedUsers                 =      req.param("tagged_users");
 
                     if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
@@ -1165,6 +1167,149 @@ module.exports = {
                                                                 {
                                                                     console.log("Successfully updated =======================");
                                                                     console.log(updatedCollage);
+                                                                    /*if(){
+                                                                    }*/
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                /*var tagged_fbUser           =   req.param("tagged_fb_user");
+                var tagged_contactUser      =   req.param("tagged_user");
+                var taggedUserArray         =   union_arrays(tagged_fbUser, tagged_contactUser);
+
+                console.log("tagged_fbUser ++++++++++++++++++++");
+                console.log(tagged_fbUser);
+                console.log("tagged_contactUser ++++++++++++++++++++");
+                console.log(tagged_contactUser);
+
+                var taggedUserArrayFinal = [];
+                console.log("taggedUserArray ++++++++++++++++++++");
+                console.log(taggedUserArray);
+                console.log(taggedUserArray.length);
+
+                if(taggedUserArray.length != 0){
+                        console.log(results);
+                        console.log("results.id+++++++++++++++++");
+                        console.log(results.id);
+
+                        var tagCollageArray = [];
+                        taggedUserArray.forEach(function(factor, index){
+                            console.log("Refy tagged User ======>>>>> factor");
+                            console.log(factor);
+                            tagCollageArray.push({collageId: results.id, userId: factor});
+                        });
+                        console.log("tagCollageArray }}}}}}}}}}}}}}}}}}}}}}}}");
+                        console.log(tagCollageArray);
+
+                        Tags.create(tagCollageArray).exec(function(err, createdCollageTags) {
+                                if(err)
+                                {
+                                    console.log(err);
+                                    console.log("+++++++++++++++++++++++++");
+                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                }
+                                else
+                                {
+
+                                        //console.log("created in collage Details=====");
+                                        //console.log(vote);
+                                        console.log("Predicated -------------------------");
+
+                                        //console.log(vote.sort( predicatBy("image_id") ));
+
+                                        //console.log(results);
+
+                                        //Query to get tagged users from both addressBook and fbFriends
+                                        query = " SELECT"+
+                                                " adb.userId, adb.ditherUsername, usr.name"+
+                                                " FROM addressBook adb"+
+                                                " INNER JOIN user usr ON usr.id = adb.userId"+
+                                                " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                " WHERE"+
+                                                " tg.collageId = "+results.id+" AND clg.userId = "+userId+
+                                                " GROUP BY adb.userId"+
+                                                " UNION"+
+                                                " SELECT"+
+                                                " fbf.userId, fbf.ditherUsername, usr.name"+
+                                                " FROM addressBook fbf"+
+                                                " INNER JOIN user usr ON usr.id = fbf.userId"+
+                                                " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                " WHERE"+
+                                                " tg.collageId = "+results.id+" AND clg.userId = "+userId+
+                                                " GROUP BY fbf.userId";
+
+                                        AddressBook.query(query, function(err, taggedUsersFinalResults) {
+                                                if(err)
+                                                {
+                                                    console.log(err);
+                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
+                                                }
+                                                else
+                                                {
+                                                    console.log(query);
+                                                    //console.log(taggedUsersFinalResults);
+
+                                                    if(taggedUsersFinalResults != 0){
+                                                        taggedUsersFinalResults.forEach(function(factor, index){
+                                                                console.log("factor ------------))))))))))))))))======================");
+                                                                console.log(factor);
+                                                                taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                        });
+                                                    }
+
+                                                }
+
+                                        });
+                                }
+                        });
+
+                }
+                //var inviteFriends       =  req.param('invite_friends_NUM');
+
+                var inviteFriends           =  request.invite_friends_NUM;
+                console.log("Without  parse inviteFriends =========================");
+                console.log(inviteFriends);
+                inviteFriends               = JSON.parse(inviteFriends);
+                var inviteFriendsArray      =  [];
+                console.log(req.param('invite_friends_NUM'));
+                console.log("inviteFriends =========================");
+                console.log(inviteFriends);
+
+               // var parseJson = JSON.parse(inviteFriends);
+                //console.log("parseJson >>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                //console.log(parseJson);
+                //var inviteFriends           = inviteFriends.split(',');
+                inviteFriends.forEach(function(factor, index){
+                            console.log("factor  ========>>>>>>>> results");
+                            console.log(factor);
+                            inviteFriendsArray.push(factor.phone_number);
+                });
+                console.log(inviteFriendsArray.length);
+                var inviteFinalArray    =  [];
+
+                if(inviteFriends.length != 0){
+                    //phoneNumber
+                    //userId
+                    console.log(userId);
+                    inviteFriends.forEach(function(factor, index){
+                             inviteFinalArray.push({userId: parseInt(userId), collageId: results.id, phoneNumber: factor.phone_number});
+                    });
+                    console.log("inviteFinalArray  -----------------------------++++++++++++++++++++++++++++++++++++");
+                    console.log(inviteFinalArray);
+                    Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
+                            if(err)
+                            {
+                                console.log("Invitation error ============>>>>>>>>>>>>>");
+                                console.log(err);
+                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                            }else{
+                                    console.log("Successfully inserted Invitation");
+
+                                    //SMS HERE
+                            }
+                    });
+
+                }*/
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                                                                     return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully updated the Dither'});
                                                                 }
                                                             });

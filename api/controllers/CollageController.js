@@ -183,7 +183,7 @@ module.exports = {
                                                                             }
                                                                             else
                                                                             {
-
+                                                                                 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
                                                                                 var vote                = [];
                                                                                 var sortedVote           = [];
                                                                                 createdCollageDetails.forEach(function(factor, index){
@@ -207,6 +207,7 @@ module.exports = {
                                                                                 console.log(taggedUserArray);
                                                                                 console.log(taggedUserArray.length);
 
+                                                                                 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
                                                                                 if(taggedUserArray.length != 0){
                                                                                         console.log(results);
                                                                                         console.log("results.id+++++++++++++++++");
@@ -310,6 +311,8 @@ module.exports = {
                                                                                         });
 
                                                                                 }
+
+                                                                                 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
                                                                                 //var inviteFriends       =  req.param('invite_friends_NUM');
 
                                                                                 var inviteFriends           =  request.invite_friends_NUM;
@@ -338,7 +341,7 @@ module.exports = {
                                                                                     //userId
                                                                                     console.log(userId);
                                                                                     inviteFriends.forEach(function(factor, index){
-                                                                                             inviteFinalArray.push({userId: parseInt(userId), collageId: results.id, phoneNumber: factor.phone_number});
+                                                                                             inviteFinalArray.push({userId: parseInt(userId), collageId: results.id, phoneNumber: factor.phone_number, invitee: factor.name});
                                                                                     });
                                                                                     console.log("inviteFinalArray  -----------------------------++++++++++++++++++++++++++++++++++++");
                                                                                     console.log(inviteFinalArray);

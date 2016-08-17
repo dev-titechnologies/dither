@@ -225,8 +225,31 @@ module.exports = {
      ==================================================================================================================================== */
         socketTest:  function (req, res) {
                 //sails.sockets.join(req.socket, "1");
-                console.log(req.socket);
+                //console.log(req.socket);
                 sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
+        },
+
+        subscribeToFunRoom: function(req, res) {
+              //r roomName = req.param('roomName');
+              //console.log(req);
+              var roomName = "pppp";
+              var socketId = sails.sockets.getId(req);
+              if (!req.isSocket) {
+                    console.log("req.isSocket ++++++--------------)))))))))))'''''''''''''''");
+              }
+              console.log(sails.sockets);
+              console.log("socketId ==============================================");
+              console.log(socketId);
+
+              console.log("sails.sockets.rooms ==============================================");
+              console.log(sails.sockets.rooms());
+              //sails.sockets.join(req.socket, roomName);
+              //sails.sockets.broadcast(roomName, { msg: 'Hi there!' });
+              //res.json({
+               //         messages: 'Subscribed to a fun room called '+roomName+'!'
+              //});
+              //sails.sockets.emit(friendId, 'privateMessage', {from: req.session.userId, msg: 'Hi!'});
+              //sails.sockets.broadcast(1, { msg: 'Hi there!' });
         },
 
         invite: function (req, res) {

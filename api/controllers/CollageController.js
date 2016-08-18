@@ -1218,6 +1218,7 @@ module.exports = {
                     var taggedUserArrayFinal        =      [];
                     var inviteFriends               =      req.param("invite_friends_NUM");
                     var inviteFriendsArray          =      [];
+                    var collage_results             =      "";
 
                     if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
@@ -1252,6 +1253,7 @@ module.exports = {
                                                         {
                                                             console.log("Successfully updated =======================");
                                                             console.log(updatedCollage);
+                                                            collage_results = foundCollage;
                                                             callback();
 
                                                         }

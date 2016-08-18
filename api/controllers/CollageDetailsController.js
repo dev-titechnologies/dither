@@ -140,7 +140,7 @@ module.exports = {
                                                                     //" tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
                                                                     " tg.collageId = "+get_collage_id+
                                                                     " GROUP BY fbf.userId";*/
-                                                            query = " SELECT temp.*"+
+                                                            /*query = " SELECT temp.*"+
                                                                     " FROM ("+
                                                                     " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
                                                                     " FROM tags tg"+
@@ -158,7 +158,29 @@ module.exports = {
                                                                     " WHERE tg.collageId = "+get_collage_id+
                                                                     " AND fbf.userId = "+userId+
                                                                     " ) AS temp"+
-                                                                    " GROUP BY temp.ditherUserId";
+                                                                    " GROUP BY temp.ditherUserId";*/
+                                                            query  = "SELECT *"+
+                                                                        " FROM ("+
+                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
+                                                                        " FROM tags tg"+
+                                                                        " INNER JOIN user usr ON usr.id = tg.userId"+
+                                                                        " LEFT JOIN addressBook adb ON adb.ditherUserId = tg.userId"+
+                                                                        " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                        " WHERE tg.collageId = "+get_collage_id+
+                                                                        " GROUP BY adb.ditherUserId"+
+                                                                        " UNION"+
+                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name"+
+                                                                        " FROM tags tg"+
+                                                                        " INNER JOIN user usr ON usr.id = tg.userId"+
+                                                                        " LEFT JOIN fbFriends fbf ON fbf.ditherUserId = tg.userId"+
+                                                                        " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                        " WHERE tg.collageId = "+get_collage_id+
+                                                                        " GROUP BY fbf.ditherUserId"+
+                                                                        " ) AS temp"+
+                                                                        " WHERE temp.ditherUserId IS NOT NULL"+
+                                                                        " AND temp.ditherUserId != "+results.userId+
+                                                                        " AND temp.ditherUserId != "+userId+
+                                                                        " GROUP BY temp.ditherUserId";
 
                                                             AddressBook.query(query, function(err, taggedUsersFinalResults) {
                                                                     if(err)

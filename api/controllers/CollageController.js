@@ -1216,7 +1216,7 @@ module.exports = {
                     //var taggedUserArray               =   tagged_fbUser.concat(tagged_contactUser);
                     var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
                     var taggedUserArrayFinal        =      [];
-                    var inviteFriends               =      req.param("invite_friends_NUM");
+                    var inviteFriends               =      JSON.parse(req.param("invite_friends_NUM"));
                     var inviteFriendsArray          =      [];
                     var collage_results             =      "";
 
@@ -1238,14 +1238,14 @@ module.exports = {
 
 
                     console.log("inviteFriends JSON parse|||||||||||||||||");
-                    console.log(JSON.parse(inviteFriends));
-                    console.log(JSON.parse(inviteFriends).length);
+                    console.log(JSON.parse(req.param("invite_friends_NUM")));
+                    console.log(JSON.parse(req.param("invite_friends_NUM")).length);
 
-                    console.log("tagged_contactUser JSON parse|||||||||||||||||");
+                    /*console.log("tagged_contactUser JSON parse|||||||||||||||||");
                     console.log(JSON.parse(tagged_contactUser));
 
                     console.log("tagged_fbUser JSON parse|||||||||||||||||");
-                    console.log(JSON.parse(tagged_fbUser));
+                    console.log(JSON.parse(tagged_fbUser));*/
 
 
 

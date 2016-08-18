@@ -270,7 +270,35 @@ module.exports = {
                 console.log("Request Length>>>>>>>>>>>>>>>>>>>> in Test");
                 console.log(JSON.parse(req.param("request1").length));
                 console.log(JSON.parse(req.param("request2").length));
-        }
+        },
+        
+            selectUser: function (req, res) {
+
+            var commonSettings = req.options.settingsKeyValue;
+            //console.log(commonSettings.EMAIL_HOST);
+            //console.log(req.options.settingsKeyValue[0]);
+            //console.log(req.options.settingsKeyValue.EMAIL_HOST);
+
+            er.query(query, function(err, results){
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        console.log('Select USer');
+                        var d = new Date();
+                        var n = d.getTime();
+                        console.log(new Date().getTime());
+                         console.log(parseInt(new Date().getTime()));
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: 'Success'});
+                    }
+
+            });
+    }
+        
+        
+        
+        
 
 
 };

@@ -516,7 +516,9 @@ module.exports = {
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " INNER JOIN tags tg ON tg.collageId = clg.id"+
+                                                " INNER JOIN user usr ON usr.id = tg.userId"+
+                                                //" INNER JOIN user usr ON usr.id = clg.userId"+
                                                 //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
                                                 " GROUP BY clgdt.id"+
@@ -734,6 +736,7 @@ module.exports = {
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                                " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
@@ -1198,7 +1201,7 @@ module.exports = {
      ==================================================================================================================================== */
         editDither:  function (req, res) {
 
-                    /*console.log("Edit Dithers ===== api");
+                    console.log("Edit Dithers ===== api");
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
                     console.log(req.param("dither_location"));
@@ -1220,7 +1223,7 @@ module.exports = {
 
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                async.series([
+                /*async.series([
                     function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 Collage.findOne({id: collageId}).exec(function (err, foundCollage){

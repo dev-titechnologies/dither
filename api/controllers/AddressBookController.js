@@ -23,71 +23,122 @@ module.exports = {
                 var query,
                     ditherUserInAddressBook,
                     ditherUserInFbFriends;
-                var phoneContactsArray      	= 	  [];
-                var fbUserArray            	    = 	  [];
-        		var device_type					=	  req.get('device_type');
-				var phonecontacts				= 	  [];
-				var fbUser						= 	  [];
-           
-				phonecontacts          		    = 	  JSON.parse(req.param('contact_array'));
-				var fbUser              	    = 	  JSON.parse(req.param('fb_array'));
-				var data_check1 				= "";
-				phonecontacts.forEach(function(factor, index){
-					console.log("factor");
-					phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
-				});
-			
-				fbUser.forEach(function(factor, index){
-					 console.log("factor");
-					// console.log(factor);
-					 fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
-				});
+                var phoneContactsArray      = [];
+                var fbUserArray             = [];
+                
+                
+                
+                
+                /*var fbUser                  = [
+                                                {ditherUserName: 'malu',fbId: 'malutest123'},
+                                                {ditherUserName: 'Testers TiTech',fbId: '172318546464606058'},
+                                                {ditherUserName: 'fb_sasi 3',fbId: 'ggggggggggg'},
+                                              ];
+                var phonecontacts           = [
+                        {ditherUserName: 'gayu',ditherUserPhoneNumber: 7897979799},
+                        {ditherUserName: 'sasi 2',ditherUserPhoneNumber: 98455454},
+                        {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
+                 
+                      ];*/
+                        
+                        
+                        
+              // console.log(req.param('contact_array'))  
+               
+               var device_type		=	req.get('device_type');
+               var phonecontacts	= [];
+               var fbUser			= [];
+                 
+              
+				//if(!req.param('contact_array') || !req.param('fb_array'))	
+					//{	
+						 console.log("iosss contacts")
+						 
+						 console.log(req.param('contact_array'))
+						 
+						phonecontacts           = JSON.parse(req.param('contact_array'));
+						 //fbUser 				 = JSON.parse(req.param('fb_array'));
+					
+						//var phonecontacts      = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
+						var fbUser               = JSON.parse(req.param('fb_array'));
+								
+							
+						var data_check1 = "";
+						phonecontacts.forEach(function(factor, index){
+							 console.log("factor");
+							// phoneContactsArray.push("("+userId+",'"+factor.name+"', '"+factor.number+"', now(), now())");
+							phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
+						});
+
+						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+						console.log(phoneContactsArray)
+						
+						fbUser.forEach(function(factor, index){
+							 console.log("factor");
+							// console.log(factor);
+							// fbUserArray.push("("+userId+",'"+factor.fb_name+"', '"+factor.fb_userid+"', now(), now())");
+							 fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
+						});
 
 					async.series([
 					
 							  function(callback) {
 											  console.log("deletion**************************************************")
-											
-												
-												AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
 
-														if(err)
-														{
-															console.log("delete address"+err);
-															//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-															//callback();
-															//callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
-														}
-														else
-														{
-															 
-															console.log("deleteAddressBook ?????????????????????????????????????????????");
-															callback();
-														}
-												});			
+												
+															/*var query = "DELETE FROM addressBook where userId = '"+userId+"'";
+															
+															var criteria	=	{userId:userId}
+														   
+
+															console.log(query);*/
+															AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
+				
+															//AddressBook.query(query, function(err, deleteAddressBook) {
+																	if(err)
+																	{
+																		console.log("delete address"+err);
+																		//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+																		//callback();
+																		//callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
+																	}
+																	else
+																	{
+																		 
+																		console.log("deleteAddressBook ?????????????????????????????????????????????");
+																		callback();
+																	}
+															});			
 								},
 											
-								 function(callback) {		
-									 
-														AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook){
-													
-																if(err)
-																{
-																	console.log(err);
-																	//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-																	//callback();
-																	//callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
-																}
-																else
-																{
-																	data_check1 = createdAddressBook;
-																	console.log(createdAddressBook.insertId);
-																	 
-																	 console.log("createdAddressBook ?????????????????????????????????????????????");
-																	 callback();
-																	 
-																}
-														});		
+								 function(callback) {							
+															/*var query = "INSERT INTO addressBook"+
+																			" (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
+																			" VALUES"+phoneContactsArray;
+
+																console.log(query);*/
+																
+																AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook){
+																
+																
+																//AddressBook.query(query, function(err, createdAddressBook) {
+																		if(err)
+																		{
+																			console.log(err);
+																			//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+																			//callback();
+																			//callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
+																		}
+																		else
+																		{
+																			data_check1 = createdAddressBook;
+																			console.log(createdAddressBook.insertId);
+																			 
+																			 console.log("createdAddressBook ?????????????????????????????????????????????");
+																			 callback();
+																			 
+																		}
+																});		
 													},		
 								function(callback) {
 																 
@@ -104,21 +155,21 @@ module.exports = {
 																							 // console.log(values)
 
 																					
-																				User.findOne({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+																				User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
 																						
 																						//console.log("#########################################")
 																						//console.log(selectDContacts)
-																						if(!selectDContacts)
+																						if(selectDContacts.length!=0)
 																						{
 																							
 																							//updation 
 																							
-																							 var data     = {ditherUserId:selectDContacts.id};
+																							 var data     = {ditherUserId:selectDContacts[0].id};
 																							 var criteria = {ditherUserPhoneNumber: factor.number};
 																							
 																							 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
 																														
-																									console.log("Address Book update record")
+																									console.log("update record")
 																									console.log(updatedRecords)
 																									//callback();
 																															
@@ -139,15 +190,35 @@ module.exports = {
 															//callback();			
 													},			
 								
+								/*], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+													if (err) {
+														console.log(err);
+														callback();
+														//return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+													}else{
+														callback();
+														//return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
+													}
 
+												});	
+							},
+							
+					function(callback) {							
+													
+					async.series([		*/								
 											
 								function(callback) {			
 											
 					
-											
+											//	if(fbUser.length != 0){
+													/*var query = "DELETE FROM fbFriends where userId = '"+userId+"'";
+													var criteria	=	{userId:userId}
+													
+													console.log(query);*/
 													
 													FbFriends.destroy({userId: userId}).exec(function (err, deleteFBFriends) {
 													
+													//FbFriends.query(query, function(err, deleteFBFriends) {
 															if(err)
 															{
 																console.log("fb friends deletion"+err);
@@ -172,25 +243,29 @@ module.exports = {
 											 		
 												console.log("insertion fb friendssssssssssssssssssssss")
 													
-												
-												FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
-												//FbFriends.create(query, function(err, createdFbFriends) {
-														if(err)
-														{
-															console.log("insertion fbfriends error"+err);
-															//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-															//callback();
-															callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
-														}
-														else
-														{
+													/*var query = "INSERT INTO fbFriends"+
+																			" (userId,  ditherUserName, fbId, createdAt, updatedAt)"+
+																			" VALUES"+fbUserArray;
 
-															   console.log(createdFbFriends);
-															   console.log("createdFbFriends ?????????????????????????????????????????????");
-															   callback();
-															   
-														}
-												});
+																console.log(query);*/
+																FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
+																//FbFriends.create(query, function(err, createdFbFriends) {
+																		if(err)
+																		{
+																			console.log("insertion fbfriends error"+err);
+																			//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+																			//callback();
+																			callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
+																		}
+																		else
+																		{
+
+																			   console.log(createdFbFriends);
+																			   console.log("createdFbFriends ?????????????????????????????????????????????");
+																			   callback();
+																			   
+																		}
+																});
 								},		
 								function(callback) {					
 																	   
@@ -199,12 +274,12 @@ module.exports = {
 											   //fbUser.forEach(function(factor, index){
 
 								
-													User.findOne({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
+													User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
 														//console.log()
-														if(!selectFBContacts)
+														if(selectFBContacts.length!=0)
 														{
 															
-															var data     = {ditherUserId:selectFBContacts.id};
+															var data     = {ditherUserId:selectFBContacts[0].id};
 															var criteria = {fbId:factor.fb_userid};
 															//console.log("fbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
 															//console.log(data)
@@ -428,7 +503,19 @@ module.exports = {
 
 							    },
 							    
+							/* ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+													if (err) {
+														console.log(err);
+														callback();
+														//return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+													}else{
+														callback();
+														//return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
+													}
 
+												});	*/
+							//}
+						
 							], function(err) { //This function gets called after the two tasks have called their "task callbacks"
 													if (err) {
 														console.log(err);

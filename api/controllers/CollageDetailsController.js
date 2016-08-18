@@ -181,7 +181,7 @@ module.exports = {
                                                                         " AND temp.ditherUserId != "+results.userId+
                                                                         " AND temp.ditherUserId != "+userId+
                                                                         " GROUP BY temp.ditherUserId";
-
+                                                                console.log(query);
                                                             AddressBook.query(query, function(err, taggedUsersFinalResults) {
                                                                     if(err)
                                                                     {

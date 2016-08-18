@@ -1220,6 +1220,13 @@ module.exports = {
                     var inviteFriendsArray          =      [];
                     var collage_results             =      "";
 
+                    console.log("tagged_fbUser |||||||||||||||||");
+                    console.log(tagged_fbUser);
+                    console.log("tagged_contactUser |||||||||||||||||");
+                    console.log(tagged_contactUser);
+                    console.log("inviteFriends |||||||||||||||||");
+                    console.log(inviteFriends);
+
                     if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
                     }else{

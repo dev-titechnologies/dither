@@ -1217,13 +1217,13 @@ module.exports = {
                     var inviteFriends               =      req.param("invite_friends_NUM");
                     var inviteFriendsArray          =      [];
 
-                    if(!imgTitle || !location || !collageId){
+                   /* if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
                     }else{
 
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                /*async.series([
+                async.series([
                     function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 Collage.findOne({id: collageId}).exec(function (err, foundCollage){

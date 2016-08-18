@@ -12,49 +12,27 @@ module.exports = {
         addUserContacts: function (req, res) {
 			
 
-			    console.log(req.options.tokenCheck.tokenDetails.userId)
+						console.log(req.options.tokenCheck.tokenDetails.userId)
 
-				var tokenCheck                  =     req.options.tokenCheck;
-                var userId                      =     tokenCheck.tokenDetails.userId;
-                var server_baseUrl              =     req.options.server_baseUrl;
+						var tokenCheck                  =     req.options.tokenCheck;
+						var userId                      =     tokenCheck.tokenDetails.userId;
+						var server_baseUrl              =     req.options.server_baseUrl;
 
-                console.log(tokenCheck)
-                console.log("addUserContacts=-=============");
-                var query,
-                    ditherUserInAddressBook,
-                    ditherUserInFbFriends;
-                var phoneContactsArray      = [];
-                var fbUserArray             = [];
-                
-                
-                
-                
-                /*var fbUser                  = [
-                                                {ditherUserName: 'malu',fbId: 'malutest123'},
-                                                {ditherUserName: 'Testers TiTech',fbId: '172318546464606058'},
-                                                {ditherUserName: 'fb_sasi 3',fbId: 'ggggggggggg'},
-                                              ];
-                var phonecontacts           = [
-                        {ditherUserName: 'gayu',ditherUserPhoneNumber: 7897979799},
-                        {ditherUserName: 'sasi 2',ditherUserPhoneNumber: 98455454},
-                        {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
+						console.log(tokenCheck)
+						console.log("addUserContacts=-=============");
+						var query,
+							ditherUserInAddressBook,
+							ditherUserInFbFriends;
+						var phoneContactsArray      = [];
+						var fbUserArray             = [];
+						
+						var device_type				=	req.get('device_type');
+						var phonecontacts			= [];
+						var fbUser					= [];
                  
-                      ];*/
-                        
-                        
-                        
-              // console.log(req.param('contact_array'))  
-               
-               var device_type		=	req.get('device_type');
-               var phonecontacts	= [];
-               var fbUser			= [];
-                 
-              
-				//if(!req.param('contact_array') || !req.param('fb_array'))	
-					//{	
-						 console.log("iosss contacts")
+				
 						 
-						 console.log(req.param('contact_array'))
+						console.log(req.param('contact_array'))
 						 
 						phonecontacts           = JSON.parse(req.param('contact_array'));
 						 //fbUser 				 = JSON.parse(req.param('fb_array'));
@@ -170,7 +148,7 @@ module.exports = {
 																							 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
 																														
 																									console.log("update record")
-																									console.log(updatedRecords)
+																									//console.log(updatedRecords)
 																									//callback();
 																															
 																							  });
@@ -292,7 +270,7 @@ module.exports = {
 																	else
 																	{
 																		console.log("update recordsssss in fbbbbb")
-																		console.log(updatedRecords)
+																		//console.log(updatedRecords)
 																		//callback();
 																	}
 																	

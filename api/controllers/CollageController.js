@@ -1220,12 +1220,34 @@ module.exports = {
                     var inviteFriendsArray          =      [];
                     var collage_results             =      "";
 
-                    console.log("tagged_fbUser |||||||||||||||||");
-                    console.log(tagged_fbUser);
+
+
                     console.log("tagged_contactUser |||||||||||||||||");
                     console.log(tagged_contactUser);
+
+                    console.log("tagged_fbUser |||||||||||||||||");
+                    console.log(tagged_fbUser);
+
                     console.log("inviteFriends |||||||||||||||||");
                     console.log(inviteFriends);
+
+                    console.log(tagged_contactUser.length);
+                    console.log(tagged_fbUser.length);
+
+
+
+
+                    console.log("inviteFriends JSON parse|||||||||||||||||");
+                    console.log(JSON.parse(inviteFriends));
+                    console.log(JSON.parse(inviteFriends).length);
+
+                    console.log("tagged_contactUser JSON parse|||||||||||||||||");
+                    console.log(JSON.parse(tagged_contactUser));
+
+                    console.log("tagged_fbUser JSON parse|||||||||||||||||");
+                    console.log(JSON.parse(tagged_fbUser));
+
+
 
                     if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});

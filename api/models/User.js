@@ -35,11 +35,11 @@ module.exports = {
             },
         fbId: {
                 type: 'string',
-                //unique: true
+                unique: true
             },
         phoneNumber: {
                 type: 'integer',
-                //unique: true
+                unique: true
             },
         status: {
                 type: 'string',

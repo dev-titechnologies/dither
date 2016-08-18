@@ -49,7 +49,7 @@ module.exports = {
 						});
 
 						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-						console.log(phoneContactsArray)
+						//console.log(phoneContactsArray)
 						
 						fbUser.forEach(function(factor, index){
 							 console.log("factor");
@@ -135,8 +135,15 @@ module.exports = {
 																					
 																				User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
 																						
-																						//console.log("#########################################")
-																						//console.log(selectDContacts)
+																						console.log("########selected contacts#################################")
+																						console.log(selectDContacts)
+																				 if(err)		
+																				 {
+																					 console.log(err)
+																					 callback();
+																				 }
+																				 else
+																				 {
 																						if(selectDContacts.length!=0)
 																						{
 																							
@@ -160,7 +167,8 @@ module.exports = {
 																						 }
 																						
 																						
-																					  });    
+																					  });   
+																					}   
 																				
 																				
 																	},callback());
@@ -304,7 +312,7 @@ module.exports = {
 																console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
 																AddressBook.query(query, function(err, selectedDitherAdb) {
 																	console.log("ttttttttttttttttttttttttttttttttttttttttttttttttttt")
-																	console.log(selectedDitherAdb)
+																	//console.log(selectedDitherAdb)
 																		if(err)
 																		{
 																				console.log("selecetion errorr"+err);
@@ -315,7 +323,7 @@ module.exports = {
 																		else
 																		{
 
-																				console.log(selectedDitherAdb);                                                                   
+																				//console.log(selectedDitherAdb);                                                                   
 																				ditherUserInAddressBook = selectedDitherAdb;
 																				ditherUserInAddressBook.forEach(function(factor, index){
 																				  if(factor.profilePic=='')	
@@ -359,7 +367,7 @@ module.exports = {
 																else
 																{
 
-																	   console.log(selectedDitherFbf);
+																	   //console.log(selectedDitherFbf);
 																	   ditherUserInFbFriends = selectedDitherFbf;
 																	   
 																	   ditherUserInFbFriends.forEach(function(factor, index){

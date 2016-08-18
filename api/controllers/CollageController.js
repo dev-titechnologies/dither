@@ -1491,6 +1491,7 @@ module.exports = {
                                     var unique_push_array               =       [];
                                     var duplicate_push_array            =       [];
                                     var inviteFriends_onlyPNArray       =       [];
+                                    var inviteFinalArray                =       [];
                                     Invitation.find({collageId: collage_results.id}).exec(function (err, foundInvitationCollage){
                                             if(err){
                                                        // console.log(err);

@@ -99,14 +99,14 @@ module.exports = {
                                                                                                                             {
 																															  //-----------Notification log Insertion----------------
 																																console.log("88888888888888888888888888888")
-																																Collage.find({id:collageId}).exec(function(err, userDetails){
+																															  /*	Collage.find({id:collageId}).exec(function(err, userDetails){
 									
 																																if(err)
 																																{		
 																																	console.log(err)
 																																}	
 																																else
-																																{
+																																{*/
 																																  
 																																  CollageLikes.find({collageId:collageId}).exec(function(err, likeDetails){
 																																	   if(err)
@@ -127,7 +127,7 @@ module.exports = {
 																															
 																																									notificationTypeId	:	2,
 																																									userId				:   userId,
-																																									ditherUserId		:	userDetails[0].userId,
+																																									ditherUserId		:	foundCollageResults.userId,
 																																									collage_id			:	collageId,
 																																									image_id			:	results.imageId,
 																																									description			:	likeDetails.length
@@ -147,18 +147,16 @@ module.exports = {
 																																						}
 																																					});
 																																				
-																																		//-----------------------------End OF NotificationLog---------------------------------
+																																			//-----------------------------End OF NotificationLog---------------------------------
 
 																																
 																																
                                                                                                                                   return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                                             total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                                     });
-                                                                                                                                    
-                                                                                                                                  }
-																															  });
-																														  }  
-																														});     
+                                                                                                                                
+																															  }  
+																															});     
                                                                                                                     }
                                                                                                                     
                                                                                                              });

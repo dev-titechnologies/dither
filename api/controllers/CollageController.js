@@ -1201,7 +1201,7 @@ module.exports = {
      ==================================================================================================================================== */
         editDither:  function (req, res) {
 
-                    /*console.log("Edit Dithers ===== api");
+                    console.log("Edit Dithers ===== api");
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
                     console.log(req.param("dither_location"));
@@ -1223,7 +1223,7 @@ module.exports = {
 
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                async.series([
+                /*async.series([
                     function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 Collage.findOne({id: collageId}).exec(function (err, foundCollage){

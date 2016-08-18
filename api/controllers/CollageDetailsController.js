@@ -20,9 +20,11 @@ module.exports = {
                 console.log(req.param("dither_id"));
                 var get_collage_id              =     req.param("dither_id");
                 var query;
+                var dither_creator;
                 if(!get_collage_id){
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id'});
                 }else{
+
                     query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                 " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
                                 " usr.name AS collageCreator, usr.profilePic,"+
@@ -71,6 +73,7 @@ module.exports = {
                                                 }else{
                                                         like_position = factor.likePosition;
                                                 }
+                                                dither_creator_id = factor.userId;
                                         });
                                         console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                         console.log(like_position);
@@ -178,7 +181,7 @@ module.exports = {
                                                                         " GROUP BY fbf.ditherUserId"+
                                                                         " ) AS temp"+
                                                                         " WHERE temp.ditherUserId IS NOT NULL"+
-                                                                        " AND temp.ditherUserId != "+results.userId+
+                                                                        " AND temp.ditherUserId != "+dither_creator_id+
                                                                         //" AND temp.ditherUserId != "+userId+
                                                                         " GROUP BY temp.ditherUserId";
                                                                 console.log(query);

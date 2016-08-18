@@ -139,7 +139,7 @@ module.exports = {
 																						console.log(selectDContacts)
 																				 if(err)		
 																				 {
-																					 console.log(err)
+																					 console.log(err);
 																					 callback();
 																				 }
 																				 else
@@ -165,10 +165,10 @@ module.exports = {
 																								
 																							
 																						 }
-																						
+																						}
 																						
 																					  });   
-																					}   
+																				  
 																				
 																				
 																	},callback());

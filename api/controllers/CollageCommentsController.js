@@ -63,7 +63,7 @@ module.exports = {
                                                                         var values ={
                                                                                         notificationTypeId  :   3,
                                                                                         userId              :   userId,
-                                                                                        ditherUserId        :   collageResult[0].userId,
+                                                                                        ditherUserId        :   collageDetails.userId,
                                                                                         collage_id          :   collageId,
                                                                                         description         :   commentDetails.length
                                                                                     }
@@ -75,18 +75,19 @@ module.exports = {
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    console.log(createdNotificationTags)
+                                                                                    console.log(createdNotificationTags);
+                                                                                    //-----------------------------End OF NotificationLog---------------------------------
+                                                                                    console.log("inserted comments");
+                                                                                    console.log(results);
+                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                                comment_id                      :    results.id,
+                                                                                                                comment_msg                     :    results.msg,
+                                                                                                                comment_created_date_time       :    results.createdAt,
+                                                                                                        });
                                                                                 }
                                                                         });
 
-                                                                        //-----------------------------End OF NotificationLog---------------------------------
-                                                                        console.log("inserted comments");
-                                                                        console.log(results);
-                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-                                                                                                    comment_id                      :    results.id,
-                                                                                                    comment_msg                     :    results.msg,
-                                                                                                    comment_created_date_time       :    results.createdAt,
-                                                                                            });
+
                                                                 }else{
                                                                         console.log("inserted comments  Same User Comment");
                                                                         console.log(results);

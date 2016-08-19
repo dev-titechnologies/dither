@@ -20,9 +20,11 @@ module.exports = {
                 console.log(req.param("dither_id"));
                 var get_collage_id              =     req.param("dither_id");
                 var query;
+
                 if(!get_collage_id){
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id'});
                 }else{
+
                     query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                 " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
                                 " usr.name AS collageCreator, usr.profilePic,"+
@@ -71,6 +73,7 @@ module.exports = {
                                                 }else{
                                                         like_position = factor.likePosition;
                                                 }
+
                                         });
                                         console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                         console.log(like_position);
@@ -140,7 +143,7 @@ module.exports = {
                                                                     //" tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
                                                                     " tg.collageId = "+get_collage_id+
                                                                     " GROUP BY fbf.userId";*/
-                                                            query = " SELECT temp.*"+
+                                                            /*query = " SELECT temp.*"+
                                                                     " FROM ("+
                                                                     " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
                                                                     " FROM tags tg"+
@@ -158,8 +161,30 @@ module.exports = {
                                                                     " WHERE tg.collageId = "+get_collage_id+
                                                                     " AND fbf.userId = "+userId+
                                                                     " ) AS temp"+
-                                                                    " GROUP BY temp.ditherUserId";
-
+                                                                    " GROUP BY temp.ditherUserId";*/
+                                                            query  = "SELECT *"+
+                                                                        " FROM ("+
+                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
+                                                                        " FROM tags tg"+
+                                                                        " INNER JOIN user usr ON usr.id = tg.userId"+
+                                                                        " LEFT JOIN addressBook adb ON adb.ditherUserId = tg.userId"+
+                                                                        " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                        " WHERE tg.collageId = "+get_collage_id+
+                                                                        " GROUP BY adb.ditherUserId"+
+                                                                        " UNION"+
+                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name"+
+                                                                        " FROM tags tg"+
+                                                                        " INNER JOIN user usr ON usr.id = tg.userId"+
+                                                                        " LEFT JOIN fbFriends fbf ON fbf.ditherUserId = tg.userId"+
+                                                                        " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                        " WHERE tg.collageId = "+get_collage_id+
+                                                                        " GROUP BY fbf.ditherUserId"+
+                                                                        " ) AS temp"+
+                                                                        " WHERE temp.ditherUserId IS NOT NULL"+
+                                                                        " AND temp.ditherUserId != "+results[0].collageCreatorId+
+                                                                        //" AND temp.ditherUserId != "+userId+
+                                                                        " GROUP BY temp.ditherUserId";
+                                                                console.log(query);
                                                             AddressBook.query(query, function(err, taggedUsersFinalResults) {
                                                                     if(err)
                                                                     {
@@ -201,6 +226,10 @@ module.exports = {
 
                                                                                             inviteeArray = [];
                                                                                     }
+                                                                                    var user_profile_image = "";
+                                                                                    if(results[0].profilePic != "" || results[0].profilePic != null){
+                                                                                            user_profile_image = server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic;
+                                                                                    }
                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                  dither_desc                : results[0].imgTitle,
                                                                                                  dither_created_date_time   : results[0].createdAt,
@@ -208,7 +237,7 @@ module.exports = {
                                                                                                  dither_id                  : results[0].collageId,
                                                                                                  dither_created_username    : results[0].collageCreator,
                                                                                                  dither_created_userID      : results[0].collageCreatorId,
-                                                                                                 dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
+                                                                                                 dither_created_profile_pic : user_profile_image,
                                                                                                  dither_location            : results[0].location,
                                                                                                  dither_image               : collageImg_path + results[0].collageImage,
                                                                                                  dither_like_position       : like_position,

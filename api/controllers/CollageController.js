@@ -664,9 +664,13 @@ module.exports = {
                                                                                                                 popular_dithers         : []
                                                                                             });
                                                                                     }else{
+                                                                                            var user_profile_image = "";
+                                                                                            if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
+                                                                                                        user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                            }
                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                                 username                : foundUserDetails.name,
-                                                                                                                user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                                user_profile_image      : user_profile_image,
                                                                                                                 total_opinion           : total_opinion,
                                                                                                                 recent_dithers          : recent_dithers_Array_4,
                                                                                                                 popular_dithers         : popular_dithers_Array_4 });
@@ -882,6 +886,10 @@ module.exports = {
                                                                                                     total_opinion           : total_opinion,
                                                                                                     recent_dithers          : recent_dithers_Array_4,
                                                                                                     popular_dithers         : popular_dithers_Array_4 });*/
+                                                                                var user_profile_image = "";
+                                                                                if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
+                                                                                            user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                }
                                                                                 if(received_dither_type == "popular"){
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
                                                                                                         username                : foundUserDetails.name,
@@ -892,7 +900,7 @@ module.exports = {
 
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the recent Dithers',
                                                                                                         username                : foundUserDetails.name,
-                                                                                                        user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                        user_profile_image      : user_profile_image,
                                                                                                         recent_dithers          : recent_dithers,
                                                                                                         });
                                                                                 }
@@ -1200,8 +1208,10 @@ module.exports = {
                To Edit Dither
      ==================================================================================================================================== */
         editDither:  function (req, res) {
-
-                  /*  console.log("Edit Dithers ===== api");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    console.log("Edit Dithers ===== api");
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
                     console.log(req.param("dither_location"));
@@ -1214,15 +1224,44 @@ module.exports = {
                     //var taggedUserArray               =   tagged_fbUser.concat(tagged_contactUser);
                     var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
                     var taggedUserArrayFinal        =      [];
-                    var inviteFriends               =      req.param("invite_friends_NUM");
+                    var inviteFriends               =      JSON.parse(req.param("invite_friends_NUM"));
                     var inviteFriendsArray          =      [];
+                    var invitedFriends_NUM_Final;
+                    var collage_results             =      "";
+
+
+
+                    /*console.log("tagged_contactUser |||||||||||||||||");
+                    console.log(tagged_contactUser);
+
+                    console.log("tagged_fbUser |||||||||||||||||");
+                    console.log(tagged_fbUser);
+
+                    console.log("inviteFriends |||||||||||||||||");
+                    console.log(inviteFriends);
+
+                    console.log(tagged_contactUser.length);
+                    console.log(tagged_fbUser.length);
+
+
+
+
+                    console.log("inviteFriends JSON parse|||||||||||||||||");
+                    console.log(JSON.parse(req.param("invite_friends_NUM")));
+                    console.log(JSON.parse(req.param("invite_friends_NUM")).length);*/
+
+                    /*console.log("tagged_contactUser JSON parse|||||||||||||||||");
+                    console.log(JSON.parse(tagged_contactUser));
+
+                    console.log("tagged_fbUser JSON parse|||||||||||||||||");
+                    console.log(JSON.parse(tagged_fbUser));*/
+
+
 
                     if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
                     }else{
 
-
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
             async.series([
                     function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
@@ -1252,6 +1291,7 @@ module.exports = {
                                                         {
                                                             console.log("Successfully updated =======================");
                                                             console.log(updatedCollage);
+                                                            collage_results = foundCollage;
                                                             callback();
 
                                                         }
@@ -1267,147 +1307,381 @@ module.exports = {
                                         console.log("results.id+++++++++++++++++");
                                         console.log(collage_results.id);
 
-                                        var tagCollageArray = [];
+                                        var tagCollageArray         = [];
+                                        var deleteTagCollageArray   = [];
                                         taggedUserArray.forEach(function(factor, index){
                                             console.log("Refy tagged User ======>>>>> factor");
                                             console.log(factor);
                                             tagCollageArray.push({collageId: collage_results.id, userId: factor});
+                                            deleteTagCollageArray.push({collageId: collage_results.id});
                                         });
                                         console.log("tagCollageArray }}}}}}}}}}}}}}}}}}}}}}}}");
                                         console.log(tagCollageArray);
 
-                                        Tags.create(tagCollageArray).exec(function(err, createdCollageTags) {
-                                                if(err)
-                                                {
-                                                    console.log(err);
-                                                    console.log("+++++++++++++++++++++++++");
-                                                    callback();
-                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
-                                                }
-                                                else
-                                                {
 
-                                                        //console.log("created in collage Details=====");
-                                                        //console.log(vote);
-                                                        console.log("Predicated -------------------------");
-                                                        console.log("Created Collage Tags -------------------------");
-                                                        console.log(createdCollageTags);
-
-                                                        //console.log(vote.sort( predicatBy("image_id") ));
-
-                                                        //console.log(results);
-
-                                                        //Query to get tagged users from both addressBook and fbFriends
-                                                        query = " SELECT"+
-                                                                " adb.userId, adb.ditherUsername, usr.name"+
-                                                                " FROM addressBook adb"+
-                                                                " INNER JOIN user usr ON usr.id = adb.userId"+
-                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
-                                                                " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                                                " WHERE"+
-                                                                " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
-                                                                " GROUP BY adb.userId"+
-                                                                " UNION"+
-                                                                " SELECT"+
-                                                                " fbf.userId, fbf.ditherUsername, usr.name"+
-                                                                " FROM addressBook fbf"+
-                                                                " INNER JOIN user usr ON usr.id = fbf.userId"+
-                                                               // " LEFT JOIN collage clg ON clg.userId = usr.id"+
-                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
-                                                                " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                                                " WHERE"+
-                                                                " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
-                                                                " GROUP BY fbf.userId";
-                                                        console.log(query);
-                                                        AddressBook.query(query, function(err, taggedUsersFinalResults) {
+                                        //Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
+                                            Tags.destroy(deleteTagCollageArray).exec(function(err, deleteCollageTags){
+                                                    if(err)
+                                                    {
+                                                        console.log(err);
+                                                        console.log("Error in Deleting Collage Tags");
+                                                        callback();
+                                                    }else{
+                                                        Tags.create(tagCollageArray).exec(function(err, createdCollageTags) {
                                                                 if(err)
                                                                 {
                                                                     console.log(err);
+                                                                    console.log("+++++++++++++++++++++++++");
                                                                     callback();
-                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
+                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                 }
                                                                 else
                                                                 {
-                                                                    console.log(query);
-                                                                    console.log(taggedUsersFinalResults);
-                                                                    console.log(taggedUsersFinalResults.length);
 
-                                                                    if(taggedUsersFinalResults != 0){
-                                                                        taggedUsersFinalResults.forEach(function(factor, index){
-                                                                                console.log("factor ------------))))))))))))))))======================");
-                                                                                console.log(factor);
-                                                                                taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
-                                                                        });
-                                                                    }
+                                                                        //console.log("created in collage Details=====");
+                                                                        //console.log(vote);
+                                                                        console.log("Predicated -------------------------");
+                                                                        console.log("Created Collage Tags -------------------------");
+                                                                        console.log(createdCollageTags);
 
-                                                                    if(taggedUserArray.length !=0){
-                                                                            taggedUserArray.forEach(function(factor, index){
-                                                                                    //tagNotifyArray.push({id:factor.user_id});
-                                                                                    tagNotifyArray.push(factor.user_id);
+                                                                        //console.log(vote.sort( predicatBy("image_id") ));
 
-                                                                            });
-                                                                            console.log(tagNotifyArray.length);
-                                                                            console.log(tagNotifyArray);
-                                                                            var values ={
-                                                                                            notificationTypeId  :   1,
-                                                                                            userId              :   userId,
-                                                                                            collage_id          :   collage_results.id,
-                                                                                            tagged_users        :   tagNotifyArray,
-                                                                                            description         :   tagNotifyArray.length
-                                                                                        }
-                                                                            console.log(values);
-                                                                            NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+                                                                        //console.log(results);
+
+                                                                        //Query to get tagged users from both addressBook and fbFriends
+                                                                        query = " SELECT"+
+                                                                                " adb.userId, adb.ditherUsername, usr.name"+
+                                                                                " FROM addressBook adb"+
+                                                                                " INNER JOIN user usr ON usr.id = adb.userId"+
+                                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                                " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                                " WHERE"+
+                                                                                " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
+                                                                                " GROUP BY adb.userId"+
+                                                                                " UNION"+
+                                                                                " SELECT"+
+                                                                                " fbf.userId, fbf.ditherUsername, usr.name"+
+                                                                                " FROM addressBook fbf"+
+                                                                                " INNER JOIN user usr ON usr.id = fbf.userId"+
+                                                                               // " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                                " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                                " WHERE"+
+                                                                                " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
+                                                                                " GROUP BY fbf.userId";
+                                                                        console.log(query);
+                                                                        AddressBook.query(query, function(err, taggedUsersFinalResults) {
                                                                                 if(err)
                                                                                 {
                                                                                     console.log(err);
                                                                                     callback();
-                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
-                                                                                }else{
-                                                                                        console.log("Successfully Inserted to---->>. NotificationLog table");
-                                                                                        console.log(createdNotificationTags);
+                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    console.log(query);
+                                                                                    console.log(taggedUsersFinalResults);
+                                                                                    console.log(taggedUsersFinalResults.length);
+
+                                                                                    if(taggedUsersFinalResults != 0){
+                                                                                        taggedUsersFinalResults.forEach(function(factor, index){
+                                                                                                console.log("factor ------------))))))))))))))))======================");
+                                                                                                console.log(factor);
+                                                                                                taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                                                        });
+                                                                                    }
+
+                                                                                    if(taggedUserArray.length !=0){
+                                                                                            taggedUserArray.forEach(function(factor, index){
+                                                                                                    //tagNotifyArray.push({id:factor.user_id});
+                                                                                                    tagNotifyArray.push(factor.user_id);
+
+                                                                                            });
+                                                                                            console.log(tagNotifyArray.length);
+                                                                                            console.log(tagNotifyArray);
+                                                                                            var values ={
+                                                                                                            notificationTypeId  :   1,
+                                                                                                            userId              :   userId,
+                                                                                                            collage_id          :   collage_results.id,
+                                                                                                            tagged_users        :   tagNotifyArray,
+                                                                                                            description         :   tagNotifyArray.length
+                                                                                                        }
+                                                                                            console.log(values);
+                                                                                            NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+                                                                                                if(err)
+                                                                                                {
+                                                                                                    console.log(err);
+                                                                                                    callback();
+                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                                }else{
+                                                                                                        console.log("Successfully Inserted to---->>. NotificationLog table");
+                                                                                                        console.log(createdNotificationTags);
+                                                                                                        callback();
+
+                                                                                                }
+                                                                                            });
+                                                                                    }else{
+
                                                                                         callback();
 
+                                                                                    }
                                                                                 }
-                                                                            });
-                                                                    }else{
 
-                                                                        callback();
-
-                                                                    }
+                                                                        });
                                                                 }
-
                                                         });
                                                 }
-                                        });
+                                            });
 
                                 }else{
 
-                                    callback();
+                                    //Query to get tagged users from both addressBook and fbFriends
+                                    query = " SELECT"+
+                                            " adb.userId, adb.ditherUsername, usr.name"+
+                                            " FROM addressBook adb"+
+                                            " INNER JOIN user usr ON usr.id = adb.userId"+
+                                            " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                            " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                            " WHERE"+
+                                            " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
+                                            " GROUP BY adb.userId"+
+                                            " UNION"+
+                                            " SELECT"+
+                                            " fbf.userId, fbf.ditherUsername, usr.name"+
+                                            " FROM addressBook fbf"+
+                                            " INNER JOIN user usr ON usr.id = fbf.userId"+
+                                           // " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                            " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                            " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                            " WHERE"+
+                                            " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
+                                            " GROUP BY fbf.userId";
+                                    console.log(query);
+                                    AddressBook.query(query, function(err, taggedUsersFinalResults) {
+                                            if(err)
+                                            {
+                                                console.log(err);
+                                                callback();
+                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
+                                            }
+                                            else
+                                            {
+                                                console.log(query);
+                                                console.log(taggedUsersFinalResults);
+                                                console.log(taggedUsersFinalResults.length);
+
+                                                if(taggedUsersFinalResults != 0){
+                                                    taggedUsersFinalResults.forEach(function(factor, index){
+                                                            console.log("factor ------------))))))))))))))))======================");
+                                                            console.log(factor);
+                                                            taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                    });
+                                                    callback();
+                                                }else{
+                                                    callback();
+                                                }
+
+                                            }
+                                    });
+
+
 
                                 }
+                                //callback();
                     },
                     function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                //[5,6,7,8,9,10,11]
+                                /*var inviteFriends = [
+                                                    {"phone_number": "5", "name":"A"},
+                                                    {"phone_number": "6", "name":"B"},
+                                                    {"phone_number": "7", "name":"C"},
+                                                    {"phone_number": "8", "name":"D"},
+                                                    {"phone_number": "9", "name":"E"},
+                                                    {"phone_number": "10", "name":"F"},
+                                                    {"phone_number": "11", "name":"G"},
+                                                    ];*/
+                                             //inviteFriends    =   ["5","6","7","8","9","10","11"];
                                 if(inviteFriends.length != 0){
                                     //phoneNumber
                                     //userId
                                     console.log(userId);
-                                    inviteFriends.forEach(function(factor, index){
-                                             inviteFinalArray.push({userId: parseInt(userId), collageId: collage_results.id, phoneNumber: factor.phone_number, invitee: factor.name});
-                                    });
-                                    console.log("inviteFinalArray  -----------------------------++++++++++++++++++++++++++++++++++++");
-                                    console.log(inviteFinalArray);
-                                    Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
-                                            if(err)
-                                            {
-                                                console.log("Invitation error ============>>>>>>>>>>>>>");
-                                                console.log(err);
-                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                    var foundInvitePNFinalArray         =       [];
+                                    var unique_push_array               =       [];
+                                    var duplicate_push_array            =       [];
+                                    var inviteFriends_onlyPNArray       =       [];
+                                    var inviteFinalArray                =       [];
+                                    Invitation.find({collageId: collage_results.id}).exec(function (err, foundInvitationCollage){
+                                            if(err){
+                                                       // console.log(err);
+                                                       // return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
                                             }else{
-                                                    console.log("Successfully inserted Invitation");
+                                                    //var foundInvitationCollage = [1,2,3,4,5,6,7];
 
-                                                    //SMS HERE
-                                                    callback();
+                                                    /*console.log("^^^^^^^^^^^^^^^^^^^^ foundInvitationCollage ^^^^^^^^^^^^^^^^^^^^");
+                                                    console.log(foundInvitationCollage);
+                                                    foundInvitationCollage.forEach(function(factor, index){
+                                                             foundInvitePNFinalArray.push(factor.phoneNumber);
+
+                                                    });
+
+                                                    console.log("^^^^^^^^^^^^^^^^foundInvitePNFinalArray^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                                    console.log(foundInvitePNFinalArray);
+                                                    console.log("^^^^^^^^^^^^^^^^foundInvitePNFinalArray^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                                    inviteFriends.forEach(function(factor, index){
+                                                             inviteFriends_onlyPNArray.push(factor.phoneNumber);
+                                                    });*/
+                                                    console.log(inviteFriends);
+                                                    /*var foundInvitation_Collage =[
+                                                                                {"phoneNumber": "1", "name":"P"},
+                                                                                {"phoneNumber": "2", "name":"Q"},
+                                                                                {"phoneNumber": "3", "name":"R"},
+                                                                                {"phoneNumber": "4", "name":"S"},
+                                                                                {"phoneNumber": "5", "name":"T"},
+                                                                                {"phoneNumber": "6", "name":"U"},
+                                                                                {"phoneNumber": "7", "name":"V"},
+                                                                                ];*/
+                                                        //foundInvitationCollage = ["1","2","3","4","5","6","7"];
+                                                        var foundInvitePNFinal_Array = [];
+                                                        foundInvitationCollage.forEach(function(factor, index){
+                                                             console.log("factor----------->>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<");
+                                                             console.log(factor);
+
+                                                             foundInvitePNFinal_Array.push(factor.phoneNumber);
+                                                        });
+
+                                                        console.log("ONLY NUM ARRAY -------------foundInvitePNFinalArray");
+                                                        console.log(foundInvitePNFinal_Array);
+
+                                                    for (var i=0; i<inviteFriends.length; i++) {
+                                                            console.log("Loop Started  +++++++++++++++++++++++++++++++");
+                                                            console.log(inviteFriends[i]);
+                                                            console.log(inviteFriends[i].phone_number);
+                                                            console.log("Loop Started  +++++++++++++++++++++++++++++++");
+                                                            index = foundInvitePNFinal_Array.indexOf(inviteFriends[i].phone_number);
+                                                            console.log("index===========");
+                                                            console.log(inviteFriends[i].phone_number+"------------------------------------------>>>>>>>>>>"+index);
+                                                            //Removing the Duplicate Values
+                                                            if(index == -1){
+                                                                    unique_push_array.push({name: inviteFriends[i].name, phone_number : inviteFriends[i].phone_number});
+                                                            }
+                                                            if(index != -1){
+                                                                    duplicate_push_array.push({name: inviteFriends[i].name, phone_number : inviteFriends[i].phone_number});
+                                                            }
+                                                    }
+                                                    /*for (var i=0; i<inviteFriends.length; i++) {
+                                                            console.log("Loop Started  +++++++++++++++++++++++++++++++");
+                                                            console.log(inviteFriends[i]);
+                                                            console.log(inviteFriends[i]);
+                                                            console.log("Loop Started  +++++++++++++++++++++++++++++++");
+                                                            index = foundInvitationCollage.indexOf(inviteFriends[i]);
+                                                            console.log("index===========");
+                                                            console.log(inviteFriends[i]+"------------------------------------------>>>>>>>>>>"+index);
+                                                            //Removing the Duplicate Values
+                                                            if(index == -1){
+                                                                    unique_push_array.push({name: inviteFriends[i], phone_number : inviteFriends[i]});
+                                                            }
+                                                            if(index != -1){
+                                                                    duplicate_push_array.push({name: inviteFriends[i], phone_number : inviteFriends[i]});
+                                                            }
+                                                    }*/
+                                                    console.log("unique push array ++++++++++++++++++++++");
+                                                    console.log(unique_push_array);
+
+                                                    console.log("duplicate_push_array ++++++++++++++++++++++");
+                                                    console.log(duplicate_push_array);
+
+
+                                                    async.series([
+                                                            function(callback) {
+                                                                            console.log("------------------- SERIES callback--1-----------------");
+                                                                            if(unique_push_array.length != 0){
+                                                                                    unique_push_array.forEach(function(factor, index){
+                                                                                             inviteFinalArray.push({userId: parseInt(userId), collageId: collage_results.id, phoneNumber: factor.phone_number, invitee: factor.name});
+                                                                                    });
+                                                                                    console.log("inviteFinalArray =============");
+                                                                                    console.log(inviteFinalArray);
+                                                                                    Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
+                                                                                            if(err)
+                                                                                            {
+                                                                                                console.log("Invitation error ============>>>>>>>>>>>>>");
+                                                                                                console.log(err);
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                            }else{
+                                                                                                    console.log("Successfully inserted Invitation New Invitation");
+
+                                                                                                    //duplicate_push_array
+                                                                                                    //SMS HERE
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
+                                                                            }else{
+                                                                                    callback();
+                                                                            }
+                                                                            //callback();
+                                                            },
+                                                            function(callback) {
+                                                                            console.log("------------------- SERIES callback--2-----------------");
+                                                                            if(duplicate_push_array.length != 0){
+                                                                                async.forEach(duplicate_push_array, function (factor, callback){
+                                                                                        var criteria            =   {
+                                                                                                                        collageId       :   collage_results.id,
+                                                                                                                        phoneNumber     :   factor.phone_number
+                                                                                                                    };
+                                                                                        var values              =   {
+                                                                                                                        invitee         :   factor.name
+                                                                                                                    };
+
+                                                                                        Invitation.update(criteria,values).exec(function(err, updateInvitation) {
+
+                                                                                                console.log("Invite update name");
+                                                                                                //console.log(updateInvitation);
+                                                                                                //callback();
+                                                                                         });
+                                                                                },callback());
+
+                                                                            }else{
+
+                                                                                    callback();
+
+                                                                            }
+                                                                            //callback();
+
+                                                            },
+                                                            function(callback) {
+                                                                            console.log("------------------- SERIES callback--3-----------------");
+                                                                            query = " SELECT invt.phoneNumber, invt.invitee"+
+                                                                                    " FROM invitation invt"+
+                                                                                    " WHERE invt.collageId = "+collageId;
+                                                                            Invitation.query(query, function(err, inviteFriend_Results) {
+                                                                                    if(err)
+                                                                                    {
+                                                                                        console.log(err);
+                                                                                        callback();
+                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        console.log("==========Selected Invited Members --------");
+                                                                                        console.log(inviteFriend_Results);
+                                                                                        invitedFriends_NUM_Final = inviteFriend_Results;
+                                                                                    }
+                                                                            });
+                                                                            //callback();
+
+                                                            }
+                                                    ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                                                        if (err) {
+                                                                            console.log(err);
+                                                                            callback();
+                                                                            //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Edit Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                                                        }else{
+                                                                            console.log("Edit Dither =============>>>>>>>>>>>>>>");
+                                                                            callback();
+                                                                        }
+                                                    });
+
+
                                             }
                                     });
 
@@ -1424,19 +1698,24 @@ module.exports = {
                                     //console.log(sortedVote);
                                     //console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);
-                                    return res.json(200, {status: 1, status_type: 'Success', message: 'Succesfully updated the Dither'});
+                                    return res.json(200, {status: 1, status_type: 'Success', message: 'Succesfully updated the Dither',
+                                                          taggedUsers           : taggedUserArrayFinal,
+                                                          invite_friends_NUM    : invitedFriends_NUM_Final,
+                                                         });
                                     //return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
                                 }
             });
 
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
                                                                    // return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully updated the Dither'});
 
 
-                    }*/
+                    }
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                    console.log("Edit Dithers ===== api");
+                  /*  console.log("Edit Dithers ===== api");
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
                     console.log(req.param("dither_location"));
@@ -1479,7 +1758,7 @@ module.exports = {
                                                 }
                             });
 
-                    }
+                    }*/
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         },

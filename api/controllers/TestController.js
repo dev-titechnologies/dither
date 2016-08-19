@@ -271,7 +271,7 @@ module.exports = {
                 console.log(JSON.parse(req.param("request1").length));
                 console.log(JSON.parse(req.param("request2").length));
         },
-        
+
             selectUser: function (req, res) {
 
             var commonSettings = req.options.settingsKeyValue;
@@ -294,6 +294,7 @@ module.exports = {
                     }
 
             });
+
     },
         
         
@@ -355,6 +356,72 @@ module.exports = {
 				  cb();
 				};
 
-	}
+	       
+        },
+
+        /* ==================================================================================================================================
+               To Upload Images
+        ==================================================================================================================================== */
+        file_upload: function (req, res) {
+                console.log("file_upload  ----- test controller");
+                var fileUploadDirectoryPath =  '../../assets/images/file_test';
+                //var imageUploadDirectoryPath =  'http://assets/images/collage';
+                //console.log(req.file('file_1'));
+                console.log(req.file('contact_array'));
+                req.file('contact_array').upload({dirname: fileUploadDirectoryPath,maxBytes: 100 * 1000 * 1000},function (err, files) {
+                        if (err){
+                            console.log(err);
+                            //return res.serverError(err);
+                            return res.json(200, {status: 1, message: 'Failure', error_details: err});
+                        }else{
+                            console.log(files);
+                            /*return res.json({
+                            message: files.length + ' file(s) uploaded successfully!',
+                            files: files
+                            });*/
+                            return res.json(200, {status: 1, message: 'Success'});
+                        }
+                });
+        },
+
+        file_read: function (req, res) {
+                console.log("file_upload  ----- test controller");
+                var jsonfile = require('jsonfile')
+                var file = 'test.json'
+                //var file = '/tmp/data.json'
+                console.log(file);
+
+                jsonfile.readFile(file, function(err, obj) {
+                    if(err){
+                        console.log(err);
+                        return res.json(200, {status: 2, message: 'Failure', error_details: err});
+
+                    }else{
+                        console.log("success --------");
+                        console.dir(obj);
+                        console.log(obj);
+                        obj.forEach(function(factor, index){
+                                //console.log(factor.name);
+                        });
+                        return res.json(200, {status: 1, message: 'Success'});
+                        }
+                })
+
+                //var fileUploadDirectoryPath =  '../../assets/images/file_test';
+                //var imageUploadDirectoryPath =  'http://assets/images/collage';
+                //console.log(req.file('file_1'));
+                //console.log(req.file('contact_array'));
+                /*req.file('file_1').upload({dirname: fileUploadDirectoryPath,maxBytes: 100 * 1000 * 1000},function (err, files) {
+                        if (err){
+                            return res.serverError(err);
+                        }else{
+                            console.log(files);
+
+                        }
+                });*/
+        },
+
+
+
 };
 

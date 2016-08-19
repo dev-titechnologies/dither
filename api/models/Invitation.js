@@ -17,13 +17,15 @@ module.exports = {
             },
         collageId: {
                 type: 'integer',
+                defaultsTo: 0
             },
         userId: {
                 type: 'integer',
+                defaultsTo: 0
             },
-        ditherUserId : {
+        /*ditherUserId : {
                 type: 'integer',
-            },
+            },*/
         phoneNumber  : {
                 type: 'string',
             },

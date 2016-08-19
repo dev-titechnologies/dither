@@ -26,7 +26,7 @@ module.exports = {
                 });
         },
         test: function (req, res) {
-               console.log("22222222222222");
+                console.log("22222222222222");
                 console.log(req.param('array'));
 
 
@@ -227,6 +227,8 @@ module.exports = {
                 //sails.sockets.join(req.socket, "1");
                 //console.log(req.socket);
                 sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
+                sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
+
         },
 
         subscribeToFunRoom: function(req, res) {
@@ -243,6 +245,11 @@ module.exports = {
 
               console.log("sails.sockets.rooms ==============================================");
               console.log(sails.sockets.rooms());
+
+            console.log("sails.sockets.socketRooms ==============================================");
+              console.log(sails.sockets.socketRooms(req.socket));
+            console.log("sails.sockets.socketRooms ==============================================");
+             console.log(sails.sockets.socketRooms());
               //sails.sockets.join(req.socket, roomName);
               //sails.sockets.broadcast(roomName, { msg: 'Hi there!' });
               //res.json({
@@ -422,6 +429,27 @@ module.exports = {
 
                         }
                 });*/
+        },
+
+        delete_record : function (req, res) {
+                        console.log("Bulk -delete ========= >>>>>>>>>>>>>>");
+                        var deleteTagCollageArray = [
+                                                        {collageId: 1, userId: 3},
+                                                        {collageId: 3, userId: 3},
+                                                        //{collageId: 4443, userId: 3},
+                                                    ];
+                        Tags.destroy(deleteTagCollageArray).exec(function(err, deleteCollageTags){
+                                if(err)
+                                {
+                                    console.log(err);
+                                    console.log("Error in Deleting Collage Tags");
+                                    //callback();
+                                }else{
+                                    console.log("Bulk delete success ++++++++++++");
+                                    console.log(deleteCollageTags);
+
+                                }
+                        });
         },
 
 

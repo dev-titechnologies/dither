@@ -17,9 +17,11 @@ module.exports = {
             },
         userId: {
                 type: 'integer',
+                defaultsTo: 0
             },
         ditherUserId: {
                 type: 'integer',
+                defaultsTo: 0
             },
         ditherUserName: {
                 type: 'string',

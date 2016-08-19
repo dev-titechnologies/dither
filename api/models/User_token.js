@@ -19,6 +19,7 @@ module.exports = {
         userId: {
                 type: 'integer',
                 //required: true,
+                defaultsTo: 0
         },
 
         token: {

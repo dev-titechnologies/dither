@@ -40,14 +40,17 @@ module.exports = {
 
         userId: {
             type: 'integer',
+            defaultsTo: 0
         },
 
         totalVote: {
             type: 'integer',
+            defaultsTo: 0
         },
         //0 for not liked, 1 - 1st position , 2 - 2nd position etc .....
         likePosition: {
             type: 'integer',
+            defaultsTo: 0
         },
 
         createdAt: {

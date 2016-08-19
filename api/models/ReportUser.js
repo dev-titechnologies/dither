@@ -26,10 +26,12 @@ module.exports = {
 
         reporterId: {
                 type: 'integer',
+                defaultsTo: 0
             },
 
         userId: {
                 type: 'integer',
+                defaultsTo: 0
             },
 
         approvalStatus: {

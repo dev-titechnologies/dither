@@ -27,10 +27,12 @@ module.exports = {
 
         collageId: {
             type: 'integer',
+            defaultsTo: 0
         },
 
         vote: {
             type: 'integer',
+            defaultsTo: 0
         },
 
         createdAt: {

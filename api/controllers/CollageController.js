@@ -1666,6 +1666,7 @@ module.exports = {
                                                                                         console.log("==========Selected Invited Members --------");
                                                                                         console.log(inviteFriend_Results);
                                                                                         invitedFriends_NUM_Final = inviteFriend_Results;
+                                                                                        callback();
                                                                                     }
                                                                             });
                                                                             //callback();

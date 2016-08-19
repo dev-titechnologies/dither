@@ -21,9 +21,9 @@ module.exports = {
         userId: {
                 type: 'integer',
             },
-        ditherUserId : {
+        /*ditherUserId : {
                 type: 'integer',
-            },
+            },*/
         phoneNumber  : {
                 type: 'string',
             },

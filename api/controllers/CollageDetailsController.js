@@ -226,6 +226,10 @@ module.exports = {
 
                                                                                             inviteeArray = [];
                                                                                     }
+                                                                                    var user_profile_image = "";
+                                                                                    if(results[0].profilePic != "" || results[0].profilePic != null){
+                                                                                            user_profile_image = server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic;
+                                                                                    }
                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                  dither_desc                : results[0].imgTitle,
                                                                                                  dither_created_date_time   : results[0].createdAt,
@@ -233,7 +237,7 @@ module.exports = {
                                                                                                  dither_id                  : results[0].collageId,
                                                                                                  dither_created_username    : results[0].collageCreator,
                                                                                                  dither_created_userID      : results[0].collageCreatorId,
-                                                                                                 dither_created_profile_pic : server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic,
+                                                                                                 dither_created_profile_pic : user_profile_image,
                                                                                                  dither_location            : results[0].location,
                                                                                                  dither_image               : collageImg_path + results[0].collageImage,
                                                                                                  dither_like_position       : like_position,

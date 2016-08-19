@@ -664,9 +664,13 @@ module.exports = {
                                                                                                                 popular_dithers         : []
                                                                                             });
                                                                                     }else{
+                                                                                            var user_profile_image = "";
+                                                                                            if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
+                                                                                                        user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                            }
                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                                 username                : foundUserDetails.name,
-                                                                                                                user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                                user_profile_image      : user_profile_image,
                                                                                                                 total_opinion           : total_opinion,
                                                                                                                 recent_dithers          : recent_dithers_Array_4,
                                                                                                                 popular_dithers         : popular_dithers_Array_4 });
@@ -882,6 +886,10 @@ module.exports = {
                                                                                                     total_opinion           : total_opinion,
                                                                                                     recent_dithers          : recent_dithers_Array_4,
                                                                                                     popular_dithers         : popular_dithers_Array_4 });*/
+                                                                                var user_profile_image = "";
+                                                                                if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
+                                                                                            user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                }
                                                                                 if(received_dither_type == "popular"){
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
                                                                                                         username                : foundUserDetails.name,
@@ -892,7 +900,7 @@ module.exports = {
 
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the recent Dithers',
                                                                                                         username                : foundUserDetails.name,
-                                                                                                        user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                        user_profile_image      : user_profile_image,
                                                                                                         recent_dithers          : recent_dithers,
                                                                                                         });
                                                                                 }

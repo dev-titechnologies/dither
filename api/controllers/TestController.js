@@ -294,12 +294,67 @@ module.exports = {
                     }
 
             });
-    }
+    },
         
         
+       /* ==================================================================================================================================
+               TEST FILE ULLOAD
+     ==================================================================================================================================== */ 
         
+       addUserContacts: function (req, res) { 
+        var jsonfile = require('jsonfile');
+        console.log(req.file('file'))
+        req.file('file').upload({dirname: '',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults) 
+									{
+											console.log(profileUploadResults)
+											imageName = profileUploadResults[0].fd.split('/');
+											imageName = imageName[imageName.length-1];
+											
+											jsonFilePath = '.tmp/uploads/'+imageName;
+											console.log(jsonFilePath)
+											jsonfile.readFile(jsonFilePath, function(err, obj) 
+											{
+													if(err)
+													{
+														console.log(err);
+														return res.json(200, {status: 2,status_type: 'Failure', message: 'File Not Found'});
+													}
+													else
+													{
+														console.log("success --------");
+														
+														console.log(obj);
+														phoneContactsArray = obj;
+													}	
+											 });			
+														
+									});
+		
         
+     },
+     
+      /* ==================================================================================================================================
+               TEST GENERATE THUMBNAIL IMAGE
+     ==================================================================================================================================== */ 
+     
+     testThumbnail: function (req, res) {
+		 
+				console.log("generating thumbnail image")
+		 
+				var Writable = require('stream').Writable;
+				var resize = require('image-resize-stream')(100); // Or any other resizer
 
+				// The output stream to pipe to
+				var output = require('fs').createWriteStream('storedImage.png');
 
+				// Let's create a custom receiver
+				var receiver = new Writable({objectMode: true});
+				receiver._write = function(file, enc, cb) {
+				  file.pipe(resize).pipe(output);
+
+				  cb();
+				};
+
+	}
 };
 

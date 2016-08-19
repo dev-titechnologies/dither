@@ -17,36 +17,41 @@ module.exports = {
             },
        notificationTypeId: {
                 type: 'integer',
+                defaultsTo: 0
             },
        userId: {
                 type: 'integer',
-            },    
-	   ditherUserId	: {
-                type: 'integer',
+                defaultsTo: 0
             },
-       collage_id	: {
+       ditherUserId : {
                 type: 'integer',
+                defaultsTo: 0
             },
-       image_id	: {
+       collage_id   : {
                 type: 'integer',
+                defaultsTo: 0
+            },
+       image_id : {
+                type: 'integer',
+                defaultsTo: 0
             },
        tagged_users:{
-			    type:'string',
-		   } ,          
+                type:'string',
+           } ,
        readStatus:{
-					type:'string',
-		   } ,
-	   description:{
-			      type:'string',
-		   } ,	   
-	   createdAt:{
-				
-				type:'datetime',
-			},    
-	   updatedAt:{
-		   
-				type:'datetime',	
-			},		
+                    type:'string',
+           } ,
+       description:{
+                  type:'string',
+           } ,
+       createdAt:{
+
+                type:'datetime',
+            },
+       updatedAt:{
+
+                type:'datetime',
+            },
   }
 };
 

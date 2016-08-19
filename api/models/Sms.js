@@ -17,18 +17,20 @@ module.exports = {
             },
         ditherId: {
                 type: 'integer',
+                defaultsTo: 0
             },
-            
+
         smsVerified: {
                 type: 'boolean',
                 defaultsTo: false
             },
         OTPCode: {
                 type: 'integer',
+                defaultsTo: 0
             },
         mobile_no:{
-			type: 'string',	
-		},    
+            type: 'string',
+        },
         createdAt: {
                 type: 'datetime',
             },

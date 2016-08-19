@@ -86,7 +86,12 @@ module.exports = {
 											  console.log("deletion**************************************************")
 
 												
-														
+															/*var query = "DELETE FROM addressBook where userId = '"+userId+"'";
+															
+															var criteria	=	{userId:userId}
+														   
+
+															console.log(query);*/
 															AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
 				
 															//AddressBook.query(query, function(err, deleteAddressBook) {

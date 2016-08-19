@@ -340,21 +340,21 @@ module.exports = {
      
      testThumbnail: function (req, res) {
 		 
-				console.log("generating thumbnail image")
-		 
-				var Writable = require('stream').Writable;
-				var resize = require('image-resize-stream')(100); // Or any other resizer
+							console.log("generating thumbnail image")
+					 
+							var Writable = require('stream').Writable;
+							var resize = require('image-resize-stream')(100); // Or any other resizer
 
-				// The output stream to pipe to
-				var output = require('fs').createWriteStream('storedImage.png');
+							// The output stream to pipe to
+							var output = require('fs').createWriteStream('storedImage.png');
 
-				// Let's create a custom receiver
-				var receiver = new Writable({objectMode: true});
-				receiver._write = function(file, enc, cb) {
-				  file.pipe(resize).pipe(output);
+							// Let's create a custom receiver
+							var receiver = new Writable({objectMode: true});
+							receiver._write = function(file, enc, cb) {
+							  file.pipe(resize).pipe(output);
 
-				  cb();
-				};
+							  cb();
+							};
 
 	       
         },

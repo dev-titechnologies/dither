@@ -338,7 +338,7 @@ module.exports = {
                TEST GENERATE THUMBNAIL IMAGE
      ==================================================================================================================================== */ 
      
-     testThumbnail: function (req, res) {
+     /*testThumbnail: function (req, res) {
 		 
 							console.log("generating thumbnail image")
 					 
@@ -357,7 +357,7 @@ module.exports = {
 							};
 
 	       
-        },
+        },*/
 
         /* ==================================================================================================================================
                To Upload Images

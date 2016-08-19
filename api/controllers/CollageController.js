@@ -1228,6 +1228,7 @@ module.exports = {
                     var inviteFriendsArray          =      [];
                     var invitedFriends_NUM_Final;
                     var collage_results             =      "";
+                    var tagNotifyArray              =      [];
 
 
 

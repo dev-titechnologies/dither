@@ -84,7 +84,7 @@ module.exports = {
                             console.log("fbid checkinggggggggggg")
                             console.log(resultData);
                             if(resultData){
-                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User', error_details: err});
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User'});
                             }else{
 
                                 User.create(values).exec(function(err, results){
@@ -96,15 +96,15 @@ module.exports = {
                                                 UsertokenService.createToken(results.id, deviceId, function (err, userTokenDetails) {
                                                     if (err) {
                                                                 sails.log(userTokenDetails)
-                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
                                                     }else {
                                                             //User.publishCreate(result);
                                                             //User.subscribe(req.socket,result);
                                                             //sails.sockets.broadcast('user', { msg: 'signup set ===========' });
                                                             //sails.sockets.emit(req.socket.id,'privateMessage', {msg: 'Hi!'});
                                                             //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
-                                                            sails.sockets.join(socket, "Room-1");
-                                                            sails.sockets.join(socket, "Room-2");
+                                                           // sails.sockets.join(socket, "Room-1");
+                                                            //sails.sockets.join(socket, "Room-2");
                                                             console.log("Before async parallel in Sign up ===============================================");
                                                                 // Send Email and Sms  Simultaneously
                                                                 async.parallel([

@@ -345,26 +345,29 @@ module.exports = {
                TEST GENERATE THUMBNAIL IMAGE
      ==================================================================================================================================== */ 
      
-     /*testThumbnail: function (req, res) {
+     testThumbnail: function (req, res) {
 		 
-							console.log("generating thumbnail image")
-					 
-							var Writable = require('stream').Writable;
-							var resize = require('image-resize-stream')(100); // Or any other resizer
+							console.log("thumbnail image")
+							/*var blobAdapter = require('skipper-disk')();
+							var diskReceiver = blobAdapter.receive();
+							var Thumbnail = require('skipper-thumbnail');
+							var thumbnailReceiver = new Thumbnail(null, 256);
+							thumbnailReceiver.pipe(diskReceiver);
 
-							// The output stream to pipe to
-							var output = require('fs').createWriteStream('storedImage.png');
-
-							// Let's create a custom receiver
-							var receiver = new Writable({objectMode: true});
-							receiver._write = function(file, enc, cb) {
-							  file.pipe(resize).pipe(output);
-
-							  cb();
-							};
+							diskReceiver
+							  .on('error', function(err) {
+								res.serverError(err);
+							  })
+							  .on('finish', function() {
+								res.json({
+								  message: 'File(s) uploaded successfully!'
+								});
+							  });
+							req.file('image').pipe(thumbnailReceiver);*/
+      
 
 	       
-        },*/
+        },
 
         /* ==================================================================================================================================
                To Upload Images

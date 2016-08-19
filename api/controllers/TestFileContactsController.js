@@ -5,7 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var jsonfile = require('jsonfile');
+//var jsonfile = require('jsonfile');
 module.exports = {
 	
 				
@@ -14,7 +14,7 @@ module.exports = {
 				/* ==================================================================================================================================
 								To Upload Contacts
 				==================================================================================================================================== */
-							addUserContacts: function (req, res) {
+						/*	addUserContacts: function (req, res) {
 								
 									//console.log(req.file('file')._files)
 									var tokenCheck                  =     req.options.tokenCheck;
@@ -535,7 +535,7 @@ module.exports = {
 
 						
 			
-		}
+		}*/
 			
 	
 	

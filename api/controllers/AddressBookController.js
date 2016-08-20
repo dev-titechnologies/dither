@@ -23,31 +23,12 @@ module.exports = {
                 var query,
                     ditherUserInAddressBook,
                     ditherUserInFbFriends;
-                var phoneContactsArray      = [];
-                var fbUserArray             = [];
-                
-                
-                
-                
-                /*var fbUser                  = [
-                                                {ditherUserName: 'malu',fbId: 'malutest123'},
-                                                {ditherUserName: 'Testers TiTech',fbId: '172318546464606058'},
-                                                {ditherUserName: 'fb_sasi 3',fbId: 'ggggggggggg'},
-                                              ];
-                var phonecontacts           = [
-                        {ditherUserName: 'gayu',ditherUserPhoneNumber: 7897979799},
-                        {ditherUserName: 'sasi 2',ditherUserPhoneNumber: 98455454},
-                        {ditherUserName: 'sasi 3',ditherUserPhoneNumber: 98455454},
-                 
-                      ];*/
-                        
-                        
-                        
-              // console.log(req.param('contact_array'))  
+                var phoneContactsArray     	    = 	   [];
+                var fbUserArray             	= 	   [];
                
-               var device_type		=	req.get('device_type');
-               var phonecontacts	= [];
-               var fbUser			= [];
+                var device_type		=	req.get('device_type');
+                var phonecontacts	= [];
+                var fbUser			= [];
                  
               
 				//if(!req.param('contact_array') || !req.param('fb_array'))	
@@ -65,8 +46,6 @@ module.exports = {
 							
 						var data_check1 = "";
 						phonecontacts.forEach(function(factor, index){
-							 //console.log("factor");
-							// phoneContactsArray.push("("+userId+",'"+factor.name+"', '"+factor.number+"', now(), now())");
 							phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
 						});
 
@@ -74,9 +53,7 @@ module.exports = {
 						//console.log(phoneContactsArray)
 						
 						fbUser.forEach(function(factor, index){
-							 //console.log("factor");
-							// console.log(factor);
-							// fbUserArray.push("("+userId+",'"+factor.fb_name+"', '"+factor.fb_userid+"', now(), now())");
+							
 							 fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
 						});
 
@@ -86,12 +63,7 @@ module.exports = {
 											  console.log("deletion**************************************************")
 
 												
-															/*var query = "DELETE FROM addressBook where userId = '"+userId+"'";
 															
-															var criteria	=	{userId:userId}
-														   
-
-															console.log(query);*/
 															AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
 				
 															//AddressBook.query(query, function(err, deleteAddressBook) {
@@ -112,11 +84,7 @@ module.exports = {
 								},
 											
 								 function(callback) {							
-															/*var query = "INSERT INTO addressBook"+
-																			" (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
-																			" VALUES"+phoneContactsArray;
-
-																console.log(query);*/
+															
 																console.log("----------insertion------------------")
 																AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook){
 																

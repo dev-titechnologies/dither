@@ -49,38 +49,63 @@ module.exports = {
                                     profilePic  : imagename,
                         };
                         //--------OTP CHECKING----------------------
-                        /*if(OTPCode)
+                       /* if(OTPCode)
                         {
-                            //sails.log("OTP match success")
-                            Sms.query("SELECT OTPCode FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"' AND Id = (SELECT MAX(Id) FROM smsDetails) ", function (err, details) {
+                            var query = "SELECT OTPCode FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"' AND Id = (SELECT MAX(Id) FROM smsDetails where mobile_no = '"+req.param('mobile_number')+"')"
+                            Sms.query(query, function (err, details) {
+								
+							 if(err)	
+							 {
+								 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'OTP Not Found'});
+							 }
+						     else
+						     {
+								 
+									if(details[0].OTPCode==OTPCode)
+									{
+									   //save signup details
+										sails.log("OTP match success")
+										var data     = {smsVerified:true};
+										var criteria = {OTPCode:details[0].OTPCode};
+										Sms.update(criteria,data).exec(function(err, updatedRecords) {
+											
+											if(err)
+											{
+												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification Updation Failed'});
+											}
+											else
+											{
+												return res.json(200, {status: 1, status_type: 'Success' ,message: 'SMS verification updation Success'});
+											}
+											
+										});
 
 
-                                sails.log("OTP match success")
-                                sails.log(details[0].OTPCode)
+									}
+									else
+									{
+										
+										return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification updation Failed,OTP Mismatch'});
 
-                                if(details[0].OTPCode==OTPCode)
-                                {
-                                    //save signup details
-                                    sails.log("OTP match success")
-                                    Sms.query("UPDATE smsDetails SET ditherId    = '"+result.insertId+"',smsVerified=1 where mobile_no = '"+req.param('mobile_number')+"' ", function (err, data) {
-                                    });
+									}
 
-
-                                }
-                                else
-                                {
-
-                                   //mobile verification failed
-
-                                }
-
-
+							 }
 
                             });
 
-                        } */
+                        }*/
+                         
+                        
+                        //------------------------------------------
 
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
+						
+						 if(err)
+						 {
+							 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
+						 }
+						 else
+						 {	 	
                             console.log("fbid checkinggggggggggg")
                             console.log(resultData);
                             if(resultData){
@@ -191,7 +216,7 @@ module.exports = {
                                                                                                                 var values ={
                                                                                                                                 notificationTypeId  : 4,
                                                                                                                                 userId              : results.id,
-                                                                                                                                ditherUserId        : selectContacts.userId,
+                                                                                                                                ditherUserId        : selectContacts[0].userId,
                                                                                                                             }
                                                                                                                  NotificationLog.create(values).exec(function(err, createdNotification) {
                                                                                                                     if(err)
@@ -232,6 +257,7 @@ module.exports = {
 
                                 });
                             }
+                          }  
                         });
                 }
     },
@@ -381,40 +407,40 @@ module.exports = {
                                     else
                                     {
 
-                                     if(profileUploadResults.length==0)
-                                     {
-                                         return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+										 if(profileUploadResults.length==0)
+										 {
+											 return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
 
-                                     }
-                                     else
-                                     {
+										 }
+										 else
+										 {
 
-                                              console.log("profileImages   ------->>> Uploaded");
-                                              console.log(profileUploadResults)
-                                               imageName = profileUploadResults[0].fd.split('/');
-                                               imageName = imageName[imageName.length-1];
-                                               console.log(imageName)
-                                                var data     = {profilePic:imageName};
-                                               var criteria = {id: userId};
+												  console.log("profileImages   ------->>> Uploaded");
+												  console.log(profileUploadResults)
+												  imageName = profileUploadResults[0].fd.split('/');
+												  imageName = imageName[imageName.length-1];
+												  console.log(imageName)
+												  var data     = {profilePic:imageName};
+												  var criteria = {id: userId};
 
-                                              // var query = "UPDATE user SET profilePic='"+ imageName +"' where id='"+userId+"'";
-                                               User.update(criteria,data).exec(function(err, data) {
-                                               // User.query(query, function(err, data){
-                                                    if(err)
-                                                    {
-                                                        sails.log(err)
-                                                        return res.json(200, {status: 2, status_type: 'Failure',message: 'Profile Image updation Failure'});
-                                                    }
-                                                    else
-                                                    {
-                                                        var profileImage = server_baseUrl + "images/profilePics/"+imageName;
-                                                        return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success',profile_image:profileImage});
-                                                    }
+												  // var query = "UPDATE user SET profilePic='"+ imageName +"' where id='"+userId+"'";
+												   User.update(criteria,data).exec(function(err, data) {
+												   // User.query(query, function(err, data){
+														if(err)
+														{
+															sails.log(err)
+															return res.json(200, {status: 2, status_type: 'Failure',message: 'Profile Image updation Failure'});
+														}
+														else
+														{
+															var profileImage = server_baseUrl + "images/profilePics/"+imageName;
+															return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success',profile_image:profileImage});
+														}
 
 
-                                                });
+													});
 
-                                        }
+										 }
 
                                     }
                                 });

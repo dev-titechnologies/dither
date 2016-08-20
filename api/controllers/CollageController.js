@@ -34,6 +34,8 @@ function union_arrays (x, y) {
   }
   return res;
 }
+
+var collage_unlink_path         =      "assets/images/collage/";
 module.exports = {
 
     /* ==================================================================================================================================
@@ -95,10 +97,6 @@ module.exports = {
                             console.log("inviteFriends =========================");
                             console.log(inviteFriends);
 
-                           // var parseJson = JSON.parse(inviteFriends);
-                            //console.log("parseJson >>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                            //console.log(parseJson);
-                            //var inviteFriends           = inviteFriends.split(',');
                             inviteFriends.forEach(function(factor, index){
                                         console.log("factor  ========>>>>>>>> results");
                                         console.log(factor);
@@ -422,8 +420,7 @@ module.exports = {
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                                //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                                " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE"+
                                                 " clg.userId = '"+received_userId+"'"+
                                                 " GROUP BY clgdt.id"+
@@ -443,16 +440,13 @@ module.exports = {
                                                 " UNION"+
                                                 " SELECT tg.collageId as id"+
                                                 " FROM tags tg"+
-                                                //" LEFT JOIN collage clg ON clg.id = tg.collageId"+
                                                 " WHERE tg.userId = '"+received_userId+"'"+
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
-                                                //" INNER JOIN user usr ON usr.id = clg.userId"+
-                                                //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                                " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " GROUP BY clgdt.id"+
                                                 " ORDER BY clg.createdAt DESC";
 
@@ -640,8 +634,7 @@ module.exports = {
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                                //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                                " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE"+
                                                 " clg.userId = '"+received_userId+"'"+
                                                 " GROUP BY clgdt.id"+
@@ -667,8 +660,7 @@ module.exports = {
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
-                                                //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                                " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
+                                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " GROUP BY clgdt.id"+
                                                 " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
 
@@ -940,7 +932,7 @@ module.exports = {
                                                         " FROM collage clg"+
                                                         " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                         " INNER JOIN user usr ON usr.id = clg.userId"+
-                                                        " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
+                                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                         " WHERE clg.id"+
                                                         " IN ( "+unique_push_array+" )"+
                                                         " GROUP BY clgdt.id"+
@@ -1221,7 +1213,7 @@ module.exports = {
                                                                         });
                                                                 }
                                                         });
-                                                }
+                                                    }
                                             });
 
                                 }else{
@@ -1495,7 +1487,6 @@ module.exports = {
                     console.log(req.param("dither_id"));
 
                     var collageId                   =      req.param("dither_id");
-                    var collage_unlink_path         =      "assets/images/collage/";
 
                     if(!collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id'});
@@ -1513,7 +1504,7 @@ module.exports = {
                                                     //Unlinking collage image
                                                     fs.unlink(collage_unlink_path + foundCollage.image);
                                                     //Finding the collageDetails
-                                                     CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
+                                                    CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
                                                             if(err){
                                                                         console.log(err);
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither Details', error_details: err});
@@ -1547,17 +1538,16 @@ module.exports = {
                                                                                                                         console.log(err);
                                                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Comments', error_details: err});
                                                                                                                 }else {
-                                                                                                                        //console.log("Deleted Single Dither");
-                                                                                                                            //Deleting from invitation Table
-                                                                                                                            Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
-                                                                                                                                if (err){
-                                                                                                                                        console.log(err);
-                                                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
-                                                                                                                                }else {
+                                                                                                                        //Deleting from invitation Table
+                                                                                                                        Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
+                                                                                                                            if (err){
+                                                                                                                                    console.log(err);
+                                                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
+                                                                                                                            }else {
 
-                                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
-                                                                                                                                }
-                                                                                                                            });
+                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
+                                                                                                                            }
+                                                                                                                        });
 
                                                                                                                 }
                                                                                                             });
@@ -1568,7 +1558,7 @@ module.exports = {
                                                                             }
                                                                     });//Collage Details
                                                             }
-                                                });
+                                                    });
                                             }
                                         }
                             });//Collage

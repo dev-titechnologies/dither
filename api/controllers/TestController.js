@@ -303,71 +303,72 @@ module.exports = {
             });
 
     },
-        
-        
+
+
        /* ==================================================================================================================================
                TEST FILE ULLOAD
-     ==================================================================================================================================== */ 
-        
-       addUserContacts: function (req, res) { 
+     ==================================================================================================================================== */
+
+       addUserContacts: function (req, res) {
         var jsonfile = require('jsonfile');
         console.log(req.file('file'))
-        req.file('file').upload({dirname: '',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults) 
-									{
-											console.log(profileUploadResults)
-											imageName = profileUploadResults[0].fd.split('/');
-											imageName = imageName[imageName.length-1];
-											
-											jsonFilePath = '.tmp/uploads/'+imageName;
-											console.log(jsonFilePath)
-											jsonfile.readFile(jsonFilePath, function(err, obj) 
-											{
-													if(err)
-													{
-														console.log(err);
-														return res.json(200, {status: 2,status_type: 'Failure', message: 'File Not Found'});
-													}
-													else
-													{
-														console.log("success --------");
-														
-														console.log(obj);
-														phoneContactsArray = obj;
-													}	
-											 });			
-														
-									});
-		
-        
+        req.file('file').upload({dirname: '',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults)
+                                    {
+                                            console.log(profileUploadResults)
+                                            imageName = profileUploadResults[0].fd.split('/');
+                                            imageName = imageName[imageName.length-1];
+
+                                            jsonFilePath = '.tmp/uploads/'+imageName;
+                                            console.log(jsonFilePath)
+                                            jsonfile.readFile(jsonFilePath, function(err, obj)
+                                            {
+                                                    if(err)
+                                                    {
+                                                        console.log(err);
+                                                        return res.json(200, {status: 2,status_type: 'Failure', message: 'File Not Found'});
+                                                    }
+                                                    else
+                                                    {
+                                                        console.log("success --------");
+
+                                                        console.log(obj);
+                                                        phoneContactsArray = obj;
+                                                    }
+                                             });
+
+                                    });
+
+
      },
-     
+
       /* ==================================================================================================================================
                TEST GENERATE THUMBNAIL IMAGE
-     ==================================================================================================================================== */ 
-     
+     ==================================================================================================================================== */
+
      testThumbnail: function (req, res) {
-		 
-							console.log("thumbnail image")
-							/*var blobAdapter = require('skipper-disk')();
-							var diskReceiver = blobAdapter.receive();
-							var Thumbnail = require('skipper-thumbnail');
-							var thumbnailReceiver = new Thumbnail(null, 256);
-							thumbnailReceiver.pipe(diskReceiver);
 
-							diskReceiver
-							  .on('error', function(err) {
-								res.serverError(err);
-							  })
-							  .on('finish', function() {
-								res.json({
-								  message: 'File(s) uploaded successfully!'
-								});
-							  });
-							req.file('image').pipe(thumbnailReceiver);*/
-      
+                            console.log("thumbnail image")
+                            /*var blobAdapter = require('skipper-disk')();
+                            var diskReceiver = blobAdapter.receive();
+                            var Thumbnail = require('skipper-thumbnail');
+                            var thumbnailReceiver = new Thumbnail(null, 256);
+                            thumbnailReceiver.pipe(diskReceiver);
 
-	       
+                            diskReceiver
+                              .on('error', function(err) {
+                                res.serverError(err);
+                              })
+                              .on('finish', function() {
+                                res.json({
+                                  message: 'File(s) uploaded successfully!'
+                                });
+                              });
+                            req.file('image').pipe(thumbnailReceiver);*/
+
+
+
         },
+
 
         /* ==================================================================================================================================
                To Upload Images
@@ -433,11 +434,11 @@ module.exports = {
 
         delete_record : function (req, res) {
                         console.log("Bulk -delete ========= >>>>>>>>>>>>>>");
-                        var deleteTagCollageArray = [
-                                                        {collageId: 1, userId: 3},
-                                                        {collageId: 3, userId: 3},
+                        var deleteTagCollageArray = //[
+                                                        {collageId: 1, userId: 3};
+                                                        //{collageId: 3, userId: 3},
                                                         //{collageId: 4443, userId: 3},
-                                                    ];
+                                                    //];
                         Tags.destroy(deleteTagCollageArray).exec(function(err, deleteCollageTags){
                                 if(err)
                                 {

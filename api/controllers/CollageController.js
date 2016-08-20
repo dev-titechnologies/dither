@@ -1228,6 +1228,7 @@ module.exports = {
                     var inviteFriendsArray          =      [];
                     var invitedFriends_NUM_Final;
                     var collage_results             =      "";
+                    var tagNotifyArray              =      [];
 
 
 
@@ -1313,14 +1314,14 @@ module.exports = {
                                             console.log("Refy tagged User ======>>>>> factor");
                                             console.log(factor);
                                             tagCollageArray.push({collageId: collage_results.id, userId: factor});
-                                            deleteTagCollageArray.push({collageId: collage_results.id});
+                                            //deleteTagCollageArray.push({collageId: collage_results.id});
                                         });
                                         console.log("tagCollageArray }}}}}}}}}}}}}}}}}}}}}}}}");
                                         console.log(tagCollageArray);
 
 
                                         //Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
-                                            Tags.destroy(deleteTagCollageArray).exec(function(err, deleteCollageTags){
+                                            Tags.destroy({collageId: collage_results.id}).exec(function(err, deleteCollageTags){
                                                     if(err)
                                                     {
                                                         console.log(err);
@@ -1665,6 +1666,7 @@ module.exports = {
                                                                                         console.log("==========Selected Invited Members --------");
                                                                                         console.log(inviteFriend_Results);
                                                                                         invitedFriends_NUM_Final = inviteFriend_Results;
+                                                                                        callback();
                                                                                     }
                                                                             });
                                                                             //callback();

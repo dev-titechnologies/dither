@@ -26,10 +26,12 @@ module.exports = {
 
         reporterId: {
                 type: 'integer',
+                defaultsTo: 0
             },
 
         collageId: {
                 type: 'integer',
+                defaultsTo: 0
             },
 
         approvalStatus: {

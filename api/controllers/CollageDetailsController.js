@@ -286,7 +286,7 @@ module.exports = {
                                     " FROM"+
                                     " collageDetails clgdt"+
                                     " INNER JOIN collage clg ON clg.id = clgdt.collageId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.collageId = clgdt.collageId"+
+                                    " LEFT JOIN collageLikes clglk ON clglk.collageId = clgdt.collageId AND clglk.likePosition = clgdt.position"+
                                     " INNER JOIN user usr ON usr.id = clglk.userId"+
                                     " WHERE"+
                                     " clgdt.collageId = '"+received_collage_id+"' AND clgdt.id = '"+received_single_image_id+"'";

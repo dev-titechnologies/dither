@@ -118,14 +118,10 @@ module.exports = {
                                         {
                                             console.log(files);
                                                 if(files.length != 0){
-
-                                                            //console.log(files);
                                                             var collage_imageName = "";
                                                             files.forEach(function(factor, index){
                                                                          var filename = factor.fd.split('/');
                                                                          filename = filename[filename.length-1];
-                                                                         //console.log(filename);
-                                                                         //sum = sum + factor.size;
 
                                                                          var filename_without_extension         =   factor.filename.split('.');
                                                                          filename_without_extension             =   filename_without_extension[0];
@@ -156,19 +152,11 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
                                                                 }
                                                                 else{
-                                                                            var sum = 0;
                                                                             var collageDetailImgArray = [];
                                                                             files.forEach(function(factor, index){
-                                                                                 //console.log("factor +++++++++++++++++++++++++++++++++++++++++");
-                                                                                 //console.log(factor);
                                                                                  var filename = factor.fd.split('/');
                                                                                  filename = filename[filename.length-1];
-                                                                                 //console.log(filename);
-                                                                                 //sum = sum + factor.size;
-
                                                                                  var filename_without_extension         =   factor.filename.split('.');
-                                                                                 //console.log(filename_without_extension);
-                                                                                 //console.log(filename_without_extension[0]);
                                                                                  filename_without_extension             =   filename_without_extension[0];
 
                                                                                  var switchKey = filename_without_extension;
@@ -183,10 +171,6 @@ module.exports = {
                                                                                         case "image_4":    position = 4;
                                                                                         break;
                                                                                  }
-                                                                                 //collageDetailImgArray.push("('"+filename+"','"+position+"',"+results.id+", now(), now())");
-                                                                                //if(filename_without_extension != "image_0"){
-                                                                                        //collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
-                                                                                //}
                                                                                 var switchKey = filename_without_extension;
                                                                                 switch(switchKey){
                                                                                         case 'image_0':
@@ -255,61 +239,6 @@ module.exports = {
                                                 }
                                                 else
                                                 {
-
-                                                        //console.log("created in collage Details=====");
-                                                        //console.log(vote);
-                                                        console.log("Predicated -------------------------");
-                                                        console.log("Created Collage Tags -------------------------");
-                                                        console.log(createdCollageTags);
-
-                                                        //console.log(vote.sort( predicatBy("image_id") ));
-
-                                                        //console.log(results);
-                                                        /*var query_test = " SELECT temp.*"+
-                                                                        " FROM ("+
-                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
-                                                                        " FROM tags tg"+
-                                                                        " INNER JOIN user usr ON usr.id = tg.userId"+
-                                                                        " INNER JOIN addressBook adb ON adb.ditherUserId = tg.userId"+
-                                                                        " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                                                        " WHERE tg.collageId = "+collage_results.id+
-                                                                        " AND adb.userId = "+userId+
-                                                                        " UNION"+
-                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name"+
-                                                                        " FROM tags tg"+
-                                                                        " INNER JOIN user usr ON usr.id = tg.userId"+
-                                                                        " INNER JOIN fbFriends fbf ON fbf.ditherUserId = tg.userId"+
-                                                                        " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                                                        " WHERE tg.collageId = "+collage_results.id+
-                                                                        " AND fbf.userId = "+userId+
-                                                                        " ) AS temp"+
-                                                                        " GROUP BY temp.ditherUserId";
-
-                                                        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ query_test ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                                        console.log(query_test);
-                                                        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ query_test ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                                        */
-                                                        //Query to get tagged users from both addressBook and fbFriends
-                                                        /*query = " SELECT"+
-                                                                " adb.userId, adb.ditherUsername, usr.name"+
-                                                                " FROM addressBook adb"+
-                                                                " INNER JOIN user usr ON usr.id = adb.userId"+
-                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
-                                                                " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                                                " WHERE"+
-                                                                " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
-                                                                " GROUP BY adb.userId"+
-                                                                " UNION"+
-                                                                " SELECT"+
-                                                                " fbf.userId, fbf.ditherUsername, usr.name"+
-                                                                " FROM fbFriends fbf"+
-                                                                " INNER JOIN user usr ON usr.id = fbf.userId"+
-                                                               // " LEFT JOIN collage clg ON clg.userId = usr.id"+
-                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
-                                                                " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                                                " WHERE"+
-                                                                " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
-                                                                " GROUP BY fbf.userId";*/
                                                         query = " SELECT temp.*"+
                                                                 " FROM ("+
                                                                 " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
@@ -449,7 +378,6 @@ module.exports = {
                                                               taggedUsers        :     taggedUserArrayFinal,
                                                               invite_friends_NUM :     request.invite_friends_NUM,
                                     });
-                                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
                                 }
             });
 
@@ -913,9 +841,6 @@ module.exports = {
                                     console.log(dither_data.length);
                                     var foundCollageArray;
                                     dither_data.forEach(function(factor, index){
-                                            //console.log(factor);
-                                            //console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                                            //console.log(index);
                                             push_Request_Array.push(factor.dither_id);
                                             Collage.findOne({id: factor.dither_id, updatedAt: factor.dither_local_time}).exec(function (err, foundCollage){
                                                 if(err){
@@ -927,11 +852,6 @@ module.exports = {
 
                                                             if(foundCollage){
                                                                     push_Result_Array.push(foundCollage.id);
-                                                                    //console.log("factor==================");
-                                                                    //console.log(factor);
-                                                                    //console.log("foundCollage==================");
-                                                                    //console.log(foundCollage);
-                                                                    //foundCollageArray = foundCollage;
                                                             }
 
                                                             if (index == dither_data.length - 1) {
@@ -961,11 +881,11 @@ module.exports = {
 
                                             //var results             = "["+results+"]";
                                             //var resultsRequest      = "["+resultsRequest+"]";
-                                            console.log("11111111111111111111111111111+++++++++++ get"  + resultsRequest);
-                                            console.log("2222222222222222222222222222 +++++++++ get"  + results);
+                                            //console.log("11111111111111111111111111111+++++++++++ get"  + resultsRequest);
+                                            //console.log("2222222222222222222222222222 +++++++++ get"  + results);
 
-                                            console.log(results.length);
-                                            console.log(resultsRequest.length);
+                                            //console.log(results.length);
+                                            //console.log(resultsRequest.length);
 
                                             var results               = results.toString().split(',');
                                             var resultsRequest        = resultsRequest.toString().split(',');
@@ -974,32 +894,23 @@ module.exports = {
                                             var results_array         = [];
                                             var resultsRequest_array  = [];
 
-                                            console.log("11111111111111111111111111111"  + resultsRequest);
-                                            console.log("2222222222222222222222222222"  + results);
+                                            //console.log("11111111111111111111111111111"  + resultsRequest);
+                                            //console.log("2222222222222222222222222222"  + results);
                                             //return res.send(results, 200);
-                                            console.log("concat ----------------------------");
+                                            //console.log("concat ----------------------------");
 
                                             //console.log(results_array.length);
                                             results.forEach(function(factor, index){
-                                                        console.log("factor  ========>>>>>>>> results");
-                                                        console.log(factor);
                                                         if(factor != "" || factor != null){
                                                             results_array.push(factor);
                                                         }
                                             });
                                             resultsRequest.forEach(function(factor, index){
-                                                        console.log("factor ========>>>>>>>>> resultsRequest");
-                                                        console.log(factor);
                                                         if(factor != "" || factor != null){
                                                             resultsRequest_array.push(factor);
                                                         }
                                             });
-                                            //console.log(results_array);
-                                            //console.log(resultsRequest_array);
-
-                                            console.log("8888888888888888888888888888888");
                                             console.log(results_array.length);
-                                            //if(results_array.length != 0){
                                             for (var i=0; i<resultsRequest_array.length; i++) {
                                                     index = results_array.indexOf(resultsRequest_array[i]);
                                                     console.log("index===========");
@@ -1009,45 +920,12 @@ module.exports = {
                                                             unique_push_array.push(resultsRequest_array[i]);
                                                     }
                                             }
-                                            //}else{
 
-                                                   // unique_push_array   = resultsRequest_array;
-                                                    //console.log("unique_push_array-------------------------------");
-
-                                            //}
                                             console.log("++++++++++++++++unique_push_array++++++++++++++++");
                                             console.log(unique_push_array);
-
-
-                                            /* ##################################### */
-
-                                                        /*var array1 = ['A', 'B', 'C', 'D', 'D', 'E'];
-                                                        var array2 = ['D', 'E', 'R' , 'T', 'A'];
-                                                        var index;
-
-                                                        for (var i=0; i<array2.length; i++) {
-                                                            index = array1.indexOf(array2[i]);
-                                                            console.log("index===========");
-                                                            console.log(array2[i]+"------------------------------------------>>>>>>>>>>"+index);
-                                                            if(index == -1) {
-
-                                                            }
-                                                        }
-                                                        console.log("2nd For looop==========================");
-                                                        for (var j=0; j<array1.length; j++) {
-                                                            index = array2.indexOf(array1[j]);
-                                                            console.log("index===========");
-                                                            console.log(array1[j]+"------------------------------------------>>>>>>>>>>"+index);
-                                                            if(index == -1) {
-
-                                                            }
-                                                        }*/
-                                            /* #################################### */
-
                                             if(unique_push_array.length == 0){
                                                     unique_push_array  =  resultsRequest_array;
                                                     console.log("unique_push_array length = 0");
-                                                    console.log(unique_push_array);
                                                     return res.json(200, {status: 1, status_type: 'Success' ,message: 'Given Dithers are not updated', feeds: []});
                                             }else{
                                                 query = " SELECT"+
@@ -1058,7 +936,6 @@ module.exports = {
                                                         " FROM collage clg"+
                                                         " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                         " INNER JOIN user usr ON usr.id = clg.userId"+
-                                                        //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
                                                         " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
                                                         " WHERE clg.id"+
                                                         " IN ( "+unique_push_array+" )"+
@@ -1071,9 +948,6 @@ module.exports = {
                                                                 console.log(err);
                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting updated dithers', error_details: err});
                                                         }else{
-                                                            console.log("results _++++++++++++++++++++++++++++__________________");
-                                                            console.log(results);
-                                                            /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
                                                             if(results.length == 0){
                                                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found', feeds: []});
                                                             }else{
@@ -1081,7 +955,7 @@ module.exports = {
                                                                         var dataResults = results;
                                                                         var key = [];
                                                                         var dataResultsKeys = [];
-                                                                        var like_position;
+                                                                        var like_position, imgDetailsArrayOrder, feeds;
                                                                         for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                             var dataResultsObj = new Object();
                                                                             var collageId_val =dataResults[i]["collageId"];
@@ -1093,6 +967,7 @@ module.exports = {
                                                                                 var likeStatusArray             = [];
                                                                                 var imgIdArray                  = [];
                                                                                 var imgDetailsArray             = [];
+
                                                                                 for (var j = dataResults.length - 1; j >= 0; j--)
                                                                                 {
                                                                                     if(dataResults[j]["collageId"]==collageId_val)
@@ -1117,9 +992,6 @@ module.exports = {
                                                                                         }
                                                                                     }
                                                                                 }
-                                                                                //var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                                               // var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                                               var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
 
                                                                                 if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                                             dataResultsObj.profile_image = "";
@@ -1128,6 +1000,7 @@ module.exports = {
                                                                                             dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
                                                                                 }
 
+                                                                                imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                                                 dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                                                 dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                                                 dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
@@ -1137,29 +1010,21 @@ module.exports = {
                                                                                 dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                                 dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                                                 dataResultsObj.mainOrder                    =       i;
-                                                                                //console.log("dataResultsObj====================");
-                                                                                //console.log(dataResultsObj);
-                                                                                //console.log("dataResultsObj====================");
+
                                                                                 key.push(dataResultsObj);
                                                                                 dataResultsKeys.push(collageId_val);
 
-                                                                                //console.log(key);
-                                                                                //var feeds = key.reverse();
-                                                                                //var feeds = key;
-                                                                                var feeds              =       key.sort( predicatBy("mainOrder") );
-                                                                                //console.log("Final Key -----------------------------------------------------------------");
-                                                                                //console.log(feeds);
+
+                                                                                feeds              =       key.sort( predicatBy("mainOrder") );
+
                                                                             }
                                                                         }
-                                                                        //console.log(key);
-                                                                        //console.log(key.reverse());
-                                                                        //console.log(JSON.stringify(key.reverse()));
+
                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the updated Feeds',
                                                                                             feeds: feeds
                                                                         });
                                                             }//results length check
 
-                                                            /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
                                                         }
                                                 });
                                             }
@@ -1175,7 +1040,6 @@ module.exports = {
         editDither:  function (req, res) {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     console.log("Edit Dithers ===== api");
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
@@ -1194,35 +1058,6 @@ module.exports = {
                     var invitedFriends_NUM_Final;
                     var collage_results             =      "";
                     var tagNotifyArray              =      [];
-
-
-
-                    /*console.log("tagged_contactUser |||||||||||||||||");
-                    console.log(tagged_contactUser);
-
-                    console.log("tagged_fbUser |||||||||||||||||");
-                    console.log(tagged_fbUser);
-
-                    console.log("inviteFriends |||||||||||||||||");
-                    console.log(inviteFriends);
-
-                    console.log(tagged_contactUser.length);
-                    console.log(tagged_fbUser.length);
-
-
-
-
-                    console.log("inviteFriends JSON parse|||||||||||||||||");
-                    console.log(JSON.parse(req.param("invite_friends_NUM")));
-                    console.log(JSON.parse(req.param("invite_friends_NUM")).length);*/
-
-                    /*console.log("tagged_contactUser JSON parse|||||||||||||||||");
-                    console.log(JSON.parse(tagged_contactUser));
-
-                    console.log("tagged_fbUser JSON parse|||||||||||||||||");
-                    console.log(JSON.parse(tagged_fbUser));*/
-
-
 
                     if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
@@ -1303,17 +1138,6 @@ module.exports = {
                                                                 }
                                                                 else
                                                                 {
-
-                                                                        //console.log("created in collage Details=====");
-                                                                        //console.log(vote);
-                                                                        console.log("Predicated -------------------------");
-                                                                        console.log("Created Collage Tags -------------------------");
-                                                                        console.log(createdCollageTags);
-
-                                                                        //console.log(vote.sort( predicatBy("image_id") ));
-
-                                                                        //console.log(results);
-
                                                                         //Query to get tagged users from both addressBook and fbFriends
                                                                         query = " SELECT"+
                                                                                 " adb.userId, adb.ditherUsername, usr.name"+
@@ -1329,7 +1153,6 @@ module.exports = {
                                                                                 " fbf.userId, fbf.ditherUsername, usr.name"+
                                                                                 " FROM addressBook fbf"+
                                                                                 " INNER JOIN user usr ON usr.id = fbf.userId"+
-                                                                               // " LEFT JOIN collage clg ON clg.userId = usr.id"+
                                                                                 " LEFT JOIN tags tg ON tg.userId = usr.id"+
                                                                                 " LEFT JOIN collage clg ON clg.id = tg.collageId"+
                                                                                 " WHERE"+
@@ -1341,7 +1164,6 @@ module.exports = {
                                                                                 {
                                                                                     console.log(err);
                                                                                     callback();
-                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
                                                                                 }
                                                                                 else
                                                                                 {
@@ -1378,7 +1200,6 @@ module.exports = {
                                                                                                 {
                                                                                                     console.log(err);
                                                                                                     callback();
-                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                                                 }else{
                                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                                         console.log(createdNotificationTags);
@@ -1416,7 +1237,6 @@ module.exports = {
                                             " fbf.userId, fbf.ditherUsername, usr.name"+
                                             " FROM addressBook fbf"+
                                             " INNER JOIN user usr ON usr.id = fbf.userId"+
-                                           // " LEFT JOIN collage clg ON clg.userId = usr.id"+
                                             " LEFT JOIN tags tg ON tg.userId = usr.id"+
                                             " LEFT JOIN collage clg ON clg.id = tg.collageId"+
                                             " WHERE"+
@@ -1428,7 +1248,6 @@ module.exports = {
                                             {
                                                 console.log(err);
                                                 callback();
-                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
                                             }
                                             else
                                             {
@@ -1438,8 +1257,6 @@ module.exports = {
 
                                                 if(taggedUsersFinalResults != 0){
                                                     taggedUsersFinalResults.forEach(function(factor, index){
-                                                            console.log("factor ------------))))))))))))))))======================");
-                                                            console.log(factor);
                                                             taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
                                                     });
                                                     callback();
@@ -1535,22 +1352,7 @@ module.exports = {
                                                                     duplicate_push_array.push({name: inviteFriends[i].name, phone_number : inviteFriends[i].phone_number});
                                                             }
                                                     }
-                                                    /*for (var i=0; i<inviteFriends.length; i++) {
-                                                            console.log("Loop Started  +++++++++++++++++++++++++++++++");
-                                                            console.log(inviteFriends[i]);
-                                                            console.log(inviteFriends[i]);
-                                                            console.log("Loop Started  +++++++++++++++++++++++++++++++");
-                                                            index = foundInvitationCollage.indexOf(inviteFriends[i]);
-                                                            console.log("index===========");
-                                                            console.log(inviteFriends[i]+"------------------------------------------>>>>>>>>>>"+index);
-                                                            //Removing the Duplicate Values
-                                                            if(index == -1){
-                                                                    unique_push_array.push({name: inviteFriends[i], phone_number : inviteFriends[i]});
-                                                            }
-                                                            if(index != -1){
-                                                                    duplicate_push_array.push({name: inviteFriends[i], phone_number : inviteFriends[i]});
-                                                            }
-                                                    }*/
+
                                                     console.log("unique push array ++++++++++++++++++++++");
                                                     console.log(unique_push_array);
 
@@ -1678,56 +1480,6 @@ module.exports = {
 
 
                     }
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                  /*  console.log("Edit Dithers ===== api");
-                    console.log(req.param("dither_id"));
-                    console.log(req.param("dither_desc"));
-                    console.log(req.param("dither_location"));
-                    var collageId                   =      req.param("dither_id");
-                    var imgTitle                    =      req.param("dither_desc");
-                    var location                    =      req.param("dither_location");
-                    var taggedUsers                 =      req.param("tagged_users");
-
-                    if(!imgTitle || !location || !collageId){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
-                    }else{
-                            Collage.findOne({id: collageId}).exec(function (err, foundCollage){
-                                                if(err){
-                                                            console.log(err);
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
-                                                }else{
-
-                                                    if(!foundCollage){
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
-                                                    }else{
-                                                            var criteria    =   {id: foundCollage.id};
-                                                            var values      =   {
-                                                                                    imgTitle           :    imgTitle,
-                                                                                    location           :    location,
-                                                                                };
-                                                            Collage.update(criteria, values).exec(function(err, updatedCollage) {
-                                                                if(err)
-                                                                {
-                                                                    console.log(err);
-                                                                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating the Dither'});
-                                                                }
-                                                                else
-                                                                {
-                                                                    console.log("Successfully updated =======================");
-                                                                    console.log(updatedCollage);
-                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully updated the Dither'});
-                                                                }
-                                                            });
-                                                    }
-                                                }
-                            });
-
-                    }*/
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
         },
 
 /* ==================================================================================================================================

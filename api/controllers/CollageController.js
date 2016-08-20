@@ -4,6 +4,10 @@
  * @description :: Server-side logic for managing collages
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+
+//Require the external modules
+var fs                  =       require('fs');
+
 //Function to get ordered, by value, in json array key value pair
 function predicatBy(prop){
    return function(a,b){
@@ -1491,10 +1495,12 @@ module.exports = {
                     console.log(req.param("dither_id"));
 
                     var collageId                   =      req.param("dither_id");
+                    var collage_unlink_path         =      "assets/images/collage/";
 
                     if(!collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id'});
                     }else{
+                            //Finding the collage
                             Collage.findOne({id: collageId}).exec(function (err, foundCollage){
                                         if(err){
                                                     console.log(err);
@@ -1504,50 +1510,65 @@ module.exports = {
                                             if(!foundCollage){
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
                                             }else{
-                                                    //Deleting from collage Table
-                                                    Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
-                                                            if (err){
-                                                                    console.log(err);
-                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
-                                                            }else {
-                                                                    //Deleting from collage Details Table
-                                                                    CollageDetails.destroy({collageId: collageId}).exec(function (err, deleteCollageDetails) {
-                                                                        if (err){
-                                                                                console.log(err);
-                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Single Dithers', error_details: err});
-                                                                        }else{
-                                                                                //Deleting from collage Likes Table
-                                                                                CollageLikes.destroy({collageId: collageId}).exec(function (err, deleteCollageLikes) {
-                                                                                    if (err){
-                                                                                            console.log(err);
-                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Votes', error_details: err});
-                                                                                    }else {
-                                                                                            //Deleting from collage Comments Table
-                                                                                            CollageComments.destroy({collageId: collageId}).exec(function (err, deleteCollageComments) {
-                                                                                                if (err){
-                                                                                                        console.log(err);
-                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Comments', error_details: err});
-                                                                                                }else {
-                                                                                                        //console.log("Deleted Single Dither");
-                                                                                                            //Deleting from invitation Table
-                                                                                                            Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
+                                                    //Unlinking collage image
+                                                    fs.unlink(collage_unlink_path + foundCollage.image);
+                                                    //Finding the collageDetails
+                                                     CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
+                                                            if(err){
+                                                                        console.log(err);
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither Details', error_details: err});
+                                                            }else{
+                                                                    //Unlinking collageDetail image
+                                                                    foundCollageDetails.forEach(function(factor, index){
+                                                                            fs.unlink(collage_unlink_path + factor.image);
+                                                                    });
+
+                                                                    //Deleting from collage Table
+                                                                    Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
+                                                                            if (err){
+                                                                                    console.log(err);
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                            }else {
+                                                                                    //Deleting from collage Details Table
+                                                                                    CollageDetails.destroy({collageId: collageId}).exec(function (err, deleteCollageDetails) {
+                                                                                        if (err){
+                                                                                                console.log(err);
+                                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Single Dithers', error_details: err});
+                                                                                        }else{
+                                                                                                //Deleting from collage Likes Table
+                                                                                                CollageLikes.destroy({collageId: collageId}).exec(function (err, deleteCollageLikes) {
+                                                                                                    if (err){
+                                                                                                            console.log(err);
+                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Votes', error_details: err});
+                                                                                                    }else {
+                                                                                                            //Deleting from collage Comments Table
+                                                                                                            CollageComments.destroy({collageId: collageId}).exec(function (err, deleteCollageComments) {
                                                                                                                 if (err){
                                                                                                                         console.log(err);
-                                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
+                                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Comments', error_details: err});
                                                                                                                 }else {
                                                                                                                         //console.log("Deleted Single Dither");
-                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
+                                                                                                                            //Deleting from invitation Table
+                                                                                                                            Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
+                                                                                                                                if (err){
+                                                                                                                                        console.log(err);
+                                                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
+                                                                                                                                }else {
+
+                                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
+                                                                                                                                }
+                                                                                                                            });
+
                                                                                                                 }
                                                                                                             });
-
-                                                                                                }
-                                                                                            });
-                                                                                    }
-                                                                                });
-                                                                        }
-                                                                    });
+                                                                                                    }
+                                                                                                });
+                                                                                        }
+                                                                                    });
+                                                                            }
+                                                                    });//Collage Details
                                                             }
-                                                    });//Collage Details
+                                                });
                                             }
                                         }
                             });//Collage

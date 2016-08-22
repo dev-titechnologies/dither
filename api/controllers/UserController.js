@@ -53,59 +53,59 @@ module.exports = {
                         {
                             var query = "SELECT OTPCode FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"' AND Id = (SELECT MAX(Id) FROM smsDetails where mobile_no = '"+req.param('mobile_number')+"')"
                             Sms.query(query, function (err, details) {
-								
-							 if(err)	
-							 {
-								 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'OTP Not Found'});
-							 }
-						     else
-						     {
-								 
-									if(details[0].OTPCode==OTPCode)
-									{
-									   //save signup details
-										sails.log("OTP match success")
-										var data     = {smsVerified:true};
-										var criteria = {OTPCode:details[0].OTPCode};
-										Sms.update(criteria,data).exec(function(err, updatedRecords) {
-											
-											if(err)
-											{
-												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification Updation Failed'});
-											}
-											else
-											{
-												return res.json(200, {status: 1, status_type: 'Success' ,message: 'SMS verification updation Success'});
-											}
-											
-										});
+
+                             if(err)
+                             {
+                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'OTP Not Found'});
+                             }
+                             else
+                             {
+
+                                    if(details[0].OTPCode==OTPCode)
+                                    {
+                                       //save signup details
+                                        sails.log("OTP match success")
+                                        var data     = {smsVerified:true};
+                                        var criteria = {OTPCode:details[0].OTPCode};
+                                        Sms.update(criteria,data).exec(function(err, updatedRecords) {
+
+                                            if(err)
+                                            {
+                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification Updation Failed'});
+                                            }
+                                            else
+                                            {
+                                                return res.json(200, {status: 1, status_type: 'Success' ,message: 'SMS verification updation Success'});
+                                            }
+
+                                        });
 
 
-									}
-									else
-									{
-										
-										return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification updation Failed,OTP Mismatch'});
+                                    }
+                                    else
+                                    {
 
-									}
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification updation Failed,OTP Mismatch'});
 
-							 }
+                                    }
+
+                             }
 
                             });
 
                         }*/
-                         
-                        
+
+
                         //------------------------------------------
 
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
-						
-						 if(err)
-						 {
-							 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
-						 }
-						 else
-						 {	 	
+
+                         if(err)
+                         {
+                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
+                         }
+                         else
+                         {
                             console.log("fbid checkinggggggggggg")
                             console.log(resultData);
                             if(resultData){
@@ -257,7 +257,7 @@ module.exports = {
 
                                 });
                             }
-                          }  
+                          }
                         });
                 }
     },
@@ -315,7 +315,13 @@ module.exports = {
                                                         }
                                                         else
                                                         {
-															console.log("User Tokennnnnnnnnnnn")
+                                                            var test = results.name;
+                                                            console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                                                            console.log(test);
+                                                            console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                                                            console.log(results.name);
+                                                            sails.sockets.blast('createIncheck', {device_id1 : "eeeeeeeeee", device_id_2: test});
+                                                            console.log("User Tokennnnnnnnnnnn")
                                                             console.log(userTokenDetails.token)
                                                             var protocol    = req.connection.encrypted?'https':'http';
                                                             var url         = protocol + '://' + req.headers.host + '/';
@@ -406,40 +412,40 @@ module.exports = {
                                     else
                                     {
 
-										 if(profileUploadResults.length==0)
-										 {
-											 return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+                                         if(profileUploadResults.length==0)
+                                         {
+                                             return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
 
-										 }
-										 else
-										 {
+                                         }
+                                         else
+                                         {
 
-												  console.log("profileImages   ------->>> Uploaded");
-												  console.log(profileUploadResults)
-												  imageName = profileUploadResults[0].fd.split('/');
-												  imageName = imageName[imageName.length-1];
-												  console.log(imageName)
-												  var data     = {profilePic:imageName};
-												  var criteria = {id: userId};
+                                                  console.log("profileImages   ------->>> Uploaded");
+                                                  console.log(profileUploadResults)
+                                                  imageName = profileUploadResults[0].fd.split('/');
+                                                  imageName = imageName[imageName.length-1];
+                                                  console.log(imageName)
+                                                  var data     = {profilePic:imageName};
+                                                  var criteria = {id: userId};
 
-												  // var query = "UPDATE user SET profilePic='"+ imageName +"' where id='"+userId+"'";
-												   User.update(criteria,data).exec(function(err, data) {
-												   // User.query(query, function(err, data){
-														if(err)
-														{
-															sails.log(err)
-															return res.json(200, {status: 2, status_type: 'Failure',message: 'Profile Image updation Failure'});
-														}
-														else
-														{
-															var profileImage = server_baseUrl + "images/profilePics/"+imageName;
-															return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success',profile_image:profileImage});
-														}
+                                                  // var query = "UPDATE user SET profilePic='"+ imageName +"' where id='"+userId+"'";
+                                                   User.update(criteria,data).exec(function(err, data) {
+                                                   // User.query(query, function(err, data){
+                                                        if(err)
+                                                        {
+                                                            sails.log(err)
+                                                            return res.json(200, {status: 2, status_type: 'Failure',message: 'Profile Image updation Failure'});
+                                                        }
+                                                        else
+                                                        {
+                                                            var profileImage = server_baseUrl + "images/profilePics/"+imageName;
+                                                            return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success',profile_image:profileImage});
+                                                        }
 
 
-													});
+                                                    });
 
-										 }
+                                         }
 
                                     }
                                 });

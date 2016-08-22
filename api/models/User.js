@@ -27,9 +27,7 @@ module.exports = {
                 type: 'boolean',
                 defaultsTo: false
             },
-        mobileVerificationKey: {
-                type: 'string',
-            },
+        
         profilePic: {
                 type: 'string',
             },

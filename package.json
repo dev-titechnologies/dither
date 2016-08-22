@@ -29,6 +29,7 @@
     "sails": "~0.12.3",
     "sails-disk": "~0.10.0",
     "sails-mysql": "^0.11.5",
+    "sails-service-pusher": "^3.2.2",
     "sailsjs-socket.io-client": "^0.1.2",
     "twilio": "^2.9.1"
   },

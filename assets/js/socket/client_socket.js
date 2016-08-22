@@ -29,11 +29,30 @@ io.socket.on('message', function messageReceived(messages){
      jQuery("#response").append('<h3>'+messages.msg+'</h3><br>');
 });
 
-io.socket.get('/test/subscribeToFunRoom', {roomName:'Two'}, function (resData, jwres){
+/*io.socket.get('/test/subscribeToFunRoom', {roomName:'Two'}, function (resData, jwres){
   // ...
 
   console.log('Sails responded with: ', resData);
   console.log('with headers: ', jwres.headers);
   console.log('and with status code: ', jwres.statusCode);
-});
+});*/
 
+
+/*io.socket.on('createIncheck', function (event){
+    console.log("User table created ----------------");
+    console.log(event);
+});*/
+//sails.sockets.emit(friendId, 'privateMessage', {from: req.session.userId, msg: 'Hi!'});
+//sails.sockets.emit('privateMessage');
+//For call an event
+//io.socket.emit('logoffchat');
+io.socket.on('createIncheck', function (event){
+        console.log("createInCheck ----------------");
+        console.log(event);
+        console.log(event.device_id);
+        console.log("event |||||||||||| Ha ha ha ha ha ha ha ha ha ha ");
+});
+/*io.socket.on('createIncheck', function newMessageFromSails ( message ) {
+        //typeof console !== 'undefined' &&
+        console.log('New message received from Sails ::\n', message);
+});*/

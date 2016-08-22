@@ -29,9 +29,9 @@ module.exports = {
         phoneNumber  : {
                 type: 'string',
             },
-        fbId:{
+       /* fbId:{
                   type:'string',
-           },
+           },*/
         invitee : {
                 type: 'string',
             },

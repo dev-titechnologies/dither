@@ -167,16 +167,16 @@ module.exports = {
 																	 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
 																	 console.log(notifyCmntArray)
 																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	 callback();
+																	// callback();
 																	 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
 																	
 																	//-----------send push notification---------------
-																	/*console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																	console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
 																	var message   = 'Comment Notification';
 																	var device_id = tokenCheck.tokenDetails.deviceId;
 																	sails.log(device_id)
-
-																	if(device_id)
+																	callback();
+																	/*if(device_id)
 																	{
 																		console.log("deviceId exist")
 																		device_id = device_id.split(',');
@@ -188,6 +188,7 @@ module.exports = {
 																			{
 																				console.log("Error in Push Notification Sending")
 																				console.log(err)
+																				callback();
 																			}
 																			else
 																			{

@@ -231,7 +231,7 @@ module.exports = {
     /* ==================================================================================================================================
                SOCKET
      ==================================================================================================================================== */
-        socketTest:  function (req, res) {
+        /*socketTest:  function (req, res) {
                 //sails.sockets.join(req.socket, "1");
                 //console.log(req.socket);
                 sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
@@ -265,7 +265,7 @@ module.exports = {
               //});
               //sails.sockets.emit(friendId, 'privateMessage', {from: req.session.userId, msg: 'Hi!'});
               //sails.sockets.broadcast(1, { msg: 'Hi there!' });
-        },
+        },*/
 
         invite: function (req, res) {
                 console.log("Request-1 >>>>>>>>>>>>>>>>>>>> in Test");

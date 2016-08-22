@@ -171,7 +171,7 @@ module.exports = {
 																	 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
 																	
 																	//-----------send push notification---------------
-																 /*  console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																	/*console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
 																	var message   = 'Comment Notification';
 																	var device_id = tokenCheck.tokenDetails.deviceId;
 																	sails.log(device_id)
@@ -186,8 +186,8 @@ module.exports = {
 																		NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
 																			if(err)
 																			{
-																				console.log(err)
 																				console.log("Error in Push Notification Sending")
+																				console.log(err)
 																			}
 																			else
 																			{
@@ -207,7 +207,7 @@ module.exports = {
 													
 																 			
 															}
-													  }
+													}
 							
 												});
 										  }

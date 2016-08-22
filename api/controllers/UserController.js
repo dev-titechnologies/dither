@@ -315,6 +315,7 @@ module.exports = {
                                                         }
                                                         else
                                                         {
+															console.log("User Tokennnnnnnnnnnn")
                                                             console.log(userTokenDetails.token)
                                                             var protocol    = req.connection.encrypted?'https':'http';
                                                             var url         = protocol + '://' + req.headers.host + '/';
@@ -332,7 +333,7 @@ module.exports = {
 
 
 
-                                }
+                            }
                           //console.log(results);
 
                     }
@@ -356,12 +357,12 @@ module.exports = {
         var userToken = req.get('token');
         var deviceId  = req.get('device_id');
         if(userToken){
-                TokenService.deleteToken(userToken,deviceId, function(err, result) {
+                UsertokenService.deleteToken(userToken,deviceId, function(err, result) {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
 
-                        return res.json(200, {status: 1,  status_type: 'Success' , message: 'success'});
+                        return res.json(200, {status: 1,  status_type: 'Success' , message: 'LogOut success'});
                     }
                 });
         }else{

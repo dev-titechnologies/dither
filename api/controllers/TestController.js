@@ -4,12 +4,20 @@
  * @description :: Server-side logic for managing tests
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+var fs          = require('fs');
+//var fs                          =     require('file-system');
 module.exports = {
 
      /* ==================================================================================================================================
                To Upload Images
      ==================================================================================================================================== */
+
+        unlink     :   function (req, res) {
+                console.log("Entered UnLink....................");
+                var imgName = "08a81ea5-389e-48ce-8798-29cc7209e51e.jpg";
+                fs.unlink("assets/images/collage_test/"+imgName);
+                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully unlinked'});
+        },
         collage_image: function (req, res) {
                 var imageUploadDirectoryPath =  '../../assets/images/collage_test';
                 //var imageUploadDirectoryPath =  'http://assets/images/collage';

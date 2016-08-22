@@ -98,15 +98,13 @@ module.exports = {
                                             " WHERE tg.userId = "+userId+
                                             " )"+
                                             " ) AS temp1"+
-                                            //" WHERE temp1.id "+offset_data_view_limit+
                                             " ORDER BY temp1.createdAt DESC"+
                                             " LIMIT "+data_view_limit+
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                            " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
                             }else{
@@ -135,8 +133,7 @@ module.exports = {
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                            " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
                             }

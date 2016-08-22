@@ -289,7 +289,7 @@ module.exports = {
                             else
                             {
 
-                                Collage.find({userId:results.id}).exec(function(err, result){
+                               /* User_token.find({userId:results.id}).exec(function(err, result){
                                // User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
                                         if (err) {
                                             console.log(err)
@@ -299,16 +299,13 @@ module.exports = {
                                         {
                                             console.log(result)
                                             //delete existing token
-                                            User_token.destroy({userId: results.id}).exec(function (err, result) {
+                                           /* User_token.destroy({userId: results.id}).exec(function (err, result) {
 
                                                 if (err) {
                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                         }
                                                 else
-                                                {
-                                                    sails.log("deletion success")
-                                                    console.log(result.deviceId)
-                                                     //Create new access token on login
+                                                {*/
 
                                                     UsertokenService.createToken(results.id,deviceId, function (err, userTokenDetails)
                                                     {
@@ -327,11 +324,11 @@ module.exports = {
                                                         }
                                                     });
 
-                                                 }
-                                            });
+                                               //  }
+                                          // });
 
-                                        }
-                                    });
+                                       // }
+                                   // });
 
 
 
@@ -357,8 +354,9 @@ module.exports = {
 // Logout action.
     logout: function(req, res){
         var userToken = req.get('token');
+        var deviceId  = req.get('device_id');
         if(userToken){
-                TokenService.deleteToken(req.body.token, function(err, result) {
+                TokenService.deleteToken(userToken,deviceId, function(err, result) {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {

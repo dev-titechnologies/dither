@@ -142,37 +142,72 @@ module.exports = {
 													else
 													{
 														
-														console.log(item)
-														notificationCommented = "No notification Found for comments";
-														console.log("77777777777777777777777777777777777777777777777")
-														console.log(ntfnTypeFound)
-														var notification	= ntfnTypeFound[0].body;
-														item.description 	= item.description - 1;
-														console.log(notification)
-													    ntfn_body  			= 	util.format(notification,item.name,item.description);
-													    item.ntfn_body		=	ntfn_body;
-													    item.type			=	ntfnTypeFound[0].type;
-													    item.profile_image	=	profilePic_path + item.profile_image;
-													    item.dither_image	=	collageImg_path + item.dither_image;
-														if(item.description==0)
-													    {
-															console.log("commenteddd")
-															notificationCommented = item.name + " commented on your Dither";
-															item.ntfn_body		  =	notificationCommented;
-														}
-														else
-														{
-														 notificationCommented =  ntfn_body;
-														 notifyCmntArray	   = [];
-														 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
-														 console.log(notifyCmntArray)
-														 
-														 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
-													    }
-														
-														callback();						
+															console.log(item)
+															notificationCommented = "No notification Found for comments";
+															var notification	= ntfnTypeFound[0].body;
+															item.description 	= item.description - 1;
+															console.log(notification)
+															ntfn_body  			= 	util.format(notification,item.name,item.description);
+															item.ntfn_body		=	ntfn_body;
+															item.type			=	ntfnTypeFound[0].type;
+															item.profile_image	=	profilePic_path + item.profile_image;
+															item.dither_image	=	collageImg_path + item.dither_image;
+															if(item.description==0)
+															{
+																console.log("commenteddd")
+																notificationCommented = item.name + " commented on your Dither";
+																item.ntfn_body		  =	notificationCommented;
+																callback();
+															}
+															else
+															{
+																	 console.log("77777777777777777777777777777777777777777777777")
+																	 notificationCommented =  ntfn_body;
+																	 notifyCmntArray	   = [];
+																	 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																	 console.log(notifyCmntArray)
+																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																	 callback();
+																	 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
+																	
+																	//-----------send push notification---------------
+																 /*  console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																	var message   = 'Comment Notification';
+																	var device_id = tokenCheck.tokenDetails.deviceId;
+																	sails.log(device_id)
 
-													}
+																	if(device_id)
+																	{
+																		console.log("deviceId exist")
+																		device_id = device_id.split(',');
+																		console.log("deviceId")
+																		sails.log.debug(device_id);
+																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
+																		NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																			if(err)
+																			{
+																				console.log(err)
+																				console.log("Error in Push Notification Sending")
+																			}
+																			else
+																			{
+																				console.log("Push notification result")
+																				console.log(ntfnSend)
+																				console.log("Push Notification sended")
+																				callback();			
+																			}
+																		
+																			
+																		});
+																	}
+																	else
+																	{
+																		callback();			
+																	}*/
+													
+																 			
+															}
+													  }
 							
 												});
 										  }
@@ -284,6 +319,7 @@ module.exports = {
 																console.log(item.description)
 																console.log(ntfnTypeFound)
 																var notification	= ntfnTypeFound[0].body;
+																item.description	= item.description - 1;
 																console.log(notification)
 																var ntfn_body  		= util.format(notification,item.description);
 																item.type			=	ntfnTypeFound[0].type;

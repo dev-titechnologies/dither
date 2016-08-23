@@ -168,7 +168,7 @@ module.exports = {
 																	 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
 																	 console.log(notifyCmntArray)
 																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	// callback();
+																	 callback();
 																	 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
 																	
 																	//-----------send push notification---------------
@@ -176,7 +176,7 @@ module.exports = {
 																	var message   = 'Comment Notification';
 																	sails.log(device_id)
 																	//callback();
-																	if(device_id)
+																	/*if(device_id)
 																	{
 																		console.log("deviceId exist")
 																		//device_id = device_id.split(',');
@@ -204,7 +204,7 @@ module.exports = {
 																	else
 																	{
 																		callback();			
-																	}
+																	}*/
 													
 																 			
 															}

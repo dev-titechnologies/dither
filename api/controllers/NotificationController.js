@@ -179,7 +179,7 @@ module.exports = {
 																	if(device_id)
 																	{
 																		console.log("deviceId exist")
-																		device_id = device_id.split(',');
+																		//device_id = device_id.split(',');
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
 																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
@@ -255,10 +255,10 @@ module.exports = {
 																if(device_id)
 																	{
 																		console.log("deviceId exist")
-																		device_id = device_id.split(',');
+																		//device_id = device_id.split(',');
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
-																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
+																		var data = {message:"vote push", device_id:device_id,ntfnDetails:item.ntfn_body};
 																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																			if(err)
 																			{
@@ -322,10 +322,10 @@ module.exports = {
 																	 if(device_id)
 																		{
 																			console.log("deviceId exist")
-																			device_id = device_id.split(',');
+																			//device_id = device_id.split(',');
 																			console.log("deviceId")
 																			sails.log.debug(device_id);
-																			var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
+																			var data = {message:"signup push", device_id:device_id,ntfnDetails:item.ntfn_body};
 																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																				if(err)
 																				{
@@ -402,10 +402,10 @@ module.exports = {
 																 if(device_id)
 																	{
 																		console.log("deviceId exist")
-																		device_id = device_id.split(',');
+																		//device_id = device_id.split(',');
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
-																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
+																		var data = {message:"tag push", device_id:device_id,ntfnDetails:item.ntfn_body};
 																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																			if(err)
 																			{

@@ -254,14 +254,14 @@ module.exports = {
 																callback();
 																//-----------send push notification---------------
 															
-																/*if(device_id)
+																if(device_id)
 																	{
 																		console.log("deviceId exist")
 																		//device_id = device_id.split(',');
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
 																		var data = {message:"vote push", device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																			if(err)
 																			{
 																				console.log("Error in Push Notification Sending")
@@ -282,7 +282,7 @@ module.exports = {
 																	else
 																	{
 																		callback();			
-																	}*/
+																	}
 
 																
 															}	

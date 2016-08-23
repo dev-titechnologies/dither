@@ -131,8 +131,8 @@ module.exports = {
 																				}		
 																				else
 																				{
-																						console.log("#########contactsssss resultttt################################")
-																						console.log(selectDContacts.length)
+																						//console.log("#########contactsssss resultttt################################")
+																						//console.log(selectDContacts.length)
 																						if(selectDContacts.length!=0)
 																						{
 																							

@@ -269,87 +269,82 @@ module.exports = {
         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
         if(req.param('fb_uid')|| req.get('device_id'))
-         {
+            {
 
-            console.log(req.options.settingKeyValue);
-            console.log(req.param('fbId'));
+                console.log(req.options.settingKeyValue);
+                console.log(req.param('fbId'));
 
-            var deviceId    = req.get('device_id');
-            console.log(deviceId)
-            User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
-                    if (err) {
-                           sails.log("jguguu"+err);
-                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
-                    }
-                    else{
-                            sails.log(results)
-                            if(typeof(results) == 'undefined')
-                            {
-                                  return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
-                            }
-                            else
-                            {
+                var deviceId    = req.get('device_id');
+                console.log(deviceId)
+                User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
+                        if (err) {
+                               sails.log("jguguu"+err);
+                               return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
+                        }
+                        else{
+                                sails.log(results)
+                                if(typeof(results) == 'undefined')
+                                {
+                                      return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
+                                }
+                                else
+                                {
+                                   /* User_token.find({userId:results.id}).exec(function(err, result){
+                                   // User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
+                                            if (err) {
+                                                console.log(err)
+                                            }
+                                            else
+                                            {
+                                                console.log(result)
+                                                //delete existing token
+                                               /* User_token.destroy({userId: results.id}).exec(function (err, result) {
 
-                               /* User_token.find({userId:results.id}).exec(function(err, result){
-                               // User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
-                                        if (err) {
-                                            console.log(err)
-
-                                        }
-                                        else
-                                        {
-                                            console.log(result)
-                                            //delete existing token
-                                           /* User_token.destroy({userId: results.id}).exec(function (err, result) {
-
-                                                if (err) {
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
-                                                        }
-                                                else
-                                                {*/
-
-                                                    UsertokenService.createToken(results.id,deviceId, function (err, userTokenDetails)
-                                                    {
-                                                        if (err)
+                                                    if (err) {
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+                                                            }
+                                                    else
+                                                    {*/
+                                                        UsertokenService.createToken(results.id,deviceId, function (err, userTokenDetails)
                                                         {
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
-                                                        }
-                                                        else
-                                                        {
-                                                            var test = results.name;
-                                                            console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                                                            console.log(test);
-                                                            console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                                                            console.log(results.name);
-                                                            sails.sockets.blast('createIncheck', {device_id1 : "eeeeeeeeee", device_id_2: test});
+                                                            if (err)
+                                                            {
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+                                                            }
+                                                            else
+                                                            {
+                                                                var test = results.name;
+                                                                console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                                                                console.log(test);
+                                                                console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-                                                            var profile_image       =   profilePic_path + results.profilePic;
-                                                            return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
-                                                                                  email             :   results.email,
-                                                                                  full_name         :   results.name,
-                                                                                  fb_uid            :   results.fbId,
-                                                                                  isNewUser         :   false,
-                                                                                  profile_image     :   profile_image,
-                                                                                  token             :   userTokenDetails.token.token,
-                                                                                  user_id           :   results.id
-                                                                            });
-                                                        }
-                                                    });
+                                                                sails.sockets.blast('createIncheck', {status : "success", name_of_user: test});
+                                                                sails.sockets.blast('message', {status : "success", name_of_user: test});
 
-                                               //  }
-                                          // });
+                                                                var profile_image       =   profilePic_path + results.profilePic;
+                                                                return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
+                                                                                      email             :   results.email,
+                                                                                      full_name         :   results.name,
+                                                                                      fb_uid            :   results.fbId,
+                                                                                      isNewUser         :   false,
+                                                                                      profile_image     :   profile_image,
+                                                                                      token             :   userTokenDetails.token.token,
+                                                                                      user_id           :   results.id
+                                                                                });
+                                                            }
+                                                        });
 
-                                       // }
-                                   // });
+                                                   //  }
+                                              // });
 
+                                           // }
+                                       // });
+                                }
+                              //console.log(results);
 
+                        }
 
-                            }
-                          //console.log(results);
-
-                    }
-
-            });
+                });
         }
         else
         {
@@ -392,7 +387,7 @@ module.exports = {
 
                 sails.log(req.get('token'))
 
-                //var fs                          =     require('file-system');
+				//var fs                        =     require('file-system');
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -407,7 +402,7 @@ module.exports = {
 
                 var switchKey = edit_type;
                 switch(switchKey){
-                        case 1 :
+                        case '1' :
                                     //-------------Change ProfilePic------------------------------------
                                     console.log("type 1")
                                     var imageName ;
@@ -459,7 +454,7 @@ module.exports = {
 
                         break;
 
-                        case 2 :
+                        case '2' :
                                     //----------------------------Remove ProfilePic-----------------------------------------------
                                     console.log("type 2")
                                     User.findOne({id:userId}).exec(function (err, resultData){

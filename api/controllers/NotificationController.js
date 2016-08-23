@@ -179,7 +179,7 @@ module.exports = {
 																	if(device_id)
 																	{
 																		console.log("deviceId exist")
-																		device_id = device_id.split(',');
+																		//device_id = device_id.split(',');
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
 																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
@@ -255,7 +255,7 @@ module.exports = {
 																if(device_id)
 																	{
 																		console.log("deviceId exist")
-																		device_id = device_id.split(',');
+																		//device_id = device_id.split(',');
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
 																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
@@ -322,7 +322,7 @@ module.exports = {
 																	 if(device_id)
 																		{
 																			console.log("deviceId exist")
-																			device_id = device_id.split(',');
+																			//device_id = device_id.split(',');
 																			console.log("deviceId")
 																			sails.log.debug(device_id);
 																			var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
@@ -402,7 +402,7 @@ module.exports = {
 																 if(device_id)
 																	{
 																		console.log("deviceId exist")
-																		device_id = device_id.split(',');
+																		//device_id = device_id.split(',');
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
 																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};

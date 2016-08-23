@@ -10,7 +10,7 @@
  var request     = require('request');
  var path        = require('path');
 
-
+ var profilePic_unlink_path         =      "assets/images/profilePics/";
 module.exports = {
 
  /* ==================================================================================================================================
@@ -210,6 +210,7 @@ module.exports = {
                                                                                                         var criteria = {phoneNumber: req.param('mobile_number')};
                                                                                                         Invitation.update(criteria,data).exec(function(err, updatedRecords) {
                                                                                                             if(err){
+                                                                                                                        console.log(err);
                                                                                                                         callback();
                                                                                                             }else{
                                                                                                                 //Notification Log Insertion
@@ -267,6 +268,8 @@ module.exports = {
      ==================================================================================================================================== */
     checkForNewUser:  function (req, res) {
 
+        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+        var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
         if(req.param('fb_uid')|| req.get('device_id'))
          {
 
@@ -323,11 +326,20 @@ module.exports = {
                                                             sails.sockets.blast('createIncheck', {device_id1 : "eeeeeeeeee", device_id_2: test});
                                                             console.log("User Tokennnnnnnnnnnn")
                                                             console.log(userTokenDetails.token)
-                                                            var protocol    = req.connection.encrypted?'https':'http';
+                                                            /*var protocol    = req.connection.encrypted?'https':'http';
                                                             var url         = protocol + '://' + req.headers.host + '/';
                                                             var profile_image   =  url+"images/profilePics/"+results.profilePic;
-                                                            sails.log(profile_image)
-                                                            return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither", email: results.email, full_name: results.name, fb_uid: results.fbId, isNewUser: false,profile_image:profile_image,token:userTokenDetails.token.token,user_id:results.id});
+                                                            sails.log(profile_image)*/
+                                                            var profile_image       =   profilePic_path + results.profilePic;
+                                                            return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
+                                                                                  email             :   results.email,
+                                                                                  full_name         :   results.name,
+                                                                                  fb_uid            :   results.fbId,
+                                                                                  isNewUser         :   false,
+                                                                                  profile_image     :   profile_image,
+                                                                                  token             :   userTokenDetails.token.token,
+                                                                                  user_id           :   results.id
+                                                                            });
                                                         }
                                                     });
 
@@ -386,7 +398,10 @@ module.exports = {
       editProfile:  function (req, res) {
 
                 sails.log(req.get('token'))
-                var fs                          =     require('file-system');
+
+                //var fs                          =     require('file-system');
+                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                 var edit_type                   =     req.param('edit_type');
                 var fileName                    =     req.file('profile_image');
                 var tokenCheck                  =     req.options.tokenCheck;
@@ -477,7 +492,7 @@ module.exports = {
                                     {
                                             console.log("hhhhhhhhhhhhhhhhhhhhhhhhhh")
                                             console.log(resultData)
-                                            var data     = {profilePic:null};
+                                            var data     = {profilePic: " "};
                                             var criteria = {id: userId};
                                             console.log("profile picccccccccccccccc")
                                             console.log(resultData)
@@ -492,9 +507,9 @@ module.exports = {
                                                 else
                                                 {
                                                     console.log(datas)
-                                                    var profileImage = server_baseUrl + "images/profilePics/"+resultData.profilePic;
+                                                    var profileImage    =   profilePic_path + resultData.profilePic;
                                                     console.log(profileImage)
-                                                    fs.unlink("assets/images/profilePics/"+resultData.profilePic);
+                                                    fs.unlink(profilePic_unlink_path + resultData.profilePic);
                                                     return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                 }
                                             });

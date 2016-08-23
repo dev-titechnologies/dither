@@ -16,7 +16,7 @@ module.exports = {
 	{
 		console.log("Push Notification Apn")
 		ios = PusherService('ios', {
-			device: [], // Array of string with device tokens
+			device: ['34060262574d028f82e129d625ec0c83324315088e35bdb095cebc52d2c37cec'], // Array of string with device tokens
 			provider: {
 				cert: 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
 				key: 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
@@ -50,7 +50,7 @@ module.exports = {
 			
 	
 			ios
-			  .send([], {
+			  .send(['34060262574d028f82e129d625ec0c83324315088e35bdb095cebc52d2c37cec'], {
 				body: 'You can override pre-defined'
 			  })
 			  .then(console.log.bind(console))

@@ -261,7 +261,7 @@ module.exports = {
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
 																		var data = {message:"vote push", device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																		NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
 																			if(err)
 																			{
 																				console.log("Error in Push Notification Sending")

@@ -284,8 +284,7 @@ module.exports = {
 
 																
 															}	
-															//notifyVoteArray.push(ditherId:item.collage_id,userId:ditherUserId)
-															callback();	
+														
 
 
 														}
@@ -359,20 +358,7 @@ module.exports = {
 											  else if(item.notificationTypeId==1)
 											 {
 												
-												//var query = "SELECT * FROM `notificationLog` WHERE `ditherUserId`='"+user_id+"' AND FIND_IN_SET('"+user_id+"', `tagged_users`)"
-												
-												NotificationLog.query(query, function(err,data) {
-													if(err)
-													{
-														console("error")
-													}
-													else
-													{
-														console.log(data)
-													}
-												});
-												
-												
+											
 												 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
 									
 															if(err)

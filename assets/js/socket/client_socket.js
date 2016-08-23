@@ -17,7 +17,7 @@ io.socket.on('createInSignUp', function (event){
     console.log(event);
 });*/
 
-io.sails.url = "http://192.168.1.57:5000";
+io.sails.url = "http://api.dither.titechdev.com:5000";
 io.socket.on('connect', function socketConnected(){
         console.log("socket --- connected");
         //io.socket.get('/user/signup', function (resData, jwres){

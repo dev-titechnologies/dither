@@ -41,10 +41,9 @@ module.exports.routes = {
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
   '/user/editProfile'                     :           ['auth.authenticate','helper.server_baseUrl','settings.settingsKeyValue'],
   '/sms/*'                                :           ['settings.settingsKeyValue'],
-
   '/collage/*'                            :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
   '/collageDetails/*'                     :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
-  '/TestFileContacts/*'         :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
+  //'/TestFileContacts/*'         		  :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
   
   '/addressBook/*'                        :           ['auth.authenticate','helper.server_baseUrl'],
   '/Notification/*'                       :          ['auth.authenticate','helper.server_baseUrl','helper.file_path'],

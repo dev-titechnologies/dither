@@ -87,6 +87,7 @@ module.exports = {
 						var server_baseUrl  	=     req.options.server_baseUrl;
 						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
 						var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
+						var device_id 			= 	  tokenCheck.tokenDetails.deviceId;
 
 						
 						notificationVoted 		= "";
@@ -173,17 +174,16 @@ module.exports = {
 																	//-----------send push notification---------------
 																	console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
 																	var message   = 'Comment Notification';
-																	var device_id = tokenCheck.tokenDetails.deviceId;
 																	sails.log(device_id)
-																	callback();
-																	/*if(device_id)
+																	//callback();
+																	if(device_id)
 																	{
 																		console.log("deviceId exist")
 																		device_id = device_id.split(',');
 																		console.log("deviceId")
 																		sails.log.debug(device_id);
 																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																			if(err)
 																			{
 																				console.log("Error in Push Notification Sending")
@@ -204,7 +204,7 @@ module.exports = {
 																	else
 																	{
 																		callback();			
-																	}*/
+																	}
 													
 																 			
 															}
@@ -244,16 +244,49 @@ module.exports = {
 															}
 															else
 															{
+																
 																notificationVoted  	=  ntfn_body;
 																notifyVoteArray	    = [];
 																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
 																console.log(notifyVoteArray)
+																
+																//-----------send push notification---------------
+															
+																if(device_id)
+																	{
+																		console.log("deviceId exist")
+																		device_id = device_id.split(',');
+																		console.log("deviceId")
+																		sails.log.debug(device_id);
+																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
+																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																			if(err)
+																			{
+																				console.log("Error in Push Notification Sending")
+																				console.log(err)
+																				callback();
+																			}
+																			else
+																			{
+																				console.log("Push notification result")
+																				console.log(ntfnSend)
+																				console.log("Push Notification sended")
+																				callback();			
+																			}
+																		
+																			
+																		});
+																	}
+																	else
+																	{
+																		callback();			
+																	}
+
+																
 															}	
 															//notifyVoteArray.push(ditherId:item.collage_id,userId:ditherUserId)
 															callback();	
-															
-															 
-																				
+
 
 														}
 										
@@ -283,7 +316,39 @@ module.exports = {
 																	item.dither_image	=	collageImg_path + item.dither_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
-																	callback();							
+																	//callback();
+																	//-----------send push notification---------------
+															
+																	 if(device_id)
+																		{
+																			console.log("deviceId exist")
+																			device_id = device_id.split(',');
+																			console.log("deviceId")
+																			sails.log.debug(device_id);
+																			var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			
+																				
+																			});
+																		}
+																		else
+																		{
+																			callback();			
+																		}
+																			
 
 															}
 															
@@ -330,7 +395,39 @@ module.exports = {
 																console.log(item.profile_image)
 																console.log(ntfn_body)
 																notificationTagged  =  ntfn_body;
-																callback();						
+																//callback();
+																
+																//-----------send push notification---------------
+														
+																 if(device_id)
+																	{
+																		console.log("deviceId exist")
+																		device_id = device_id.split(',');
+																		console.log("deviceId")
+																		sails.log.debug(device_id);
+																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
+																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																			if(err)
+																			{
+																				console.log("Error in Push Notification Sending")
+																				console.log(err)
+																				callback();
+																			}
+																			else
+																			{
+																				console.log("Push notification result")
+																				console.log(ntfnSend)
+																				console.log("Push Notification sended")
+																				callback();			
+																			}
+																		
+																			
+																		});
+																	}
+																	else
+																	{
+																		callback();			
+																	}						
 
 															}
 										

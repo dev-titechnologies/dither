@@ -54,10 +54,11 @@ module.exports = {
                             console.log(JSON.parse(req.param("REQUEST")));
 
                             var server_baseUrl              =     req.options.server_baseUrl;
+                            var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                             var tokenCheck                  =     req.options.tokenCheck;
                             var userId                      =     tokenCheck.tokenDetails.userId;
-                            var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
-                            var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                            var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                            var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                             var imageUploadDirectoryPath    =     '../../assets/images/collage';
                             var concatUploadImgArray;
 
@@ -396,9 +397,10 @@ module.exports = {
                     console.log("get Profile Dithers ===================");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var userId                      =     tokenCheck.tokenDetails.userId;
-                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
-                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                    var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var received_userId             =     req.param("user_id");
                     var received_userName, received_userProfilePic;
                     var query;
@@ -611,8 +613,9 @@ module.exports = {
                     console.log("dithers ===== api");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
-                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var received_userId             =     req.param("user_id");
                     var received_dither_type        =     req.param("type");
@@ -812,8 +815,9 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var server_baseUrl              =     req.options.server_baseUrl;
-                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var getCollageData              =     req.param("dither_data");
                     //console.log(dither_data);
                     /*var dither_data = [

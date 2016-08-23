@@ -387,7 +387,7 @@ module.exports = {
 
                 sails.log(req.get('token'))
 
-                //var fs                          =     require('file-system');
+				//var fs                        =     require('file-system');
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;

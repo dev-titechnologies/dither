@@ -66,10 +66,10 @@ module.exports = {
 	{
 		
 		console.log("Push Notification GCM")
-		console.log(data)
+		//console.log(data)
 		 android = PusherService('android', {
 			  
-				device: [], // Array of string with device tokens
+				device: [data.device_id], // Array of string with device tokens
 				provider: {
 							apiKey		: 'AIzaSyDZzvfjg_PoPGzejtauFDK_PREuwqYZOJY', // Your Google Server API Key
 							maxSockets	: 12, // Max number of sockets to have open at one time

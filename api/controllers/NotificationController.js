@@ -87,7 +87,6 @@ module.exports = {
 						var server_baseUrl  	=     req.options.server_baseUrl;
 						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
 						var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
-						var device_id 			= 	  tokenCheck.tokenDetails.deviceId;
 
 						
 						notificationVoted 		= "";
@@ -143,71 +142,36 @@ module.exports = {
 													else
 													{
 														
-															console.log(item)
-															notificationCommented = "No notification Found for comments";
-															var notification	= ntfnTypeFound[0].body;
-															item.description 	= item.description - 1;
-															console.log(notification)
-															ntfn_body  			= 	util.format(notification,item.name,item.description);
-															item.ntfn_body		=	ntfn_body;
-															item.type			=	ntfnTypeFound[0].type;
-															item.profile_image	=	profilePic_path + item.profile_image;
-															item.dither_image	=	collageImg_path + item.dither_image;
-															if(item.description==0)
-															{
-																console.log("commenteddd")
-																notificationCommented = item.name + " commented on your Dither";
-																item.ntfn_body		  =	notificationCommented;
-																callback();
-															}
-															else
-															{
-																	 console.log("77777777777777777777777777777777777777777777777")
-																	 notificationCommented =  ntfn_body;
-																	 notifyCmntArray	   = [];
-																	 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
-																	 console.log(notifyCmntArray)
-																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	// callback();
-																	 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
-																	
-																	//-----------send push notification---------------
-																	console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	var message   = 'Comment Notification';
-																	sails.log(device_id)
-																	//callback();
-																	if(device_id)
-																	{
-																		console.log("deviceId exist")
-																		//device_id = device_id.split(',');
-																		console.log("deviceId")
-																		sails.log.debug(device_id);
-																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																			if(err)
-																			{
-																				console.log("Error in Push Notification Sending")
-																				console.log(err)
-																				callback();
-																			}
-																			else
-																			{
-																				console.log("Push notification result")
-																				console.log(ntfnSend)
-																				console.log("Push Notification sended")
-																				callback();			
-																			}
-																		
-																			
-																		});
-																	}
-																	else
-																	{
-																		callback();			
-																	}
-													
-																 			
-															}
+														console.log(item)
+														notificationCommented = "No notification Found for comments";
+														console.log("77777777777777777777777777777777777777777777777")
+														console.log(ntfnTypeFound)
+														var notification	= ntfnTypeFound[0].body;
+														item.description 	= item.description - 1;
+														console.log(notification)
+													    ntfn_body  			= 	util.format(notification,item.name,item.description);
+													    item.ntfn_body		=	ntfn_body;
+													    item.type			=	ntfnTypeFound[0].type;
+													    item.profile_image	=	profilePic_path + item.profile_image;
+													    item.dither_image	=	collageImg_path + item.dither_image;
+														if(item.description==0)
+													    {
+															console.log("commenteddd")
+															notificationCommented = item.name + " commented on your Dither";
+															item.ntfn_body		  =	notificationCommented;
+														}
+														else
+														{
+														 notificationCommented =  ntfn_body;
+														 notifyCmntArray	   = [];
+														 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+														 console.log(notifyCmntArray)
+														 
+														 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
+													    }
+														
+														callback();						
+
 													}
 							
 												});
@@ -244,48 +208,16 @@ module.exports = {
 															}
 															else
 															{
-																
 																notificationVoted  	=  ntfn_body;
 																notifyVoteArray	    = [];
 																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
 																console.log(notifyVoteArray)
-																//callback();
-																//-----------send push notification---------------
-															
-																if(device_id)
-																	{
-																		console.log("deviceId exist")
-																		//device_id = device_id.split(',');
-																		console.log("deviceId")
-																		sails.log.debug(device_id);
-																		var data = {message:"vote push", device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																			if(err)
-																			{
-																				console.log("Error in Push Notification Sending")
-																				console.log(err)
-																				callback();
-																			}
-																			else
-																			{
-																				console.log("Push notification result")
-																				console.log(ntfnSend)
-																				console.log("Push Notification sended")
-																				callback();			
-																			}
-																		
-																			
-																		});
-																	}
-																	else
-																	{
-																		callback();			
-																	}
-
-																
 															}	
-														
-
+															//notifyVoteArray.push(ditherId:item.collage_id,userId:ditherUserId)
+															callback();	
+															
+															 
+																				
 
 														}
 										
@@ -315,39 +247,7 @@ module.exports = {
 																	item.dither_image	=	collageImg_path + item.dither_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
-																	//callback();
-																	//-----------send push notification---------------
-															
-																	if(device_id)
-																		{
-																			console.log("deviceId exist")
-																			//device_id = device_id.split(',');
-																			console.log("deviceId")
-																			sails.log.debug(device_id);
-																			var data = {message:"signup push", device_id:device_id,ntfnDetails:item.ntfn_body};
-																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																				if(err)
-																				{
-																					console.log("Error in Push Notification Sending")
-																					console.log(err)
-																					callback();
-																				}
-																				else
-																				{
-																					console.log("Push notification result")
-																					console.log(ntfnSend)
-																					console.log("Push Notification sended")
-																					callback();			
-																				}
-																			
-																				
-																			});
-																		}
-																		else
-																		{
-																			callback();			
-																		}
-																			
+																	callback();							
 
 															}
 															
@@ -358,7 +258,20 @@ module.exports = {
 											  else if(item.notificationTypeId==1)
 											 {
 												
-											
+												//var query = "SELECT * FROM `notificationLog` WHERE `ditherUserId`='"+user_id+"' AND FIND_IN_SET('"+user_id+"', `tagged_users`)"
+												
+												NotificationLog.query(query, function(err,data) {
+													if(err)
+													{
+														console("error")
+													}
+													else
+													{
+														console.log(data)
+													}
+												});
+												
+												
 												 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
 									
 															if(err)
@@ -371,7 +284,6 @@ module.exports = {
 																console.log(item.description)
 																console.log(ntfnTypeFound)
 																var notification	= ntfnTypeFound[0].body;
-																item.description	= item.description - 1;
 																console.log(notification)
 																var ntfn_body  		= util.format(notification,item.description);
 																item.type			=	ntfnTypeFound[0].type;
@@ -381,39 +293,7 @@ module.exports = {
 																console.log(item.profile_image)
 																console.log(ntfn_body)
 																notificationTagged  =  ntfn_body;
-																//callback();
-																
-																//-----------send push notification---------------
-														
-																if(device_id)
-																	{
-																		console.log("deviceId exist")
-																		//device_id = device_id.split(',');
-																		console.log("deviceId")
-																		sails.log.debug(device_id);
-																		var data = {message:"tag push", device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																			if(err)
-																			{
-																				console.log("Error in Push Notification Sending")
-																				console.log(err)
-																				callback();
-																			}
-																			else
-																			{
-																				console.log("Push notification result")
-																				console.log(ntfnSend)
-																				console.log("Push Notification sended")
-																				callback();			
-																			}
-																		
-																			
-																		});
-																	}
-																	else
-																	{
-																		callback();			
-																	}						
+																callback();						
 
 															}
 										
@@ -431,8 +311,6 @@ module.exports = {
 										
 									}, function(err) {
 								
-								       console.log("resulttt dataaa")
-								       console.log(results)
 										return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
 									});
 								

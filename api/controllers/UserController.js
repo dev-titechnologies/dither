@@ -99,166 +99,164 @@ module.exports = {
                         //------------------------------------------
 
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
-
-                         if(err)
-                         {
-                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
-                         }
-                         else
-                         {
-                            console.log("fbid checkinggggggggggg")
-                            console.log(resultData);
-                            if(resultData){
-                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User'});
-                            }else{
-
-                                User.create(values).exec(function(err, results){
-                                        if(err){
-                                                console.log(err);
-                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
-                                        }else{
-                                                // Create new access token on login
-                                                UsertokenService.createToken(results.id, deviceId, function (err, userTokenDetails) {
-                                                    if (err) {
-                                                                sails.log(userTokenDetails)
-                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
-                                                    }else {
-                                                            //User.publishCreate(result);
-                                                            //User.subscribe(req.socket,result);
-                                                            //sails.sockets.broadcast('user', { msg: 'signup set ===========' });
-                                                            //sails.sockets.emit(req.socket.id,'privateMessage', {msg: 'Hi!'});
-                                                            //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
-                                                           // sails.sockets.join(socket, "Room-1");
-                                                            //sails.sockets.join(socket, "Room-2");
-                                                            console.log("Before async parallel in Sign up ===============================================");
-                                                                // Send Email and Sms  Simultaneously
-                                                                async.parallel([
-                                                                            function(callback) {
-                                                                                        console.log("parallel 1")
-                                                                                        console.log("async parallel in Mailpart ===============================================");
-                                                                                        var global_settingsKeyValue = req.options.settingsKeyValue;
-                                                                                        var email_to        = results.email;
-                                                                                        var email_subject   = 'Welcome to Dither';
-                                                                                        var email_template  = 'signup';
-                                                                                        var email_context   = {receiverName: results.name};
-                                                                                        EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
-                                                                                            if(err)
-                                                                                            {
-                                                                                                    console.log(err);
-                                                                                                    console.log("async parallel in Mailpart Error");
-                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
-                                                                                                     callback();
-                                                                                            }else{
-                                                                                                    //console.log(results);
-                                                                                                    console.log(email_to);
-                                                                                                    console.log(email_subject);
-                                                                                                    console.log(email_template);
-                                                                                                    console.log(email_context);
-                                                                                                    console.log("async parallel in Mailpart Success");
-                                                                                                    callback();
-                                                                                                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                                                                            }
-
-
-                                                                                        });
-
-                                                                            },
-                                                                            function(callback) {
-                                                                                        console.log("parallel 2")
-                                                                                        var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
-                                                                                        var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
-                                                                                        var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
-                                                                                        console.log(req.options.settingsKeyValue);
-
-                                                                                        /*SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
-                                                                                            if(err)
-                                                                                            {
-                                                                                                    console.log(err);
-                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                                                                                    callback();
-                                                                                            }else{
-                                                                                                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                                                                                    callback();
-                                                                                            }
-                                                                                        });*/
-                                                                                        console.log("async parallel in Sms Part");
-                                                                                        callback();
-                                                                            },
-                                                                            function(callback) {
-                                                                                        //Notification Log insertion
-                                                                                        console.log("parallel 3")
-                                                                                        Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
-                                                                                                if(err)
-                                                                                                {
-                                                                                                    console.log(err);
-                                                                                                    callback();
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-                                                                                                    //console.log(selectContacts[0].userId)
-                                                                                                    if(selectContacts.length == 0)
+                                if(err)
+                                {
+                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
+                                }
+                                else
+                                {
+                                    console.log("fbid checkinggggggggggg")
+                                    console.log(resultData);
+                                    if(resultData){
+                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User'});
+                                    }else{
+                                        User.create(values).exec(function(err, results){
+                                                if(err){
+                                                        console.log(err);
+                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
+                                                }else{
+                                                        // Create new access token on login
+                                                        UsertokenService.createToken(results.id, deviceId, function (err, userTokenDetails) {
+                                                            if (err) {
+                                                                        sails.log(userTokenDetails)
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
+                                                            }else {
+                                                                    //User.publishCreate(result);
+                                                                    //User.subscribe(req.socket,result);
+                                                                    //sails.sockets.broadcast('user', { msg: 'signup set ===========' });
+                                                                    //sails.sockets.emit(req.socket.id,'privateMessage', {msg: 'Hi!'});
+                                                                    //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
+                                                                   // sails.sockets.join(socket, "Room-1");
+                                                                    //sails.sockets.join(socket, "Room-2");
+                                                                    console.log("Before async parallel in Sign up ===============================================");
+                                                                        // Send Email and Sms  Simultaneously
+                                                                        async.parallel([
+                                                                                    function(callback) {
+                                                                                                console.log("parallel 1")
+                                                                                                console.log("async parallel in Mailpart ===============================================");
+                                                                                                var global_settingsKeyValue = req.options.settingsKeyValue;
+                                                                                                var email_to        = results.email;
+                                                                                                var email_subject   = 'Welcome to Dither';
+                                                                                                var email_template  = 'signup';
+                                                                                                var email_context   = {receiverName: results.name};
+                                                                                                EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
+                                                                                                    if(err)
                                                                                                     {
+                                                                                                            console.log(err);
+                                                                                                            console.log("async parallel in Mailpart Error");
+                                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
+                                                                                                             callback();
+                                                                                                    }else{
+                                                                                                            //console.log(results);
+                                                                                                            console.log(email_to);
+                                                                                                            console.log(email_subject);
+                                                                                                            console.log(email_template);
+                                                                                                            console.log(email_context);
+                                                                                                            console.log("async parallel in Mailpart Success");
+                                                                                                            callback();
+                                                                                                            //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                    }
+
+
+                                                                                                });
+
+                                                                                    },
+                                                                                    function(callback) {
+                                                                                                console.log("parallel 2")
+                                                                                                var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                                                                                                var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                                                                                                var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
+                                                                                                console.log(req.options.settingsKeyValue);
+
+                                                                                                /*SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
+                                                                                                    if(err)
+                                                                                                    {
+                                                                                                            console.log(err);
+                                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
                                                                                                             callback();
                                                                                                     }else{
-
-                                                                                                        var data     = {
-                                                                                                                        userId              :       results.id,
-                                                                                                                        ditherUserId        :       selectContacts[0].userId,
-                                                                                                                        fbId                :       req.param('fb_uid'),
-                                                                                                                        };
-                                                                                                        var criteria = {phoneNumber: req.param('mobile_number')};
-                                                                                                        Invitation.update(criteria,data).exec(function(err, updatedRecords) {
-                                                                                                            if(err){
-                                                                                                                        console.log(err);
-                                                                                                                        callback();
+                                                                                                            //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                            callback();
+                                                                                                    }
+                                                                                                });*/
+                                                                                                console.log("async parallel in Sms Part");
+                                                                                                callback();
+                                                                                    },
+                                                                                    function(callback) {
+                                                                                                //Notification Log insertion
+                                                                                                console.log("parallel 3")
+                                                                                                Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
+                                                                                                        if(err)
+                                                                                                        {
+                                                                                                            console.log(err);
+                                                                                                            callback();
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+                                                                                                            //console.log(selectContacts[0].userId)
+                                                                                                            if(selectContacts.length == 0)
+                                                                                                            {
+                                                                                                                    callback();
                                                                                                             }else{
-                                                                                                                //Notification Log Insertion
-                                                                                                                var values ={
-                                                                                                                                notificationTypeId  : 4,
-                                                                                                                                userId              : results.id,
-                                                                                                                                ditherUserId        : selectContacts[0].userId,
+
+                                                                                                                var data     = {
+                                                                                                                                userId              :       results.id,
+                                                                                                                                ditherUserId        :       selectContacts[0].userId,
+                                                                                                                                fbId                :       req.param('fb_uid'),
+                                                                                                                                };
+                                                                                                                var criteria = {phoneNumber: req.param('mobile_number')};
+                                                                                                                Invitation.update(criteria,data).exec(function(err, updatedRecords) {
+                                                                                                                    if(err){
+                                                                                                                                console.log(err);
+                                                                                                                                callback();
+                                                                                                                    }else{
+                                                                                                                        //Notification Log Insertion
+                                                                                                                        var values ={
+                                                                                                                                        notificationTypeId  : 4,
+                                                                                                                                        userId              : results.id,
+                                                                                                                                        ditherUserId        : selectContacts[0].userId,
+                                                                                                                                    }
+                                                                                                                         NotificationLog.create(values).exec(function(err, createdNotification) {
+                                                                                                                            if(err)
+                                                                                                                            {
+                                                                                                                                console.log(err);
+                                                                                                                                callback();
+                                                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
                                                                                                                             }
-                                                                                                                 NotificationLog.create(values).exec(function(err, createdNotification) {
-                                                                                                                    if(err)
-                                                                                                                    {
-                                                                                                                        console.log(err);
-                                                                                                                        callback();
-                                                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
-                                                                                                                    }
-                                                                                                                    else
-                                                                                                                    {
-                                                                                                                        console.log(createdNotification);
-                                                                                                                        callback();
+                                                                                                                            else
+                                                                                                                            {
+                                                                                                                                console.log(createdNotification);
+                                                                                                                                callback();
+                                                                                                                            }
+                                                                                                                        });
                                                                                                                     }
                                                                                                                 });
                                                                                                             }
-                                                                                                        });
-                                                                                                    }
-                                                                                                }
-                                                                                                console.log("#########################################")
-                                                                                        });
+                                                                                                        }
+                                                                                                        console.log("#########################################")
+                                                                                                });
 
-                                                                            },
-                                                                ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                                                                if (err) {
-                                                                                    console.log("async parallel in Sms Part Failure --------------------");
-                                                                                    console.log(err);
-                                                                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
-                                                                                }else{
-                                                                                    console.log("async parallel in Sms Part Success --------------------");
-                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
-                                                                                }
+                                                                                    },
+                                                                        ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                                                                        if (err) {
+                                                                                            console.log("async parallel in Sms Part Failure --------------------");
+                                                                                            console.log(err);
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                                                                        }else{
+                                                                                            console.log("async parallel in Sms Part Success --------------------");
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+                                                                                        }
 
-                                                                });
-                                                    }
-                                                });
-                                        }
+                                                                        });
+                                                            }
+                                                        });
+                                                }
 
 
-                                });
-                            }
-                          }
+                                        });
+                                    }
+                                }
                         });
                 }
     },
@@ -324,12 +322,7 @@ module.exports = {
                                                             console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                                             console.log(results.name);
                                                             sails.sockets.blast('createIncheck', {device_id1 : "eeeeeeeeee", device_id_2: test});
-                                                            console.log("User Tokennnnnnnnnnnn")
-                                                            console.log(userTokenDetails.token)
-                                                            /*var protocol    = req.connection.encrypted?'https':'http';
-                                                            var url         = protocol + '://' + req.headers.host + '/';
-                                                            var profile_image   =  url+"images/profilePics/"+results.profilePic;
-                                                            sails.log(profile_image)*/
+
                                                             var profile_image       =   profilePic_path + results.profilePic;
                                                             return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
                                                                                   email             :   results.email,
@@ -400,52 +393,50 @@ module.exports = {
                 sails.log(req.get('token'))
 
                 //var fs                          =     require('file-system');
-                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                var edit_type                   =     req.param('edit_type');
-                var fileName                    =     req.file('profile_image');
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
-                console.log(req.file('profile_image'))
+                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                 var server_baseUrl              =     req.options.server_baseUrl;
-                var imageUploadDirectoryPath    = '../../assets/images/profilePics';
+                var imageUploadDirectoryPath    =     '../../assets/images/profilePics';
 
-                //-------------Change ProfilePic------------------------------------
+                var edit_type                   =     req.param('edit_type');
+                var fileName                    =     req.file('profile_image');
 
-                        if(edit_type==1)
-                        {
+                console.log(req.file('profile_image'))
 
-                                console.log("type 1")
-                                var imageName ;
-                                req.file('profile_image').upload({dirname: '../../assets/images/profilePics',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults) {
-                                    if (err)
-                                    {
-                                        console.log(err)
-                                        return res.json(200, {status: 2,status_type: 'Failure', message: 'Updateion failure'});
+                var switchKey = edit_type;
+                switch(switchKey){
+                        case 1 :
+                                    //-------------Change ProfilePic------------------------------------
+                                    console.log("type 1")
+                                    var imageName ;
+                                    req.file('profile_image').upload({dirname: '../../assets/images/profilePics',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults) {
+                                        if (err)
+                                        {
+                                            console.log(err)
+                                            return res.json(200, {status: 2,status_type: 'Failure', message: 'Updateion failure'});
 
-                                    }
-                                    else
-                                    {
+                                        }
+                                        else
+                                        {
 
-                                         if(profileUploadResults.length==0)
-                                         {
-                                             return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+                                             if(profileUploadResults.length==0)
+                                             {
+                                                 return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
 
-                                         }
-                                         else
-                                         {
+                                             }
+                                             else
+                                             {
 
-                                                  console.log("profileImages   ------->>> Uploaded");
-                                                  console.log(profileUploadResults)
-                                                  imageName = profileUploadResults[0].fd.split('/');
-                                                  imageName = imageName[imageName.length-1];
-                                                  console.log(imageName)
-                                                  var data     = {profilePic:imageName};
-                                                  var criteria = {id: userId};
-
-                                                  // var query = "UPDATE user SET profilePic='"+ imageName +"' where id='"+userId+"'";
-                                                   User.update(criteria,data).exec(function(err, data) {
-                                                   // User.query(query, function(err, data){
+                                                    console.log("profileImages   ------->>> Uploaded");
+                                                    //console.log(profileUploadResults)
+                                                    imageName = profileUploadResults[0].fd.split('/');
+                                                    imageName = imageName[imageName.length-1];
+                                                    //console.log(imageName)
+                                                    var data     = {profilePic:imageName};
+                                                    var criteria = {id: userId};
+                                                    User.update(criteria,data).exec(function(err, data) {
                                                         if(err)
                                                         {
                                                             sails.log(err)
@@ -453,72 +444,63 @@ module.exports = {
                                                         }
                                                         else
                                                         {
-                                                            var profileImage = server_baseUrl + "images/profilePics/"+imageName;
-                                                            return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success',profile_image:profileImage});
+                                                            //var profileImage = server_baseUrl + "images/profilePics/"+imageName;
+                                                            var profileImage        =   profilePic_path + imageName;
+                                                            return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
                                                         }
 
 
                                                     });
 
-                                         }
+                                             }
 
-                                    }
-                                });
+                                        }
+                                    });
 
-                        }
+                        break;
 
-                    //----------------------------Remove ProfilePic-----------------------------------------------
-
-                        if(edit_type==2)
-                        {
-
-                                console.log("type 2")
-                                User.findOne({id:userId}).exec(function (err, resultData){
-                                    if(err)
-                                    {
-                                        console.log(err)
-                                        return res.json(200, {status: 2, status_type: 'Failure',message:'error occured in profilePic selection in delete profile'});
-                                    }
-                                    else
-                                    {
-
-                                      if(!resultData)
-                                     {
-
-                                         return res.json(200, {status: 2, status_type: 'Failure',message: 'User Not Found'});
-
-                                    }
-                                    else
-                                    {
-                                            console.log("hhhhhhhhhhhhhhhhhhhhhhhhhh")
-                                            console.log(resultData)
-                                            var data     = {profilePic: " "};
-                                            var criteria = {id: userId};
-                                            console.log("profile picccccccccccccccc")
-                                            console.log(resultData)
-
-                                           User.update(criteria,data).exec(function(err, datas) {
-
-                                                if(err)
+                        case 2 :
+                                    //----------------------------Remove ProfilePic-----------------------------------------------
+                                    console.log("type 2")
+                                    User.findOne({id:userId}).exec(function (err, resultData){
+                                        if(err)
+                                        {
+                                            console.log(err)
+                                            return res.json(200, {status: 2, status_type: 'Failure',message:'error occured in profilePic selection in delete profile'});
+                                        }
+                                        else
+                                        {
+                                                if(!resultData)
                                                 {
-                                                    sails.log(err)
-                                                    return res.json(200, {status: 2, status_type: 'Failure', message: 'profile image deletion failure'});
+
+                                                        return res.json(200, {status: 2, status_type: 'Failure',message: 'User Not Found'});
+
                                                 }
                                                 else
                                                 {
-                                                    console.log(datas)
-                                                    var profileImage    =   profilePic_path + resultData.profilePic;
-                                                    console.log(profileImage)
-                                                    fs.unlink(profilePic_unlink_path + resultData.profilePic);
-                                                    return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
+
+                                                        var data     = {profilePic: " "};
+                                                        var criteria = {id: userId};
+                                                        User.update(criteria,data).exec(function(err, datas) {
+                                                            if(err)
+                                                            {
+                                                                sails.log(err)
+                                                                return res.json(200, {status: 2, status_type: 'Failure', message: 'profile image deletion failure'});
+                                                            }
+                                                            else
+                                                            {
+                                                                console.log(datas)
+                                                                var profileImage    =   profilePic_path + resultData.profilePic;
+                                                                console.log(profileImage)
+                                                                fs.unlink(profilePic_unlink_path + resultData.profilePic);
+                                                                return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
+                                                            }
+                                                        });
                                                 }
-                                            });
-                                    }
-
-                                  }
-                            });
-
-                         }
+                                        }
+                                    });
+                        break;
+                }
 
       },
 

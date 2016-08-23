@@ -13,8 +13,9 @@ module.exports = {
         getDitherDetail: function (req, res) {
                 console.log("collage details api==================");
                 var server_baseUrl              =     req.options.server_baseUrl;
-                var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 console.log(req.param("dither_id"));
@@ -166,7 +167,7 @@ module.exports = {
                                                                                     }
                                                                                     var user_profile_image = "";
                                                                                     if(results[0].profilePic != "" || results[0].profilePic != null){
-                                                                                            user_profile_image = server_baseUrl + req.options.file_path.profilePic_path + results[0].profilePic;
+                                                                                            user_profile_image = profilePic_path + results[0].profilePic;
                                                                                     }
                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                  dither_desc                : results[0].imgTitle,
@@ -208,8 +209,9 @@ module.exports = {
         getSingleDitherDetails: function (req, res) {
                     console.log("Single Dither Details api==================");
                     var server_baseUrl                           =     req.options.server_baseUrl;
-                    var collageImg_path                          =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var profilePic_path                          =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var server_image_baseUrl                     =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var collageImg_path                          =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path                          =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var received_collage_id                      =     req.param("dither_id");
                     var received_single_image_id                 =     req.param("dither_single_id");
                     var query;

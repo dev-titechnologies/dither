@@ -24,10 +24,10 @@ io.socket.on('connect', function socketConnected(){
                     //console.log(resData);
         //});
 });
-io.socket.on('message', function messageReceived(messages){
-    console.log(messages);
-     jQuery("#response").append('<h3>'+messages.msg+'</h3><br>');
-});
+//io.socket.on('message', function messageReceived(messages){
+    //console.log(messages);
+     //jQuery("#response").append('<h3>'+messages.msg+'</h3><br>');
+//});
 
 /*io.socket.get('/test/subscribeToFunRoom', {roomName:'Two'}, function (resData, jwres){
   // ...
@@ -46,6 +46,11 @@ io.socket.on('message', function messageReceived(messages){
 //sails.sockets.emit('privateMessage');
 //For call an event
 //io.socket.emit('logoffchat');
+io.socket.on('message', function (event){
+        console.log("createInCheck ----------------");
+        console.log(event);
+        console.log("!!!! event  <-->  Message !!!!");
+});
 io.socket.on('createIncheck', function (event){
         console.log("createInCheck ----------------");
         console.log(event);

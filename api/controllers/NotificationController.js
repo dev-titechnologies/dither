@@ -431,6 +431,8 @@ module.exports = {
 										
 									}, function(err) {
 								
+								       console.log("resulttt dataaa")
+								       console.log(results)
 										return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
 									});
 								

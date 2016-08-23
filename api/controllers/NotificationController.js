@@ -168,7 +168,7 @@ module.exports = {
 																	 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
 																	 console.log(notifyCmntArray)
 																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	 callback();
+																	// callback();
 																	 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
 																	
 																	//-----------send push notification---------------
@@ -176,7 +176,7 @@ module.exports = {
 																	var message   = 'Comment Notification';
 																	sails.log(device_id)
 																	//callback();
-																	/*if(device_id)
+																	if(device_id)
 																	{
 																		console.log("deviceId exist")
 																		//device_id = device_id.split(',');
@@ -204,7 +204,7 @@ module.exports = {
 																	else
 																	{
 																		callback();			
-																	}*/
+																	}
 													
 																 			
 															}
@@ -249,10 +249,10 @@ module.exports = {
 																notifyVoteArray	    = [];
 																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
 																console.log(notifyVoteArray)
-																callback();
+																//callback();
 																//-----------send push notification---------------
 															
-																/*if(device_id)
+																if(device_id)
 																	{
 																		console.log("deviceId exist")
 																		//device_id = device_id.split(',');
@@ -280,7 +280,7 @@ module.exports = {
 																	else
 																	{
 																		callback();			
-																	}*/
+																	}
 
 																
 															}	
@@ -315,10 +315,10 @@ module.exports = {
 																	item.dither_image	=	collageImg_path + item.dither_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
-																	callback();
+																	//callback();
 																	//-----------send push notification---------------
 															
-																	/* if(device_id)
+																	if(device_id)
 																		{
 																			console.log("deviceId exist")
 																			//device_id = device_id.split(',');
@@ -346,7 +346,7 @@ module.exports = {
 																		else
 																		{
 																			callback();			
-																		}*/
+																		}
 																			
 
 															}
@@ -381,11 +381,11 @@ module.exports = {
 																console.log(item.profile_image)
 																console.log(ntfn_body)
 																notificationTagged  =  ntfn_body;
-																callback();
+																//callback();
 																
 																//-----------send push notification---------------
 														
-																/* if(device_id)
+																if(device_id)
 																	{
 																		console.log("deviceId exist")
 																		//device_id = device_id.split(',');
@@ -413,7 +413,7 @@ module.exports = {
 																	else
 																	{
 																		callback();			
-																	}	*/					
+																	}						
 
 															}
 										

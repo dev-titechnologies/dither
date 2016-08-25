@@ -150,7 +150,7 @@ module.exports = {
 															var notification	= ntfnTypeFound[0].body;
 															item.description 	= item.description - 1;
 															console.log(notification)
-															ntfn_body  			= 	util.format(notification,item.name,item.description);
+															ntfn_body  			= 	util.format(notification,item.description);
 															item.ntfn_body		=	ntfn_body;
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
@@ -158,7 +158,7 @@ module.exports = {
 															if(item.description==0)
 															{ 
 																console.log("commenteddd")
-																notificationCommented = item.name + " commented on your Dither";
+																notificationCommented = " commented on your Dither";
 																item.ntfn_body		  =	notificationCommented;
 																
 																/*------------------------------------------------------------------------------------
@@ -311,14 +311,14 @@ module.exports = {
 															var notification	= ntfnTypeFound[0].body;
 															console.log(notification)
 															item.description	= item.description - 1;
-															ntfn_body  			= util.format(notification,item.name,item.description);
+															ntfn_body  			= util.format(notification,item.description);
 															item.ntfn_body		=	ntfn_body;
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
 															item.dither_image	=	collageImg_path + item.dither_image;
 															if(item.description==0)
 															{
-															  notificationVoted = item.name + " voted on your Dither";
+															  notificationVoted = " voted on your Dither";
 															  item.ntfn_body	= notificationVoted;
 															  
 															  /*------------------------------------------------------------------------------------
@@ -461,7 +461,7 @@ module.exports = {
 																	console.log(ntfnTypeFound)
 																	var notification	= ntfnTypeFound[0].body;
 																	console.log(notification)
-																	ntfn_body  			= util.format(notification,item.name);
+																	ntfn_body  			= util.format(notification);
 																	item.ntfn_body		=	ntfn_body;
 																	item.type			=	ntfnTypeFound[0].type;
 																	item.profile_image	=	profilePic_path + item.profile_image;

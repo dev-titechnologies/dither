@@ -88,7 +88,7 @@ module.exports = {
 						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
 						var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
 						var device_id 			= 	  tokenCheck.tokenDetails.deviceId;
-
+						var device_type			=	  req.get('device_type');
 						
 						notificationVoted 		= "";
 						notificationCommented 	= "";
@@ -169,26 +169,27 @@ module.exports = {
 
 																if(device_id)
 																{
-																	async.parallel(
-																				[
-																				  function (callback) {
-																					NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});
-																				  },
-																				  function (callback) {
+																	if(device_type=='ios')
+																	  {
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
 																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
 																						if(err)
 																						{
@@ -204,22 +205,11 @@ module.exports = {
 																							callback();			
 																						}
 																					});  
-																					
-																				  }
-																				],
-																				function (err, results) {
-																				   if(err)
-																				   {
-																					   console.log("error in parallel")
-																					   callback();
-																				   }
-																				   else
-																				   {
-																					   console.log("Parallel Success")
-																					   callback();
-																				   }
-																				}
-																	); // async.parallel
+																	  }	
+																	  else
+																	  {
+																		  callback();
+																	  }
 																}  
 																
 																else
@@ -237,8 +227,7 @@ module.exports = {
 																	 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
 																	 console.log(notifyCmntArray)
 																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	// callback();
-																	 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
+																	
 																	
 																/*------------------------------------------------------------------------------------
 																							PUSH NOTIFICATION
@@ -249,26 +238,27 @@ module.exports = {
 																	//callback();
 																	if(device_id)
 																	{
-																		async.parallel(
-																				[
-																				  function (callback) {
-																					NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});
-																				  },
-																				  function (callback) {
+																	  if(device_type=='ios')
+																	  {
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
 																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
 																						if(err)
 																						{
@@ -284,22 +274,11 @@ module.exports = {
 																							callback();			
 																						}
 																					});  
-																					
-																				  }
-																				],
-																				function (err, results) {
-																				   if(err)
-																				   {
-																					   console.log("error in parallel")
-																					   callback();
-																				   }
-																				   else
-																				   {
-																					   console.log("Parallel Success")
-																					   callback();
-																				   }
-																				}
-																		); // async.parallel
+																	  }	
+																	  else
+																	  {
+																		  callback();
+																	  }
 																	}
 																	else
 																	{
@@ -348,26 +327,27 @@ module.exports = {
 																var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};			
 																if(device_id)
 																{
-																	async.parallel(
-																				[
-																				  function (callback) {
-																					NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});
-																				  },
-																				  function (callback) {
+																	if(device_type=='ios')
+																	{
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
 																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
 																						if(err)
 																						{
@@ -383,22 +363,11 @@ module.exports = {
 																							callback();			
 																						}
 																					});  
-																					
-																				  }
-																				],
-																				function (err, results) {
-																				   if(err)
-																				   {
-																					   console.log("error in parallel")
-																					   callback();
-																				   }
-																				   else
-																				   {
-																					   console.log("Parallel Success")
-																					   callback();
-																				   }
-																				}
-																	); // async.parallel
+																	 }	
+																	 else
+																	  {
+																		  callback();
+																	  }
 																}
 																else
 																{
@@ -419,27 +388,29 @@ module.exports = {
 																 -------------------------------------------------------------------------------------*/
 																var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
 																if(device_id)
+																{
+																		
+																	if(device_type=='ios')
 																	{
-																		async.parallel(
-																				[
-																				  function (callback) {
-																					NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});
-																				  },
-																				  function (callback) {
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
 																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
 																						if(err)
 																						{
@@ -455,33 +426,20 @@ module.exports = {
 																							callback();			
 																						}
 																					});  
-																					
-																				  }
-																				],
-																				function (err, results) {
-																				   if(err)
-																				   {
-																					   console.log("error in parallel")
-																					   callback();
-																				   }
-																				   else
-																				   {
-																					   console.log("Parallel Success")
-																					   callback();
-																				   }
-																				}
-																		); // async.parallel
-																	}
-																	else
-																	{
-																		callback();			
-																	}
-
+																	 }	
+																	  else
+																	  {
+																		  callback();
+																	  }
 																
-															}	
-														
+															    }	
+															    else
+															    {
+																  callback();
+															    }	
 
 
+														    }
 														}
 										
 													});
@@ -517,9 +475,9 @@ module.exports = {
 																			
 																	if(device_id)
 																	{
-																		async.parallel(
-																				[
-																				  function (callback) {
+																		
+																				  if(device_type=='ios')
+																				  {	 
 																					NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																						if(err)
 																						{
@@ -535,8 +493,10 @@ module.exports = {
 																							callback();			
 																						}
 																					});
-																				  },
-																				  function (callback) {
+																				  }
+																				 
+																				  else if(device_type=='android')
+																				  {
 																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
 																						if(err)
 																						{
@@ -552,22 +512,12 @@ module.exports = {
 																							callback();			
 																						}
 																					});  
-																					
+																				  }	
+																				  else
+																				  {
+																					  callback();
 																				  }
-																				],
-																				function (err, results) {
-																				   if(err)
-																				   {
-																					   console.log("error in parallel")
-																					   callback();
-																				   }
-																				   else
-																				   {
-																					   console.log("Parallel Success")
-																					   callback();
-																				   }
-																				}
-																		); // async.parallel
+																				
 																	}
 																	else
 																	{
@@ -618,26 +568,27 @@ module.exports = {
 																if(device_id)
 																{
 																	
-																	async.parallel(
-																				[
-																				  function (callback) {
-																					NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});
-																				  },
-																				  function (callback) {
+																	if(device_type=='ios')
+																	{
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
 																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
 																						if(err)
 																						{
@@ -653,24 +604,14 @@ module.exports = {
 																							callback();			
 																						}
 																					});  
-																					
-																				  }
-																				],
-																				function (err, results) {
-																				   if(err)
-																				   {
-																					   console.log("error in parallel")
-																					   callback();
-																				   }
-																				   else
-																				   {
-																					   console.log("Parallel Success")
-																					   callback();
-																				   }
-																				}
-																	); // async.parallel
-																	
-																	
+																		  }	
+																		  else
+																		  {
+																			  callback();
+																		  }	
+																 
+																		
+																				
 																}
 																else
 																{

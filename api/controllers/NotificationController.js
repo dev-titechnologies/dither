@@ -88,7 +88,7 @@ module.exports = {
 						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
 						var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
 						var device_id 			= 	  tokenCheck.tokenDetails.deviceId;
-
+						var device_type			=	  req.get('device_type');
 						
 						notificationVoted 		= "";
 						notificationCommented 	= "";
@@ -156,11 +156,68 @@ module.exports = {
 															item.profile_image	=	profilePic_path + item.profile_image;
 															item.dither_image	=	collageImg_path + item.dither_image;
 															if(item.description==0)
-															{
+															{ 
 																console.log("commenteddd")
 																notificationCommented = item.name + " commented on your Dither";
 																item.ntfn_body		  =	notificationCommented;
-																callback();
+																
+																/*------------------------------------------------------------------------------------
+																							PUSH NOTIFICATION
+																 -------------------------------------------------------------------------------------*/
+																var message   = 'Comment Notification'; 
+																var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
+
+																if(device_id)
+																{
+																	if(device_type=='ios')
+																	  {
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
+																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																						if(err)
+																						{
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log("Push notification result")
+																							console.log(ntfnSend)
+																							console.log("Push Notification sended")
+																							callback();			
+																						}
+																					});  
+																	  }	
+																	  else
+																	  {
+																		  callback();
+																	  }
+																}  
+																
+																else
+																{
+																	callback();			
+																}
+																
+																//callback();
 															}
 															else
 															{
@@ -170,38 +227,58 @@ module.exports = {
 																	 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
 																	 console.log(notifyCmntArray)
 																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	// callback();
-																	 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
 																	
-																	//-----------send push notification---------------
-																	console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																	
+																/*------------------------------------------------------------------------------------
+																							PUSH NOTIFICATION
+																 -------------------------------------------------------------------------------------*/																	console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
 																	var message   = 'Comment Notification';
+																	var data 	  = {message:message,device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
 																	sails.log(device_id)
 																	//callback();
 																	if(device_id)
 																	{
-																		console.log("deviceId exist")
-																		//device_id = device_id.split(',');
-																		console.log("deviceId")
-																		sails.log.debug(device_id);
-																		var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																			if(err)
-																			{
-																				console.log("Error in Push Notification Sending")
-																				console.log(err)
-																				callback();
-																			}
-																			else
-																			{
-																				console.log("Push notification result")
-																				console.log(ntfnSend)
-																				console.log("Push Notification sended")
-																				callback();			
-																			}
-																		
-																			
-																		});
+																	  if(device_type=='ios')
+																	  {
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
+																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																						if(err)
+																						{
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log("Push notification result")
+																							console.log(ntfnSend)
+																							console.log("Push Notification sended")
+																							callback();			
+																						}
+																					});  
+																	  }	
+																	  else
+																	  {
+																		  callback();
+																	  }
 																	}
 																	else
 																	{
@@ -243,6 +320,61 @@ module.exports = {
 															{
 															  notificationVoted = item.name + " voted on your Dither";
 															  item.ntfn_body	= notificationVoted;
+															  
+															  /*------------------------------------------------------------------------------------
+																							PUSH NOTIFICATION
+																 -------------------------------------------------------------------------------------*/
+																var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};			
+																if(device_id)
+																{
+																	if(device_type=='ios')
+																	{
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
+																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																						if(err)
+																						{
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log("Push notification result")
+																							console.log(ntfnSend)
+																							console.log("Push Notification sended")
+																							callback();			
+																						}
+																					});  
+																	 }	
+																	 else
+																	  {
+																		  callback();
+																	  }
+																}
+																else
+																{
+																	callback();			
+																}
+															  
+															  
 															}
 															else
 															{
@@ -251,44 +383,63 @@ module.exports = {
 																notifyVoteArray	    = [];
 																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
 																console.log(notifyVoteArray)
-																callback();
-																//-----------send push notification---------------
-															
+																/*------------------------------------------------------------------------------------
+																							PUSH NOTIFICATION
+																 -------------------------------------------------------------------------------------*/
+																var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
 																if(device_id)
-																	{
-																		console.log("deviceId exist")
-																		//device_id = device_id.split(',');
-																		console.log("deviceId")
-																		sails.log.debug(device_id);
-																		var data = {message:"vote push", device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																			if(err)
-																			{
-																				console.log("Error in Push Notification Sending")
-																				console.log(err)
-																				callback();
-																			}
-																			else
-																			{
-																				console.log("Push notification result")
-																				console.log(ntfnSend)
-																				console.log("Push Notification sended")
-																				callback();			
-																			}
+																{
 																		
-																			
-																		});
-																	}
-																	else
+																	if(device_type=='ios')
 																	{
-																		callback();			
-																	}
-
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
+																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																						if(err)
+																						{
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log("Push notification result")
+																							console.log(ntfnSend)
+																							console.log("Push Notification sended")
+																							callback();			
+																						}
+																					});  
+																	 }	
+																	  else
+																	  {
+																		  callback();
+																	  }
 																
-															}	
-														
+															    }	
+															    else
+															    {
+																  callback();
+															    }	
 
 
+														    }
 														}
 										
 													});
@@ -317,38 +468,64 @@ module.exports = {
 																	item.dither_image	=	collageImg_path + item.dither_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
-																	callback();
-																	//-----------send push notification---------------
-															
-																	/*if(device_id)
-																		{
-																			console.log("deviceId exist")
-																			//device_id = device_id.split(',');
-																			console.log("deviceId")
-																			sails.log.debug(device_id);
-																			var data = {message:"signup push", device_id:device_id,ntfnDetails:item.ntfn_body};
-																			NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																				if(err)
-																				{
-																					console.log("Error in Push Notification Sending")
-																					console.log(err)
-																					callback();
-																				}
-																				else
-																				{
-																					console.log("Push notification result")
-																					console.log(ntfnSend)
-																					console.log("Push Notification sended")
-																					callback();			
-																				}
+																	var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
+																	/*------------------------------------------------------------------------------------
+																							PUSH NOTIFICATION
+																	-------------------------------------------------------------------------------------*/
 																			
+																	if(device_id)
+																	{
+																		
+																				  if(device_type=='ios')
+																				  {	 
+																					NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																						if(err)
+																						{
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log("Push notification result")
+																							console.log(ntfnSend)
+																							console.log("Push Notification sended")
+																							callback();			
+																						}
+																					});
+																				  }
+																				 
+																				  else if(device_type=='android')
+																				  {
+																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																						if(err)
+																						{
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log("Push notification result")
+																							console.log(ntfnSend)
+																							console.log("Push Notification sended")
+																							callback();			
+																						}
+																					});  
+																				  }	
+																				  else
+																				  {
+																					  callback();
+																				  }
 																				
-																			});
-																		}
-																		else
-																		{
-																			callback();			
-																		}*/
+																	}
+																	else
+																	{
+																		callback();			
+																	}
+																	
+															
+																	
 																			
 
 															}
@@ -358,7 +535,7 @@ module.exports = {
 												  
 											  }
 											  else if(item.notificationTypeId==1)
-											 {
+											  {
 												
 											
 												 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
@@ -383,39 +560,63 @@ module.exports = {
 																console.log(item.profile_image)
 																console.log(ntfn_body)
 																notificationTagged  =  ntfn_body;
-																callback();
-																
-																//-----------send push notification---------------
-														
-																/*if(device_id)
-																	{
-																		console.log("deviceId exist")
-																		//device_id = device_id.split(',');
-																		console.log("deviceId")
-																		sails.log.debug(device_id);
-																		var data = {message:"tag push", device_id:device_id,ntfnDetails:item.ntfn_body};
-																		NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																			if(err)
-																			{
-																				console.log("Error in Push Notification Sending")
-																				console.log(err)
-																				callback();
-																			}
-																			else
-																			{
-																				console.log("Push notification result")
-																				console.log(ntfnSend)
-																				console.log("Push Notification sended")
-																				callback();			
-																			}
-																		
+																var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
+																/*------------------------------------------------------------------------------------
+																							PUSH NOTIFICATION
+																 -------------------------------------------------------------------------------------*/
 																			
-																		});
-																	}
-																	else
+																if(device_id)
+																{
+																	
+																	if(device_type=='ios')
 																	{
-																		callback();			
-																	}		*/				
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	 }
+																	 else if(device_type=='android')
+																	  {
+																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																						if(err)
+																						{
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log("Push notification result")
+																							console.log(ntfnSend)
+																							console.log("Push Notification sended")
+																							callback();			
+																						}
+																					});  
+																		  }	
+																		  else
+																		  {
+																			  callback();
+																		  }	
+																 
+																		
+																				
+																}
+																else
+																{
+																	callback();			
+																}
 
 															}
 										

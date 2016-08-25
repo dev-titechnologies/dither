@@ -1051,17 +1051,19 @@ module.exports = {
                     var tagged_fbUser               =      req.param("tagged_fb_user");
                     var tagged_contactUser          =      req.param("tagged_user");
                     //var taggedUserArray               =   tagged_fbUser.concat(tagged_contactUser);
-                    var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
-                    var taggedUserArrayFinal        =      [];
-                    var inviteFriends               =      JSON.parse(req.param("invite_friends_NUM"));
-                    var inviteFriendsArray          =      [];
-                    var invitedFriends_NUM_Final;
-                    var collage_results             =      "";
-                    var tagNotifyArray              =      [];
+                    var invite_friends_NUM          =      req.param("invite_friends_NUM");
 
                     if(!imgTitle || !location || !collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
                     }else{
+
+                            var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
+                            var taggedUserArrayFinal        =      [];
+                            var inviteFriends               =      JSON.parse(invite_friends_NUM);
+                            var inviteFriendsArray          =      [];
+                            var invitedFriends_NUM_Final;
+                            var collage_results             =      "";
+                            var tagNotifyArray              =      [];
 
             async.series([
                     function(callback) {
@@ -1314,7 +1316,7 @@ module.exports = {
                                                     inviteFriends.forEach(function(factor, index){
                                                              inviteFriends_onlyPNArray.push(factor.phoneNumber);
                                                     });*/
-                                                    console.log(inviteFriends);
+                                                  //  console.log(inviteFriends);
                                                     /*var foundInvitation_Collage =[
                                                                                 {"phoneNumber": "1", "name":"P"},
                                                                                 {"phoneNumber": "2", "name":"Q"},
@@ -1457,6 +1459,7 @@ module.exports = {
                                 }else{
                                     callback();
                                 }
+                                //callback();
                     },
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                 if (err) {
@@ -1464,6 +1467,7 @@ module.exports = {
                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Edit Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                 }else{
                                     console.log("Edit Dither =============>>>>>>>>>>>>>>");
+                                    sails.sockets.blast('edit-dither', {status : "success", name : "editDither"});
                                     //console.log(sortedVote);
                                     //console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);

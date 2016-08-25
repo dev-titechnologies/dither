@@ -52,6 +52,11 @@ module.exports = {
             type: 'integer',
             defaultsTo: 0
         },
+        //true means 0 = active, false means 1 = inactive
+        status: {
+            type: 'string',
+            defaultsTo: 'active'
+        },
 
         createdAt: {
             type: 'datetime',

@@ -71,25 +71,28 @@ module.exports = {
 			  
 				device: [data.device_id], // Array of string with device tokens
 				provider: {
-							apiKey		: 'AIzaSyDZzvfjg_PoPGzejtauFDK_PREuwqYZOJY', // Your Google Server API Key
+							apiKey		: 'AIzaSyB1l2pE2mqKfvXDsA_C3MgoiICU6KG5GVU', // Your Google Server API Key
 							maxSockets	: 12, // Max number of sockets to have open at one time
 							proxy		: '' // This is [just like passing a proxy on to request](https://github.com/request/request#proxies)
 						 },
 				notification: {
-							title: 'Android Test Push', // Indicates notification title
-							body: 'Hey, there!', // Indicates notification body text
-							icon: '', // Indicates notification icon
-							sound: '', // Indicates sound to be played
-							badge: '', // Indicates the badge on client app home icon
-							payload: {}// Custom data to send within Push Notification
+							title	: 'Android Test Push', // Indicates notification title
+							body	: data.NtfnBody, // Indicates notification body text
+							icon	: '', // Indicates notification icon
+							sound	: '', // Indicates sound to be played
+							badge	: '', // Indicates the badge on client app home icon
+							payload : {}// Custom data to send within Push Notification
 						},			
 		 });
+
+		
 
 		console.log(android)
 		console.log(data.device_id)
 		android
 			.send([data.device_id], {
-             		body: 'You can override pre-defined'
+             		body:  data.NtfnBody,
+             		title: 'Android Test Push'
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));

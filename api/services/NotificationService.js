@@ -16,13 +16,13 @@ module.exports = {
 	{
 		console.log("Push Notification Apn")
 		ios = PusherService('ios', {
-			device: ['34060262574d028f82e129d625ec0c83324315088e35bdb095cebc52d2c37cec'], // Array of string with device tokens
+			device: [data.device_id], // Array of string with device tokens
 			provider: {
 				cert: 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
 				key: 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
 				ca: [], // An array of trusted certificates
 				pfx: '', // File path for private key, certificate and CA certs in PFX or PKCS12 format
-				passphrase: '', // The passphrase for the connection key
+				passphrase: '123456789', // The passphrase for the connection key
 				production: false, // Specifies which environment to connect to: Production (if true) or Sandbox
 				voip: false, // Enable when you are using a VoIP certificate to enable paylods up to 4096 bytes
 				port: 2195, // Gateway port
@@ -50,8 +50,8 @@ module.exports = {
 			
 	
 			ios
-			  .send(['34060262574d028f82e129d625ec0c83324315088e35bdb095cebc52d2c37cec'], {
-				body: 'You can override pre-defined'
+			  .send([data.device_id], {
+				body: data.NtfnBody
 			  })
 			  .then(console.log.bind(console))
 			  .catch(console.error.bind(console));

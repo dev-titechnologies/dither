@@ -91,8 +91,7 @@ module.exports = {
 		console.log(data.device_id)
 		android
 			.send([data.device_id], {
-             		body:  data.NtfnBody,
-             		title: 'Android Test Push'
+             		body:  data.NtfnBody
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));

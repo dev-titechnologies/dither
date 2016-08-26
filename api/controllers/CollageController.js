@@ -1467,6 +1467,7 @@ module.exports = {
                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Edit Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                 }else{
                                     console.log("Edit Dither =============>>>>>>>>>>>>>>");
+                                    //sails.sockets.blast('edit-dither', {status : "success", name : "editDither"});
                                     sails.sockets.blast('edit-dither', {status : "success", name : "editDither"});
                                     //console.log(sortedVote);
                                     //console.log(taggedUserArrayFinal);

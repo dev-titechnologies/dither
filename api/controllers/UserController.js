@@ -320,7 +320,9 @@ module.exports = {
 
                                                                 sails.sockets.blast('createIncheck', {status : "success", name_of_user: test});
                                                                 sails.sockets.blast('message', {status : "success", name_of_user: test});
-
+                                                                
+                                                                var notifyArray = [];
+                                                                notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion});
                                                                 var profile_image       =   profilePic_path + results.profilePic;
                                                                 return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
                                                                                       email             :   results.email,
@@ -329,7 +331,8 @@ module.exports = {
                                                                                       isNewUser         :   false,
                                                                                       profile_image     :   profile_image,
                                                                                       token             :   userTokenDetails.token.token,
-                                                                                      user_id           :   results.id
+                                                                                      user_id           :   results.id,
+                                                                                      notification		:	notifyArray
                                                                                 });
                                                             }
                                                         });

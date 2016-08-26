@@ -26,12 +26,12 @@
 					//var client            = require('twilio')(smsAccountSid, smsAuthToken); //API_KEY and TOCKEN from TWILIO
 					var mobile  = req.param("mobile");
 					
-					User.findOne({phoneNumber: req.param('mobile')}).exec(function (err, findUser){
+					User.findOne({phoneNumber: req.param('mobile')}).exec(function (err, findUser)
 					{
 						if(err)
 						{
 							console.log(err);
-							return res.json(200, {status: 2, status_type: 'Failure' , msg: 'Mobile Number Already Exist!'});
+							return res.json(200, {status: 2, status_type: 'Failure' , msg: 'error occured in Mobile Number checking!'});
 
 						}
 						else
@@ -75,6 +75,10 @@
 											}
 								});
 						  }	
+						  else
+						  {
+							  return res.json(200, {status: 2, status_type: 'Failure' , msg: 'Mobile Number Already Exist!'});
+						  }
 					
 						}
 					});		

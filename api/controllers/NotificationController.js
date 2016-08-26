@@ -155,7 +155,7 @@ module.exports = {
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
 															item.dither_image	=	collageImg_path + item.dither_image;
-															if(item.description==0)
+															if(item.description<=0)
 															{ 
 																console.log("commenteddd")
 																notificationCommented = " commented on your Dither";
@@ -316,7 +316,7 @@ module.exports = {
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
 															item.dither_image	=	collageImg_path + item.dither_image;
-															if(item.description==0)
+															if(item.description<=0)
 															{
 															  notificationVoted = " voted on your Dither";
 															  item.ntfn_body	= notificationVoted;
@@ -552,7 +552,7 @@ module.exports = {
 																console.log(item.description)
 																console.log(ntfnTypeFound)
 																var notification	= ntfnTypeFound[0].body;
-																item.description	= item.description - 1;
+																//item.description	= item.description - 1;
 																console.log(notification)
 																var ntfn_body  		= util.format(notification,item.description);
 																item.type			=	ntfnTypeFound[0].type;
@@ -566,6 +566,66 @@ module.exports = {
 																/*------------------------------------------------------------------------------------
 																							PUSH NOTIFICATION
 																 -------------------------------------------------------------------------------------*/
+																 
+															if(item.description<=0)
+															{
+															  notificationTaggeed = " You tagged in a Post";
+															  item.ntfn_body	  = notificationTaggeed;
+															  var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};			
+																if(device_id)
+																{
+																	if(device_type=='ios')
+																	{
+																		  
+																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();			
+																				}
+																			});
+																	}
+																	else if(device_type=='android')
+																	  {
+																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																						if(err)
+																						{
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log("Push notification result")
+																							console.log(ntfnSend)
+																							console.log("Push Notification sended")
+																							callback();			
+																						}
+																					});  
+																	 }	
+																	 else
+																	  {
+																		  callback();
+																	  }
+																}
+																
+																else
+																{
+																	callback();			
+																}
+															  
+															  
+															}
+															else	 
+															{	 
 																			
 																if(device_id)
 																{
@@ -621,7 +681,7 @@ module.exports = {
 																}
 
 															}
-										
+														}
 												});
 												 
 									

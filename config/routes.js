@@ -47,7 +47,7 @@ module.exports.routes = {
 
   '/addressBook/*'                        :           ['auth.authenticate','helper.server_baseUrl'],
   '/Notification/*'                       :           ['auth.authenticate','helper.server_baseUrl','helper.file_path'],
-  '/feed/*'                               :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
+  '/feed/*'                               :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageLikes/*'                       :           ['auth.authenticate'],
   '/collageComments/*'                    :           ['auth.authenticate'],
   '/report/*'                             :           ['auth.authenticate'],

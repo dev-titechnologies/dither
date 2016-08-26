@@ -286,10 +286,11 @@ module.exports = {
                                                                     if(taggedUserArray.length !=0){
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
-                                                                                    tagNotifyArray.push(factor.user_id);
+                                                                                    tagNotifyArray.push(factor);
 
                                                                             });
                                                                             console.log(tagNotifyArray.length);
+                                                                            console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
                                                                             console.log(tagNotifyArray);
                                                                             var values ={
                                                                                             notificationTypeId  :   1,

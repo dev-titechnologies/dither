@@ -31,7 +31,7 @@
 						if(err)
 						{
 							console.log(err);
-							return res.json(200, {status: 2, status_type: 'Failure' , msg: 'error occured in Mobile Number checking!'});
+							return res.json(200, {status: 2, status_type: 'Failure' , message: 'error occured in Mobile Number checking!'});
 
 						}
 						else
@@ -52,7 +52,7 @@
 								SmsService.sendSmsOTP(smsAccountSid, smsAuthToken, smsFrom,mobile,verification_code, function(err,sendSmsResults)  {
 											if(!err){
 													console.log(err);
-												return res.json(200, {status: 2, status_type: 'Failure' , msg: 'mobile number is not valid', error_details: sendSmsResults});
+												return res.json(200, {status: 2, status_type: 'Failure' , message: 'mobile number is not valid', error_details: sendSmsResults});
 
 											}else{
 													sails.log(req.param("mobile"))
@@ -64,12 +64,12 @@
 														if(err)
 															{
 																sails.log("eror");
-																return res.json(200, {status: 2, status_type: 'Failure' , msg: 'Error occured in sending OTP'});
+																return res.json(200, {status: 2, status_type: 'Failure' , message: 'Error occured in sending OTP'});
 															}
 														else
 															{
 																sails.log("result"+results)
-																return res.json(200, {status: 1, status_type: 'Success' , msg: 'OTP send Successfully',otp:verification_code});
+																return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully',otp:verification_code});
 															}
 													});
 											}
@@ -77,7 +77,7 @@
 						  }	
 						  else
 						  {
-							  return res.json(200, {status: 2, status_type: 'Failure' , msg: 'Mobile Number Already Exist!'});
+							  return res.json(200, {status: 2, status_type: 'Failure' , message: 'Mobile Number Already Exist!'});
 						  }
 					
 						}

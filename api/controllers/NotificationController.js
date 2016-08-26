@@ -546,6 +546,8 @@ module.exports = {
 															}	
 															else
 															{
+																
+																var query = "";
 										
 																console.log(item.description)
 																console.log(ntfnTypeFound)

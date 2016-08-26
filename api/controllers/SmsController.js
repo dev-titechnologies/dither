@@ -25,40 +25,60 @@
 					console.log(smsAuthToken)                      
 					//var client            = require('twilio')(smsAccountSid, smsAuthToken); //API_KEY and TOCKEN from TWILIO
 					var mobile  = req.param("mobile");
-					//---------SMS SENDING-------------
-					var possible ="0123456789";
-					var verification_code    = "";
-					for(var i=0;i<4;i++)
+					
+					User.findOne({phoneNumber: req.param('mobile')}).exec(function (err, findUser){
+					{
+						if(err)
 						{
-							verification_code += possible.charAt(Math.floor(Math.random()*possible.length)); // usertocken generation
-						}         
+							console.log(err);
+							return res.json(200, {status: 2, status_type: 'Failure' , msg: 'Mobile Number Already Exist!'});
 
-					//Send an SMS text message
-					SmsService.sendSmsOTP(smsAccountSid, smsAuthToken, smsFrom,mobile,verification_code, function(err,sendSmsResults)  {
-							    if(!err){
-										console.log(err);
-									return res.json(200, {status: 2, status_type: 'Failure' , msg: 'mobile number is not valid', error_details: sendSmsResults});
+						}
+						else
+						{
+							
+						  if(typeof(findUser) == 'undefined')
+						  {
+					
+								//---------SMS SENDING-------------
+								var possible ="0123456789";
+								var verification_code    = "";
+								for(var i=0;i<4;i++)
+									{
+										verification_code += possible.charAt(Math.floor(Math.random()*possible.length)); // usertocken generation
+									}         
 
-								}else{
-										sails.log(req.param("mobile"))
-										var values = {
-											OTPCode       	 : verification_code,
-											mobile_no        : req.param("mobile")									
-										};	 								
-										Sms.create(values).exec(function(err, results){
-											if(err)
-												{
-													sails.log("eror");
-													return res.json(200, {status: 2, status_type: 'Failure' , msg: 'Error occured in sending OTP'});
-												}
-											else
-												{
-													sails.log("result"+results)
-													return res.json(200, {status: 1, status_type: 'Success' , msg: 'OTP send Successfully',otp:verification_code});
-												}
-										});
-								}
-					});
+								//Send an SMS text message
+								SmsService.sendSmsOTP(smsAccountSid, smsAuthToken, smsFrom,mobile,verification_code, function(err,sendSmsResults)  {
+											if(!err){
+													console.log(err);
+												return res.json(200, {status: 2, status_type: 'Failure' , msg: 'mobile number is not valid', error_details: sendSmsResults});
+
+											}else{
+													sails.log(req.param("mobile"))
+													var values = {
+														OTPCode       	 : verification_code,
+														mobile_no        : req.param("mobile")									
+													};	 								
+													Sms.create(values).exec(function(err, results){
+														if(err)
+															{
+																sails.log("eror");
+																return res.json(200, {status: 2, status_type: 'Failure' , msg: 'Error occured in sending OTP'});
+															}
+														else
+															{
+																sails.log("result"+results)
+																return res.json(200, {status: 1, status_type: 'Success' , msg: 'OTP send Successfully',otp:verification_code});
+															}
+													});
+											}
+								});
+						  }	
+					
+						}
+					});		
+					
 	    }
 
 

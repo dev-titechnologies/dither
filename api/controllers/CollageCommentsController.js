@@ -83,7 +83,7 @@ module.exports = {
                                                                                     
                                                                                     //----------------------------Push Notification For Comment------------------------------------------
 																						var message   = 'Comment Notification';
-																						var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Post";
+																						var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
 																						
 																						
 																						 User_token.findOne({userId: collageDetails.userId }).exec(function (err, getDeviceId){

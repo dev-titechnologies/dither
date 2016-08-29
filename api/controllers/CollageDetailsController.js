@@ -79,7 +79,7 @@ module.exports = {
                                         console.log(like_position);
 
 
-                                        query = " SELECT clgcmt.id, clgcmt.comment, usr.name, usr.profilePic, usr.id userId"+
+                                        query = " SELECT clgcmt.id, clgcmt.comment, usr.name, clgcmt.createdAt,usr.profilePic, usr.id userId"+
                                                 " FROM collageComments clgcmt"+
                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                 " WHERE clgcmt.collageId = "+get_collage_id;
@@ -98,7 +98,7 @@ module.exports = {
                                                             collageCommentResults.forEach(function(factor, index){
                                                                     //console.log("factor");
                                                                     //console.log(factor);
-                                                                    commentArray.push({comment_id: factor.id, user_id: factor.userId, user_name: factor.name,  user_profile_pic_url : profilePic_path + factor.profilePic, message: factor.comment});
+                                                                    commentArray.push({comment_id: factor.id, user_id: factor.userId, user_name: factor.name,  user_profile_pic_url : profilePic_path + factor.profilePic, message: factor.comment,comment_created_date_time:factor.createdAt});
                                                             });
                                                         }
                                                         //Query to get tagged users from both addressBook and fbFriends

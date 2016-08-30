@@ -82,11 +82,15 @@ module.exports = {
                                                                     like_position = factor.likePosition;
                                                             }
                                                     }*/
-
+                                                        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                                        console.log("_______factor.likeUserId__________"+factor.likeUserId);
+                                                        console.log("_______factor.collageCreatorId__________"+factor.collageCreatorId);
+                                                        console.log("_______userId__________"+userId);
+                                                        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                                     if(factor.likeUserId != null || factor.likeUserId != "" ){
                                                             console.log("Inside factor likeUserId not null ==============");
                                                             if(factor.likePosition != "" || factor.likePosition !== null){
-                                                                if(factor.likeUserId == userId){
+                                                                if(factor.likeUserId == userId && factor.collageCreatorId != userId){
                                                                     //like_position = factor.likePosition;
                                                                     console.log("Inside factor like User id check ================");
                                                                     like_position_Array.push(factor.likePosition);

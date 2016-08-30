@@ -29,8 +29,8 @@ module.exports = {
             //imgPosition                 =     1;
 
 
-            if(!collageId || !likedImageId || !imgPosition || !device_id){
-                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the device_id and dither_id and dither_like_image_id and position'});
+            if(!collageId || !likedImageId || !imgPosition || !device_type){
+                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the device_type and dither_id and dither_like_image_id and position'});
             }else{
                 //To check the user already voted for this image or not
                 CollageLikes.findOne({collageId: collageId, userId: userId}).exec(function (err, found){
@@ -152,58 +152,64 @@ module.exports = {
                                                                                                 var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
                                                                                                 var device_id   =  getDeviceId.deviceId;
                                                                                                 var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
-                                                                                                var switchKey  =  device_type;
 
-                                                                                                switch(switchKey){
-                                                                                                        case 'ios' :
-                                                                                                                    NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-                                                                                                                        if(err)
-                                                                                                                        {
-                                                                                                                            console.log("Error in Push Notification Sending")
-                                                                                                                            console.log(err)
-                                                                                                                            //callback();
-                                                                                                                        }
-                                                                                                                        else
-                                                                                                                        {
-                                                                                                                            console.log("Push notification result")
-                                                                                                                            console.log(ntfnSend)
-                                                                                                                            console.log("Push Notification sended")
-                                                                                                                            //callback();
-                                                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                if(!device_id){
+                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                                        total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                             });
-                                                                                                                        }
-                                                                                                                    });
-                                                                                                        break;
-
-                                                                                                        case 'android' :
-                                                                                                                    NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-                                                                                                                        if(err)
-                                                                                                                        {
-                                                                                                                            console.log("Error in Push Notification Sending")
-                                                                                                                            console.log(err)
-                                                                                                                            //callback();
-                                                                                                                        }
-                                                                                                                        else
-                                                                                                                        {
-                                                                                                                            console.log("Push notification result")
-                                                                                                                            console.log(ntfnSend)
-                                                                                                                            console.log("Push Notification sended")
-                                                                                                                            //callback();
-                                                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                    total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                }else{
+                                                                                                        var switchKey  =  device_type;
+                                                                                                        switch(switchKey){
+                                                                                                                case 'ios' :
+                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                                                                                                if(err)
+                                                                                                                                {
+                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                    console.log(err)
+                                                                                                                                    //callback();
+                                                                                                                                }
+                                                                                                                                else
+                                                                                                                                {
+                                                                                                                                    console.log("Push notification result")
+                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                    //callback();
+                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                                        total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                                    });
+                                                                                                                                }
                                                                                                                             });
-                                                                                                                        }
-                                                                                                                    });
-                                                                                                        break;
+                                                                                                                break;
 
-                                                                                                        default:
-                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                                    });
+                                                                                                                case 'android' :
+                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                                                                                                if(err)
+                                                                                                                                {
+                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                    console.log(err)
+                                                                                                                                    //callback();
+                                                                                                                                }
+                                                                                                                                else
+                                                                                                                                {
+                                                                                                                                    console.log("Push notification result")
+                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                    //callback();
+                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                                            total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                                    });
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                break;
 
-                                                                                                        break;
+                                                                                                                default:
+                                                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                                        total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                            });
 
+                                                                                                                break;
+
+                                                                                                        }
                                                                                                 }
 
                                                                                             //------------------------------

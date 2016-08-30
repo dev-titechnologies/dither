@@ -85,7 +85,7 @@ module.exports = {
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus, clglk.likePosition"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
@@ -113,7 +113,7 @@ module.exports = {
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus, clglk.likePosition"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
@@ -157,12 +157,12 @@ module.exports = {
                                                             var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
-                                                            var like_position;
+                                                            var like_position = 0;
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj = new Object();
                                                                 var collageId_val =dataResults[i]["collageId"];
                                                                 //console.log(data[i]);
-                                                                console.log("For loop--------------->>>>>>>>>>>>>>>>>");
+                                                                //console.log("For loop--------------->>>>>>>>>>>>>>>>>");
                                                                 if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
                                                                 {
                                                                     var imagesPositionArray         = [];
@@ -174,8 +174,8 @@ module.exports = {
                                                                     {
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
-                                                                            console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ------------------ dataResults[j]["likeStatus"]');
-                                                                            console.log(dataResults[j]["likeStatus"]);
+                                                                            //console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ------------------ dataResults[j]["likeStatus"]');
+                                                                            //console.log(dataResults[j]["likeStatus"]);
                                                                             var likeStatus;
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
                                                                                     likeStatus = 0;
@@ -188,11 +188,33 @@ module.exports = {
                                                                                                 like_status     : likeStatus,
                                                                                                 vote            : dataResults[j]["vote"]
                                                                                                 });
-
-                                                                            if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
+                                                                            /*if(factor.likeUserId != null || factor.likeUserId != "" ){
+                                                                                    console.log("Inside factor likeUserId not null ==============");
+                                                                                    if(factor.likePosition != "" || factor.likePosition !== null){
+                                                                                        if(factor.likeUserId == userId && factor.collageCreatorId != userId){
+                                                                                            //like_position = factor.likePosition;
+                                                                                            console.log("Inside factor like User id check ================");
+                                                                                            like_position_Array.push(factor.likePosition);
+                                                                                        }
+                                                                                    }
+                                                                            }*/
+                                                                            /*if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
                                                                                     like_position = 0;
                                                                             }else{
                                                                                     like_position = dataResults[j]["likePosition"];
+                                                                            }*/
+                                                                            console.log("111111111111111111++++++++++++++++");
+                                                                            //console.log(dataResults[i]["likePosition"]);
+                                                                            console.log(dataResults[j]["likePosition"]);
+                                                                            console.log("111111111111111111++++++++++++++++");
+                                                                            if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" ){
+                                                                                    console.log("Inside dataResults[j][likePosition]not null ==============");
+                                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                            //like_position = factor.likePosition;
+                                                                                            console.log("Inside factor like User id check ================");
+                                                                                            //like_position_Array.push(factor.likePosition);
+                                                                                            like_position = dataResults[j]["likePosition"];
+                                                                                    }
                                                                             }
                                                                         }
                                                                     }
@@ -216,8 +238,8 @@ module.exports = {
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                                     dataResultsObj.mainOrder                    =       i;
-                                                                    console.log("vote =================");
-                                                                    console.log(dataResultsObj.vote);
+                                                                    //console.log("vote =================");
+                                                                    //console.log(dataResultsObj.vote);
                                                                     //console.log("dataResultsObj====================");
                                                                     //console.log(dataResultsObj);
                                                                     //console.log("dataResultsObj====================");

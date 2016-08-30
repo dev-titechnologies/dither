@@ -36,7 +36,7 @@ module.exports.routes = {
     view: 'first'
   },
 
-  '/user/signup'                          :           ['settings.settingsKeyValue'],
+  '/user/signup'                          :           ['settings.settingsKeyValue','helper.file_path'],
   '/user/checkForNewUser'                 :           ['settings.settingsKeyValue', 'helper.file_path'],
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
   '/user/editProfile'                     :           ['auth.authenticate','settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],

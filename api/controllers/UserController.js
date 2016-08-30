@@ -17,6 +17,8 @@ module.exports = {
                To signup
      ==================================================================================================================================== */
     signup: function (req, res) {
+				 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+				 var profilePic_path             =     req.options.file_path.profilePic_path;
                 console.log("signup---------------- api")
                 console.log(req.body);
                 console.log(req.get('device_id'));
@@ -26,17 +28,23 @@ module.exports = {
                 }else{
                         var filename     =  "image.png";
                         var imagename    = new Date().getTime() + filename;
+                        var thumbImage;   
                         console.log(imgUrl);
                         //Download STARTS--------
                         var download = function(uri, filename, callback){
                                 request.head(uri, function(err, res, body){
                                     request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                                 });
+                                //---------------------------generating Thumbnail image-----------------------------------
+                        
                         };
                         download(imgUrl, 'assets/images/profilePics/'+imagename, function()
                         {
                             sails.log('done');
+                        
                         });
+                        
+                        
                         //Download ENDS--------
                         var OTPCode  = req.param('otp');
                         var deviceId = req.get('device_id');
@@ -47,6 +55,7 @@ module.exports = {
                                     fbId        : req.param('fb_uid'),
                                     phoneNumber : req.param('mobile_number'),
                                     profilePic  : imagename,
+                                    thumbImage	: thumbImage,
                         };
                         //--------OTP CHECKING----------------------
                        /* if(OTPCode)
@@ -96,7 +105,7 @@ module.exports = {
                         }*/
 
 
-                        //------------------------------------------
+                     
 
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
                                 if(err)
@@ -105,6 +114,41 @@ module.exports = {
                                 }
                                 else
                                 {
+									/*------------------------------Generate ThumbnailImage-----------------------------------------------
+									console.log('/assets/images/profilePics/'+imagename)
+									require('lwip').open(imagename, function(err, image) {
+										if(err)
+										  {
+											  console.log(err)
+											  console.log("Errorrrrrrrrrrrrrrrrrrr")
+											  //return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+										  }
+										  else
+										  {
+											// lanczos
+											thumbImage    = 'thumb' + imagename;
+											
+											image.resize(50, 50, function(err, rzdImg) {
+												rzdImg.writeFile(thumbImage, function(err) {
+													if(err)
+													  {
+														  console.log("Error")
+														  
+													  }
+													  else
+													  {
+														  console.log(rzdImg)
+														  console.log("success")
+													  }
+													});
+											});
+										  }	
+										});
+									
+									//------------------------------------------------End of thumbnail--------------------------------*/
+									
+									
+									
                                     console.log("fbid checkinggggggggggg")
                                     console.log(resultData);
                                     if(resultData){

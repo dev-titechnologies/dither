@@ -309,7 +309,7 @@ module.exports = {
                                                                                 }else{
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                         console.log(createdNotificationTags);
-                                                                                        callback();
+																						callback();
 
                                                                                 }
                                                                             });

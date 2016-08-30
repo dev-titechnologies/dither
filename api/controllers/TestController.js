@@ -370,23 +370,33 @@ module.exports = {
      testThumbnail: function (req, res) {
 
                             console.log("thumbnail image")
-                            /*var blobAdapter = require('skipper-disk')();
-                            var diskReceiver = blobAdapter.receive();
-                            var Thumbnail = require('skipper-thumbnail');
-                            var thumbnailReceiver = new Thumbnail(null, 256);
-                            thumbnailReceiver.pipe(diskReceiver);
-
-                            diskReceiver
-                              .on('error', function(err) {
-                                res.serverError(err);
-                              })
-                              .on('finish', function() {
-                                res.json({
-                                  message: 'File(s) uploaded successfully!'
-                                });
-                              });
-                            req.file('image').pipe(thumbnailReceiver);*/
-
+                     
+                           /* require('lwip').open('img2.jpeg', function(err, image) {
+							if(err)
+							  {
+								  console.log("Error")
+								  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+							  }
+							  else
+							  {
+								// lanczos
+								image.resize(50, 50, function(err, rzdImg) {
+									rzdImg.writeFile('testThumb/output.jpg', function(err) {
+										if(err)
+										  {
+											  console.log("Error")
+											  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+										  }
+										  else
+										  {
+											  return res.json(200, {status: 1,status_type: 'Success', message: 'Image Resizing Success'});
+										  }
+										});
+								});
+							  }	
+							});*/
+                            
+                           
 
 
         },

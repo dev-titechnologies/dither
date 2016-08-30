@@ -84,18 +84,22 @@ module.exports = {
                                                     }*/
 
                                                     if(factor.likeUserId != null || factor.likeUserId != ""){
+                                                             console.log("Inside factor likeUserId not null ==============");
                                                             if(factor.likeUserId == userId){
                                                                 //like_position = factor.likePosition;
+                                                                console.log("Inside factor like User id check ================");
                                                                 like_position_Array.push(factor.likePosition);
                                                             }
                                                     }
-
+                                                    console.log(like_position_Array);
                                         });
                                         console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                         console.log(like_position_Array);
                                         if(like_position_Array.length != 0){
+                                                    console.log("like_position_Array === >>>  length != 0");
                                                     like_position = like_position_Array[0].likePosition;
                                         }else{
+                                                    console.log("like_position_Array === >>>  length == 0");
                                                     like_position = 0;
                                         }
 

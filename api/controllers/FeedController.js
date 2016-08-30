@@ -198,16 +198,19 @@ module.exports = {
                                                                                         }
                                                                                     }
                                                                             }*/
-                                                                            /*if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
+                                                                            if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
                                                                                     like_position = 0;
                                                                             }else{
+                                                                                if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                    console.log("Inside factor like User id check ================");
                                                                                     like_position = dataResults[j]["likePosition"];
-                                                                            }*/
+                                                                                }
+                                                                            }
                                                                             console.log("111111111111111111++++++++++++++++");
                                                                             //console.log(dataResults[i]["likePosition"]);
                                                                             console.log(dataResults[j]["likePosition"]);
                                                                             console.log("111111111111111111++++++++++++++++");
-                                                                            if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" ){
+                                                                            /*if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" ){
                                                                                     console.log("Inside dataResults[j][likePosition]not null ==============");
                                                                                     if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                                             //like_position = factor.likePosition;
@@ -215,7 +218,7 @@ module.exports = {
                                                                                             //like_position_Array.push(factor.likePosition);
                                                                                             like_position = dataResults[j]["likePosition"];
                                                                                     }
-                                                                            }
+                                                                            }*/
                                                                         }
                                                                     }
                                                                     //var imgDetailsArrayOrder = imgDetailsArray.reverse();

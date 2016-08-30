@@ -83,7 +83,7 @@ module.exports = {
                                                             }
                                                     }*/
 
-                                                    if(factor.likeUserId != null || factor.likeUserId != ""){
+                                                    if(factor.likeUserId != null || factor.likeUserId != "" || factor.likePosition != "" || factor.likePosition !== null){
                                                             console.log("Inside factor likeUserId not null ==============");
                                                             if(factor.likeUserId != userId){
                                                                 //like_position = factor.likePosition;

@@ -31,6 +31,9 @@ module.exports = {
         profilePic: {
                 type: 'string',
             },
+        thumbImage: {
+                type: 'string',
+            },    
         fbId: {
                 type: 'string',
                 unique: true

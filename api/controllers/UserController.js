@@ -26,7 +26,7 @@ module.exports = {
                 if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('fb_uid') || !req.param('email_id') || !req.param('username') || !req.param('otp')){
                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and fb_uid and email_id and username and otp'}); //If an error occured, we let express/connect handle it by calling the "next" function
                 }else{
-                        var filename     =  "image.png";
+                        var filename     =  "image.jpg";
                         var imagename    = new Date().getTime() + filename;
                         var thumbImage;   
                         console.log(imgUrl);
@@ -35,14 +35,15 @@ module.exports = {
                                 request.head(uri, function(err, res, body){
                                     request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                                 });
-                                //---------------------------generating Thumbnail image-----------------------------------
+                           
                         
                         };
-                        download(imgUrl, 'assets/images/profilePics/'+imagename, function()
+                        download(imgUrl,'assets/images/profilePics/'+imagename, function()
                         {
                             sails.log('done');
-                        
+
                         });
+                        
                         
                         
                         //Download ENDS--------
@@ -55,7 +56,6 @@ module.exports = {
                                     fbId        : req.param('fb_uid'),
                                     phoneNumber : req.param('mobile_number'),
                                     profilePic  : imagename,
-                                    thumbImage	: thumbImage,
                         };
                         //--------OTP CHECKING----------------------
                        /* if(OTPCode)
@@ -114,38 +114,7 @@ module.exports = {
                                 }
                                 else
                                 {
-									/*------------------------------Generate ThumbnailImage-----------------------------------------------
-									console.log('/assets/images/profilePics/'+imagename)
-									require('lwip').open(imagename, function(err, image) {
-										if(err)
-										  {
-											  console.log(err)
-											  console.log("Errorrrrrrrrrrrrrrrrrrr")
-											  //return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-										  }
-										  else
-										  {
-											// lanczos
-											thumbImage    = 'thumb' + imagename;
-											
-											image.resize(50, 50, function(err, rzdImg) {
-												rzdImg.writeFile(thumbImage, function(err) {
-													if(err)
-													  {
-														  console.log("Error")
-														  
-													  }
-													  else
-													  {
-														  console.log(rzdImg)
-														  console.log("success")
-													  }
-													});
-											});
-										  }	
-										});
 									
-									//------------------------------------------------End of thumbnail--------------------------------*/
 									
 									
 									
@@ -288,8 +257,55 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                                         }else{
-                                                                                            console.log("async parallel in Sms Part Success --------------------");
-                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+																							 //------------------------------Generate ThumbnailImage-----------------------------------------------
+																							console.log('/assets/images/profilePics/'+imagename)
+																							require('lwip').open('assets/images/profilePics/'+imagename, function(err, image) {
+																								if(err)
+																								  {
+																									  console.log(err)
+																									  console.log("Errorrrrrrrrrrrrrrrrrrr")
+																									  //return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+																								  }
+																								  else
+																								  {
+																									// lanczos
+																									thumbImage    = 'thumb' + imagename;
+																									
+																									image.resize(50, 50, function(err, rzdImg) {
+																										rzdImg.writeFile('assets/images/profilePics/'+thumbImage, function(err) {
+																											if(err)
+																											  {
+																												  console.log("Error")
+																											  }
+																											  else
+																											  {
+																												  console.log(rzdImg)
+																												  console.log("success")
+																												  var data     = {thumbImage:thumbImage };
+																												  var criteria = {id: results.id};
+																												  User.update(criteria,data).exec(function(err, data) {
+																														if(err)
+																														{
+																															sails.log(err)
+																															return res.json(200, {status: 2, status_type: 'Failure',message: 'ThumbImage updation Failure'});
+																														}
+																														else
+																														{
+																															 console.log("async parallel in Sms Part Success --------------------");
+																															 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+																														}
+
+
+																													});
+
+																											  }
+																											});
+																									});
+																								  }	
+																								});
+																							
+																							//------------------------------------------------End of thumbnail--------------------------------
+																						
                                                                                         }
 
                                                                         });

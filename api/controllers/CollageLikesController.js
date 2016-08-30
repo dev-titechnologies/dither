@@ -159,7 +159,7 @@ module.exports = {
 																																							var message     =  'Vote Notification';
 																																							var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither"; 
 																																							var device_id	=  getDeviceId.deviceId;
-																																							var data 		=  {device_id:device_id,ntfnDetails:ntfn_body};	
+																																							var data 		=  {message:message,device_id:device_id,NtfnBody:ntfn_body};	
 																																							var device_type	=  req.get('device_type');		
 																																							if(device_id)
 																																							{

@@ -26,20 +26,32 @@ module.exports = {
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the report_type and description and user_id'});
 
                     }else{
-                            var values = {
-                                    report                  :           report,
-                                    reportType              :           reportType,
-                                    reporterId              :           userId,
-                                    userId                  :           received_userId,
-                            };
-                            ReportUser.create(values).exec(function(err, results){
+                            ReportDither.findOne({reporterId: userId, userId: received_userId}).exec(function (err, foundReport){
                                     if(err){
-                                            console.log(err);
-                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in report user insertion', error_details: err});
-                                    }
-                                    else{
-                                            console.log(results);
-                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+                                                console.log(err);
+                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding user already reported or not ', error_details: err});
+                                    }else{
+
+                                            if(foundReport){
+                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'You have already reported this User'});
+                                            }else{
+                                                    var values = {
+                                                            report                  :           report,
+                                                            reportType              :           reportType,
+                                                            reporterId              :           userId,
+                                                            userId                  :           received_userId,
+                                                    };
+                                                    ReportUser.create(values).exec(function(err, results){
+                                                            if(err){
+                                                                    console.log(err);
+                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in report user insertion', error_details: err});
+                                                            }
+                                                            else{
+                                                                    console.log(results);
+                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+                                                            }
+                                                    });
+                                            }
                                     }
                             });
                     }
@@ -74,21 +86,34 @@ module.exports = {
                                     if(!found){
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found'});
                                     }else{
-                                            var values = {
-                                                    report                  :           report,
-                                                    reportType              :           reportType,
-                                                    reporterId              :           userId,
-                                                    collageId               :           collageId,
-                                            };
-                                            ReportDither.create(values).exec(function(err, results){
-                                                    if(err){
+
+                                            ReportDither.findOne({reporterId: userId, collageId: collageId}).exec(function (err, foundReport){
+                                                if(err){
                                                             console.log(err);
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in report Dither insertion', error_details: err});
-                                                    }
-                                                    else{
-                                                            console.log(results);
-                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the Dither'});
-                                                    }
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding user already reported or not ', error_details: err});
+                                                }else{
+
+                                                        if(foundReport){
+                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'You have already reported this Dither'});
+                                                        }else{
+                                                                var values = {
+                                                                        report                  :           report,
+                                                                        reportType              :           reportType,
+                                                                        reporterId              :           userId,
+                                                                        collageId               :           collageId,
+                                                                };
+                                                                ReportDither.create(values).exec(function(err, results){
+                                                                        if(err){
+                                                                                console.log(err);
+                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in report Dither insertion', error_details: err});
+                                                                        }
+                                                                        else{
+                                                                                console.log(results);
+                                                                                return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the Dither'});
+                                                                        }
+                                                                });
+                                                        }
+                                                }
                                             });
                                     }
                                 }

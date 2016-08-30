@@ -117,7 +117,7 @@ module.exports = {
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        //console.log(req);
+                                                                                       /* //console.log(req);
                                                                                         console.log(req.isSocket);
                                                                                         if (!req.isSocket) {
                                                                                                 console.log("No socket");
@@ -131,9 +131,9 @@ module.exports = {
                                                                                         console.log(createdNotificationTags);
                                                                                         //return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                 //total_like_count       :  updatedVoteCount[0].vote,
-                                                                                        //});
+                                                                                        //});*/
 
-																				//###################################
+                                                                                //###################################
 
                                                                                         /*------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
                                                                                                                     PUSH NOTIFICATION
@@ -216,7 +216,7 @@ module.exports = {
                                                                                             //------------------------------
                                                                                             }
                                                                                           });
-																							//###################################
+                                                                                            //###################################
                                                                                     }
                                                                                 });
                                                                                 //-----------------------------End OF NotificationLog---------------------------------

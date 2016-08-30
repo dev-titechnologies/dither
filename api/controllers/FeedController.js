@@ -158,6 +158,7 @@ module.exports = {
                                                             var key = [];
                                                             var dataResultsKeys = [];
                                                             var like_position = 0;
+                                                            var likeStatus;
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj = new Object();
                                                                 var collageId_val =dataResults[i]["collageId"];
@@ -176,7 +177,7 @@ module.exports = {
                                                                         {
                                                                             //console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ------------------ dataResults[j]["likeStatus"]');
                                                                             //console.log(dataResults[j]["likeStatus"]);
-                                                                            var likeStatus;
+
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
                                                                                     likeStatus = 0;
                                                                             }else{
@@ -198,12 +199,14 @@ module.exports = {
                                                                                         }
                                                                                     }
                                                                             }*/
-                                                                            if(dataResults[j]["likeUserId"] != null || dataResults[j]["likeUserId"] == ""){
+                                                                            if(dataResults[j]["likeUserId"] != null || dataResults[j]["likeUserId"] != ""){
+                                                                                console.log("Inside ----->>>> likeUserId not null");
                                                                                     if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
                                                                                             //like_position = 0;
                                                                                     //}else{
+                                                                                        console.log("Inside ----->>>> likePosition not null");
                                                                                         if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
-                                                                                            console.log("Inside factor like User id check ================");
+                                                                                            console.log("Inside factor like User id check ================ ++++++++++++++");
                                                                                             like_position = dataResults[j]["likePosition"];
                                                                                         }
                                                                                     }

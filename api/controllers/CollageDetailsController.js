@@ -29,7 +29,7 @@ module.exports = {
                     query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
                             " usr.name AS collageCreator, usr.profilePic,"+
-                            " clglk.likeStatus, clglk.likePosition"+
+                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                             " FROM collage clg"+
                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                             " INNER JOIN user usr ON usr.id = clg.userId"+
@@ -68,11 +68,13 @@ module.exports = {
                                                                 like_status: like_status,
                                                                 id: factor.imageId
                                                                 });
-                                                if(factor.likePosition == null || factor.likePosition == "" || factor.likePosition == 0){
-                                                        like_position = 0;
-                                                }else{
-                                                        like_position = factor.likePosition;
-                                                }
+                                                    if(factor.likeUserId == userId){
+                                                            if(factor.likePosition == null || factor.likePosition == "" || factor.likePosition == 0){
+                                                                    like_position = 0;
+                                                            }else{
+                                                                    like_position = factor.likePosition;
+                                                            }
+                                                    }
 
                                         });
                                         console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

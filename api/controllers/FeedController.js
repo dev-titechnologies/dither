@@ -157,7 +157,8 @@ module.exports = {
                                                             var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
-                                                            var like_position = 0;
+                                                            var like_position_Array = [];
+                                                            var like_position;
                                                             var likeStatus;
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var dataResultsObj = new Object();
@@ -207,7 +208,8 @@ module.exports = {
                                                                                         console.log("Inside ----->>>> likePosition not null");
                                                                                         if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                                             console.log("Inside factor like User id check ================ ++++++++++++++");
-                                                                                            like_position = dataResults[j]["likePosition"];
+                                                                                            //like_position = dataResults[j]["likePosition"];
+                                                                                            like_position_Array.push(dataResults[j]["likePosition"]);
                                                                                         }
                                                                                     }
                                                                             }
@@ -228,6 +230,13 @@ module.exports = {
                                                                     }
                                                                     //var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                                    // var imgDetailsArrayOrder = imgDetailsArray.reverse();
+                                                                    if(like_position_Array.length != 0){
+                                                                                console.log("like_position_Array === >>>  length != 0");
+                                                                                like_position = like_position_Array[0];
+                                                                    }else{
+                                                                                console.log("like_position_Array === >>>  length == 0");
+                                                                                like_position = 0;
+                                                                    }
                                                                    var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
 
                                                                     if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){

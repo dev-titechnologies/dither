@@ -51,6 +51,7 @@ module.exports = {
                                         var imageArray = [];
                                         console.log("results  ---------- getLike .....................++++++++++++++++++++");
                                         console.log(results);
+                                        var like_position_Array = [];
                                         var like_position;
                                         results.forEach(function(factor, index){
                                                 //console.log("factor");
@@ -68,17 +69,35 @@ module.exports = {
                                                                 like_status: like_status,
                                                                 id: factor.imageId
                                                                 });
-                                                    if(factor.likeUserId == userId){
+                                                    /*if(factor.likeUserId == null || factor.likeUserId == ""){
+                                                            //like_position = 0;
+                                                    }else{
+                                                        if(factor.likeUserId == userId){
+                                                            //like_position = factor.likePosition;
+                                                            like_position_Array.push(factor.likePosition);
+                                                        }
                                                             if(factor.likePosition == null || factor.likePosition == "" || factor.likePosition == 0){
                                                                     like_position = 0;
                                                             }else{
                                                                     like_position = factor.likePosition;
                                                             }
+                                                    }*/
+
+                                                    if(factor.likeUserId != null || factor.likeUserId != ""){
+                                                            if(factor.likeUserId == userId){
+                                                                //like_position = factor.likePosition;
+                                                                like_position_Array.push(factor.likePosition);
+                                                            }
                                                     }
 
                                         });
                                         console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                                        console.log(like_position);
+                                        console.log(like_position_Array);
+                                        if(like_position_Array.length != 0){
+                                                    like_position = like_position_Array[0].likePosition;
+                                        }else{
+                                                    like_position = 0;
+                                        }
 
 
                                         query = " SELECT clgcmt.id, clgcmt.comment, usr.name, clgcmt.createdAt,usr.profilePic, usr.id userId"+

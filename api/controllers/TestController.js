@@ -6,6 +6,20 @@
  */
 var fs          = require('fs');
 //var fs                          =     require('file-system');
+// solution:
+//function to remove a value from the json array
+function removeItem(obj, prop, val) {
+    var c, found=false;
+    for(c in obj) {
+        if(obj[c][prop] == val) {
+            found=true;
+            break;
+        }
+    }
+    if(found){
+        delete obj[c];
+    }
+}
 module.exports = {
 
      /* ==================================================================================================================================
@@ -351,7 +365,7 @@ module.exports = {
 
       /* ==================================================================================================================================
                TEST GENERATE THUMBNAIL IMAGE
-		==================================================================================================================================== */
+        ==================================================================================================================================== */
 
      testThumbnail: function (req, res) {
 
@@ -460,11 +474,35 @@ module.exports = {
                                 }
                         });
         },
-        
-        
+
+        delete_Socket : function (req, res) {
+                console.log(req.options.available_sockets);
+                var countries = {};
+
+                countries.results = [
+                    {id:'AF',name:'Afghanistan'},
+                    {id:'AL',name:'Albania'},
+                    {id:'DZ',name:'Algeria'}
+                ];
+                //example: call the 'remove' function to remove an item by id.
+                removeItem(countries.results,'id','AF');
+
+                //example2: call the 'remove' function to remove an item by name.
+                removeItem(countries.results,'name','Albania');
+
+                // print our result to console to check it works !
+                console.log(countries.results);
+                for(c in countries.results) {
+                    console.log(countries.results[c].id);
+                }
+        },
+
+
+
+
          /* ==================================================================================================================================
                TEST PUSH NOTIFICATION
-		==================================================================================================================================== */
+        ==================================================================================================================================== */
 
 
 

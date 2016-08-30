@@ -106,14 +106,26 @@ module.exports.sockets = {
   * app's security.                                                          *
   *                                                                          *
   ***************************************************************************/
-  // beforeConnect: function(handshake, cb) {
-  //   // `true` allows the connection
-  //   return cb(null, true);
-  //
-  //   // (`false` would reject the connection)
-  // },
+  /* beforeConnect: function(handshake, cb) {
+          //   // `true` allows the connection
+          //   return cb(null, true);
+          //
+          //   // (`false` would reject the connection)
+          console.log("beforeConnect Connect +++++++++++++++");
+          var id = '/#'+handshake.headers.cookie.split(';')[0].replace(/^io=/,'');
+          console.log(id);
+            // `true` allows the connection
+            return cb(null, true);
+   },
 
+    onConnect: function(socket, cb) {
+         // By default: do nothing.
+         //return cb();
+         console.log("On Connect  ");
+         //console.log(session);
 
+         //console.log(socket);
+    },*/
   /***************************************************************************
   *                                                                          *
   * `afterDisconnect`                                                        *
@@ -122,10 +134,14 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-  // afterDisconnect: function(session, socket, cb) {
-  //   // By default: do nothing.
-  //   return cb();
-  // },
+   /*afterDisconnect: function(session, socket, cb) {
+     // By default: do nothing.
+     //return cb();
+     console.log("After DisConnect");
+     //console.log(session);
+
+     //console.log(socket);
+   },*/
 
   /***************************************************************************
   *                                                                          *

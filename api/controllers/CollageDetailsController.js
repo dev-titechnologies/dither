@@ -85,7 +85,7 @@ module.exports = {
 
                                                     if(factor.likeUserId != null || factor.likeUserId != ""){
                                                             console.log("Inside factor likeUserId not null ==============");
-                                                            if(factor.likeUserId == userId){
+                                                            if(factor.likeUserId != userId){
                                                                 //like_position = factor.likePosition;
                                                                 console.log("Inside factor like User id check ================");
                                                                 like_position_Array.push(factor.likePosition);

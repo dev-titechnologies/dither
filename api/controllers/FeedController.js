@@ -200,6 +200,10 @@ module.exports = {
                                                                                         }
                                                                                     }
                                                                             }*/
+                                                                            console.log("dataResults[j][likeUserId]}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}");
+                                                                            console.log(dataResults[j]["likeUserId"]);
+                                                                            console.log("dataResults[i][likeUserId]**************************************");
+                                                                            console.log(dataResults[i]["likeUserId"]);
                                                                             if(dataResults[j]["likeUserId"] != null || dataResults[j]["likeUserId"] != ""){
                                                                                 console.log("collageId +++++++++++++++++++++++++++++++++");
                                                                                 console.log(dataResults[j]["collageId"]);

@@ -144,7 +144,7 @@ module.exports = {
 																																						else
 																																						{
 																																							
-																																							/*------------------------------------------------------------------------------------																							/*------------------------------------------------------------------------------------
+																																							/*------------------------------------------------------------------------------------																							
 																																														PUSH NOTIFICATION
 																																							 -------------------------------------------------------------------------------------*/
 																																							 
@@ -152,6 +152,7 @@ module.exports = {
 																																						  if(err)
 																																						  {
 																																							  console.log(err)
+																																							  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in push Notification', error_details: err});
 																																						  }	
 																																						 else
 																																						 {	 
@@ -171,6 +172,7 @@ module.exports = {
 																																											{
 																																												console.log("Error in Push Notification Sending")
 																																												console.log(err)
+																																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
 																																												//callback();
 																																											}
 																																											else
@@ -192,6 +194,7 @@ module.exports = {
 																																													{
 																																														console.log("Error in Push Notification Sending")
 																																														console.log(err)
+																																														return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
 																																														//callback();
 																																													}
 																																													else

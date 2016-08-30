@@ -90,6 +90,7 @@ module.exports = {
 																						  if(err)
 																						  {
 																							  console.log(err)
+																							  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
 																						  }	
 																						  else
 																						  {	
@@ -109,7 +110,7 @@ module.exports = {
 																											{
 																												console.log("Error in Push Notification Sending")
 																												console.log(err)
-																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage commented users', error_details: err});
+																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
 																											}
 																											else
 																											{
@@ -134,7 +135,7 @@ module.exports = {
 																													{
 																														console.log("Error in Push Notification Sending")
 																														console.log(err)
-																														
+																														return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
 																													}
 																													else
 																													{

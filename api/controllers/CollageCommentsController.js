@@ -99,7 +99,7 @@ module.exports = {
 																						   {
 																							  console.log(getDeviceId.deviceId)	  
 																							  
-																							  var data 	  = {message:message, device_id:device_id,ntfnDetails:ntfn_body};
+																							  var data 	  = {message:message, device_id:device_id,NtfnBody:ntfn_body};
 																							  console.log(data)
 																							  if(device_type=='ios')
 																								{

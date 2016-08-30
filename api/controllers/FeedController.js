@@ -198,13 +198,15 @@ module.exports = {
                                                                                         }
                                                                                     }
                                                                             }*/
-                                                                            if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
-                                                                                    like_position = 0;
-                                                                            }else{
-                                                                                if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
-                                                                                    console.log("Inside factor like User id check ================");
-                                                                                    like_position = dataResults[j]["likePosition"];
-                                                                                }
+                                                                            if(dataResults[j]["likeUserId"] != null || dataResults[j]["likeUserId"] == ""){
+                                                                                    if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
+                                                                                            //like_position = 0;
+                                                                                    //}else{
+                                                                                        if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                            console.log("Inside factor like User id check ================");
+                                                                                            like_position = dataResults[j]["likePosition"];
+                                                                                        }
+                                                                                    }
                                                                             }
                                                                             console.log("111111111111111111++++++++++++++++");
                                                                             //console.log(dataResults[i]["likePosition"]);

@@ -1470,7 +1470,7 @@ module.exports = {
                                 }else{
                                     console.log("Edit Dither =============>>>>>>>>>>>>>>");
                                     //sails.sockets.blast('edit-dither', {status : "success", name : "editDither"});
-                                    sails.sockets.blast('edit-dither', {status : "success", name : "editDither"});
+                                    sails.sockets.blast('edit-dither', {status : 1, status_type: 'Success', message : "editDither Blasted successfully"});
                                     //console.log(sortedVote);
                                     //console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);

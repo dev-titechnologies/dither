@@ -201,6 +201,8 @@ module.exports = {
                                                                                     }
                                                                             }*/
                                                                             if(dataResults[j]["likeUserId"] != null || dataResults[j]["likeUserId"] != ""){
+                                                                                console.log("collageId +++++++++++++++++++++++++++++++++");
+                                                                                console.log(dataResults[j]["collageId"]);
                                                                                 console.log("Inside ----->>>> likeUserId not null");
                                                                                     if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
                                                                                             //like_position = 0;

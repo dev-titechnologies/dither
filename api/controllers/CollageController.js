@@ -420,7 +420,7 @@ module.exports = {
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus, clglk.likePosition"+
+                                                " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
@@ -436,7 +436,7 @@ module.exports = {
                                                 " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                                 " FROM ("+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+

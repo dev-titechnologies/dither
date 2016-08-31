@@ -268,44 +268,23 @@ module.exports = {
 																								  }
 																								  else
 																								  {
-																									// lanczos
-																									thumbImage    = 'thumb' + imagename;
 																									
-																									image.resize(50, 50, function(err, rzdImg) {
-																										rzdImg.writeFile('assets/images/profilePics/'+thumbImage, function(err) {
+																									   //------------Thumnail Image-------------------------------------------------------- 
+																										ImgResizeService.imageResize(imagename,results.id, function(err, imageResult) {
 																											if(err)
-																											  {
-																												  console.log("Error")
-																											  }
-																											  else
-																											  {
-																												  console.log(rzdImg)
-																												  console.log("success")
-																												  var data     = {thumbImage:thumbImage };
-																												  var criteria = {id: results.id};
-																												  User.update(criteria,data).exec(function(err, data) {
-																														if(err)
-																														{
-																															sails.log(err)
-																															return res.json(200, {status: 2, status_type: 'Failure',message: 'ThumbImage updation Failure'});
-																														}
-																														else
-																														{
-																															 console.log("async parallel in Sms Part Success --------------------");
-																															 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
-																														}
-
-
-																													});
-
-																											  }
-																											});
-																									});
+																											{
+																													console.log(err);
+																													return res.json(200, {status: 2, status_type: 'Failure' , message: 'ThumbImage Creation Failure', error_details: err});
+			
+																											}else{
+																													console.log("async parallel in Sms Part Success --------------------");
+																													return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+																											}
+																										});
+																								
 																								  }	
-																								});
-																							
-																							//------------------------------------------------End of thumbnail--------------------------------
-																						
+																							});
+
                                                                                         }
 
                                                                         });

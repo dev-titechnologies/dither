@@ -151,14 +151,16 @@ module.exports = {
                                                                                                 var message     =  'Vote Notification';
                                                                                                 var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
                                                                                                 var device_id   =  getDeviceId.deviceId;
-                                                                                                var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
+                                                                                                
 
                                                                                                 if(!device_id){
                                                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                                         total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                             });
                                                                                                 }else{
-                                                                                                        var switchKey  =  device_type;
+																										device_id 		=  device_id.split(',');sails.log.debug(device_id);
+																										var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
+                                                                                                        var switchKey  	=  device_type;
                                                                                                         switch(switchKey){
                                                                                                                 case 'ios' :
                                                                                                                             NotificationService.pushNtfnApn(data, function(err, ntfnSend) {

@@ -99,7 +99,7 @@ module.exports = {
 																						   if(device_id)
 																						   {
 																							  console.log(getDeviceId.deviceId)	  
-																							  
+																							  device_id = device_id.split(',');sails.log.debug(device_id);
 																							  var data 	  = {message:message, device_id:device_id,NtfnBody:ntfn_body};
 																							  console.log(data)
 																							  if(device_type=='ios')

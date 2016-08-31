@@ -22,6 +22,7 @@ module.exports = {
                 console.log("signup---------------- api")
                 console.log(req.body);
                 console.log(req.get('device_id'));
+                var device_type = req.get('device_type');
                 var imgUrl       = req.param('profilepic');
                 if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('fb_uid') || !req.param('email_id') || !req.param('username') || !req.param('otp')){
                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and fb_uid and email_id and username and otp'}); //If an error occured, we let express/connect handle it by calling the "next" function
@@ -213,7 +214,7 @@ module.exports = {
                                                                                                                     callback();
                                                                                                             }else{
 
-                                                                                                                var data     = {
+                                                                                                              /*  var data     = {
                                                                                                                                 userId              :       results.id,
                                                                                                                                 ditherUserId        :       selectContacts[0].userId,
                                                                                                                                 fbId                :       req.param('fb_uid'),
@@ -223,7 +224,7 @@ module.exports = {
                                                                                                                     if(err){
                                                                                                                                 console.log(err);
                                                                                                                                 callback();
-                                                                                                                    }else{
+                                                                                                                    }else{*/
                                                                                                                         //Notification Log Insertion
                                                                                                                         var values ={
                                                                                                                                         notificationTypeId  : 4,
@@ -240,11 +241,97 @@ module.exports = {
                                                                                                                             else
                                                                                                                             {
                                                                                                                                 console.log(createdNotification);
-                                                                                                                                callback();
+                                                                                                                                
+                                                                                                                                Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
+																																	if(err)
+																																	{
+																																		console.log(err);
+																																		callback();
+																																	}
+																																	else
+																																	{
+																																		//-----------PUSH Notification------------------------------------
+																																		User_token.findOne({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+																																			if(err)
+																																			{
+																																				  console.log(err);
+																																				  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+																																			}
+																																			else
+																																			{
+
+																																				var message     =  'signup Notification';
+																																				var ntfn_body   =   results.name +" Joined on Dither";
+																																				var device_id   =  getDeviceId.deviceId;
+																																				console.log(results)
+
+																																				if(!device_id){
+																																						callback();
+																																				}else{
+																																						device_id 		=  device_id.split(',');sails.log.debug(device_id);
+																																						var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
+																																						var switchKey  	=  device_type;
+																																						switch(switchKey){
+																																								case 'ios' :
+																																											NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																																												if(err)
+																																												{
+																																													console.log("Error in Push Notification Sending")
+																																													console.log(err)
+																																													callback();
+																																												}
+																																												else
+																																												{
+																																													console.log("Push notification result")
+																																													console.log(ntfnSend)
+																																													console.log("Push Notification sended")
+																																													callback();
+																																													
+																																												}
+																																											});
+																																								break;
+
+																																								case 'android' :
+																																											NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																																												if(err)
+																																												{
+																																													console.log("Error in Push Notification Sending")
+																																													console.log(err)
+																																													callback();
+																																												}
+																																												else
+																																												{
+																																													console.log("Push notification result")
+																																													console.log(ntfnSend)
+																																													console.log("Push Notification sended")
+																																													callback();
+																																													
+																																												}
+																																											});
+																																								break;
+
+																																								default:
+																																											callback();
+
+																																								break;
+
+
+																																						}
+																																				}
+
+																																			//------------------------------
+																																			}
+																																		  });
+																															
+																																		 
+																																	}
+																															     });
+                                                                                                                                
+                                                                                                                               
                                                                                                                             }
                                                                                                                         });
-                                                                                                                    }
-                                                                                                                });
+                                                                                                                    //}
+                                                                                                               // });
                                                                                                             }
                                                                                                         }
                                                                                                         console.log("#########################################")

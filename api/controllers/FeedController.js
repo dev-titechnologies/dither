@@ -157,6 +157,7 @@ module.exports = {
                                                             var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
+                                                            var imgDetailsArrayOrder;
 
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
                                                                 var like_position_Array = [];
@@ -289,7 +290,7 @@ module.exports = {
                                                                                 console.log("like_position_Array === >>>  length == 0");
                                                                                 like_position = 0;
                                                                     }
-                                                                   var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+
 
                                                                     if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                                 dataResultsObj.profile_image = "";
@@ -297,7 +298,7 @@ module.exports = {
 
                                                                                 dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
                                                                     }
-
+                                                                    imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                                     dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                                     dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];

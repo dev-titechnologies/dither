@@ -295,7 +295,7 @@ module.exports = {
                                                                             var values ={
                                                                                             notificationTypeId  :   1,
                                                                                             userId              :   userId,
-                                                                                            ditherUserId		:	userId,
+                                                                                            ditherUserId        :   userId,
                                                                                             collage_id          :   collage_results.id,
                                                                                             tagged_users        :   tagNotifyArray,
                                                                                             description         :   tagNotifyArray.length
@@ -309,7 +309,7 @@ module.exports = {
                                                                                 }else{
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                         console.log(createdNotificationTags);
-																						callback();
+                                                                                        callback();
 
                                                                                 }
                                                                             });
@@ -420,7 +420,7 @@ module.exports = {
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus, clglk.likePosition"+
+                                                " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
@@ -436,7 +436,7 @@ module.exports = {
                                                 " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus"+
+                                                " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                                 " FROM ("+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+
@@ -497,11 +497,14 @@ module.exports = {
                                                     var key                 = [];
                                                     var dataResultsKeys     = [];
                                                     var opinionArray        = [];
-                                                    var like_position;
+                                                    //var like_position;
                                                     var recent_dithers,
                                                         popular_dithers,
                                                         imgDetailsArrayOrder;
                                                     for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                        var like_position_Array = [];
+                                                        var like_position;
+                                                        var likeStatus;
                                                         var dataResultsObj      =  new Object();
                                                         var collageId_val       =  dataResults[i]["collageId"];
                                                         if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
@@ -511,11 +514,20 @@ module.exports = {
                                                             {
                                                                 if(dataResults[j]["collageId"]==collageId_val)
                                                                 {
-                                                                    var likeStatus;
+
                                                                     if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                 likeStatus = 0;
                                                                     }else{
                                                                             likeStatus = 1;
+                                                                            console.log("Inside ----->>>> likePosition not null");
+                                                                                    console.log(dataResults[j]["likeUserId"]);
+                                                                                     console.log(userId);
+                                                                                    console.log(dataResults[j]["userId"]);
+                                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                        console.log("Inside factor like User id check ================ ++++++++++++++");
+                                                                                        //like_position = dataResults[j]["likePosition"];
+                                                                                        like_position_Array.push(dataResults[j]["likePosition"]);
+                                                                                    }
                                                                     }
                                                                     imgDetailsArray.push({
                                                                                     image_id        : dataResults[j]["imgId"],
@@ -523,15 +535,23 @@ module.exports = {
                                                                                     like_status     : likeStatus,
                                                                                     vote            : dataResults[j]["vote"]
                                                                                     });
-                                                                    if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
+                                                                    /*if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
                                                                             like_position = 0;
                                                                     }else{
                                                                             like_position = dataResults[j]["likePosition"];
-                                                                    }
+                                                                    }*/
 
                                                                 }
                                                             }
-                                                            imgDetailsArrayOrder                    = imgDetailsArray.reverse();
+
+                                                            if(like_position_Array.length != 0){
+                                                                        console.log("like_position_Array === >>>  length != 0");
+                                                                        like_position = like_position_Array[0];
+                                                            }else{
+                                                                        console.log("like_position_Array === >>>  length == 0");
+                                                                        like_position = 0;
+                                                            }
+                                                            imgDetailsArrayOrder                    =       imgDetailsArray.reverse();
                                                             received_userName                       =       dataResults[i]["name"];
                                                             received_userProfilePic                 =       profilePic_path + dataResults[i]["profilePic"];
                                                             dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
@@ -575,7 +595,7 @@ module.exports = {
                                                     });
                                                     User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                             if (err) {
-                                                                console.log(err);
+                                                                   console.log(err);
                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                             }else{
 
@@ -635,7 +655,7 @@ module.exports = {
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus, clglk.likePosition"+
+                                                " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
                                                 " FROM collage clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
@@ -651,7 +671,7 @@ module.exports = {
                                         query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus, clglk.likePosition"+
+                                                " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
                                                 " FROM ("+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+
@@ -699,12 +719,15 @@ module.exports = {
                                                             var dataResults         =   results;
                                                             var key                 =   [];
                                                             var dataResultsKeys     =   [];
-                                                            var like_position,
-                                                                likeStatus;
+                                                            //var like_position,
+                                                               // likeStatus;
                                                             var recent_dithers,
                                                                 popular_dithers,
                                                                 imgDetailsArrayOrder;
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                                var like_position_Array = [];
+                                                                var like_position;
+                                                                var likeStatus;
                                                                 var dataResultsObj      =  new Object();
                                                                 var collageId_val       =  dataResults[i]["collageId"];
                                                                 if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
@@ -712,12 +735,22 @@ module.exports = {
                                                                     var imgDetailsArray = [];
                                                                     for (var j = dataResults.length - 1; j >= 0; j--)
                                                                     {
+
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                         likeStatus = 0;
                                                                             }else{
                                                                                     likeStatus = 1;
+                                                                                    console.log("Inside ----->>>> likePosition not null");
+                                                                                    console.log(dataResults[j]["likeUserId"]);
+                                                                                     console.log(userId);
+                                                                                    console.log(dataResults[j]["userId"]);
+                                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                        console.log("Inside factor like User id check ================ ++++++++++++++");
+                                                                                        //like_position = dataResults[j]["likePosition"];
+                                                                                        like_position_Array.push(dataResults[j]["likePosition"]);
+                                                                                    }
                                                                             }
                                                                             imgDetailsArray.push({
                                                                                             image_id        : dataResults[j]["imgId"],
@@ -725,15 +758,21 @@ module.exports = {
                                                                                             like_status     : likeStatus,
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
-                                                                            if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
+                                                                           /* if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
                                                                                     like_position = 0;
                                                                             }else{
                                                                                     like_position = dataResults[j]["likePosition"];
-                                                                            }
+                                                                            } */
 
                                                                         }
                                                                     }
-
+                                                                    if(like_position_Array.length != 0){
+                                                                                console.log("like_position_Array === >>>  length != 0");
+                                                                                like_position = like_position_Array[0];
+                                                                    }else{
+                                                                                console.log("like_position_Array === >>>  length == 0");
+                                                                                like_position = 0;
+                                                                    }
                                                                     imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                                     received_userName                           =       dataResults[i]["name"];
                                                                     received_userProfilePic                     =       profilePic_path + dataResults[i]["profilePic"];

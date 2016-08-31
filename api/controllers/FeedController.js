@@ -85,7 +85,7 @@ module.exports = {
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus, clglk.likePosition"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
@@ -113,7 +113,7 @@ module.exports = {
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus, clglk.likePosition"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
@@ -157,12 +157,16 @@ module.exports = {
                                                             var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
-                                                            var like_position;
+                                                            var imgDetailsArrayOrder;
+
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                                var like_position_Array = [];
+                                                                var like_position;
+                                                                var likeStatus;
                                                                 var dataResultsObj = new Object();
                                                                 var collageId_val =dataResults[i]["collageId"];
                                                                 //console.log(data[i]);
-                                                                console.log("For loop--------------->>>>>>>>>>>>>>>>>");
+                                                                //console.log("For loop--------------->>>>>>>>>>>>>>>>>");
                                                                 if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
                                                                 {
                                                                     var imagesPositionArray         = [];
@@ -176,12 +180,98 @@ module.exports = {
                                                                         {
                                                                             console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ------------------ dataResults[j]["likeStatus"]');
                                                                             console.log(dataResults[j]["likeStatus"]);
-                                                                            var likeStatus;
-                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                            console.log(dataResults[j]["collageId"]);
+                                                                            //dataResults[j]["collageId"]
+
+                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
                                                                                     likeStatus = 0;
                                                                             }else{
                                                                                     likeStatus = dataResults[j]["likeStatus"];
+                                                                                    console.log("Inside ----->>>> likePosition not null");
+                                                                                    console.log(dataResults[j]["likeUserId"]);
+                                                                                     console.log(userId);
+                                                                                    console.log(dataResults[j]["userId"]);
+                                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                        console.log("Inside factor like User id check ================ ++++++++++++++");
+                                                                                        //like_position = dataResults[j]["likePosition"];
+                                                                                        like_position_Array.push(dataResults[j]["likePosition"]);
+                                                                                    }
                                                                             }
+
+                                                                            /*if(factor.likeUserId != null || factor.likeUserId != "" ){
+                                                                                    console.log("Inside factor likeUserId not null ==============");
+                                                                                    if(factor.likePosition != "" || factor.likePosition !== null){
+                                                                                        if(factor.likeUserId == userId && factor.collageCreatorId != userId){
+                                                                                            //like_position = factor.likePosition;
+                                                                                            console.log("Inside factor like User id check ================");
+                                                                                            like_position_Array.push(factor.likePosition);
+                                                                                        }
+                                                                                    }
+                                                                            }*/
+                                                                            /*console.log("dataResults[j][likeUserId]}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}");
+                                                                            console.log(dataResults[j]["likeUserId"]);
+                                                                            console.log("dataResults[i][likeUserId]**************************************");
+                                                                            console.log(dataResults[i]["likeUserId"]);
+                                                                            var switchKey = dataResults[j]["likeUserId"];
+                                                                            switch(switchKey){
+                                                                                    case null :
+                                                                                    case ""   :
+                                                                                                console.log("collageId +++++++++++++++++++++++++++++++++");
+                                                                                                console.log(dataResults[j]["collageId"]);
+                                                                                                console.log("Inside ----->>>> likeUserId not null");
+                                                                                                var switchKey_2 = dataResults[j]["likePosition"];
+                                                                                                switch(switchKey_2){
+                                                                                                        case null:
+                                                                                                        case "" :
+                                                                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                                                        console.log("Inside factor like User id check ================ ++++++++++++++");
+                                                                                                                        //like_position = dataResults[j]["likePosition"];
+                                                                                                                        like_position_Array.push(dataResults[j]["likePosition"]);
+                                                                                                                        console.log("Inside ----->>>> likePosition not null");
+                                                                                                                    }
+                                                                                                        break;
+
+                                                                                                        default:
+
+                                                                                                        break;
+                                                                                                }
+
+                                                                                    break;
+
+                                                                                    default :
+                                                                                                console.log("default ------------");
+                                                                                    break;
+
+                                                                            }*/
+                                                                            /*if(dataResults[j]["likeUserId"] !== null || dataResults[j]["likeUserId"] !== 'null' || dataResults[j]["likeUserId"] !== ""){
+                                                                                console.log("collageId +++++++++++++++++++++++++++++++++");
+                                                                                console.log(dataResults[j]["collageId"]);
+                                                                                console.log("Inside ----->>>> likeUserId not null");
+                                                                                    if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" || dataResults[j]["likePosition"] != 0){
+                                                                                            //like_position = 0;
+                                                                                    //}else{
+                                                                                        console.log("Inside ----->>>> likePosition not null");
+                                                                                        if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                            console.log("Inside factor like User id check ================ ++++++++++++++");
+                                                                                            //like_position = dataResults[j]["likePosition"];
+                                                                                            like_position_Array.push(dataResults[j]["likePosition"]);
+                                                                                        }
+                                                                                    }
+                                                                            }*/
+                                                                            //console.log("111111111111111111++++++++++++++++");
+                                                                            //console.log(dataResults[i]["likePosition"]);
+                                                                            //console.log(dataResults[j]["likePosition"]);
+                                                                            //console.log("111111111111111111++++++++++++++++");
+                                                                            /*if(dataResults[j]["likePosition"] != null || dataResults[j]["likePosition"] != "" ){
+                                                                                    console.log("Inside dataResults[j][likePosition]not null ==============");
+                                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                            //like_position = factor.likePosition;
+                                                                                            console.log("Inside factor like User id check ================");
+                                                                                            //like_position_Array.push(factor.likePosition);
+                                                                                            like_position = dataResults[j]["likePosition"];
+                                                                                    }
+                                                                            }*/
+
                                                                             imgDetailsArray.push({
                                                                                                 image_id        : dataResults[j]["imgId"],
                                                                                                 position        : dataResults[j]["position"],
@@ -189,16 +279,18 @@ module.exports = {
                                                                                                 vote            : dataResults[j]["vote"]
                                                                                                 });
 
-                                                                            if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
-                                                                                    like_position = 0;
-                                                                            }else{
-                                                                                    like_position = dataResults[j]["likePosition"];
-                                                                            }
                                                                         }
                                                                     }
                                                                     //var imgDetailsArrayOrder = imgDetailsArray.reverse();
                                                                    // var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                                   var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+                                                                    if(like_position_Array.length != 0){
+                                                                                console.log("like_position_Array === >>>  length != 0");
+                                                                                like_position = like_position_Array[0];
+                                                                    }else{
+                                                                                console.log("like_position_Array === >>>  length == 0");
+                                                                                like_position = 0;
+                                                                    }
+
 
                                                                     if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                                 dataResultsObj.profile_image = "";
@@ -206,7 +298,7 @@ module.exports = {
 
                                                                                 dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
                                                                     }
-
+                                                                    imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                                     dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                                     dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
@@ -216,8 +308,8 @@ module.exports = {
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                                     dataResultsObj.mainOrder                    =       i;
-                                                                    console.log("vote =================");
-                                                                    console.log(dataResultsObj.vote);
+                                                                    //console.log("vote =================");
+                                                                    //console.log(dataResultsObj.vote);
                                                                     //console.log("dataResultsObj====================");
                                                                     //console.log(dataResultsObj);
                                                                     //console.log("dataResultsObj====================");

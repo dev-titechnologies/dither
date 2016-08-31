@@ -143,9 +143,17 @@ module.exports = {
 																							
 																							 AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
 																														
-																									//console.log("update record")
-																									//console.log(updatedRecords)
-																									//callback();
+																									if(err)
+																										{
+																											console.log("phone")
+																											console.log(err)
+																										}
+																										else
+																										{
+																											console.log("update recordsssss in contacts")
+																											//console.log(updatedRecords)
+																											//callback();
+																										}
 																															
 																							  });
 																							
@@ -240,7 +248,7 @@ module.exports = {
 																	else
 																	{
 																		console.log("update recordsssss in fbbbbb")
-																		console.log(updatedRecords)
+																		//console.log(updatedRecords)
 																		//callback();
 																	}
 																	
@@ -260,11 +268,7 @@ module.exports = {
 									
 								function(callback) {	
 																			 
-																console.log("address book updated")		
 																
-																console.log("address book selectionnnnnnnnnnnnnnnn")
-																			
-																			
 																query = "SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
 																		" FROM addressBook adb"+
 																		" INNER JOIN user usr ON usr.id = adb.ditherUserId"+
@@ -310,8 +314,7 @@ module.exports = {
 											
 								function(callback) {					
 																			   
-														console.log("fb friends updatedddddd")
-														   
+														
 														query = " SELECT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
 																	" FROM fbFriends fbf"+
 																	" INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
@@ -451,18 +454,7 @@ module.exports = {
 
 							    },
 							    
-							/* ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-													if (err) {
-														console.log(err);
-														callback();
-														//return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
-													}else{
-														callback();
-														//return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
-													}
-
-												});	*/
-							//}
+							
 						
 							], function(err) { //This function gets called after the two tasks have called their "task callbacks"
 													if (err) {

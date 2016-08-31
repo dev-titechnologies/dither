@@ -96,21 +96,21 @@ module.exports = {
 						notifyVoteArray	   		= [];
 						notifyCmntArray			= [];
 						
-							/*var query = "(SELECT 
-									N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,
-									U.name,U.profilePic as profile_image,
-									FROM
-									notificationLog as N LEFT JOIN user as U ON U.id = N.userId 
-									WHERE
-									N.ditherUserId='"+user_id+"' AND
-									(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)
-									OR 
-									FIND_IN_SET('"+user_id+"', N.tagged_users))"*/
-						
+							var query = " SELECT"+ 
+										" N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+										" U.name,U.profilePic as profile_image,"+
+										" C.image as dither_image"+
+										" FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+										" LEFT JOIN collage as C ON C.id = N.collage_id"+
+										" WHERE"+
+										" N.ditherUserId="+user_id+
+										" AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
+										" OR "+
+										" FIND_IN_SET("+user_id+", N.tagged_users)";
 						
 						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,C.image as dither_image from notificationLog as N LEFT JOIN user as U ON U.id = N.userId LEFT JOIN collage as C ON C.id = N.collage_id where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
 						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
-						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,C.image as dither_image from notificationLog as N LEFT JOIN user as U ON U.id = N.userId LEFT JOIN collage as C ON C.id = N.collage_id where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
+						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,C.image as dither_image from notificationLog as N LEFT JOIN user as U ON U.id = N.userId LEFT JOIN collage as C ON C.id = N.collage_id where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
 					
 						console.log(query)
 						NotificationLog.query(query, function(err,results) {
@@ -150,74 +150,18 @@ module.exports = {
 															var notification	= ntfnTypeFound[0].body;
 															item.description 	= item.description - 1;
 															console.log(notification)
-															ntfn_body  			= 	util.format(notification,item.name,item.description);
+															ntfn_body  			= 	util.format(notification,item.description);
 															item.ntfn_body		=	ntfn_body;
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
 															item.dither_image	=	collageImg_path + item.dither_image;
-															if(item.description==0)
+															if(item.description<=0)
 															{ 
 																console.log("commenteddd")
-																notificationCommented = item.name + " commented on your Dither";
+																notificationCommented = " commented on your Dither";
 																item.ntfn_body		  =	notificationCommented;
 																
-																/*------------------------------------------------------------------------------------
-																							PUSH NOTIFICATION
-																 -------------------------------------------------------------------------------------*/
-																var message   = 'Comment Notification'; 
-																var data = {message:message, device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
-
-																if(device_id)
-																{
-																	if(device_type=='ios')
-																	  {
-																		  
-																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																				if(err)
-																				{
-																					console.log("Error in Push Notification Sending")
-																					console.log(err)
-																					callback();
-																				}
-																				else
-																				{
-																					console.log("Push notification result")
-																					console.log(ntfnSend)
-																					console.log("Push Notification sended")
-																					callback();			
-																				}
-																			});
-																	 }
-																	 else if(device_type=='android')
-																	  {
-																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});  
-																	  }	
-																	  else
-																	  {
-																		  callback();
-																	  }
-																}  
-																
-																else
-																{
-																	callback();			
-																}
-																
-																//callback();
+																callback();
 															}
 															else
 															{
@@ -227,65 +171,7 @@ module.exports = {
 																	 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
 																	 console.log(notifyCmntArray)
 																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	
-																	
-																/*------------------------------------------------------------------------------------
-																							PUSH NOTIFICATION
-																 -------------------------------------------------------------------------------------*/																	console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-																	var message   = 'Comment Notification';
-																	var data 	  = {message:message,device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
-																	sails.log(device_id)
-																	//callback();
-																	if(device_id)
-																	{
-																	  if(device_type=='ios')
-																	  {
-																		  
-																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																				if(err)
-																				{
-																					console.log("Error in Push Notification Sending")
-																					console.log(err)
-																					callback();
-																				}
-																				else
-																				{
-																					console.log("Push notification result")
-																					console.log(ntfnSend)
-																					console.log("Push Notification sended")
-																					callback();			
-																				}
-																			});
-																	 }
-																	 else if(device_type=='android')
-																	  {
-																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});  
-																	  }	
-																	  else
-																	  {
-																		  callback();
-																	  }
-																	}
-																	else
-																	{
-																		callback();			
-																	}
-													
-																 			
+																	 callback();
 															}
 													}
 							
@@ -311,70 +197,16 @@ module.exports = {
 															var notification	= ntfnTypeFound[0].body;
 															console.log(notification)
 															item.description	= item.description - 1;
-															ntfn_body  			= util.format(notification,item.name,item.description);
+															ntfn_body  			= util.format(notification,item.description);
 															item.ntfn_body		=	ntfn_body;
 															item.type			=	ntfnTypeFound[0].type;
 															item.profile_image	=	profilePic_path + item.profile_image;
 															item.dither_image	=	collageImg_path + item.dither_image;
-															if(item.description==0)
+															if(item.description<=0)
 															{
-															  notificationVoted = item.name + " voted on your Dither";
-															  item.ntfn_body	= notificationVoted;
-															  
-															  /*------------------------------------------------------------------------------------
-																							PUSH NOTIFICATION
-																 -------------------------------------------------------------------------------------*/
-																var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};			
-																if(device_id)
-																{
-																	if(device_type=='ios')
-																	{
-																		  
-																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																				if(err)
-																				{
-																					console.log("Error in Push Notification Sending")
-																					console.log(err)
-																					callback();
-																				}
-																				else
-																				{
-																					console.log("Push notification result")
-																					console.log(ntfnSend)
-																					console.log("Push Notification sended")
-																					callback();			
-																				}
-																			});
-																	 }
-																	 else if(device_type=='android')
-																	  {
-																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});  
-																	 }	
-																	 else
-																	  {
-																		  callback();
-																	  }
-																}
-																else
-																{
-																	callback();			
-																}
-															  
-															  
+															  notificationVoted = " voted on your Dither";
+															  item.ntfn_body	= notificationVoted; 
+															  callback();
 															}
 															else
 															{
@@ -383,62 +215,7 @@ module.exports = {
 																notifyVoteArray	    = [];
 																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
 																console.log(notifyVoteArray)
-																/*------------------------------------------------------------------------------------
-																							PUSH NOTIFICATION
-																 -------------------------------------------------------------------------------------*/
-																var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
-																if(device_id)
-																{
-																		
-																	if(device_type=='ios')
-																	{
-																		  
-																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																				if(err)
-																				{
-																					console.log("Error in Push Notification Sending")
-																					console.log(err)
-																					callback();
-																				}
-																				else
-																				{
-																					console.log("Push notification result")
-																					console.log(ntfnSend)
-																					console.log("Push Notification sended")
-																					callback();			
-																				}
-																			});
-																	 }
-																	 else if(device_type=='android')
-																	  {
-																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});  
-																	 }	
-																	  else
-																	  {
-																		  callback();
-																	  }
-																
-															    }	
-															    else
-															    {
-																  callback();
-															    }	
-
-
+																callback();
 														    }
 														}
 										
@@ -461,69 +238,14 @@ module.exports = {
 																	console.log(ntfnTypeFound)
 																	var notification	= ntfnTypeFound[0].body;
 																	console.log(notification)
-																	ntfn_body  			= util.format(notification,item.name);
+																	ntfn_body  			= util.format(notification);
 																	item.ntfn_body		=	ntfn_body;
 																	item.type			=	ntfnTypeFound[0].type;
 																	item.profile_image	=	profilePic_path + item.profile_image;
 																	item.dither_image	=	collageImg_path + item.dither_image;
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
-																	var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
-																	/*------------------------------------------------------------------------------------
-																							PUSH NOTIFICATION
-																	-------------------------------------------------------------------------------------*/
-																			
-																	if(device_id)
-																	{
-																		
-																				  if(device_type=='ios')
-																				  {	 
-																					NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});
-																				  }
-																				 
-																				  else if(device_type=='android')
-																				  {
-																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});  
-																				  }	
-																				  else
-																				  {
-																					  callback();
-																				  }
-																				
-																	}
-																	else
-																	{
-																		callback();			
-																	}
-																	
+																	callback();
 															
 																	
 																			
@@ -537,7 +259,20 @@ module.exports = {
 											  else if(item.notificationTypeId==1)
 											  {
 												
-											
+												//var query = "SELECT * FROM `notificationLog` WHERE `ditherUserId`='"+user_id+"' AND FIND_IN_SET('"+user_id+"', `tagged_users`)"
+												
+												NotificationLog.query(query, function(err,data) {
+													if(err)
+													{
+														console("error")
+													}
+													else
+													{
+														console.log(data)
+													}
+												});
+												
+												
 												 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
 									
 															if(err)
@@ -550,9 +285,8 @@ module.exports = {
 																console.log(item.description)
 																console.log(ntfnTypeFound)
 																var notification	= ntfnTypeFound[0].body;
-																item.description	= item.description - 1;
 																console.log(notification)
-																var ntfn_body  		= util.format(notification,item.description);
+																var ntfn_body  		= util.format(notification,item.name);
 																item.type			=	ntfnTypeFound[0].type;
 																item.ntfn_body		=	ntfn_body;
 																item.profile_image	=	profilePic_path + item.profile_image;
@@ -560,70 +294,14 @@ module.exports = {
 																console.log(item.profile_image)
 																console.log(ntfn_body)
 																notificationTagged  =  ntfn_body;
-																var data = {device_id:device_id,ntfnDetails:item.ntfn_body,NtfnBody:item.ntfn_body};
-																/*------------------------------------------------------------------------------------
-																							PUSH NOTIFICATION
-																 -------------------------------------------------------------------------------------*/
-																			
-																if(device_id)
-																{
-																	
-																	if(device_type=='ios')
-																	{
-																		  
-																			NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																				if(err)
-																				{
-																					console.log("Error in Push Notification Sending")
-																					console.log(err)
-																					callback();
-																				}
-																				else
-																				{
-																					console.log("Push notification result")
-																					console.log(ntfnSend)
-																					console.log("Push Notification sended")
-																					callback();			
-																				}
-																			});
-																	 }
-																	 else if(device_type=='android')
-																	  {
-																					NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																						if(err)
-																						{
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-																						}
-																						else
-																						{
-																							console.log("Push notification result")
-																							console.log(ntfnSend)
-																							console.log("Push Notification sended")
-																							callback();			
-																						}
-																					});  
-																		  }	
-																		  else
-																		  {
-																			  callback();
-																		  }	
-																 
-																		
-																				
-																}
-																else
-																{
-																	callback();			
-																}
+																callback();						
 
 															}
 										
-												});
+													});
 												 
 									
-											 }
+												}
 											  
 											  
 										}	

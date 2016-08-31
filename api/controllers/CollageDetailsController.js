@@ -29,7 +29,7 @@ module.exports = {
                     query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                             " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
                             " usr.name AS collageCreator, usr.profilePic,"+
-                            " clglk.likeStatus, clglk.likePosition"+
+                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                             " FROM collage clg"+
                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                             " INNER JOIN user usr ON usr.id = clg.userId"+
@@ -51,6 +51,7 @@ module.exports = {
                                         var imageArray = [];
                                         console.log("results  ---------- getLike .....................++++++++++++++++++++");
                                         console.log(results);
+                                        var like_position_Array = [];
                                         var like_position;
                                         results.forEach(function(factor, index){
                                                 //console.log("factor");
@@ -68,18 +69,48 @@ module.exports = {
                                                                 like_status: like_status,
                                                                 id: factor.imageId
                                                                 });
-                                                if(factor.likePosition == null || factor.likePosition == "" || factor.likePosition == 0){
-                                                        like_position = 0;
-                                                }else{
-                                                        like_position = factor.likePosition;
-                                                }
-
+                                                    /*if(factor.likeUserId == null || factor.likeUserId == ""){
+                                                            //like_position = 0;
+                                                    }else{
+                                                        if(factor.likeUserId == userId){
+                                                            //like_position = factor.likePosition;
+                                                            like_position_Array.push(factor.likePosition);
+                                                        }
+                                                            if(factor.likePosition == null || factor.likePosition == "" || factor.likePosition == 0){
+                                                                    like_position = 0;
+                                                            }else{
+                                                                    like_position = factor.likePosition;
+                                                            }
+                                                    }*/
+                                                        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                                        console.log("_______factor.likeUserId__________"+factor.likeUserId);
+                                                        console.log("_______factor.collageCreatorId__________"+factor.collageCreatorId);
+                                                        console.log("_______userId__________"+userId);
+                                                        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                                    if(factor.likeUserId != null || factor.likeUserId != "" ){
+                                                            console.log("Inside factor likeUserId not null ==============");
+                                                            if(factor.likePosition != "" || factor.likePosition !== null){
+                                                                if(factor.likeUserId == userId && factor.collageCreatorId != userId){
+                                                                    //like_position = factor.likePosition;
+                                                                    console.log("Inside factor like User id check ================");
+                                                                    like_position_Array.push(factor.likePosition);
+                                                                }
+                                                            }
+                                                    }
+                                                    console.log(like_position_Array);
                                         });
                                         console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                                        console.log(like_position);
+                                        console.log(like_position_Array);
+                                        if(like_position_Array.length != 0){
+                                                    console.log("like_position_Array === >>>  length != 0");
+                                                    like_position = like_position_Array[0];
+                                        }else{
+                                                    console.log("like_position_Array === >>>  length == 0");
+                                                    like_position = 0;
+                                        }
 
 
-                                        query = " SELECT clgcmt.id, clgcmt.comment, usr.name, usr.profilePic, usr.id userId"+
+                                        query = " SELECT clgcmt.id, clgcmt.comment, usr.name, clgcmt.createdAt,usr.profilePic, usr.id userId"+
                                                 " FROM collageComments clgcmt"+
                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                 " WHERE clgcmt.collageId = "+get_collage_id;
@@ -98,7 +129,13 @@ module.exports = {
                                                             collageCommentResults.forEach(function(factor, index){
                                                                     //console.log("factor");
                                                                     //console.log(factor);
-                                                                    commentArray.push({comment_id: factor.id, user_id: factor.userId, user_name: factor.name,  user_profile_pic_url : profilePic_path + factor.profilePic, message: factor.comment});
+                                                                    commentArray.push({comment_id: factor.id,
+                                                                                        user_id: factor.userId,
+                                                                                        user_name: factor.name,
+                                                                                        user_profile_pic_url : profilePic_path + factor.profilePic,
+                                                                                        message: factor.comment,
+                                                                                        comment_created_date_time:factor.createdAt
+                                                                    });
                                                             });
                                                         }
                                                         //Query to get tagged users from both addressBook and fbFriends

@@ -6,6 +6,20 @@
  */
 var fs          = require('fs');
 //var fs                          =     require('file-system');
+// solution:
+//function to remove a value from the json array
+function removeItem(obj, prop, val) {
+    var c, found=false;
+    for(c in obj) {
+        if(obj[c][prop] == val) {
+            found=true;
+            break;
+        }
+    }
+    if(found){
+        delete obj[c];
+    }
+}
 module.exports = {
 
      /* ==================================================================================================================================
@@ -351,28 +365,38 @@ module.exports = {
 
       /* ==================================================================================================================================
                TEST GENERATE THUMBNAIL IMAGE
-		==================================================================================================================================== */
+        ==================================================================================================================================== */
 
      testThumbnail: function (req, res) {
 
                             console.log("thumbnail image")
-                            /*var blobAdapter = require('skipper-disk')();
-                            var diskReceiver = blobAdapter.receive();
-                            var Thumbnail = require('skipper-thumbnail');
-                            var thumbnailReceiver = new Thumbnail(null, 256);
-                            thumbnailReceiver.pipe(diskReceiver);
-
-                            diskReceiver
-                              .on('error', function(err) {
-                                res.serverError(err);
-                              })
-                              .on('finish', function() {
-                                res.json({
-                                  message: 'File(s) uploaded successfully!'
-                                });
-                              });
-                            req.file('image').pipe(thumbnailReceiver);*/
-
+                     
+                           require('lwip').open('img2.jpeg', function(err, image) {
+							if(err)
+							  {
+								  console.log("Error")
+								  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+							  }
+							  else
+							  {
+								// lanczos
+								image.resize(50, 50, function(err, rzdImg) {
+									rzdImg.writeFile('testThumb/output.jpg', function(err) {
+										if(err)
+										  {
+											  console.log("Error")
+											  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+										  }
+										  else
+										  {
+											  return res.json(200, {status: 1,status_type: 'Success', message: 'Image Resizing Success'});
+										  }
+										});
+								});
+							  }	
+							});
+                            
+                           
 
 
         },
@@ -460,12 +484,134 @@ module.exports = {
                                 }
                         });
         },
-        
-        
+
+        delete_Socket : function (req, res) {
+                console.log(req.options.available_sockets);
+                var countries = {};
+
+                countries.results = [
+                    {id:'AF',name:'Afghanistan'},
+                    {id:'AL',name:'Albania'},
+                    {id:'DZ',name:'Algeria'}
+                ];
+                //example: call the 'remove' function to remove an item by id.
+                removeItem(countries.results,'id','AF');
+
+                //example2: call the 'remove' function to remove an item by name.
+                removeItem(countries.results,'name','Albania');
+
+                // print our result to console to check it works !
+                console.log(countries.results);
+                for(c in countries.results) {
+                    console.log(countries.results[c].id);
+                }
+        },
+
+
+
+
          /* ==================================================================================================================================
                TEST PUSH NOTIFICATION
 		==================================================================================================================================== */
 
+		testTag: function (req, res) {
+					var taggedUserArray	= ['145','127'];
+					
+					deviceId_arr	= [];
+					ntfn_body		= "test push";
+					device_type		= req.get('device_Type');
+					User_token.find({userId: taggedUserArray})
+						.exec(function (err, response) {
+							
+							response.forEach(function(factor, index){
+						
+									deviceId_arr.push(factor.deviceId);
+									
+							
+							});
+							console.log(JSON.stringify(deviceId_arr))
+							if(deviceId_arr.length!=0)
+							{
+									var data 	  = {device_id:deviceId_arr,NtfnBody:ntfn_body};
+									 
+									 
+									var switchKey  	=  device_type;
+									switch(switchKey){
+											case 'ios' :
+														NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+															if(err)
+															{
+																console.log("Error in Push Notification Sending")
+																console.log(err)
+																//callback();
+															}
+															else
+															{
+																console.log("Push notification result")
+																console.log(ntfnSend)
+																console.log("Push Notification sended")
+																//callback();
+																return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+															}
+														});
+											break;
+
+											case 'android' :
+														NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+															if(err)
+															{
+																console.log("Error in Push Notification Sending")
+																console.log(err)
+																//callback();
+															}
+															else
+															{
+																console.log("Push notification result")
+																console.log(ntfnSend)
+																console.log("Push Notification sended")
+																//callback();
+																return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+															}
+														});
+											break;
+
+											default:
+														return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceType'});
+											break;
+
+
+									}
+									 
+									 
+									
+							} 
+							else
+							{
+								return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceId'});
+							}
+							 
+						});
+
+					
+					
+					/*var query 	=	"SELECT deviceId from userToken wher userId IN ('"+taggedUserArray+"')"
+					User_token.query(query, function(err, getDeviceId) {
+						if(err)
+						{
+						console.log(err)	
+						  console.log("errror")
+						}
+						else
+						{
+							console.log(getDeviceId)
+						}
+					});*/
+					
+					
+					
+					
+					
+		},
 
 
 };

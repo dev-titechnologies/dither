@@ -36,7 +36,7 @@ module.exports.routes = {
     view: 'first'
   },
 
-  '/user/signup'                          :           ['settings.settingsKeyValue'],
+  '/user/signup'                          :           ['settings.settingsKeyValue','helper.file_path'],
   '/user/checkForNewUser'                 :           ['settings.settingsKeyValue', 'helper.file_path'],
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
   '/user/editProfile'                     :           ['auth.authenticate','settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
@@ -47,10 +47,14 @@ module.exports.routes = {
 
   '/addressBook/*'                        :           ['auth.authenticate','helper.server_baseUrl'],
   '/Notification/*'                       :           ['auth.authenticate','helper.server_baseUrl','helper.file_path'],
-  '/feed/*'                               :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
+  '/feed/*'                               :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageLikes/*'                       :           ['auth.authenticate'],
   '/collageComments/*'                    :           ['auth.authenticate'],
   '/report/*'                             :           ['auth.authenticate'],
+  '/socketSettings/*'                     :           ['auth.authenticate'],
+  '/test/delete_Socket'                   :           ['SocketSettings.Socket_connection'],
+
+
 
 
 

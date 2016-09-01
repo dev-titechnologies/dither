@@ -121,6 +121,32 @@ module.exports = {
                     }
 
         },
+        /* ==================================================================================================================================
+						To Get ReportedUser List
+		==================================================================================================================================== */
+        reportedUserList:  function (req, res) {
+			
+					console.log("Reported Users List========api")
+					var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    
+                    var query	= "SELECT R.reporterId,U.name FROM reportUser as R LEFT JOIN user as U ON R.userId = U.id where R.reporterId = '"+userId+"' where ";
+				    ReportUser.query(query, function(err, ReportedUsers) {
+						if(err)
+						{
+							console.log(err)
+							return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in get Reported User List', error_details: err});
+						}
+						else
+						{
+							console.log(ReportedUsers)
+							return res.json(200, {status: 1 ,status_type: 'Success', message: 'Successfully get Reporters',});
+						}
+						
+					});
+			
+		},
+
 
 };
 

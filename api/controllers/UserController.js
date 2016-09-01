@@ -29,7 +29,7 @@ module.exports = {
                 }else{
                         var filename     =  "image.jpg";
                         var imagename    = new Date().getTime() + filename;
-                        var thumbImage;   
+                       
                         console.log(imgUrl);
                         //Download STARTS--------
                         var download = function(uri, filename, callback){

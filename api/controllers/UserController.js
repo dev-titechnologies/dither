@@ -17,8 +17,8 @@ module.exports = {
                To signup
      ==================================================================================================================================== */
     signup: function (req, res) {
-				 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-				 var profilePic_path             =     req.options.file_path.profilePic_path;
+                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                 var profilePic_path             =     req.options.file_path.profilePic_path;
                 console.log("signup---------------- api")
                 console.log(req.body);
                 console.log(req.get('device_id'));
@@ -27,26 +27,26 @@ module.exports = {
                 if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('fb_uid') || !req.param('email_id') || !req.param('username') || !req.param('otp')){
                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and fb_uid and email_id and username and otp'}); //If an error occured, we let express/connect handle it by calling the "next" function
                 }else{
-                        var filename     =  "image.jpg";
+                        var filename     =  "image.png";
                         var imagename    = new Date().getTime() + filename;
-                        var thumbImage;   
+                        var thumbImage;
                         console.log(imgUrl);
                         //Download STARTS--------
                         var download = function(uri, filename, callback){
                                 request.head(uri, function(err, res, body){
                                     request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                                 });
-                           
-                        
+
+
                         };
                         download(imgUrl,'assets/images/profilePics/'+imagename, function()
                         {
                             sails.log('done');
 
                         });
-                        
-                        
-                        
+
+
+
                         //Download ENDS--------
                         var OTPCode  = req.param('otp');
                         var deviceId = req.get('device_id');
@@ -106,7 +106,7 @@ module.exports = {
                         }*/
 
 
-                     
+
 
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
                                 if(err)
@@ -115,10 +115,10 @@ module.exports = {
                                 }
                                 else
                                 {
-									
-									
-									
-									
+
+
+
+
                                     console.log("fbid checkinggggggggggg")
                                     console.log(resultData);
                                     if(resultData){
@@ -241,93 +241,93 @@ module.exports = {
                                                                                                                             else
                                                                                                                             {
                                                                                                                                 console.log(createdNotification);
-                                                                                                                                
+
                                                                                                                                 Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
-																																	if(err)
-																																	{
-																																		console.log(err);
-																																		callback();
-																																	}
-																																	else
-																																	{
-																																		//-----------PUSH Notification------------------------------------
-																																		User_token.findOne({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
-																																			if(err)
-																																			{
-																																				  console.log(err);
-																																				  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
-																																			}
-																																			else
-																																			{
+                                                                                                                                    if(err)
+                                                                                                                                    {
+                                                                                                                                        console.log(err);
+                                                                                                                                        callback();
+                                                                                                                                    }
+                                                                                                                                    else
+                                                                                                                                    {
+                                                                                                                                        //-----------PUSH Notification------------------------------------
+                                                                                                                                        User_token.findOne({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+                                                                                                                                            if(err)
+                                                                                                                                            {
+                                                                                                                                                  console.log(err);
+                                                                                                                                                  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+                                                                                                                                            }
+                                                                                                                                            else
+                                                                                                                                            {
 
-																																				var message     =  'signup Notification';
-																																				var ntfn_body   =   results.name +" Joined on Dither";
-																																				var device_id   =  getDeviceId.deviceId;
-																																				console.log(results)
+                                                                                                                                                var message     =  'signup Notification';
+                                                                                                                                                var ntfn_body   =   results.name +" Joined on Dither";
+                                                                                                                                                var device_id   =  getDeviceId.deviceId;
+                                                                                                                                                console.log(results)
 
-																																				if(!device_id){
-																																						callback();
-																																				}else{
-																																						device_id 		=  device_id.split(',');sails.log.debug(device_id);
-																																						var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
-																																						var switchKey  	=  device_type;
-																																						switch(switchKey){
-																																								case 'ios' :
-																																											NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																																												if(err)
-																																												{
-																																													console.log("Error in Push Notification Sending")
-																																													console.log(err)
-																																													callback();
-																																												}
-																																												else
-																																												{
-																																													console.log("Push notification result")
-																																													console.log(ntfnSend)
-																																													console.log("Push Notification sended")
-																																													callback();
-																																													
-																																												}
-																																											});
-																																								break;
+                                                                                                                                                if(!device_id){
+                                                                                                                                                        callback();
+                                                                                                                                                }else{
+                                                                                                                                                        device_id       =  device_id.split(',');sails.log.debug(device_id);
+                                                                                                                                                        var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
+                                                                                                                                                        var switchKey   =  device_type;
+                                                                                                                                                        switch(switchKey){
+                                                                                                                                                                case 'ios' :
+                                                                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                                                                                                                                                if(err)
+                                                                                                                                                                                {
+                                                                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                                                                    console.log(err)
+                                                                                                                                                                                    callback();
+                                                                                                                                                                                }
+                                                                                                                                                                                else
+                                                                                                                                                                                {
+                                                                                                                                                                                    console.log("Push notification result")
+                                                                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                                                                    callback();
 
-																																								case 'android' :
-																																											NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																																												if(err)
-																																												{
-																																													console.log("Error in Push Notification Sending")
-																																													console.log(err)
-																																													callback();
-																																												}
-																																												else
-																																												{
-																																													console.log("Push notification result")
-																																													console.log(ntfnSend)
-																																													console.log("Push Notification sended")
-																																													callback();
-																																													
-																																												}
-																																											});
-																																								break;
+                                                                                                                                                                                }
+                                                                                                                                                                            });
+                                                                                                                                                                break;
 
-																																								default:
-																																											callback();
+                                                                                                                                                                case 'android' :
+                                                                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                                                                                                                                                if(err)
+                                                                                                                                                                                {
+                                                                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                                                                    console.log(err)
+                                                                                                                                                                                    callback();
+                                                                                                                                                                                }
+                                                                                                                                                                                else
+                                                                                                                                                                                {
+                                                                                                                                                                                    console.log("Push notification result")
+                                                                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                                                                    callback();
 
-																																								break;
+                                                                                                                                                                                }
+                                                                                                                                                                            });
+                                                                                                                                                                break;
+
+                                                                                                                                                                default:
+                                                                                                                                                                            callback();
+
+                                                                                                                                                                break;
 
 
-																																						}
-																																				}
+                                                                                                                                                        }
+                                                                                                                                                }
 
-																																			//------------------------------
-																																			}
-																																		  });
-																															
-																																		 
-																																	}
-																															     });
-                                                                                                                                
-                                                                                                                               
+                                                                                                                                            //------------------------------
+                                                                                                                                            }
+                                                                                                                                          });
+
+
+                                                                                                                                    }
+                                                                                                                                 });
+
+
                                                                                                                             }
                                                                                                                         });
                                                                                                                     //}
@@ -344,37 +344,37 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                                         }else{
-																							 //------------------------------Generate ThumbnailImage-----------------------------------------------
-																							console.log('/assets/images/profilePics/'+imagename)
-																							require('lwip').open('assets/images/profilePics/'+imagename, function(err, image) {
-																								if(err)
-																								  {
-																									  console.log(err)
-																									  console.log("Errorrrrrrrrrrrrrrrrrrr")
-																									  //return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-																								  }
-																								  else
-																								  {
-																									
-																									   /*------------Thumnail Image-------------------------------------------------------- 
-																										ImgResizeService.imageResize(imagename,results.id, function(err, imageResult) {
-																											if(err)
-																											{
-																													console.log(err);
-																													return res.json(200, {status: 2, status_type: 'Failure' , message: 'ThumbImage Creation Failure', error_details: err});
-			
-																											}else{
-																													console.log("async parallel in Sms Part Success --------------------");
-																													return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
-																											}
-																										//});*/
-																										
-																										console.log("async parallel in Sms Part Success --------------------");
-																										return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
-																										
-																								
-																								  }	
-																							});
+                                                                                             //------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                                                            console.log('/assets/images/profilePics/'+imagename)
+                                                                                            require('lwip').open('assets/images/profilePics/'+imagename, function(err, image) {
+                                                                                                if(err)
+                                                                                                  {
+                                                                                                      console.log(err)
+                                                                                                      console.log("Errorrrrrrrrrrrrrrrrrrr")
+                                                                                                      //return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+                                                                                                  }
+                                                                                                  else
+                                                                                                  {
+
+                                                                                                       /*------------Thumnail Image--------------------------------------------------------
+                                                                                                        ImgResizeService.imageResize(imagename,results.id, function(err, imageResult) {
+                                                                                                            if(err)
+                                                                                                            {
+                                                                                                                    console.log(err);
+                                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'ThumbImage Creation Failure', error_details: err});
+
+                                                                                                            }else{
+                                                                                                                    console.log("async parallel in Sms Part Success --------------------");
+                                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+                                                                                                            }
+                                                                                                        //});*/
+
+                                                                                                        console.log("async parallel in Sms Part Success --------------------");
+                                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+
+
+                                                                                                  }
+                                                                                            });
 
                                                                                         }
 
@@ -450,7 +450,7 @@ module.exports = {
 
                                                                 sails.sockets.blast('createIncheck', {status : "success", name_of_user: test});
                                                                 sails.sockets.blast('message', {status : "success", name_of_user: test});
-                                                                
+
                                                                 var notifyArray = [];
                                                                 notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion});
                                                                 var profile_image       =   profilePic_path + results.profilePic;
@@ -462,7 +462,7 @@ module.exports = {
                                                                                       profile_image     :   profile_image,
                                                                                       token             :   userTokenDetails.token.token,
                                                                                       user_id           :   results.id,
-                                                                                      notification		:	notifyArray
+                                                                                      notification      :   notifyArray
                                                                                 });
                                                             }
                                                         });

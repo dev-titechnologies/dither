@@ -356,7 +356,7 @@ module.exports = {
 																								  else
 																								  {
 																									
-																									   //------------Thumnail Image-------------------------------------------------------- 
+																									   /*------------Thumnail Image-------------------------------------------------------- 
 																										ImgResizeService.imageResize(imagename,results.id, function(err, imageResult) {
 																											if(err)
 																											{
@@ -367,7 +367,11 @@ module.exports = {
 																													console.log("async parallel in Sms Part Success --------------------");
 																													return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
 																											}
-																										});
+																										//});*/
+																										
+																										console.log("async parallel in Sms Part Success --------------------");
+																										return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+																										
 																								
 																								  }	
 																							});

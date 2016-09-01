@@ -68,7 +68,7 @@ module.exports = {
                             console.log(request);
                             console.log(request.dither_title);
                             console.log(request.dither_location);
-
+							var device_type					=	  req.get('device_type');
                             console.log("json parse====>>>>");
                             //console.log(JSON.parse(request));
                             //Tagged Users ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -287,7 +287,6 @@ module.exports = {
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
                                                                                     tagNotifyArray.push(factor);
-
                                                                             });
                                                                             console.log(tagNotifyArray.length);
                                                                             console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
@@ -309,7 +308,87 @@ module.exports = {
                                                                                 }else{
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                         console.log(createdNotificationTags);
-                                                                                        callback();
+                                                                                        
+                                                                                        
+                                                                                   //---------------------Push Notification In Tagged Users--------------------------------
+                                                                                        
+                                                                                        
+																						var deviceId_arr	= [];
+																						var message   = 'Notification For Opinion';
+																						var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
+																						User_token.find({userId: tagNotifyArray})
+																							.exec(function (err, response) {
+																								
+																								response.forEach(function(factor, index){
+																							
+																										deviceId_arr.push(factor.deviceId);
+																										
+																								
+																								});
+																								
+																								if(deviceId_arr.length!=0)
+																								{
+																										var data 	  = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body};
+																										 
+																										var switchKey  	=  device_type;
+																										switch(switchKey){
+																												case 'ios' :
+																															NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																																if(err)
+																																{
+																																	console.log("Error in Push Notification Sending")
+																																	console.log(err)
+																																	//callback();
+																																}
+																																else
+																																{
+																																	console.log("Push notification result")
+																																	console.log(ntfnSend)
+																																	console.log("Push Notification sended")
+																																	//callback();
+																																	return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+																																}
+																															});
+																												break;
+
+																												case 'android' :
+																															NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																																if(err)
+																																{
+																																	console.log("Error in Push Notification Sending")
+																																	console.log(err)
+																																	//callback();
+																																}
+																																else
+																																{
+																																	console.log("Push notification result")
+																																	console.log(ntfnSend)
+																																	console.log("Push Notification sended")
+																																	callback();
+																																	
+																																}
+																															});
+																												break;
+
+																												default:
+																															callback();
+																												break;
+
+
+																										}
+																								
+																								} 
+																								else
+																								{
+																									console.log("No deviceId")
+																									callback();
+																								}
+																								 
+																							});
+                                                                                        
+                                                                                      
+																				 //-------------------END Of PUSH Notification-------------------------------------------------------------------	
+                                                                                      //  callback();
 
                                                                                 }
                                                                             });

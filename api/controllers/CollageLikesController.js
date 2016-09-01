@@ -23,11 +23,11 @@ module.exports = {
             var likedImageId                =     req.param("dither_like_image_id");
             var imgPosition                 =     req.param("image_position");
             var device_type                 =     req.get('device_type');
-
+console.log(req.params.all());
             //collageId                   =     63;
             //likedImageId                =     128;
             //imgPosition                 =     1;
-
+console.log(device_type);
 
             if(!collageId || !likedImageId || !imgPosition || !device_type){
                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the device_type and dither_id and dither_like_image_id and position'});
@@ -117,21 +117,21 @@ module.exports = {
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                       /* //console.log(req);
+                                                                                        //console.log(req);
                                                                                         console.log(req.isSocket);
                                                                                         if (!req.isSocket) {
                                                                                                 console.log("No socket");
-                                                                                                console.log(sails.sockets.getId(req));
+                                                                                                //console.log(sails.sockets.getId(req));
                                                                                         }
-                                                                                        console.log(sails.sockets.getId(req));
-                                                                                        console.log(sails.sockets.socketRooms(req.socket));
-                                                                                        //sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully"});
-                                                                                        sails.sockets.broadcast(sails.sockets.getId(req),'like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
+                                                                                        //console.log(sails.sockets.getId(req));
+                                                                                        //console.log(sails.sockets.socketRooms(req.socket));
+                                                                                        sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully"});
+                                                                                        //sails.sockets.broadcast(sails.sockets.getId(req),'like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
                                                                                         //sails.sockets.emit('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
                                                                                         console.log(createdNotificationTags);
                                                                                         //return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                 //total_like_count       :  updatedVoteCount[0].vote,
-                                                                                        //});*/
+                                                                                        //});
 
                                                                                 //###################################
 

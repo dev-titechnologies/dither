@@ -27,13 +27,11 @@ module.exports = {
                 type: 'boolean',
                 defaultsTo: false
             },
-        
+
         profilePic: {
                 type: 'string',
             },
-        thumbImage: {
-                type: 'string',
-            },    
+
         fbId: {
                 type: 'string',
                 unique: true
@@ -59,7 +57,7 @@ module.exports = {
                 type: 'boolean',
 
                 defaultsTo: true
-            }, 
+            },
 
         notifyContact: {
                 type: 'boolean',

@@ -26,6 +26,14 @@ io.socket.on('connect', function socketConnected(){
                     console.log("Connection  =============== >>>>>>>>>>>>>>>>>> +++++++++++++++++++++");
                     console.log(resData);
         });
+
+        io.socket.post('/collageLikes/voteDither', function (resData, jwres){
+          //console.log('Sails responded with: ', resData);
+          //console.log('with headers: ', jwres.headers);
+          //console.log('and with status code: ', jwres.statusCode);
+          console.log("yyyyyyyyyyyyyyyyy(((((((((((((((((((((9999999999999");
+          console.log('Sails responded with: ', resData);
+        });
 });
 
 io.socket.on('disconnect', function socketConnected(socket){
@@ -58,13 +66,7 @@ io.socket.on('disconnect', function socketConnected(socket){
 //sails.sockets.emit('privateMessage');
 //For call an event
 
-io.socket.post('/collageLikes/voteDither', function (resData, jwres){
-          //console.log('Sails responded with: ', resData);
-          //console.log('with headers: ', jwres.headers);
-          //console.log('and with status code: ', jwres.statusCode);
-          console.log("yyyyyyyyyyyyyyyyy(((((((((((((((((((((9999999999999");
-          console.log('Sails responded with: ', resData);
-});
+
 /*io.socket.on('message', function (event){
         console.log("createInCheck ----------------");
         console.log(event);

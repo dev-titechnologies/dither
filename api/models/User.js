@@ -39,7 +39,7 @@ module.exports = {
                 unique: true
             },
         phoneNumber: {
-                type: 'integer',
+                type: 'string',
                 unique: true
             },
         status: {

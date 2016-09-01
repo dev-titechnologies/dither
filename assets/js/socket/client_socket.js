@@ -17,8 +17,8 @@ io.socket.on('createInSignUp', function (event){
     console.log(event);
 });*/
 
-io.sails.url = "http://192.168.1.57:5000";
-io.socket.on('connect', function socketConnected(socket){
+io.sails.url = "http://api.dither.titechdev.com:5000";
+io.socket.on('connect', function socketConnected(){
         console.log("socket --- connected");
         //socket.emit('edit-dither');
 

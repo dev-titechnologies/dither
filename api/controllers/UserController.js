@@ -29,7 +29,7 @@ module.exports = {
                 }else{
                         var filename     =  "image.png";
                         var imagename    = new Date().getTime() + filename;
-                        var thumbImage;
+
                         console.log(imgUrl);
                         //Download STARTS--------
                         var download = function(uri, filename, callback){
@@ -344,7 +344,7 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                                         }else{
-                                                                                             //------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                                                            /* ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                                             console.log('/assets/images/profilePics/'+imagename)
                                                                                             require('lwip').open('assets/images/profilePics/'+imagename, function(err, image) {
                                                                                                 if(err)
@@ -356,7 +356,7 @@ module.exports = {
                                                                                                   else
                                                                                                   {
 
-                                                                                                       /*------------Thumnail Image--------------------------------------------------------
+                                                                                                       ------------Thumnail Image--------------------------------------------------------
                                                                                                         ImgResizeService.imageResize(imagename,results.id, function(err, imageResult) {
                                                                                                             if(err)
                                                                                                             {
@@ -367,14 +367,17 @@ module.exports = {
                                                                                                                     console.log("async parallel in Sms Part Success --------------------");
                                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
                                                                                                             }
-                                                                                                        //});*/
+                                                                                                        });
 
                                                                                                         console.log("async parallel in Sms Part Success --------------------");
                                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
 
 
                                                                                                   }
-                                                                                            });
+                                                                                            });*/
+                                                                                            
+                                                                                            console.log("async parallel in Sms Part Success --------------------");
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
 
                                                                                         }
 

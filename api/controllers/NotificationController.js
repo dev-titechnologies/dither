@@ -96,7 +96,7 @@ module.exports = {
 						notifyVoteArray	   		= [];
 						notifyCmntArray			= [];
 						
-							var query = " SELECT"+ 
+						var query 	= 	" SELECT"+ 
 										" N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
 										" U.name,U.profilePic as profile_image,"+
 										" C.image as dither_image"+
@@ -108,10 +108,7 @@ module.exports = {
 										" OR "+
 										" FIND_IN_SET("+user_id+", N.tagged_users)";
 						
-						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,C.image as dither_image from notificationLog as N LEFT JOIN user as U ON U.id = N.userId LEFT JOIN collage as C ON C.id = N.collage_id where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
-						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
-						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,C.image as dither_image from notificationLog as N LEFT JOIN user as U ON U.id = N.userId LEFT JOIN collage as C ON C.id = N.collage_id where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
-					
+											
 						console.log(query)
 						NotificationLog.query(query, function(err,results) {
 							

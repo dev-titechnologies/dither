@@ -16,7 +16,7 @@ module.exports = {
 
             console.log(req.get('token'));
             var userToken = req.get('token');
-            //var userToken = req.body.token;
+            //var userToken = "16c229ef11c6946708b6e987";
             console.log(userToken);
             if(userToken){
                     UsertokenService.checkToken(userToken, function(err, tokenCheck) {

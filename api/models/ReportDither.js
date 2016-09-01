@@ -34,11 +34,6 @@ module.exports = {
                 defaultsTo: 0
             },
 
-        approvalStatus: {
-                type: 'boolean',
-                defaultsTo: false
-            },
-
         createdAt: {
                 type: 'datetime',
             },

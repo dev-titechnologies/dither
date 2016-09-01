@@ -19,6 +19,7 @@ module.exports = {
                     var reportType                  =     req.param('report_type');
                     var report                      =     req.param('description');
                     var received_userId             =     req.param('user_id');
+                    var device_type					=	  req.get('device_type');
                     console.log(reportType);
                     console.log(report);
 
@@ -26,7 +27,7 @@ module.exports = {
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the report_type and description and user_id'});
 
                     }else{
-                            ReportDither.findOne({reporterId: userId, userId: received_userId}).exec(function (err, foundReport){
+                            ReportUser.findOne({reporterId: userId, userId: received_userId}).exec(function (err, foundReport){
                                     if(err){
                                                 console.log(err);
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding user already reported or not ', error_details: err});
@@ -48,7 +49,81 @@ module.exports = {
                                                             }
                                                             else{
                                                                     console.log(results);
-                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+                                                                    //-----------------------PUSH NOTIFICATION-------------------------------------------------------------
+                                                                    
+                                                                    User_token.findOne({userId: received_userId }).exec(function (err, getTokenDetails){
+                                                                                            if(err)
+                                                                                            {
+                                                                                                  console.log(err);
+                                                                                                  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+                                                                                            }
+                                                                                            else
+                                                                                            {
+
+                                                                                                var message     =  'Report User Notification';
+                                                                                                var ntfn_body   =  " Reported againt You";
+                                                                                                var device_id   =  getTokenDetails.deviceId;
+                                                                                                
+
+                                                                                                if(!device_id){
+                                                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+                                                                                                }else{
+																										device_id 		=  device_id.split(',');sails.log.debug(device_id);
+																										var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
+                                                                                                        var switchKey  	=  device_type;
+                                                                                                        switch(switchKey){
+                                                                                                                case 'ios' :
+                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                                                                                                if(err)
+                                                                                                                                {
+                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                    console.log(err)
+                                                                                                                                    //callback();
+                                                                                                                                }
+                                                                                                                                else
+                                                                                                                                {
+                                                                                                                                    console.log("Push notification result")
+                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                    //callback();
+                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                break;
+
+                                                                                                                case 'android' :
+                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                                                                                                if(err)
+                                                                                                                                {
+                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                    console.log(err)
+                                                                                                                                    //callback();
+                                                                                                                                }
+                                                                                                                                else
+                                                                                                                                {
+                                                                                                                                    console.log("Push notification result")
+                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                    //callback();
+                                                                                                                                     return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                break;
+
+                                                                                                                default:
+                                                                                                                             return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+
+                                                                                                                break;
+
+
+                                                                                                        }
+                                                                                                }
+
+                                                                                            //------------------------------
+                                                                                            }
+                                                                    });
+                                                                
+                                                                   
                                                             }
                                                     });
                                             }
@@ -129,8 +204,8 @@ module.exports = {
 					console.log("Reported Users List========api")
 					var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
-                    
-                    var query	= "SELECT R.reporterId,U.name FROM reportUser as R LEFT JOIN user as U ON R.userId = U.id where R.reporterId = '"+userId+"' where ";
+					var reportUserArray				=	  [];
+                    var query	= "SELECT R.reporterId,U.name FROM reportUser as R LEFT JOIN user as U ON R.reporterId = U.id where R.userId = '"+userId+"'";
 				    ReportUser.query(query, function(err, ReportedUsers) {
 						if(err)
 						{
@@ -139,8 +214,12 @@ module.exports = {
 						}
 						else
 						{
-							console.log(ReportedUsers)
-							return res.json(200, {status: 1 ,status_type: 'Success', message: 'Successfully get Reporters',});
+							console.log(ReportedUsers[0])
+							ReportedUsers.forEach(function(factor, index){
+									reportUserArray.push({userId:factor.reporterId,name:factor.name});
+							});
+							console.log(reportUserArray)
+							return res.json(200, {status: 1 ,status_type: 'Success', message: 'Successfully get Reporters',reportedUsers:reportUserArray});
 						}
 						
 					});

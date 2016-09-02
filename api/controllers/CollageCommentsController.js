@@ -86,7 +86,7 @@ module.exports = {
 																						var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
 																						
 																						
-																						 User_token.findOne({userId: collageDetails.userId }).exec(function (err, getDeviceId){
+																						 User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
 																						  if(err)
 																						  {
 																							  console.log(err)
@@ -95,12 +95,19 @@ module.exports = {
 																						  else
 																						  {	
 																							  
-																						   var device_id	= getDeviceId.deviceId;
-																						   if(device_id)
+																						   //var device_id	= getDeviceId.deviceId;
+																						   var deviceId_arr	= [];
+																						   getDeviceId.forEach(function(factor, index){
+																							
+																										deviceId_arr.push(factor.deviceId);
+																										
+																								
+																							});
+																						   if(deviceId_arr.length!=0)
 																						   {
 																							  console.log(getDeviceId.deviceId)	  
-																							  device_id = device_id.split(',');sails.log.debug(device_id);
-																							  var data 	  = {message:message, device_id:device_id,NtfnBody:ntfn_body};
+																							  // = device_id.split(',');sails.log.debug(device_id);
+																							  var data 	  = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body};
 																							  console.log(data)
 																							  if(device_type=='ios')
 																								{

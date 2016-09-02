@@ -68,10 +68,7 @@ module.exports = {
 			  
 			  
 		  },
-	
-	
-	
-	
+
 	 /* ==================================================================================================================================
                 Notification API
 	   ==================================================================================================================================== */
@@ -90,11 +87,11 @@ module.exports = {
 						var device_id 			= 	  tokenCheck.tokenDetails.deviceId;
 						var device_type			=	  req.get('device_type');
 						
-						notificationVoted 		= "";
-						notificationCommented 	= "";
-						notificationSignup		= "";
-						notifyVoteArray	   		= [];
-						notifyCmntArray			= [];
+						notificationVoted 		= 	  "";
+						notificationCommented 	= 	  "";
+						notificationSignup		= 	  "";
+						notifyVoteArray	   		= 	  [];
+						notifyCmntArray			= 	  [];
 						
 						var query 	= 	" SELECT"+ 
 										" N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
@@ -157,7 +154,6 @@ module.exports = {
 																console.log("commenteddd")
 																notificationCommented = " commented on your Dither";
 																item.ntfn_body		  =	notificationCommented;
-																
 																callback();
 															}
 															else
@@ -243,9 +239,7 @@ module.exports = {
 																	console.log(ntfn_body)
 																	notificationSignup  =  ntfn_body;
 																	callback();
-															
-																	
-																			
+																
 
 															}
 															
@@ -255,20 +249,6 @@ module.exports = {
 											  }
 											  else if(item.notificationTypeId==1)
 											  {
-												
-												//var query = "SELECT * FROM `notificationLog` WHERE `ditherUserId`='"+user_id+"' AND FIND_IN_SET('"+user_id+"', `tagged_users`)"
-												
-												NotificationLog.query(query, function(err,data) {
-													if(err)
-													{
-														console("error")
-													}
-													else
-													{
-														console.log(data)
-													}
-												});
-												
 												
 												 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
 									

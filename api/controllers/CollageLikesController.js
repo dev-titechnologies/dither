@@ -161,7 +161,7 @@ console.log(device_type);
 																									
 																								});*/
 
-                                                                                                if(deviceId_arr.length!=0){
+                                                                                                if(device_id){
                                                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                                         total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                             });

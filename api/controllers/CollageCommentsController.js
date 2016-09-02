@@ -84,9 +84,9 @@ module.exports = {
                                                                                     //----------------------------Push Notification For Comment------------------------------------------
 																						var message   = 'Comment Notification';
 																						var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
-																						
-																						
-																						 User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
+																						var query	  =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+collageDetails.userId+"'";
+																						User_token.query(query, function(err, getDeviceId) {
+																						// User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
 																						  if(err)
 																						  {
 																							  console.log(err)

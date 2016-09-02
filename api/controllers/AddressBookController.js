@@ -26,10 +26,10 @@ module.exports = {
                 var phoneContactsArray     	    = 	   [];
                 var fbUserArray             	= 	   [];
                
-                var device_type					=	   req.get('device_type');
-                var phonecontacts				= 	   [];
-                var fbUser						= 	   [];
-                var phoneInviteArray 			= 	   []; 
+                var device_type		=	req.get('device_type');
+                var phonecontacts	= [];
+                var fbUser			= [];
+                 
               
 				//if(!req.param('contact_array') || !req.param('fb_array'))	
 					//{	
@@ -47,7 +47,6 @@ module.exports = {
 						var data_check1 = "";
 						phonecontacts.forEach(function(factor, index){
 							phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
-							phoneInviteArray.push({userId:userId,phoneNumber:factor.number});
 						});
 
 						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
@@ -59,32 +58,6 @@ module.exports = {
 						});
 
 					async.series([
-							  function(callback) {
-								  //---------------Invitaion Table Insertion--------------------------------
-									console.log("------------Users In Invitation------------------ ")
-									if(phoneInviteArray.length!=0)
-									{
-										Invitation.create(phoneInviteArray).exec(function(err, createdinvitation){
-											
-											if(err)
-											{
-												console.log(err)
-												callback();
-											}
-											else
-											{
-												console.log("Added to Invitation")
-												callback();
-											}
-									  
-										});
-									}
-									else
-									{
-										callback();
-									}
-								  //---------------End Of Invitation Table----------------------------------
-							  },
 					
 							  function(callback) {
 											  console.log("deletion**************************************************")

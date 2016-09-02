@@ -671,8 +671,8 @@ module.exports = {
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                            " INNER JOIN tags tg ON tg.collageId = clg.id"+
-                                            " INNER JOIN user usr ON usr.id = tg.userId"+
+                                            " LEFT JOIN tags tg ON tg.collageId = clg.id"+
+                                            " INNER JOIN user usr ON usr.id = clg.userId OR usr.id = tg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.totalVote DESC";

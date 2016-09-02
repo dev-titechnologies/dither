@@ -138,8 +138,10 @@ console.log(device_type);
                                                                                         /*------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
                                                                                                                     PUSH NOTIFICATION
                                                                                          -------------------------------------------------------------------------------------*/
+																						var query	  =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+foundCollageResults.userId+"'";
+																						User_token.query(query, function(err, getDeviceId) {		
 
-                                                                                        User_token.find({userId: foundCollageResults.userId }).exec(function (err, getDeviceId){
+                                                                                        //User_token.find({userId: foundCollageResults.userId }).exec(function (err, getDeviceId){
                                                                                             if(err)
                                                                                             {
                                                                                                   console.log(err);

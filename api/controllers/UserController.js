@@ -431,22 +431,24 @@ module.exports = {
                                 }
                                 else
                                 {
-                                   /* User_token.find({userId:results.id}).exec(function(err, result){
+                                   // User_token.find({userId:results.id}).exec(function(err, result){
                                    // User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
-                                            if (err) {
+                                           /* if (err) {
                                                 console.log(err)
                                             }
                                             else
-                                            {
+                                            {*/
                                                 console.log(result)
                                                 //delete existing token
-                                               /* User_token.destroy({userId: results.id}).exec(function (err, result) {
+                                                var query	=	"DELETE FROM userToken where userId='"+results.id+"' AND deviceId='"+deviceId+"'";
+                                                User_token.query(query, function(err, result) {
+                                               // User_token.destroy({userId: results.id,deviceId:deviceId}).exec(function (err, result) {
 
                                                     if (err) {
                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                             }
                                                     else
-                                                    {*/
+                                                    {
                                                         UsertokenService.createToken(results.id,deviceId, function (err, userTokenDetails)
                                                         {
                                                             if (err)
@@ -479,8 +481,8 @@ module.exports = {
                                                             }
                                                         });
 
-                                                   //  }
-                                              // });
+                                                     }
+                                              });
 
                                            // }
                                        // });

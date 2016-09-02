@@ -138,10 +138,10 @@ console.log(device_type);
                                                                                         /*------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
                                                                                                                     PUSH NOTIFICATION
                                                                                          -------------------------------------------------------------------------------------*/
-																						var query	  =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+foundCollageResults.userId+"'";
-																						User_token.query(query, function(err, getDeviceId) {		
+																						//var query	  =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+foundCollageResults.userId+"'";
+																						//User_token.query(query, function(err, getDeviceId) {		
 
-                                                                                        //User_token.find({userId: foundCollageResults.userId }).exec(function (err, getDeviceId){
+                                                                                        User_token.find({userId: foundCollageResults.userId }).exec(function (err, getDeviceId){
                                                                                             if(err)
                                                                                             {
                                                                                                   console.log(err);
@@ -152,14 +152,14 @@ console.log(device_type);
 
                                                                                                 var message     =  'Vote Notification';
                                                                                                 var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
-                                                                                                //var device_id   =  getDeviceId.deviceId;
-                                                                                                var deviceId_arr	= [];
+                                                                                                var device_id   =  getDeviceId.deviceId;
+                                                                                                /*var deviceId_arr	= [];
 																								getDeviceId.forEach(function(factor, index){
 																								
 																											deviceId_arr.push(factor.deviceId);
 																											
 																									
-																								});
+																								});*/
 
                                                                                                 if(deviceId_arr.length!=0){
                                                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
@@ -167,7 +167,7 @@ console.log(device_type);
                                                                                                                             });
                                                                                                 }else{
 																										//device_id 		=  device_id.split(',');sails.log.debug(device_id);
-																										var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
+																										var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body,NtfnType:2};
                                                                                                         var switchKey  	=  device_type;
                                                                                                         switch(switchKey){
                                                                                                                 case 'ios' :

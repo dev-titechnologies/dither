@@ -91,7 +91,8 @@ module.exports = {
 		console.log(data.device_id)
 		android
 			.send([data.device_id], {
-             		body:  data.NtfnBody
+             		body:  data.NtfnBody,
+             		Type:  data.NtfnType
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));

@@ -328,7 +328,7 @@ module.exports = {
 
                                                                                                 if(deviceId_arr.length!=0)
                                                                                                 {
-                                                                                                        var data      = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body};
+                                                                                                        var data      = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1};
 
                                                                                                         var switchKey   =  device_type;
                                                                                                         switch(switchKey){

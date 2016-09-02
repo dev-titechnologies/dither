@@ -83,10 +83,11 @@ module.exports = {
                                                                                     
                                                                                     //----------------------------Push Notification For Comment------------------------------------------
 																						var message   = 'Comment Notification';
+																						
 																						var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
-																						var query	  =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+collageDetails.userId+"'";
-																						User_token.query(query, function(err, getDeviceId) {
-																						// User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
+																						//var query	  =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+collageDetails.userId+"'";
+																						//User_token.query(query, function(err, getDeviceId) {
+																						User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
 																						  if(err)
 																						  {
 																							  console.log(err)
@@ -95,19 +96,19 @@ module.exports = {
 																						  else
 																						  {	
 																							  
-																						   //var device_id	= getDeviceId.deviceId;
-																						   var deviceId_arr	= [];
+																						   var device_id	= getDeviceId.deviceId;
+																						  /* var deviceId_arr	= [];
 																						   getDeviceId.forEach(function(factor, index){
 																							
 																										deviceId_arr.push(factor.deviceId);
 																										
 																								
-																							});
-																						   if(deviceId_arr.length!=0)
+																							});*/
+																						   if(deviceId)
 																						   {
 																							  //console.log(getDeviceId.deviceId)	  
 																							  // = device_id.split(',');sails.log.debug(device_id);
-																							  var data 	  = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body};
+																							  var data 	  = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3};
 																							  console.log(data)
 																							  if(device_type=='ios')
 																								{

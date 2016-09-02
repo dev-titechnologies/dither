@@ -14,6 +14,7 @@ module.exports = {
         reportUser:  function (req, res) {
 
                     console.log("report  User ===== api");
+                    console.log(req.get('token'))
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var reportType                  =     req.param('report_type');
@@ -59,7 +60,7 @@ module.exports = {
                                                                                             }
                                                                                             else
                                                                                             {
-
+																								console.log(getTokenDetails)
                                                                                                 var message     =  'Report User Notification';
                                                                                                 var ntfn_body   =  " Reported againt You";
                                                                                                 var device_id   =  getTokenDetails.deviceId;
@@ -206,6 +207,7 @@ module.exports = {
                     var userId                      =     tokenCheck.tokenDetails.userId;
 					var reportUserArray				=	  [];
                     var query	= "SELECT R.reporterId,U.name FROM reportUser as R LEFT JOIN user as U ON R.reporterId = U.id where R.userId = '"+userId+"'";
+				    console.log(query);
 				    ReportUser.query(query, function(err, ReportedUsers) {
 						if(err)
 						{

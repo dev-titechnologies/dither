@@ -438,7 +438,7 @@ module.exports = {
                                             }
                                             else
                                             {*/
-                                                console.log(result)
+                                                //console.log(result)
                                                 //delete existing token
                                                 var query	=	"DELETE FROM userToken where userId='"+results.id+"' AND deviceId='"+deviceId+"'";
                                                 User_token.query(query, function(err, result) {

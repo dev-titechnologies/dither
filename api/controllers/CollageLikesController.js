@@ -139,7 +139,7 @@ console.log(device_type);
                                                                                                                     PUSH NOTIFICATION
                                                                                          -------------------------------------------------------------------------------------*/
 
-                                                                                        User_token.findOne({userId: foundCollageResults.userId }).exec(function (err, getDeviceId){
+                                                                                        User_token.find({userId: foundCollageResults.userId }).exec(function (err, getDeviceId){
                                                                                             if(err)
                                                                                             {
                                                                                                   console.log(err);
@@ -150,15 +150,21 @@ console.log(device_type);
 
                                                                                                 var message     =  'Vote Notification';
                                                                                                 var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
-                                                                                                var device_id   =  getDeviceId.deviceId;
-                                                                                                
+                                                                                                //var device_id   =  getDeviceId.deviceId;
+                                                                                                var deviceId_arr	= [];
+																								getDeviceId.forEach(function(factor, index){
+																								
+																											deviceId_arr.push(factor.deviceId);
+																											
+																									
+																								});
 
-                                                                                                if(!device_id){
+                                                                                                if(deviceId_arr.length!=0){
                                                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                                         total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                             });
                                                                                                 }else{
-																										device_id 		=  device_id.split(',');sails.log.debug(device_id);
+																										//device_id 		=  device_id.split(',');sails.log.debug(device_id);
 																										var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body};
                                                                                                         var switchKey  	=  device_type;
                                                                                                         switch(switchKey){

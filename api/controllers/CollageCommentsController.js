@@ -105,7 +105,7 @@ module.exports = {
 																							});
 																						   if(deviceId_arr.length!=0)
 																						   {
-																							  console.log(getDeviceId.deviceId)	  
+																							  //console.log(getDeviceId.deviceId)	  
 																							  // = device_id.split(',');sails.log.debug(device_id);
 																							  var data 	  = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body};
 																							  console.log(data)

@@ -68,7 +68,7 @@ module.exports = {
                             console.log(request);
                             console.log(request.dither_title);
                             console.log(request.dither_location);
-							var device_type					=	  req.get('device_type');
+                            var device_type                 =     req.get('device_type');
                             console.log("json parse====>>>>");
                             //console.log(JSON.parse(request));
                             //Tagged Users ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -308,86 +308,86 @@ module.exports = {
                                                                                 }else{
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                         console.log(createdNotificationTags);
-                                                                                        
-                                                                                        
+
+
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
-                                                                                        
-                                                                                        
-																						var deviceId_arr	= [];
-																						var message   = 'Notification For Opinion';
-																						var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
-																						User_token.find({userId: tagNotifyArray})
-																							.exec(function (err, response) {
-																								
-																								response.forEach(function(factor, index){
-																							
-																										deviceId_arr.push(factor.deviceId);
-																										
-																								
-																								});
-																								
-																								if(deviceId_arr.length!=0)
-																								{
-																										var data 	  = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body};
-																										 
-																										var switchKey  	=  device_type;
-																										switch(switchKey){
-																												case 'ios' :
-																															NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-																																if(err)
-																																{
-																																	console.log("Error in Push Notification Sending")
-																																	console.log(err)
-																																	//callback();
-																																}
-																																else
-																																{
-																																	console.log("Push notification result")
-																																	console.log(ntfnSend)
-																																	console.log("Push Notification sended")
-																																	//callback();
-																																	return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
-																																}
-																															});
-																												break;
-
-																												case 'android' :
-																															NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-																																if(err)
-																																{
-																																	console.log("Error in Push Notification Sending")
-																																	console.log(err)
-																																	//callback();
-																																}
-																																else
-																																{
-																																	console.log("Push notification result")
-																																	console.log(ntfnSend)
-																																	console.log("Push Notification sended")
-																																	callback();
-																																	
-																																}
-																															});
-																												break;
-
-																												default:
-																															callback();
-																												break;
 
 
-																										}
-																								
-																								} 
-																								else
-																								{
-																									console.log("No deviceId")
-																									callback();
-																								}
-																								 
-																							});
-                                                                                        
-                                                                                      
-																				 //-------------------END Of PUSH Notification-------------------------------------------------------------------	
+                                                                                        var deviceId_arr    = [];
+                                                                                        var message   = 'Notification For Opinion';
+                                                                                        var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
+                                                                                        User_token.find({userId: tagNotifyArray})
+                                                                                            .exec(function (err, response) {
+
+                                                                                                response.forEach(function(factor, index){
+
+                                                                                                        deviceId_arr.push(factor.deviceId);
+
+
+                                                                                                });
+
+                                                                                                if(deviceId_arr.length!=0)
+                                                                                                {
+                                                                                                        var data      = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body};
+
+                                                                                                        var switchKey   =  device_type;
+                                                                                                        switch(switchKey){
+                                                                                                                case 'ios' :
+                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                                                                                                if(err)
+                                                                                                                                {
+                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                    console.log(err)
+                                                                                                                                    //callback();
+                                                                                                                                }
+                                                                                                                                else
+                                                                                                                                {
+                                                                                                                                    console.log("Push notification result")
+                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                    //callback();
+                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                break;
+
+                                                                                                                case 'android' :
+                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                                                                                                if(err)
+                                                                                                                                {
+                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                    console.log(err)
+                                                                                                                                    //callback();
+                                                                                                                                }
+                                                                                                                                else
+                                                                                                                                {
+                                                                                                                                    console.log("Push notification result")
+                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                    callback();
+
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                break;
+
+                                                                                                                default:
+                                                                                                                            callback();
+                                                                                                                break;
+
+
+                                                                                                        }
+
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    console.log("No deviceId")
+                                                                                                    callback();
+                                                                                                }
+
+                                                                                            });
+
+
+                                                                                 //-------------------END Of PUSH Notification-------------------------------------------------------------------
                                                                                       //  callback();
 
                                                                                 }
@@ -475,235 +475,302 @@ module.exports = {
      ==================================================================================================================================== */
         getProfileDithers:  function (req, res) {
 
-                    console.log("get Profile Dithers ===================");
-                    var tokenCheck                  =     req.options.tokenCheck;
-                    var server_baseUrl              =     req.options.server_baseUrl;
-                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                    var userId                      =     tokenCheck.tokenDetails.userId;
-                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                    var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
-                    var received_userId             =     req.param("user_id");
-                    var received_userName, received_userProfilePic;
-                    var query;
-                    console.log("Get Dither Other Profile  -------------------- ================================================");
-                    console.log("received_userId ------------------------------");
-                    console.log(received_userId);
-                    console.log("userId ------------------------------");
-                    console.log(userId);
-                    if(!received_userId){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass user_id'});
-                    }else{
-                                if(received_userId == userId){
-                                        console.log("Same Id ----------------------------------------------------");
-                                        query = "SELECT"+
-                                                " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
-                                                " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
-                                                " FROM collage clg"+
-                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                                " INNER JOIN user usr ON usr.id = clg.userId"+
-                                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
-                                                " WHERE"+
-                                                " clg.userId = '"+received_userId+"'"+
-                                                " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.createdAt DESC";
+                console.log("get Profile Dithers ===================");
+                var tokenCheck                  =     req.options.tokenCheck;
+                var server_baseUrl              =     req.options.server_baseUrl;
+                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var userId                      =     tokenCheck.tokenDetails.userId;
+                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                var received_userId             =     req.param("user_id");
+                var received_userName, received_userProfilePic;
+                var query;
+                console.log("Get Dither Other Profile  -------------------- ================================================");
+                console.log("received_userId ------------------------------");
+                console.log(received_userId);
+                console.log("userId ------------------------------");
+                console.log(userId);
 
-                                }else{
-                                        console.log("Not a logged User ----------------------------------------------------");
-                                        query = "SELECT"+
-                                                " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
-                                                " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                                " usr.profilePic, usr.name,"+
-                                                " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
-                                                " FROM ("+
-                                                " SELECT clg.id"+
-                                                " FROM collage clg"+
-                                                " WHERE clg.userId = '"+received_userId+"'"+
-                                                " UNION"+
-                                                " SELECT tg.collageId as id"+
-                                                " FROM tags tg"+
-                                                " WHERE tg.userId = '"+received_userId+"'"+
-                                                " ) AS temp_union"+
-                                                " INNER JOIN collage clg ON clg.id = temp_union.id"+
-                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                                " INNER JOIN tags tg ON tg.collageId = clg.id"+
-                                                " INNER JOIN user usr ON usr.id = tg.userId"+
-                                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
-                                                " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.createdAt DESC";
 
+                function commonKeyFunction(commonResults){
+                        //console.log(recentResults);
+                        var dataResults         = commonResults;
+                        var key                 = [];
+                        var dataResultsKeys     = [];
+                        var opinionArray        = [];
+                        //var like_position;
+                        var recent_dithers,
+                            popular_dithers,
+                            imgDetailsArrayOrder,
+                            total_opinion;
+                        for (var i = dataResults.length - 1; i >= 0; i--) {
+                            var like_position_Array = [];
+                            var like_position;
+                            var likeStatus;
+                            var dataResultsObj      =  new Object();
+                            var collageId_val       =  dataResults[i]["collageId"];
+                            if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
+                            {
+                                var imgDetailsArray = [];
+                                for (var j = dataResults.length - 1; j >= 0; j--)
+                                {
+                                    if(dataResults[j]["collageId"]==collageId_val)
+                                    {
+
+                                        if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
+                                                    likeStatus = 0;
+                                        }else{
+                                                likeStatus = 1;
+                                                console.log("Inside ----->>>> likePosition not null");
+                                                        //console.log(dataResults[j]["likeUserId"]);
+                                                         //console.log(userId);
+                                                        //console.log(dataResults[j]["userId"]);
+                                                        if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                            console.log("Inside factor like User id check ================ ++++++++++++++");
+                                                            like_position_Array.push(dataResults[j]["likePosition"]);
+                                                        }
+                                        }
+                                        imgDetailsArray.push({
+                                                        image_id        : dataResults[j]["imgId"],
+                                                        position        : dataResults[j]["position"],
+                                                        like_status     : likeStatus,
+                                                        vote            : dataResults[j]["vote"]
+                                                        });
+
+                                    }
                                 }
 
-                                console.log(query);
-                                Collage.query(query, function(err, results) {
-                                        if(err)
-                                        {
-                                            console.log(err);
-                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting collages of the user', error_details: err});
-                                        }
-                                        else
-                                        {
-                                            //console.log(results);
-                                            if(results.length == 0){
-                                                    User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
-                                                            if (err) {
-                                                                console.log(err);
-                                                                   return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
-                                                            }else{
+                                if(like_position_Array.length != 0){
+                                            console.log("like_position_Array === >>>  length != 0");
+                                            like_position = like_position_Array[0];
+                                }else{
+                                            console.log("like_position_Array === >>>  length == 0");
+                                            like_position = 0;
+                                }
+                                imgDetailsArrayOrder                    =       imgDetailsArray.reverse();
+                                received_userName                       =       dataResults[i]["name"];
+                                received_userProfilePic                 =       profilePic_path + dataResults[i]["profilePic"];
+                                dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
+                                dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
+                                dataResultsObj.dither_like_position     =       like_position;
+                                dataResultsObj.collage_id               =       collageId_val;
+                                dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
+                                dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
+                                dataResultsObj.vote                     =       imgDetailsArrayOrder;
 
-                                                                if(!foundUserDetails){
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
-                                                                                            username                : "",
-                                                                                            user_profile_image      : "",
-                                                                                            recent_dithers          : [],
-                                                                                            popular_dithers         : []
-                                                                        });
-                                                                }else{
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
-                                                                                            username                : foundUserDetails.name,
-                                                                                            user_profile_image      : profilePic_path + foundUserDetails.profilePic,
-                                                                                            recent_dithers          : [],
-                                                                                            popular_dithers         : []
-                                                                        });
-                                                                }
-                                                            }
-                                                    });
-                                            }else{
+                                key.push(dataResultsObj);
+                                dataResultsKeys.push(collageId_val);
+                                total_opinion                           =       dataResults[i]["opinionCount"];
+                                common_dithers                          =       key;
+                            }
+                        }
+                        //return  [total_opinion, recent_dithers, popular_dithers];
+                        return  {
+                                total_opinion       :    total_opinion,
+                                common_dithers      :    common_dithers,
+                                };
+                }
 
-                                                    //console.log(results);
-                                                    var dataResults         = results;
-                                                    var key                 = [];
-                                                    var dataResultsKeys     = [];
-                                                    var opinionArray        = [];
-                                                    //var like_position;
-                                                    var recent_dithers,
-                                                        popular_dithers,
-                                                        imgDetailsArrayOrder;
-                                                    for (var i = dataResults.length - 1; i >= 0; i--) {
-                                                        var like_position_Array = [];
-                                                        var like_position;
-                                                        var likeStatus;
-                                                        var dataResultsObj      =  new Object();
-                                                        var collageId_val       =  dataResults[i]["collageId"];
-                                                        if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
-                                                        {
-                                                            var imgDetailsArray = [];
-                                                            for (var j = dataResults.length - 1; j >= 0; j--)
-                                                            {
-                                                                if(dataResults[j]["collageId"]==collageId_val)
-                                                                {
 
-                                                                    if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
-                                                                                likeStatus = 0;
+                if(!received_userId){
+                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass user_id'});
+                }else{
+                            if(received_userId == userId){
+                                    console.log("Same Id ----------------------------------------------------");
+                                    query_recent = "SELECT"+
+                                            " temp.*,"+
+                                            " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                            " usr.profilePic, usr.name,"+
+                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
+                                            " FROM ("+
+                                            " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
+                                            " FROM collage clg"+
+                                            " WHERE clg.userId =  '"+received_userId+"'"+
+                                            " ORDER BY clg.createdAt DESC"+
+                                            " LIMIT 4"+
+                                            " ) AS temp"+
+                                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp.id"+
+                                            " INNER JOIN user usr ON usr.id = temp.userId"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                            " WHERE"+
+                                            " temp.userId = '"+received_userId+"'"+
+                                            " GROUP BY clgdt.id"+
+                                            " ORDER BY temp.createdAt DESC";
+
+                                    query_popular = "SELECT"+
+                                            " temp.*,"+
+                                            " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                            " usr.profilePic, usr.name,"+
+                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
+                                            " FROM ("+
+                                            " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
+                                            " FROM collage clg"+
+                                            " WHERE clg.userId =  '"+received_userId+"' AND clg.totalVote != 0"+
+                                            " ORDER BY clg.totalVote DESC"+
+                                            " LIMIT 4"+
+                                            " ) AS temp"+
+                                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp.id"+
+                                            " INNER JOIN user usr ON usr.id = temp.userId"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                            " WHERE"+
+                                            " temp.userId = '"+received_userId+"'"+
+                                            " GROUP BY clgdt.id"+
+                                            " ORDER BY temp.totalVote DESC";
+
+                            }else{
+                                    console.log("Not a logged User ----------------------------------------------------");
+                                    query_recent = "SELECT"+
+                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                                            " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                            " usr.profilePic, usr.name,"+
+                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
+                                            " FROM ("+
+                                            " SELECT temp.id"+
+                                            " FROM ("+
+                                            " SELECT clg.id"+
+                                            " FROM collage clg"+
+                                            " WHERE clg.userId =  '"+received_userId+"'"+
+                                            " UNION SELECT tg.collageId AS id"+
+                                            " FROM tags tg"+
+                                            " WHERE tg.userId =  '"+received_userId+"'"+
+                                            " ) AS temp"+
+                                            " INNER JOIN collage clg ON temp.id = clg.id"+
+                                            " ORDER BY clg.createdAt DESC"+
+                                            " LIMIT 4"+
+                                            " ) AS temp_union"+
+                                            " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                            " INNER JOIN tags tg ON tg.collageId = clg.id"+
+                                            " INNER JOIN user usr ON usr.id = tg.userId"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                            " GROUP BY clgdt.id"+
+                                            " ORDER BY clg.createdAt DESC";
+
+                                    query_popular = "SELECT"+
+                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                                            " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                            " usr.profilePic, usr.name,"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
+                                            " FROM ("+
+                                            " SELECT temp.id"+
+                                            " FROM ("+
+                                            " SELECT clg.id"+
+                                            " FROM collage clg"+
+                                            " WHERE clg.userId =  '"+received_userId+"'"+
+                                            " UNION SELECT tg.collageId AS id"+
+                                            " FROM tags tg"+
+                                            " WHERE tg.userId =  '"+received_userId+"'"+
+                                            " ) AS temp"+
+                                            " INNER JOIN collage clg ON temp.id = clg.id"+
+                                            " WHERE clg.totalVote != 0"+
+                                            " ORDER BY clg.totalVote DESC"+
+                                            " LIMIT 4"+
+                                            " ) AS temp_union"+
+                                            " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
+                                            " INNER JOIN tags tg ON tg.collageId = clg.id"+
+                                            " INNER JOIN user usr ON usr.id = tg.userId"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                            " GROUP BY clgdt.id"+
+                                            " ORDER BY clg.totalVote DESC";
+
+                            }
+
+                            console.log(query_recent);
+                            console.log(query_popular);
+                            Collage.query(query_recent, function(err, recentResults) {
+                                    if(err)
+                                    {
+                                        console.log(err);
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting recent collages of the user', error_details: err});
+                                    }
+                                    else
+                                    {
+
+                                        Collage.query(query_popular, function(err, popularResults) {
+                                                if(err)
+                                                {
+                                                    console.log(err);
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting popular collages of the user', error_details: err});
+                                                }
+                                                else
+                                                {
+                                                    //console.log(recentResults);
+                                                    if(recentResults.length == 0 && popularResults.length == 0){
+                                                            User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
+                                                                    if (err) {
+                                                                        console.log(err);
+                                                                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                                     }else{
-                                                                            likeStatus = 1;
-                                                                            console.log("Inside ----->>>> likePosition not null");
-                                                                                    console.log(dataResults[j]["likeUserId"]);
-                                                                                     console.log(userId);
-                                                                                    console.log(dataResults[j]["userId"]);
-                                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
-                                                                                        console.log("Inside factor like User id check ================ ++++++++++++++");
-                                                                                        //like_position = dataResults[j]["likePosition"];
-                                                                                        like_position_Array.push(dataResults[j]["likePosition"]);
-                                                                                    }
-                                                                    }
-                                                                    imgDetailsArray.push({
-                                                                                    image_id        : dataResults[j]["imgId"],
-                                                                                    position        : dataResults[j]["position"],
-                                                                                    like_status     : likeStatus,
-                                                                                    vote            : dataResults[j]["vote"]
-                                                                                    });
-                                                                    /*if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
-                                                                            like_position = 0;
-                                                                    }else{
-                                                                            like_position = dataResults[j]["likePosition"];
-                                                                    }*/
 
-                                                                }
-                                                            }
-
-                                                            if(like_position_Array.length != 0){
-                                                                        console.log("like_position_Array === >>>  length != 0");
-                                                                        like_position = like_position_Array[0];
-                                                            }else{
-                                                                        console.log("like_position_Array === >>>  length == 0");
-                                                                        like_position = 0;
-                                                            }
-                                                            imgDetailsArrayOrder                    =       imgDetailsArray.reverse();
-                                                            received_userName                       =       dataResults[i]["name"];
-                                                            received_userProfilePic                 =       profilePic_path + dataResults[i]["profilePic"];
-                                                            dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
-                                                            dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
-                                                            dataResultsObj.dither_like_position     =       like_position;
-                                                            dataResultsObj.collage_id               =       collageId_val;
-                                                            dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
-                                                            dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
-                                                            dataResultsObj.vote                     =       imgDetailsArrayOrder;
-                                                            dataResultsObj.mainOrder                =       i;
-
-                                                            key.push(dataResultsObj);
-                                                            dataResultsKeys.push(collageId_val);
-                                                            opinionArray.push(dataResults[i]["totalVote"]);
-                                                            recent_dithers                          =       key.sort( predicatBy("mainOrder") );
-                                                            popular_dithers                         =       key.sort( predicatBy("totalVote") );
-                                                            //popular_dithers                         =       popular_dithers.sort( predicatBy("totalVote") ).reverse();
-                                                        }
-                                                    }
-                                                    var total_opinion = 0;
-                                                    opinionArray.forEach(function(factor, index){
-                                                                    //console.log(factor);
-                                                                    total_opinion += factor;
-                                                    });
-                                                    console.log(total_opinion);
-                                                    var recent_dithers_Array_4      =   [];
-                                                    var popular_dithers_Array_4     =   [];
-                                                    recent_dithers.forEach(function(factor, index){
-                                                                    //console.log(factor);
-                                                                    if(index < 4){
-                                                                        recent_dithers_Array_4.push(factor);
-                                                                    }
-                                                    });
-
-                                                    popular_dithers = popular_dithers.reverse();
-                                                    popular_dithers.forEach(function(factor, index){
-                                                                    //console.log(factor);
-                                                                    if(index < 4){
-                                                                        popular_dithers_Array_4.push(factor);
-                                                                    }
-                                                    });
-                                                    User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
-                                                            if (err) {
-                                                                   console.log(err);
-                                                                   return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
-                                                            }else{
-
-                                                                if(!foundUserDetails){
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
-                                                                                            username                : "",
-                                                                                            user_profile_image      : "",
-                                                                                            recent_dithers          : [],
-                                                                                            popular_dithers         : []
-                                                                        });
-                                                                }else{
-                                                                        var user_profile_image = "";
-                                                                        if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
-                                                                                    user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                        if(!foundUserDetails){
+                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
+                                                                                                    username                : "",
+                                                                                                    user_profile_image      : "",
+                                                                                                    recent_dithers          : [],
+                                                                                                    popular_dithers         : []
+                                                                                });
+                                                                        }else{
+                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
+                                                                                                    username                : foundUserDetails.name,
+                                                                                                    user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                    recent_dithers          : [],
+                                                                                                    popular_dithers         : []
+                                                                                });
                                                                         }
-                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
-                                                                                            username                : foundUserDetails.name,
-                                                                                            user_profile_image      : user_profile_image,
-                                                                                            total_opinion           : total_opinion,
-                                                                                            recent_dithers          : recent_dithers_Array_4,
-                                                                                            popular_dithers         : popular_dithers_Array_4 , key : key});
-                                                                }
-                                                            }
-                                                    });
+                                                                    }
+                                                            });
+                                                    }else{
 
-                                            }//Results length check else
-                                        }
-                                });
-                    }
+                                                            User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
+                                                                    if (err) {
+                                                                           console.log(err);
+                                                                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
+                                                                    }else{
+
+                                                                        if(!foundUserDetails){
+                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
+                                                                                                    username                : "",
+                                                                                                    user_profile_image      : "",
+                                                                                                    recent_dithers          : [],
+                                                                                                    popular_dithers         : []
+                                                                                });
+                                                                        }else{
+                                                                                console.log("function abcd()++++++++++++++++++++++++++++++++++++++++");
+                                                                                var recent_DitherResults    =   commonKeyFunction(recentResults);
+                                                                                var popular_DitherResults   =   commonKeyFunction(popularResults);
+                                                                                /*console.log("|||||||||||||||||||||||||||||||||||| recent_DitherResults |||||||||||||||||||||||||||||");
+                                                                                console.log(recent_DitherResults);
+                                                                                console.log("|||||||||||||||||||||||||||||||||||| popular_DitherResults |||||||||||||||||||||||||||||");
+                                                                                console.log(popular_DitherResults);
+                                                                                console.log("total_opinion");
+                                                                                console.log(recent_DitherResults.total_opinion);*/
+                                                                                var user_profile_image = "";
+                                                                                if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
+                                                                                            user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                }
+                                                                                recent_dithers          =  recent_DitherResults.common_dithers.reverse();
+                                                                                popular_dithers         =  popular_DitherResults.common_dithers;
+                                                                                popular_dithers         =  popular_dithers.sort( predicatBy("totalVote") ).reverse();
+                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
+                                                                                                        username                : foundUserDetails.name,
+                                                                                                        user_profile_image      : user_profile_image,
+                                                                                                        total_opinion           : recent_DitherResults.total_opinion,
+                                                                                                        recent_dithers          : recent_dithers,
+                                                                                                        popular_dithers         : popular_dithers,
+                                                                                                    });
+                                                                        }
+                                                                    }
+                                                            });
+                                                    }//Results length check else
+                                                }
+                                        });
+                                    }
+                            });
+                }
         },
 
 /* ==================================================================================================================================

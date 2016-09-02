@@ -621,6 +621,7 @@ module.exports = {
 
                             }else{
                                     console.log("Not a logged User ----------------------------------------------------");
+                                    //show only tagged
                                     query_recent = "SELECT"+
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
@@ -643,8 +644,8 @@ module.exports = {
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                            " LEFT JOIN tags tg ON tg.collageId = clg.id"+
-                                            " INNER JOIN user usr ON usr.id = clg.userId OR usr.id = tg.userId"+
+                                            " INNER JOIN tags tg ON tg.collageId = clg.id"+
+                                            " INNER JOIN user usr ON usr.id = tg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
@@ -671,8 +672,8 @@ module.exports = {
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                            " LEFT JOIN tags tg ON tg.collageId = clg.id"+
-                                            " INNER JOIN user usr ON usr.id = clg.userId OR usr.id = tg.userId"+
+                                            " INNER JOIN tags tg ON tg.collageId = clg.id"+
+                                            " INNER JOIN user usr ON usr.id = tg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.totalVote DESC";
@@ -814,6 +815,7 @@ module.exports = {
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
+                                        //Show only tagged
                                         query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
@@ -829,8 +831,8 @@ module.exports = {
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                                " LEFT JOIN tags tg ON tg.collageId = clg.id"+
-                                                " INNER JOIN user usr ON usr.id = clg.userId OR usr.id = tg.userId"+
+                                                " INNER JOIN tags tg ON tg.collageId = clg.id"+
+                                                " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " GROUP BY clgdt.id"+
                                                 " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";

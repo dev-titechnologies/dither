@@ -245,15 +245,17 @@ module.exports = {
     /* ==================================================================================================================================
                SOCKET
      ==================================================================================================================================== */
-        /*socketTest:  function (req, res) {
+        socketTest:  function (req, res) {
+                console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> socketTest");
                 //sails.sockets.join(req.socket, "1");
                 //console.log(req.socket);
-                sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
-                sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
+                sails.sockets.blast('comment-dither', {msg: 'Hi! Message ------11111111'});
+                //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
+                //sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
 
         },
 
-        subscribeToFunRoom: function(req, res) {
+        /*subscribeToFunRoom: function(req, res) {
               //r roomName = req.param('roomName');
               //console.log(req);
               var roomName = "pppp";

@@ -17,11 +17,18 @@ io.socket.on('createInSignUp', function (event){
     console.log(event);
 });*/
 
-io.sails.url = "http://api.dither.titechdev.com:5000";
+io.sails.url = "http://192.168.1.57:5000";
 io.socket.on('connect', function socketConnected(){
         console.log("socket --- connected");
         //socket.emit('edit-dither');
 
+        io.socket.get('/test/socketTest', function (resData, jwres){
+                  //console.log('Sails responded with: ', resData);
+                  //console.log('with headers: ', jwres.headers);
+                  //console.log('and with status code: ', jwres.statusCode);
+                  console.log("yyyyyyyyyyyyyyyyy(((((((((((((((((((((TTTTTTTTTTTTTTTTTTTT");
+                  console.log('Sails responded with: ', resData);
+        });
         io.socket.get('/socketSettings/Socket_connection', function (resData, jwres){
                     console.log("Connection  =============== >>>>>>>>>>>>>>>>>> +++++++++++++++++++++");
                     console.log(resData);
@@ -34,6 +41,16 @@ io.socket.on('connect', function socketConnected(){
           console.log("yyyyyyyyyyyyyyyyy(((((((((((((((((((((9999999999999");
           console.log('Sails responded with: ', resData);
         });
+
+        io.socket.post('/collageComments/commentDither', function (resData, jwres){
+          //console.log('Sails responded with: ', resData);
+          //console.log('with headers: ', jwres.headers);
+          //console.log('and with status code: ', jwres.statusCode);
+          console.log("yyyyyyyyyyyyyyyyy(((((((((((((((((((((77777777777777777");
+          console.log('Sails responded with: ', resData);
+        });
+
+
 });
 
 io.socket.on('disconnect', function socketConnected(socket){
@@ -90,6 +107,13 @@ io.socket.on('like-dither', function (event){
         console.log(event);
         console.log(event.message);
         console.log("2222222222222222222222222222222222222222222222");
+});
+
+io.socket.on('comment-dither', function (event){
+        console.log("comment Dither ----------------");
+        console.log(event);
+        console.log(event.message);
+        console.log("3333333333333333333333333333");
 });
 
 /*io.socket.on('createIncheck', function newMessageFromSails ( message ) {

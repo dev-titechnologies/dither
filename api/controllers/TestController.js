@@ -370,33 +370,33 @@ module.exports = {
      testThumbnail: function (req, res) {
 
                             console.log("thumbnail image")
-                     
+
                            require('lwip').open('img2.jpeg', function(err, image) {
-							if(err)
-							  {
-								  console.log("Error")
-								  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-							  }
-							  else
-							  {
-								// lanczos
-								image.resize(50, 50, function(err, rzdImg) {
-									rzdImg.writeFile('testThumb/output.jpg', function(err) {
-										if(err)
-										  {
-											  console.log("Error")
-											  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-										  }
-										  else
-										  {
-											  return res.json(200, {status: 1,status_type: 'Success', message: 'Image Resizing Success'});
-										  }
-										});
-								});
-							  }	
-							});
-                            
-                           
+                            if(err)
+                              {
+                                  console.log("Error")
+                                  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+                              }
+                              else
+                              {
+                                // lanczos
+                                image.resize(50, 50, function(err, rzdImg) {
+                                    rzdImg.writeFile('testThumb/output.jpg', function(err) {
+                                        if(err)
+                                          {
+                                              console.log("Error")
+                                              return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+                                          }
+                                          else
+                                          {
+                                              return res.json(200, {status: 1,status_type: 'Success', message: 'Image Resizing Success'});
+                                          }
+                                        });
+                                });
+                              }
+                            });
+
+
 
 
         },
@@ -507,111 +507,139 @@ module.exports = {
                 }
         },
 
+        findArrayTest : function (req, res) {
+
+                var s_Array = [{notifyContact : 0}, {notifyContact : 1}];
+                /*//User.find({notifyContact: [0,1]}).exec(function (err, results) {   //Possible
+                //User.find({notifyContact: 1}).exec(function (err, results) {       //Possible
+                User.find(s_Array).exec(function (err, results) {
+                       console.log();
+                    if(err){
+                            console.log(err);
+                    }else{
+                            console.log("SSSSSSSSSSSSSSSSSSSSSSSSS");
+                            console.log(results);
+                            console.log(results.length);
+                    }
+                });*/
+
+                User.findOne({notifyContact: 1}).exec(function (err, results) {
+                        console.log();
+                        if(err){
+                                console.log(err);
+                        }else{
+                                console.log("SSSSSSSSSSSSSSSSSSSSSSSSS");
+                                console.log(results);
+                                console.log(results.length);
+                        }
+                });
+        },
+
 
 
 
          /* ==================================================================================================================================
                TEST PUSH NOTIFICATION
-		==================================================================================================================================== */
+        ==================================================================================================================================== */
 
-		testTag: function (req, res) {
-					var taggedUserArray	= ['145','127'];
-					
-					deviceId_arr	= [];
-					ntfn_body		= "test push";
-					device_type		= req.get('device_Type');
-					User_token.find({userId: taggedUserArray})
-						.exec(function (err, response) {
-							
-							response.forEach(function(factor, index){
-						
-									deviceId_arr.push(factor.deviceId);
-									
-							
-							});
-							console.log(JSON.stringify(deviceId_arr))
-							if(deviceId_arr.length!=0)
-							{
-									var data 	  = {device_id:deviceId_arr,NtfnBody:ntfn_body};
-									 
-									 
-									var switchKey  	=  device_type;
-									switch(switchKey){
-											case 'ios' :
-														NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-															if(err)
-															{
-																console.log("Error in Push Notification Sending")
-																console.log(err)
-																//callback();
-															}
-															else
-															{
-																console.log("Push notification result")
-																console.log(ntfnSend)
-																console.log("Push Notification sended")
-																//callback();
-																return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
-															}
-														});
-											break;
+        testTag: function (req, res) {
+                    var taggedUserArray = ['145','127'];
 
-											case 'android' :
-														NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-															if(err)
-															{
-																console.log("Error in Push Notification Sending")
-																console.log(err)
-																//callback();
-															}
-															else
-															{
-																console.log("Push notification result")
-																console.log(ntfnSend)
-																console.log("Push Notification sended")
-																//callback();
-																return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
-															}
-														});
-											break;
+                    deviceId_arr    = [];
+                    ntfn_body       = "test push";
+                    device_type     = req.get('device_Type');
+                    User_token.find({userId: taggedUserArray})
+                        .exec(function (err, response) {
 
-											default:
-														return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceType'});
-											break;
+                            response.forEach(function(factor, index){
+
+                                    deviceId_arr.push(factor.deviceId);
 
 
-									}
-									 
-									 
-									
-							} 
-							else
-							{
-								return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceId'});
-							}
-							 
-						});
+                            });
+                            console.log(JSON.stringify(deviceId_arr))
+                            if(deviceId_arr.length!=0)
+                            {
+                                    var data      = {device_id:deviceId_arr,NtfnBody:ntfn_body};
 
-					
-					
-					/*var query 	=	"SELECT deviceId from userToken wher userId IN ('"+taggedUserArray+"')"
-					User_token.query(query, function(err, getDeviceId) {
-						if(err)
-						{
-						console.log(err)	
-						  console.log("errror")
-						}
-						else
-						{
-							console.log(getDeviceId)
-						}
-					});*/
-					
-					
-					
-					
-					
-		},
+
+                                    var switchKey   =  device_type;
+                                    switch(switchKey){
+                                            case 'ios' :
+                                                        NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                            if(err)
+                                                            {
+                                                                console.log("Error in Push Notification Sending")
+                                                                console.log(err)
+                                                                //callback();
+                                                            }
+                                                            else
+                                                            {
+                                                                console.log("Push notification result")
+                                                                console.log(ntfnSend)
+                                                                console.log("Push Notification sended")
+                                                                //callback();
+                                                                return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+                                                            }
+                                                        });
+                                            break;
+
+                                            case 'android' :
+                                                        NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                            if(err)
+                                                            {
+                                                                console.log("Error in Push Notification Sending")
+                                                                console.log(err)
+                                                                //callback();
+                                                            }
+                                                            else
+                                                            {
+                                                                console.log("Push notification result")
+                                                                console.log(ntfnSend)
+                                                                console.log("Push Notification sended")
+                                                                //callback();
+                                                                return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+                                                            }
+                                                        });
+                                            break;
+
+                                            default:
+                                                        return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceType'});
+                                            break;
+
+
+                                    }
+
+
+
+                            }
+                            else
+                            {
+                                return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceId'});
+                            }
+
+                        });
+
+
+
+                    /*var query     =   "SELECT deviceId from userToken wher userId IN ('"+taggedUserArray+"')"
+                    User_token.query(query, function(err, getDeviceId) {
+                        if(err)
+                        {
+                        console.log(err)
+                          console.log("errror")
+                        }
+                        else
+                        {
+                            console.log(getDeviceId)
+                        }
+                    });*/
+
+
+
+
+
+        },
 
 
 };

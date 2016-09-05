@@ -271,7 +271,7 @@ module.exports = {
                                                                                                                                                 if(device_id){
                                                                                                                                                         callback();
                                                                                                                                                 }else{
-                                                                                                                                                       // device_id       =  device_id.split(',');sails.log.debug(device_id);
+																																						device_id       =  device_id.split(',');sails.log.debug(device_id);
                                                                                                                                                         var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body,NtfnType:4};
                                                                                                                                                         var switchKey   =  device_type;
                                                                                                                                                         switch(switchKey){

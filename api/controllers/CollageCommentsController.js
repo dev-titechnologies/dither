@@ -57,8 +57,8 @@ module.exports = {
                                                            }
                                                            else
                                                            {
-                                                              //  if(userId   !=  collageDetails.userId)
-                                                               // {
+                                                               if(userId   !=  collageDetails.userId)
+                                                                {
                                                                         console.log("inserted comments  Different User Comment");
                                                                         console.log("own comment not included")
                                                                         var values ={
@@ -181,13 +181,13 @@ module.exports = {
                                                                                                  }
                                                                                                 }
                                                                                             });
-                                                                                        //}
+                                                                                       // }
 
                                                                                 }
                                                                         });
 
 
-                                                               /* }else{
+                                                                }else{
                                                                         console.log("inserted comments  Same User Comment");
                                                                         console.log(results);
                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
@@ -195,7 +195,7 @@ module.exports = {
                                                                                                     comment_msg                     :    results.msg,
                                                                                                     comment_created_date_time       :    results.createdAt,
                                                                                             });
-                                                                }*/
+                                                                }
                                                             }
                                                         });
 

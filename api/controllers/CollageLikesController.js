@@ -149,25 +149,25 @@ console.log(device_type);
                                                                                             }
                                                                                             else
                                                                                             {
-
+																								console.log(getDeviceId)
                                                                                                 var message     =  'Vote Notification';
                                                                                                 var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
-                                                                                                var device_id   =  getDeviceId.deviceId;
-                                                                                                /*var deviceId_arr	= [];
+                                                                                               // var device_id   =  getDeviceId.deviceId;
+                                                                                                var deviceId_arr	= [];
 																								getDeviceId.forEach(function(factor, index){
 																								
 																											deviceId_arr.push(factor.deviceId);
 																											
 																									
-																								});*/
+																								});
 
-                                                                                                if(device_id){
+                                                                                                if(!deviceId_arr.length){
                                                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                                         total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                             });
                                                                                                 }else{
 																										//device_id 		=  device_id.split(',');sails.log.debug(device_id);
-																										var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body,NtfnType:2};
+																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:2};
                                                                                                         var switchKey  	=  device_type;
                                                                                                         switch(switchKey){
                                                                                                                 case 'ios' :

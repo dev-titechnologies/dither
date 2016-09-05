@@ -630,10 +630,11 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT temp.id"+
                                             " FROM ("+
-                                            " SELECT clg.id"+
-                                            " FROM collage clg"+
-                                            " WHERE clg.userId =  '"+received_userId+"'"+
-                                            " UNION SELECT tg.collageId AS id"+
+                                            //" SELECT clg.id"+
+                                            //" FROM collage clg"+
+                                            //" WHERE clg.userId =  '"+received_userId+"'"+
+                                            //" UNION SELECT tg.collageId AS id"+
+                                            " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
                                             " WHERE tg.userId =  '"+received_userId+"'"+
                                             " ) AS temp"+
@@ -657,10 +658,11 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT temp.id"+
                                             " FROM ("+
-                                            " SELECT clg.id"+
-                                            " FROM collage clg"+
-                                            " WHERE clg.userId =  '"+received_userId+"'"+
-                                            " UNION SELECT tg.collageId AS id"+
+                                            //" SELECT clg.id"+
+                                            //" FROM collage clg"+
+                                           // " WHERE clg.userId =  '"+received_userId+"'"+
+                                            //" UNION SELECT tg.collageId AS id"+
+                                            " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
                                             " WHERE tg.userId =  '"+received_userId+"'"+
                                             " ) AS temp"+

@@ -51,201 +51,205 @@ console.log(device_type);
                                         if(!foundCollageResults){
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No Dither Found by this id'});
                                         }else{
-
-                                            //To check the CollageId and the ImageId is existing or not
-                                            CollageDetails.findOne({id: likedImageId, collageId: collageId}).exec(function (err, foundImgResults){
-                                                if(err){
-                                                    console.log(err);
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding image from Image Details', error_details: err});
-                                                }else{
-                                                    console.log(foundImgResults);
-                                                    if(!foundImgResults){
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No Image of the Dither Found by this id'});
+                                            //To Check vote by Dither creator or not
+                                            if(userId   ==  foundCollageResults.userId){
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Dither created by current user'});
+                                            }else{
+                                                //To check the CollageId and the ImageId is existing or not
+                                                CollageDetails.findOne({id: likedImageId, collageId: collageId}).exec(function (err, foundImgResults){
+                                                    if(err){
+                                                        console.log(err);
+                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding image from Image Details', error_details: err});
                                                     }else{
+                                                        console.log(foundImgResults);
+                                                        if(!foundImgResults){
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No Image of the Dither Found by this id'});
+                                                        }else{
 
-                                                        var values = {
-                                                            collageId       :       collageId,
-                                                            imageId         :       likedImageId,
-                                                            userId          :       userId,
-                                                            likeStatus      :       true,
-                                                            likePosition    :       imgPosition,
-                                                        };
-                                                        console.log(values);
-                                                        //Creating the vote
-                                                        CollageLikes.create(values).exec(function(err, results){
-                                                            if(err){
-                                                                    console.log(err);
-                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Vote Creation', error_details: err});
-                                                            }
-                                                            else{
-                                                                var criteria = {id: foundImgResults.id};
-                                                                var values   = {vote: parseInt(foundImgResults.vote) + 1};
-                                                                //To Update the vote count against the image
-                                                                CollageDetails.update(criteria, values).exec(function(err, updatedVoteCount) {
-                                                                    if(err)
-                                                                    {
+                                                            var values = {
+                                                                collageId       :       collageId,
+                                                                imageId         :       likedImageId,
+                                                                userId          :       userId,
+                                                                likeStatus      :       true,
+                                                                likePosition    :       imgPosition,
+                                                            };
+                                                            console.log(values);
+                                                            //Creating the vote
+                                                            CollageLikes.create(values).exec(function(err, results){
+                                                                if(err){
                                                                         console.log(err);
-                                                                        return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating vote count of a single image'});
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        var criteria = {id: foundCollageResults.id};
-                                                                        var values   = {totalVote: parseInt(foundCollageResults.totalVote) + 1};
-                                                                        //To update the totalVote (opinion) against that collage
-                                                                        Collage.update(criteria, values).exec(function(err, updatedTotalVoteCount) {
-                                                                            if(err)
-                                                                            {
-                                                                                console.log(err);
-                                                                                return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating total opinion of a Dither'});
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                //-----------Notification log Insertion----------------
-                                                                                var values ={
-                                                                                        notificationTypeId  :   2,
-                                                                                        userId              :   userId,
-                                                                                        ditherUserId        :   foundCollageResults.userId,
-                                                                                        collage_id          :   collageId,
-                                                                                        image_id            :   likedImageId,
-                                                                                        //description         :   likeDetails.length
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Vote Creation', error_details: err});
+                                                                }
+                                                                else{
+                                                                    var criteria = {id: foundImgResults.id};
+                                                                    var values   = {vote: parseInt(foundImgResults.vote) + 1};
+                                                                    //To Update the vote count against the image
+                                                                    CollageDetails.update(criteria, values).exec(function(err, updatedVoteCount) {
+                                                                        if(err)
+                                                                        {
+                                                                            console.log(err);
+                                                                            return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating vote count of a single image'});
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            var criteria = {id: foundCollageResults.id};
+                                                                            var values   = {totalVote: parseInt(foundCollageResults.totalVote) + 1};
+                                                                            //To update the totalVote (opinion) against that collage
+                                                                            Collage.update(criteria, values).exec(function(err, updatedTotalVoteCount) {
+                                                                                if(err)
+                                                                                {
+                                                                                    console.log(err);
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating total opinion of a Dither'});
                                                                                 }
-                                                                                NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-                                                                                    if(err)
-                                                                                    {
-                                                                                        console.log(err);
-                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                                                                else
+                                                                                {
+                                                                                    //-----------Notification log Insertion----------------
+                                                                                    var values ={
+                                                                                            notificationTypeId  :   2,
+                                                                                            userId              :   userId,
+                                                                                            ditherUserId        :   foundCollageResults.userId,
+                                                                                            collage_id          :   collageId,
+                                                                                            image_id            :   likedImageId,
+                                                                                            //description         :   likeDetails.length
                                                                                     }
-                                                                                    else
-                                                                                    {
-                                                                                        //console.log(req);
-                                                                                        console.log(req.isSocket);
-                                                                                        if (!req.isSocket) {
-                                                                                                console.log("No socket");
-                                                                                                //console.log(sails.sockets.getId(req));
+                                                                                    NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+                                                                                        if(err)
+                                                                                        {
+                                                                                            console.log(err);
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                                         }
-                                                                                        //console.log(sails.sockets.getId(req));
-                                                                                        //console.log(sails.sockets.socketRooms(req.socket));
-                                                                                        sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully"});
-                                                                                        //sails.sockets.broadcast(sails.sockets.getId(req),'like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
-                                                                                        //sails.sockets.emit('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
-                                                                                        console.log(createdNotificationTags);
-                                                                                        //return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                //total_like_count       :  updatedVoteCount[0].vote,
-                                                                                        //});
-
-                                                                                //###################################
-
-                                                                                        /*------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
-                                                                                                                    PUSH NOTIFICATION
-                                                                                         -------------------------------------------------------------------------------------*/
-																						//var query	  =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+foundCollageResults.userId+"'";
-																						//User_token.query(query, function(err, getDeviceId) {		
-
-                                                                                        User_token.find({userId: foundCollageResults.userId }).exec(function (err, getDeviceId){
-                                                                                            if(err)
-                                                                                            {
-                                                                                                  console.log(err);
-                                                                                                  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+                                                                                        else
+                                                                                        {
+                                                                                            //console.log(req);
+                                                                                            console.log(req.isSocket);
+                                                                                            if (!req.isSocket) {
+                                                                                                    console.log("No socket");
+                                                                                                    //console.log(sails.sockets.getId(req));
                                                                                             }
-                                                                                            else
-                                                                                            {
-																								console.log(getDeviceId)
-                                                                                                var message     =  'Vote Notification';
-                                                                                                var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
-                                                                                               // var device_id   =  getDeviceId.deviceId;
-                                                                                                var deviceId_arr	= [];
-																								getDeviceId.forEach(function(factor, index){
-																								
-																											deviceId_arr.push(factor.deviceId);
-																											
-																									
-																								});
+                                                                                            //console.log(sails.sockets.getId(req));
+                                                                                            //console.log(sails.sockets.socketRooms(req.socket));
+                                                                                            sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully"});
+                                                                                            //sails.sockets.broadcast(sails.sockets.getId(req),'like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
+                                                                                            //sails.sockets.emit('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
+                                                                                            console.log(createdNotificationTags);
+                                                                                            //return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                    //total_like_count       :  updatedVoteCount[0].vote,
+                                                                                            //});
 
-                                                                                                if(!deviceId_arr.length){
-                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                        total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                                            });
-                                                                                                }else{
-																										//device_id 		=  device_id.split(',');sails.log.debug(device_id);
-																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:2};
-                                                                                                        var switchKey  	=  device_type;
-                                                                                                        switch(switchKey){
-                                                                                                                case 'ios' :
-                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-                                                                                                                                if(err)
-                                                                                                                                {
-                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                    console.log(err)
-                                                                                                                                    //callback();
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
-                                                                                                                                    console.log("Push notification result")
-                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                    //callback();
-                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                        total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                                                    });
-                                                                                                                                }
-                                                                                                                            });
-                                                                                                                break;
+                                                                                    //###################################
 
-                                                                                                                case 'android' :
-                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-                                                                                                                                if(err)
-                                                                                                                                {
-                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                    console.log(err)
-                                                                                                                                    //callback();
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
-                                                                                                                                    console.log("Push notification result")
-                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                    //callback();
-                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                            total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                                                    });
-                                                                                                                                }
-                                                                                                                            });
-                                                                                                                break;
+                                                                                            /*------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
+                                                                                                                        PUSH NOTIFICATION
+                                                                                             -------------------------------------------------------------------------------------*/
+                                                                                            //var query   =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+foundCollageResults.userId+"'";
+                                                                                            //User_token.query(query, function(err, getDeviceId) {
 
-                                                                                                                default:
-                                                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                        total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                                            });
-
-                                                                                                                break;
-
-
-                                                                                                        }
+                                                                                            User_token.find({userId: foundCollageResults.userId }).exec(function (err, getDeviceId){
+                                                                                                if(err)
+                                                                                                {
+                                                                                                      console.log(err);
+                                                                                                      return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
                                                                                                 }
+                                                                                                else
+                                                                                                {
+                                                                                                    console.log(getDeviceId)
+                                                                                                    var message     =  'Vote Notification';
+                                                                                                    var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
+                                                                                                   // var device_id   =  getDeviceId.deviceId;
+                                                                                                    var deviceId_arr    = [];
+                                                                                                    getDeviceId.forEach(function(factor, index){
 
-                                                                                            //------------------------------
-                                                                                            }
-                                                                                          });
-                                                                                            //###################################
-                                                                                    }
-                                                                                });
-                                                                                //-----------------------------End OF NotificationLog---------------------------------
+                                                                                                                deviceId_arr.push(factor.deviceId);
 
-                                                                            }//Collage totalVote count Update
-                                                                        });
 
-                                                                    }//CollageDetails vote count Update
-                                                                });
+                                                                                                    });
 
-                                                            }//Like Creation End
-                                                        });
+                                                                                                    if(!deviceId_arr.length){
+                                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                                            total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                                });
+                                                                                                    }else{
+                                                                                                            //device_id         =  device_id.split(',');sails.log.debug(device_id);
+                                                                                                            var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:2};
+                                                                                                            var switchKey   =  device_type;
+                                                                                                            switch(switchKey){
+                                                                                                                    case 'ios' :
+                                                                                                                                NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                                                                                                    if(err)
+                                                                                                                                    {
+                                                                                                                                        console.log("Error in Push Notification Sending")
+                                                                                                                                        console.log(err)
+                                                                                                                                        //callback();
+                                                                                                                                    }
+                                                                                                                                    else
+                                                                                                                                    {
+                                                                                                                                        console.log("Push notification result")
+                                                                                                                                        console.log(ntfnSend)
+                                                                                                                                        console.log("Push Notification sended")
+                                                                                                                                        //callback();
+                                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                                            total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                                        });
+                                                                                                                                    }
+                                                                                                                                });
+                                                                                                                    break;
 
-                                                    }//Collage Details exising Check Else
-                                                }
-                                            });
+                                                                                                                    case 'android' :
+                                                                                                                                NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                                                                                                    if(err)
+                                                                                                                                    {
+                                                                                                                                        console.log("Error in Push Notification Sending")
+                                                                                                                                        console.log(err)
+                                                                                                                                        //callback();
+                                                                                                                                    }
+                                                                                                                                    else
+                                                                                                                                    {
+                                                                                                                                        console.log("Push notification result")
+                                                                                                                                        console.log(ntfnSend)
+                                                                                                                                        console.log("Push Notification sended")
+                                                                                                                                        //callback();
+                                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                                                total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                                        });
+                                                                                                                                    }
+                                                                                                                                });
+                                                                                                                    break;
 
+                                                                                                                    default:
+                                                                                                                                return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                                            total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                                });
+
+                                                                                                                    break;
+
+
+                                                                                                            }
+                                                                                                    }
+
+                                                                                                //------------------------------
+                                                                                                }
+                                                                                              });
+                                                                                                //###################################
+                                                                                        }
+                                                                                    });
+                                                                                    //-----------------------------End OF NotificationLog---------------------------------
+
+                                                                                }//Collage totalVote count Update
+                                                                            });
+
+                                                                        }//CollageDetails vote count Update
+                                                                    });
+
+                                                                }//Like Creation End
+                                                            });
+
+                                                        }//Collage Details exising Check Else
+                                                    }
+                                                });
+                                            }//Voted by creator or not
                                         }//Collage existing check
-                                     }
+
+                                    }
                                 });
                         }// already Liked by user check,  Else stop
                     }

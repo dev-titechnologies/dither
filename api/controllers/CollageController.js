@@ -580,12 +580,12 @@ module.exports = {
                                             " temp.*,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                             " FROM collage clg"+
-                                            " WHERE clg.userId =  '"+received_userId+"'"+
+                                            " WHERE clg.userId =  '"+userId+"'"+
                                             " ORDER BY clg.createdAt DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp"+
@@ -593,7 +593,7 @@ module.exports = {
                                             " INNER JOIN user usr ON usr.id = temp.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                             " WHERE"+
-                                            " temp.userId = '"+received_userId+"'"+
+                                            " temp.userId = '"+userId+"'"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY temp.createdAt DESC";
 
@@ -601,12 +601,12 @@ module.exports = {
                                             " temp.*,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                             " FROM collage clg"+
-                                            " WHERE clg.userId =  '"+received_userId+"' AND clg.totalVote != 0"+
+                                            " WHERE clg.userId =  '"+userId+"' AND clg.totalVote != 0"+
                                             " ORDER BY clg.totalVote DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp"+
@@ -614,7 +614,7 @@ module.exports = {
                                             " INNER JOIN user usr ON usr.id = temp.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                             " WHERE"+
-                                            " temp.userId = '"+received_userId+"'"+
+                                            " temp.userId = '"+userId+"'"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY temp.totalVote DESC";
 
@@ -636,7 +636,7 @@ module.exports = {
                                             //" UNION SELECT tg.collageId AS id"+
                                             " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
-                                            " WHERE tg.userId =  '"+received_userId+"'"+
+                                            " WHERE tg.userId =  '"+userId+"'"+
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
                                             " ORDER BY clg.createdAt DESC"+
@@ -664,7 +664,7 @@ module.exports = {
                                             //" UNION SELECT tg.collageId AS id"+
                                             " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
-                                            " WHERE tg.userId =  '"+received_userId+"'"+
+                                            " WHERE tg.userId =  '"+userId+"'"+
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
                                             " WHERE clg.totalVote != 0"+

@@ -294,7 +294,6 @@ module.exports = {
                                                                             var values ={
                                                                                             notificationTypeId  :   1,
                                                                                             userId              :   userId,
-                                                                                            ditherUserId        :   userId,
                                                                                             collage_id          :   collage_results.id,
                                                                                             tagged_users        :   tagNotifyArray,
                                                                                             description         :   tagNotifyArray.length

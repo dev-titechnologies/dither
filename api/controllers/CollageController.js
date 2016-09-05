@@ -327,7 +327,7 @@ module.exports = {
 
                                                                                                 if(deviceId_arr.length!=0)
                                                                                                 {
-                                                                                                        var data      = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1};
+                                                                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,dither_id:collage_results.id};
 
                                                                                                         var switchKey   =  device_type;
                                                                                                         switch(switchKey){
@@ -1658,7 +1658,9 @@ module.exports = {
                                 }else{
                                     console.log("Edit Dither =============>>>>>>>>>>>>>>");
                                     //sails.sockets.blast('edit-dither', {status : "success", name : "editDither"});
-                                    sails.sockets.blast('edit-dither', {status : 1, status_type: 'Success', message : "editDither Blasted successfully"});
+                                    sails.sockets.blast('edit-dither', {status : 1, status_type: 'Success', message : "editDither Blasted successfully",
+																		dither_id:collageId,
+																		dither_type:'details'});
                                     //console.log(sortedVote);
                                     //console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);

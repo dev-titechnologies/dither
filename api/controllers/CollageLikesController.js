@@ -128,7 +128,9 @@ console.log(device_type);
                                                                                             }
                                                                                             //console.log(sails.sockets.getId(req));
                                                                                             //console.log(sails.sockets.socketRooms(req.socket));
-                                                                                            sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully"});
+                                                                                            sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully",
+																																dither_id:collageId,
+																																dither_type:'details'});
                                                                                             //sails.sockets.broadcast(sails.sockets.getId(req),'like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
                                                                                             //sails.sockets.emit('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
                                                                                             console.log(createdNotificationTags);
@@ -170,7 +172,7 @@ console.log(device_type);
                                                                                                                                 });
                                                                                                     }else{
                                                                                                             //device_id         =  device_id.split(',');sails.log.debug(device_id);
-                                                                                                            var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:2};
+                                                                                                            var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:2,dither_id:collageId};
                                                                                                             var switchKey   =  device_type;
                                                                                                             switch(switchKey){
                                                                                                                     case 'ios' :

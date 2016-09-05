@@ -93,8 +93,6 @@ module.exports = {
 						notifyVoteArray	   		= 	  [];
 						notifyCmntArray			= 	  [];
 						
-						var data_view_limit     =     req.options.global.data_view_limit;
-						
 						var query 	= 	" SELECT"+ 
 										" N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
 										" U.name,U.profilePic as profile_image,"+
@@ -105,8 +103,7 @@ module.exports = {
 										" N.ditherUserId="+user_id+
 										" AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
 										" OR "+
-										" FIND_IN_SET("+user_id+", N.tagged_users)"+
-										" ORDER BY N.createdAt";
+										" FIND_IN_SET("+user_id+", N.tagged_users)";
 						
 											
 						console.log(query)

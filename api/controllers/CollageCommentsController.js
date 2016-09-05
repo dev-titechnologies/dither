@@ -84,7 +84,10 @@ module.exports = {
                                                                                             }
                                                                                             //console.log(sails.sockets.getId(req));
                                                                                             //console.log(sails.sockets.socketRooms(req.socket));
-                                                                                            sails.sockets.blast('comment-dither', {status : 1, status_type: 'Success', message : "commentDither Blasted successfully"});
+                                                                                            sails.sockets.blast('comment-dither', {status : 1, status_type: 'Success', message : "commentDither Blasted successfully",
+																																	dither_id:collageId,
+																																	dither_type:'details'
+																																	});
                                                                                     console.log(createdNotificationTags);
                                                                                     //-----------------------------End OF NotificationLog---------------------------------
                                                                                     console.log("inserted comments");
@@ -118,7 +121,7 @@ module.exports = {
                                                                                            if(deviceId_arr.length!=0)
                                                                                            {
 
-                                                                                              var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3};
+                                                                                              var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,dither_id:collageId};
                                                                                               console.log(data)
                                                                                               if(device_type=='ios')
                                                                                                 {

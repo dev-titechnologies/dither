@@ -17,7 +17,7 @@ io.socket.on('createInSignUp', function (event){
     console.log(event);
 });*/
 
-io.sails.url = "http://api.dither.titechdev.com:5000";
+io.sails.url = "http://git.titechnologies.in:5000";
 io.socket.on('connect', function socketConnected(){
         console.log("socket --- connected");
         //socket.emit('edit-dither');
@@ -95,4 +95,4 @@ io.socket.on('like-dither', function (event){
 /*io.socket.on('createIncheck', function newMessageFromSails ( message ) {
         //typeof console !== 'undefined' &&
         console.log('New message received from Sails ::\n', message);
-});*/
+}); d*/

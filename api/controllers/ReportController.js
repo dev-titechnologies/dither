@@ -75,8 +75,8 @@ module.exports = {
                                                                                                 if(!deviceId_arr.length){
                                                                                                          return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
                                                                                                 }else{
-																										device_id 		=  device_id.split(',');sails.log.debug(device_id);
-																										var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body,id:userId};
+																										//device_id 		=  device_id.split(',');sails.log.debug(device_id);
+																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,id:userId};
 																										console.log(data)
 																										console.log(device_type)
                                                                                                         var switchKey  	=  device_type;

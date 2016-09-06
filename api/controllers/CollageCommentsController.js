@@ -121,7 +121,7 @@ module.exports = {
                                                                                            if(deviceId_arr.length!=0)
                                                                                            {
 
-                                                                                              var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,dither_id:collageId};
+                                                                                              var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId};
                                                                                               console.log(data)
                                                                                               if(device_type=='ios')
                                                                                                 {

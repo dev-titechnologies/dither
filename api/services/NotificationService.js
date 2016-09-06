@@ -67,6 +67,7 @@ module.exports = {
 		
 		console.log("Push Notification GCM")
 		console.log(data)
+		var details ={message:data.NtfnBody,Type:data.NtfnType,ditherId:data.dither_id};
 		 android = PusherService('android', {
 			  
 				device: data.device_id, // Array of string with device tokens
@@ -78,8 +79,6 @@ module.exports = {
 				notification: {
 							title	: 'Android Test Push', // Indicates notification title
 							body	: data.NtfnBody, // Indicates notification body text
-							Type	: data.NtfnType,
-							ditherId: data.dither_id,
 							icon	: '', // Indicates notification icon
 							sound	: '', // Indicates sound to be played
 							badge	: '', // Indicates the badge on client app home icon
@@ -93,9 +92,7 @@ module.exports = {
 		console.log(data.dither_id)
 		android
 			.send([data.device_id], {
-             		body:  data.NtfnBody,
-             		Type:  data.NtfnType,
-             		ditherId:data.dither_id
+             		body: details
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));

@@ -34,6 +34,17 @@ module.exports = {
                             else
                             {
                                 if(tokenCheck.message == 'token'){
+									
+									/* TokenService.deleteToken(userToken, function(err, result) {
+										if(err) {
+											 return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
+										} else {
+
+											return res.json(200, {status: 1,  status_type: 'Success' , message: 'success'});
+										}
+									});*/
+									
+									
                                     return res.json(200, {status: 3, status_type: 'Failure' , message: 'Token expired'});
                                 }
                                 else if(tokenCheck.message == 'status'){

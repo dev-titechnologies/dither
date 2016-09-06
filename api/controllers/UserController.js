@@ -262,17 +262,24 @@ module.exports = {
 
                                                                                                                                                 var message     =  'signup Notification';
                                                                                                                                                 var ntfn_body   =   results.name +" Joined on Dither";
-                                                                                                                                                var device_id   =  getDeviceId.deviceId;
+                                                                                                                                                //var device_id   =  getDeviceId.deviceId;
+                                                                                                                                                
+                                                                                                                                                var deviceId_arr  = [];
+																																				getDeviceId.forEach(function(factor, index){
+
+																																					deviceId_arr.push(factor.deviceId);
+
+																																				});
                                                                                                                                                 
                                                                                                                                                 
                                                                                                                                                 
                                                                                                                                                 console.log(results)
 
-                                                                                                                                                if(device_id){
+                                                                                                                                                if(!deviceId_arr.length){
                                                                                                                                                         callback();
                                                                                                                                                 }else{
-																																						device_id       =  device_id.split(',');sails.log.debug(device_id);
-                                                                                                                                                        var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body,NtfnType:4};
+																																						//device_id       =  device_id.split(',');sails.log.debug(device_id);
+                                                                                                                                                        var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4};
                                                                                                                                                         var switchKey   =  device_type;
                                                                                                                                                         switch(switchKey){
                                                                                                                                                                 case 'ios' :

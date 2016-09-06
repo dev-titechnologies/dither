@@ -52,7 +52,7 @@ module.exports = {
                                                                     console.log(results);
                                                                     //-----------------------PUSH NOTIFICATION-------------------------------------------------------------
                                                                     
-                                                                    User_token.findOne({userId: received_userId }).exec(function (err, getTokenDetails){
+                                                                    User_token.find({userId: received_userId }).exec(function (err, getTokenDetails){
                                                                                             if(err)
                                                                                             {
                                                                                                   console.log(err);
@@ -63,14 +63,22 @@ module.exports = {
 																								console.log(getTokenDetails)
                                                                                                 var message     =  'Report User Notification';
                                                                                                 var ntfn_body   =  " Reported againt You";
-                                                                                                var device_id   =  getTokenDetails.deviceId;
-                                                                                                
+                                                                                                //var device_id   =  getTokenDetails.deviceId;
+                                                                                                var deviceId_arr = [];
+																								getTokenDetails.forEach(function(factor, index){
 
-                                                                                                if(!device_id){
+                                                                                                                deviceId_arr.push(factor.deviceId);
+
+
+                                                                                                    });
+																								
+                                                                                                if(!deviceId_arr.length){
                                                                                                          return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
                                                                                                 }else{
 																										device_id 		=  device_id.split(',');sails.log.debug(device_id);
 																										var data        =  {message:message,device_id:device_id,NtfnBody:ntfn_body,id:userId};
+																										console.log(data)
+																										console.log(device_type)
                                                                                                         var switchKey  	=  device_type;
                                                                                                         switch(switchKey){
                                                                                                                 case 'ios' :

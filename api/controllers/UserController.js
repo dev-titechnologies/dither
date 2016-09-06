@@ -441,7 +441,7 @@ module.exports = {
                                             {*/
                                                 //console.log(result)
                                                 //delete existing token
-                                                var query	=	"DELETE FROM userToken where userId='"+results.id+"' AND deviceId='"+deviceId+"'";
+                                                var query	=	"DELETE FROM userToken where deviceId='"+deviceId+"'";
                                                 User_token.query(query, function(err, result) {
                                                // User_token.destroy({userId: results.id,deviceId:deviceId}).exec(function (err, result) {
 
@@ -515,7 +515,7 @@ module.exports = {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
-
+						console.log("logout")
                         return res.json(200, {status: 1,  status_type: 'Success' , message: 'LogOut success'});
                     }
                 });

@@ -92,7 +92,8 @@ module.exports = {
 		android
 			.send([data.device_id], {
              		body:  data.NtfnBody,
-             		Type:  data.NtfnType
+             		Type:  data.NtfnType,
+             		ditherId:data.dither_id
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));

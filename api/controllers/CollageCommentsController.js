@@ -110,15 +110,25 @@ module.exports = {
 
                                                                                            console.log(getDeviceId)
                                                                                            //var device_id  = getDeviceId.deviceId;
+                                                                                           if(!getDeviceId.length)
+                                                                                           {
+																							   console.log("device not found")
+																							   return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                                    comment_id                      :    results.id,
+                                                                                                                    comment_msg                     :    results.msg,
+                                                                                                                    comment_created_date_time       :    results.createdAt,
+                                                                                                            });
+																						   }
+																						   else
+																						   {			
+																								  var deviceId_arr  = [];
+																								   getDeviceId.forEach(function(factor, index){
 
-                                                                                          var deviceId_arr  = [];
-                                                                                           getDeviceId.forEach(function(factor, index){
-
-                                                                                                        deviceId_arr.push(factor.deviceId);
+																												deviceId_arr.push(factor.deviceId);
 
 
-                                                                                            });
-                                                                                           if(deviceId_arr.length!=0)
+																									});
+                                                                                           if(deviceId_arr.length)
                                                                                            {
 
                                                                                               var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId};
@@ -182,6 +192,7 @@ module.exports = {
                                                                                                             });
                                                                                                   }
                                                                                                  }
+																								}
                                                                                                 }
                                                                                             });
                                                                                        // }

@@ -428,6 +428,11 @@ module.exports = {
                                 sails.log(results)
                                 if(typeof(results) == 'undefined')
                                 {
+									
+									var query	=	"DELETE FROM userToken where deviceId='"+deviceId+"'";
+                                                User_token.query(query, function(err, result) {
+												});
+									
                                       return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                                 }
                                 else

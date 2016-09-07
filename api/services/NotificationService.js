@@ -89,9 +89,10 @@ module.exports = {
 		
 
 		console.log(android)
-		console.log(data.dither_id)
+		console.log("device arrayyyyyyyyyyyyyyyyy")
+		console.log(data.device_id)
 		android
-			.send([data.device_id], {
+			.send(data.device_id, {
              		body: details
 				})
 			.then(console.log.bind(console))

@@ -97,14 +97,25 @@ module.exports = {
 				var focus_Ntfn_id     	=     req.param("focus_Ntfn_id");
 				var data_view_limit     =     req.options.global.data_view_limit;
 				
-				if(!focus_Ntfn_id){
-						return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});
+				/*if(!focus_Ntfn_id){
+						//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});
+						var query 	= 	" SELECT"+ 
+										" N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+										" U.name,U.profilePic as profile_image,"+
+										" C.image as dither_image"+
+										" FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+										" LEFT JOIN collage as C ON C.id = N.collage_id"+
+										" WHERE"+
+										" N.ditherUserId="+user_id+
+										" AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
+										" OR "+
+										" FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT 10";
 				}
 				else
-				{
+				{*/
 				  
 					
-					if(focus_Ntfn_id == 0){
+					if(focus_Ntfn_id == 0||!focus_Ntfn_id){
 				  	
 					var query 	= 	" SELECT"+ 
 										" N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
@@ -337,7 +348,7 @@ module.exports = {
 							}
 						});
 						
-			    }			
+			    //}			
 			
 		},
 		

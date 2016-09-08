@@ -77,24 +77,37 @@ module.exports = {
 		notification: function(req, res) {
 			
 			
-						console.log("Notification API")
-						console.log(req.options.file_path.profilePic_path)
-						var tokenCheck          =     req.options.tokenCheck;
-						var user_id				= 	  tokenCheck.tokenDetails.id;
-						var server_baseUrl  	=     req.options.server_baseUrl;
-						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
-						var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
-						var device_id 			= 	  tokenCheck.tokenDetails.deviceId;
-						var device_type			=	  req.get('device_type');
-						
-						notificationVoted 		= 	  "";
-						notificationCommented 	= 	  "";
-						notificationSignup		= 	  "";
-						notifyVoteArray	   		= 	  [];
-						notifyCmntArray			= 	  [];
-						
-						var query 	= 	" SELECT"+ 
-										" N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+				console.log("Notification API")
+				console.log(req.options.file_path.profilePic_path)
+				var tokenCheck          =     req.options.tokenCheck;
+				var user_id				= 	  tokenCheck.tokenDetails.id;
+				var server_baseUrl  	=     req.options.server_baseUrl;
+				var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
+				var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
+				var device_id 			= 	  tokenCheck.tokenDetails.deviceId;
+				var device_type			=	  req.get('device_type');
+				
+				notificationVoted 		= 	  "";
+				notificationCommented 	= 	  "";
+				notificationSignup		= 	  "";
+				notifyVoteArray	   		= 	  [];
+				notifyCmntArray			= 	  [];
+				
+				var page_type           =     req.param("page_type");
+				var focus_Ntfn_id     	=     req.param("focus_Ntfn_id");
+				var data_view_limit     =     req.options.global.data_view_limit;
+				
+				if(!focus_Ntfn_id){
+						return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});
+				}
+				else
+				{
+				  
+					
+					if(focus_Ntfn_id == 0){
+				  	
+					var query 	= 	" SELECT"+ 
+										" N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
 										" U.name,U.profilePic as profile_image,"+
 										" C.image as dither_image"+
 										" FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
@@ -103,23 +116,30 @@ module.exports = {
 										" N.ditherUserId="+user_id+
 										" AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
 										" OR "+
-										" FIND_IN_SET("+user_id+", N.tagged_users)";
+										" FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT 10";
 										
 					  //---------------test pagination-------------------------------
-					  
-					/*  var query 	= 	" SELECT"+ 
-										" N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
-										" U.name,U.profilePic as profile_image,"+
-										" C.image as dither_image"+
-										" FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-										" LEFT JOIN collage as C ON C.id = N.collage_id"+
-										" WHERE"+
-										" N.ditherUserId="+user_id+
-										" AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
-										" OR "+
-										" FIND_IN_SET("+user_id+", N.tagged_users)"*/
+				  }
+				  else
+				  {
+					 var query 	= 	" SELECT"+
+									" * FROM"+
+									" ("+
+									" SELECT"+
+									" N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+									" U.name,U.profilePic as profile_image,C.image as dither_image"+
+									" FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+									" LEFT JOIN collage as C ON C.id = N.collage_id"+
+									" WHERE"+
+									" N.ditherUserId="+user_id+
+									" OR"+
+									" FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
+									") as temp"+
+									" where temp.id <"+focus_Ntfn_id+
+									" LIMIT 10"; 
+
 					//--------------------------------------------------------------------
-						
+				 }	
 											
 						console.log(query)
 						NotificationLog.query(query, function(err,results) {
@@ -317,7 +337,7 @@ module.exports = {
 							}
 						});
 						
-						
+			    }			
 			
 		},
 		

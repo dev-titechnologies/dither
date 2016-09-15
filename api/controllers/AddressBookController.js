@@ -269,7 +269,7 @@ module.exports = {
 								function(callback) {	
 																			 
 																
-																query = "SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
+																query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
 																		" FROM addressBook adb"+
 																		" INNER JOIN user usr ON usr.id = adb.ditherUserId"+
 																		" WHERE adb.userId = "+userId+
@@ -315,7 +315,7 @@ module.exports = {
 								function(callback) {					
 																			   
 														
-														query = " SELECT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
+														query = " SELECT DISTINCT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
 																	" FROM fbFriends fbf"+
 																	" INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
 																	" WHERE fbf.userId = "+userId+
@@ -364,7 +364,7 @@ module.exports = {
 																console.log("address book selectionnnnnnnnnnnnnnnn")
 																			
 																			
-																query = "SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
+																query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
 																		" FROM addressBook adb"+
 																		" INNER JOIN user usr ON usr.id = adb.ditherUserId"+
 																		" WHERE adb.userId = "+userId+
@@ -412,7 +412,7 @@ module.exports = {
 																			   
 														console.log("fb friends updatedddddd")
 														   
-														query = " SELECT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
+														query = " SELECT DISTINCT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
 																	" FROM fbFriends fbf"+
 																	" INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
 																	" WHERE fbf.userId = "+userId+

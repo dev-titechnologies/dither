@@ -115,15 +115,9 @@ module.exports = {
 																async.forEach(phonecontacts, function (factor, callback){ 
 																//phonecontacts.forEach(function(factor, index){
 																					
-																				var values={
-																								userId		: userId,
-																								phoneNumber	: factor.number,
-																							  }	
-																							  
-																							 // console.log(values)
-
-																					
-																				User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+																				var query	  = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
+																				User.query(query, function(err, selectDContacts) {
+																				//User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
 																				if(err)
 																				{
 																						console.log(err)
@@ -137,6 +131,7 @@ module.exports = {
 																						{
 																							
 																							//updation 
+																							
 																							
 																							 var data     = {ditherUserId:selectDContacts[0].id};
 																							 var criteria = {ditherUserPhoneNumber: factor.number};
@@ -229,7 +224,7 @@ module.exports = {
 											   async.forEach(fbUser, function (factor, callback){
 											   //fbUser.forEach(function(factor, index){
 
-								
+													
 													User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
 														//console.log()
 														if(selectFBContacts.length!=0)

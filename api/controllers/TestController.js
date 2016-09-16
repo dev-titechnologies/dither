@@ -353,7 +353,6 @@ module.exports = {
                                             console.log(profileUploadResults)
                                             imageName = profileUploadResults[0].fd.split('/');
                                             imageName = imageName[imageName.length-1];
-
                                             jsonFilePath = '.tmp/uploads/'+imageName;
                                             console.log(jsonFilePath)
                                             jsonfile.readFile(jsonFilePath, function(err, obj)
@@ -384,8 +383,37 @@ module.exports = {
      testThumbnail: function (req, res) {
 
                             console.log("thumbnail image")
+                           
+                           /* var thumbnailsCreator = require('lwip-image-thumbnails-creator');
+							var options 		  = { outputbasepath: 'thumbnail.jpg'};
+							return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
+								maxWidth: 50,
+								maxHeight: 50
+							}, options).then(function (res) {
+								// ok 
+								console.log(res.thumbnail);
+							}, function (err) {
+							  console.log(err)
+							});*/
+                            
+                            var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
+                            ImgResizeService.imageResize(imagename, function(err, thumbImage) {
+								if(err)
+								{
+										console.log(err);
+										
+										return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
+										//callback();
+								}else{
+									    console.log("generatedddddddddddddddddd")
+										console.log(thumbImage)
+										return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
+									//	callback();
+								}
+							});
+                            
 
-                           require('lwip').open('img2.jpeg', function(err, image) {
+                           /*require('lwip').open('img2.jpeg', function(err, image) {
                             if(err)
                               {
                                   console.log("Error")
@@ -408,7 +436,7 @@ module.exports = {
                                         });
                                 });
                               }
-                            });
+                            });*/
 
 
 

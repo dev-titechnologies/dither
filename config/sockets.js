@@ -126,6 +126,7 @@ module.exports.sockets = {
 
          //console.log(socket);
     },*/
+
     //onConnect: function (socket, session, req) {
     /*onConnect: function (handshake, socket, cb) {
             //var currentSocketId;
@@ -156,6 +157,7 @@ module.exports.sockets = {
                 // handle event here
             //});
     },*/
+
   /***************************************************************************
   *                                                                          *
   * `afterDisconnect`                                                        *

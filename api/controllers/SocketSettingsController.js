@@ -22,54 +22,61 @@ function removeItem(obj, prop, val) {
 
 module.exports = {
         socketConnection  : function (req, res) {
-                var tokenCheck                  =     req.options.tokenCheck;
-                var userId                      =     tokenCheck.tokenDetails.userId;
-                console.log("--------------------------------------    Socket_connection     --------------------------------");
-                console.log(sails.sockets.getId(req));
-                console.log(sails.sockets.rooms());
 
-                console.log(userId);
-                var user_roomName = "socket_user_"+userId;
-                console.log(user_roomName);
-                sails.sockets.join(req.socket, user_roomName);
-                console.log(sails.sockets.rooms());
+                if(req.isSocket){
+                    console.log("--------------------------------------    Socket_connection     --------------------------------");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
 
-                //var get_collage_id = req.param("dither_id");
-                //console.log(sails.sockets.socketRooms(req.socket));
-                //console.log(sails.sockets.socketRooms());
-                /*socket_user_id_Array            =     [];
-                var tokenCheck                  =     req.options.tokenCheck;
-                var userId                      =     tokenCheck.tokenDetails.userId;
-                socket_user_id_Array.push({user_id : tokenCheck.tokenDetails.userId, socket_id : sails.sockets.getId(req)});
-                console.log("--------------------------------------    Socket_connection   Rooms  --------------------------------");
-                req.options.available_sockets = socket_user_id_Array;
-                next();
-                //return res.json(200, {status: 1, message: 'Success Socket Connenction', data: socket_user_id_Array});*/
-                //var ditherIdArray = [1,2,3,4];
-                console.log("0000000000000000000000000000000000000000000000000000000000000000000000000");
-                console.log(req.param("dither_id_array"));
-                console.log("0000000000000000000000000000000000000000000000000000000000000000000000000");
-                var ditherIdArray  = req.param("dither_id_array");
-                ditherIdArray.forEach(function(factor, index){
-                        console.log(factor);
-                        var roomName = "socket_dither_"+factor;
-                        console.log(roomName);
-                        sails.sockets.join(req.socket, roomName);
-                        console.log(sails.sockets.subscribers(roomName));
-                        //console.log(sails.sockets.subscribers(socket_dither_3));
-                        //sails.sockets.broadcast(roomName,{type: update, id: , message: "========== socketConnection Room Broadcast --------", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
-                });
-                console.log(sails.sockets.rooms());
+                    console.log(sails.sockets.getId(req));
+                    console.log(sails.sockets.rooms());
+
+                    console.log(userId);
+                    var user_roomName = "socket_user_"+userId;
+                    console.log(user_roomName);
+                    sails.sockets.join(req.socket, user_roomName);
+                    console.log(sails.sockets.rooms());
+
+                    //var get_collage_id = req.param("dither_id");
+                    //console.log(sails.sockets.socketRooms(req.socket));
+                    //console.log(sails.sockets.socketRooms());
+                    /*socket_user_id_Array            =     [];
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    socket_user_id_Array.push({user_id : tokenCheck.tokenDetails.userId, socket_id : sails.sockets.getId(req)});
+                    console.log("--------------------------------------    Socket_connection   Rooms  --------------------------------");
+                    req.options.available_sockets = socket_user_id_Array;
+                    next();
+                    //return res.json(200, {status: 1, message: 'Success Socket Connenction', data: socket_user_id_Array});*/
+                    //var ditherIdArray = [1,2,3,4];
+                    console.log("0000000000000000000000000000000000000000000000000000000000000000000000000");
+                    console.log(req.param("dither_id_array"));
+                    console.log("0000000000000000000000000000000000000000000000000000000000000000000000000");
+                    var ditherIdArray  = req.param("dither_id_array");
+                    ditherIdArray.forEach(function(factor, index){
+                            console.log(factor);
+                            var roomName = "socket_dither_"+factor;
+                            console.log(roomName);
+                            sails.sockets.join(req.socket, roomName);
+                            console.log(sails.sockets.subscribers(roomName));
+                            //console.log(sails.sockets.subscribers(socket_dither_3));
+                            //sails.sockets.broadcast(roomName,{type: update, id: , message: "========== socketConnection Room Broadcast --------", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
+                    });
+                    console.log(sails.sockets.rooms());
 
 
-                 //console.log(req.body);
-                 //console.log(req.params.all());
-                 //console.log(req);
+                     //console.log(req.body);
+                     //console.log(req.params.all());
+                     //console.log(req);
 
-                //console.log(get_collage_id);
-                /*var roomName = "socket_dither_"+get_collage_id;
-                console.log(roomName);
-                sails.sockets.join(req.socket, roomName);*/
+                    //console.log(get_collage_id);
+                    /*var roomName = "socket_dither_"+get_collage_id;
+                    console.log(roomName);
+                    sails.sockets.join(req.socket, roomName);*/
+                }else{
+                        console.log("--------------------------------------    Socket_connection Else Socket Disconnected    --------------------------------");
+
+                }
 
 
         },

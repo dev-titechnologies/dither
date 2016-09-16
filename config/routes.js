@@ -55,10 +55,10 @@ module.exports.routes = {
   //'/test/delete_Socket'                   :           ['SocketSettings.Socket_connection'],
 
 
-  'GET /user/join': {
+ /* 'GET /user/join': {
                     controller: "UserController",
                     action:"join"
-                    },
+                    },*/
 
 
 

@@ -245,11 +245,23 @@ module.exports = {
     /* ==================================================================================================================================
                SOCKET
      ==================================================================================================================================== */
-        socketTest:  function (req, res) {
+        socketTests:  function (req, res) {
                 console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> socketTest");
+                console.log(req);
+                console.log("param only ======");
+                console.log(req.params.all());
+                console.log(req.param("data"));
+                //console.log(req.param("ajay"));
+                console.log("body only ======");
+                console.log(req.body);
+                console.log(req.body.name);
+                //console.log(req.body.ajay);
+                console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> ENDsocketTest");
                 //sails.sockets.join(req.socket, "1");
                 //console.log(req.socket);
-                sails.sockets.blast('comment-dither', {msg: 'Hi! Message ------11111111'});
+                //sails.sockets.blast('comment-dither', {msg: 'Hi! Comment ------11111111'});
+
+                //sails.sockets.blast('like-dither', {msg: 'Hi! Like ------2222222'});
                 //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
                 //sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
 
@@ -672,5 +684,7 @@ module.exports = {
         },
 
 
+
 };
+
 

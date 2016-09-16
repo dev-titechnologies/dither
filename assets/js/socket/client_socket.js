@@ -24,7 +24,7 @@ io.socket.on('connect', function socketConnected(){
         console.log("socket --- connected");
         //socket.emit('edit-dither');
 
-        io.socket.get('/test/socketTest', function (resData, jwres){
+        /*io.socket.get('/test/socketTest', function (resData, jwres){
                   //console.log('Sails responded with: ', resData);
                   //console.log('with headers: ', jwres.headers);
                   //console.log('and with status code: ', jwres.statusCode);
@@ -51,7 +51,22 @@ io.socket.on('connect', function socketConnected(){
           console.log("yyyyyyyyyyyyyyyyy(((((((((((((((((((((77777777777777777");
           console.log('Sails responded with: ', resData);
         });
+        //console.log(sails.sockets.getId(socket));
+         io.socket.get('/test/socketTests', function (resData, jwres){
+          //console.log('Sails responded with: ', resData);
+          //console.log('with headers: ', jwres.headers);
+          //console.log('and with status code: ', jwres.statusCode);
+          console.log("333333333333333333333333333333333333333333333(((((((((((((((((((((77777777777777777");
+          //console.log('Sails responded with: ', resData);
+        });*/
 
+        io.socket.post('/socketSettings/socketConnection',{dither_id : 18},function (resData, jwres){
+          //console.log('Sails responded with: ', resData);
+          //console.log('with headers: ', jwres.headers);
+          //console.log('and with status code: ', jwres.statusCode);
+          console.log("socketConnection sssssssssssssssssssssssssssssssssssssssssss");
+          console.log('Sails responded with: ', resData);
+        });
 
 });
 
@@ -85,8 +100,7 @@ io.socket.on('disconnect', function socketConnected(socket){
 //sails.sockets.emit('privateMessage');
 //For call an event
 
-
-/*io.socket.on('message', function (event){
+io.socket.on('message', function (event){
         console.log("createInCheck ----------------");
         console.log(event);
         console.log("!!!! event  <-->  Message !!!!");
@@ -96,14 +110,12 @@ io.socket.on('createIncheck', function (event){
         console.log(event);
         console.log(event.device_id);
         console.log("event |||||||||||| Ha ha ha ha ha ha ha ha ha ha ");
-});*/
-
-io.socket.on('edit-dither', function (event){
-        console.log("Edit Dither ----------------");
-        console.log(event);
-        console.log(event.message);
-        console.log("111111111111111111111111111111111111111111111");
 });
+io.socket.on('connectDa', function (event){
+        console.log("Ayyo ooooooooooooooooooooooooooo  ===================>>");
+});
+
+
 io.socket.on('like-dither', function (event){
         console.log("Like Dither ----------------");
         console.log(event);
@@ -117,6 +129,26 @@ io.socket.on('comment-dither', function (event){
         console.log(event.message);
         console.log("3333333333333333333333333333");
 });
+
+io.socket.on('edit-dither', function (event){
+        console.log("edit Dither ----------------");
+        console.log(event);
+        console.log(event.message);
+        console.log("44444444444444444444444444");
+});
+
+io.socket.on('dither_details', function (event){
+        console.log("edit Dither ----------------");
+        console.log(event);
+        console.log(event.message);
+        console.log("55555555555555555555555");
+});
+
+
+//*****************************************************************************************************
+
+//io.emit('dither_details_emit');
+
 
 /*io.socket.on('createIncheck', function newMessageFromSails ( message ) {
         //typeof console !== 'undefined' &&

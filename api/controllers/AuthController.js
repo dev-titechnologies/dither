@@ -13,12 +13,46 @@ module.exports = {
  ====================================================================================================================================*/
 
     authenticate : function(req, res, next) {
-
-            console.log(req.get('token'));
+           console.log("Auth '''''''''''''''''''''''''''''''----------_______________________________req.body__________________========");
+            //console.log(req.body);
+            //console.log(req.body.roomName);
+            //console.log(req.body.options);
+            //console.log(req.body.opts);
+            //console.log("::::::::::::::::::::::::::::::::::::::::::::::::********************************************:::::::::::::::::::::::::::::::::::::::::::");
+            //console.log(req.socket);
+            //console.log(req.socket.handshake);
+            //console.log(req.socket.handshake.query);
+            //console.log(req.socket.handshake.query.param);
+            //console.log("*************************************");
+            //console.log(req.socket.options);
+            //console.log("*************************************");
+           // console.log(req.options);
+            //console.log("*************************************");
+            //console.log(socket-options);
+            //console.log(req.get('currentSocketId'));
+            //console.log(req.get('token'));
+            /*console.log(req);
+            console.log("end      -----222222222");
+            console.log(req.socket.handshake);
+            console.log(req.socket.handshake.query);*/
+            //console.log(req.socket.handshake.query.token);
+            console.log("end      -----tokennnnnnnnnnnnnnnnnnnn");
+            /*console.log(req.query);
+            console.log(req.query.token);
             var userToken = req.get('token');
-            //var userToken = "16c229ef11c6946708b6e987";
-            console.log(userToken);
+            //var userToken = "16c229ef11c6946708b6e987";*/
+            console.log("userToken ;;;;;;;;;;;");
+            console.log(req.get('token'));
+            console.log(req.isSocket);
+            var userToken;
+            if(req.isSocket){
+                    userToken = req.socket.handshake.query.token;
+            }else{
+                    userToken = req.get('token');
+            }
             if(userToken){
+                    console.log("Inside token check  ha ha ha userToken==============");
+                    console.log(userToken);
                     UsertokenService.checkToken(userToken, function(err, tokenCheck) {
                         if(err)
                         {
@@ -26,8 +60,10 @@ module.exports = {
                         }
                         else
                         {
+                            console.log("BEFORE  -------  tokenCheck.status == 1");
                              if(tokenCheck.status == 1)
                             {
+                                console.log("tokenCheck.status == 1");
                                 req.options.tokenCheck = tokenCheck;
                                 next();
                             }

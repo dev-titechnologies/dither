@@ -35,7 +35,7 @@ module.exports = {
 					//{	
 						 console.log("iosss contacts")
 						 
-						 console.log(req.param('contact_array'))
+						 //console.log(req.param('contact_array'))
 						 
 						phonecontacts           = JSON.parse(req.param('contact_array'));
 						 //fbUser 				 = JSON.parse(req.param('fb_array'));
@@ -110,8 +110,8 @@ module.exports = {
 													},		
 								function(callback) {
 																 
-																 console.log("Address book updation")
-																 console.log(phonecontacts.length)
+																console.log("Address book updation")
+																console.log(phonecontacts.length)
 																async.forEach(phonecontacts, function (factor, callback){ 
 																//phonecontacts.forEach(function(factor, index){
 																					

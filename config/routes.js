@@ -51,8 +51,14 @@ module.exports.routes = {
   '/collageLikes/*'                       :           ['auth.authenticate'],
   '/collageComments/*'                    :           ['auth.authenticate'],
   '/report/*'                             :           ['auth.authenticate'],
-  '/socketSettings/*'                     :           ['auth.authenticate'],
-  '/test/delete_Socket'                   :           ['SocketSettings.Socket_connection'],
+  //'/socketSettings/*'                     :           ['auth.authenticate'],
+  //'/test/delete_Socket'                   :           ['SocketSettings.Socket_connection'],
+
+
+  'GET /user/join': {
+                    controller: "UserController",
+                    action:"join"
+                    },
 
 
 

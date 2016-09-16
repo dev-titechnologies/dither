@@ -28,7 +28,18 @@ console.log(req.params.all());
             //likedImageId                =     128;
             //imgPosition                 =     1;
 console.log(device_type);
-
+            console.log(req.isSocket);
+            /*if(req.isSocket){
+                     console.log("Socket Present ============================");
+                    //sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully"});
+                    var roomName1 = "ditherLike_" + collageId;
+                    var roomName = "ditherDetail_" + collageId;
+                    //sails.sockets.join(req.socket, roomName);
+                    console.log(roomName);
+                    console.log(sails.sockets.subscribers(roomName));
+                    sails.sockets.broadcast(roomName, {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully", members : sails.sockets.rooms(), joinedMembers: sails.sockets.subscribers(roomName)});
+            }else{*/
+                  console.log("Socket Absent ============================");
             if(!collageId || !likedImageId || !imgPosition || !device_type){
                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the device_type and dither_id and dither_like_image_id and position'});
             }else{
@@ -103,6 +114,8 @@ console.log(device_type);
                                                                                 }
                                                                                 else
                                                                                 {
+                                                                                    var roomName  = "socket_dither_"+collageId;
+                                                                                    sails.sockets.broadcast(roomName,{type: "update", id: collageId, message: "Like Dither - Room Broadcast", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
                                                                                     //-----------Notification log Insertion----------------
                                                                                     var values ={
                                                                                             notificationTypeId  :   2,
@@ -120,23 +133,6 @@ console.log(device_type);
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            //console.log(req);
-                                                                                            console.log(req.isSocket);
-                                                                                            if (!req.isSocket) {
-                                                                                                    console.log("No socket");
-                                                                                                    //console.log(sails.sockets.getId(req));
-                                                                                            }
-                                                                                            //console.log(sails.sockets.getId(req));
-                                                                                            //console.log(sails.sockets.socketRooms(req.socket));
-                                                                                            sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully",
-																																dither_id:collageId,
-																																dither_type:'details'});
-                                                                                            //sails.sockets.broadcast(sails.sockets.getId(req),'like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
-                                                                                            //sails.sockets.emit('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully"});
-                                                                                            console.log(createdNotificationTags);
-                                                                                            //return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                    //total_like_count       :  updatedVoteCount[0].vote,
-                                                                                            //});
 
                                                                                     //###################################
 
@@ -256,6 +252,7 @@ console.log(device_type);
                         }// already Liked by user check,  Else stop
                     }
                 });
+            //}
             }
 
         },

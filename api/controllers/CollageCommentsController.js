@@ -21,7 +21,17 @@ module.exports = {
                     var collageId                   =     req.param("dither_id");
                     var comment                     =     req.param("comment_msg");
                     var device_type                 =     req.get('device_type');
-
+                   /* if(req.isSocket){
+                             console.log("Socket Present ============================");
+                            //sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully"});
+                            var roomName1 = "ditherComment_" + collageId;
+                            var roomName = "ditherDetail_" + collageId;
+                            //sails.sockets.join(req.socket, roomName);
+                            console.log(roomName);
+                            console.log(sails.sockets.subscribers(roomName));
+                            sails.sockets.broadcast(roomName, {status : 1, status_type: 'Success', message : "commentDither Broadcast successfully", members : sails.sockets.rooms(), joinedMembers: sails.sockets.subscribers(roomName)});
+                            sails.sockets.blast(roomName, {status : 1, status_type: 'Success', message : "commentDither Blasted  successfully", members : sails.sockets.rooms(), joinedMembers: sails.sockets.subscribers(roomName)});
+                    }else{*/
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
                     }else{
@@ -47,6 +57,8 @@ module.exports = {
                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Comment Insertion', error_details: err});
                                                     }
                                                     else{
+                                                        var roomName  = "socket_dither_"+collageId;
+                                                        sails.sockets.broadcast(roomName,{type: "update", id: collageId, message: "Comment Dither - Room Broadcast", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
                                                     //-----------Notification log Insertion----------------
                                                     console.log("88888888888888888888888888888")
                                                         CollageComments.find({collageId:collageId}).exec(function(err, commentDetails){
@@ -76,18 +88,6 @@ module.exports = {
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    //console.log(req);
-                                                                                            console.log(req.isSocket);
-                                                                                            if (!req.isSocket) {
-                                                                                                    console.log("No socket");
-                                                                                                    //console.log(sails.sockets.getId(req));
-                                                                                            }
-                                                                                            //console.log(sails.sockets.getId(req));
-                                                                                            //console.log(sails.sockets.socketRooms(req.socket));
-                                                                                            sails.sockets.blast('comment-dither', {status : 1, status_type: 'Success', message : "commentDither Blasted successfully",
-																																	dither_id:collageId,
-																																	dither_type:'details'
-																																	});
                                                                                     console.log(createdNotificationTags);
                                                                                     //-----------------------------End OF NotificationLog---------------------------------
                                                                                     console.log("inserted comments");
@@ -112,22 +112,22 @@ module.exports = {
                                                                                            //var device_id  = getDeviceId.deviceId;
                                                                                            if(!getDeviceId.length)
                                                                                            {
-																							   console.log("device not found")
-																							   return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                               console.log("device not found")
+                                                                                               return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
                                                                                                                     comment_id                      :    results.id,
                                                                                                                     comment_msg                     :    results.msg,
                                                                                                                     comment_created_date_time       :    results.createdAt,
                                                                                                             });
-																						   }
-																						   else
-																						   {			
-																								  var deviceId_arr  = [];
-																								   getDeviceId.forEach(function(factor, index){
+                                                                                           }
+                                                                                           else
+                                                                                           {
+                                                                                                  var deviceId_arr  = [];
+                                                                                                   getDeviceId.forEach(function(factor, index){
 
-																												deviceId_arr.push(factor.deviceId);
+                                                                                                                deviceId_arr.push(factor.deviceId);
 
 
-																									});
+                                                                                                    });
                                                                                            if(deviceId_arr.length)
                                                                                            {
 
@@ -192,7 +192,7 @@ module.exports = {
                                                                                                             });
                                                                                                   }
                                                                                                  }
-																								}
+                                                                                                }
                                                                                                 }
                                                                                             });
                                                                                        // }
@@ -219,6 +219,7 @@ module.exports = {
 
                                     }
                             });
+                    //}
                     }
         }
 };

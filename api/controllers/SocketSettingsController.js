@@ -21,9 +21,17 @@ function removeItem(obj, prop, val) {
 }
 
 module.exports = {
-        socketConnection  : function (req, res ,next) {
+        socketConnection  : function (req, res) {
+                var tokenCheck                  =     req.options.tokenCheck;
+                var userId                      =     tokenCheck.tokenDetails.userId;
                 console.log("--------------------------------------    Socket_connection     --------------------------------");
                 console.log(sails.sockets.getId(req));
+                console.log(sails.sockets.rooms());
+
+                console.log(userId);
+                var user_roomName = "socket_user_"+userId;
+                console.log(user_roomName);
+                sails.sockets.join(req.socket, user_roomName);
                 console.log(sails.sockets.rooms());
 
                 //var get_collage_id = req.param("dither_id");
@@ -52,6 +60,7 @@ module.exports = {
                         //sails.sockets.broadcast(roomName,{type: update, id: , message: "========== socketConnection Room Broadcast --------", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
                 });
                 console.log(sails.sockets.rooms());
+
 
                  //console.log(req.body);
                  //console.log(req.params.all());

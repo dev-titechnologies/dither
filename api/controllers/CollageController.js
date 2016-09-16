@@ -446,6 +446,16 @@ module.exports = {
                                     console.log(sortedVote);
                                     console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);
+
+                                    taggedUserArrayFinal.forEach(function(factor, index){
+                                            console.log(factor);
+                                            var roomName = "socket_user_"+factor.userId;
+                                            console.log(roomName);
+                                            //sails.sockets.join(req.socket, roomName);
+                                            console.log(sails.sockets.subscribers(roomName));
+                                            //console.log(sails.sockets.subscribers(socket_dither_3));
+                                            sails.sockets.broadcast(roomName,{type: "new", id: collage_results.id, message: "========== ditherCreate Room Broadcast --------", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
+                                    });
                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
                                                               profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
                                                               user_name          :     tokenCheck.tokenDetails.name,
@@ -1659,8 +1669,8 @@ module.exports = {
                                     console.log("Edit Dither =============>>>>>>>>>>>>>>");
                                     //sails.sockets.blast('edit-dither', {status : "success", name : "editDither"});
                                     sails.sockets.blast('edit-dither', {status : 1, status_type: 'Success', message : "editDither Blasted successfully",
-																		dither_id:collageId,
-																		dither_type:'details'});
+                                                                        dither_id:collageId,
+                                                                        dither_type:'details'});
                                     //console.log(sortedVote);
                                     //console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);

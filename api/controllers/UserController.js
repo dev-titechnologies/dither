@@ -17,12 +17,12 @@ module.exports = {
                To signup
      ==================================================================================================================================== */
     signup: function (req, res) {
-                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                 var profilePic_path             =     req.options.file_path.profilePic_path;
+				var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+				var profilePic_path             =     req.options.file_path.profilePic_path;
                 console.log("signup---------------- api")
                 console.log(req.body);
                 console.log(req.get('device_id'));
-                var device_type = req.get('device_type');
+                var device_type  = req.get('device_type');
                 var imgUrl       = req.param('profilepic');
                 if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('fb_uid') || !req.param('email_id') || !req.param('username') || !req.param('otp')){
                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and fb_uid and email_id and username and otp'}); //If an error occured, we let express/connect handle it by calling the "next" function
@@ -651,7 +651,6 @@ module.exports = {
                 }
 
       },
-
 
 
 

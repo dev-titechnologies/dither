@@ -115,7 +115,7 @@ module.exports = {
 				{*/
 				  
 					
-					if(focus_Ntfn_id == 0||!focus_Ntfn_id){
+				  if(focus_Ntfn_id == 0||!focus_Ntfn_id){
 				  	
 					var query 	= 	" SELECT"+ 
 										" N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
@@ -129,7 +129,6 @@ module.exports = {
 										" OR "+
 										" FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT 10";
 										
-					  //---------------test pagination-------------------------------
 				  }
 				  else
 				  {
@@ -150,7 +149,7 @@ module.exports = {
 									" LIMIT 10"; 
 
 					//--------------------------------------------------------------------
-				 }	
+				  }	
 											
 						console.log(query)
 						NotificationLog.query(query, function(err,results) {

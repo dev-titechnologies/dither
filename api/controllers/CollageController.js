@@ -305,6 +305,17 @@ module.exports = {
                                                                                     console.log(err);
                                                                                     //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                                 }else{
+                                                                                        taggedUserArray.forEach(function(factor, index){
+                                                                                                var taggedUser_roomName  = "socket_user_"+factor;
+                                                                                                sails.sockets.broadcast(taggedUser_roomName,{
+                                                                                                                                        type                       :       "notification",
+                                                                                                                                        id                         :       collageDetails.userId,
+                                                                                                                                        message                    :       "Create Dither - Room Broadcast - to Tagged Users",
+                                                                                                                                        roomName                   :       taggedUser_roomName,
+                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+                                                                                                                                        socket                     :       sails.sockets.rooms(),
+                                                                                                                                        });
+                                                                                        });
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                         console.log(createdNotificationTags);
 
@@ -344,8 +355,8 @@ module.exports = {
                                                                                                                                     console.log("Push notification result")
                                                                                                                                     console.log(ntfnSend)
                                                                                                                                     console.log("Push Notification sended")
-                                                                                                                                    //callback();
-                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+                                                                                                                                    callback();
+                                                                                                                                    //return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
                                                                                                                                 }
                                                                                                                             });
                                                                                                                 break;

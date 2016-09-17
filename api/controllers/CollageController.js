@@ -454,7 +454,14 @@ module.exports = {
                                             //sails.sockets.join(req.socket, roomName);
                                             console.log(sails.sockets.subscribers(roomName));
                                             //console.log(sails.sockets.subscribers(socket_dither_3));
-                                            sails.sockets.broadcast(roomName,{type: "new", id: collage_results.id, message: "========== ditherCreate Room Broadcast --------", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
+                                            sails.sockets.broadcast(roomName,{
+                                                                            type            :   "new",
+                                                                            id              :   collage_results.id,
+                                                                            message         :   "========== ditherCreate Room Broadcast --------",
+                                                                            roomName        :   roomName,
+                                                                            subscribers     :   sails.sockets.subscribers(roomName),
+                                                                            socket          :   sails.sockets.rooms()
+                                                                            });
                                     });
                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
                                                               profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,

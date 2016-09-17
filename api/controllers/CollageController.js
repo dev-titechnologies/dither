@@ -309,7 +309,7 @@ module.exports = {
                                                                                                 var taggedUser_roomName  = "socket_user_"+factor;
                                                                                                 sails.sockets.broadcast(taggedUser_roomName,{
                                                                                                                                         type                       :       "notification",
-                                                                                                                                        id                         :       userId,
+                                                                                                                                        id                         :       createdCollageTags.collageId,
                                                                                                                                         message                    :       "Create Dither - Room Broadcast - to Tagged Users",
                                                                                                                                         roomName                   :       taggedUser_roomName,
                                                                                                                                         subscribers                :       sails.sockets.subscribers(taggedUser_roomName),

@@ -144,7 +144,7 @@ console.log(device_type);
                                                                                             var creator_roomName  = "socket_user_"+foundCollageResults.userId;
                                                                                             sails.sockets.broadcast(creator_roomName,{
                                                                                                                                     type                       :       "notification",
-                                                                                                                                    id                         :       foundCollageResults.userId,
+                                                                                                                                    id                         :       collageId,
                                                                                                                                     message                    :       "Like Dither - Room Broadcast - to Creator",
                                                                                                                                     roomName                   :       creator_roomName,
                                                                                                                                     subscribers                :       sails.sockets.subscribers(creator_roomName),

@@ -40,16 +40,21 @@ module.exports = {
             /*console.log(req.query);
             console.log(req.query.token);
             var userToken = req.get('token');
-            //var userToken = "16c229ef11c6946708b6e987";*/
+            var userToken = "16c229ef11c6946708b6e987";*/
             console.log("userToken ;;;;;;;;;;;");
             console.log(req.get('token'));
             console.log(req.isSocket);
             var userToken;
             if(req.isSocket){
+                    console.log("is Socket true");
                     userToken = req.socket.handshake.query.token;
             }else{
+                    console.log("is Socket false");
                     userToken = req.get('token');
             }
+            //var userToken = "a5f1d1c931f6ef1710ed18b2";
+            console.log("Auth ========================================== ++++++++++++++++++++++++++++++++++++");
+            console.log(userToken);
             if(userToken){
                     console.log("Inside token check  ha ha ha userToken==============");
                     console.log(userToken);
@@ -63,24 +68,26 @@ module.exports = {
                             console.log("BEFORE  -------  tokenCheck.status == 1");
                              if(tokenCheck.status == 1)
                             {
+                                console.log("IF  -------  tokenCheck.status == 1");
                                 console.log("tokenCheck.status == 1");
                                 req.options.tokenCheck = tokenCheck;
                                 next();
                             }
                             else
                             {
+                                console.log("ELSE  -------  tokenCheck.status == 1");
                                 if(tokenCheck.message == 'token'){
-									
-									/* TokenService.deleteToken(userToken, function(err, result) {
-										if(err) {
-											 return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
-										} else {
 
-											return res.json(200, {status: 1,  status_type: 'Success' , message: 'success'});
-										}
-									});*/
-									
-									
+                                    /* TokenService.deleteToken(userToken, function(err, result) {
+                                        if(err) {
+                                             return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
+                                        } else {
+
+                                            return res.json(200, {status: 1,  status_type: 'Success' , message: 'success'});
+                                        }
+                                    });*/
+
+
                                     return res.json(200, {status: 3, status_type: 'Failure' , message: 'Token expired'});
                                 }
                                 else if(tokenCheck.message == 'status'){

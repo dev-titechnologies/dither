@@ -664,25 +664,46 @@ module.exports = {
 
 
 
-                    /*var query     =   "SELECT deviceId from userToken wher userId IN ('"+taggedUserArray+"')"
-                    User_token.query(query, function(err, getDeviceId) {
-                        if(err)
-                        {
-                        console.log(err)
-                          console.log("errror")
-                        }
-                        else
-                        {
-                            console.log(getDeviceId)
-                        }
-                    });*/
-
-
 
 
 
         },
-
+        
+        /* ==================================================================================================================================
+               SEC-SOCKET TEST 
+        ==================================================================================================================================== */
+        
+        
+		testSocket: function (req, res) {
+			console.log("=============testsocket starttttttttt-====================")
+			console.log(sails.sockets.getId(req));
+			
+			console.log(sails.sockets.rooms());
+						console.log("=============testsocket endddddddddd-====================")
+						
+						
+		console.log("==================blast================")	
+		//sails.sockets.broadcast('artsAndEntertainment', { greeting: 'Hola!' });	
+		sails.sockets.blast('aaaaaaaaaaaa', {
+				  msg: 'User just logged in.'
+				});	
+				/*sails.sockets.blast( {
+				  msg: 'User message.'
+				});*/	
+		console.log(req.isSocket)		
+		console.log("==================end blast================")	
+		
+			  console.log("------------request")
+			  //console.log(req)
+			  var roomName = '/#raP59-iBx1FXbqjJAAAB';
+			 sails.sockets.join(req, roomName, function(err) {
+				
+			  });		
+			console.log(sails.sockets.subscribers(roomName))
+			sails.sockets.broadcast(roomName, { greeting: 'haiiiiiiiiiiiiiiiiiiiii am hereeeeeeeeeeeeeee!' });
+		},
+		
+		
 
 
 };

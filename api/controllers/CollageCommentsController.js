@@ -88,6 +88,10 @@ module.exports = {
                                                                                 }
                                                                                 else
                                                                                 {
+
+                                                                                    var creator_roomName  = "socket_user_"+collageDetails.userId;
+                                                                                    sails.sockets.broadcast(creator_roomName,{type: "notification", id: collageDetails.userId, message: "Comment Dither - Room Broadcast - to creator", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
+
                                                                                     console.log(createdNotificationTags);
                                                                                     //-----------------------------End OF NotificationLog---------------------------------
                                                                                     console.log("inserted comments");

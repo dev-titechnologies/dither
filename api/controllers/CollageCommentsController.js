@@ -58,7 +58,14 @@ module.exports = {
                                                     }
                                                     else{
                                                         var roomName  = "socket_dither_"+collageId;
-                                                        sails.sockets.broadcast(roomName,{type: "update", id: collageId, message: "Comment Dither - Room Broadcast", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
+                                                        sails.sockets.broadcast(roomName,{
+                                                                                        type            : "update",
+                                                                                        id              : collageId,
+                                                                                        message         : "Comment Dither - Room Broadcast",
+                                                                                        roomName        : roomName,
+                                                                                        subscribers     : sails.sockets.subscribers(roomName),
+                                                                                        socket          : sails.sockets.rooms()
+                                                                                        });
                                                     //-----------Notification log Insertion----------------
                                                     console.log("88888888888888888888888888888")
                                                         CollageComments.find({collageId:collageId}).exec(function(err, commentDetails){
@@ -90,7 +97,17 @@ module.exports = {
                                                                                 {
 
                                                                                     var creator_roomName  = "socket_user_"+collageDetails.userId;
-                                                                                    sails.sockets.broadcast(creator_roomName,{type: "notification", id: collageDetails.userId, message: "Comment Dither - Room Broadcast - to creator", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
+                                                                                    sails.sockets.broadcast(creator_roomName,{
+                                                                                                                            type                       :       "notification",
+                                                                                                                            id                         :       collageDetails.userId,
+                                                                                                                            message                    :       "Comment Dither - Room Broadcast - to Creator",
+                                                                                                                            roomName                   :       roomName,
+                                                                                                                            subscribers                :       sails.sockets.subscribers(roomName),
+                                                                                                                            socket                     :       sails.sockets.rooms(),
+                                                                                                                            comment_id                 :       results.id,
+                                                                                                                            comment_msg                :       results.msg,
+                                                                                                                            comment_created_date_time  :       results.createdAt,
+                                                                                                                            });
 
                                                                                     console.log(createdNotificationTags);
                                                                                     //-----------------------------End OF NotificationLog---------------------------------

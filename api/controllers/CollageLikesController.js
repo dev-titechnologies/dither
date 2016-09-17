@@ -115,7 +115,14 @@ console.log(device_type);
                                                                                 else
                                                                                 {
                                                                                     var roomName  = "socket_dither_"+collageId;
-                                                                                    sails.sockets.broadcast(roomName,{type: "update", id: collageId, message: "Like Dither - Room Broadcast", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
+                                                                                    sails.sockets.broadcast(roomName,{
+                                                                                                                    type            :   "update",
+                                                                                                                    id              :   collageId,
+                                                                                                                    message         :   "Like Dither - Room Broadcast",
+                                                                                                                    roomName        :   roomName,
+                                                                                                                    subscribers     :   sails.sockets.subscribers(roomName),
+                                                                                                                    socket          :   sails.sockets.rooms()
+                                                                                                                    });
                                                                                     //-----------Notification log Insertion----------------
                                                                                     var values ={
                                                                                             notificationTypeId  :   2,

@@ -146,8 +146,8 @@ console.log(device_type);
                                                                                                                                     type                       :       "notification",
                                                                                                                                     id                         :       collageDetails.userId,
                                                                                                                                     message                    :       "Like Dither - Room Broadcast - to Creator",
-                                                                                                                                    roomName                   :       roomName,
-                                                                                                                                    subscribers                :       sails.sockets.subscribers(roomName),
+                                                                                                                                    roomName                   :       creator_roomName,
+                                                                                                                                    subscribers                :       sails.sockets.subscribers(creator_roomName),
                                                                                                                                     socket                     :       sails.sockets.rooms(),
                                                                                                                                     total_like_count           :       updatedVoteCount[0].vote,
                                                                                                                                     });

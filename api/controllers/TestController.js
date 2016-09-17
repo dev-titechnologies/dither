@@ -695,10 +695,10 @@ module.exports = {
 		
 			  console.log("------------request")
 			  //console.log(req)
-			  var roomName = '/#raP59-iBx1FXbqjJAAAB';
+			  var roomName = '/#vkXeI3w890uBsw5lAAAB';
 			 sails.sockets.join(req, roomName, function(err) {
 				
-			  });		
+			  });
 			console.log(sails.sockets.subscribers(roomName))
 			sails.sockets.broadcast(roomName, { greeting: 'haiiiiiiiiiiiiiiiiiiiii am hereeeeeeeeeeeeeee!' });
 		},

@@ -141,6 +141,16 @@ console.log(device_type);
                                                                                         else
                                                                                         {
 
+                                                                                            var creator_roomName  = "socket_user_"+foundCollageResults.userId;
+                                                                                            sails.sockets.broadcast(creator_roomName,{
+                                                                                                                                    type                       :       "notification",
+                                                                                                                                    id                         :       collageDetails.userId,
+                                                                                                                                    message                    :       "Like Dither - Room Broadcast - to Creator",
+                                                                                                                                    roomName                   :       roomName,
+                                                                                                                                    subscribers                :       sails.sockets.subscribers(roomName),
+                                                                                                                                    socket                     :       sails.sockets.rooms(),
+                                                                                                                                    total_like_count           :       updatedVoteCount[0].vote,
+                                                                                                                                    });
                                                                                     //###################################
 
                                                                                             /*------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------

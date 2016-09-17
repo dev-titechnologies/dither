@@ -99,7 +99,7 @@ module.exports = {
                                                                                     var creator_roomName  = "socket_user_"+collageDetails.userId;
                                                                                     sails.sockets.broadcast(creator_roomName,{
                                                                                                                             type                       :       "notification",
-                                                                                                                            id                         :       collageDetails.userId,
+                                                                                                                            id                         :       collageId,
                                                                                                                             message                    :       "Comment Dither - Room Broadcast - to Creator",
                                                                                                                             roomName                   :       creator_roomName,
                                                                                                                             subscribers                :       sails.sockets.subscribers(creator_roomName),

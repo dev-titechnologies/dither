@@ -331,11 +331,11 @@ module.exports = {
                                                                                             .exec(function (err, response) {
 
                                                                                                 response.forEach(function(factor, index){
-																									
-																									if(factor.deviceId!=req.get('device_id'))
-																									{
+
+                                                                                                    if(factor.deviceId!=req.get('device_id'))
+                                                                                                    {
                                                                                                         deviceId_arr.push(factor.deviceId);
-																									}
+                                                                                                    }
 
                                                                                                 });
 
@@ -1313,6 +1313,19 @@ module.exports = {
                                                         }
                                                         else
                                                         {
+                                                            if(taggedUserArray.length != 0){
+                                                                    taggedUserArray.forEach(function(factor, index){
+                                                                            var taggedUser_roomName  = "socket_user_"+factor;
+                                                                            sails.sockets.broadcast(taggedUser_roomName,{
+                                                                                                                    type                       :       "update",
+                                                                                                                    id                         :       collageId,
+                                                                                                                    message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
+                                                                                                                    roomName                   :       taggedUser_roomName,
+                                                                                                                    subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+                                                                                                                    socket                     :       sails.sockets.rooms(),
+                                                                                                                    });
+                                                                    });
+                                                            }
                                                             console.log("Successfully updated =======================");
                                                             console.log(updatedCollage);
                                                             collage_results = foundCollage;
@@ -1424,6 +1437,19 @@ module.exports = {
                                                                                                     console.log(err);
                                                                                                     callback();
                                                                                                 }else{
+
+                                                                                                        taggedUserArray.forEach(function(factor, index){
+                                                                                                                var taggedUser_roomName  = "socket_user_"+factor;
+                                                                                                                sails.sockets.broadcast(taggedUser_roomName,{
+                                                                                                                                                        type                       :       "notification",
+                                                                                                                                                        id                         :       collageId,
+                                                                                                                                                        message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
+                                                                                                                                                        roomName                   :       taggedUser_roomName,
+                                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+                                                                                                                                                        socket                     :       sails.sockets.rooms(),
+                                                                                                                                                        });
+                                                                                                        });
+
                                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                                         console.log(createdNotificationTags);
                                                                                                         callback();

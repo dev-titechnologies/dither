@@ -96,19 +96,15 @@ module.exports = {
 		
 		
 		
-		data.device_id.forEach(function(factor, index){
-			
-			android
-			.send(factor, {
+		
+		
+		android
+			.send(data.device_id, {
              		body: details
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));
-			 	
-			
-		},callback);
-		
-		
+			 callback();
 	}	
 	
 	

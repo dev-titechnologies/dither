@@ -61,7 +61,7 @@ module.exports = {
                                                         sails.sockets.broadcast(roomName,{
                                                                                         type            : "update",
                                                                                         id              : collageId,
-                                                                                        creator_id      : collageDetails.userId,
+                                                                                        user_id         : userId,
                                                                                         message         : "Comment Dither - Room Broadcast",
                                                                                         roomName        : roomName,
                                                                                         subscribers     : sails.sockets.subscribers(roomName),
@@ -101,7 +101,7 @@ module.exports = {
                                                                                     sails.sockets.broadcast(creator_roomName,{
                                                                                                                             type                       :       "notification",
                                                                                                                             id                         :       collageId,
-                                                                                                                            creator_id                 :       collageDetails.userId,
+                                                                                                                            user_id                    :       userId,
                                                                                                                             message                    :       "Comment Dither - Room Broadcast - to Creator",
                                                                                                                             roomName                   :       creator_roomName,
                                                                                                                             subscribers                :       sails.sockets.subscribers(creator_roomName),

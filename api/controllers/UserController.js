@@ -215,7 +215,6 @@ module.exports = {
 																								 console.log(query)
 																								Invitation.query(query, function(err, selectContacts){
                                                                                                 
-                                                                                                
                                                                                                 //Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
                                                                                                         if(err)
                                                                                                         {

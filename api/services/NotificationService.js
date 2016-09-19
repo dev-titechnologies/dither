@@ -67,13 +67,14 @@ module.exports = {
 		
 		console.log("Push Notification GCM")
 		console.log(data)
+		console.log("counttttttttttttttttttt"+data.device_id.length)
 		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id};
 		 android = PusherService('android', {
 			  
 				device: data.device_id, // Array of string with device tokens
 				provider: {
 							apiKey		: 'AIzaSyAtRgo9lBqb-bMhyxqfNnNILthdyRNkiLg', // Your Google Server API Key
-							maxSockets	: 10, // Max number of sockets to have open at one time
+							maxSockets	: data.device_id.length, // Max number of sockets to have open at one time
 							proxy		: '' // This is [just like passing a proxy on to request](https://github.com/request/request#proxies)
 						 },
 				notification: {

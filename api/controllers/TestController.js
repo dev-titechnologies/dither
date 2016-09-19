@@ -257,7 +257,7 @@ module.exports = {
                 console.log(req.body.name);
                 //console.log(req.body.ajay);
                 console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> ENDsocketTest");
-                //sails.sockets.join(req.socket, "1");
+                sails.sockets.join(req.socket, "Room-A");
                 //console.log(req.socket);
                 //sails.sockets.blast('comment-dither', {msg: 'Hi! Comment ------11111111'});
 
@@ -383,35 +383,35 @@ module.exports = {
      testThumbnail: function (req, res) {
 
                             console.log("thumbnail image")
-                           
+
                            /* var thumbnailsCreator = require('lwip-image-thumbnails-creator');
-							var options 		  = { outputbasepath: 'thumbnail.jpg'};
-							return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
-								maxWidth: 50,
-								maxHeight: 50
-							}, options).then(function (res) {
-								// ok 
-								console.log(res.thumbnail);
-							}, function (err) {
-							  console.log(err)
-							});*/
-                            
+                            var options           = { outputbasepath: 'thumbnail.jpg'};
+                            return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
+                                maxWidth: 50,
+                                maxHeight: 50
+                            }, options).then(function (res) {
+                                // ok
+                                console.log(res.thumbnail);
+                            }, function (err) {
+                              console.log(err)
+                            });*/
+
                             var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
                             ImgResizeService.imageResize(imagename, function(err, thumbImage) {
-								if(err)
-								{
-										console.log(err);
-										
-										return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
-										//callback();
-								}else{
-									    console.log("generatedddddddddddddddddd")
-										console.log(thumbImage)
-										return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
-									//	callback();
-								}
-							});
-                            
+                                if(err)
+                                {
+                                        console.log(err);
+
+                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
+                                        //callback();
+                                }else{
+                                        console.log("generatedddddddddddddddddd")
+                                        console.log(thumbImage)
+                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
+                                    //  callback();
+                                }
+                            });
+
 
                            /*require('lwip').open('img2.jpeg', function(err, image) {
                             if(err)
@@ -668,42 +668,48 @@ module.exports = {
 
 
         },
-        
+
         /* ==================================================================================================================================
-               SEC-SOCKET TEST 
+               SEC-SOCKET TEST
         ==================================================================================================================================== */
-        
-        
-		testSocket: function (req, res) {
-			console.log("=============testsocket starttttttttt-====================")
-			console.log(sails.sockets.getId(req));
-			
-			console.log(sails.sockets.rooms());
-						console.log("=============testsocket endddddddddd-====================")
-						
-						
-		console.log("==================blast================")	
-		//sails.sockets.broadcast('artsAndEntertainment', { greeting: 'Hola!' });	
-		sails.sockets.blast('aaaaaaaaaaaa', {
-				  msg: 'User just logged in.'
-				});	
-				/*sails.sockets.blast( {
-				  msg: 'User message.'
-				});*/	
-		console.log(req.isSocket)		
-		console.log("==================end blast================")	
-		
-			  console.log("------------request")
-			  //console.log(req)
-			  var roomName = '/#raP59-iBx1FXbqjJAAAB';
-			 sails.sockets.join(req, roomName, function(err) {
-				
-			  });		
-			console.log(sails.sockets.subscribers(roomName))
-			sails.sockets.broadcast(roomName, { greeting: 'haiiiiiiiiiiiiiiiiiiiii am hereeeeeeeeeeeeeee!' });
-		},
-		
-		
+
+
+        testSocket: function (req, res) {
+            console.log("=============testsocket starttttttttt-====================")
+            console.log(sails.sockets.getId(req));
+
+            console.log(sails.sockets.rooms());
+                        console.log("=============testsocket endddddddddd-====================")
+
+
+        console.log("==================blast================")
+        //sails.sockets.broadcast('artsAndEntertainment', { greeting: 'Hola!' });
+        sails.sockets.blast('aaaaaaaaaaaa', {
+                  msg: 'User just logged in.'
+                });
+                /*sails.sockets.blast( {
+                  msg: 'User message.'
+                });*/
+        console.log(req.isSocket)
+        console.log("==================end blast================")
+
+              console.log("------------request")
+              //console.log(req)
+              var roomName = '/#raP59-iBx1FXbqjJAAAB';
+             sails.sockets.join(req, roomName, function(err) {
+
+              });
+            console.log(sails.sockets.subscribers(roomName))
+            sails.sockets.broadcast(roomName, { greeting: 'haiiiiiiiiiiiiiiiiiiiii am hereeeeeeeeeeeeeee!' });
+        },
+        imageResizes: function (req, res) {
+                    var im = require('imagemagick');
+                    im.readMetadata('assets/images/collage/abc.jpg', function(err, metadata){
+                      if (err) throw err;
+                      //console.log('Shot at '+metadata.exif.dateTimeOriginal);
+                      console.log(metadata);
+                    });
+        },
 
 
 };

@@ -53,15 +53,17 @@ module.exports = {
                     console.log(req.param("dither_id_array"));
                     console.log("0000000000000000000000000000000000000000000000000000000000000000000000000");
                     var ditherIdArray  = req.param("dither_id_array");
-                    ditherIdArray.forEach(function(factor, index){
-                            console.log(factor);
-                            var roomName = "socket_dither_"+factor;
-                            console.log(roomName);
-                            sails.sockets.join(req.socket, roomName);
-                            console.log(sails.sockets.subscribers(roomName));
-                            //console.log(sails.sockets.subscribers(socket_dither_3));
-                            //sails.sockets.broadcast(roomName,{type: update, id: , message: "========== socketConnection Room Broadcast --------", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
-                    });
+                    if(ditherIdArray.length != 0){
+                            ditherIdArray.forEach(function(factor, index){
+                                    console.log(factor);
+                                    var roomName = "socket_dither_"+factor;
+                                    console.log(roomName);
+                                    sails.sockets.join(req.socket, roomName);
+                                    console.log(sails.sockets.subscribers(roomName));
+                                    //console.log(sails.sockets.subscribers(socket_dither_3));
+                                    //sails.sockets.broadcast(roomName,{type: update, id: , message: "========== socketConnection Room Broadcast --------", roomName: roomName, subscribers: sails.sockets.subscribers(roomName), socket: sails.sockets.rooms()});
+                            });
+                    }
                     console.log(sails.sockets.rooms());
 
 

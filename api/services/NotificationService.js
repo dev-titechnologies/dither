@@ -73,7 +73,7 @@ module.exports = {
 				device: data.device_id, // Array of string with device tokens
 				provider: {
 							apiKey		: 'AIzaSyAtRgo9lBqb-bMhyxqfNnNILthdyRNkiLg', // Your Google Server API Key
-							maxSockets	: 50, // Max number of sockets to have open at one time
+							maxSockets	: 10, // Max number of sockets to have open at one time
 							proxy		: '' // This is [just like passing a proxy on to request](https://github.com/request/request#proxies)
 						 },
 				notification: {

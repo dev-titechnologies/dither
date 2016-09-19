@@ -58,6 +58,8 @@ module.exports = {
                                     phoneNumber : req.param('mobile_number'),
                                     profilePic  : imagename,
                         };
+                        var deviceId_arr  = [];
+                        var contact_arr	  = [];
                         //--------OTP CHECKING----------------------
                        /* if(OTPCode)
                         {
@@ -199,7 +201,22 @@ module.exports = {
                                                                                     function(callback) {
                                                                                                 //Notification Log insertion
                                                                                                 console.log("parallel 3")
-                                                                                                Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
+                                                                                                console.log(req.param('mobile_number'))
+                                                                                                 var mobile_number  = req.param('mobile_number');
+																								 var validNo1       = mobile_number.replace('-','');
+																								 var validNo2	    = mobile_number.split('-').pop();
+																								 var validNo3	    = '0'+validNo2;
+																								 var validNo4	    = validNo1.replace('+','');
+																								console.log("nnnnnnnnnnnnnnnnnnn"+validNo1)
+																								console.log("nnnnnnnnnnnnnnnnnnn"+validNo2)
+																								console.log("nnnnnnnnnnnnnnnnnnn"+validNo3)
+																								console.log("nnnnnnnnnnnnnnnnnnn"+validNo4)
+																								 var query	= 'SELECT userId FROM invitation where phoneNumber="'+validNo1+'" OR  phoneNumber="'+validNo2+'" OR  phoneNumber="'+validNo4+'" OR phoneNumber="'+validNo3+'" ';
+																								 console.log(query)
+																								Invitation.query(query, function(err, selectContacts){
+                                                                                                
+                                                                                                
+                                                                                                //Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
                                                                                                         if(err)
                                                                                                         {
                                                                                                             console.log(err);
@@ -213,25 +230,21 @@ module.exports = {
                                                                                                             {
                                                                                                                     callback();
                                                                                                             }else{
+																													
+																														selectContacts.forEach(function(factor, index){
 
-                                                                                                              /*  var data     = {
-                                                                                                                                userId              :       results.id,
-                                                                                                                                ditherUserId        :       selectContacts[0].userId,
-                                                                                                                                fbId                :       req.param('fb_uid'),
-                                                                                                                                };
-                                                                                                                var criteria = {phoneNumber: req.param('mobile_number')};
-                                                                                                                Invitation.update(criteria,data).exec(function(err, updatedRecords) {
-                                                                                                                    if(err){
-                                                                                                                                console.log(err);
-                                                                                                                                callback();
-                                                                                                                    }else{*/
+																																	contact_arr.push(factor.userId);
+																														});
                                                                                                                         //Notification Log Insertion
-                                                                                                                        var values ={
-                                                                                                                                        notificationTypeId  : 4,
-                                                                                                                                        userId              : results.id,
-                                                                                                                                        ditherUserId        : selectContacts[0].userId,
-                                                                                                                                    }
-                                                                                                                         NotificationLog.create(values).exec(function(err, createdNotification) {
+                                                                                                                        var phonecontacts		= selectContacts;
+                                                                                                                        var phoneContactsArray  = [];
+                                                                                                        
+                                                                                                                        phonecontacts.forEach(function(factor, index){
+																																phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+																														});
+                                                                                                                              
+                                                                                                                                    
+                                                                                                                         NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification) {
                                                                                                                             if(err)
                                                                                                                             {
                                                                                                                                 console.log(err);
@@ -241,7 +254,25 @@ module.exports = {
                                                                                                                             else
                                                                                                                             {
                                                                                                                                 console.log(createdNotification);
-
+																																
+																																 //-------Socket brodcast------------------------------
+                                                                                                                        
+																																contact_arr.forEach(function(factor, index){
+																																	
+																																	var	roomName  = "socket_user_"+factor.userId;
+																																				
+																																	sails.sockets.broadcast(roomName,{
+																																									type            : "notification",
+																																									id              : factor.userId,
+																																									message         : "Signup Dither - Room Broadcast",
+																																									roomName        : roomName,
+																																									subscribers     : sails.sockets.subscribers(roomName),
+																																									socket          : sails.sockets.rooms()
+																																									});
+																																			
+																																  });   
+																																//------------end of socket---------------------------------------
+																																
                                                                                                                                 Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
                                                                                                                                     if(err)
                                                                                                                                     {
@@ -251,7 +282,9 @@ module.exports = {
                                                                                                                                     else
                                                                                                                                     {
                                                                                                                                         //-----------PUSH Notification------------------------------------
-                                                                                                                                        User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+                                                                                                                                        
+                                                                                                                                        User_token.find({userId: contact_arr}).exec(function (err, getDeviceId) {
+                                                                                                                                        //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
                                                                                                                                             if(err)
                                                                                                                                             {
                                                                                                                                                   console.log(err);
@@ -264,15 +297,13 @@ module.exports = {
                                                                                                                                                 var ntfn_body   =   results.name +" Joined on Dither";
                                                                                                                                                 //var device_id   =  getDeviceId.deviceId;
                                                                                                                                                 
-                                                                                                                                                var deviceId_arr  = [];
+                                                                                                                                                
 																																				getDeviceId.forEach(function(factor, index){
 
 																																					deviceId_arr.push(factor.deviceId);
 
 																																				});
-                                                                                                                                                
-                                                                                                                                                
-                                                                                                                                                
+                                                                                                                                               
                                                                                                                                                 console.log(results)
 
                                                                                                                                                 if(!deviceId_arr.length){
@@ -340,8 +371,7 @@ module.exports = {
 
                                                                                                                             }
                                                                                                                         });
-                                                                                                                    //}
-                                                                                                               // });
+                                                                                                                   
                                                                                                             }
                                                                                                         }
                                                                                                         console.log("#########################################")
@@ -463,13 +493,13 @@ module.exports = {
                                                             }
                                                             else
                                                             {
-                                                                var test = results.name;
+                                                                /*var test = results.name;
                                                                 console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                                                 console.log(test);
                                                                 console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
                                                                 sails.sockets.blast('createIncheck', {status : "success", name_of_user: test});
-                                                                sails.sockets.blast('message', {status : "success", name_of_user: test});
+                                                                sails.sockets.blast('message', {status : "success", name_of_user: test});*/
 
                                                                 var notifyArray = [];
                                                                 notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion});

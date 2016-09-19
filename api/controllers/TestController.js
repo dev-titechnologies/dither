@@ -383,18 +383,53 @@ module.exports = {
      testThumbnail: function (req, res) {
 
                             console.log("thumbnail image")
-
+                            var mobile_number  = '+91-9685423156';
+                            var mobile  = req.param('mobile');
+                            var validNo1       = mobile_number.replace('-','');
+                            var validNo2	   = mobile_number.split('-').pop();
+                            //if(mobile_number==mobPlus || mobile_number== )
+                            console.log("pppppppppppppppppppp"+validNo1)
+                            console.log("nnnnnnnnnnnnnnnnnnnn"+validNo2)
+                            
+                            if(mobile==validNo1 || mobile==validNo2 || mobile =='+91'+validNo2 || mobile =='+0'+validNo2)
+                            {
+								console.log(mobile)
+								return res.json(200, {status: 1, status_type: 'Success' , message: 'Success'});
+							}
+                            else
+                            {
+								return res.json(200, {status: 2, status_type: 'Failure' , message: 'Failure'});
+							}
+                            
                            /* var thumbnailsCreator = require('lwip-image-thumbnails-creator');
-                            var options           = { outputbasepath: 'thumbnail.jpg'};
-                            return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
-                                maxWidth: 50,
-                                maxHeight: 50
-                            }, options).then(function (res) {
-                                // ok
-                                console.log(res.thumbnail);
-                            }, function (err) {
-                              console.log(err)
-                            });*/
+							var options 		  = { outputbasepath: 'thumbnail.jpg'};
+							return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
+								maxWidth: 50,
+								maxHeight: 50
+							}, options).then(function (res) {
+								// ok 
+								console.log(res.thumbnail);
+							}, function (err) {
+							  console.log(err)
+							});
+                            
+                            var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
+                            ImgResizeService.imageResize(imagename, function(err, thumbImage) {
+								if(err)
+								{
+										console.log(err);
+										
+										return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
+										//callback();
+								}else{
+									    console.log("generatedddddddddddddddddd")
+										console.log(thumbImage)
+										return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
+									//	callback();
+								}
+							});
+                            
+
 
                             var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
                             ImgResizeService.imageResize(imagename, function(err, thumbImage) {

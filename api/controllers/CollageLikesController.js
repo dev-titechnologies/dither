@@ -118,6 +118,7 @@ console.log(device_type);
                                                                                     sails.sockets.broadcast(roomName,{
                                                                                                                     type            :   "update",
                                                                                                                     id              :   collageId,
+                                                                                                                    creator_id      :   foundCollageResults.userId,
                                                                                                                     message         :   "Like Dither - Room Broadcast",
                                                                                                                     roomName        :   roomName,
                                                                                                                     subscribers     :   sails.sockets.subscribers(roomName),
@@ -145,6 +146,7 @@ console.log(device_type);
                                                                                             sails.sockets.broadcast(creator_roomName,{
                                                                                                                                     type                       :       "notification",
                                                                                                                                     id                         :       collageId,
+                                                                                                                                    creator_id                 :       foundCollageResults.userId,
                                                                                                                                     message                    :       "Like Dither - Room Broadcast - to Creator",
                                                                                                                                     roomName                   :       creator_roomName,
                                                                                                                                     subscribers                :       sails.sockets.subscribers(creator_roomName),

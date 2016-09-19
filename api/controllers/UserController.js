@@ -309,7 +309,7 @@ module.exports = {
                                                                                                                                                         callback();
                                                                                                                                                 }else{
 																																						//device_id       =  device_id.split(',');sails.log.debug(device_id);
-                                                                                                                                                        var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4};
+                                                                                                                                                        var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id};
                                                                                                                                                         var switchKey   =  device_type;
                                                                                                                                                         switch(switchKey){
                                                                                                                                                                 case 'ios' :

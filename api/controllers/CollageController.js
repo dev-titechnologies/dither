@@ -303,6 +303,7 @@ module.exports = {
                                                                                 if(err)
                                                                                 {
                                                                                     console.log(err);
+                                                                                    callback();
                                                                                     //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                                 }else{
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
@@ -319,9 +320,11 @@ module.exports = {
                                                                                             .exec(function (err, response) {
 
                                                                                                 response.forEach(function(factor, index){
-
+																									
+																									if(factor.deviceId!=req.get('device_id'))
+																									{
                                                                                                         deviceId_arr.push(factor.deviceId);
-
+																									}
 
                                                                                                 });
 

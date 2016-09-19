@@ -81,6 +81,29 @@ module.exports = {
 
         },
 
+        socketDitherDetail  : function (req, res) {
+
+                if(req.isSocket){
+
+                            console.log("--------------------------------------    socketDitherDetail     --------------------------------");
+                            var tokenCheck                  =     req.options.tokenCheck;
+                            var userId                      =     tokenCheck.tokenDetails.userId;
+
+                            console.log(sails.sockets.getId(req));
+                            console.log(sails.sockets.rooms());
+
+                            console.log(req.param("dither_id"));
+                            var collageId           =   req.param("dither_id");
+                            var dither_roomName     =   "socket_dither_"+collageId;
+                            console.log(dither_roomName);
+                            sails.sockets.join(req.socket, dither_roomName);
+                            console.log(sails.sockets.rooms());
+                }else{
+                        console.log("--------------------------------------    socketDitherDetail Else Socket Disconnected    --------------------------------");
+
+                }
+        },
+
         Socket_disconnection  : function (req, res) {
                 /*console.log("--------------------------------------    Socket_disconnection     --------------------------------");
                 console.log(sails.sockets.getId(req));

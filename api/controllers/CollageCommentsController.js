@@ -61,6 +61,7 @@ module.exports = {
                                                         sails.sockets.broadcast(roomName,{
                                                                                         type            : "update",
                                                                                         id              : collageId,
+                                                                                        creator_id      : collageDetails.userId,
                                                                                         message         : "Comment Dither - Room Broadcast",
                                                                                         roomName        : roomName,
                                                                                         subscribers     : sails.sockets.subscribers(roomName),
@@ -99,10 +100,11 @@ module.exports = {
                                                                                     var creator_roomName  = "socket_user_"+collageDetails.userId;
                                                                                     sails.sockets.broadcast(creator_roomName,{
                                                                                                                             type                       :       "notification",
-                                                                                                                            id                         :       collageDetails.userId,
+                                                                                                                            id                         :       collageId,
+                                                                                                                            creator_id                 :       collageDetails.userId,
                                                                                                                             message                    :       "Comment Dither - Room Broadcast - to Creator",
-                                                                                                                            roomName                   :       roomName,
-                                                                                                                            subscribers                :       sails.sockets.subscribers(roomName),
+                                                                                                                            roomName                   :       creator_roomName,
+                                                                                                                            subscribers                :       sails.sockets.subscribers(creator_roomName),
                                                                                                                             socket                     :       sails.sockets.rooms(),
                                                                                                                             comment_id                 :       results.id,
                                                                                                                             comment_msg                :       results.msg,

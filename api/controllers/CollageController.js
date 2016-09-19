@@ -1322,6 +1322,7 @@ module.exports = {
                                                                             sails.sockets.broadcast(taggedUser_roomName,{
                                                                                                                     type                       :       "update",
                                                                                                                     id                         :       collageId,
+                                                                                                                    user_id                    :       userId,
                                                                                                                     message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
                                                                                                                     roomName                   :       taggedUser_roomName,
                                                                                                                     subscribers                :       sails.sockets.subscribers(taggedUser_roomName),

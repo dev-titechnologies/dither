@@ -92,13 +92,20 @@ module.exports = {
 		console.log(android)
 		console.log("device arrayyyyyyyyyyyyyyyyy")
 		console.log(data.device_id)
+		
+		data.device_id.forEach(function(factor, index){
+
 		android
-			.send(data.device_id, {
+			.send(factor.device_id, {
              		body: details
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));
-			 callback();
+
+
+		},callback);
+		
+			
 	}	
 	
 	

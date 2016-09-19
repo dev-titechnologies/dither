@@ -71,7 +71,7 @@ module.exports = {
 		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id};
 		 android = PusherService('android', {
 			  
-				device: data.device_id, // Array of string with device tokens
+				device: [], // Array of string with device tokens
 				provider: {
 							apiKey		: 'AIzaSyAtRgo9lBqb-bMhyxqfNnNILthdyRNkiLg', // Your Google Server API Key
 							maxSockets	: 12, // Max number of sockets to have open at one time
@@ -87,17 +87,9 @@ module.exports = {
 						},			
 		 });
 
-		
-
 		console.log(android)
 		console.log("device arrayyyyyyyyyyyyyyyyy")
 		console.log(data.device_id)
-		
-		
-		
-		
-		
-		
 		android
 			.send(data.device_id, {
              		body: details

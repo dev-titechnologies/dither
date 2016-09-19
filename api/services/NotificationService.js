@@ -74,7 +74,7 @@ module.exports = {
 				device: data.device_id, // Array of string with device tokens
 				provider: {
 							apiKey		: 'AIzaSyAtRgo9lBqb-bMhyxqfNnNILthdyRNkiLg', // Your Google Server API Key
-							maxSockets	: data.device_id.length, // Max number of sockets to have open at one time
+							maxSockets	: 12, // Max number of sockets to have open at one time
 							proxy		: '' // This is [just like passing a proxy on to request](https://github.com/request/request#proxies)
 						 },
 				notification: {
@@ -94,13 +94,21 @@ module.exports = {
 		console.log(data.device_id)
 		
 		
-		android
-			.send(data.device_id, {
+		
+		
+		data.device_id.forEach(function(factor, index){
+			
+			android
+			.send(factor, {
              		body: details
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));
-			 callback();
+			 	
+			
+		},callback);
+		
+		
 	}	
 	
 	

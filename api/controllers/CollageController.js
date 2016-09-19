@@ -667,7 +667,7 @@ module.exports = {
                                             //" UNION SELECT tg.collageId AS id"+
                                             " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
-                                            " WHERE tg.userId =  '"+userId+"'"+
+                                            " WHERE tg.userId =  '"+received_userId+"'"+
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
                                             " ORDER BY clg.createdAt DESC"+
@@ -695,7 +695,7 @@ module.exports = {
                                             //" UNION SELECT tg.collageId AS id"+
                                             " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
-                                            " WHERE tg.userId =  '"+userId+"'"+
+                                            " WHERE tg.userId =  '"+received_userId+"'"+
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
                                             " WHERE clg.totalVote != 0"+

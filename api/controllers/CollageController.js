@@ -1313,6 +1313,9 @@ module.exports = {
                                                         }
                                                         else
                                                         {
+                                                            console.log("++++++++++++++ -------------- taggedUserArray -------------- +++++++++++++  STARTS");
+                                                            console.log(taggedUserArray);
+                                                            console.log("++++++++++++++ ---------------- taggedUserArray -------------- +++++++++++++  ENDS");
                                                             if(taggedUserArray.length != 0){
                                                                     taggedUserArray.forEach(function(factor, index){
                                                                             var taggedUser_roomName  = "socket_user_"+factor;

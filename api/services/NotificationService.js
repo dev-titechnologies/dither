@@ -68,6 +68,7 @@ module.exports = {
 		console.log("Push Notification GCM")
 		console.log(data)
 		console.log("counttttttttttttttttttt"+data.device_id.length)
+		
 		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id};
 		 android = PusherService('android', {
 			  
@@ -96,6 +97,7 @@ module.exports = {
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));
+			data.device_id = [];
 			 callback();
 	}	
 	

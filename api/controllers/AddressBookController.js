@@ -110,64 +110,14 @@ module.exports = {
 													},		
 								function(callback) {
 																 
-														console.log("Address book updation")
-														console.log(phonecontacts.length)
-														var allUsers	=	[];
-														User.query("SELECT * FROM user", function(err, selectUsers){
-														if(err)
-														{
-															console.log(err)
-															callback();
-														}
-														else
-														{		
-																
-																selectUsers.forEach(function(factor, index){
-												
-																	allUsers.push({id:factor.id,name:factor.name,fbId:factor.fbId,phoneNumber:factor.phoneNumber});
-												
-																});
-																
-																
+																console.log("Address book updation")
+																console.log(phonecontacts.length)
 																async.forEach(phonecontacts, function (factor, callback){ 
 																//phonecontacts.forEach(function(factor, index){
-																				
-																				var num	= factor.number;	
-																				
-																				allUsers.forEach(function(factor, index){
-													
-																					  var validNo1      = factor.phoneNumber.replace('-','');
-																					  var validNo2	    = factor.phoneNumber.split('-').pop();
-																					  var validNo3	    = '0'+validNo2;
-																					  var validNo4	    = validNo1.replace('+','');
-																					  if(num==validNo1 || num==validNo2 ||  num==validNo3 ||  num==validNo4) 
-																					  {
-																						  
-																						  
-																						  var data     = {ditherUserId:factor.id};
-																						  var criteria = {ditherUserPhoneNumber: num};
-																						
-																						  AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
-
-																								if(err)
-																								{
-																									console.log(err)
-																								}
-																								else
-																								{
-																									console.log("updated")
-																								}
-																								
-																							});
-																					 
-																					 }
-																					 
-																					 
-																				 });
-																				
-																				/*var query	  = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
-																				User.query(query, function(err, selectDContacts) {
-																				//User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+																					
+																				//var query	  = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
+																				//User.query(query, function(err, selectDContacts) {
+																				User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
 																				if(err)
 																				{
 																						console.log(err)
@@ -209,12 +159,10 @@ module.exports = {
 																						 }
 																				}
 																						
-																			});    */
+																			});    
 																				
 																				
 																	},callback());
-																}
-															});		
 																	
 															//callback();			
 													},			

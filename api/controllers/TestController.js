@@ -381,25 +381,71 @@ module.exports = {
         ==================================================================================================================================== */
 
      testThumbnail: function (req, res) {
+							
+						   var allUsers	=	[];	
+                           var phonecontacts      = [{name:'Melita Nora',number:'8281442870'},{name:'Rena Acosta',number:'+17689456489'},{name:'Jacklyn Simon',number:'917654789872)'},{name:'Jacklyn Simon',number:'+154564'},{name:'Elizabeth Evangeline',number:'09875421365'}];
+                           var phoneContactsArray = [];
+							phonecontacts.forEach(function(factor, index){
+								phoneContactsArray.push({userId:127,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
+							});
+                           
+                           User.query("SELECT * FROM user", function(err, selectDContacts){
+										if(err)
+										{
+											console.log(err)
+											//callback();
+										}
+										else
+										{
+											//console.log(selectDContacts[0])
+											
+											selectDContacts.forEach(function(factor, index){
+												
+												allUsers.push({id:factor.id,name:factor.name,fbId:factor.fbId,phoneNumber:factor.phoneNumber});
+												
+											});
+											
+											
+										
+                           
+											async.forEach(phonecontacts, function (factor, callback){ 
+												
+												console.log("inside")
+												var num	= factor.number;
+												allUsers.forEach(function(factor, index){
+													
+													  var validNo1      = factor.phoneNumber.replace('-','');
+													  var validNo2	    = factor.phoneNumber.split('-').pop();
+													  var validNo3	    = '0'+validNo2;
+													  var validNo4	    = validNo1.replace('+','');
+													  if(num==validNo1 || num==validNo2 ||  num==validNo3 ||  num==validNo4) 
+													  {
+														  
+														  
+														  var data     = {ditherUserId:factor.id};
+														  var criteria = {ditherUserPhoneNumber: num};
+														
+														  AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
 
-                            console.log("thumbnail image")
-                            var mobile_number  = '+91-9685423156';
-                            var mobile  = req.param('mobile');
-                            var validNo1       = mobile_number.replace('-','');
-                            var validNo2	   = mobile_number.split('-').pop();
-                            //if(mobile_number==mobPlus || mobile_number== )
-                            console.log("pppppppppppppppppppp"+validNo1)
-                            console.log("nnnnnnnnnnnnnnnnnnnn"+validNo2)
-                            
-                            if(mobile==validNo1 || mobile==validNo2 || mobile =='+91'+validNo2 || mobile =='+0'+validNo2)
-                            {
-								console.log(mobile)
-								return res.json(200, {status: 1, status_type: 'Success' , message: 'Success'});
-							}
-                            else
-                            {
-								return res.json(200, {status: 2, status_type: 'Failure' , message: 'Failure'});
-							}
+																if(!err)
+																{
+																	console.log("success")
+																}
+															});
+													 
+													 }
+													 
+													 
+												 });
+												
+												
+												
+											});
+                           
+											//console.log(allUsers)
+										}
+							});
+                           
                             
                            /* var thumbnailsCreator = require('lwip-image-thumbnails-creator');
 							var options 		  = { outputbasepath: 'thumbnail.jpg'};

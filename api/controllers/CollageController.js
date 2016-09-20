@@ -651,7 +651,7 @@ module.exports = {
 
                             }else{
                                     console.log("Not a logged User ----------------------------------------------------");
-                                    //show only tagged
+                                    //only tagged logged user and created by received_user
                                     query_recent = "SELECT"+
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
@@ -667,9 +667,10 @@ module.exports = {
                                             //" UNION SELECT tg.collageId AS id"+
                                             " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
-                                            " WHERE tg.userId =  '"+received_userId+"'"+
+                                            " WHERE tg.userId =  '"+userId+"'"+
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
+                                            " WHERE clg.userId = "+received_userId+
                                             " ORDER BY clg.createdAt DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp_union"+
@@ -695,10 +696,11 @@ module.exports = {
                                             //" UNION SELECT tg.collageId AS id"+
                                             " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
-                                            " WHERE tg.userId =  '"+received_userId+"'"+
+                                            " WHERE tg.userId =  '"+userId+"'"+
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
                                             " WHERE clg.totalVote != 0"+
+                                            " AND clg.userId = "+received_userId+
                                             " ORDER BY clg.totalVote DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp_union"+

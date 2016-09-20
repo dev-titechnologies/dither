@@ -842,14 +842,14 @@ module.exports = {
                                                 " INNER JOIN user usr ON usr.id = clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE"+
-                                                " clg.userId = '"+received_userId+"'"+
+                                                " clg.userId = '"+userId+"'"+
                                                 " GROUP BY clgdt.id"+
                                                 " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
 
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
-                                        //Show only tagged
+                                        //Show tagged logged user and created by received_user
                                         query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
@@ -861,13 +861,14 @@ module.exports = {
                                                 " UNION"+
                                                 " SELECT tg.collageId as id"+
                                                 " FROM tags tg"+
-                                                " WHERE tg.userId = '"+received_userId+"'"+
+                                                " WHERE tg.userId = '"+userId+"'"+
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                                " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
                                                 " GROUP BY clgdt.id"+
                                                 " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
 

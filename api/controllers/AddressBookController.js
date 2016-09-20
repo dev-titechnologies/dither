@@ -115,9 +115,9 @@ module.exports = {
 																async.forEach(phonecontacts, function (factor, callback){ 
 																//phonecontacts.forEach(function(factor, index){
 																					
-																				var query	  = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
-																				User.query(query, function(err, selectDContacts) {
-																				//User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+																				//var query	  = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
+																				//User.query(query, function(err, selectDContacts) {
+																				User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
 																				if(err)
 																				{
 																						console.log(err)

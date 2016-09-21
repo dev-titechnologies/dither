@@ -96,7 +96,9 @@ module.exports = {
                                                                                 }
                                                                                 else
                                                                                 {
-
+                                                                                    console.log("createdNotificationTags |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+                                                                                    console.log(createdNotificationTags);
+                                                                                    console.log("createdNotificationTags @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                                                                                     var creator_roomName  = "socket_user_"+collageDetails.userId;
                                                                                     sails.sockets.broadcast(creator_roomName,{
                                                                                                                             type                       :       "notification",
@@ -106,9 +108,8 @@ module.exports = {
                                                                                                                             roomName                   :       creator_roomName,
                                                                                                                             subscribers                :       sails.sockets.subscribers(creator_roomName),
                                                                                                                             socket                     :       sails.sockets.rooms(),
-                                                                                                                            comment_id                 :       results.id,
-                                                                                                                            comment_msg                :       results.msg,
-                                                                                                                            comment_created_date_time  :       results.createdAt,
+                                                                                                                            notification_type          :       3,
+                                                                                                                            notification_id            :       createdNotificationTags.id
                                                                                                                             });
 
                                                                                     console.log(createdNotificationTags);
@@ -130,7 +131,7 @@ module.exports = {
                                                                                           }
                                                                                           else
                                                                                           {
-																						   console.log("^^^^^^^^^^deviceIds^^^^^^^^^^^^")
+                                                                                           console.log("^^^^^^^^^^deviceIds^^^^^^^^^^^^")
                                                                                            console.log(getDeviceId)
                                                                                            //var device_id  = getDeviceId.deviceId;
                                                                                            if(!getDeviceId.length)

@@ -102,7 +102,7 @@ module.exports = {
 																
 																AddressBook.query(query,function(err, createdAddressBook){*/
 																
-																AddressBook.create(query).exec(function(err, createdAddressBook) {
+																AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
 																		if(err)
 																		{
 																			console.log(err);

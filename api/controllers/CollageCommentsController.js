@@ -130,7 +130,7 @@ module.exports = {
                                                                                           }
                                                                                           else
                                                                                           {
-
+																						   console.log("^^^^^^^^^^deviceIds^^^^^^^^^^^^")
                                                                                            console.log(getDeviceId)
                                                                                            //var device_id  = getDeviceId.deviceId;
                                                                                            if(!getDeviceId.length)

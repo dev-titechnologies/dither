@@ -67,6 +67,7 @@ module.exports = {
 		
 		console.log("Push Notification GCM")
 		console.log(data)
+		console.log(data.device_id)
 		console.log("counttttttttttttttttttt"+data.device_id.length)
 		var ntfnArr = [];
 		ntfnArr	 	= data.device_id;
@@ -93,7 +94,7 @@ module.exports = {
 		 });
 		console.log(android)
 		console.log("device arrayyyyyyyyyyyyyyyyy")
-		console.log(data.device_id)
+		console.log(ntfnArr)
 		android
 			.send(ntfnArr, {
              		body: details

@@ -25,6 +25,7 @@ module.exports = {
                     ditherUserInFbFriends;
                 var phoneContactsArray     	    = 	   [];
                 var fbUserArray             	= 	   [];
+                var phoneContactsArray1             	= 	   [];
                
                 var device_type		=	req.get('device_type');
                 var phonecontacts	= [];
@@ -49,10 +50,11 @@ module.exports = {
 						phonecontacts.forEach(function(factor, index){
 							//phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
 							phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
+							phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
 						});
 
 						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-						//console.log(phoneContactsArray)
+						
 						
 						fbUser.forEach(function(factor, index){
 							
@@ -94,7 +96,7 @@ module.exports = {
 																var query = "INSERT INTO addressBook"+
 																			" (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
 																			" VALUES"+phoneContactsArray;
-																console.log("=====contactsssssssss?????????????????????????????????????????????????")
+																
 																console.log(query)
 																//var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
 																
@@ -121,7 +123,8 @@ module.exports = {
 																});		
 													},		
 								function(callback) {
-																 
+																 console.log("=====contactsssssssss?????????????????????????????????????????????????")
+																 console.log(phoneContactsArray1)
 																console.log("Address book updation")
 																console.log(phonecontacts.length)
 																async.forEach(phonecontacts, function (factor, callback){ 

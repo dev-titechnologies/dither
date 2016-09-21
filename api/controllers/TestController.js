@@ -759,7 +759,7 @@ module.exports = {
             console.log("=============testsocket starttttttttt-====================")
             console.log(sails.sockets.getId(req));
 
-            console.log(sails.sockets.rooms());
+            
                         console.log("=============testsocket endddddddddd-====================")
 
 
@@ -776,10 +776,12 @@ module.exports = {
 
               console.log("------------request")
               //console.log(req)
-              var roomName = '/#raP59-iBx1FXbqjJAAAB';
+              var roomName = 'socket_user_90';
+             console.log("ggggggggggggggggggggggggggggggggggggg")
              sails.sockets.join(req, roomName, function(err) {
-
+                  console.log(roomName)
               });
+              console.log(sails.sockets.rooms());
             console.log(sails.sockets.subscribers(roomName))
             sails.sockets.broadcast(roomName, { greeting: 'haiiiiiiiiiiiiiiiiiiiii am hereeeeeeeeeeeeeee!' });
         },

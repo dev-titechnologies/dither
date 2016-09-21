@@ -262,7 +262,7 @@ module.exports = {
 																																				
 																																	sails.sockets.broadcast(roomName,{
 																																									type            : "notification",
-																																									id              : factor.userId,
+																																									user_id         : factor.userId,
 																																									message         : "Signup Dither - Room Broadcast",
 																																									roomName        : roomName,
 																																									subscribers     : sails.sockets.subscribers(roomName),
@@ -416,7 +416,11 @@ module.exports = {
                                                                                             });*/
                                                                                             
                                                                                             console.log("async parallel in Sms Part Success --------------------");
-                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+																												  token  		:	userTokenDetails.token.token,
+																												  user_id		:	results.id,
+																												  mobile_number :   results.phoneNumber
+																											});
 
                                                                                         }
 
@@ -511,6 +515,7 @@ module.exports = {
                                                                                       profile_image     :   profile_image,
                                                                                       token             :   userTokenDetails.token.token,
                                                                                       user_id           :   results.id,
+                                                                                      mobile_number		:   results.phoneNumber,
                                                                                       notification      :   notifyArray
                                                                                 });
                                                             }

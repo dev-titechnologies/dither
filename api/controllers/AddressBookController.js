@@ -45,13 +45,14 @@ module.exports = {
 								
 							
 						var data_check1 = "";
+						//console.log(phonecontacts)
 						phonecontacts.forEach(function(factor, index){
 							//phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
 							phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
 						});
 
 						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-						//console.log(phoneContactsArray)
+						console.log(phoneContactsArray)
 						
 						fbUser.forEach(function(factor, index){
 							
@@ -93,8 +94,8 @@ module.exports = {
 																var query = "INSERT INTO addressBook"+
 																			" (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
 																			" VALUES"+phoneContactsArray;
-																
-																
+																console.log("=====contactsssssssss?????????????????????????????????????????????????")
+																console.log(query)
 																//var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
 																
 																AddressBook.query(query,function(err, createdAddressBook){

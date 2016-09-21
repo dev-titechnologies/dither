@@ -52,7 +52,7 @@ module.exports = {
 						});
 
 						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-						console.log(phoneContactsArray)
+						//console.log(phoneContactsArray)
 						
 						fbUser.forEach(function(factor, index){
 							

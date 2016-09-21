@@ -52,6 +52,7 @@ module.exports.routes = {
   '/collageComments/*'                    :           ['auth.authenticate'],
   '/report/*'                             :           ['auth.authenticate'],
   '/socketSettings/*'                     :           ['auth.authenticate'],
+  '/collageUpload/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
   //'/test/delete_Socket'                   :           ['SocketSettings.Socket_connection'],
 
 

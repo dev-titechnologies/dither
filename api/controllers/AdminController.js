@@ -31,6 +31,7 @@ module.exports = {
 				});
                 
     },
+    // View Details of every single User
     getUserDetails: function(req, res){
 					userId=req.body.userId;
                     query = "SELECT * FROM  `user` WHERE id="+userId;
@@ -50,6 +51,7 @@ module.exports = {
 				});
                 
     },
+    //Delete a particular User
     deleteUser: function(req, res){
 					criteria={id: req.body.userId};
 					data= {status: 'delete'};
@@ -68,6 +70,7 @@ module.exports = {
 				});
                 
     },
+    // Activate Deactivate User 
     userStatus: function(req, res){
 					//key=req.body.key;
 					criteria={id: req.body.userId};
@@ -83,6 +86,49 @@ module.exports = {
 					{
 						
 						console.log(result);
+						return res.json(200, {status: 1, message: "success", data: result});
+					}
+				});
+                
+    },
+    
+    // Get Reported User List
+    getReportedUser: function(req, res){
+		
+			
+                    query = "SELECT u.id,u.profilePic,u.status, u.name, COUNT( ru.userId ) AS RepUserCount FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.userId GROUP BY ru.userId LIMIT 0 , 30";
+				
+				User.query(query, function(err, result) {
+					if(err)
+					{
+						// console.log(err);
+						return res.json(200, { status: 2, error_details: 'db error' });
+					}
+					else
+					{
+						
+						//console.log(result);
+						return res.json(200, {status: 1, message: "success", data: result});
+					}
+				});
+                
+    },
+    
+    // Get One User Reported List
+    getReportList: function(req, res){
+		
+			console.log(req.body.userId);
+                    query = "SELECT u.profilePic, u.name, rt.description, ru.report, ru.createdAt FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.reporterId LEFT JOIN reportType AS rt ON rt.id = ru.reportType WHERE ru.userId ="+req.body.userId+" LIMIT 0 , 30";
+				User.query(query, function(err, result) {
+					if(err)
+					{
+						// console.log(err);
+						return res.json(200, { status: 2, error_details: 'db error' });
+					}
+					else
+					{
+						
+						//console.log(result);
 						return res.json(200, {status: 1, message: "success", data: result});
 					}
 				});

@@ -258,6 +258,10 @@ module.exports = {
                 //console.log(req.body.ajay);
                 console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> ENDsocketTest");
                 sails.sockets.join(req.socket, "Room-A");
+                var roomName  = "socket_dither_43";
+                sails.sockets.join(req.socket, roomName);
+                var creator_roomName  = "socket_user_2";
+                sails.sockets.join(req.socket, creator_roomName);
                 //console.log(req.socket);
                 //sails.sockets.blast('comment-dither', {msg: 'Hi! Comment ------11111111'});
 
@@ -381,100 +385,100 @@ module.exports = {
         ==================================================================================================================================== */
 
      testThumbnail: function (req, res) {
-							
-						   var allUsers	=	[];	
+
+                           var allUsers =   [];
                            var phonecontacts      = [{name:'Melita Nora',number:'8281442870'},{name:'Rena Acosta',number:'+17689456489'},{name:'Jacklyn Simon',number:'917654789872)'},{name:'Jacklyn Simon',number:'+154564'},{name:'Elizabeth Evangeline',number:'09875421365'}];
                            var phoneContactsArray = [];
-							phonecontacts.forEach(function(factor, index){
-								phoneContactsArray.push({userId:127,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
-							});
-                           
-                           User.query("SELECT * FROM user", function(err, selectDContacts){
-										if(err)
-										{
-											console.log(err)
-											//callback();
-										}
-										else
-										{
-											//console.log(selectDContacts[0])
-											
-											selectDContacts.forEach(function(factor, index){
-												
-												allUsers.push({id:factor.id,name:factor.name,fbId:factor.fbId,phoneNumber:factor.phoneNumber});
-												
-											});
-											
-											
-										
-                           
-											async.forEach(phonecontacts, function (factor, callback){ 
-												
-												console.log("inside")
-												var num	= factor.number;
-												allUsers.forEach(function(factor, index){
-													
-													  var validNo1      = factor.phoneNumber.replace('-','');
-													  var validNo2	    = factor.phoneNumber.split('-').pop();
-													  var validNo3	    = '0'+validNo2;
-													  var validNo4	    = validNo1.replace('+','');
-													  if(num==validNo1 || num==validNo2 ||  num==validNo3 ||  num==validNo4) 
-													  {
-														  
-														  
-														  var data     = {ditherUserId:factor.id};
-														  var criteria = {ditherUserPhoneNumber: num};
-														
-														  AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+                            phonecontacts.forEach(function(factor, index){
+                                phoneContactsArray.push({userId:127,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
+                            });
 
-																if(!err)
-																{
-																	console.log("success")
-																}
-															});
-													 
-													 }
-													 
-													 
-												 });
-												
-												
-												
-											});
-                           
-											//console.log(allUsers)
-										}
-							});
-                           
-                            
+                           User.query("SELECT * FROM user", function(err, selectDContacts){
+                                        if(err)
+                                        {
+                                            console.log(err)
+                                            //callback();
+                                        }
+                                        else
+                                        {
+                                            //console.log(selectDContacts[0])
+
+                                            selectDContacts.forEach(function(factor, index){
+
+                                                allUsers.push({id:factor.id,name:factor.name,fbId:factor.fbId,phoneNumber:factor.phoneNumber});
+
+                                            });
+
+
+
+
+                                            async.forEach(phonecontacts, function (factor, callback){
+
+                                                console.log("inside")
+                                                var num = factor.number;
+                                                allUsers.forEach(function(factor, index){
+
+                                                      var validNo1      = factor.phoneNumber.replace('-','');
+                                                      var validNo2      = factor.phoneNumber.split('-').pop();
+                                                      var validNo3      = '0'+validNo2;
+                                                      var validNo4      = validNo1.replace('+','');
+                                                      if(num==validNo1 || num==validNo2 ||  num==validNo3 ||  num==validNo4)
+                                                      {
+
+
+                                                          var data     = {ditherUserId:factor.id};
+                                                          var criteria = {ditherUserPhoneNumber: num};
+
+                                                          AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+
+                                                                if(!err)
+                                                                {
+                                                                    console.log("success")
+                                                                }
+                                                            });
+
+                                                     }
+
+
+                                                 });
+
+
+
+                                            });
+
+                                            //console.log(allUsers)
+                                        }
+                            });
+
+
                            /* var thumbnailsCreator = require('lwip-image-thumbnails-creator');
-							var options 		  = { outputbasepath: 'thumbnail.jpg'};
-							return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
-								maxWidth: 50,
-								maxHeight: 50
-							}, options).then(function (res) {
-								// ok 
-								console.log(res.thumbnail);
-							}, function (err) {
-							  console.log(err)
-							});
-                            
+                            var options           = { outputbasepath: 'thumbnail.jpg'};
+                            return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
+                                maxWidth: 50,
+                                maxHeight: 50
+                            }, options).then(function (res) {
+                                // ok
+                                console.log(res.thumbnail);
+                            }, function (err) {
+                              console.log(err)
+                            });
+
                             var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
                             ImgResizeService.imageResize(imagename, function(err, thumbImage) {
-								if(err)
-								{
-										console.log(err);
-										
-										return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
-										//callback();
-								}else{
-									    console.log("generatedddddddddddddddddd")
-										console.log(thumbImage)
-										return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
-									//	callback();
-								}
-							});
-                            
+                                if(err)
+                                {
+                                        console.log(err);
+
+                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
+                                        //callback();
+                                }else{
+                                        console.log("generatedddddddddddddddddd")
+                                        console.log(thumbImage)
+                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
+                                    //  callback();
+                                }
+                            });
+
 
 
                             var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';

@@ -94,8 +94,8 @@ module.exports = {
 																var query = "INSERT INTO addressBook"+
 																			" (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
 																			" VALUES"+phoneContactsArray;
-																
-																
+																console.log("=====contactsssssssss?????????????????????????????????????????????????")
+																console.log(query)
 																//var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
 																
 																AddressBook.query(query,function(err, createdAddressBook){

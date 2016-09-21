@@ -555,7 +555,7 @@ module.exports = {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
 						console.log("logout")
-                        return res.json(200, {status: 1,  status_type: 'Success' , message: 'LogOut success'});
+                        return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });
         }else{

@@ -35,7 +35,7 @@ module.exports = {
 					//{	
 						 console.log("iosss contacts")
 						 
-						 console.log(req.param('contact_array'))
+						 //console.log(req.param('contact_array'))
 						 
 						phonecontacts           = JSON.parse(req.param('contact_array'));
 						 //fbUser 				 = JSON.parse(req.param('fb_array'));
@@ -110,19 +110,13 @@ module.exports = {
 													},		
 								function(callback) {
 																 
-																 console.log("Address book updation")
-																 console.log(phonecontacts.length)
+																console.log("Address book updation")
+																console.log(phonecontacts.length)
 																async.forEach(phonecontacts, function (factor, callback){ 
 																//phonecontacts.forEach(function(factor, index){
 																					
-																				var values={
-																								userId		: userId,
-																								phoneNumber	: factor.number,
-																							  }	
-																							  
-																							 // console.log(values)
-
-																					
+																				//var query	  = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
+																				//User.query(query, function(err, selectDContacts) {
 																				User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
 																				if(err)
 																				{
@@ -137,6 +131,7 @@ module.exports = {
 																						{
 																							
 																							//updation 
+																							
 																							
 																							 var data     = {ditherUserId:selectDContacts[0].id};
 																							 var criteria = {ditherUserPhoneNumber: factor.number};
@@ -269,7 +264,7 @@ module.exports = {
 								function(callback) {	
 																			 
 																
-																query = "SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
+																query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
 																		" FROM addressBook adb"+
 																		" INNER JOIN user usr ON usr.id = adb.ditherUserId"+
 																		" WHERE adb.userId = "+userId+
@@ -315,7 +310,7 @@ module.exports = {
 								function(callback) {					
 																			   
 														
-														query = " SELECT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
+														query = " SELECT DISTINCT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
 																	" FROM fbFriends fbf"+
 																	" INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
 																	" WHERE fbf.userId = "+userId+
@@ -364,7 +359,7 @@ module.exports = {
 																console.log("address book selectionnnnnnnnnnnnnnnn")
 																			
 																			
-																query = "SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
+																query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
 																		" FROM addressBook adb"+
 																		" INNER JOIN user usr ON usr.id = adb.ditherUserId"+
 																		" WHERE adb.userId = "+userId+
@@ -412,7 +407,7 @@ module.exports = {
 																			   
 														console.log("fb friends updatedddddd")
 														   
-														query = " SELECT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
+														query = " SELECT DISTINCT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
 																	" FROM fbFriends fbf"+
 																	" INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
 																	" WHERE fbf.userId = "+userId+

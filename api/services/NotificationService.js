@@ -66,13 +66,21 @@ module.exports = {
 	{
 		
 		console.log("Push Notification GCM")
-		//console.log(data)
+		console.log(data)
+		console.log(data.device_id)
+		console.log("counttttttttttttttttttt"+data.device_id.length)
+		var ntfnArr = [];
+		ntfnArr	 	= data.device_id;
+		console.log("neww devicee  arrayyyyyy")
+		console.log(ntfnArr)
+		
+		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id};
 		 android = PusherService('android', {
 			  
-				device: [data.device_id], // Array of string with device tokens
+				device: [], // Array of string with device tokens
 				provider: {
-							apiKey		: 'AIzaSyB1l2pE2mqKfvXDsA_C3MgoiICU6KG5GVU', // Your Google Server API Key
-							maxSockets	: 12, // Max number of sockets to have open at one time
+							apiKey		: 'AIzaSyAtRgo9lBqb-bMhyxqfNnNILthdyRNkiLg', // Your Google Server API Key
+							maxSockets	: 0, // Max number of sockets to have open at one time
 							proxy		: '' // This is [just like passing a proxy on to request](https://github.com/request/request#proxies)
 						 },
 				notification: {
@@ -84,14 +92,12 @@ module.exports = {
 							payload : {}// Custom data to send within Push Notification
 						},			
 		 });
-
-		
-
 		console.log(android)
-		console.log(data.device_id)
+		console.log("device arrayyyyyyyyyyyyyyyyy")
+		console.log(ntfnArr)
 		android
-			.send([data.device_id], {
-             		body:  data.NtfnBody
+			.send(ntfnArr, {
+             		body: details
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));

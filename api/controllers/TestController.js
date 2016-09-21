@@ -245,15 +245,33 @@ module.exports = {
     /* ==================================================================================================================================
                SOCKET
      ==================================================================================================================================== */
-        /*socketTest:  function (req, res) {
-                //sails.sockets.join(req.socket, "1");
+        socketTests:  function (req, res) {
+                console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> socketTest");
+                console.log(req);
+                console.log("param only ======");
+                console.log(req.params.all());
+                console.log(req.param("data"));
+                //console.log(req.param("ajay"));
+                console.log("body only ======");
+                console.log(req.body);
+                console.log(req.body.name);
+                //console.log(req.body.ajay);
+                console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> ENDsocketTest");
+                sails.sockets.join(req.socket, "Room-A");
+                var roomName  = "socket_dither_43";
+                sails.sockets.join(req.socket, roomName);
+                var creator_roomName  = "socket_user_2";
+                sails.sockets.join(req.socket, creator_roomName);
                 //console.log(req.socket);
-                sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
-                sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
+                //sails.sockets.blast('comment-dither', {msg: 'Hi! Comment ------11111111'});
+
+                //sails.sockets.blast('like-dither', {msg: 'Hi! Like ------2222222'});
+                //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
+                //sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
 
         },
 
-        subscribeToFunRoom: function(req, res) {
+        /*subscribeToFunRoom: function(req, res) {
               //r roomName = req.param('roomName');
               //console.log(req);
               var roomName = "pppp";
@@ -339,7 +357,6 @@ module.exports = {
                                             console.log(profileUploadResults)
                                             imageName = profileUploadResults[0].fd.split('/');
                                             imageName = imageName[imageName.length-1];
-
                                             jsonFilePath = '.tmp/uploads/'+imageName;
                                             console.log(jsonFilePath)
                                             jsonfile.readFile(jsonFilePath, function(err, obj)
@@ -369,34 +386,144 @@ module.exports = {
 
      testThumbnail: function (req, res) {
 
-                            console.log("thumbnail image")
-                     
-                           /* require('lwip').open('img2.jpeg', function(err, image) {
-							if(err)
-							  {
-								  console.log("Error")
-								  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-							  }
-							  else
-							  {
-								// lanczos
-								image.resize(50, 50, function(err, rzdImg) {
-									rzdImg.writeFile('testThumb/output.jpg', function(err) {
-										if(err)
-										  {
-											  console.log("Error")
-											  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-										  }
-										  else
-										  {
-											  return res.json(200, {status: 1,status_type: 'Success', message: 'Image Resizing Success'});
-										  }
-										});
-								});
-							  }	
-							});*/
-                            
-                           
+                           var allUsers =   [];
+                           var phonecontacts      = [{name:'Melita Nora',number:'8281442870'},{name:'Rena Acosta',number:'+17689456489'},{name:'Jacklyn Simon',number:'917654789872)'},{name:'Jacklyn Simon',number:'+154564'},{name:'Elizabeth Evangeline',number:'09875421365'}];
+                           var phoneContactsArray = [];
+                            phonecontacts.forEach(function(factor, index){
+                                phoneContactsArray.push({userId:127,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
+                            });
+
+                           User.query("SELECT * FROM user", function(err, selectDContacts){
+                                        if(err)
+                                        {
+                                            console.log(err)
+                                            //callback();
+                                        }
+                                        else
+                                        {
+                                            //console.log(selectDContacts[0])
+
+                                            selectDContacts.forEach(function(factor, index){
+
+                                                allUsers.push({id:factor.id,name:factor.name,fbId:factor.fbId,phoneNumber:factor.phoneNumber});
+
+                                            });
+
+
+
+
+                                            async.forEach(phonecontacts, function (factor, callback){
+
+                                                console.log("inside")
+                                                var num = factor.number;
+                                                allUsers.forEach(function(factor, index){
+
+                                                      var validNo1      = factor.phoneNumber.replace('-','');
+                                                      var validNo2      = factor.phoneNumber.split('-').pop();
+                                                      var validNo3      = '0'+validNo2;
+                                                      var validNo4      = validNo1.replace('+','');
+                                                      if(num==validNo1 || num==validNo2 ||  num==validNo3 ||  num==validNo4)
+                                                      {
+
+
+                                                          var data     = {ditherUserId:factor.id};
+                                                          var criteria = {ditherUserPhoneNumber: num};
+
+                                                          AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+
+                                                                if(!err)
+                                                                {
+                                                                    console.log("success")
+                                                                }
+                                                            });
+
+                                                     }
+
+
+                                                 });
+
+
+
+                                            });
+
+                                            //console.log(allUsers)
+                                        }
+                            });
+
+
+                           /* var thumbnailsCreator = require('lwip-image-thumbnails-creator');
+                            var options           = { outputbasepath: 'thumbnail.jpg'};
+                            return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
+                                maxWidth: 50,
+                                maxHeight: 50
+                            }, options).then(function (res) {
+                                // ok
+                                console.log(res.thumbnail);
+                            }, function (err) {
+                              console.log(err)
+                            });
+
+                            var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
+                            ImgResizeService.imageResize(imagename, function(err, thumbImage) {
+                                if(err)
+                                {
+                                        console.log(err);
+
+                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
+                                        //callback();
+                                }else{
+                                        console.log("generatedddddddddddddddddd")
+                                        console.log(thumbImage)
+                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
+                                    //  callback();
+                                }
+                            });
+
+
+
+                            var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
+                            ImgResizeService.imageResize(imagename, function(err, thumbImage) {
+                                if(err)
+                                {
+                                        console.log(err);
+
+                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
+                                        //callback();
+                                }else{
+                                        console.log("generatedddddddddddddddddd")
+                                        console.log(thumbImage)
+                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
+                                    //  callback();
+                                }
+                            });
+
+
+                           /*require('lwip').open('img2.jpeg', function(err, image) {
+                            if(err)
+                              {
+                                  console.log("Error")
+                                  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+                              }
+                              else
+                              {
+                                // lanczos
+                                image.resize(50, 50, function(err, rzdImg) {
+                                    rzdImg.writeFile('testThumb/output.jpg', function(err) {
+                                        if(err)
+                                          {
+                                              console.log("Error")
+                                              return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+                                          }
+                                          else
+                                          {
+                                              return res.json(200, {status: 1,status_type: 'Success', message: 'Image Resizing Success'});
+                                          }
+                                        });
+                                });
+                              }
+                            });*/
+
+
 
 
         },
@@ -507,6 +634,34 @@ module.exports = {
                 }
         },
 
+        findArrayTest : function (req, res) {
+
+                var s_Array = [{notifyContact : 0}, {notifyContact : 1}];
+                /*//User.find({notifyContact: [0,1]}).exec(function (err, results) {   //Possible
+                //User.find({notifyContact: 1}).exec(function (err, results) {       //Possible
+                User.find(s_Array).exec(function (err, results) {
+                       console.log();
+                    if(err){
+                            console.log(err);
+                    }else{
+                            console.log("SSSSSSSSSSSSSSSSSSSSSSSSS");
+                            console.log(results);
+                            console.log(results.length);
+                    }
+                });*/
+
+                User.findOne({notifyContact: 1}).exec(function (err, results) {
+                        console.log();
+                        if(err){
+                                console.log(err);
+                        }else{
+                                console.log("SSSSSSSSSSSSSSSSSSSSSSSSS");
+                                console.log(results);
+                                console.log(results.length);
+                        }
+                });
+        },
+
 
 
 
@@ -514,7 +669,136 @@ module.exports = {
                TEST PUSH NOTIFICATION
         ==================================================================================================================================== */
 
+        testTag: function (req, res) {
+                    var taggedUserArray = ['145','127'];
+
+                    deviceId_arr    = [];
+                    ntfn_body       = "test push";
+                    device_type     = req.get('device_Type');
+                    User_token.find({userId: taggedUserArray})
+                        .exec(function (err, response) {
+
+                            response.forEach(function(factor, index){
+
+                                    deviceId_arr.push(factor.deviceId);
+
+
+                            });
+                            console.log(JSON.stringify(deviceId_arr))
+                            if(deviceId_arr.length!=0)
+                            {
+                                    var data      = {device_id:deviceId_arr,NtfnBody:ntfn_body};
+
+
+                                    var switchKey   =  device_type;
+                                    switch(switchKey){
+                                            case 'ios' :
+                                                        NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                            if(err)
+                                                            {
+                                                                console.log("Error in Push Notification Sending")
+                                                                console.log(err)
+                                                                //callback();
+                                                            }
+                                                            else
+                                                            {
+                                                                console.log("Push notification result")
+                                                                console.log(ntfnSend)
+                                                                console.log("Push Notification sended")
+                                                                //callback();
+                                                                return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+                                                            }
+                                                        });
+                                            break;
+
+                                            case 'android' :
+                                                        NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                            if(err)
+                                                            {
+                                                                console.log("Error in Push Notification Sending")
+                                                                console.log(err)
+                                                                //callback();
+                                                            }
+                                                            else
+                                                            {
+                                                                console.log("Push notification result")
+                                                                console.log(ntfnSend)
+                                                                console.log("Push Notification sended")
+                                                                //callback();
+                                                                return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+                                                            }
+                                                        });
+                                            break;
+
+                                            default:
+                                                        return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceType'});
+                                            break;
+
+
+                                    }
+
+
+
+                            }
+                            else
+                            {
+                                return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceId'});
+                            }
+
+                        });
+
+
+
+
+
+
+        },
+
+        /* ==================================================================================================================================
+               SEC-SOCKET TEST
+        ==================================================================================================================================== */
+
+
+        testSocket: function (req, res) {
+            console.log("=============testsocket starttttttttt-====================")
+            console.log(sails.sockets.getId(req));
+
+            
+                        console.log("=============testsocket endddddddddd-====================")
+
+
+        console.log("==================blast================")
+        //sails.sockets.broadcast('artsAndEntertainment', { greeting: 'Hola!' });
+        sails.sockets.blast('aaaaaaaaaaaa', {
+                  msg: 'User just logged in.'
+                });
+                /*sails.sockets.blast( {
+                  msg: 'User message.'
+                });*/
+        console.log(req.isSocket)
+        console.log("==================end blast================")
+
+              console.log("------------request")
+              //console.log(req)
+              var roomName = 'socket_user_90';
+             console.log("ggggggggggggggggggggggggggggggggggggg")
+             sails.sockets.join(req, roomName, function(err) {
+                  console.log(roomName)
+              });
+              console.log(sails.sockets.rooms());
+            console.log(sails.sockets.subscribers(roomName))
+            sails.sockets.broadcast(roomName, { greeting: 'haiiiiiiiiiiiiiiiiiiiii am hereeeeeeeeeeeeeee!' });
+        },
+        imageResizes: function (req, res) {
+                    var im = require('imagemagick');
+                    im.readMetadata('assets/images/collage/abc.jpg', function(err, metadata){
+                      if (err) throw err;
+                      //console.log('Shot at '+metadata.exif.dateTimeOriginal);
+                      console.log(metadata);
+                    });
+        },
 
 
 };
+
 

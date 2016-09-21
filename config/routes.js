@@ -46,13 +46,20 @@ module.exports.routes = {
   '/TestFileContacts/*'                   :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
 
   '/addressBook/*'                        :           ['auth.authenticate','helper.server_baseUrl'],
-  '/Notification/*'                       :           ['auth.authenticate','helper.server_baseUrl','helper.file_path'],
+  '/Notification/*'                       :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/feed/*'                               :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageLikes/*'                       :           ['auth.authenticate'],
   '/collageComments/*'                    :           ['auth.authenticate'],
   '/report/*'                             :           ['auth.authenticate'],
   '/socketSettings/*'                     :           ['auth.authenticate'],
-  '/test/delete_Socket'                   :           ['SocketSettings.Socket_connection'],
+  '/collageUpload/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
+  //'/test/delete_Socket'                   :           ['SocketSettings.Socket_connection'],
+
+
+ /* 'GET /user/join': {
+                    controller: "UserController",
+                    action:"join"
+                    },*/
 
 
 

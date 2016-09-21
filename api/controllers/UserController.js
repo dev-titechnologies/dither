@@ -17,35 +17,36 @@ module.exports = {
                To signup
      ==================================================================================================================================== */
     signup: function (req, res) {
-				 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-				 var profilePic_path             =     req.options.file_path.profilePic_path;
+				var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+				var profilePic_path             =     req.options.file_path.profilePic_path;
                 console.log("signup---------------- api")
                 console.log(req.body);
                 console.log(req.get('device_id'));
+                var device_type  = req.get('device_type');
                 var imgUrl       = req.param('profilepic');
                 if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('fb_uid') || !req.param('email_id') || !req.param('username') || !req.param('otp')){
                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and fb_uid and email_id and username and otp'}); //If an error occured, we let express/connect handle it by calling the "next" function
                 }else{
-                        var filename     =  "image.jpg";
+                        var filename     =  "image.png";
                         var imagename    = new Date().getTime() + filename;
-                        var thumbImage;   
+
                         console.log(imgUrl);
                         //Download STARTS--------
                         var download = function(uri, filename, callback){
                                 request.head(uri, function(err, res, body){
                                     request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                                 });
-                           
-                        
+
+
                         };
                         download(imgUrl,'assets/images/profilePics/'+imagename, function()
                         {
                             sails.log('done');
 
                         });
-                        
-                        
-                        
+
+
+
                         //Download ENDS--------
                         var OTPCode  = req.param('otp');
                         var deviceId = req.get('device_id');
@@ -57,6 +58,8 @@ module.exports = {
                                     phoneNumber : req.param('mobile_number'),
                                     profilePic  : imagename,
                         };
+                        var deviceId_arr  = [];
+                        var contact_arr	  = [];
                         //--------OTP CHECKING----------------------
                        /* if(OTPCode)
                         {
@@ -105,7 +108,7 @@ module.exports = {
                         }*/
 
 
-                     
+
 
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
                                 if(err)
@@ -114,10 +117,10 @@ module.exports = {
                                 }
                                 else
                                 {
-									
-									
-									
-									
+
+
+
+
                                     console.log("fbid checkinggggggggggg")
                                     console.log(resultData);
                                     if(resultData){
@@ -198,7 +201,21 @@ module.exports = {
                                                                                     function(callback) {
                                                                                                 //Notification Log insertion
                                                                                                 console.log("parallel 3")
-                                                                                                Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
+                                                                                                console.log(req.param('mobile_number'))
+                                                                                                 var mobile_number  = req.param('mobile_number');
+																								 var validNo1       = mobile_number.replace('-','');
+																								 var validNo2	    = mobile_number.split('-').pop();
+																								 var validNo3	    = '0'+validNo2;
+																								 var validNo4	    = validNo1.replace('+','');
+																								console.log("nnnnnnnnnnnnnnnnnnn"+validNo1)
+																								console.log("nnnnnnnnnnnnnnnnnnn"+validNo2)
+																								console.log("nnnnnnnnnnnnnnnnnnn"+validNo3)
+																								console.log("nnnnnnnnnnnnnnnnnnn"+validNo4)
+																								 var query	= 'SELECT userId FROM invitation where phoneNumber="'+validNo1+'" OR  phoneNumber="'+validNo2+'" OR  phoneNumber="'+validNo4+'" OR phoneNumber="'+validNo3+'" ';
+																								 console.log(query)
+																								Invitation.query(query, function(err, selectContacts){
+                                                                                                
+                                                                                                //Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
                                                                                                         if(err)
                                                                                                         {
                                                                                                             console.log(err);
@@ -212,25 +229,21 @@ module.exports = {
                                                                                                             {
                                                                                                                     callback();
                                                                                                             }else{
+																													
+																														selectContacts.forEach(function(factor, index){
 
-                                                                                                                var data     = {
-                                                                                                                                userId              :       results.id,
-                                                                                                                                ditherUserId        :       selectContacts[0].userId,
-                                                                                                                                fbId                :       req.param('fb_uid'),
-                                                                                                                                };
-                                                                                                                var criteria = {phoneNumber: req.param('mobile_number')};
-                                                                                                                Invitation.update(criteria,data).exec(function(err, updatedRecords) {
-                                                                                                                    if(err){
-                                                                                                                                console.log(err);
-                                                                                                                                callback();
-                                                                                                                    }else{
+																																	contact_arr.push(factor.userId);
+																														});
                                                                                                                         //Notification Log Insertion
-                                                                                                                        var values ={
-                                                                                                                                        notificationTypeId  : 4,
-                                                                                                                                        userId              : results.id,
-                                                                                                                                        ditherUserId        : selectContacts[0].userId,
-                                                                                                                                    }
-                                                                                                                         NotificationLog.create(values).exec(function(err, createdNotification) {
+                                                                                                                        var phonecontacts		= selectContacts;
+                                                                                                                        var phoneContactsArray  = [];
+                                                                                                        
+                                                                                                                        phonecontacts.forEach(function(factor, index){
+																																phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+																														});
+                                                                                                                              
+                                                                                                                                    
+                                                                                                                         NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification) {
                                                                                                                             if(err)
                                                                                                                             {
                                                                                                                                 console.log(err);
@@ -240,11 +253,124 @@ module.exports = {
                                                                                                                             else
                                                                                                                             {
                                                                                                                                 console.log(createdNotification);
-                                                                                                                                callback();
+																																
+																																 //-------Socket brodcast------------------------------
+                                                                                                                        
+																																contact_arr.forEach(function(factor, index){
+																																	
+																																	var	roomName  = "socket_user_"+factor.userId;
+																																				
+																																	sails.sockets.broadcast(roomName,{
+																																									type            : "notification",
+																																									user_id         : factor.userId,
+																																									message         : "Signup Dither - Room Broadcast",
+																																									roomName        : roomName,
+																																									subscribers     : sails.sockets.subscribers(roomName),
+																																									socket          : sails.sockets.rooms()
+																																									});
+																																			
+																																  });   
+																																//------------end of socket---------------------------------------
+																																
+                                                                                                                                Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
+                                                                                                                                    if(err)
+                                                                                                                                    {
+                                                                                                                                        console.log(err);
+                                                                                                                                        callback();
+                                                                                                                                    }
+                                                                                                                                    else
+                                                                                                                                    {
+                                                                                                                                        //-----------PUSH Notification------------------------------------
+                                                                                                                                        
+                                                                                                                                        User_token.find({userId: contact_arr}).exec(function (err, getDeviceId) {
+                                                                                                                                        //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+                                                                                                                                            if(err)
+                                                                                                                                            {
+                                                                                                                                                  console.log(err);
+                                                                                                                                                  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+                                                                                                                                            }
+                                                                                                                                            else
+                                                                                                                                            {
+
+                                                                                                                                                var message     =  'signup Notification';
+                                                                                                                                                var ntfn_body   =   results.name +" Joined on Dither";
+                                                                                                                                                //var device_id   =  getDeviceId.deviceId;
+                                                                                                                                                
+                                                                                                                                                
+																																				getDeviceId.forEach(function(factor, index){
+
+																																					deviceId_arr.push(factor.deviceId);
+
+																																				});
+                                                                                                                                               
+                                                                                                                                                console.log(results)
+
+                                                                                                                                                if(!deviceId_arr.length){
+                                                                                                                                                        callback();
+                                                                                                                                                }else{
+																																						//device_id       =  device_id.split(',');sails.log.debug(device_id);
+                                                                                                                                                        var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id};
+                                                                                                                                                        var switchKey   =  device_type;
+                                                                                                                                                        switch(switchKey){
+                                                                                                                                                                case 'ios' :
+                                                                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                                                                                                                                                if(err)
+                                                                                                                                                                                {
+                                                                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                                                                    console.log(err)
+                                                                                                                                                                                    callback();
+                                                                                                                                                                                }
+                                                                                                                                                                                else
+                                                                                                                                                                                {
+                                                                                                                                                                                    console.log("Push notification result")
+                                                                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                                                                    callback();
+
+                                                                                                                                                                                }
+                                                                                                                                                                            });
+                                                                                                                                                                break;
+
+                                                                                                                                                                case 'android' :
+                                                                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                                                                                                                                                if(err)
+                                                                                                                                                                                {
+                                                                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                                                                    console.log(err)
+                                                                                                                                                                                    callback();
+                                                                                                                                                                                }
+                                                                                                                                                                                else
+                                                                                                                                                                                {
+                                                                                                                                                                                    console.log("Push notification result")
+                                                                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                                                                    callback();
+
+                                                                                                                                                                                }
+                                                                                                                                                                            });
+                                                                                                                                                                break;
+
+                                                                                                                                                                default:
+                                                                                                                                                                            callback();
+
+                                                                                                                                                                break;
+
+
+                                                                                                                                                        }
+                                                                                                                                                }
+
+                                                                                                                                            //------------------------------
+                                                                                                                                            }
+                                                                                                                                          });
+
+
+                                                                                                                                    }
+                                                                                                                                 });
+
+
                                                                                                                             }
                                                                                                                         });
-                                                                                                                    }
-                                                                                                                });
+                                                                                                                   
                                                                                                             }
                                                                                                         }
                                                                                                         console.log("#########################################")
@@ -257,33 +383,44 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                                         }else{
-																							 //------------------------------Generate ThumbnailImage-----------------------------------------------
-																							console.log('/assets/images/profilePics/'+imagename)
-																							require('lwip').open('assets/images/profilePics/'+imagename, function(err, image) {
-																								if(err)
-																								  {
-																									  console.log(err)
-																									  console.log("Errorrrrrrrrrrrrrrrrrrr")
-																									  //return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-																								  }
-																								  else
-																								  {
-																									
-																									   //------------Thumnail Image-------------------------------------------------------- 
-																										ImgResizeService.imageResize(imagename,results.id, function(err, imageResult) {
-																											if(err)
-																											{
-																													console.log(err);
-																													return res.json(200, {status: 2, status_type: 'Failure' , message: 'ThumbImage Creation Failure', error_details: err});
-			
-																											}else{
-																													console.log("async parallel in Sms Part Success --------------------");
-																													return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
-																											}
-																										});
-																								
-																								  }	
-																							});
+                                                                                            /* ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                                                            console.log('/assets/images/profilePics/'+imagename)
+                                                                                            require('lwip').open('assets/images/profilePics/'+imagename, function(err, image) {
+                                                                                                if(err)
+                                                                                                  {
+                                                                                                      console.log(err)
+                                                                                                      console.log("Errorrrrrrrrrrrrrrrrrrr")
+                                                                                                      //return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
+                                                                                                  }
+                                                                                                  else
+                                                                                                  {
+
+                                                                                                       ------------Thumnail Image--------------------------------------------------------
+                                                                                                        ImgResizeService.imageResize(imagename,results.id, function(err, imageResult) {
+                                                                                                            if(err)
+                                                                                                            {
+                                                                                                                    console.log(err);
+                                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'ThumbImage Creation Failure', error_details: err});
+
+                                                                                                            }else{
+                                                                                                                    console.log("async parallel in Sms Part Success --------------------");
+                                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+                                                                                                            }
+                                                                                                        });
+
+                                                                                                        console.log("async parallel in Sms Part Success --------------------");
+                                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
+
+
+                                                                                                  }
+                                                                                            });*/
+                                                                                            
+                                                                                            console.log("async parallel in Sms Part Success --------------------");
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+																												  token  		:	userTokenDetails.token.token,
+																												  user_id		:	results.id,
+																												  mobile_number :   results.phoneNumber
+																											});
 
                                                                                         }
 
@@ -324,26 +461,33 @@ module.exports = {
                                 sails.log(results)
                                 if(typeof(results) == 'undefined')
                                 {
+									
+									var query	=	"DELETE FROM userToken where deviceId='"+deviceId+"'";
+                                                User_token.query(query, function(err, result) {
+												});
+									
                                       return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                                 }
                                 else
                                 {
-                                   /* User_token.find({userId:results.id}).exec(function(err, result){
+                                   // User_token.find({userId:results.id}).exec(function(err, result){
                                    // User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
-                                            if (err) {
+                                           /* if (err) {
                                                 console.log(err)
                                             }
                                             else
-                                            {
-                                                console.log(result)
+                                            {*/
+                                                //console.log(result)
                                                 //delete existing token
-                                               /* User_token.destroy({userId: results.id}).exec(function (err, result) {
+                                                var query	=	"DELETE FROM userToken where deviceId='"+deviceId+"'";
+                                                User_token.query(query, function(err, result) {
+                                               // User_token.destroy({userId: results.id,deviceId:deviceId}).exec(function (err, result) {
 
                                                     if (err) {
                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                             }
                                                     else
-                                                    {*/
+                                                    {
                                                         UsertokenService.createToken(results.id,deviceId, function (err, userTokenDetails)
                                                         {
                                                             if (err)
@@ -352,14 +496,14 @@ module.exports = {
                                                             }
                                                             else
                                                             {
-                                                                var test = results.name;
+                                                                /*var test = results.name;
                                                                 console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                                                 console.log(test);
                                                                 console.log("test ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
                                                                 sails.sockets.blast('createIncheck', {status : "success", name_of_user: test});
-                                                                sails.sockets.blast('message', {status : "success", name_of_user: test});
-                                                                
+                                                                sails.sockets.blast('message', {status : "success", name_of_user: test});*/
+
                                                                 var notifyArray = [];
                                                                 notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion});
                                                                 var profile_image       =   profilePic_path + results.profilePic;
@@ -371,13 +515,14 @@ module.exports = {
                                                                                       profile_image     :   profile_image,
                                                                                       token             :   userTokenDetails.token.token,
                                                                                       user_id           :   results.id,
-                                                                                      notification		:	notifyArray
+                                                                                      mobile_number		:   results.phoneNumber,
+                                                                                      notification      :   notifyArray
                                                                                 });
                                                             }
                                                         });
 
-                                                   //  }
-                                              // });
+                                                     }
+                                              });
 
                                            // }
                                        // });
@@ -409,8 +554,8 @@ module.exports = {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
-
-                        return res.json(200, {status: 1,  status_type: 'Success' , message: 'LogOut success'});
+						console.log("logout")
+                        return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });
         }else{
@@ -540,7 +685,6 @@ module.exports = {
                 }
 
       },
-
 
 
 

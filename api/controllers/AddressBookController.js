@@ -48,9 +48,9 @@ module.exports = {
 						var data_check1 = "";
 						//console.log(phonecontacts)
 						phonecontacts.forEach(function(factor, index){
-							//phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
-							phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
-							phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
+							phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
+							//phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
+							//phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
 						});
 
 						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
@@ -58,9 +58,9 @@ module.exports = {
 						
 						fbUser.forEach(function(factor, index){
 							
-							 //fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
+							 fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
 							 
-							 fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
+							 //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
 						});
 
 					async.series([
@@ -93,17 +93,16 @@ module.exports = {
 															
 																console.log("----------insertion------------------")
 																
-																var query = "INSERT INTO addressBook"+
+																/*var query = "INSERT INTO addressBook"+
 																			" (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
 																			" VALUES"+phoneContactsArray;
 																
 																console.log(query)
 																//var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
 																
-																AddressBook.query(query,function(err, createdAddressBook){
+																AddressBook.query(query,function(err, createdAddressBook){*/
 																
-																
-																//AddressBook.query(query, function(err, createdAddressBook) {
+																AddressBook.create(query).exec(function(err, createdAddressBook) {
 																		if(err)
 																		{
 																			console.log(err);
@@ -213,12 +212,12 @@ module.exports = {
 											 		
 												console.log("insertion fb friendssssssssssssssssssssss")
 													
-																var query = "INSERT INTO fbFriends"+
+																/*var query = "INSERT INTO fbFriends"+
 																			" (userId,ditherUserName, fbId, createdAt, updatedAt)"+
 																			" VALUES"+fbUserArray;
 													
-																FbFriends.query(query,function(err, createdFbFriends){
-																//FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
+																FbFriends.query(query,function(err, createdFbFriends){*/
+																FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
 																//FbFriends.create(query, function(err, createdFbFriends) {
 																		if(err)
 																		{

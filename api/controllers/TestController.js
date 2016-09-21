@@ -386,7 +386,32 @@ module.exports = {
 
      testThumbnail: function (req, res) {
 
-                           var allUsers =   [];
+
+						console.log("thumbNail Image")
+						var fs   	= require('fs');
+						var path    = require('path');
+						var image 	= require('imagemagick-stream');
+						/*var read 	= fs.createReadStream('imageNw.jpeg');
+						var write 	= fs.createWriteStream('image-resized.jpeg');
+						var resize 	= im().resize('40x40').quality(90);
+						read.pipe(resize).pipe(write);	*/
+						image('imageNw.jpeg').resize('40x40').quality(90).to('image-resized.jpeg');
+						
+						var gm = require ('gm');
+						var savedphoto = "imageNw.jpeg";
+						var testdir = "image-resized.jpeg";
+						gm(savedphoto)
+							.resize(100, 100)
+							.noProfile()
+							.write(testdir, function (err) {
+								console.error (err);
+							});
+						
+						
+						
+						
+						
+                          /* var allUsers =   [];
                            var phonecontacts      = [{name:'Melita Nora',number:'8281442870'},{name:'Rena Acosta',number:'+17689456489'},{name:'Jacklyn Simon',number:'917654789872)'},{name:'Jacklyn Simon',number:'+154564'},{name:'Elizabeth Evangeline',number:'09875421365'}];
                            var phoneContactsArray = [];
                             phonecontacts.forEach(function(factor, index){
@@ -448,81 +473,10 @@ module.exports = {
 
                                             //console.log(allUsers)
                                         }
-                            });
-
-
-                           /* var thumbnailsCreator = require('lwip-image-thumbnails-creator');
-                            var options           = { outputbasepath: 'thumbnail.jpg'};
-                            return thumbnailsCreator.createThumbnail('big_icon_funny.png', {
-                                maxWidth: 50,
-                                maxHeight: 50
-                            }, options).then(function (res) {
-                                // ok
-                                console.log(res.thumbnail);
-                            }, function (err) {
-                              console.log(err)
-                            });
-
-                            var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
-                            ImgResizeService.imageResize(imagename, function(err, thumbImage) {
-                                if(err)
-                                {
-                                        console.log(err);
-
-                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
-                                        //callback();
-                                }else{
-                                        console.log("generatedddddddddddddddddd")
-                                        console.log(thumbImage)
-                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
-                                    //  callback();
-                                }
-                            });
-
-
-
-                            var imagename = 'assets/images/profilePics/acd6c31f-913f-413d-98f0-3d36a1779f92.png';
-                            ImgResizeService.imageResize(imagename, function(err, thumbImage) {
-                                if(err)
-                                {
-                                        console.log(err);
-
-                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in thumbnail creation', error_details: sendSmsResults});
-                                        //callback();
-                                }else{
-                                        console.log("generatedddddddddddddddddd")
-                                        console.log(thumbImage)
-                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully generated the image'});
-                                    //  callback();
-                                }
-                            });
-
-
-                           /*require('lwip').open('img2.jpeg', function(err, image) {
-                            if(err)
-                              {
-                                  console.log("Error")
-                                  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-                              }
-                              else
-                              {
-                                // lanczos
-                                image.resize(50, 50, function(err, rzdImg) {
-                                    rzdImg.writeFile('testThumb/output.jpg', function(err) {
-                                        if(err)
-                                          {
-                                              console.log("Error")
-                                              return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-                                          }
-                                          else
-                                          {
-                                              return res.json(200, {status: 1,status_type: 'Success', message: 'Image Resizing Success'});
-                                          }
-                                        });
-                                });
-                              }
                             });*/
 
+
+                          
 
 
 

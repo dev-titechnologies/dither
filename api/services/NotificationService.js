@@ -68,6 +68,10 @@ module.exports = {
 		console.log("Push Notification GCM")
 		console.log(data)
 		console.log("counttttttttttttttttttt"+data.device_id.length)
+		var ntfnArr = [];
+		ntfnArr	 	= data.device_id;
+		console.log("neww devicee  arrayyyyyy")
+		console.log(ntfnArr)
 		
 		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id};
 		 android = PusherService('android', {
@@ -87,17 +91,15 @@ module.exports = {
 							payload : {}// Custom data to send within Push Notification
 						},			
 		 });
-
 		console.log(android)
 		console.log("device arrayyyyyyyyyyyyyyyyy")
 		console.log(data.device_id)
 		android
-			.send(data.device_id, {
+			.send(ntfnArr, {
              		body: details
 				})
 			.then(console.log.bind(console))
 			.catch(console.error.bind(console));
-			data.device_id = [];
 			 callback();
 	}	
 	

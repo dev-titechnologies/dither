@@ -358,33 +358,26 @@ module.exports = {
 
         typeNotification: function(req, res) {
 
-                    var notificationTypeId          =   req.param("type_id");
-                    var received_userId             =   req.param("user_id");
-                    var collageId                   =   req.param("dither_id");
+                    var notificationTypeId          =   req.param("notification_type");
+                    var notificationId              =   req.param("notification_id");
                     console.log(req.params.all());
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                    var query, notification, ntfn_body, user_id;
-                    if(!notificationTypeId || !received_userId || !collageId){
-                           return res.json(200, {status: 2, status_type:"Failure", msg: 'Please pass type_id and user_id and collage_id'});
+                    var query, notification, ntfn_body;
+                    if(!notificationTypeId && !notificationId){
+                           return res.json(200, {status: 2, status_type:"Failure", msg: 'Please pass notification_type and notification_id'});
                     }else{
-                            var user_query;
-                            if(notificationTypeId == 1){
-                                    user_query  = " AND FIND_IN_SET( "+received_userId+", ntlg.tagged_users )";
-                            }else{
-                                    user_query  = " AND ntlg.ditherUserId = "+received_userId;
-                            }
-                            query = "SELECT ntlg.id, ntlg.notificationTypeId, ntlg.collage_id, ntlg.ditherUserId, ntlg.description, ntlg.createdAt,"+
-                                    " usr.profilePic,"+
+
+                            query = "SELECT ntlg.id, ntlg.notificationTypeId, ntlg.collage_id, ntlg.userId, ntlg.ditherUserId, ntlg.description, ntlg.createdAt,"+
+                                    " usr.name, usr.profilePic,"+
                                     " clg.image as collageImage"+
                                     " FROM notificationLog ntlg"+
                                     " INNER JOIN user usr ON usr.id = ntlg.ditherUserId"+
                                     " INNER JOIN collage clg ON clg.id = ntlg.collage_id"+
                                     " WHERE"+
-                                    " ntlg.notificationTypeId = "+notificationTypeId+ user_query +" AND ntlg.collage_id = "+collageId+
-                                    " ORDER BY ntlg.createdAt"+
-                                    " DESC LIMIT 0,1";
+                                    " ntlg.id = "+notificationId;
+
                             console.log(query);
                             NotificationLog.query(query, function(err,results) {
                                     if(err){
@@ -409,16 +402,18 @@ module.exports = {
                                                                 switch(switchKey){
 
                                                                     case 1:
-                                                                            user_id                 =   results[0].userId;
                                                                             tagged_users            =   results[0].tagged_users;
+
                                                                     break;
 
                                                                     case 2:
                                                                             notification            =   " voted on your Dither";
+
                                                                     break;
 
                                                                     case 3:
                                                                             notification            =   " commented on your Dither";
+
                                                                     break;
 
                                                                     default:
@@ -429,25 +424,28 @@ module.exports = {
 
                                                                 ntfn_body               =   notification;
 
-                                                                if(results[0].description > 0 || !results[0].description)
-                                                                {
+                                                                if(results[0].description > 0 || !results[0].description){
                                                                     notification                =       ntfnFoundResults.body;
                                                                     results[0].description      =       results[0].description - 1;
                                                                     ntfn_body                   =       util.format(notification, results[0].description);
                                                                     console.log(notification);
                                                                 }
                                                                 console.log(ntfn_body);
-
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
-                                                                                      type                  :   notificationTypeId,
-                                                                                      dither_id             :   collageId,
-                                                                                      user_id               :   user_id,
-                                                                                      msg                   :   ntfn_body,
-                                                                                      user_profile_img      :   profilePic_path + results[0].profilePic,
-                                                                                      dither_img            :   collageImg_path + results[0].collageImage,
-                                                                                      date                  :   results[0].createdAt,
-                                                                                      notification_id       :   results[0].id,
+                                                                                      id                    :   notificationId,
+                                                                                      userId                :   results[0].userId,
+                                                                                      ditherUserId          :   results[0].ditherUserId,
+                                                                                      ditherId              :   results[0].collage_id,
+                                                                                      notificationTypeId    :   notificationTypeId,
+                                                                                      createdDate           :   results[0].createdAt,
+                                                                                      image_id              :   results[0].image_id,
                                                                                       tagged_users          :   tagged_users,
+                                                                                      description           :   results[0].description,
+                                                                                      name                  :   results[0].name,
+                                                                                      profile_image         :   profilePic_path + results[0].profilePic,
+                                                                                      dither_image          :   collageImg_path + results[0].collageImage,
+                                                                                      ntfn_body             :   ntfn_body,
+                                                                                      type                  :   ntfnFoundResults.type,
                                                                                 });
 
                                                             }

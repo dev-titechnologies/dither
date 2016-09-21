@@ -309,13 +309,15 @@ module.exports = {
                                                                                         taggedUserArray.forEach(function(factor, index){
                                                                                                 var taggedUser_roomName  = "socket_user_"+factor;
                                                                                                 sails.sockets.broadcast(taggedUser_roomName,{
-                                                                                                                                        type                       :       "notification",
-                                                                                                                                        id                         :       createdCollageTags.collageId,
-                                                                                                                                        message                    :       "Create Dither - Room Broadcast - to Tagged Users",
-                                                                                                                                        roomName                   :       taggedUser_roomName,
-                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
-                                                                                                                                        socket                     :       sails.sockets.rooms(),
-                                                                                                                                        });
+                                                                                                                type                       :       "notification",
+                                                                                                                id                         :       createdCollageTags.collageId,
+                                                                                                                message                    :       "Create Dither - Room Broadcast - to Tagged Users",
+                                                                                                                roomName                   :       taggedUser_roomName,
+                                                                                                                subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+                                                                                                                socket                     :       sails.sockets.rooms(),
+                                                                                                                notification_type          :       1,
+                                                                                                                notification_id            :       createdNotificationTags.id
+                                                                                                                });
                                                                                         });
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                         console.log(createdNotificationTags);
@@ -1448,13 +1450,13 @@ module.exports = {
                                                                                                         taggedUserArray.forEach(function(factor, index){
                                                                                                                 var taggedUser_roomName  = "socket_user_"+factor;
                                                                                                                 sails.sockets.broadcast(taggedUser_roomName,{
-                                                                                                                                                        type                       :       "notification",
-                                                                                                                                                        id                         :       collageId,
-                                                                                                                                                        message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
-                                                                                                                                                        roomName                   :       taggedUser_roomName,
-                                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
-                                                                                                                                                        socket                     :       sails.sockets.rooms(),
-                                                                                                                                                        });
+                                                                                                                                        type                       :       "notification",
+                                                                                                                                        id                         :       collageId,
+                                                                                                                                        message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
+                                                                                                                                        roomName                   :       taggedUser_roomName,
+                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+                                                                                                                                        socket                     :       sails.sockets.rooms(),
+                                                                                                                                        });
                                                                                                         });
 
                                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");

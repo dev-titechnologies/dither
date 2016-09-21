@@ -151,7 +151,8 @@ console.log(device_type);
                                                                                                                                     roomName                   :       creator_roomName,
                                                                                                                                     subscribers                :       sails.sockets.subscribers(creator_roomName),
                                                                                                                                     socket                     :       sails.sockets.rooms(),
-                                                                                                                                    total_like_count           :       updatedVoteCount[0].vote,
+                                                                                                                                    notification_type          :       2,
+                                                                                                                                    notification_id            :       createdNotificationTags.id
                                                                                                                                     });
                                                                                     //###################################
 

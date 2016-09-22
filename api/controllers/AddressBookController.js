@@ -39,14 +39,17 @@ module.exports = {
                          //console.log(req.param('contact_array'))
 
 
-                        var file = fs.createWriteStream('BeforejsonParse.txt');
+                        //var file = fs.createWriteStream('BeforejsonParse.txt');
                         //file.on('error', function(err) { /* error handling */ });
                         //req.param('contact_array').forEach(function(v) { file.write(v.join(', ') + '\n'); });
-                        file.end();
+                        //file.end();
 
-                        var file_2 = fs.createWriteStream('AfterjsonParse.txt');
-                        //file_2.on('error', function(err) { /* error handling */ });
-                        //JSON.parse(req.param('contact_array')).forEach(function(v) { file_2.write(v.join(', ') + '\n'); });
+
+
+                        /*var file_2 = fs.createWriteStream('AfterjsonParse.txt');
+                        file_2.on('error', function(err) {  });
+                        JSON.parse(req.param('contact_array')).forEach(function(v) { file_2.write(v.join(', ') + '\n'); });
+                        file_2.end();*/
 
 
                         phonecontacts           = JSON.parse(req.param('contact_array'));
@@ -61,13 +64,16 @@ module.exports = {
                         phonecontacts.forEach(function(factor, index){
                                 //var contact_name = factor.name;
                                 //var formatted_name = contact_name.replace(/'/g, "\\'");
-                                file_2.write(factor.join(', ') + '\n');
+
 
                             //phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
                             phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
                             //phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
                         });
-                        file_2.end();
+
+                        fs.writeFile("BeforejsonParse", req.param('contact_array'));
+                        fs.writeFile("AfterjsonParse", phoneContactsArray);
+
 
                         console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
                         console.log(phoneContactsArray);

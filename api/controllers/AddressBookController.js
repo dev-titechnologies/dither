@@ -54,8 +54,8 @@ module.exports = {
 								//console.log(string );
 								//console.log(string.replace(/"/g, '\\"') );
 
-							phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
-							//phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
+							//phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
+							phoneContactsArray.push("("+userId+",'"+formatted_name+"', "+factor.number+", now(), now())");
 							//phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
 						});
 

@@ -48,11 +48,11 @@ module.exports = {
 						var data_check1 = "";
 						//console.log(phonecontacts)
 						phonecontacts.forEach(function(factor, index){
-								var contact_name = factor.name;
-								var formatted_name = contact_name.replace(/'/g, "\\'");
+								//var contact_name = factor.name;
+								//var formatted_name = contact_name.replace(/'/g, "\\'");
 								
 							//phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
-							phoneContactsArray.push("("+userId+",'"+formatted_name+"', "+factor.number+", now(), now())");
+							phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
 							//phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
 						});
 
@@ -61,8 +61,8 @@ module.exports = {
 						
 						fbUser.forEach(function(factor, index){
 							
-							 var contact_name = factor.fb_name;
-							 var formatted_name = contact_name.replace(/"/g, '\\"');
+							 //var contact_name = factor.fb_name;
+							 //var formatted_name = contact_name.replace(/"/g, '\\"');
 							
 							// fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
 							 

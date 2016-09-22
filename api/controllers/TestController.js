@@ -753,9 +753,15 @@ module.exports = {
         },
         testInsertion: function (req, res) {
 			
-			console("testing insertion")
+			console.log("testing insertion")
+			
+			var contact_name = "Ganesh  G' Nath";
+			
 			var formatted_name = contact_name.replace(/"/g, '\\"');
+			//var formatted_name1 = contact_name.replace(/'/g, '\\"');
+			var formatted_name1 = contact_name.replace(/'/g, "\\'");
 			console.log(formatted_name)
+			console.log(formatted_name1)
 			
 		},
 

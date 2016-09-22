@@ -43,8 +43,8 @@ module.exports = {
                         //file.on('error', function(err) { /* error handling */ });
                         //req.param('contact_array').forEach(function(v) { file.write(v.join(', ') + '\n'); });
                         //file.end();
-                        fs.writeFile("BeforejsonParse", req.param('contact_array'));
-                        fs.writeFile("AfterjsonParse", JSON.parse(req.param('contact_array')));
+
+
 
                         /*var file_2 = fs.createWriteStream('AfterjsonParse.txt');
                         file_2.on('error', function(err) {  });
@@ -70,6 +70,9 @@ module.exports = {
                             phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
                             //phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
                         });
+
+                        fs.writeFile("BeforejsonParse", req.param('contact_array'));
+                        fs.writeFile("AfterjsonParse", phoneContactsArray);
 
 
                         console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")

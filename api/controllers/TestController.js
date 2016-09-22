@@ -755,7 +755,7 @@ module.exports = {
 			
 			console.log("testing insertion")
 			
-			var contact_name = "Ganesh  G' Nath";
+			var contact_name = ' \'*533*2#';
 			
 			var formatted_name = contact_name.replace(/"/g, '\\"');
 			//var formatted_name1 = contact_name.replace(/'/g, '\\"');

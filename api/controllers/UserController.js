@@ -444,6 +444,7 @@ module.exports = {
 
         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+        var device_IMEI		= req.get('device_imei');
         if(req.param('fb_uid') || req.get('device_id'))
             {
 
@@ -462,7 +463,7 @@ module.exports = {
                                 if(typeof(results) == 'undefined')
                                 {
 									
-									var query	=	"DELETE FROM userToken where deviceId='"+deviceId+"'";
+									var query	=	"DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
                                                 User_token.query(query, function(err, result) {
 												});
 									
@@ -479,7 +480,7 @@ module.exports = {
                                             {*/
                                                 //console.log(result)
                                                 //delete existing token
-                                                var query	=	"DELETE FROM userToken where deviceId='"+deviceId+"'";
+                                                var query	=	"DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
                                                 User_token.query(query, function(err, result) {
                                                // User_token.destroy({userId: results.id,deviceId:deviceId}).exec(function (err, result) {
 
@@ -547,10 +548,13 @@ module.exports = {
      ==================================================================================================================================== */
 // Logout action.
     logout: function(req, res){
-        var userToken = req.get('token');
-        var deviceId  = req.get('device_id');
+        var userToken 		= req.get('token');
+        var deviceId  		= req.get('device_id');
+        var device_IMEI		= req.get('device_imei');
         if(userToken){
-                UsertokenService.deleteToken(userToken,deviceId, function(err, result) {
+			
+			    var query = "DELETE FROM user WHERE device_IMEI='"+device_IMEI+"'";
+                User_token.query(query, function(err, result) {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {

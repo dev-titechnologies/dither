@@ -557,11 +557,14 @@ module.exports = {
         if(userToken){
 			
 			    var query = "DELETE FROM userToken WHERE device_IMEI='"+device_IMEI+"'";
+			    console.log(query)
                 User_token.query(query, function(err, result) {
                     if(err) {
+						console.log(err)
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
 						console.log("logout")
+						console.log(result)
                         return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });

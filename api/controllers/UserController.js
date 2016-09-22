@@ -261,14 +261,12 @@ module.exports = {
 																																	var	roomName  = "socket_user_"+factor.userId;
 																																				
 																																	sails.sockets.broadcast(roomName,{
-																																									type            	: "notification",
-																																									user_id         	: factor.userId,
-																																									message         	: "Signup Dither - Room Broadcast",
-																																									roomName        	: roomName,
-																																									subscribers     	: sails.sockets.subscribers(roomName),
-																																									socket          	: sails.sockets.rooms(),
-																																									notification_type   : 4,
-																																									notification_id     : createdNotification.id
+																																									type            : "notification",
+																																									user_id         : factor.userId,
+																																									message         : "Signup Dither - Room Broadcast",
+																																									roomName        : roomName,
+																																									subscribers     : sails.sockets.subscribers(roomName),
+																																									socket          : sails.sockets.rooms()
 																																									});
 																																			
 																																  });   
@@ -551,20 +549,17 @@ module.exports = {
     logout: function(req, res){
         var userToken = req.get('token');
         var deviceId  = req.get('device_id');
-        console.log(userToken)
-        console.log(deviceId)
-        if(!userToken && !deviceId){
-                    return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token and device_id'});
-
-        }else{
-                 UsertokenService.deleteToken(userToken,deviceId,function(err, result) {
+        if(userToken){
+                UsertokenService.deleteToken(userToken,deviceId, function(err, result) {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
-						console.log(result)
+						console.log("logout")
                         return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });
+        }else{
+                return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token'});
         }
 
     },

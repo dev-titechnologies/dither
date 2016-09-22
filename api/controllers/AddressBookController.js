@@ -49,8 +49,8 @@ module.exports = {
 						//console.log(phonecontacts)
 						phonecontacts.forEach(function(factor, index){
 								var contact_name = factor.name;
-								var formatted_name = contact_name.replace(/"/g, '\\"');
-
+								var formatted_name = contact_name.replace(/'/g, "\\'");
+								
 							//phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
 							phoneContactsArray.push("("+userId+",'"+formatted_name+"', "+factor.number+", now(), now())");
 							//phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");

@@ -552,6 +552,8 @@ module.exports = {
         var userToken 		= req.get('token');
         var deviceId  		= req.get('device_id');
         var device_IMEI		= req.get('device_imei');
+        console.log("-----------------IMEI____________???")
+        console.log(device_IMEI)
         if(userToken){
 			
 			    var query = "DELETE FROM userToken WHERE device_IMEI='"+device_IMEI+"'";

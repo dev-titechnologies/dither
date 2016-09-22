@@ -549,17 +549,20 @@ module.exports = {
     logout: function(req, res){
         var userToken = req.get('token');
         var deviceId  = req.get('device_id');
-        if(userToken){
-                UsertokenService.deleteToken(userToken,deviceId, function(err, result) {
+        console.log(userToken)
+        console.log(deviceId)
+        if(!userToken && !deviceId){
+                    return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token and device_id'});
+
+        }else{
+                 UsertokenService.deleteToken(userToken,deviceId, function(err, result) {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
-						console.log("logout")
+						console.log(result)
                         return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });
-        }else{
-                return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token'});
         }
 
     },

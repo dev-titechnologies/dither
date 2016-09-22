@@ -755,13 +755,15 @@ module.exports = {
 			
 			console.log("testing insertion")
 			
-			var contact_name = ' \'*533*2#';
-			
+			/*var contact_name = ' ""*533*2#';
 			var formatted_name = contact_name.replace(/"/g, '\\"');
 			//var formatted_name1 = contact_name.replace(/'/g, '\\"');
-			var formatted_name1 = contact_name.replace(/'/g, "\\'");
+			var formatted_name1 = contact_name.replace(/"/g, '\\"');
+			
+			var formatted_name = contact_name.replace(/"/g, '\\"');
+
 			console.log(formatted_name)
-			console.log(formatted_name1)
+			console.log(formatted_name1)*/
 			
 		},
 

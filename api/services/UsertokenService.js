@@ -36,8 +36,8 @@ console.log("Before Generate Token");
 /*  =================================================================================================================================
             Function to delete a token
     ================================================================================================================================== */
-    deleteToken: function (token,deviceId,callback) {
-        User_token.destroy({token: token,deviceId:deviceId}).exec(function (err, results) {
+    deleteToken: function (token,callback) {
+        User_token.destroy({token: token}).exec(function (err, results) {
 
             if (err) {
                 callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in delete token query', error_details: err});

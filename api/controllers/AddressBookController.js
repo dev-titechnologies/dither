@@ -32,60 +32,69 @@ module.exports = {
                 var fbUser          = [];
 
 
-                //if(!req.param('contact_array') || !req.param('fb_array'))
-                    //{
-                         console.log("iosss contacts")
 
-                         //console.log(req.param('contact_array'))
-
-
-                        //var file = fs.createWriteStream('BeforejsonParse.txt');
-                        //file.on('error', function(err) { /* error handling */ });
-                        //req.param('contact_array').forEach(function(v) { file.write(v.join(', ') + '\n'); });
-                        //file.end();
+                        console.log("iosss contacts")
+                        console.log(req.param('contact_array'));
+                        /*req.param('contact_array').forEach(function(factor, index){
+                                            //console.log("INSIDE FOR EACH ======================");
+                        });*/
+                        console.log(req.param('contact_array').length);
+                        //phonecontacts           = JSON.parse(req.param('contact_array'));
+                        phonecontacts           = req.param('contact_array');
 
 
 
-                        /*var file_2 = fs.createWriteStream('AfterjsonParse.txt');
-                        file_2.on('error', function(err) {  });
-                        JSON.parse(req.param('contact_array')).forEach(function(v) { file_2.write(v.join(', ') + '\n'); });
-                        file_2.end();*/
 
-
-                        phonecontacts           = JSON.parse(req.param('contact_array'));
+                        console.log("---------------------------------------------------------------------PPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                        //console.log(phonecontacts);
                          //fbUser                = JSON.parse(req.param('fb_array'));
 
                         //var phonecontacts      = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
-                        var fbUser               = JSON.parse(req.param('fb_array'));
+                        //var fbUser               = JSON.parse(req.param('fb_array'));
+                        var fbUser               = req.param('fb_array');
 
 
                         var data_check1 = "";
                         //console.log(phonecontacts)
                         phonecontacts.forEach(function(factor, index){
-                                //var contact_name = factor.name;
-                                //var formatted_name = contact_name.replace(/'/g, "\\'");
+                                var contact_name = factor.name;
+                                //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
+                                var formatted_name = contact_name.replace(/'/g, "\\'");
+
+                                console.log(contact_name);
+
+                                console.log("111111111111111111111111111111111111111111111111111111111111111111111111");
+
+                                console.log(formatted_name);
+
+
 
 
                             //phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
-                            phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
+                            phoneContactsArray.push("("+userId+",'"+formatted_name+"', '"+factor.number+"', now(), now())");
                             //phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
+                            console.log("("+userId+",'"+formatted_name+"', "+factor.number+", now(), now())");
                         });
 
-                        fs.writeFile("BeforejsonParse", req.param('contact_array'));
-                        fs.writeFile("AfterjsonParse", phoneContactsArray);
+                        //fs.writeFile("BeforejsonParse.txt", req.param('contact_array'));
+                        //fs.writeFile("AfterjsonParse.txt", phoneContactsArray);
 
 
                         console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-                        console.log(phoneContactsArray);
+                        //console.log(phoneContactsArray);
+                        //console.log(JSON.parse(phoneContactsArray));
 
                         fbUser.forEach(function(factor, index){
 
-                             //var contact_name = factor.fb_name;
-                             //var formatted_name = contact_name.replace(/"/g, '\\"');
+
+                             var contact_name = factor.fb_name;
+                            //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
+                            var formatted_name = contact_name.replace(/'/g, "\\'");
 
                             // fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
 
-                             fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
+                             //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
+                             fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.number+"', now(), now())");
                         });
 
                     async.series([
@@ -254,7 +263,7 @@ module.exports = {
                                                                         else
                                                                         {
 
-                                                                               console.log(createdFbFriends);
+                                                                               //console.log(createdFbFriends);
                                                                                console.log("createdFbFriends ?????????????????????????????????????????????");
                                                                                callback();
 
@@ -316,7 +325,7 @@ module.exports = {
                                                                 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
                                                                 AddressBook.query(query, function(err, selectedDitherAdb) {
                                                                     console.log("ttttttttttttttttttttttttttttttttttttttttttttttttttt")
-                                                                    console.log(selectedDitherAdb)
+                                                                    //console.log(selectedDitherAdb)
                                                                         if(err)
                                                                         {
                                                                                 console.log("selecetion errorr"+err);
@@ -338,7 +347,7 @@ module.exports = {
                                                                                     {
                                                                                         console.log("dddddddddddddddddddddddddddddd")
                                                                                         factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
-                                                                                        console.log(factor.profilePic)
+                                                                                        //console.log(factor.profilePic)
                                                                                     }
                                                                                 });
 
@@ -411,7 +420,7 @@ module.exports = {
                                                                 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
                                                                 AddressBook.query(query, function(err, selectedDitherAdb) {
                                                                     console.log("ttttttttttttttttttttttttttttttttttttttttttttttttttt")
-                                                                    console.log(selectedDitherAdb)
+                                                                    //console.log(selectedDitherAdb)
                                                                         if(err)
                                                                         {
                                                                                 console.log("selecetion errorr"+err);
@@ -422,7 +431,7 @@ module.exports = {
                                                                         else
                                                                         {
 
-                                                                                console.log(selectedDitherAdb);
+                                                                                //console.log(selectedDitherAdb);
                                                                                 ditherUserInAddressBook = selectedDitherAdb;
                                                                                 ditherUserInAddressBook.forEach(function(factor, index){
                                                                                   if(factor.profilePic=='')
@@ -433,7 +442,7 @@ module.exports = {
                                                                                     {
                                                                                         console.log("dddddddddddddddddddddddddddddd")
                                                                                         factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
-                                                                                        console.log(factor.profilePic)
+                                                                                        //console.log(factor.profilePic)
                                                                                     }
                                                                                 });
 

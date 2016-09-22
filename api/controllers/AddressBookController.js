@@ -61,7 +61,7 @@ module.exports = {
                         phonecontacts.forEach(function(factor, index){
                                 //var contact_name = factor.name;
                                 //var formatted_name = contact_name.replace(/'/g, "\\'");
-                                file_2.write(v.join(', ') + '\n');
+                                file_2.write(factor.join(', ') + '\n');
 
                             //phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
                             phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");

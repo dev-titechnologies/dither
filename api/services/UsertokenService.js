@@ -3,7 +3,7 @@ module.exports = {
 /*  =================================================================================================================================
             Function to create new token
     ================================================================================================================================== */
-    createToken: function (userId, deviceId, callback) {
+    createToken: function (userId, deviceId,device_IMEI, callback) {
         console.log("user token >>>>>>>>>>");
         //Get token expiry time from datatbase
         var param = 3600;
@@ -15,7 +15,7 @@ console.log("Before Expiry Date-------------------------");
 console.log("Before Generate Token");
         //Generate token
         var token = crypto.randomBytes(12).toString('hex');
-        var tokenValues = {userId: userId, token: token, deviceId: deviceId, expiryDate: expiry_date};
+        var tokenValues = {userId: userId, token: token, deviceId: deviceId,device_IMEI:device_IMEI, expiryDate: expiry_date};
         console.log("tokenValues------------------------------------------" );
         console.log(tokenValues);
         User_token.create(tokenValues).exec(function (err, resultToken) {

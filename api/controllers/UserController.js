@@ -554,7 +554,7 @@ module.exports = {
         var device_IMEI		= req.get('device_imei');
         if(userToken){
 			
-			    var query = "DELETE FROM user WHERE device_IMEI='"+device_IMEI+"'";
+			    var query = "DELETE FROM userTocken WHERE device_IMEI='"+device_IMEI+"'";
                 User_token.query(query, function(err, result) {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});

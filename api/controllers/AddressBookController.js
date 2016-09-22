@@ -48,7 +48,13 @@ module.exports = {
 						var data_check1 = "";
 						//console.log(phonecontacts)
 						phonecontacts.forEach(function(factor, index){
-							phoneContactsArray.push({userId:userId,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
+								var contact_name = factor.name;
+								var formatted_name = contact_name.replace(/"/g, '\\"');
+								
+								//console.log(string );
+								//console.log(string.replace(/"/g, '\\"') );
+
+							phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
 							//phoneContactsArray.push("("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
 							//phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
 						});
@@ -93,16 +99,16 @@ module.exports = {
 															
 																console.log("----------insertion------------------")
 																
-																/*var query = "INSERT INTO addressBook"+
+																var query = "INSERT INTO addressBook"+
 																			" (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
 																			" VALUES"+phoneContactsArray;
 																
 																console.log(query)
 																//var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
 																
-																AddressBook.query(query,function(err, createdAddressBook){*/
+																AddressBook.query(query,function(err, createdAddressBook){
 																
-																AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
+																//AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
 																		if(err)
 																		{
 																			console.log(err);

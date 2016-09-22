@@ -60,20 +60,13 @@ module.exports = {
                                 var contact_name = factor.name;
                                 //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
                                 var formatted_name = contact_name.replace(/'/g, "\\'");
-
-                                console.log(contact_name);
-
-                                console.log("111111111111111111111111111111111111111111111111111111111111111111111111");
-
-                                console.log(formatted_name);
-
-
-
-
+                                //console.log(contact_name);
+                                //console.log("111111111111111111111111111111111111111111111111111111111111111111111111");
+                                //console.log(formatted_name);
                             //phoneContactsArray.push({userId:userId,ditherUserName:formatted_name, ditherUserPhoneNumber:factor.number});
                             phoneContactsArray.push("("+userId+",'"+formatted_name+"', '"+factor.number+"', now(), now())");
                             //phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
-                            console.log("("+userId+",'"+formatted_name+"', "+factor.number+", now(), now())");
+                            //console.log("("+userId+",'"+formatted_name+"', "+factor.number+", now(), now())");
                         });
 
                         //fs.writeFile("BeforejsonParse.txt", req.param('contact_array'));
@@ -85,27 +78,19 @@ module.exports = {
                         //console.log(JSON.parse(phoneContactsArray));
 
                         fbUser.forEach(function(factor, index){
-
-
                              var contact_name = factor.fb_name;
                             //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
                             var formatted_name = contact_name.replace(/'/g, "\\'");
-
                             // fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
-
                              //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
-                             fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.number+"', now(), now())");
+                             fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.fb_userid+"', now(), now())");
                         });
 
                     async.series([
 
                               function(callback) {
                                               console.log("deletion**************************************************")
-
-
-
                                                             AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
-
                                                             //AddressBook.query(query, function(err, deleteAddressBook) {
                                                                     if(err)
                                                                     {

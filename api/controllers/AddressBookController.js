@@ -40,13 +40,13 @@ module.exports = {
 
 
                         var file = fs.createWriteStream('BeforejsonParse.txt');
-                        file.on('error', function(err) { /* error handling */ });
-                        req.param('contact_array').forEach(function(v) { file.write(v.join(', ') + '\n'); });
+                        //file.on('error', function(err) { /* error handling */ });
+                        //req.param('contact_array').forEach(function(v) { file.write(v.join(', ') + '\n'); });
                         file.end();
 
                         var file_2 = fs.createWriteStream('AfterjsonParse.txt');
-                        file_2.on('error', function(err) { /* error handling */ });
-                        JSON.parse(req.param('contact_array')).forEach(function(v) { file_2.write(v.join(', ') + '\n'); });
+                        //file_2.on('error', function(err) { /* error handling */ });
+                        //SON.parse(req.param('contact_array')).forEach(function(v) { file_2.write(v.join(', ') + '\n'); });
                         file_2.end();
 
                         phonecontacts           = JSON.parse(req.param('contact_array'));

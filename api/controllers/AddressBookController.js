@@ -50,7 +50,7 @@ module.exports = {
 						phonecontacts.forEach(function(factor, index){
 								var contact_name = factor.name;
 								var formatted_name = contact_name.replace(/"/g, '\\"');
-								
+								//console.log(formatted_name)
 								//console.log(string );
 								//console.log(string.replace(/"/g, '\\"') );
 
@@ -60,7 +60,7 @@ module.exports = {
 						});
 
 						console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-						
+						console.log(phoneContactsArray);						
 						
 						fbUser.forEach(function(factor, index){
 							
@@ -129,7 +129,7 @@ module.exports = {
 													},		
 								function(callback) {
 																 console.log("=====contactsssssssss?????????????????????????????????????????????????")
-																 console.log(phoneContactsArray1)
+																// console.log(phoneContactsArray1)
 																console.log("Address book updation")
 																console.log(phonecontacts.length)
 																async.forEach(phonecontacts, function (factor, callback){ 

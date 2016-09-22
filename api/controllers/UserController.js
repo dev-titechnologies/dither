@@ -557,7 +557,7 @@ module.exports = {
                     return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token and device_id'});
 
         }else{
-                 UsertokenService.deleteToken(userToken,function(err, result) {
+                 UsertokenService.deleteToken(userToken,deviceId,function(err, result) {
                     if(err) {
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {

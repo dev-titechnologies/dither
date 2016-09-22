@@ -751,6 +751,13 @@ module.exports = {
                       console.log(metadata);
                     });
         },
+        testInsertion: function (req, res) {
+			
+			console("testing insertion")
+			var formatted_name = contact_name.replace(/"/g, '\\"');
+			console.log(formatted_name)
+			
+		},
 
 
 };

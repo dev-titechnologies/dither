@@ -554,9 +554,16 @@ module.exports = {
         var device_IMEI		= req.get('device_imei');
         console.log("-----------------IMEI____________???")
         console.log(device_IMEI)
-        if(userToken){
+        console.log(req.get('token'))
+        console.log(req.get('device_id'))
+        if(!device_IMEI && !deviceId && !userToken){
 			
-			    var query = "DELETE FROM userToken WHERE device_IMEI='"+device_IMEI+"'";
+			  console.log("error")
+			   return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token,device_id,device_imei'});
+        }else{
+                
+                
+                 var query = "DELETE FROM userToken WHERE device_IMEI='"+device_IMEI+"'";
 			    console.log(query)
                 User_token.query(query, function(err, result) {
                     if(err) {
@@ -568,8 +575,7 @@ module.exports = {
                         return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });
-        }else{
-                return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token'});
+                
         }
 
     },

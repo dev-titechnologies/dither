@@ -33,8 +33,8 @@ module.exports = {
                 required: true,
         },
 		device_IMEI: {
-                type: 'string',
-                required: true,
+                type: 'string'
+                
         },
         expiryDate: {
                 type: 'datetime',

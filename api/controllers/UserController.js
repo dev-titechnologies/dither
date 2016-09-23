@@ -262,12 +262,15 @@ module.exports = {
 																																	var	roomName  = "socket_user_"+factor.userId;
 																																				
 																																	sails.sockets.broadcast(roomName,{
-																																									type            : "notification",
-																																									user_id         : factor.userId,
-																																									message         : "Signup Dither - Room Broadcast",
-																																									roomName        : roomName,
-																																									subscribers     : sails.sockets.subscribers(roomName),
-																																									socket          : sails.sockets.rooms()
+																																									type            	: "notification",
+																																									user_id         	: factor.userId,
+																																									message         	: "Signup Dither - Room Broadcast",
+																																									roomName        	: roomName,
+																																									subscribers     	: sails.sockets.subscribers(roomName),
+																																									socket          	: sails.sockets.rooms(),
+																																									notification_type   : 4,
+																																									notification_id     : createdNotification.id
+																																									
 																																									});
 																																			
 																																  });   

@@ -806,26 +806,34 @@ module.exports = {
         ==================================================================================================================================== */
         imagemagick: function (req, res) {
                 console.log("contactAddressInsert  ====== mage magick");
-                var im = require('imagemagick');
+                //var im = require('imagemagick');
                 var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                 var imageSrc                    =     profilePic_path_assets +'imageTest.png';
                 var ext                         =     imageSrc.split('/');
                 ext                             =     ext[ext.length-1].split('.');
                 var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
 
-                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-                    if(err)
-                    {
-                            console.log(err);
-                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in image resize', error_details: err});
+                console.log(imageSrc);
+                fs.exists(imageSrc, function(exists) {
+                        if (exists) {
+                                console.log("Image exists");
+                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+                                    if(err)
+                                    {
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in image resize', error_details: err});
 
-                    }else{
-                            console.log(imageResizeResults);
-                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+                                    }else{
+                                            console.log(imageResizeResults);
+                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
 
-                    }
+                                    }
+                                });
+                        }else{
+                                console.log("Image not exists");
+                                return res.json(200, {status: 1, status_type: 'Success' , message: 'passed Image not exists'});
+                        }
                 });
-
         },
 
 };

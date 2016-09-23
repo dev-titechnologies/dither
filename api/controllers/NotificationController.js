@@ -79,23 +79,25 @@ module.exports = {
 
                 console.log("Notification API")
                 console.log(req.options.file_path.profilePic_path)
-                var tokenCheck          =     req.options.tokenCheck;
-                var user_id             =     tokenCheck.tokenDetails.id;
-                var server_baseUrl      =     req.options.server_baseUrl;
-                var profilePic_path     =     server_baseUrl + req.options.file_path.profilePic_path;
-                var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
-                var device_id           =     tokenCheck.tokenDetails.deviceId;
-                var device_type         =     req.get('device_type');
+                var tokenCheck           =     req.options.tokenCheck;
+                var user_id              =     tokenCheck.tokenDetails.id;
+               // var server_baseUrl       =     req.options.server_baseUrl;
+                var server_baseUrl       =     req.options.server_baseUrl;
+                var server_image_baseUrl =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path      =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                var collageImg_path      =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                var device_id            =     tokenCheck.tokenDetails.deviceId;
+                var device_type          =     req.get('device_type');
 
-                notificationVoted       =     "";
-                notificationCommented   =     "";
-                notificationSignup      =     "";
-                notifyVoteArray         =     [];
-                notifyCmntArray         =     [];
+                notificationVoted        =     "";
+                notificationCommented    =     "";
+                notificationSignup       =     "";
+                notifyVoteArray          =     [];
+                notifyCmntArray          =     [];
 
-                var page_type           =     req.param("page_type");
-                var focus_Ntfn_id       =     req.param("focus_Ntfn_id");
-                var data_view_limit     =     req.options.global.data_view_limit;
+                var page_type            =     req.param("page_type");
+                var focus_Ntfn_id        =     req.param("focus_Ntfn_id");
+                var data_view_limit      =     req.options.global.data_view_limit;
 
                 /*if(!focus_Ntfn_id){
                         //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});

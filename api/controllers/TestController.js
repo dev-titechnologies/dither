@@ -390,25 +390,31 @@ module.exports = {
 						console.log("thumbNail Image")
 						var fs   	= require('fs');
 						var path    = require('path');
-						var image 	= require('imagemagick-stream');
-						/*var read 	= fs.createReadStream('imageNw.jpeg');
-						var write 	= fs.createWriteStream('image-resized.jpeg');
-						var resize 	= im().resize('40x40').quality(90);
-						read.pipe(resize).pipe(write);	*/
-						image('imageNw.jpeg').resize('40x40').quality(90).to('image-resized.jpeg');
+						var im 	= require('imagemagick');
 						
-						var gm = require ('gm');
-						var savedphoto = "imageNw.jpeg";
-						var testdir = "image-resized.jpeg";
-						gm(savedphoto)
-							.resize(100, 100)
-							.noProfile()
-							.write(testdir, function (err) {
-								console.error (err);
-							});
+						/*console.log(read)
+						console.log(write)
+						var resize 	= image().resize('40x40').quality(90);
+						console.log(resize)
+						read.pipe(resize).pipe(write);	
+						//image('imageNw.jpeg').resize('40x40').quality(90).to('image-resized.jpeg');*/
 						
 						
+						/*im.convert({
+						  srcData: fs.readFileSync('imageNw.jpeg', 'binary'),
+						  width:   256
+						}, function(err, stdout, stderr){
+						  if (err) throw err
+						  fs.writeFileSync('image-resized.jpeg', stdout, 'binary');
+						  console.log('resized kittens.jpg to fit within 256x256px')
+						});*/
 						
+						
+						im.convert(['imageNw.jpeg', '-resize', '40x120', 'kittens-small1.png'],
+										function(err, stdout){
+										if (err) throw err;
+										console.log('stdout:', stdout);
+								});
 						
 						
                           /* var allUsers =   [];
@@ -755,13 +761,15 @@ module.exports = {
 			
 			console.log("testing insertion")
 			
-			var contact_name = ' \'*533*2#';
-			
+			/*var contact_name = ' ""*533*2#';
 			var formatted_name = contact_name.replace(/"/g, '\\"');
 			//var formatted_name1 = contact_name.replace(/'/g, '\\"');
-			var formatted_name1 = contact_name.replace(/'/g, "\\'");
+			var formatted_name1 = contact_name.replace(/"/g, '\\"');
+			
+			var formatted_name = contact_name.replace(/"/g, '\\"');
+
 			console.log(formatted_name)
-			console.log(formatted_name1)
+			console.log(formatted_name1)*/
 			
 		},
 

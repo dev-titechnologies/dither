@@ -387,36 +387,27 @@ module.exports = {
      testThumbnail: function (req, res) {
 
 
-						console.log("thumbNail Image")
-						var fs   	= require('fs');
-						var path    = require('path');
-						var im 	= require('imagemagick');
-						
-						/*console.log(read)
-						console.log(write)
-						var resize 	= image().resize('40x40').quality(90);
-						console.log(resize)
-						read.pipe(resize).pipe(write);	
-						//image('imageNw.jpeg').resize('40x40').quality(90).to('image-resized.jpeg');*/
-						
-						
-						/*im.convert({
-						  srcData: fs.readFileSync('imageNw.jpeg', 'binary'),
-						  width:   256
-						}, function(err, stdout, stderr){
-						  if (err) throw err
-						  fs.writeFileSync('image-resized.jpeg', stdout, 'binary');
-						  console.log('resized kittens.jpg to fit within 256x256px')
-						});*/
-						
-						
-						im.convert(['imageNw.jpeg', '-resize', '40x120', 'kittens-small1.png'],
-										function(err, stdout){
-										if (err) throw err;
-										console.log('stdout:', stdout);
-								});
-						
-						
+                        console.log("thumbNail Image")
+                        var fs      = require('fs');
+                        var path    = require('path');
+                        var image   = require('imagemagick-stream');
+                        /*var read  = fs.createReadStream('imageNw.jpeg');
+                        var write   = fs.createWriteStream('image-resized.jpeg');
+                        var resize  = im().resize('40x40').quality(90);
+                        read.pipe(resize).pipe(write);  */
+                        image('imageNw.jpeg').resize('40x40').quality(90).to('image-resized.jpeg');
+
+                        var gm = require ('gm');
+                        var savedphoto = "imageNw.jpeg";
+                        var testdir = "image-resized.jpeg";
+                        gm(savedphoto)
+                            .resize(100, 100)
+                            .noProfile()
+                            .write(testdir, function (err) {
+                                console.error (err);
+                            });
+
+
                           /* var allUsers =   [];
                            var phonecontacts      = [{name:'Melita Nora',number:'8281442870'},{name:'Rena Acosta',number:'+17689456489'},{name:'Jacklyn Simon',number:'917654789872)'},{name:'Jacklyn Simon',number:'+154564'},{name:'Elizabeth Evangeline',number:'09875421365'}];
                            var phoneContactsArray = [];
@@ -482,7 +473,7 @@ module.exports = {
                             });*/
 
 
-                          
+
 
 
 
@@ -723,7 +714,7 @@ module.exports = {
             console.log("=============testsocket starttttttttt-====================")
             console.log(sails.sockets.getId(req));
 
-            
+
                         console.log("=============testsocket endddddddddd-====================")
 
 
@@ -758,21 +749,84 @@ module.exports = {
                     });
         },
         testInsertion: function (req, res) {
-			
-			console.log("testing insertion")
-			
-			/*var contact_name = ' ""*533*2#';
-			var formatted_name = contact_name.replace(/"/g, '\\"');
-			//var formatted_name1 = contact_name.replace(/'/g, '\\"');
-			var formatted_name1 = contact_name.replace(/"/g, '\\"');
-			
-			var formatted_name = contact_name.replace(/"/g, '\\"');
 
-			console.log(formatted_name)
-			console.log(formatted_name1)*/
-			
-		},
+            console.log("testing insertion")
 
+            var contact_name = ' \'*533*2#';
+
+            var formatted_name = contact_name.replace(/"/g, '\\"');
+            //var formatted_name1 = contact_name.replace(/'/g, '\\"');
+            var formatted_name1 = contact_name.replace(/'/g, "\\'");
+            console.log(formatted_name)
+            console.log(formatted_name1)
+
+        },
+
+
+        /* ==================================================================================================================================
+               SEC-SOCKET TEST
+        ==================================================================================================================================== */
+        contactAddressInsert: function (req, res) {
+
+                        var phonecontacts     = [
+                                                    {name   :   'Thomas Jacob1',    number  :   '9745875212'},
+                                                    {name   :   'Thomas Jacob2',    number  :   '9745875213'},
+                                                    {name   :   'Thomas Jacob3',    number  :   '9745875214'},
+                                                    {name   :   'Thomas Jacob4',    number  :   '9745875215'},
+                                                    {name   :   'Thomas Jacob5',    number  :   '9745875216'},
+                                                    {name   :   'Thomas Jacob6',    number  :   '9745875217'}
+                                                ];
+
+
+                        console.log("phonecontacts ========= Before parse");
+                        console.log(phonecontacts);
+
+                        phonecontacts  =  phonecontacts.toString();
+                        console.log("phonecontacts ========= To String");
+                        console.log(phonecontacts);
+
+                        console.log("phonecontacts ========= After parse");
+                        console.log(JSON.parse(phonecontacts));
+                        var phoneContactsArray  =  [];
+                        var userId              =  1;
+                        phonecontacts.forEach(function(factor, index){
+                                var contact_name = factor.name;
+                                //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
+                                var formatted_name = contact_name.replace(/'/g, "\\'");
+
+                                phoneContactsArray.push("("+userId+",'"+formatted_name+"', '"+factor.number+"', now(), now())");
+                        });
+
+                        console.log(phoneContactsArray);
+
+        },
+
+         /* ==================================================================================================================================
+               Image Magick
+        ==================================================================================================================================== */
+        imagemagick: function (req, res) {
+                console.log("contactAddressInsert  ====== mage magick");
+                var im = require('imagemagick');
+                var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+                var imageSrc                    =     profilePic_path_assets +'imageTest.png';
+                var ext                         =     imageSrc.split('/');
+                ext                             =     ext[ext.length-1].split('.');
+                var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+
+                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+                    if(err)
+                    {
+                            console.log(err);
+                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in image resize', error_details: err});
+
+                    }else{
+                            console.log(imageResizeResults);
+                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+
+                    }
+                });
+
+        },
 
 };
 

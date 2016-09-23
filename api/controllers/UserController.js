@@ -119,9 +119,6 @@ module.exports = {
                                 else
                                 {
 
-
-
-
                                     console.log("fbid checkinggggggggggg")
                                     console.log(resultData);
                                     if(resultData){
@@ -475,14 +472,7 @@ module.exports = {
                                 }
                                 else
                                 {
-                                   // User_token.find({userId:results.id}).exec(function(err, result){
-                                   // User_token.query("SELECT * FROM userToken WHERE userId = '"+results.id+"'", function (err, result) {
-                                           /* if (err) {
-                                                console.log(err)
-                                            }
-                                            else
-                                            {*/
-                                                //console.log(result)
+                                   
                                                 //delete existing token
                                                 var query	=	"DELETE FROM userToken where device_IMEI='"+device_IMEI+"' and deviceId='"+deviceId+"'";
                                                 User_token.query(query, function(err, result) {
@@ -529,8 +519,6 @@ module.exports = {
                                                      }
                                               });
 
-                                           // }
-                                       // });
                                 }
                               //console.log(results);
 

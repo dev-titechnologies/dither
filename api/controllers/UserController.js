@@ -484,7 +484,7 @@ module.exports = {
                                             {*/
                                                 //console.log(result)
                                                 //delete existing token
-                                                var query	=	"DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
+                                                var query	=	"DELETE FROM userToken where device_IMEI='"+device_IMEI+"' and deviceId='"+deviceId+"'";
                                                 User_token.query(query, function(err, result) {
                                                // User_token.destroy({userId: results.id,deviceId:deviceId}).exec(function (err, result) {
 

@@ -19,6 +19,11 @@ module.exports = {
     signup: function (req, res) {
 				var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
 				var profilePic_path             =     req.options.file_path.profilePic_path;
+				
+			    var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+               
+				
+				
                 console.log("signup---------------- api")
                 console.log(req.body);
                 console.log(req.get('device_id'));
@@ -384,44 +389,41 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                                         }else{
-                                                                                            /* ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                                            console.log('/assets/images/profilePics/'+imagename)
-                                                                                            require('lwip').open('assets/images/profilePics/'+imagename, function(err, image) {
-                                                                                                if(err)
-                                                                                                  {
-                                                                                                      console.log(err)
-                                                                                                      console.log("Errorrrrrrrrrrrrrrrrrrr")
-                                                                                                      //return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-                                                                                                  }
-                                                                                                  else
-                                                                                                  {
+																								// ------------------------------Generate ThumbnailImage-----------------------------------------------
+																								
+																									
+																									
+																									var imageSrc                    =     profilePic_path_assets + results.profilePic;
+																									var ext                         =     imageSrc.split('/');
+																									ext                             =     ext[ext.length-1].split('.');
+																									var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																									console.log(imageSrc)
+																									console.log(imageDst)
+																									ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																										if(err)
+																										{
+																												console.log(err);
+																												return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in image resize', error_details: err});
 
-                                                                                                       ------------Thumnail Image--------------------------------------------------------
-                                                                                                        ImgResizeService.imageResize(imagename,results.id, function(err, imageResult) {
-                                                                                                            if(err)
-                                                                                                            {
-                                                                                                                    console.log(err);
-                                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'ThumbImage Creation Failure', error_details: err});
+																										}else{
+																												console.log(imageResizeResults);
+																												// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																												console.log("async parallel in Sms Part Success --------------------");
+																												return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+																																	  token  		:	userTokenDetails.token.token,
+																																	  user_id		:	results.id,
+																																	  mobile_number :   results.phoneNumber
+																																});
 
-                                                                                                            }else{
-                                                                                                                    console.log("async parallel in Sms Part Success --------------------");
-                                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
-                                                                                                            }
-                                                                                                        });
-
-                                                                                                        console.log("async parallel in Sms Part Success --------------------");
-                                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',token:userTokenDetails.token.token,user_id:results.id});
-
-
-                                                                                                  }
-                                                                                            });*/
-                                                                                            
-                                                                                            console.log("async parallel in Sms Part Success --------------------");
-                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
-																												  token  		:	userTokenDetails.token.token,
-																												  user_id		:	results.id,
-																												  mobile_number :   results.phoneNumber
-																											});
+																										}
+																									});
+																									
+																								
+																								
+																								
+																								//------------------------------------------------------------------------------------------------------
+																											   
+																								
 
                                                                                         }
 
@@ -634,8 +636,55 @@ module.exports = {
                                                         else
                                                         {
                                                             //var profileImage = server_baseUrl + "images/profilePics/"+imageName;
+                                                          
                                                             var profileImage        =   profilePic_path + imageName;
+                                                            
                                                             return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
+                                                            
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																								
+																									
+																									
+															/*	var imageSrc                    =     profilePic_path_assets + imageName;
+																
+																fs.exists(imageSrc, function(exists) {
+																if (exists) {
+																
+																console.log("Image exists");
+																				
+																
+																
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																			if(err)
+																			{
+																					console.log(err);
+																					return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in image resize', error_details: err});
+
+																			}else{
+																					console.log(imageResizeResults);
+																					// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																					return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
+																					
+
+																			}
+																		});
+																		
+															    }else{
+																		console.log("Image not exists");
+																		return res.json(200, {status: 1, status_type: 'Success',message: 'Profile image not exist', });
+																		
+																	}
+																	});*/
+															
+															
+															//------------------------------------------------------------------------------------------------------
+
+                                                            
                                                         }
 
 

@@ -266,7 +266,7 @@ module.exports = {
 																							
 																					}else{
 																							 console.log(imageResizeResults);
-																							 item.resized_image = imageDst;
+																							 item.resized_image = server_baseUrl+imageDst;
 																							 console.log("8888888888888888888888"+item.resized_image)
 																							// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
 																							 if(item.description<=0)

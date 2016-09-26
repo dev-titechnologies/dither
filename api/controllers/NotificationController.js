@@ -196,25 +196,96 @@ module.exports = {
                                                             ntfn_body           =   util.format(notification,item.description);
                                                             item.ntfn_body      =   ntfn_body;
                                                             item.type           =   ntfnTypeFound[0].type;
+                                                             var imageToResize	=   item.profile_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
-                                                            if(item.description<=0)
-                                                            {
-                                                                console.log("commenteddd")
-                                                                notificationCommented = " commented on your Dither";
-                                                                item.ntfn_body        = notificationCommented;
-                                                                callback();
-                                                            }
-                                                            else
-                                                            {
-                                                                     console.log("77777777777777777777777777777777777777777777777")
-                                                                     notificationCommented =  ntfn_body;
-                                                                     notifyCmntArray       = [];
-                                                                     notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
-                                                                     console.log(notifyCmntArray)
-                                                                     console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-                                                                     callback();
-                                                            }
+                                                            
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		item.resized_image				=	  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					 if(item.description<=0)
+																						{
+																							console.log("commenteddd")
+																							notificationCommented = " commented on your Dither";
+																							item.ntfn_body        = notificationCommented;
+																							callback();
+																						}
+																						else
+																						{
+																								 console.log("77777777777777777777777777777777777777777777777")
+																								 notificationCommented =  ntfn_body;
+																								 notifyCmntArray       = [];
+																								 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																								 console.log(notifyCmntArray)
+																								 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																								 callback();
+																						}
+																					
+																					
+																				}
+																				else
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								if(item.description<=0)
+																								{
+																									console.log("commenteddd")
+																									notificationCommented = " commented on your Dither";
+																									item.ntfn_body        = notificationCommented;
+																									callback();
+																								}
+																								else
+																								{
+																										 console.log("77777777777777777777777777777777777777777777777")
+																										 notificationCommented =  ntfn_body;
+																										 notifyCmntArray       = [];
+																										 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																										 console.log(notifyCmntArray)
+																										 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																										 callback();
+																								}
+
+
+																						}
+																					});
+																				}	
+																			});	
+
+																		}else{
+																				console.log("Image not exists");
+																				callback();
+
+																			}
+                                                                    });
+
+
+                                                            //------------------------------------------------------------------------------------------------------
+
+   
+                                                            
                                                     }
 
                                                 });
@@ -324,7 +395,7 @@ module.exports = {
                                                                     });
 
 
-                                                            //------------------------------------------------------------------------------------------------------
+																	//------------------------------------------------------------------------------------------------------
 
                                                            
                                                         }
@@ -351,11 +422,64 @@ module.exports = {
                                                                     ntfn_body           = util.format(notification);
                                                                     item.ntfn_body      =   ntfn_body;
                                                                     item.type           =   ntfnTypeFound[0].type;
+                                                                    var imageToResize	=   item.profile_image;
                                                                     item.profile_image  =   profilePic_path + item.profile_image;
                                                                     item.dither_image   =   collageImg_path + item.dither_image;
                                                                     console.log(ntfn_body)
                                                                     notificationSignup  =  ntfn_body;
-                                                                    callback();
+                                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																		var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+																		fs.exists(imageSrc, function(exists) {
+																				if (exists) {
+
+																				console.log("Image exists");
+
+																				var ext                         =     imageSrc.split('/');
+																				ext                             =     ext[ext.length-1].split('.');
+																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																				item.resized_image				=	  		
+																				console.log(imageSrc)
+																				console.log(imageDst)
+																				 fs.exists(imageDst, function(exists) {
+																					 if (exists) {
+																							item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																							 callback();
+																						
+																						}
+																						else
+																						{
+
+																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																								if(err)
+																								{
+																										console.log(err);
+																										callback();
+																										
+																								}else{
+																										 console.log(imageResizeResults);
+																										 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																										 console.log("8888888888888888888888"+item.resized_image)
+																										 callback();
+																										// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																										
+
+
+																								}
+																							});
+																						}	
+																					});	
+
+																				}else{
+																						console.log("Image not exists");
+																						callback();
+
+																					}
+																			});
+
+
+																	//------------------------------------------------------------------------------------------------------
+
 
                                                             }
 
@@ -382,12 +506,64 @@ module.exports = {
                                                                 var ntfn_body       = util.format(notification,item.name);
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 item.ntfn_body      =   ntfn_body;
+                                                                var imageToResize	=   item.profile_image;
                                                                 item.profile_image  =   profilePic_path + item.profile_image;
                                                                 item.dither_image   =   collageImg_path + item.dither_image;
                                                                 console.log(item.profile_image)
                                                                 console.log(ntfn_body)
                                                                 notificationTagged  =  ntfn_body;
-                                                                callback();
+                                                                
+                                                                // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		item.resized_image				=	  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					callback();
+																					
+																				}
+																				else
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								callback();
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								callback();
+
+																						}
+																					});
+																				}	
+																			});	
+
+																		}else{
+																				console.log("Image not exists");
+																				callback();
+
+																			}
+                                                                    });
+
+
+																	//------------------------------------------------------------------------------------------------------
+
 
                                                             }
 

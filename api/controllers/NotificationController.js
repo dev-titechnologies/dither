@@ -254,41 +254,67 @@ module.exports = {
 
 																		console.log("Image exists");
 
-																				var ext                         =     imageSrc.split('/');
-																				ext                             =     ext[ext.length-1].split('.');
-																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																				item.resized_image				=	  		
-																				console.log(imageSrc)
-																				console.log(imageDst)
-																				ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																					if(err)
-																					{
-																							console.log(err);
-																							
-																					}else{
-																							 console.log(imageResizeResults);
-																							 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																							 console.log("8888888888888888888888"+item.resized_image)
-																							// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-																							 if(item.description<=0)
-																							{
-																							  notificationVoted  = " voted on your Dither";
-																							  item.ntfn_body     = notificationVoted;
-																							  callback();
-																							}
-																							else
-																							{
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		item.resized_image				=	  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					 if(item.description<=0)
+																						{
+																						  notificationVoted  = " voted on your Dither";
+																						  item.ntfn_body     = notificationVoted;
+																						  callback();
+																						}
+																						else
+																						{
 
-																								notificationVoted   =  ntfn_body;
-																								notifyVoteArray     = [];
-																								notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																								console.log(notifyVoteArray)
-																								callback();
-																							}
+																							notificationVoted   =  ntfn_body;
+																							notifyVoteArray     = [];
+																							notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																							console.log(notifyVoteArray)
+																							callback();
+																						}
+																					
+																					
+																				}
+																				else
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								 if(item.description<=0)
+																								{
+																								  notificationVoted  = " voted on your Dither";
+																								  item.ntfn_body     = notificationVoted;
+																								  callback();
+																								}
+																								else
+																								{
+
+																									notificationVoted   =  ntfn_body;
+																									notifyVoteArray     = [];
+																									notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																									console.log(notifyVoteArray)
+																									callback();
+																								}
 
 
-																					}
-																				});
+																						}
+																					});
+																				}	
+																			});	
 
 																		}else{
 																				console.log("Image not exists");

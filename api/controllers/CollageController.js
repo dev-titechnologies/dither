@@ -867,13 +867,19 @@ module.exports = {
 
                                         case 'recent' :
                                                     query_order_same_user1 = " ORDER BY clg.createdAt DESC";
-                                                    query_order_same_user2 = " ORDER BY clg.createdAt DESC";
+                                                    query_order_same_user2 = " ORDER BY temp_clg.createdAt DESC";
+
+                                                    query_order_other_user1 = " ORDER BY clg.createdAt DESC";
+                                                    query_order_other_user2 = " ORDER BY clg.createdAt DESC";
 
                                         break;
 
                                         case 'popular' :
                                                     query_order_same_user1 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
-                                                    query_order_same_user2 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+                                                    query_order_same_user2 = " ORDER BY temp_clg.totalVote DESC, temp_clg.createdAt DESC";
+
+                                                    query_order_other_user1 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+                                                    query_order_other_user2 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
 
                                         break;
                                 }
@@ -919,7 +925,7 @@ module.exports = {
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 query_offset_data_view_limit+
-                                                query_order_same_user1+
+                                                query_order_other_user1+
                                                 " LIMIT "+data_view_limit+
                                                 " ) AS temp_clg"+
 
@@ -929,7 +935,7 @@ module.exports = {
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
-                                                query_order_same_user2;
+                                                query_order_other_user2;
 
                                 }
 

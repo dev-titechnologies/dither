@@ -948,8 +948,8 @@ module.exports = {
                                                 }
                                                 else
                                                 {
-                                                    console.log(results);
-                                                    console.log(results.length);
+                                                    //console.log(results);
+                                                    //console.log(results.length);
                                                     if(results.length == 0){
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                                     if (err) {
@@ -1003,9 +1003,9 @@ module.exports = {
                                                                             }else{
                                                                                     likeStatus = 1;
                                                                                     console.log("Inside ----->>>> likePosition not null");
-                                                                                    console.log(dataResults[j]["likeUserId"]);
-                                                                                     console.log(userId);
-                                                                                    console.log(dataResults[j]["userId"]);
+                                                                                    //console.log(dataResults[j]["likeUserId"]);
+                                                                                     //console.log(userId);
+                                                                                    //console.log(dataResults[j]["userId"]);
                                                                                     if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                                         console.log("Inside factor like User id check ================ ++++++++++++++");
                                                                                         //like_position = dataResults[j]["likePosition"];

@@ -216,6 +216,7 @@ module.exports = {
 																		console.log(imageDst)
 																		 fs.exists(imageDst, function(exists) {
 																			 if (exists) {
+																					console.log("Resized Image Exists")
 																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																					 if(item.description<=0)
 																						{
@@ -333,6 +334,7 @@ module.exports = {
 																		console.log(imageDst)
 																		 fs.exists(imageDst, function(exists) {
 																			 if (exists) {
+																					console.log("Resized Image Exists")
 																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																					 if(item.description<=0)
 																						{
@@ -443,6 +445,7 @@ module.exports = {
 																				console.log(imageDst)
 																				 fs.exists(imageDst, function(exists) {
 																					 if (exists) {
+																							console.log("Resized Image Exists")
 																							item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																							 callback();
 																						
@@ -529,6 +532,7 @@ module.exports = {
 																		console.log(imageDst)
 																		 fs.exists(imageDst, function(exists) {
 																			 if (exists) {
+																					console.log("Resized Image Exists")
 																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																					callback();
 																					

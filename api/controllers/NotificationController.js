@@ -257,6 +257,7 @@ module.exports = {
 																				var ext                         =     imageSrc.split('/');
 																				ext                             =     ext[ext.length-1].split('.');
 																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																				item.resized_image				=	  		
 																				console.log(imageSrc)
 																				console.log(imageDst)
 																				ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
@@ -266,7 +267,7 @@ module.exports = {
 																							
 																					}else{
 																							 console.log(imageResizeResults);
-																							 item.resized_image = server_baseUrl+imageDst;
+																							 item.resized_image = server_baseUrl+ ext[0] + "_50x50" + "." +ext[1];
 																							 console.log("8888888888888888888888"+item.resized_image)
 																							// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
 																							 if(item.description<=0)

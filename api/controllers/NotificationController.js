@@ -422,6 +422,7 @@ module.exports = {
                                                                     ntfn_body           = util.format(notification);
                                                                     item.ntfn_body      =   ntfn_body;
                                                                     item.type           =   ntfnTypeFound[0].type;
+                                                                    var imageToResize	=   item.profile_image;
                                                                     item.profile_image  =   profilePic_path + item.profile_image;
                                                                     item.dither_image   =   collageImg_path + item.dither_image;
                                                                     console.log(ntfn_body)
@@ -505,6 +506,7 @@ module.exports = {
                                                                 var ntfn_body       = util.format(notification,item.name);
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 item.ntfn_body      =   ntfn_body;
+                                                                var imageToResize	=   item.profile_image;
                                                                 item.profile_image  =   profilePic_path + item.profile_image;
                                                                 item.dither_image   =   collageImg_path + item.dither_image;
                                                                 console.log(item.profile_image)

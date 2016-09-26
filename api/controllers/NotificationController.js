@@ -5,7 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var util = require('util');
+var util 		= require('util');
+var fs          = require('fs');
 
 module.exports = {
 
@@ -79,25 +80,26 @@ module.exports = {
 
                 console.log("Notification API")
                 console.log(req.options.file_path.profilePic_path)
-                var tokenCheck           =     req.options.tokenCheck;
-                var user_id              =     tokenCheck.tokenDetails.id;
+                var tokenCheck             =     req.options.tokenCheck;
+                var user_id                =     tokenCheck.tokenDetails.id;
                // var server_baseUrl       =     req.options.server_baseUrl;
-                var server_baseUrl       =     req.options.server_baseUrl;
-                var server_image_baseUrl =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                var profilePic_path      =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                var collageImg_path      =     server_image_baseUrl + req.options.file_path.collageImg_path;
-                var device_id            =     tokenCheck.tokenDetails.deviceId;
-                var device_type          =     req.get('device_type');
+                var server_baseUrl         =     req.options.server_baseUrl;
+                var server_image_baseUrl   =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path        =     server_baseUrl + req.options.file_path.profilePic_path;
+                var collageImg_path        =     server_baseUrl + req.options.file_path.collageImg_path;
+                var profilePic_path_assets =     req.options.file_path.profilePic_path_assets;
+                var device_id              =     tokenCheck.tokenDetails.deviceId;
+                var device_type            =     req.get('device_type');
 
-                notificationVoted        =     "";
-                notificationCommented    =     "";
-                notificationSignup       =     "";
-                notifyVoteArray          =     [];
-                notifyCmntArray          =     [];
+                notificationVoted          =     "";
+                notificationCommented      =     "";
+                notificationSignup         =     "";
+                notifyVoteArray            =     [];
+                notifyCmntArray            =     [];
 
-                var page_type            =     req.param("page_type");
-                var focus_Ntfn_id        =     req.param("focus_Ntfn_id");
-                var data_view_limit      =     req.options.global.data_view_limit;
+                var page_type              =     req.param("page_type");
+                var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
+                var data_view_limit        =     req.options.global.data_view_limit;
 
                 /*if(!focus_Ntfn_id){
                         //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});
@@ -240,23 +242,64 @@ module.exports = {
                                                             ntfn_body           = util.format(notification,item.description);
                                                             item.ntfn_body      =   ntfn_body;
                                                             item.type           =   ntfnTypeFound[0].type;
+                                                            var imageToResize	=   item.profile_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
-                                                            if(item.description<=0)
-                                                            {
-                                                              notificationVoted = " voted on your Dither";
-                                                              item.ntfn_body    = notificationVoted;
-                                                              callback();
-                                                            }
-                                                            else
-                                                            {
+                                                            
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
 
-                                                                notificationVoted   =  ntfn_body;
-                                                                notifyVoteArray     = [];
-                                                                notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-                                                                console.log(notifyVoteArray)
-                                                                callback();
-                                                            }
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																				var ext                         =     imageSrc.split('/');
+																				ext                             =     ext[ext.length-1].split('.');
+																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																				console.log(imageSrc)
+																				console.log(imageDst)
+																				ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																					if(err)
+																					{
+																							console.log(err);
+																							
+																					}else{
+																							 console.log(imageResizeResults);
+																							 item.resized_image = imageDst;
+																							 console.log("8888888888888888888888"+item.resized_image)
+																							// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																							 if(item.description<=0)
+																							{
+																							  notificationVoted  = " voted on your Dither";
+																							  item.ntfn_body     = notificationVoted;
+																							  callback();
+																							}
+																							else
+																							{
+
+																								notificationVoted   =  ntfn_body;
+																								notifyVoteArray     = [];
+																								notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																								console.log(notifyVoteArray)
+																								callback();
+																							}
+
+
+																					}
+																				});
+
+																		}else{
+																				console.log("Image not exists");
+																				callback();
+
+																			}
+                                                                    });
+
+
+                                                            //------------------------------------------------------------------------------------------------------
+
+                                                           
                                                         }
 
                                                     });
@@ -286,7 +329,6 @@ module.exports = {
                                                                     console.log(ntfn_body)
                                                                     notificationSignup  =  ntfn_body;
                                                                     callback();
-
 
                                                             }
 

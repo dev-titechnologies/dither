@@ -561,7 +561,7 @@ module.exports = {
                 var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                 var server_baseUrl              =     req.options.server_baseUrl;
                 var imageUploadDirectoryPath    =     '../../assets/images/profilePics';
-
+                var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                 var edit_type                   =     req.param('edit_type');
                 var fileName                    =     req.file('profile_image');
 
@@ -613,10 +613,7 @@ module.exports = {
                                                             return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
 
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
-
-
-
-                                                            /*  var imageSrc                    =     profilePic_path_assets + imageName;
+																var imageSrc                    =     profilePic_path_assets + imageName;
 
                                                                 fs.exists(imageSrc, function(exists) {
                                                                 if (exists) {
@@ -650,7 +647,7 @@ module.exports = {
                                                                         return res.json(200, {status: 1, status_type: 'Success',message: 'Profile image not exist', });
 
                                                                     }
-                                                                    });*/
+                                                                    });
 
 
                                                             //------------------------------------------------------------------------------------------------------

@@ -822,57 +822,114 @@ module.exports = {
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var userId                      =     tokenCheck.tokenDetails.userId;
+                    var data_view_limit             =     req.options.global.data_view_limit;
                     var received_userId             =     req.param("user_id");
                     var received_dither_type        =     req.param("type");
                     var received_userName, received_userProfilePic;
-                    var query = "";
+                    var query, offset_data_view_limit;
                     console.log("Get all Type Dither  -------------------- ================================================");
                     console.log(received_userId);
                     console.log(received_dither_type);
-                    if(!received_userId || !received_dither_type){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both user_id and type'});
+
+                    console.log(req.param("page_type"));
+                    console.log(req.param("focus_dither_id"));
+                    var page_type               =   req.param("page_type");
+                    var focus_dither_id         =   req.param("focus_dither_id");
+
+
+                            switch(page_type){
+
+                                        case 'new' :
+                                                    offset_data_view_limit =  "> "+focus_dither_id;
+                                        break;
+
+                                        case 'old' :
+                                                    offset_data_view_limit =  "< "+focus_dither_id;
+                                        break;
+                            }
+
+                            console.log("offset_data_view_limit ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                            console.log(offset_data_view_limit);
+
+
+                    if(!received_userId || !received_dither_type || !page_type || !focus_dither_id){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both user_id, type, page_type and focus_dither_id'});
                     }else{
+                                var query_offset_data_view_limit;
+                                //check the focus_dither id 0 or not
+                                if(focus_dither_id == 0){
+                                        query_offset_data_view_limit = "";
+                                }else{
+                                        query_offset_data_view_limit = " AND clg.id "+offset_data_view_limit;
+                                }
+                                //check the dither type (recent or popular)
+                                switch(received_dither_type){
+
+                                        case 'recent' :
+                                                    query_order_same_user1 = " ORDER BY clg.createdAt DESC";
+                                                    query_order_same_user2 = " ORDER BY clg.createdAt DESC";
+
+                                        break;
+
+                                        case 'popular' :
+                                                    query_order_same_user1 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+                                                    query_order_same_user2 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+
+                                        break;
+                                }
                                 if(received_userId == userId){
                                         console.log("Same Id ----------------------------------------------------");
                                         query = "SELECT"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                                                " temp_clg.userId, temp_clg.image AS collage_image, temp_clg.totalVote, temp_clg.createdAt, temp_clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
                                                 " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
+                                                " FROM"+
+                                                "("+
+                                                " SELECT *"+
                                                 " FROM collage clg"+
-                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " WHERE clg.userId = '"+userId+"'"+
+                                                query_offset_data_view_limit+
+                                                query_order_same_user1+
+                                                " LIMIT "+data_view_limit+
+                                                ") AS temp_clg"+
+                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
+                                                " INNER JOIN user usr ON usr.id = temp_clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
-                                                " WHERE"+
-                                                " clg.userId = '"+userId+"'"+
-                                                " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
-
+                                                query_order_same_user2;
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
                                         //Show tagged logged user and created by received_user
-                                        query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+
+                                        query = " SELECT clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
                                                 " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
-                                                " FROM ("+
+
+                                                " FROM("+
+                                                " SELECT temp_union.* FROM ("+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+
                                                 " WHERE clg.userId = '"+received_userId+"'"+
                                                 " UNION"+
-                                                " SELECT tg.collageId as id"+
+                                                " SELECT tg.collageId AS id"+
                                                 " FROM tags tg"+
                                                 " WHERE tg.userId = '"+userId+"'"+
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                query_offset_data_view_limit+
+                                                query_order_same_user1+
+                                                " LIMIT "+data_view_limit+
+                                                " ) AS temp_clg"+
+
+                                                " INNER JOIN collage clg ON clg.id = temp_clg.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
-                                                " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
+                                                query_order_same_user2;
 
                                 }
 
@@ -885,18 +942,30 @@ module.exports = {
                                                 }
                                                 else
                                                 {
+                                                    console.log(results);
+                                                    console.log(results.length);
                                                     if(results.length == 0){
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                                     if (err) {
                                                                         console.log(err);
                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                                     }else{
-                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
-                                                                                                    username                : foundUserDetails.name,
-                                                                                                    user_profile_image      : profilePic_path + foundUserDetails.profilePic,
-                                                                                                    recent_dithers          : [],
-                                                                                                    popular_dithers         : []
-                                                                                });
+                                                                                console.log(foundUserDetails);
+                                                                                if(!foundUserDetails){
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage and no user found',
+                                                                                                        username                : "",
+                                                                                                        user_profile_image      : "",
+                                                                                                        recent_dithers          : [],
+                                                                                                        popular_dithers         : []
+                                                                                    });
+                                                                                }else{
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
+                                                                                                        username                : foundUserDetails.name,
+                                                                                                        user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                        recent_dithers          : [],
+                                                                                                        popular_dithers         : []
+                                                                                    });
+                                                                                }
                                                                     }
                                                             });
 
@@ -973,21 +1042,23 @@ module.exports = {
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
 
-                                                                    recent_dithers                              =       key.sort( predicatBy("mainOrder") );
-                                                                    popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                    //recent_dithers                              =       key.sort( predicatBy("mainOrder") );
+                                                                    //popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                    recent_dithers                              =       key;
+                                                                    popular_dithers                             =       key;
                                                                 }
                                                             }
 
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                                     if (err) {
-                                                                        console.log(err);
-                                                                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
+                                                                            console.log(err);
+                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                                     }else{
 
                                                                         if(!foundUserDetails){
 
                                                                                 if(received_dither_type == "popular"){
-                                                                                        popular_dithers   =  popular_dithers.reverse();
+
                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                                         username                : "",
                                                                                                         user_profile_image      : "",
@@ -1008,7 +1079,7 @@ module.exports = {
                                                                                 }
 
                                                                                 if(received_dither_type == "popular"){
-                                                                                        popular_dithers   =  popular_dithers.reverse();
+
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
                                                                                                         username                : foundUserDetails.name,
                                                                                                         user_profile_image      : profilePic_path + foundUserDetails.profilePic,

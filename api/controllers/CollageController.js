@@ -36,7 +36,6 @@ function union_arrays (x, y) {
 }
 
 var collage_unlink_path         =      "assets/images/collage/";
- var fs          = require('fs');
 module.exports = {
 
     /* ==================================================================================================================================
@@ -820,7 +819,6 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                    var profilePic_path_assets	    =     req.options.file_path.profilePic_path_assets;
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var userId                      =     tokenCheck.tokenDetails.userId;
@@ -967,64 +965,12 @@ module.exports = {
                                                                                                         popular_dithers         : []
                                                                                     });
                                                                                 }else{
-																					
-																						//----------------------thumbnail generation----------------------------------
-																						var imageSrc                    =     profilePic_path_assets + foundUserDetails.profilePic;
-																						fs.exists(imageSrc, function(exists) {
-																						if (exists) {	
-																							console.log("Image exists");
-																						console.log("Image exists");
-
-																						var ext                         =     imageSrc.split('/');
-																						ext                             =     ext[ext.length-1].split('.');
-																						var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																						console.log(imageSrc)
-																						console.log(imageDst)
-																						var user_profile_image;  
-																						fs.exists(imageDst, function(exists) {
-																							 if (exists) {
-																									
-																									user_profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-
-																							}else{
-																									console.log("Image not exists");
-																									ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																										if(err)
-																										{
-																												console.log(err);
-																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user,erroro occured in imageResizing',
-																																		username                : foundUserDetails.name,
-																																		user_profile_image      : profilePic_path + foundUserDetails.profilePic,
-																																		recent_dithers          : [],
-																																		popular_dithers         : []
-																																	});
-
-																										}else{
-																												console.log(imageResizeResults);
-																												user_profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																												return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
-																																		username                : foundUserDetails.name,
-																																		user_profile_image      : user_profile_image,
-																																		recent_dithers          : [],
-																																		popular_dithers         : []
-																																   });
-																										}
-																									});
-
-																								}
-																						});
-
-																						}
-																						else
-																						{
-																							user_profile_image = profilePic_path + profilePic_path + foundUserDetails.profilePic;
-																						}
-																					});
-																					//------------------------------------------------------------------------------------------------------
-																					
-																					
-																					
-																						
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
+                                                                                                        username                : foundUserDetails.name,
+                                                                                                        user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                        recent_dithers          : [],
+                                                                                                        popular_dithers         : []
+                                                                                    });
                                                                                 }
                                                                     }
                                                             });
@@ -1966,5 +1912,4 @@ module.exports = {
         },
 
 };
-
 

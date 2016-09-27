@@ -819,6 +819,7 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var profilePic_path_assets	    =     req.options.file_path.profilePic_path_assets;
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var userId                      =     tokenCheck.tokenDetails.userId;

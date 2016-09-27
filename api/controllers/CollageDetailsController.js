@@ -14,6 +14,7 @@ module.exports = {
                 console.log("collage details api==================");
                 var server_baseUrl              =     req.options.server_baseUrl;
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path_assets 		=     req.options.file_path.profilePic_path_assets;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                 var tokenCheck                  =     req.options.tokenCheck;
@@ -241,7 +242,54 @@ module.exports = {
                                                                                         }
                                                                                         var user_profile_image = "";
                                                                                         if(results[0].profilePic != "" || results[0].profilePic != null){
-                                                                                                user_profile_image = profilePic_path + results[0].profilePic;
+																							
+																								
+																						//----------------------thumbnail generation----------------------------------
+																								var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
+																								fs.exists(imageSrc, function(exists) {
+																								if (exists) {	
+																									console.log("Image exists");
+																								console.log("Image exists");
+
+																								var ext                         =     imageSrc.split('/');
+																								ext                             =     ext[ext.length-1].split('.');
+																								var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								console.log(imageSrc)
+																								console.log(imageDst)
+																									
+																								fs.exists(imageDst, function(exists) {
+																									 if (exists) {
+																											
+																											 user_profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+
+																									}else{
+																											console.log("Image not exists");
+																											ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																												if(err)
+																												{
+																														console.log(err);
+																														user_profile_image = '';
+
+																												}else{
+																														console.log(imageResizeResults);
+																														user_profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+
+																												}
+																											});
+
+																										}
+																								});
+																								}
+																								else
+																								 {
+																									user_profile_image = profilePic_path + results[0].profilePic;
+																								 }
+																								});		
+
+																							//------------------------------------------------------------------------------------------------------
+																							
+																							
+                                                                                               
                                                                                         }
 
 

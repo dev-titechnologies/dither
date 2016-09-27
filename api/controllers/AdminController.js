@@ -11,82 +11,130 @@
  var path        = require('path');
 
 module.exports = {
-    //   List all users
-    getCompleteUser: function(req, res){
-        
-            
-                    query = "SELECT * FROM  `user` ";
-                
-                User.query(query, function(err, result) {
-                    if(err)
-                    {
-                        // console.log(err);
-                        return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
-                        
-                        //console.log(result);
-                        return res.json(200, {status: 1, message: "success", data: result});
-                    }
-                });
-                
-    },
-    getUserDetails: function(req, res){
-                    userId=req.body.userId;
-                    query = "SELECT * FROM  `user` WHERE id="+userId;
-                
-                User.query(query, function(err, result) {
-                    if(err)
-                    {
-                        // console.log(err);
-                        return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
-                        
-                        //console.log(result);
-                        return res.json(200, {status: 1, message: "success", data: result});
-                    }
-                });
-                
-    },
-    deleteUser: function(req, res){
-                    criteria={id: req.body.userId};
-                    data= {status: 'delete'};
-                User.update(criteria, data).exec(function (err, result) {
-                    if(err)
-                    {
-                        // console.log(err);
-                        return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
-                        
-                        //console.log(result);
-                        return res.json(200, {status: 1, message: "success", data: result});
-                    }
-                });
-                
-    },
-    userStatus: function(req, res){
-                    //key=req.body.key;
-                    criteria={id: req.body.userId};
-                    data= {status: req.body.status};
 
-                User.update(criteria, data).exec(function (err, result) {
-                    if(err)
-                    {
-                         console.log(err);
-                        return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
-                        
-                        console.log(result);
-                        return res.json(200, {status: 1, message: "success", data: result});
-                    }
-                });
+	//   List all users
+    getCompleteUser: function(req, res){
+		
+			
+                    query = "SELECT * FROM  `user` ";
+				
+				User.query(query, function(err, result) {
+					if(err)
+					{
+						// console.log(err);
+						return res.json(200, { status: 2, error_details: 'db error' });
+					}
+					else
+					{
+						
+						//console.log(result);
+						return res.json(200, {status: 1, message: "success", data: result});
+					}
+				});
+                
+    },
+    // View Details of every single User
+    getUserDetails: function(req, res){
+					userId=req.body.userId;
+                    query = "SELECT * FROM  `user` WHERE id="+userId;
+				
+				User.query(query, function(err, result) {
+					if(err)
+					{
+						// console.log(err);
+						return res.json(200, { status: 2, error_details: 'db error' });
+					}
+					else
+					{
+						
+						//console.log(result);
+						return res.json(200, {status: 1, message: "success", data: result});
+					}
+				});
+                
+    },
+    //Delete a particular User
+    deleteUser: function(req, res){
+					criteria={id: req.body.userId};
+					data= {status: 'delete'};
+				User.update(criteria, data).exec(function (err, result) {
+					if(err)
+					{
+						// console.log(err);
+						return res.json(200, { status: 2, error_details: 'db error' });
+					}
+					else
+					{
+						
+						//console.log(result);
+						return res.json(200, {status: 1, message: "success", data: result});
+					}
+				});
+                
+    },
+    // Activate Deactivate User 
+    userStatus: function(req, res){
+					//key=req.body.key;
+					criteria={id: req.body.userId};
+					data= {status: req.body.status};
+
+				User.update(criteria, data).exec(function (err, result) {
+					if(err)
+					{
+						 console.log(err);
+						return res.json(200, { status: 2, error_details: 'db error' });
+					}
+					else
+					{
+						
+						console.log(result);
+						return res.json(200, {status: 1, message: "success", data: result});
+					}
+				});
+                
+    },
+    
+    // Get Reported User List
+    getReportedUser: function(req, res){
+		
+			
+                    query = "SELECT u.id,u.profilePic,u.status, u.name, COUNT( ru.userId ) AS RepUserCount FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.userId GROUP BY ru.userId LIMIT 0 , 30";
+				
+				User.query(query, function(err, result) {
+					if(err)
+					{
+						// console.log(err);
+						return res.json(200, { status: 2, error_details: 'db error' });
+					}
+					else
+					{
+						
+						//console.log(result);
+						return res.json(200, {status: 1, message: "success", data: result});
+					}
+				});
+                
+    },
+    
+    // Get One User Reported List
+    getReportList: function(req, res){
+		
+			console.log(req.body.userId);
+                    query = "SELECT u.profilePic, u.name, rt.description, ru.report, ru.createdAt FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.reporterId LEFT JOIN reportType AS rt ON rt.id = ru.reportType WHERE ru.userId ="+req.body.userId+" LIMIT 0 , 30";
+				User.query(query, function(err, result) {
+					if(err)
+					{
+						// console.log(err);
+						return res.json(200, { status: 2, error_details: 'db error' });
+					}
+					else
+					{
+						
+						//console.log(result);
+						return res.json(200, {status: 1, message: "success", data: result});
+					}
+				});
+
                 
     },
     
@@ -140,8 +188,10 @@ module.exports = {
     //** get reported dither details **/
     getReportDither: function(req,res){
         
+
        // var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
        var query = "SELECT DISTINCT rd.collageId,u.name AS postedBy,c.imgTitle,c.status, COUNT( rd.collageId ) AS RepDitherCount FROM reportDither AS rd LEFT JOIN collage AS c ON c.id=rd.collageId LEFT JOIN user AS u ON c.userId=u.id GROUP BY rd.collageId";
+
         console.log(query);
                     ReportDither.query(query, function (err, result) {
                         if (err) {
@@ -156,8 +206,10 @@ module.exports = {
     
     //** suspend a dither
     suspendDither: function(req,res){
+
         var suspendDitherId=req.body.collageId;
         var criteria = {id: suspendDitherId};
+
                     var data = {status: 'inactive'};
 
                     Collage.update(criteria, data).exec(function (err, updatedData) {
@@ -172,8 +224,10 @@ module.exports = {
                     });
     },
     releaseDither: function(req,res){
+
         var releaseDitherId=req.body.collageId;
         var criteria = {id: releaseDitherId};
+
                     var data = {status: 'active'};
 
                     Collage.update(criteria, data).exec(function (err, updatedData) {
@@ -187,7 +241,6 @@ module.exports = {
                         }
                     });
     },
-
     getReportedBy: function(req,res){
         var ditherId=req.body.collageId;
         console.log("ghhhhhhh"+ditherId);
@@ -205,3 +258,4 @@ module.exports = {
     },
     
 };
+

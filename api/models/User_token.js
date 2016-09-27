@@ -19,6 +19,7 @@ module.exports = {
         userId: {
                 type: 'integer',
                 //required: true,
+                defaultsTo: 0
         },
 
         token: {
@@ -31,7 +32,10 @@ module.exports = {
                 type: 'string',
                 required: true,
         },
-
+		device_IMEI: {
+                type: 'string'
+                
+        },
         expiryDate: {
                 type: 'datetime',
         },

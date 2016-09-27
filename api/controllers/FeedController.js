@@ -29,11 +29,12 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var server_baseUrl              =     req.options.server_baseUrl;
-                    var collageImg_path             =     server_baseUrl + req.options.file_path.collageImg_path;
-                    var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var data_view_limit             =     req.options.global.data_view_limit;
                     console.log("Feed ============>>>");
-                    var query;
+                    var query, offset_data_view_limit;
                     console.log("Get Feed  -------------------- ================================================");
 
 
@@ -58,63 +59,17 @@ module.exports = {
 
                             console.log("offset_data_view_limit ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             console.log(offset_data_view_limit);
-
-                            /*query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.likePosition, clg.createdAt, clg.updatedAt,"+
-                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                    " usr.profilePic, usr.name,"+
-                                    " clglk.likeStatus"+
-                                    " FROM ("+
-                                    " SELECT clg.id"+
-                                    " FROM collage clg"+
-                                    " WHERE clg.userId ="+userId+
-                                    " UNION"+
-                                    " SELECT tg.collageId"+
-                                    " FROM tags tg"+
-                                    " WHERE tg.userId = "+userId+
-                                    " ) AS temp_union"+
-                                    " INNER JOIN collage clg ON clg.id = temp_union.id"+
-                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                    " INNER JOIN user usr ON usr.id = clg.userId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                    " ORDER BY clg.updatedAt DESC";
-                            console.log(query);*/
-
+                            var query_offset_data_view_limit;
                             if(focus_dither_id == 0){
-                                     query  = " SELECT"+
-                                            " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
-                                            " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                            " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus, clglk.likePosition"+
-                                            " FROM ("+
-                                            " SELECT temp1.*"+
-                                            " FROM ("+
-                                            " SELECT clg.id, clg.createdAt"+
-                                            " FROM collage clg"+
-                                            " WHERE clg.userId = "+userId+
-                                            " UNION ("+
-                                            " SELECT tg.collageId AS id, clg.createdAt"+
-                                            " FROM tags tg"+
-                                            " INNER JOIN collage clg ON clg.id = tg.collageId"+
-                                            " WHERE tg.userId = "+userId+
-                                            " )"+
-                                            " ) AS temp1"+
-                                            //" WHERE temp1.id "+offset_data_view_limit+
-                                            " ORDER BY temp1.createdAt DESC"+
-                                            " LIMIT "+data_view_limit+
-                                            " ) AS temp_union"+
-                                            " INNER JOIN collage clg ON clg.id = temp_union.id"+
-                                            " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                            " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                            " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
-                                            " GROUP BY clgdt.id"+
-                                            " ORDER BY clg.createdAt DESC";
+                                    query_offset_data_view_limit = "";
                             }else{
-                                    query  = " SELECT"+
+                                    query_offset_data_view_limit = " WHERE temp1.id "+offset_data_view_limit;
+                            }
+                            query  = " SELECT"+
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus, clglk.likePosition"+
+                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
@@ -128,18 +83,17 @@ module.exports = {
                                             " WHERE tg.userId = "+userId+
                                             " )"+
                                             " ) AS temp1"+
-                                            " WHERE temp1.id "+offset_data_view_limit+
+                                            query_offset_data_view_limit+
                                             " ORDER BY temp1.createdAt DESC"+
                                             " LIMIT "+data_view_limit+
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            //" LEFT JOIN collageLikes clglk ON clglk.userId = usr.id"+
-                                            " LEFT JOIN collageLikes clglk ON clglk.collageId = clg.id"+
+                                            " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
-                            }
+
                             console.log(query);
 
                             Collage.query(query, function(err, results) {
@@ -159,12 +113,16 @@ module.exports = {
                                                             var dataResults = results;
                                                             var key = [];
                                                             var dataResultsKeys = [];
-                                                            var like_position;
+                                                            var imgDetailsArrayOrder;
+
                                                             for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                                var like_position_Array = [];
+                                                                var like_position;
+                                                                var likeStatus;
                                                                 var dataResultsObj = new Object();
                                                                 var collageId_val =dataResults[i]["collageId"];
                                                                 //console.log(data[i]);
-                                                                console.log("For loop--------------->>>>>>>>>>>>>>>>>");
+                                                                //console.log("For loop--------------->>>>>>>>>>>>>>>>>");
                                                                 if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
                                                                 {
                                                                     var imagesPositionArray         = [];
@@ -178,12 +136,24 @@ module.exports = {
                                                                         {
                                                                             console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ------------------ dataResults[j]["likeStatus"]');
                                                                             console.log(dataResults[j]["likeStatus"]);
-                                                                            var likeStatus;
-                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == ""){
+                                                                            console.log(dataResults[j]["collageId"]);
+                                                                            //dataResults[j]["collageId"]
+
+                                                                            if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
                                                                                     likeStatus = 0;
                                                                             }else{
                                                                                     likeStatus = dataResults[j]["likeStatus"];
+                                                                                    console.log("Inside ----->>>> likePosition not null");
+                                                                                    console.log(dataResults[j]["likeUserId"]);
+                                                                                     console.log(userId);
+                                                                                    console.log(dataResults[j]["userId"]);
+                                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                        console.log("Inside factor like User id check ================ ++++++++++++++");
+                                                                                        //like_position = dataResults[j]["likePosition"];
+                                                                                        like_position_Array.push(dataResults[j]["likePosition"]);
+                                                                                    }
                                                                             }
+
                                                                             imgDetailsArray.push({
                                                                                                 image_id        : dataResults[j]["imgId"],
                                                                                                 position        : dataResults[j]["position"],
@@ -191,16 +161,17 @@ module.exports = {
                                                                                                 vote            : dataResults[j]["vote"]
                                                                                                 });
 
-                                                                            if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
-                                                                                    like_position = 0;
-                                                                            }else{
-                                                                                    like_position = dataResults[j]["likePosition"];
-                                                                            }
                                                                         }
                                                                     }
-                                                                    //var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                                   // var imgDetailsArrayOrder = imgDetailsArray.reverse();
-                                                                   var imgDetailsArrayOrder = imgDetailsArray.sort(predicatBy("position"));
+
+                                                                    if(like_position_Array.length != 0){
+                                                                                console.log("like_position_Array === >>>  length != 0");
+                                                                                like_position = like_position_Array[0];
+                                                                    }else{
+                                                                                console.log("like_position_Array === >>>  length == 0");
+                                                                                like_position = 0;
+                                                                    }
+
 
                                                                     if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                                 dataResultsObj.profile_image = "";
@@ -208,7 +179,7 @@ module.exports = {
 
                                                                                 dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
                                                                     }
-
+                                                                    imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                                     dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                                     dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
@@ -218,25 +189,16 @@ module.exports = {
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                                     dataResultsObj.mainOrder                    =       i;
-                                                                    console.log("vote =================");
-                                                                    console.log(dataResultsObj.vote);
-                                                                    //console.log("dataResultsObj====================");
-                                                                    //console.log(dataResultsObj);
-                                                                    //console.log("dataResultsObj====================");
+
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
 
-                                                                    //console.log(key);
-                                                                    //var feeds = key.reverse();
-                                                                    //var feeds = key;
+
                                                                     var feeds              =       key.sort( predicatBy("mainOrder") );
-                                                                    //console.log("Final Key -----------------------------------------------------------------");
-                                                                    //console.log(feeds);
+
                                                                 }
                                                             }
-                                                            //console.log(key);
-                                                            //console.log(key.reverse());
-                                                            //console.log(JSON.stringify(key.reverse()));
+
                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds',
                                                                                 feeds: feeds
                                                             });

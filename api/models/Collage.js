@@ -40,14 +40,22 @@ module.exports = {
 
         userId: {
             type: 'integer',
+            defaultsTo: 0
         },
 
         totalVote: {
             type: 'integer',
+            defaultsTo: 0
         },
         //0 for not liked, 1 - 1st position , 2 - 2nd position etc .....
         likePosition: {
             type: 'integer',
+            defaultsTo: 0
+        },
+        //true means 0 = active, false means 1 = inactive
+        status: {
+            type: 'string',
+            defaultsTo: 'active'
         },
          //true means 0 = active, false means 1 = inactive
         status: {

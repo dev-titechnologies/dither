@@ -4,12 +4,34 @@
  * @description :: Server-side logic for managing tests
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+var fs          = require('fs');
+//var fs                          =     require('file-system');
+// solution:
+//function to remove a value from the json array
+function removeItem(obj, prop, val) {
+    var c, found=false;
+    for(c in obj) {
+        if(obj[c][prop] == val) {
+            found=true;
+            break;
+        }
+    }
+    if(found){
+        delete obj[c];
+    }
+}
 module.exports = {
 
      /* ==================================================================================================================================
                To Upload Images
      ==================================================================================================================================== */
+
+        unlink     :   function (req, res) {
+                console.log("Entered UnLink....................");
+                var imgName = "08a81ea5-389e-48ce-8798-29cc7209e51e.jpg";
+                fs.unlink("assets/images/collage_test/"+imgName);
+                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully unlinked'});
+        },
         collage_image: function (req, res) {
                 var imageUploadDirectoryPath =  '../../assets/images/collage_test';
                 //var imageUploadDirectoryPath =  'http://assets/images/collage';
@@ -26,7 +48,7 @@ module.exports = {
                 });
         },
         test: function (req, res) {
-               console.log("22222222222222");
+                console.log("22222222222222");
                 console.log(req.param('array'));
 
 
@@ -223,13 +245,33 @@ module.exports = {
     /* ==================================================================================================================================
                SOCKET
      ==================================================================================================================================== */
-        socketTest:  function (req, res) {
-                //sails.sockets.join(req.socket, "1");
+        socketTests:  function (req, res) {
+                console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> socketTest");
+                console.log(req);
+                console.log("param only ======");
+                console.log(req.params.all());
+                console.log(req.param("data"));
+                //console.log(req.param("ajay"));
+                console.log("body only ======");
+                console.log(req.body);
+                console.log(req.body.name);
+                //console.log(req.body.ajay);
+                console.log("INSIDE -------------  >>>>>>>>>>>>>>>>>> ENDsocketTest");
+                sails.sockets.join(req.socket, "Room-A");
+                var roomName  = "socket_dither_43";
+                sails.sockets.join(req.socket, roomName);
+                var creator_roomName  = "socket_user_2";
+                sails.sockets.join(req.socket, creator_roomName);
                 //console.log(req.socket);
-                sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
+                //sails.sockets.blast('comment-dither', {msg: 'Hi! Comment ------11111111'});
+
+                //sails.sockets.blast('like-dither', {msg: 'Hi! Like ------2222222'});
+                //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
+                //sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
+
         },
 
-        subscribeToFunRoom: function(req, res) {
+        /*subscribeToFunRoom: function(req, res) {
               //r roomName = req.param('roomName');
               //console.log(req);
               var roomName = "pppp";
@@ -243,6 +285,11 @@ module.exports = {
 
               console.log("sails.sockets.rooms ==============================================");
               console.log(sails.sockets.rooms());
+
+            console.log("sails.sockets.socketRooms ==============================================");
+              console.log(sails.sockets.socketRooms(req.socket));
+            console.log("sails.sockets.socketRooms ==============================================");
+             console.log(sails.sockets.socketRooms());
               //sails.sockets.join(req.socket, roomName);
               //sails.sockets.broadcast(roomName, { msg: 'Hi there!' });
               //res.json({
@@ -250,7 +297,7 @@ module.exports = {
               //});
               //sails.sockets.emit(friendId, 'privateMessage', {from: req.session.userId, msg: 'Hi!'});
               //sails.sockets.broadcast(1, { msg: 'Hi there!' });
-        },
+        },*/
 
         invite: function (req, res) {
                 console.log("Request-1 >>>>>>>>>>>>>>>>>>>> in Test");
@@ -271,7 +318,7 @@ module.exports = {
                 console.log(JSON.parse(req.param("request1").length));
                 console.log(JSON.parse(req.param("request2").length));
         },
-        
+
             selectUser: function (req, res) {
 
             var commonSettings = req.options.settingsKeyValue;
@@ -294,12 +341,501 @@ module.exports = {
                     }
 
             });
-    }
-        
-        
-        
-        
 
+    },
+
+
+       /* ==================================================================================================================================
+               TEST FILE ULLOAD
+     ==================================================================================================================================== */
+
+       addUserContacts: function (req, res) {
+        var jsonfile = require('jsonfile');
+        console.log(req.file('file'))
+        req.file('file').upload({dirname: '',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults)
+                                    {
+                                            console.log(profileUploadResults)
+                                            imageName = profileUploadResults[0].fd.split('/');
+                                            imageName = imageName[imageName.length-1];
+                                            jsonFilePath = '.tmp/uploads/'+imageName;
+                                            console.log(jsonFilePath)
+                                            jsonfile.readFile(jsonFilePath, function(err, obj)
+                                            {
+                                                    if(err)
+                                                    {
+                                                        console.log(err);
+                                                        return res.json(200, {status: 2,status_type: 'Failure', message: 'File Not Found'});
+                                                    }
+                                                    else
+                                                    {
+                                                        console.log("success --------");
+
+                                                        console.log(obj);
+                                                        phoneContactsArray = obj;
+                                                    }
+                                             });
+
+                                    });
+
+
+     },
+
+      /* ==================================================================================================================================
+               TEST GENERATE THUMBNAIL IMAGE
+        ==================================================================================================================================== */
+
+     testThumbnail: function (req, res) {
+
+
+                        console.log("thumbNail Image")
+                        var fs      = require('fs');
+                        var path    = require('path');
+                        var image   = require('imagemagick-stream');
+                        /*var read  = fs.createReadStream('imageNw.jpeg');
+                        var write   = fs.createWriteStream('image-resized.jpeg');
+                        var resize  = im().resize('40x40').quality(90);
+                        read.pipe(resize).pipe(write);  */
+                        image('imageNw.jpeg').resize('40x40').quality(90).to('image-resized.jpeg');
+
+                        var gm = require ('gm');
+                        var savedphoto = "imageNw.jpeg";
+                        var testdir = "image-resized.jpeg";
+                        gm(savedphoto)
+                            .resize(100, 100)
+                            .noProfile()
+                            .write(testdir, function (err) {
+                                console.error (err);
+                            });
+
+
+                          /* var allUsers =   [];
+                           var phonecontacts      = [{name:'Melita Nora',number:'8281442870'},{name:'Rena Acosta',number:'+17689456489'},{name:'Jacklyn Simon',number:'917654789872)'},{name:'Jacklyn Simon',number:'+154564'},{name:'Elizabeth Evangeline',number:'09875421365'}];
+                           var phoneContactsArray = [];
+                            phonecontacts.forEach(function(factor, index){
+                                phoneContactsArray.push({userId:127,ditherUserName:factor.name, ditherUserPhoneNumber:factor.number});
+                            });
+
+                           User.query("SELECT * FROM user", function(err, selectDContacts){
+                                        if(err)
+                                        {
+                                            console.log(err)
+                                            //callback();
+                                        }
+                                        else
+                                        {
+                                            //console.log(selectDContacts[0])
+
+                                            selectDContacts.forEach(function(factor, index){
+
+                                                allUsers.push({id:factor.id,name:factor.name,fbId:factor.fbId,phoneNumber:factor.phoneNumber});
+
+                                            });
+
+
+
+
+                                            async.forEach(phonecontacts, function (factor, callback){
+
+                                                console.log("inside")
+                                                var num = factor.number;
+                                                allUsers.forEach(function(factor, index){
+
+                                                      var validNo1      = factor.phoneNumber.replace('-','');
+                                                      var validNo2      = factor.phoneNumber.split('-').pop();
+                                                      var validNo3      = '0'+validNo2;
+                                                      var validNo4      = validNo1.replace('+','');
+                                                      if(num==validNo1 || num==validNo2 ||  num==validNo3 ||  num==validNo4)
+                                                      {
+
+
+                                                          var data     = {ditherUserId:factor.id};
+                                                          var criteria = {ditherUserPhoneNumber: num};
+
+                                                          AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+
+                                                                if(!err)
+                                                                {
+                                                                    console.log("success")
+                                                                }
+                                                            });
+
+                                                     }
+
+
+                                                 });
+
+
+
+                                            });
+
+                                            //console.log(allUsers)
+                                        }
+                            });*/
+
+
+
+
+
+
+        },
+
+
+        /* ==================================================================================================================================
+               To Upload Images
+        ==================================================================================================================================== */
+        file_upload: function (req, res) {
+                console.log("file_upload  ----- test controller");
+                var fileUploadDirectoryPath =  '../../assets/images/file_test';
+                //var imageUploadDirectoryPath =  'http://assets/images/collage';
+                //console.log(req.file('file_1'));
+                console.log(req.file('contact_array'));
+                req.file('contact_array').upload({dirname: fileUploadDirectoryPath,maxBytes: 100 * 1000 * 1000},function (err, files) {
+                        if (err){
+                            console.log(err);
+                            //return res.serverError(err);
+                            return res.json(200, {status: 1, message: 'Failure', error_details: err});
+                        }else{
+                            console.log(files);
+                            /*return res.json({
+                            message: files.length + ' file(s) uploaded successfully!',
+                            files: files
+                            });*/
+                            return res.json(200, {status: 1, message: 'Success'});
+                        }
+                });
+        },
+
+        file_read: function (req, res) {
+                console.log("file_upload  ----- test controller");
+                var jsonfile = require('jsonfile')
+                var file = 'test.json'
+                //var file = '/tmp/data.json'
+                console.log(file);
+
+                jsonfile.readFile(file, function(err, obj) {
+                    if(err){
+                        console.log(err);
+                        return res.json(200, {status: 2, message: 'Failure', error_details: err});
+
+                    }else{
+                        console.log("success --------");
+                        console.dir(obj);
+                        console.log(obj);
+                        obj.forEach(function(factor, index){
+                                //console.log(factor.name);
+                        });
+                        return res.json(200, {status: 1, message: 'Success'});
+                        }
+                })
+
+                //var fileUploadDirectoryPath =  '../../assets/images/file_test';
+                //var imageUploadDirectoryPath =  'http://assets/images/collage';
+                //console.log(req.file('file_1'));
+                //console.log(req.file('contact_array'));
+                /*req.file('file_1').upload({dirname: fileUploadDirectoryPath,maxBytes: 100 * 1000 * 1000},function (err, files) {
+                        if (err){
+                            return res.serverError(err);
+                        }else{
+                            console.log(files);
+
+                        }
+                });*/
+        },
+
+        delete_record : function (req, res) {
+                        console.log("Bulk -delete ========= >>>>>>>>>>>>>>");
+                        var deleteTagCollageArray = //[
+                                                        {collageId: 1, userId: 3};
+                                                        //{collageId: 3, userId: 3},
+                                                        //{collageId: 4443, userId: 3},
+                                                    //];
+                        Tags.destroy(deleteTagCollageArray).exec(function(err, deleteCollageTags){
+                                if(err)
+                                {
+                                    console.log(err);
+                                    console.log("Error in Deleting Collage Tags");
+                                    //callback();
+                                }else{
+                                    console.log("Bulk delete success ++++++++++++");
+                                    console.log(deleteCollageTags);
+
+                                }
+                        });
+        },
+
+        delete_Socket : function (req, res) {
+                console.log(req.options.available_sockets);
+                var countries = {};
+
+                countries.results = [
+                    {id:'AF',name:'Afghanistan'},
+                    {id:'AL',name:'Albania'},
+                    {id:'DZ',name:'Algeria'}
+                ];
+                //example: call the 'remove' function to remove an item by id.
+                removeItem(countries.results,'id','AF');
+
+                //example2: call the 'remove' function to remove an item by name.
+                removeItem(countries.results,'name','Albania');
+
+                // print our result to console to check it works !
+                console.log(countries.results);
+                for(c in countries.results) {
+                    console.log(countries.results[c].id);
+                }
+        },
+
+        findArrayTest : function (req, res) {
+
+                var s_Array = [{notifyContact : 0}, {notifyContact : 1}];
+                /*//User.find({notifyContact: [0,1]}).exec(function (err, results) {   //Possible
+                //User.find({notifyContact: 1}).exec(function (err, results) {       //Possible
+                User.find(s_Array).exec(function (err, results) {
+                       console.log();
+                    if(err){
+                            console.log(err);
+                    }else{
+                            console.log("SSSSSSSSSSSSSSSSSSSSSSSSS");
+                            console.log(results);
+                            console.log(results.length);
+                    }
+                });*/
+
+                User.findOne({notifyContact: 1}).exec(function (err, results) {
+                        console.log();
+                        if(err){
+                                console.log(err);
+                        }else{
+                                console.log("SSSSSSSSSSSSSSSSSSSSSSSSS");
+                                console.log(results);
+                                console.log(results.length);
+                        }
+                });
+        },
+
+
+
+
+         /* ==================================================================================================================================
+               TEST PUSH NOTIFICATION
+        ==================================================================================================================================== */
+
+        testTag: function (req, res) {
+                    var taggedUserArray = ['145','127'];
+
+                    deviceId_arr    = [];
+                    ntfn_body       = "test push";
+                    device_type     = req.get('device_Type');
+                    User_token.find({userId: taggedUserArray})
+                        .exec(function (err, response) {
+
+                            response.forEach(function(factor, index){
+
+                                    deviceId_arr.push(factor.deviceId);
+
+
+                            });
+                            console.log(JSON.stringify(deviceId_arr))
+                            if(deviceId_arr.length!=0)
+                            {
+                                    var data      = {device_id:deviceId_arr,NtfnBody:ntfn_body};
+
+
+                                    var switchKey   =  device_type;
+                                    switch(switchKey){
+                                            case 'ios' :
+                                                        NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+                                                            if(err)
+                                                            {
+                                                                console.log("Error in Push Notification Sending")
+                                                                console.log(err)
+                                                                //callback();
+                                                            }
+                                                            else
+                                                            {
+                                                                console.log("Push notification result")
+                                                                console.log(ntfnSend)
+                                                                console.log("Push Notification sended")
+                                                                //callback();
+                                                                return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+                                                            }
+                                                        });
+                                            break;
+
+                                            case 'android' :
+                                                        NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+                                                            if(err)
+                                                            {
+                                                                console.log("Error in Push Notification Sending")
+                                                                console.log(err)
+                                                                //callback();
+                                                            }
+                                                            else
+                                                            {
+                                                                console.log("Push notification result")
+                                                                console.log(ntfnSend)
+                                                                console.log("Push Notification sended")
+                                                                //callback();
+                                                                return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
+                                                            }
+                                                        });
+                                            break;
+
+                                            default:
+                                                        return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceType'});
+                                            break;
+
+
+                                    }
+
+
+
+                            }
+                            else
+                            {
+                                return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No deviceId'});
+                            }
+
+                        });
+
+
+
+
+
+
+        },
+
+        /* ==================================================================================================================================
+               SEC-SOCKET TEST
+        ==================================================================================================================================== */
+
+
+        testSocket: function (req, res) {
+            console.log("=============testsocket starttttttttt-====================")
+            console.log(sails.sockets.getId(req));
+
+
+                        console.log("=============testsocket endddddddddd-====================")
+
+
+        console.log("==================blast================")
+        //sails.sockets.broadcast('artsAndEntertainment', { greeting: 'Hola!' });
+        sails.sockets.blast('aaaaaaaaaaaa', {
+                  msg: 'User just logged in.'
+                });
+                /*sails.sockets.blast( {
+                  msg: 'User message.'
+                });*/
+        console.log(req.isSocket)
+        console.log("==================end blast================")
+
+              console.log("------------request")
+              //console.log(req)
+              var roomName = 'socket_user_90';
+             console.log("ggggggggggggggggggggggggggggggggggggg")
+             sails.sockets.join(req, roomName, function(err) {
+                  console.log(roomName)
+              });
+              console.log(sails.sockets.rooms());
+            console.log(sails.sockets.subscribers(roomName))
+            sails.sockets.broadcast(roomName, { greeting: 'haiiiiiiiiiiiiiiiiiiiii am hereeeeeeeeeeeeeee!' });
+        },
+        imageResizes: function (req, res) {
+                    var im = require('imagemagick');
+                    im.readMetadata('assets/images/collage/abc.jpg', function(err, metadata){
+                      if (err) throw err;
+                      //console.log('Shot at '+metadata.exif.dateTimeOriginal);
+                      console.log(metadata);
+                    });
+        },
+        testInsertion: function (req, res) {
+
+            console.log("testing insertion")
+
+            var contact_name = ' \'*533*2#';
+
+            var formatted_name = contact_name.replace(/"/g, '\\"');
+            //var formatted_name1 = contact_name.replace(/'/g, '\\"');
+            var formatted_name1 = contact_name.replace(/'/g, "\\'");
+            console.log(formatted_name)
+            console.log(formatted_name1)
+
+        },
+
+
+        /* ==================================================================================================================================
+               SEC-SOCKET TEST
+        ==================================================================================================================================== */
+        contactAddressInsert: function (req, res) {
+
+                        var phonecontacts     = [
+                                                    {name   :   'Thomas Jacob1',    number  :   '9745875212'},
+                                                    {name   :   'Thomas Jacob2',    number  :   '9745875213'},
+                                                    {name   :   'Thomas Jacob3',    number  :   '9745875214'},
+                                                    {name   :   'Thomas Jacob4',    number  :   '9745875215'},
+                                                    {name   :   'Thomas Jacob5',    number  :   '9745875216'},
+                                                    {name   :   'Thomas Jacob6',    number  :   '9745875217'}
+                                                ];
+
+
+                        console.log("phonecontacts ========= Before parse");
+                        console.log(phonecontacts);
+
+                        phonecontacts  =  phonecontacts.toString();
+                        console.log("phonecontacts ========= To String");
+                        console.log(phonecontacts);
+
+                        console.log("phonecontacts ========= After parse");
+                        console.log(JSON.parse(phonecontacts));
+                        var phoneContactsArray  =  [];
+                        var userId              =  1;
+                        phonecontacts.forEach(function(factor, index){
+                                var contact_name = factor.name;
+                                //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
+                                var formatted_name = contact_name.replace(/'/g, "\\'");
+
+                                phoneContactsArray.push("("+userId+",'"+formatted_name+"', '"+factor.number+"', now(), now())");
+                        });
+
+                        console.log(phoneContactsArray);
+
+        },
+
+         /* ==================================================================================================================================
+               Image Magick
+        ==================================================================================================================================== */
+        imagemagick: function (req, res) {
+                console.log("contactAddressInsert  ====== mage magick");
+                //var im = require('imagemagick');
+                var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+                var imageSrc                    =     profilePic_path_assets +'imageTest.png';
+                var ext                         =     imageSrc.split('/');
+                ext                             =     ext[ext.length-1].split('.');
+                var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+
+                console.log(imageSrc);
+                fs.exists(imageSrc, function(exists) {
+                        if (exists) {
+                                console.log("Image exists");
+                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+                                    if(err)
+                                    {
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in image resize', error_details: err});
+
+                                    }else{
+                                            console.log(imageResizeResults);
+                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+
+                                    }
+                                });
+                        }else{
+                                console.log("Image not exists");
+                                return res.json(200, {status: 1, status_type: 'Success' , message: 'passed Image not exists'});
+                        }
+                });
+        },
 
 };
+
 

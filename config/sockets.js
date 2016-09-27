@@ -106,13 +106,57 @@ module.exports.sockets = {
   * app's security.                                                          *
   *                                                                          *
   ***************************************************************************/
-  // beforeConnect: function(handshake, cb) {
-  //   // `true` allows the connection
-  //   return cb(null, true);
-  //
-  //   // (`false` would reject the connection)
-  // },
+  /* beforeConnect: function(handshake, cb) {
+          //   // `true` allows the connection
+          //   return cb(null, true);
+          //
+          //   // (`false` would reject the connection)
+          console.log("beforeConnect Connect +++++++++++++++");
+          var id = '/#'+handshake.headers.cookie.split(';')[0].replace(/^io=/,'');
+          console.log(id);
+            // `true` allows the connection
+            return cb(null, true);
+   },
 
+    onConnect: function(socket, cb) {
+         // By default: do nothing.
+         //return cb();
+         console.log("On Connect  ");
+         //console.log(session);
+
+         //console.log(socket);
+    },*/
+
+    //onConnect: function (socket, session, req) {
+    /*onConnect: function (handshake, socket, cb) {
+            //var currentSocketId;
+            console.log("On connect entered  =====>>>>>   ");
+            //console.log(socket.getId());
+            //console.log(handshake);
+            //console.log(socket);
+            //console.log(socket.nsp);
+            // --console.log(socket.nsp.sockets);
+            //console.log(socket.nsp.sockets.Socket.id);
+            //console.log(socket.sockets);
+            //console.log(socket.sockets.conn.Socket.id);
+            //console.log(handshake.conn);
+             //console.log(handshake.conn.Socket.conn.Socket.id);
+            console.log(sails.sockets.getId(socket));
+            console.log("socket Rooms");
+            console.log(sails.sockets.rooms(socket));
+            //var currentSocketId = sails.sockets.getId(socket);
+            console.log("||||||||||||||||||||||||||");
+            //console.log(currentSocketId);
+            console.log(sails.sockets.getId(socket));
+            console.log("===================||||||||||||||||||||||||||=================");
+
+
+            //var currentSocketId  = socket.currentSocketId;
+            //req.session.socket_id = sails.sockets.getId(socket);
+            //socket.on('some_event', function(data) {
+                // handle event here
+            //});
+    },*/
 
   /***************************************************************************
   *                                                                          *
@@ -122,10 +166,28 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-  // afterDisconnect: function(session, socket, cb) {
-  //   // By default: do nothing.
-  //   return cb();
-  // },
+   afterDisconnect: function(session, socket, cb) {
+
+            //afterDisconnect: function(session, socket, cb) {
+                 // By default: do nothing.
+                // return cb();
+           // },
+
+            console.log("After DisConnect");
+            //console.log(session);
+            console.log(sails.sockets.getId(socket));
+            console.log("socket Rooms");
+            //console.log(sails.sockets.rooms(socket));
+            //console.log(socket);
+   },
+
+  /* onDisconnect: function (session, socket, cb) {
+            console.log("On connect entered  =====>>>>>   ");
+            //console.log(socket.nsp.sockets);
+            //console.log(sails.sockets.getId(socket));
+            //console.log("socket Rooms");
+            //console.log(sails.sockets.rooms(socket));
+    }*/
 
   /***************************************************************************
   *                                                                          *
@@ -136,6 +198,6 @@ module.exports.sockets = {
   * transport should be disabled.                                            *
   *                                                                          *
   ***************************************************************************/
-  // transports: ["polling", "websocket"]
+   //transports: ["polling", "websocket"]
 
 };

@@ -5,595 +5,738 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var util = require('util');
+var util 		= require('util');
+var fs          = require('fs');
 
 module.exports = {
-	
-	  /* ==================================================================================================================================
+
+      /* ==================================================================================================================================
                 Edit Notification Settings
-	   ==================================================================================================================================== */
-	
-	      notificationSettings: function(req, res) {
-			  
+       ==================================================================================================================================== */
+
+          notificationSettings: function(req, res) {
+
                     console.log("Notification Settingssssssssssss")
-					var notifyOpinion	=	req.param('opinion');
-					var notifyVote		=	req.param('vote');
-					var notifyComment	=	req.param('comment');
-					var notifyContact	=	req.param('contact');
-					var token			= 	req.get('token');
-					console.log(token)
-					console.log(req.param('opinion'))
-					console.log(req.param('vote'))
-					console.log(req.param('comment'))
-					console.log(req.param('contact'))
-					
-					if(token!=undefined)
-					{
-						User_token.findOne({token: token}).exec(function (err, results){
-							if (err) {
-										sails.log("jguguu"+err);
-										return res.json(200, {status: 2, status_type: 'Failure' ,msg: 'Some error occured in finding userId', error_details: err});
-									}
-									else{
-										
-											sails.log(results.userId)
-										
-											var data     = {notifyOpinion:notifyOpinion, notifyVote:notifyVote,notifyComment:notifyComment,notifyContact:notifyContact};
-											var criteria = {id: results.userId};
-																					
-											User.update(criteria, data).exec(function(err, updatedUser) {
-												if(err) 
-												{
-													console.log(err)
-													return res.json(200, {status: 2, status_type: 'Failure' ,msg: 'Some error occured in Updation', error_details: err});
-												}
-												else
-												{
-													console.log(updatedUser[0])
-													return res.json(200, {status: 1, status_type: 'Success' ,msg: 'Settings updated Successfully',opinion:updatsssedUser[0].notifyOpinion,vote:updatedUser[0].notifyVote,comment:updatedUser[0].notifyComment,contact:updatedUser[0].notifyContact});
-													
-												}
-										    });
-										
-										
-									}
-						});	
-					}		
-					else
-					{
-						console.log("token required")
-						return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Token Missing in Request'});
-					}
-					
-			  
-			  
-		  },
-	
-	
-	
-	
-	 /* ==================================================================================================================================
+                    var notifyOpinion   =   req.param('opinion');
+                    var notifyVote      =   req.param('vote');
+                    var notifyComment   =   req.param('comment');
+                    var notifyContact   =   req.param('contact');
+                    var token           =   req.get('token');
+                    console.log(token)
+                    console.log(req.param('opinion'))
+                    console.log(req.param('vote'))
+                    console.log(req.param('comment'))
+                    console.log(req.param('contact'))
+
+                    if(token!=undefined)
+                    {
+                        User_token.findOne({token: token}).exec(function (err, results){
+                            if (err) {
+                                        sails.log("jguguu"+err);
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,msg: 'Some error occured in finding userId', error_details: err});
+                                    }
+                                    else{
+
+                                            sails.log(results.userId)
+
+                                            var data     = {notifyOpinion:notifyOpinion, notifyVote:notifyVote,notifyComment:notifyComment,notifyContact:notifyContact};
+                                            var criteria = {id: results.userId};
+
+                                            User.update(criteria, data).exec(function(err, updatedUser) {
+                                                if(err)
+                                                {
+                                                    console.log(err)
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,msg: 'Some error occured in Updation', error_details: err});
+                                                }
+                                                else
+                                                {
+                                                    console.log(updatedUser[0])
+                                                    return res.json(200, {status: 1, status_type: 'Success' ,msg: 'Settings updated Successfully',opinion:updatedUser[0].notifyOpinion,vote:updatedUser[0].notifyVote,comment:updatedUser[0].notifyComment,contact:updatedUser[0].notifyContact});
+
+                                                }
+                                            });
+
+
+                                    }
+                        });
+                    }
+                    else
+                    {
+                        console.log("token required")
+                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Token Missing in Request'});
+                    }
+
+
+
+          },
+
+     /* ==================================================================================================================================
                 Notification API
-	   ==================================================================================================================================== */
+       ==================================================================================================================================== */
 
-		
-		notification: function(req, res) {
-			
-			
-						console.log("Notification API")
-						console.log(req.options.file_path.profilePic_path)
-						var tokenCheck          =     req.options.tokenCheck;
-						var user_id				= 	  tokenCheck.tokenDetails.id;
-						var server_baseUrl  	=     req.options.server_baseUrl;
-						var profilePic_path	    =     server_baseUrl + req.options.file_path.profilePic_path;
-						var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
 
-						
-						notificationVoted 		= "";
-						notificationCommented 	= "";
-						notificationSignup		= "";
-						notifyVoteArray	   		= [];
-						notifyCmntArray			= [];
-						
-							/*var query = "(SELECT 
-									N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,
-									U.name,U.profilePic as profile_image,
-									FROM
-									notificationLog as N LEFT JOIN user as U ON U.id = N.userId 
-									WHERE
-									N.ditherUserId='"+user_id+"' AND
-									(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)
-									OR 
-									FIND_IN_SET('"+user_id+"', N.tagged_users))"*/
-						
-						
-						var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,C.image as dither_image from notificationLog as N LEFT JOIN user as U ON U.id = N.userId LEFT JOIN collage as C ON C.id = N.collage_id where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
-						//var query = "SELECT N.userId,N.ditherUserId,U.name,U.profilePic as profile_image,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description from notificationLog as N LEFT JOIN user as U ON U.id = N.userId where N.ditherUserId='"+user_id+"' AND (N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)   OR FIND_IN_SET('"+user_id+"', N.tagged_users)"
-						console.log(query)
-						NotificationLog.query(query, function(err,results) {
-							
-							if(err)
-							{
-								console.log(err)
-							}
-							else
-							{
-								console.log(results.length)
-								
-								if(typeof results != 'undefined' && results.length!=0)
-								{
-								    
-									async.forEach(results, function (item, callback){ 
-									if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4)	
-										{
-										  //----------Comment Notification---------------------------
-										  
-										  if(item.notificationTypeId==3) 
-										  {
-											  
-											//  console.log(item.description)
-											  NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
-									
-													if(err)
-													{		
-														console.log(err)
-														callback(true,ntfnTypeFound );
-													}	
-													else
-													{
-														
-														console.log(item)
-														notificationCommented = "No notification Found for comments";
-														console.log("77777777777777777777777777777777777777777777777")
-														console.log(ntfnTypeFound)
-														var notification	= ntfnTypeFound[0].body;
-														item.description 	= item.description - 1;
-														console.log(notification)
-													    ntfn_body  			= 	util.format(notification,item.name,item.description);
-													    item.ntfn_body		=	ntfn_body;
-													    item.type			=	ntfnTypeFound[0].type;
-													    item.profile_image	=	profilePic_path + item.profile_image;
-													    item.dither_image	=	collageImg_path + item.dither_image;
-														if(item.description==0)
-													    {
-															console.log("commenteddd")
-															notificationCommented = item.name + " commented on your Dither";
-															item.ntfn_body		  =	notificationCommented;
-														}
-														else
-														{
-														 notificationCommented =  ntfn_body;
-														 notifyCmntArray	   = [];
-														 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
-														 console.log(notifyCmntArray)
-														 
-														 //notifyCmntArray.push(ditherId:item.collage_id,userId:ditherUserId)
-													    }
-														
-														callback();						
+        notification: function(req, res) {
 
-													}
-							
-												});
-										  }
-										  else if(item.notificationTypeId==2)
-										      {
-												  
-												  console.log("vote?????????")
-												  NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
-									
-														if(err)
-														{		
-															console.log(err)
-															callback(true,ntfnTypeFound );
-														}	
-														else
-														{
-									
-															console.log(item.description)
-															
-															console.log(ntfnTypeFound)
-															var notification	= ntfnTypeFound[0].body;
-															console.log(notification)
-															item.description	= item.description - 1;
-															ntfn_body  			= util.format(notification,item.name,item.description);
-															item.ntfn_body		=	ntfn_body;
-															item.type			=	ntfnTypeFound[0].type;
-															item.profile_image	=	profilePic_path + item.profile_image;
-															item.dither_image	=	collageImg_path + item.dither_image;
-															if(item.description==0)
-															{
-															  notificationVoted = item.name + " voted on your Dither";
-															  item.ntfn_body	= notificationVoted;
-															}
-															else
-															{
-																notificationVoted  	=  ntfn_body;
-																notifyVoteArray	    = [];
-																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																console.log(notifyVoteArray)
-															}	
-															//notifyVoteArray.push(ditherId:item.collage_id,userId:ditherUserId)
-															callback();	
-															
-															 
-																				
 
-														}
-										
-													});
-												  
-												  
-											  }
-											  else if(item.notificationTypeId==4)
-											  {
-												  console.log("signuppp")
-												  NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
-										
-														if(err)
-															{		
-																console.log(err)
-																callback(true,ntfnTypeFound );
-															}	
-														else
-															{
-																	console.log(ntfnTypeFound)
-																	var notification	= ntfnTypeFound[0].body;
-																	console.log(notification)
-																	ntfn_body  			= util.format(notification,item.name);
-																	item.ntfn_body		=	ntfn_body;
-																	item.type			=	ntfnTypeFound[0].type;
-																	item.profile_image	=	profilePic_path + item.profile_image;
-																	item.dither_image	=	collageImg_path + item.dither_image;
-																	console.log(ntfn_body)
-																	notificationSignup  =  ntfn_body;
-																	callback();							
+                console.log("Notification API")
+                console.log(req.options.file_path.profilePic_path)
+                var tokenCheck             =     req.options.tokenCheck;
+                var user_id                =     tokenCheck.tokenDetails.id;
+               // var server_baseUrl       =     req.options.server_baseUrl;
+                var server_baseUrl         =     req.options.server_baseUrl;
+                var server_image_baseUrl   =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path        =     server_baseUrl + req.options.file_path.profilePic_path;
+                var collageImg_path        =     server_baseUrl + req.options.file_path.collageImg_path;
+                var profilePic_path_assets =     req.options.file_path.profilePic_path_assets;
+                var device_id              =     tokenCheck.tokenDetails.deviceId;
+                var device_type            =     req.get('device_type');
 
-															}
-															
-													});
-												  
-												  
-											  }
-											  else if(item.notificationTypeId==1)
-											 {
-												
-												//var query = "SELECT * FROM `notificationLog` WHERE `ditherUserId`='"+user_id+"' AND FIND_IN_SET('"+user_id+"', `tagged_users`)"
-												
-												NotificationLog.query(query, function(err,data) {
-													if(err)
-													{
-														console("error")
-													}
-													else
-													{
-														console.log(data)
-													}
-												});
-												
-												
-												 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
-									
-															if(err)
-															{		
-																console.log(err)
-															}	
-															else
-															{
-										
-																console.log(item.description)
-																console.log(ntfnTypeFound)
-																var notification	= ntfnTypeFound[0].body;
-																console.log(notification)
-																var ntfn_body  		= util.format(notification,item.description);
-																item.type			=	ntfnTypeFound[0].type;
-																item.ntfn_body		=	ntfn_body;
-																item.profile_image	=	profilePic_path + item.profile_image;
-																item.dither_image	=	collageImg_path + item.dither_image;
-																console.log(item.profile_image)
-																console.log(ntfn_body)
-																notificationTagged  =  ntfn_body;
-																callback();						
+                notificationVoted          =     "";
+                notificationCommented      =     "";
+                notificationSignup         =     "";
+                notifyVoteArray            =     [];
+                notifyCmntArray            =     [];
 
-															}
-										
-												});
-												 
-									
-											 }
-											  
-											  
-										}	
-										else
-										{
-											callback();
-										}
-										
-									}, function(err) {
-								
-										return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
-									});
-								
-							}
-							else
-								{
-									return res.json(200, {status: 2,status_type:"Failure",msg: 'No notification found'});
-								}
-							}
-						});
-						
-						/*console.log("+++++++++++++++++++++++++")
-						console.log(tokenCheck)
-						console.log(tokenCheck.tokenDetails.id)
-						var user_id	= tokenCheck.tokenDetails.id;
-						
-						async.series([
-						
-								function(callback) {    
-										  
-										  
-									async.parallel([
-										  
-										  function(callback) {
-														//---Notification-signup---
+                var page_type              =     req.param("page_type");
+                var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
+                var data_view_limit        =     req.options.global.data_view_limit;
 
-														var query	=  "SELECT N.ditherUserId,U.name,U.profilePic,U.phoneNumber,U.email,U.fbId,N.createdAt,N.updatedAt from notificationLog as N LEFT JOIN user as U ON N.ditherUserId = U.id where N.ditherUserId='"+user_id+"'";
+                /*if(!focus_Ntfn_id){
+                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});
+                        var query   =   " SELECT"+
+                                        " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+                                        " U.name,U.profilePic as profile_image,"+
+                                        " C.image as dither_image"+
+                                        " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                        " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                        " WHERE"+
+                                        " N.ditherUserId="+user_id+
+                                        " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
+                                        " OR "+
+                                        " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT 10";
+                }
+                else
+                {*/
 
-														NotificationLog.query(query, function(err, NtfnResult) {
-							
-																console.log("hhhhhhhhhhhh")
-																if(err)
-																{
-																	console.log(err)
-																	callback(true, {status: 2, status_type: 'Failure' ,message: 'Notification Not found'});
-																}
-																else
-																{
-																		if(NtfnResult.length!=0)
-																		{
-																			console.log("Notification Found")
-																			console.log(NtfnResult)		
-																			var username		= NtfnResult[0].name;
-																			var profile_image	= NtfnResult[0].profilePic;
-																			var phoneNumber		= NtfnResult[0].phoneNumber;
-																			var email			= NtfnResult[0].email;
-																			var fbId			= NtfnResult[0].fbId;
-																			NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
-										
-																				if(err)
-																					{		
-																						console.log(err)
-																					}	
+
+                  if(focus_Ntfn_id == 0||!focus_Ntfn_id){
+
+                    var query   =   " SELECT"+
+                                        " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+                                        " U.name,U.profilePic as profile_image,"+
+                                        " C.image as dither_image"+
+                                        " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                        " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                        " WHERE"+
+                                        " N.ditherUserId="+user_id+
+                                        " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
+                                        " OR "+
+                                        " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT 10";
+
+                  }
+                  else
+                  {
+                     var query  =   " SELECT"+
+                                    " * FROM"+
+                                    " ("+
+                                    " SELECT"+
+                                    " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+                                    " U.name,U.profilePic as profile_image,C.image as dither_image"+
+                                    " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                    " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                    " WHERE"+
+                                    " N.ditherUserId="+user_id+
+                                    " OR"+
+                                    " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
+                                    ") as temp"+
+                                    " where temp.id <"+focus_Ntfn_id+
+                                    " LIMIT 10";
+
+                    //--------------------------------------------------------------------
+                  }
+
+                        console.log(query)
+                        NotificationLog.query(query, function(err,results) {
+
+                            if(err)
+                            {
+                                console.log(err)
+                            }
+                            else
+                            {
+                                console.log(results.length)
+
+                                if(typeof results != 'undefined' && results.length!=0)
+                                {
+
+                                    async.forEach(results, function (item, callback){
+                                    if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4)
+                                        {
+                                          //----------Comment Notification---------------------------
+
+                                          if(item.notificationTypeId==3)
+                                          {
+
+                                            //  console.log(item.description)
+                                              NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
+
+                                                    if(err)
+                                                    {
+                                                        console.log(err)
+                                                        callback(true,ntfnTypeFound );
+                                                    }
+                                                    else
+                                                    {
+
+                                                            console.log(item)
+                                                            notificationCommented = "No notification Found for comments";
+                                                            var notification    = ntfnTypeFound[0].body;
+                                                            item.description    = item.description - 1;
+                                                            console.log(notification)
+                                                            ntfn_body           =   util.format(notification,item.description);
+                                                            item.ntfn_body      =   ntfn_body;
+                                                            item.type           =   ntfnTypeFound[0].type;
+                                                             var imageToResize	=   item.profile_image;
+                                                            item.profile_image  =   profilePic_path + item.profile_image;
+                                                            item.dither_image   =   collageImg_path + item.dither_image;
+                                                            
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		item.resized_image				=	  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					console.log("Resized Image Exists")
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					 if(item.description<=0)
+																						{
+																							console.log("commenteddd")
+																							notificationCommented = " commented on your Dither";
+																							item.ntfn_body        = notificationCommented;
+																							callback();
+																						}
+																						else
+																						{
+																								 console.log("77777777777777777777777777777777777777777777777")
+																								 notificationCommented =  ntfn_body;
+																								 notifyCmntArray       = [];
+																								 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																								 console.log(notifyCmntArray)
+																								 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																								 callback();
+																						}
+																					
+																					
+																				}
 																				else
-																					{
-																							console.log(ntfnTypeFound)
-																							var notification	= ntfnTypeFound[0].body;
-																							console.log(notification)
-																							var ntfn_body  		= util.format(notification,username);
-																							console.log(ntfn_body)
-																					        notificationSignup  =  ntfn_body;
-																							callback();							
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								if(item.description<=0)
+																								{
+																									console.log("commenteddd")
+																									notificationCommented = " commented on your Dither";
+																									item.ntfn_body        = notificationCommented;
+																									callback();
+																								}
+																								else
+																								{
+																										 console.log("77777777777777777777777777777777777777777777777")
+																										 notificationCommented =  ntfn_body;
+																										 notifyCmntArray       = [];
+																										 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																										 console.log(notifyCmntArray)
+																										 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																										 callback();
+																								}
+
+
+																						}
+																					});
+																				}	
+																			});	
+
+																		}else{
+																				console.log("Image not exists");
+																				if(item.description<=0)
+																				{
+																					console.log("commenteddd")
+																					notificationCommented = " commented on your Dither";
+																					item.ntfn_body        = notificationCommented;
+																					callback();
+																				}
+																				else
+																				{
+																						 console.log("77777777777777777777777777777777777777777777777")
+																						 notificationCommented =  ntfn_body;
+																						 notifyCmntArray       = [];
+																						 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																						 console.log(notifyCmntArray)
+																						 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																						 callback();
+																				}
+																				
+																			}
+                                                                    });
+
+
+                                                            //------------------------------------------------------------------------------------------------------
+
+   
+                                                            
+                                                    }
+
+                                                });
+                                          }
+                                          else if(item.notificationTypeId==2)
+                                              {
+
+                                                  console.log("vote?????????")
+                                                  NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
+
+                                                        if(err)
+                                                        {
+                                                            console.log(err)
+                                                            callback(true,ntfnTypeFound );
+                                                        }
+                                                        else
+                                                        {
+
+                                                            console.log(item.description)
+
+                                                            console.log(ntfnTypeFound)
+                                                            var notification    = ntfnTypeFound[0].body;
+                                                            console.log(notification)
+                                                            item.description    = item.description - 1;
+                                                            ntfn_body           = util.format(notification,item.description);
+                                                            item.ntfn_body      =   ntfn_body;
+                                                            item.type           =   ntfnTypeFound[0].type;
+                                                            var imageToResize	=   item.profile_image;
+                                                            item.profile_image  =   profilePic_path + item.profile_image;
+                                                            item.dither_image   =   collageImg_path + item.dither_image;
+                                                            
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		item.profile_image				=	  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					console.log("Resized Image Exists")
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					 if(item.description<=0)
+																						{
+																						  notificationVoted  = " voted on your Dither";
+																						  item.ntfn_body     = notificationVoted;
+																						  callback();
+																						}
+																						else
+																						{
+
+																							notificationVoted   =  ntfn_body;
+																							notifyVoteArray     = [];
+																							notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																							console.log(notifyVoteArray)
+																							callback();
+																						}
+																					
+																					
+																				}
+																				else
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								 if(item.description<=0)
+																								{
+																								  notificationVoted  = " voted on your Dither";
+																								  item.ntfn_body     = notificationVoted;
+																								  callback();
+																								}
+																								else
+																								{
+
+																									notificationVoted   =  ntfn_body;
+																									notifyVoteArray     = [];
+																									notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																									console.log(notifyVoteArray)
+																									callback();
+																								}
+
+
+																						}
+																					});
+																				}	
+																			});	
+
+																		}else{
+																				console.log("Image not exists");
+																				if(item.description<=0)
+																				{
+																				  notificationVoted  = " voted on your Dither";
+																				  item.ntfn_body     = notificationVoted;
+																				  callback();
+																				}
+																				else
+																				{
+
+																					notificationVoted   =  ntfn_body;
+																					notifyVoteArray     = [];
+																					notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																					console.log(notifyVoteArray)
+																					callback();
+																				}
+
+																			}
+                                                                    });
+
+
+																	//------------------------------------------------------------------------------------------------------
+
+                                                           
+                                                        }
+
+                                                    });
+
+
+                                              }
+                                              else if(item.notificationTypeId==4)
+                                              {
+                                                  console.log("signuppp")
+                                                  NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
+
+                                                        if(err)
+                                                            {
+                                                                console.log(err)
+                                                                callback(true,ntfnTypeFound );
+                                                            }
+                                                        else
+                                                            {
+                                                                    console.log(ntfnTypeFound)
+                                                                    var notification    = ntfnTypeFound[0].body;
+                                                                    console.log(notification)
+                                                                    ntfn_body           = util.format(notification);
+                                                                    item.ntfn_body      =   ntfn_body;
+                                                                    item.type           =   ntfnTypeFound[0].type;
+                                                                    var imageToResize	=   item.profile_image;
+                                                                    item.profile_image  =   profilePic_path + item.profile_image;
+                                                                    item.dither_image   =   collageImg_path + item.dither_image;
+                                                                    console.log(ntfn_body)
+                                                                    notificationSignup  =  ntfn_body;
+                                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																		var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+																		fs.exists(imageSrc, function(exists) {
+																				if (exists) {
+
+																				console.log("Image exists");
+
+																				var ext                         =     imageSrc.split('/');
+																				ext                             =     ext[ext.length-1].split('.');
+																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];		
+																				console.log(imageSrc)
+																				console.log(imageDst)
+																				 fs.exists(imageDst, function(exists) {
+																					 if (exists) {
+																							console.log("Resized Image Exists")
+																							item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																							 callback();
+																						
+																						}
+																						else
+																						{
+
+																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																								if(err)
+																								{
+																										console.log(err);
+																										callback();
+																										
+																								}else{
+																										 console.log(imageResizeResults);
+																										 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																										 console.log("8888888888888888888888"+item.resized_image)
+																										 callback();
+																										// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																										
+
+
+																								}
+																							});
+																						}	
+																					});	
+
+																				}else{
+																						console.log("Image not exists");
+																						callback();
 
 																					}
-										
-																				});
-                                    
-                                    									
-																		}
-																}
-							
-														});
-												},	
-												function(callback) {
-													
-													//-----------Notification For Tagged In Users----------------------------------
-						
-													var query = "SELECT N.ditherUserId,N.`tagged_users`,N.`collage_id`,N.description,N.createdAt,N.updatedAt FROM `notificationLog` as N INNER JOIN user as U ON U.id = N.userId where N.`ditherUserId` = '"+user_id+"'";
-													console.log(query)
-													NotificationLog.query(query, function(err, NtfnTagResult) {
-							
-													if(err)
-													{		
-														console.log(err)
-														callback(true, {status: 2, status_type: 'Failure' ,message: 'Notification Not found'});
-													}
-													else
-													{
+																			});
 
-														console.log(NtfnTagResult[0].description)
-														
-														NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
-									
-																if(err)
-																{		
-																	console.log(err)
-																}	
-																else
-																{
-											
-																	console.log(NtfnTagResult[0].description)
-																	console.log(ntfnTypeFound)
-																	var notification	= ntfnTypeFound[0].body;
-																	console.log(notification)
-																	var ntfn_body  		= util.format(notification,NtfnTagResult[0].description);
-																	console.log(ntfn_body)
-																	notificationTagged  =  ntfn_body;
-																	callback();						
 
-																}
-										
-														});
-								
-								
-													}
-												});
-													
-															
-											},
-											
-											function(callback) {
-													
-													//-----------Notification For UserVotes----------------------------------
-													
-													var query ="SELECT  N.userId,N.ditherUserId,N.description,N.collage_id,U.name FROM `notificationLog` as N LEFT JOIN user as U ON N.userId = U.id WHERE N.ditherUserId = '"+user_id+"' AND N.id=(SELECT MAX(id) from notificationLog)"
-													NotificationLog.query(query, function(err, NtfnVoteResult) {
-														
-														
-														if(err)
-														{		
-															console.log(err)
-															callback(true, {status: 2, status_type: 'Failure' ,message: 'Notification Not found'});
-														}
-														else
-														{
-															console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-															console.log(NtfnVoteResult[0].name)
-														   
-														   
-														
-														
-														
-															NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
-									
-																if(err)
-																{		
-																	console.log(err)
-																}	
-																else
-																{
-											
-																	console.log(NtfnVoteResult[0].description)
-																	console.log(ntfnTypeFound)
-																	var notification	= ntfnTypeFound[0].body;
-																	console.log(notification)
-																	var ntfn_body  		= util.format(notification,NtfnVoteResult[0].name,NtfnVoteResult[0].description-1);
-																	console.log(ntfn_body)
-												
-																	if(NtfnVoteResult[0].description!=1)
-																	{
-																		notificationVoted  =  ntfn_body;
-																	}
-																	else
-																	{
-																		notificationVoted = NtfnVoteResult[0].name +" likes your Dither";
-																	}
-																	callback();						
+																	//------------------------------------------------------------------------------------------------------
 
-																}
-										
-															});
-								
-								
-														}
-														
-														
 
-													});
-													
-													
-													
-										   },
-										    
-										   function(callback) {
-													
-													//-----------Notification For UserComments----------------------------------
-													
-													var query ="SELECT  N.userId,N.ditherUserId,N.description,N.collage_id,U.name FROM `notificationLog` as N LEFT JOIN user as U ON N.userId = U.id WHERE N.ditherUserId = '"+user_id+"'AND N.id=(SELECT MAX(id) from notificationLog)"
-													NotificationLog.query(query, function(err, NtfnCommentResult) {
-														
-														
-														if(err)
-														{		
-															console.log(err)
-															callback(true, {status: 2, status_type: 'Failure' ,message: 'Notification Not found'});
-														}
-														else
-														{
-															console.log("6666666666666666666666666666666666666666666666")
-															console.log(NtfnCommentResult)
-														   
-														   
-														
-														
-														
-															NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
-									
-																if(err)
-																{		
-																	console.log(err)
-																}	
-																else
-																{
-																	
-																	console.log("77777777777777777777777777777777777777777777777")
-																	console.log(NtfnCommentResult)
-																	console.log(NtfnCommentResult[0].description)
-																	console.log(ntfnTypeFound)
-																	var notification	= ntfnTypeFound[0].body;
-																	console.log(notification)
-																	var ntfn_body  		= util.format(notification,NtfnCommentResult[0].name,NtfnCommentResult[0].description-1);
-																	console.log(ntfn_body)
-												
-																	if(NtfnCommentResult[0].description!=1)
-																	{
-																		notificationCommented =  ntfn_body;
-																	}
-																	else
-																	{
-																		notificationCommented = NtfnCommentResult[0].name +" commented on your Dither";
-																	}
-																	callback();						
+                                                            }
 
-																}
-										
-															});
-								
-								
-														}
-														
-														
+                                                    });
 
-													});
-													
-													
-													
-										   }, 
-										    
-										    
-										   
-										  ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-													if (err) {
-																console.log(err);
-																callback(true, {status: 2, status_type: 'Failure' ,message: 'Notification Not Found'});
-															}else{
-                                                
-																  console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-																  callback();
-																 }
 
-												});
-								
-								}
-							], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                            if (err) {
-                                                console.log(err);
-                                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Notification Not Found', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                              }
+                                              else if(item.notificationTypeId==1)
+                                              {
+
+                                                 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
+
+                                                            if(err)
+                                                            {
+                                                                console.log(err)
+                                                            }
+                                                            else
+                                                            {
+
+                                                                console.log(item.description)
+                                                                console.log(ntfnTypeFound)
+                                                                var notification    = ntfnTypeFound[0].body;
+                                                                console.log(notification)
+                                                                var ntfn_body       = util.format(notification,item.name);
+                                                                item.type           =   ntfnTypeFound[0].type;
+                                                                item.ntfn_body      =   ntfn_body;
+                                                                var imageToResize	=   item.profile_image;
+                                                                item.profile_image  =   profilePic_path + item.profile_image;
+                                                                item.dither_image   =   collageImg_path + item.dither_image;
+                                                                console.log(item.profile_image)
+                                                                console.log(ntfn_body)
+                                                                notificationTagged  =  ntfn_body;
+                                                                
+                                                                // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					console.log("Resized Image Exists")
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					callback();
+																					
+																				}
+																				else
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								callback();
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								callback();
+
+																						}
+																					});
+																				}	
+																			});	
+
+																		}else{
+																				console.log("Image not exists");
+																				callback();
+
+																			}
+                                                                    });
+
+
+																	//------------------------------------------------------------------------------------------------------
+
+
+                                                            }
+
+                                                    });
+
+
+                                                }
+
+
+                                        }
+                                        else
+                                        {
+                                            callback();
+                                        }
+
+                                    }, function(err) {
+
+                                       console.log("resulttt dataaa")
+                                       console.log(results)
+                                        return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
+                                    });
+
+                            }
+                            else
+                                {
+                                    return res.json(200, {status: 2,status_type:"Failure",msg: 'No notification found'});
+                                }
+                            }
+                        });
+
+                //}
+
+        },
+
+    /* ==================================================================================================================================
+                Type Notification API
+    ==================================================================================================================================== */
+
+
+        typeNotification: function(req, res) {
+
+                    var notificationTypeId          =   req.param("notification_type");
+                    var notificationId              =   req.param("notification_id");
+                    console.log(req.params.all());
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                    var query, notification, ntfn_body;
+                    if(!notificationTypeId && !notificationId){
+                           return res.json(200, {status: 2, status_type:"Failure", msg: 'Please pass notification_type and notification_id'});
+                    }else{
+
+                            query = "SELECT ntlg.id, ntlg.notificationTypeId, ntlg.collage_id, ntlg.userId, ntlg.ditherUserId, ntlg.description, ntlg.createdAt,"+
+                                    " usr.name, usr.profilePic,"+
+                                    " clg.image as collageImage"+
+                                    " FROM notificationLog ntlg"+
+                                    " INNER JOIN user usr ON usr.id = ntlg.ditherUserId"+
+                                    " INNER JOIN collage clg ON clg.id = ntlg.collage_id"+
+                                    " WHERE"+
+                                    " ntlg.id = "+notificationId;
+
+                            console.log(query);
+                            NotificationLog.query(query, function(err,results) {
+                                    if(err){
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification'});
+                                    }
+                                    else{
+                                            console.log(results);
+                                            if(results.length == 0){
+                                                    return res.json(200, {status: 2, status_type:"Failure", msg: 'No notification Found'});
                                             }else{
-                                                console.log("Success -----------------------------------------");
-                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Notifications Found',dataSignUp:notificationSignup,dataTag:notificationTagged,dataVote:notificationVoted,dataComment:notificationCommented});
+                                                    NotificationType.findOne({id: notificationTypeId}).exec(function(err, ntfnFoundResults){
+                                                            if(err){
+                                                                    console.log(err);
+                                                                    return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification body/msg'});
+
+                                                            }else{
+                                                                console.log(ntfnFoundResults);
+                                                                user_id                 =   results[0].ditherUserId;
+                                                                var tagged_users            =   [];
+                                                                var switchKey = notificationTypeId;
+                                                                switch(switchKey){
+
+                                                                    case 1:
+                                                                            tagged_users            =   results[0].tagged_users;
+
+                                                                    break;
+
+                                                                    case 2:
+                                                                            notification            =   " voted on your Dither";
+
+                                                                    break;
+
+                                                                    case 3:
+                                                                            notification            =   " commented on your Dither";
+
+                                                                    break;
+
+                                                                    default:
+                                                                            notification            =   ntfnFoundResults.body;
+
+                                                                    break;
+                                                                }
+
+                                                                ntfn_body               =   notification;
+
+                                                                if(results[0].description > 0 || !results[0].description){
+                                                                    notification                =       ntfnFoundResults.body;
+                                                                    results[0].description      =       results[0].description - 1;
+                                                                    ntfn_body                   =       util.format(notification, results[0].description);
+                                                                    console.log(notification);
+                                                                }
+                                                                console.log(ntfn_body);
+                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
+                                                                                      id                    :   notificationId,
+                                                                                      userId                :   results[0].userId,
+                                                                                      ditherUserId          :   results[0].ditherUserId,
+                                                                                      ditherId              :   results[0].collage_id,
+                                                                                      notificationTypeId    :   notificationTypeId,
+                                                                                      createdDate           :   results[0].createdAt,
+                                                                                      image_id              :   results[0].image_id,
+                                                                                      tagged_users          :   tagged_users,
+                                                                                      description           :   results[0].description,
+                                                                                      name                  :   results[0].name,
+                                                                                      profile_image         :   profilePic_path + results[0].profilePic,
+                                                                                      dither_image          :   collageImg_path + results[0].collageImage,
+                                                                                      ntfn_body             :   ntfn_body,
+                                                                                      type                  :   ntfnFoundResults.type,
+                                                                                });
+
+                                                            }
+                                                    });
                                             }
 
-                          });	*/
-						
-						
-							
-					
-					
-					
-				
-			
-		},
-		
+                                    }
+                            });
+                    }
+        }
+
 
 
 };

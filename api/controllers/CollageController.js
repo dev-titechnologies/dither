@@ -217,6 +217,27 @@ module.exports = {
                                 });
                     },
                     function(callback) {
+							 // ------------------------------Generate ThumbnailImage-----------------------------------------------
+							 console.log("generating thumnail image of dither Image")
+								var imageSrc                    =     collageImg_path_assets + collage_results.image;
+								var ext                         =     imageSrc.split('/');
+								ext                             =     ext[ext.length-1].split('.');
+								var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+								console.log(imageSrc);
+								console.log(imageDst);
+								ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+										if(err){
+												console.log(err);
+												console.log("Error in image resize !!!!");
+												callback();
+										}else{
+												console.log(imageResizeResults);
+												callback();
+										}
+								});
+					},
+                    
+                    function(callback) {
                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 if(taggedUserArray.length != 0){
                                         console.log(collage_results);
@@ -452,26 +473,7 @@ module.exports = {
                                     callback();
                                 }
                     },
-                    function(callback) {
-							 // ------------------------------Generate ThumbnailImage-----------------------------------------------
-							 console.log("generating thumnail image of dither Image")
-								var imageSrc                    =     collageImg_path_assets + collage_results.image;
-								var ext                         =     imageSrc.split('/');
-								ext                             =     ext[ext.length-1].split('.');
-								var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-								console.log(imageSrc);
-								console.log(imageDst);
-								ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-										if(err){
-												console.log(err);
-												console.log("Error in image resize !!!!");
-												callback();
-										}else{
-												console.log(imageResizeResults);
-												callback();
-										}
-								});
-					},
+                    
 
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                 if (err) {

@@ -63,9 +63,9 @@ module.exports = {
                                                                                         id              : collageId,
                                                                                         user_id         : userId,
                                                                                         message         : "Comment Dither - Room Broadcast",
-                                                                                        roomName        : roomName,
-                                                                                        subscribers     : sails.sockets.subscribers(roomName),
-                                                                                        socket          : sails.sockets.rooms()
+                                                                                        //roomName        : roomName,
+                                                                                        //subscribers     : sails.sockets.subscribers(roomName),
+                                                                                        //socket          : sails.sockets.rooms()
                                                                                         });
                                                     //-----------Notification log Insertion----------------
                                                     console.log("88888888888888888888888888888")
@@ -105,9 +105,9 @@ module.exports = {
                                                                                                                             id                         :       collageId,
                                                                                                                             user_id                    :       userId,
                                                                                                                             message                    :       "Comment Dither - Room Broadcast - to Creator",
-                                                                                                                            roomName                   :       creator_roomName,
-                                                                                                                            subscribers                :       sails.sockets.subscribers(creator_roomName),
-                                                                                                                            socket                     :       sails.sockets.rooms(),
+                                                                                                                            //roomName                   :       creator_roomName,
+                                                                                                                            //subscribers                :       sails.sockets.subscribers(creator_roomName),
+                                                                                                                            //socket                     :       sails.sockets.rooms(),
                                                                                                                             notification_type          :       3,
                                                                                                                             notification_id            :       createdNotificationTags.id
                                                                                                                             });

@@ -120,9 +120,9 @@ console.log(device_type);
                                                                                                                     id              :   collageId,
                                                                                                                     user_id         :   userId,
                                                                                                                     message         :   "Like Dither - Room Broadcast",
-                                                                                                                    roomName        :   roomName,
-                                                                                                                    subscribers     :   sails.sockets.subscribers(roomName),
-                                                                                                                    socket          :   sails.sockets.rooms()
+                                                                                                                    //roomName        :   roomName,
+                                                                                                                    //subscribers     :   sails.sockets.subscribers(roomName),
+                                                                                                                    //socket          :   sails.sockets.rooms()
                                                                                                                     });
                                                                                     //-----------Notification log Insertion----------------
                                                                                     var values ={
@@ -148,9 +148,9 @@ console.log(device_type);
                                                                                                                                     id                         :       collageId,
                                                                                                                                     user_id                    :       userId,
                                                                                                                                     message                    :       "Like Dither - Room Broadcast - to Creator",
-                                                                                                                                    roomName                   :       creator_roomName,
-                                                                                                                                    subscribers                :       sails.sockets.subscribers(creator_roomName),
-                                                                                                                                    socket                     :       sails.sockets.rooms(),
+                                                                                                                                    //roomName                   :       creator_roomName,
+                                                                                                                                    //subscribers                :       sails.sockets.subscribers(creator_roomName),
+                                                                                                                                    //socket                     :       sails.sockets.rooms(),
                                                                                                                                     notification_type          :       2,
                                                                                                                                     notification_id            :       createdNotificationTags.id
                                                                                                                                     });

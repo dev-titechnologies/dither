@@ -217,7 +217,7 @@ module.exports = {
 																		 fs.exists(imageDst, function(exists) {
 																			 if (exists) {
 																					console.log("Resized Image Exists")
-																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																					 if(item.description<=0)
 																						{
 																							console.log("commenteddd")
@@ -248,7 +248,7 @@ module.exports = {
 																								
 																						}else{
 																								 console.log(imageResizeResults);
-																								 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																								 console.log("8888888888888888888888"+item.resized_image)
 																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
 																								if(item.description<=0)
@@ -345,13 +345,13 @@ module.exports = {
 																		var ext                         =     imageSrc.split('/');
 																		ext                             =     ext[ext.length-1].split('.');
 																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		item.resized_image				=	  		
+																		item.profile_image				=	  		
 																		console.log(imageSrc)
 																		console.log(imageDst)
 																		 fs.exists(imageDst, function(exists) {
 																			 if (exists) {
 																					console.log("Resized Image Exists")
-																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																					 if(item.description<=0)
 																						{
 																						  notificationVoted  = " voted on your Dither";
@@ -380,7 +380,7 @@ module.exports = {
 																								
 																						}else{
 																								 console.log(imageResizeResults);
-																								 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																								 console.log("8888888888888888888888"+item.resized_image)
 																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
 																								 if(item.description<=0)
@@ -469,14 +469,13 @@ module.exports = {
 
 																				var ext                         =     imageSrc.split('/');
 																				ext                             =     ext[ext.length-1].split('.');
-																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																				item.resized_image				=	  		
+																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];		
 																				console.log(imageSrc)
 																				console.log(imageDst)
 																				 fs.exists(imageDst, function(exists) {
 																					 if (exists) {
 																							console.log("Resized Image Exists")
-																							item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																							item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																							 callback();
 																						
 																						}
@@ -491,7 +490,7 @@ module.exports = {
 																										
 																								}else{
 																										 console.log(imageResizeResults);
-																										 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																										 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																										 console.log("8888888888888888888888"+item.resized_image)
 																										 callback();
 																										// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
@@ -557,13 +556,13 @@ module.exports = {
 																		var ext                         =     imageSrc.split('/');
 																		ext                             =     ext[ext.length-1].split('.');
 																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		item.resized_image				=	  		
+																		  		
 																		console.log(imageSrc)
 																		console.log(imageDst)
 																		 fs.exists(imageDst, function(exists) {
 																			 if (exists) {
 																					console.log("Resized Image Exists")
-																					item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																					callback();
 																					
 																				}
@@ -578,7 +577,7 @@ module.exports = {
 																								
 																						}else{
 																								 console.log(imageResizeResults);
-																								 item.resized_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																								 console.log("8888888888888888888888"+item.resized_image)
 																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
 																								callback();

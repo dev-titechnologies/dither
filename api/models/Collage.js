@@ -49,6 +49,11 @@ module.exports = {
         likePosition: {
             type: 'integer',
         },
+         //true means 0 = active, false means 1 = inactive
+        status: {
+            type: 'string',
+            defaultsTo: 'active'
+        },
 
         createdAt: {
             type: 'datetime',

@@ -4,7 +4,7 @@
  * @description :: Server-side logic for managing collagedetails
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+ var fs          = require('fs');
 module.exports = {
 
 /* ==================================================================================================================================

@@ -20,11 +20,16 @@ module.exports = {
 
         file_path : function(req, res, next) {
 
-                        var profilePic_path         = "images/profilePics/";
-                        var collageImg_path         = "images/collage/";
+                        var profilePic_path                =     "images/profilePics/";
+                        var collageImg_path                =     "images/collage/";
+
+                        var profilePic_path_assets         =     "assets/images/profilePics/";
+                        var collageImg_path_assets         =     "assets/images/collage/";
                         req.options.file_path = {
-                                                    profilePic_path     : profilePic_path,
-                                                    collageImg_path     : collageImg_path,
+                                                    profilePic_path         :   profilePic_path,
+                                                    collageImg_path         :   collageImg_path,
+                                                    profilePic_path_assets  :   profilePic_path_assets,
+                                                    collageImg_path_assets  :   collageImg_path_assets,
                                                 };
                         next();
         },

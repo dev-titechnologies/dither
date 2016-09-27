@@ -5,7 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var util = require('util');
+var util 		= require('util');
+var fs          = require('fs');
 
 module.exports = {
 
@@ -79,23 +80,26 @@ module.exports = {
 
                 console.log("Notification API")
                 console.log(req.options.file_path.profilePic_path)
-                var tokenCheck          =     req.options.tokenCheck;
-                var user_id             =     tokenCheck.tokenDetails.id;
-                var server_baseUrl      =     req.options.server_baseUrl;
-                var profilePic_path     =     server_baseUrl + req.options.file_path.profilePic_path;
-                var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
-                var device_id           =     tokenCheck.tokenDetails.deviceId;
-                var device_type         =     req.get('device_type');
+                var tokenCheck             =     req.options.tokenCheck;
+                var user_id                =     tokenCheck.tokenDetails.id;
+               // var server_baseUrl       =     req.options.server_baseUrl;
+                var server_baseUrl         =     req.options.server_baseUrl;
+                var server_image_baseUrl   =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path        =     server_baseUrl + req.options.file_path.profilePic_path;
+                var collageImg_path        =     server_baseUrl + req.options.file_path.collageImg_path;
+                var profilePic_path_assets =     req.options.file_path.profilePic_path_assets;
+                var device_id              =     tokenCheck.tokenDetails.deviceId;
+                var device_type            =     req.get('device_type');
 
-                notificationVoted       =     "";
-                notificationCommented   =     "";
-                notificationSignup      =     "";
-                notifyVoteArray         =     [];
-                notifyCmntArray         =     [];
+                notificationVoted          =     "";
+                notificationCommented      =     "";
+                notificationSignup         =     "";
+                notifyVoteArray            =     [];
+                notifyCmntArray            =     [];
 
-                var page_type           =     req.param("page_type");
-                var focus_Ntfn_id       =     req.param("focus_Ntfn_id");
-                var data_view_limit     =     req.options.global.data_view_limit;
+                var page_type              =     req.param("page_type");
+                var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
+                var data_view_limit        =     req.options.global.data_view_limit;
 
                 /*if(!focus_Ntfn_id){
                         //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});
@@ -192,25 +196,113 @@ module.exports = {
                                                             ntfn_body           =   util.format(notification,item.description);
                                                             item.ntfn_body      =   ntfn_body;
                                                             item.type           =   ntfnTypeFound[0].type;
+                                                             var imageToResize	=   item.profile_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
-                                                            if(item.description<=0)
-                                                            {
-                                                                console.log("commenteddd")
-                                                                notificationCommented = " commented on your Dither";
-                                                                item.ntfn_body        = notificationCommented;
-                                                                callback();
-                                                            }
-                                                            else
-                                                            {
-                                                                     console.log("77777777777777777777777777777777777777777777777")
-                                                                     notificationCommented =  ntfn_body;
-                                                                     notifyCmntArray       = [];
-                                                                     notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
-                                                                     console.log(notifyCmntArray)
-                                                                     console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-                                                                     callback();
-                                                            }
+                                                            
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		item.resized_image				=	  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					console.log("Resized Image Exists")
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					 if(item.description<=0)
+																						{
+																							console.log("commenteddd")
+																							notificationCommented = " commented on your Dither";
+																							item.ntfn_body        = notificationCommented;
+																							callback();
+																						}
+																						else
+																						{
+																								 console.log("77777777777777777777777777777777777777777777777")
+																								 notificationCommented =  ntfn_body;
+																								 notifyCmntArray       = [];
+																								 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																								 console.log(notifyCmntArray)
+																								 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																								 callback();
+																						}
+																					
+																					
+																				}
+																				else
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								if(item.description<=0)
+																								{
+																									console.log("commenteddd")
+																									notificationCommented = " commented on your Dither";
+																									item.ntfn_body        = notificationCommented;
+																									callback();
+																								}
+																								else
+																								{
+																										 console.log("77777777777777777777777777777777777777777777777")
+																										 notificationCommented =  ntfn_body;
+																										 notifyCmntArray       = [];
+																										 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																										 console.log(notifyCmntArray)
+																										 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																										 callback();
+																								}
+
+
+																						}
+																					});
+																				}	
+																			});	
+
+																		}else{
+																				console.log("Image not exists");
+																				if(item.description<=0)
+																				{
+																					console.log("commenteddd")
+																					notificationCommented = " commented on your Dither";
+																					item.ntfn_body        = notificationCommented;
+																					callback();
+																				}
+																				else
+																				{
+																						 console.log("77777777777777777777777777777777777777777777777")
+																						 notificationCommented =  ntfn_body;
+																						 notifyCmntArray       = [];
+																						 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																						 console.log(notifyCmntArray)
+																						 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																						 callback();
+																				}
+																				
+																			}
+                                                                    });
+
+
+                                                            //------------------------------------------------------------------------------------------------------
+
+   
+                                                            
                                                     }
 
                                                 });
@@ -238,23 +330,106 @@ module.exports = {
                                                             ntfn_body           = util.format(notification,item.description);
                                                             item.ntfn_body      =   ntfn_body;
                                                             item.type           =   ntfnTypeFound[0].type;
+                                                            var imageToResize	=   item.profile_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
-                                                            if(item.description<=0)
-                                                            {
-                                                              notificationVoted = " voted on your Dither";
-                                                              item.ntfn_body    = notificationVoted;
-                                                              callback();
-                                                            }
-                                                            else
-                                                            {
+                                                            
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
 
-                                                                notificationVoted   =  ntfn_body;
-                                                                notifyVoteArray     = [];
-                                                                notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-                                                                console.log(notifyVoteArray)
-                                                                callback();
-                                                            }
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		item.profile_image				=	  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					console.log("Resized Image Exists")
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					 if(item.description<=0)
+																						{
+																						  notificationVoted  = " voted on your Dither";
+																						  item.ntfn_body     = notificationVoted;
+																						  callback();
+																						}
+																						else
+																						{
+
+																							notificationVoted   =  ntfn_body;
+																							notifyVoteArray     = [];
+																							notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																							console.log(notifyVoteArray)
+																							callback();
+																						}
+																					
+																					
+																				}
+																				else
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								 if(item.description<=0)
+																								{
+																								  notificationVoted  = " voted on your Dither";
+																								  item.ntfn_body     = notificationVoted;
+																								  callback();
+																								}
+																								else
+																								{
+
+																									notificationVoted   =  ntfn_body;
+																									notifyVoteArray     = [];
+																									notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																									console.log(notifyVoteArray)
+																									callback();
+																								}
+
+
+																						}
+																					});
+																				}	
+																			});	
+
+																		}else{
+																				console.log("Image not exists");
+																				if(item.description<=0)
+																				{
+																				  notificationVoted  = " voted on your Dither";
+																				  item.ntfn_body     = notificationVoted;
+																				  callback();
+																				}
+																				else
+																				{
+
+																					notificationVoted   =  ntfn_body;
+																					notifyVoteArray     = [];
+																					notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																					console.log(notifyVoteArray)
+																					callback();
+																				}
+
+																			}
+                                                                    });
+
+
+																	//------------------------------------------------------------------------------------------------------
+
+                                                           
                                                         }
 
                                                     });
@@ -279,11 +454,63 @@ module.exports = {
                                                                     ntfn_body           = util.format(notification);
                                                                     item.ntfn_body      =   ntfn_body;
                                                                     item.type           =   ntfnTypeFound[0].type;
+                                                                    var imageToResize	=   item.profile_image;
                                                                     item.profile_image  =   profilePic_path + item.profile_image;
                                                                     item.dither_image   =   collageImg_path + item.dither_image;
                                                                     console.log(ntfn_body)
                                                                     notificationSignup  =  ntfn_body;
-                                                                    callback();
+                                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																		var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+																		fs.exists(imageSrc, function(exists) {
+																				if (exists) {
+
+																				console.log("Image exists");
+
+																				var ext                         =     imageSrc.split('/');
+																				ext                             =     ext[ext.length-1].split('.');
+																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];		
+																				console.log(imageSrc)
+																				console.log(imageDst)
+																				 fs.exists(imageDst, function(exists) {
+																					 if (exists) {
+																							console.log("Resized Image Exists")
+																							item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																							 callback();
+																						
+																						}
+																						else
+																						{
+
+																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																								if(err)
+																								{
+																										console.log(err);
+																										callback();
+																										
+																								}else{
+																										 console.log(imageResizeResults);
+																										 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																										 console.log("8888888888888888888888"+item.resized_image)
+																										 callback();
+																										// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																										
+
+
+																								}
+																							});
+																						}	
+																					});	
+
+																				}else{
+																						console.log("Image not exists");
+																						callback();
+
+																					}
+																			});
+
+
+																	//------------------------------------------------------------------------------------------------------
 
 
                                                             }
@@ -311,12 +538,65 @@ module.exports = {
                                                                 var ntfn_body       = util.format(notification,item.name);
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 item.ntfn_body      =   ntfn_body;
+                                                                var imageToResize	=   item.profile_image;
                                                                 item.profile_image  =   profilePic_path + item.profile_image;
                                                                 item.dither_image   =   collageImg_path + item.dither_image;
                                                                 console.log(item.profile_image)
                                                                 console.log(ntfn_body)
                                                                 notificationTagged  =  ntfn_body;
-                                                                callback();
+                                                                
+                                                                // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
+
+                                                                fs.exists(imageSrc, function(exists) {
+																		if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		  		
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		 fs.exists(imageDst, function(exists) {
+																			 if (exists) {
+																					console.log("Resized Image Exists")
+																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					callback();
+																					
+																				}
+																				else
+																				{
+
+																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																						if(err)
+																						{
+																								console.log(err);
+																								callback();
+																								
+																						}else{
+																								 console.log(imageResizeResults);
+																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								 console.log("8888888888888888888888"+item.resized_image)
+																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+																								callback();
+
+																						}
+																					});
+																				}	
+																			});	
+
+																		}else{
+																				console.log("Image not exists");
+																				callback();
+
+																			}
+                                                                    });
+
+
+																	//------------------------------------------------------------------------------------------------------
+
 
                                                             }
 
@@ -358,33 +638,26 @@ module.exports = {
 
         typeNotification: function(req, res) {
 
-                    var notificationTypeId          =   req.param("type_id");
-                    var received_userId             =   req.param("user_id");
-                    var collageId                   =   req.param("dither_id");
+                    var notificationTypeId          =   req.param("notification_type");
+                    var notificationId              =   req.param("notification_id");
                     console.log(req.params.all());
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                    var query, notification, ntfn_body, user_id;
-                    if(!notificationTypeId || !received_userId || !collageId){
-                           return res.json(200, {status: 2, status_type:"Failure", msg: 'Please pass type_id and user_id and collage_id'});
+                    var query, notification, ntfn_body;
+                    if(!notificationTypeId && !notificationId){
+                           return res.json(200, {status: 2, status_type:"Failure", msg: 'Please pass notification_type and notification_id'});
                     }else{
-                            var user_query;
-                            if(notificationTypeId == 1){
-                                    user_query  = " AND FIND_IN_SET( "+received_userId+", ntlg.tagged_users )";
-                            }else{
-                                    user_query  = " AND ntlg.ditherUserId = "+received_userId;
-                            }
-                            query = "SELECT ntlg.id, ntlg.notificationTypeId, ntlg.collage_id, ntlg.ditherUserId, ntlg.description, ntlg.createdAt,"+
-                                    " usr.profilePic,"+
+
+                            query = "SELECT ntlg.id, ntlg.notificationTypeId, ntlg.collage_id, ntlg.userId, ntlg.ditherUserId, ntlg.description, ntlg.createdAt,"+
+                                    " usr.name, usr.profilePic,"+
                                     " clg.image as collageImage"+
                                     " FROM notificationLog ntlg"+
                                     " INNER JOIN user usr ON usr.id = ntlg.ditherUserId"+
                                     " INNER JOIN collage clg ON clg.id = ntlg.collage_id"+
                                     " WHERE"+
-                                    " ntlg.notificationTypeId = "+notificationTypeId+ user_query +" AND ntlg.collage_id = "+collageId+
-                                    " ORDER BY ntlg.createdAt"+
-                                    " DESC LIMIT 0,1";
+                                    " ntlg.id = "+notificationId;
+
                             console.log(query);
                             NotificationLog.query(query, function(err,results) {
                                     if(err){
@@ -409,16 +682,18 @@ module.exports = {
                                                                 switch(switchKey){
 
                                                                     case 1:
-                                                                            user_id                 =   results[0].userId;
                                                                             tagged_users            =   results[0].tagged_users;
+
                                                                     break;
 
                                                                     case 2:
                                                                             notification            =   " voted on your Dither";
+
                                                                     break;
 
                                                                     case 3:
                                                                             notification            =   " commented on your Dither";
+
                                                                     break;
 
                                                                     default:
@@ -429,25 +704,28 @@ module.exports = {
 
                                                                 ntfn_body               =   notification;
 
-                                                                if(results[0].description > 0 || !results[0].description)
-                                                                {
+                                                                if(results[0].description > 0 || !results[0].description){
                                                                     notification                =       ntfnFoundResults.body;
                                                                     results[0].description      =       results[0].description - 1;
                                                                     ntfn_body                   =       util.format(notification, results[0].description);
                                                                     console.log(notification);
                                                                 }
                                                                 console.log(ntfn_body);
-
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
-                                                                                      type                  :   notificationTypeId,
-                                                                                      dither_id             :   collageId,
-                                                                                      user_id               :   user_id,
-                                                                                      msg                   :   ntfn_body,
-                                                                                      user_profile_img      :   profilePic_path + results[0].profilePic,
-                                                                                      dither_img            :   collageImg_path + results[0].collageImage,
-                                                                                      date                  :   results[0].createdAt,
-                                                                                      notification_id       :   results[0].id,
+                                                                                      id                    :   notificationId,
+                                                                                      userId                :   results[0].userId,
+                                                                                      ditherUserId          :   results[0].ditherUserId,
+                                                                                      ditherId              :   results[0].collage_id,
+                                                                                      notificationTypeId    :   notificationTypeId,
+                                                                                      createdDate           :   results[0].createdAt,
+                                                                                      image_id              :   results[0].image_id,
                                                                                       tagged_users          :   tagged_users,
+                                                                                      description           :   results[0].description,
+                                                                                      name                  :   results[0].name,
+                                                                                      profile_image         :   profilePic_path + results[0].profilePic,
+                                                                                      dither_image          :   collageImg_path + results[0].collageImage,
+                                                                                      ntfn_body             :   ntfn_body,
+                                                                                      type                  :   ntfnFoundResults.type,
                                                                                 });
 
                                                             }

@@ -32,7 +32,10 @@ module.exports = {
                 type: 'string',
                 required: true,
         },
-
+		device_IMEI: {
+                type: 'string'
+                
+        },
         expiryDate: {
                 type: 'datetime',
         },

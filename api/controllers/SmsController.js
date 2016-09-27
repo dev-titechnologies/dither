@@ -25,7 +25,7 @@
 					console.log(smsAuthToken)                      
 					//var client            = require('twilio')(smsAccountSid, smsAuthToken); //API_KEY and TOCKEN from TWILIO
 					var mobile  = req.param("mobile");
-					
+					var email	= req.param("email");
 					User.findOne({phoneNumber: req.param('mobile')}).exec(function (err, findUser)
 					{
 						if(err)
@@ -36,7 +36,8 @@
 						}
 						else
 						{
-							
+						console.log("llllllllllllllllllllllllllllllllllllllllllllllllll")	
+					      console.log(typeof(findUser))		
 						  if(typeof(findUser) == 'undefined')
 						  {
 					
@@ -68,8 +69,31 @@
 															}
 														else
 															{
-																sails.log("result"+results)
-																return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully',otp:verification_code});
+																User.findOne({email:email}).exec(function (err, getEmail)
+																{
+																	if(err)
+																	{
+																		console.log(err)
+																		return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully',otp:verification_code});
+																	}
+																	else
+																	{
+																		console.log(getEmail)
+																		if(typeof(getEmail) == 'undefined')
+																		{
+																			console.log("jjjjjjjjjjjjjjjjj")
+																			return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully',otp:verification_code});
+																		}
+																		else
+																		{
+																			sails.log("result"+results)
+																			return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully',otp:verification_code,email:email});
+																		}
+																	}
+																
+															    });
+																
+																
 															}
 													});
 											}
@@ -77,7 +101,30 @@
 						  }	
 						  else
 						  {
-							  return res.json(200, {status: 2, status_type: 'Failure' , message: 'Mobile Number Already Exist!'});
+							  
+							  User.findOne({email:email}).exec(function (err, getEmail)
+								{
+									if(err)
+									{
+										console.log(err)
+										return res.json(200, {status: 2, status_type: 'Failure' , message: 'Mobile Number Already Exist!'});
+									}
+									else
+									{
+										if(typeof(getEmail) == 'undefined')
+										{
+											return res.json(200, {status: 2, status_type: 'Failure' , message: 'Mobile Number Already Exist!'});
+										}
+										else
+										{
+										   return res.json(200, {status: 2, status_type: 'Failure' , message: 'Mobile Number Already Exist!',email:email});
+									    }
+									}
+								
+								});
+							  
+							  
+							 
 						  }
 					
 						}

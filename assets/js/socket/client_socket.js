@@ -17,7 +17,9 @@ io.socket.on('createInSignUp', function (event){
     console.log(event);
 });*/
 
-io.sails.url = "http://192.168.1.62:5000";
+io.sails.url = "http://git.titechnologies.in:5000";
+//io.sails.url = "http://192.168.1.57:5000";
+
 io.socket.on('connect', function socketConnected(){
         console.log("socket --- connected");
         //socket.emit('edit-dither');
@@ -151,4 +153,4 @@ io.socket.on('dither_details', function (event){
 /*io.socket.on('createIncheck', function newMessageFromSails ( message ) {
         //typeof console !== 'undefined' &&
         console.log('New message received from Sails ::\n', message);
-});*/
+}); d*/

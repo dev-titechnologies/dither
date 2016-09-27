@@ -106,6 +106,32 @@ module.exports = {
                 }
         },
 
+        socketTyping  : function (req, res) {
+
+                    console.log("--------------------------------------    socketTyping     --------------------------------");
+                    if(req.isSocket){
+                            console.log(req.param("dither_id"));
+                            var tokenCheck               =     req.options.tokenCheck;
+                            var userId                   =     tokenCheck.tokenDetails.userId;
+                            var collageId                =     req.param("dither_id");
+                            var dither_roomName          =     "socket_dither_"+collageId;
+                            console.log(dither_roomName);
+
+                            sails.sockets.broadcast(dither_roomName,{
+                                                        type            :   "typing",
+                                                        dither_id       :   collageId,
+                                                        user_id         :   userId,
+                                                        message         :   "Typed - Room Broadcast",
+                                                        roomName        :   dither_roomName,
+                                                        subscribers     :   sails.sockets.subscribers(dither_roomName),
+                                                        socket          :   sails.sockets.rooms()
+                                                        });
+                    }else{
+                            console.log("--------------------------------------    socketDitherDetail Else Socket Disconnected    --------------------------------");
+
+                    }
+        },
+
         Socket_disconnection  : function (req, res) {
                 /*console.log("--------------------------------------    Socket_disconnection     --------------------------------");
                 console.log(sails.sockets.getId(req));

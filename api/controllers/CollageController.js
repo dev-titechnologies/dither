@@ -59,11 +59,10 @@ module.exports = {
                             var userId                      =     tokenCheck.tokenDetails.userId;
                             var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                             var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                            var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                             var imageUploadDirectoryPath    =     '../../assets/images/collage';
                             var concatUploadImgArray;
-
                             var request                     =     JSON.parse(req.param("REQUEST"));
-
                             console.log("request Using Param-----------------------------------------");
                             console.log(request);
                             console.log(request.dither_title);
@@ -218,6 +217,27 @@ module.exports = {
                                 });
                     },
                     function(callback) {
+                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                             console.log("generating thumnail image of dither Image")
+                                var imageSrc                    =     collageImg_path_assets + collage_results.image;
+                                var ext                         =     imageSrc.split('/');
+                                ext                             =     ext[ext.length-1].split('.');
+                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                console.log(imageSrc);
+                                console.log(imageDst);
+                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+                                        if(err){
+                                                console.log(err);
+                                                console.log("Error in image resize !!!!");
+                                                callback();
+                                        }else{
+                                                console.log(imageResizeResults);
+                                                callback();
+                                        }
+                                });
+                    },
+
+                    function(callback) {
                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 if(taggedUserArray.length != 0){
                                         console.log(collage_results);
@@ -309,13 +329,15 @@ module.exports = {
                                                                                         taggedUserArray.forEach(function(factor, index){
                                                                                                 var taggedUser_roomName  = "socket_user_"+factor;
                                                                                                 sails.sockets.broadcast(taggedUser_roomName,{
-                                                                                                                                        type                       :       "notification",
-                                                                                                                                        id                         :       createdCollageTags.collageId,
-                                                                                                                                        message                    :       "Create Dither - Room Broadcast - to Tagged Users",
-                                                                                                                                        roomName                   :       taggedUser_roomName,
-                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
-                                                                                                                                        socket                     :       sails.sockets.rooms(),
-                                                                                                                                        });
+                                                                                                                type                       :       "notification",
+                                                                                                                id                         :       createdCollageTags.collageId,
+                                                                                                                message                    :       "Create Dither - Room Broadcast - to Tagged Users",
+                                                                                                                roomName                   :       taggedUser_roomName,
+                                                                                                                subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+                                                                                                                socket                     :       sails.sockets.rooms(),
+                                                                                                                notification_type          :       1,
+                                                                                                                notification_id            :       createdNotificationTags.id
+                                                                                                                });
                                                                                         });
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
                                                                                         console.log(createdNotificationTags);
@@ -451,6 +473,8 @@ module.exports = {
                                     callback();
                                 }
                     },
+
+
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                 if (err) {
                                     console.log(err);
@@ -820,57 +844,120 @@ module.exports = {
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var userId                      =     tokenCheck.tokenDetails.userId;
+                    var data_view_limit             =     req.options.global.data_view_limit;
                     var received_userId             =     req.param("user_id");
                     var received_dither_type        =     req.param("type");
                     var received_userName, received_userProfilePic;
-                    var query = "";
+                    var query, offset_data_view_limit;
                     console.log("Get all Type Dither  -------------------- ================================================");
                     console.log(received_userId);
                     console.log(received_dither_type);
-                    if(!received_userId || !received_dither_type){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both user_id and type'});
+
+                    console.log(req.param("page_type"));
+                    console.log(req.param("focus_dither_id"));
+                    var page_type               =   req.param("page_type");
+                    var focus_dither_id         =   req.param("focus_dither_id");
+
+
+                            switch(page_type){
+
+                                        case 'new' :
+                                                    offset_data_view_limit =  "> "+focus_dither_id;
+                                        break;
+
+                                        case 'old' :
+                                                    offset_data_view_limit =  "< "+focus_dither_id;
+                                        break;
+                            }
+
+                            console.log("offset_data_view_limit ----------------++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                            console.log(offset_data_view_limit);
+
+
+                    if(!received_userId || !received_dither_type || !page_type || !focus_dither_id){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both user_id, type, page_type and focus_dither_id'});
                     }else{
+                                var query_offset_data_view_limit;
+                                //check the focus_dither id 0 or not
+                                if(focus_dither_id == 0){
+                                        query_offset_data_view_limit = "";
+                                }else{
+                                        query_offset_data_view_limit = " AND clg.id "+offset_data_view_limit;
+                                }
+                                //check the dither type (recent or popular)
+                                switch(received_dither_type){
+
+                                        case 'recent' :
+                                                    query_order_same_user1 = " ORDER BY clg.createdAt";
+                                                    query_order_same_user2 = " ORDER BY temp_clg.createdAt DESC";
+
+                                                    query_order_other_user1 = " ORDER BY clg.createdAt";
+                                                    query_order_other_user2 = " ORDER BY clg.createdAt DESC";
+
+                                        break;
+
+                                        case 'popular' :
+                                                    query_order_same_user1 = " ORDER BY clg.totalVote, clg.createdAt";
+                                                    query_order_same_user2 = " ORDER BY temp_clg.totalVote DESC, temp_clg.createdAt DESC";
+
+                                                    query_order_other_user1 = " ORDER BY clg.totalVote, clg.createdAt";
+                                                    query_order_other_user2 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+
+                                        break;
+                                }
                                 if(received_userId == userId){
                                         console.log("Same Id ----------------------------------------------------");
                                         query = "SELECT"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                                " clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+                                                " temp_clg.userId, temp_clg.image AS collage_image, temp_clg.totalVote, temp_clg.createdAt, temp_clg.updatedAt,"+
                                                 " usr.profilePic, usr.name,"+
                                                 " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
+                                                " FROM"+
+                                                "("+
+                                                " SELECT *"+
                                                 " FROM collage clg"+
-                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                                " INNER JOIN user usr ON usr.id = clg.userId"+
+                                                " WHERE clg.userId = '"+userId+"'"+
+                                                query_offset_data_view_limit+
+                                                query_order_same_user1+
+                                                " LIMIT "+data_view_limit+
+                                                ") AS temp_clg"+
+                                                " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
+                                                " INNER JOIN user usr ON usr.id = temp_clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
-                                                " WHERE"+
-                                                " clg.userId = '"+userId+"'"+
-                                                " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
-
+                                                query_order_same_user2;
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
                                         //Show tagged logged user and created by received_user
-                                        query = " SELECT temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
+
+                                        query = " SELECT clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
                                                 " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
-                                                " FROM ("+
+
+                                                " FROM("+
+                                                " SELECT temp_union.* FROM ("+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+
                                                 " WHERE clg.userId = '"+received_userId+"'"+
                                                 " UNION"+
-                                                " SELECT tg.collageId as id"+
+                                                " SELECT tg.collageId AS id"+
                                                 " FROM tags tg"+
                                                 " WHERE tg.userId = '"+userId+"'"+
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                query_offset_data_view_limit+
+                                                query_order_other_user1+
+                                                " LIMIT "+data_view_limit+
+                                                " ) AS temp_clg"+
+
+                                                " INNER JOIN collage clg ON clg.id = temp_clg.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
-                                                " GROUP BY clgdt.id"+
-                                                " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
+                                                query_order_other_user2;
 
                                 }
 
@@ -883,18 +970,30 @@ module.exports = {
                                                 }
                                                 else
                                                 {
+                                                    //console.log(results);
+                                                    //console.log(results.length);
                                                     if(results.length == 0){
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                                     if (err) {
                                                                         console.log(err);
                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                                     }else{
-                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
-                                                                                                    username                : foundUserDetails.name,
-                                                                                                    user_profile_image      : profilePic_path + foundUserDetails.profilePic,
-                                                                                                    recent_dithers          : [],
-                                                                                                    popular_dithers         : []
-                                                                                });
+                                                                                console.log(foundUserDetails);
+                                                                                if(!foundUserDetails){
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage and no user found',
+                                                                                                        username                : "",
+                                                                                                        user_profile_image      : "",
+                                                                                                        recent_dithers          : [],
+                                                                                                        popular_dithers         : []
+                                                                                    });
+                                                                                }else{
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
+                                                                                                        username                : foundUserDetails.name,
+                                                                                                        user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                        recent_dithers          : [],
+                                                                                                        popular_dithers         : []
+                                                                                    });
+                                                                                }
                                                                     }
                                                             });
 
@@ -926,9 +1025,9 @@ module.exports = {
                                                                             }else{
                                                                                     likeStatus = 1;
                                                                                     console.log("Inside ----->>>> likePosition not null");
-                                                                                    console.log(dataResults[j]["likeUserId"]);
-                                                                                     console.log(userId);
-                                                                                    console.log(dataResults[j]["userId"]);
+                                                                                    //console.log(dataResults[j]["likeUserId"]);
+                                                                                     //console.log(userId);
+                                                                                    //console.log(dataResults[j]["userId"]);
                                                                                     if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                                         console.log("Inside factor like User id check ================ ++++++++++++++");
                                                                                         //like_position = dataResults[j]["likePosition"];
@@ -971,21 +1070,23 @@ module.exports = {
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
 
-                                                                    recent_dithers                              =       key.sort( predicatBy("mainOrder") );
-                                                                    popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                    //recent_dithers                              =       key.sort( predicatBy("mainOrder") );
+                                                                    //popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                    recent_dithers                              =       key;
+                                                                    popular_dithers                             =       key;
                                                                 }
                                                             }
 
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                                     if (err) {
-                                                                        console.log(err);
-                                                                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
+                                                                            console.log(err);
+                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                                     }else{
 
                                                                         if(!foundUserDetails){
 
                                                                                 if(received_dither_type == "popular"){
-                                                                                        popular_dithers   =  popular_dithers.reverse();
+
                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                                         username                : "",
                                                                                                         user_profile_image      : "",
@@ -1006,7 +1107,7 @@ module.exports = {
                                                                                 }
 
                                                                                 if(received_dither_type == "popular"){
-                                                                                        popular_dithers   =  popular_dithers.reverse();
+
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
                                                                                                         username                : foundUserDetails.name,
                                                                                                         user_profile_image      : profilePic_path + foundUserDetails.profilePic,
@@ -1448,13 +1549,13 @@ module.exports = {
                                                                                                         taggedUserArray.forEach(function(factor, index){
                                                                                                                 var taggedUser_roomName  = "socket_user_"+factor;
                                                                                                                 sails.sockets.broadcast(taggedUser_roomName,{
-                                                                                                                                                        type                       :       "notification",
-                                                                                                                                                        id                         :       collageId,
-                                                                                                                                                        message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
-                                                                                                                                                        roomName                   :       taggedUser_roomName,
-                                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
-                                                                                                                                                        socket                     :       sails.sockets.rooms(),
-                                                                                                                                                        });
+                                                                                                                                        type                       :       "notification",
+                                                                                                                                        id                         :       collageId,
+                                                                                                                                        message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
+                                                                                                                                        roomName                   :       taggedUser_roomName,
+                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+                                                                                                                                        socket                     :       sails.sockets.rooms(),
+                                                                                                                                        });
                                                                                                         });
 
                                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");
@@ -1833,5 +1934,4 @@ module.exports = {
         },
 
 };
-
 

@@ -1,3 +1,4 @@
+
 /**
  * AdminController
  *
@@ -10,6 +11,7 @@ var crypto = require('crypto');
  var path        = require('path');
 
 module.exports = {
+
 	// Admin Login
 	     adminLogin: function (req, res) {
         console.log("userLogin  .....");
@@ -52,6 +54,7 @@ console.log(values);
     },
     	//   List all users
      getCompleteUser: function(req, res){
+
 		
 			
                     query = "SELECT * FROM  `user` ";
@@ -172,6 +175,7 @@ console.log(values);
 						return res.json(200, {status: 1, message: "success", data: result});
 					}
 				});
+
                 
     },
     
@@ -225,7 +229,10 @@ console.log(values);
     //** get reported dither details **/
     getReportDither: function(req,res){
         
-        var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
+
+       // var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
+       var query = "SELECT DISTINCT rd.collageId,u.name AS postedBy,c.imgTitle,c.status, COUNT( rd.collageId ) AS RepDitherCount FROM reportDither AS rd LEFT JOIN collage AS c ON c.id=rd.collageId LEFT JOIN user AS u ON c.userId=u.id GROUP BY rd.collageId";
+
         console.log(query);
                     ReportDither.query(query, function (err, result) {
                         if (err) {
@@ -240,7 +247,10 @@ console.log(values);
     
     //** suspend a dither
     suspendDither: function(req,res){
-        var criteria = {id: 200};
+
+        var suspendDitherId=req.body.collageId;
+        var criteria = {id: suspendDitherId};
+
                     var data = {status: 'inactive'};
 
                     Collage.update(criteria, data).exec(function (err, updatedData) {
@@ -255,7 +265,10 @@ console.log(values);
                     });
     },
     releaseDither: function(req,res){
-        var criteria = {id: 200};
+
+        var releaseDitherId=req.body.collageId;
+        var criteria = {id: releaseDitherId};
+
                     var data = {status: 'active'};
 
                     Collage.update(criteria, data).exec(function (err, updatedData) {
@@ -269,6 +282,21 @@ console.log(values);
                         }
                     });
     },
+    getReportedBy: function(req,res){
+        var ditherId=req.body.collageId;
+        console.log("ghhhhhhh"+ditherId);
+        var query="select rd.*, u.name,rt.description from reportDither as rd LEFT JOIN user as u on rd.reporterId=u.id LEFT JOIN reportType as rt on rd.reportType=rt.reportId where rd.collageId="+ditherId;
+        console.log(query);
+         ReportDither.query(query, function (err, result) {
+                        if (err) {
+                            return res.json(200, {status: 2, error_details: err});
+                        } else {
+                            console.log("hello");
+                            console.log(result);
+                            return res.json(200, {status: 1, message: "success", result: result});
+                        }
+                    });
+    },
     
 };
-    
+

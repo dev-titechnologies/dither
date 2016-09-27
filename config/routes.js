@@ -41,7 +41,7 @@ module.exports.routes = {
   '/user/selectUser'                      :           ['auth.authenticate', 'settings.settingsKeyValue'],
   '/user/editProfile'                     :           ['auth.authenticate','settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
   '/sms/*'                                :           ['settings.settingsKeyValue'],
-  '/collage/*'                            :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
+  '/collage/*'                            :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageDetails/*'                     :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
   '/TestFileContacts/*'                   :           ['auth.authenticate', 'helper.server_baseUrl', 'helper.file_path'],
 
@@ -53,7 +53,8 @@ module.exports.routes = {
   '/report/*'                             :           ['auth.authenticate'],
   '/socketSettings/*'                     :           ['auth.authenticate'],
   '/collageUpload/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
-  //'/test/delete_Socket'                   :           ['SocketSettings.Socket_connection'],
+  //'/test/delete_Socket'                 :           ['SocketSettings.Socket_connection'],
+  '/test/imagemagick'                     :           ['settings.settingsKeyValue','helper.file_path'],
 
 
  /* 'GET /user/join': {

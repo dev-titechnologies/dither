@@ -176,8 +176,50 @@ module.exports = {
                                                                     if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                                 dataResultsObj.profile_image = "";
                                                                     }else{
+																			//----------------------thumbnail generation----------------------------------
+																			var imageSrc                    =     profilePic_path_assets + dataResultsObj.profile_image;
+																			fs.exists(imageSrc, function(exists) {
+																			if (exists) {	
+																				console.log("Image exists");
 
-                                                                                dataResultsObj.profile_image = profilePic_path + dataResults[i]["profilePic"];
+																				var ext                         =     imageSrc.split('/');
+																				ext                             =     ext[ext.length-1].split('.');
+																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																				console.log(imageSrc)
+																				console.log(imageDst)
+																						
+																				fs.exists(imageDst, function(exists) {
+																					 if (exists) {
+																							
+																							dataResultsObj.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+
+																					}else{
+																							console.log("Image not exists");
+																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																								if(err)
+																								{
+																										console.log(err);
+																										dataResultsObj.profile_image = '';
+
+																								}else{
+																										console.log(imageResizeResults);
+																										dataResultsObj.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								}
+																							});
+
+																						}
+																				});
+																			 }
+																			 else
+																			 {
+																				 dataResultsObj.profile_image = profilePic_path + dataResultsObj.profile_image;
+																			 }
+																		 });	
+
+																			//------------------------------------------------------------------------------------------------------
+																				
+																				
+                                                                                
                                                                     }
                                                                     imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                                     dataResultsObj.user_name                    =       dataResults[i]["name"];

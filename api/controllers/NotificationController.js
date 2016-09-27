@@ -277,8 +277,24 @@ module.exports = {
 
 																		}else{
 																				console.log("Image not exists");
-																				callback();
-
+																				if(item.description<=0)
+																				{
+																					console.log("commenteddd")
+																					notificationCommented = " commented on your Dither";
+																					item.ntfn_body        = notificationCommented;
+																					callback();
+																				}
+																				else
+																				{
+																						 console.log("77777777777777777777777777777777777777777777777")
+																						 notificationCommented =  ntfn_body;
+																						 notifyCmntArray       = [];
+																						 notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+																						 console.log(notifyCmntArray)
+																						 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+																						 callback();
+																				}
+																				
 																			}
                                                                     });
 
@@ -391,7 +407,21 @@ module.exports = {
 
 																		}else{
 																				console.log("Image not exists");
-																				callback();
+																				if(item.description<=0)
+																				{
+																				  notificationVoted  = " voted on your Dither";
+																				  item.ntfn_body     = notificationVoted;
+																				  callback();
+																				}
+																				else
+																				{
+
+																					notificationVoted   =  ntfn_body;
+																					notifyVoteArray     = [];
+																					notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																					console.log(notifyVoteArray)
+																					callback();
+																				}
 
 																			}
                                                                     });

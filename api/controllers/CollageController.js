@@ -36,6 +36,7 @@ function union_arrays (x, y) {
 }
 
 var collage_unlink_path         =      "assets/images/collage/";
+ var fs          = require('fs');
 module.exports = {
 
     /* ==================================================================================================================================

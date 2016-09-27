@@ -880,28 +880,30 @@ module.exports = {
                                 var query_offset_data_view_limit;
                                 //check the focus_dither id 0 or not
                                 if(focus_dither_id == 0){
-                                        query_offset_data_view_limit = "";
+                                        query_offset_data_view_limit    =   "";
+                                        focus_dither_id_0_order         =   "DESC";
                                 }else{
-                                        query_offset_data_view_limit = " AND clg.id "+offset_data_view_limit;
+                                        query_offset_data_view_limit    =   " AND clg.id "+offset_data_view_limit;
+                                        focus_dither_id_0_order         =   "";
                                 }
                                 //check the dither type (recent or popular)
                                 switch(received_dither_type){
 
                                         case 'recent' :
-                                                    query_order_same_user1 = " ORDER BY clg.createdAt";
-                                                    query_order_same_user2 = " ORDER BY temp_clg.createdAt DESC";
+                                                    query_order_same_user1      =   " ORDER BY clg.createdAt " +focus_dither_id_0_order;
+                                                    query_order_same_user2      =   " ORDER BY temp_clg.createdAt DESC";
 
-                                                    query_order_other_user1 = " ORDER BY clg.createdAt";
-                                                    query_order_other_user2 = " ORDER BY clg.createdAt DESC";
+                                                    query_order_other_user1     =   " ORDER BY clg.createdAt" +focus_dither_id_0_order;
+                                                    query_order_other_user2     =   " ORDER BY clg.createdAt DESC";
 
                                         break;
 
                                         case 'popular' :
-                                                    query_order_same_user1 = " ORDER BY clg.totalVote, clg.createdAt";
-                                                    query_order_same_user2 = " ORDER BY temp_clg.totalVote DESC, temp_clg.createdAt DESC";
+                                                    query_order_same_user1      =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
+                                                    query_order_same_user2      =   " ORDER BY temp_clg.totalVote DESC, temp_clg.createdAt DESC";
 
-                                                    query_order_other_user1 = " ORDER BY clg.totalVote, clg.createdAt";
-                                                    query_order_other_user2 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+                                                    query_order_other_user1     =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
+                                                    query_order_other_user2     =   " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
 
                                         break;
                                 }

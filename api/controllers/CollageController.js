@@ -59,11 +59,10 @@ module.exports = {
                             var userId                      =     tokenCheck.tokenDetails.userId;
                             var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                             var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                            var collageImg_path_assets		=	  req.options.file_path.collageImg_path_assets;
                             var imageUploadDirectoryPath    =     '../../assets/images/collage';
                             var concatUploadImgArray;
-
                             var request                     =     JSON.parse(req.param("REQUEST"));
-
                             console.log("request Using Param-----------------------------------------");
                             console.log(request);
                             console.log(request.dither_title);
@@ -453,6 +452,27 @@ module.exports = {
                                     callback();
                                 }
                     },
+                    function(callback) {
+							 // ------------------------------Generate ThumbnailImage-----------------------------------------------
+							 console.log("generating thumnail image of dither Image")
+								var imageSrc                    =     collageImg_path_assets + collage_results.image;
+								var ext                         =     imageSrc.split('/');
+								ext                             =     ext[ext.length-1].split('.');
+								var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+								console.log(imageSrc);
+								console.log(imageDst);
+								ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+										if(err){
+												console.log(err);
+												console.log("Error in image resize !!!!");
+												callback();
+										}else{
+												console.log(imageResizeResults);
+												callback();
+										}
+								});
+					},
+
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                 if (err) {
                                     console.log(err);

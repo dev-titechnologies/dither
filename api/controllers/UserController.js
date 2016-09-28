@@ -376,7 +376,7 @@ module.exports = {
                                                                                                         console.log("#########################################")
                                                                                                 });
 
-                                                                                    },
+                                                                                    },/*
                                                                                     function(callback) {
                                                                                              // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                                                 var imageSrc                    =     profilePic_path_assets + results.profilePic;
@@ -395,7 +395,7 @@ module.exports = {
                                                                                                                 callback();
                                                                                                         }
                                                                                                 });
-                                                                                    },
+                                                                                    },*/
                                                                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if (err) {
                                                                                             console.log("async parallel in Sms Part Failure --------------------");

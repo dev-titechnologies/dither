@@ -88,6 +88,7 @@ module.exports = {
                 var profilePic_path        =     server_baseUrl + req.options.file_path.profilePic_path;
                 var collageImg_path        =     server_baseUrl + req.options.file_path.collageImg_path;
                 var profilePic_path_assets =     req.options.file_path.profilePic_path_assets;
+                var collageImg_path_assets =	 req.options.file_path.collageImg_path_assets;
                 var device_id              =     tokenCheck.tokenDetails.deviceId;
                 var device_type            =     req.get('device_type');
 
@@ -196,13 +197,15 @@ module.exports = {
                                                             ntfn_body           =   util.format(notification,item.description);
                                                             item.ntfn_body      =   ntfn_body;
                                                             item.type           =   ntfnTypeFound[0].type;
-                                                             var imageToResize	=   item.profile_image;
+                                                            var imageToResize	=   item.profile_image;
+                                                            var clgImgToResize	=	item.dither_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
                                                             
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + imageToResize;
-
+																var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
+																console.log(clgImgSrc)
                                                                 fs.exists(imageSrc, function(exists) {
 																		if (exists) {
 
@@ -211,7 +214,6 @@ module.exports = {
 																		var ext                         =     imageSrc.split('/');
 																		ext                             =     ext[ext.length-1].split('.');
 																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		item.resized_image				=	  		
 																		console.log(imageSrc)
 																		console.log(imageDst)
 																		 fs.exists(imageDst, function(exists) {

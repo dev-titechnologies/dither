@@ -34,7 +34,7 @@ module.exports = {
 
 
                         console.log("iosss contacts")
-                        console.log(req.param('contact_array'));
+                       // console.log(req.param('contact_array'));
                         /*req.param('contact_array').forEach(function(factor, index){
                                             //console.log("INSIDE FOR EACH ======================");
                         });*/
@@ -46,6 +46,7 @@ module.exports = {
 
 
                         console.log("---------------------------------------------------------------------PPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                        console.log(req.param('fb_array'))
                         //console.log(phonecontacts);
                          //fbUser                = JSON.parse(req.param('fb_array'));
 
@@ -76,7 +77,7 @@ module.exports = {
                         console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
                         //console.log(phoneContactsArray);
                         //console.log(JSON.parse(phoneContactsArray));
-
+						
                         fbUser.forEach(function(factor, index){
                              var contact_name = factor.fb_name;
                             //var contact_name = zzzzz ajay"s / \ \ /ajay's ''

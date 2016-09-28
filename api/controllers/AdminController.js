@@ -1,17 +1,60 @@
+
 /**
  * AdminController
  *
  * @description :: Server-side logic for managing Admin
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+var crypto = require('crypto');
  var fs          = require('fs');
  var request     = require('request');
  var path        = require('path');
 
 module.exports = {
-	//   List all users
-    getCompleteUser: function(req, res){
+
+	// Admin Login
+	     adminLogin: function (req, res) {
+        console.log("userLogin  .....");
+         var password = crypto.createHash('md5').update(req.body.password).digest("hex");
+         console.log(password);
+        //var password = req.body.password;
+        var values = {
+            username: req.body.email,
+            password: password
+        };
+console.log(values);
+        // Get Admin details
+        Admin.findOne(values).exec(function (err, result) {
+            if (err) {
+
+                sails.log.debug('Some error occured ' + err);
+                return res.json(200, {status: 2, message: 'some error occured', error: err});
+
+            } else {
+
+                if (typeof result == "undefined")
+                {
+                    sails.log.debug({message: 'No admin found'});
+                    return res.json(200, {status: 2, message: 'No admin found', data: result});
+
+                }
+                else
+                {
+					console.log("kittyada.!!!!");
+					    return res.json(200, {status: 1, message: 'success', data: result.id });
+                    
+
+                }
+
+            }
+        });
+
+
+                
+    },
+    	//   List all users
+     getCompleteUser: function(req, res){
+
 		
 			
                     query = "SELECT * FROM  `user` ";
@@ -132,6 +175,7 @@ module.exports = {
 						return res.json(200, {status: 1, message: "success", data: result});
 					}
 				});
+
                 
     },
     
@@ -185,7 +229,10 @@ module.exports = {
     //** get reported dither details **/
     getReportDither: function(req,res){
         
-        var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
+
+       // var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
+       var query = "SELECT DISTINCT rd.collageId,u.name AS postedBy,c.imgTitle,c.status, COUNT( rd.collageId ) AS RepDitherCount FROM reportDither AS rd LEFT JOIN collage AS c ON c.id=rd.collageId LEFT JOIN user AS u ON c.userId=u.id GROUP BY rd.collageId";
+
         console.log(query);
                     ReportDither.query(query, function (err, result) {
                         if (err) {
@@ -200,7 +247,10 @@ module.exports = {
     
     //** suspend a dither
     suspendDither: function(req,res){
-        var criteria = {id: 200};
+
+        var suspendDitherId=req.body.collageId;
+        var criteria = {id: suspendDitherId};
+
                     var data = {status: 'inactive'};
 
                     Collage.update(criteria, data).exec(function (err, updatedData) {
@@ -215,7 +265,10 @@ module.exports = {
                     });
     },
     releaseDither: function(req,res){
-        var criteria = {id: 200};
+
+        var releaseDitherId=req.body.collageId;
+        var criteria = {id: releaseDitherId};
+
                     var data = {status: 'active'};
 
                     Collage.update(criteria, data).exec(function (err, updatedData) {
@@ -229,6 +282,21 @@ module.exports = {
                         }
                     });
     },
+    getReportedBy: function(req,res){
+        var ditherId=req.body.collageId;
+        console.log("ghhhhhhh"+ditherId);
+        var query="select rd.*, u.name,rt.description from reportDither as rd LEFT JOIN user as u on rd.reporterId=u.id LEFT JOIN reportType as rt on rd.reportType=rt.reportId where rd.collageId="+ditherId;
+        console.log(query);
+         ReportDither.query(query, function (err, result) {
+                        if (err) {
+                            return res.json(200, {status: 2, error_details: err});
+                        } else {
+                            console.log("hello");
+                            console.log(result);
+                            return res.json(200, {status: 1, message: "success", result: result});
+                        }
+                    });
+    },
     
 };
-    
+

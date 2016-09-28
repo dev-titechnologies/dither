@@ -3,7 +3,7 @@
     "name"        : "Dither",
     "script"      : "app.js",
     "ignore_watch" : ["[\\/\\\\]\\./", "node_modules", ".tmp", "views", "assets", ".idea",".git"],
-    "watch"       : "../",
+    "watch"       : false,
 }]
 }
 

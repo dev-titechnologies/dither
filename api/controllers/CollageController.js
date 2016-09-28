@@ -59,7 +59,7 @@ module.exports = {
                             var userId                      =     tokenCheck.tokenDetails.userId;
                             var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                             var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
-                            var collageImg_path_assets		=	  req.options.file_path.collageImg_path_assets;
+                            var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                             var imageUploadDirectoryPath    =     '../../assets/images/collage';
                             var concatUploadImgArray;
                             var request                     =     JSON.parse(req.param("REQUEST"));
@@ -217,26 +217,26 @@ module.exports = {
                                 });
                     },
                     function(callback) {
-							 // ------------------------------Generate ThumbnailImage-----------------------------------------------
-							 console.log("generating thumnail image of dither Image")
-								var imageSrc                    =     collageImg_path_assets + collage_results.image;
-								var ext                         =     imageSrc.split('/');
-								ext                             =     ext[ext.length-1].split('.');
-								var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-								console.log(imageSrc);
-								console.log(imageDst);
-								ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-										if(err){
-												console.log(err);
-												console.log("Error in image resize !!!!");
-												callback();
-										}else{
-												console.log(imageResizeResults);
-												callback();
-										}
-								});
-					},
-                    
+                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                             console.log("generating thumnail image of dither Image")
+                                var imageSrc                    =     collageImg_path_assets + collage_results.image;
+                                var ext                         =     imageSrc.split('/');
+                                ext                             =     ext[ext.length-1].split('.');
+                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                console.log(imageSrc);
+                                console.log(imageDst);
+                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+                                        if(err){
+                                                console.log(err);
+                                                console.log("Error in image resize !!!!");
+                                                callback();
+                                        }else{
+                                                console.log(imageResizeResults);
+                                                callback();
+                                        }
+                                });
+                    },
+
                     function(callback) {
                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 if(taggedUserArray.length != 0){
@@ -473,7 +473,7 @@ module.exports = {
                                     callback();
                                 }
                     },
-                    
+
 
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                 if (err) {
@@ -880,28 +880,30 @@ module.exports = {
                                 var query_offset_data_view_limit;
                                 //check the focus_dither id 0 or not
                                 if(focus_dither_id == 0){
-                                        query_offset_data_view_limit = "";
+                                        query_offset_data_view_limit    =   "";
+                                        focus_dither_id_0_order         =   "DESC";
                                 }else{
-                                        query_offset_data_view_limit = " AND clg.id "+offset_data_view_limit;
+                                        query_offset_data_view_limit    =   " AND clg.id "+offset_data_view_limit;
+                                        focus_dither_id_0_order         =   "";
                                 }
                                 //check the dither type (recent or popular)
                                 switch(received_dither_type){
 
                                         case 'recent' :
-                                                    query_order_same_user1 = " ORDER BY clg.createdAt DESC";
-                                                    query_order_same_user2 = " ORDER BY temp_clg.createdAt DESC";
+                                                    query_order_same_user1      =   " ORDER BY clg.createdAt " +focus_dither_id_0_order;
+                                                    query_order_same_user2      =   " ORDER BY temp_clg.createdAt DESC";
 
-                                                    query_order_other_user1 = " ORDER BY clg.createdAt DESC";
-                                                    query_order_other_user2 = " ORDER BY clg.createdAt DESC";
+                                                    query_order_other_user1     =   " ORDER BY clg.createdAt" +focus_dither_id_0_order;
+                                                    query_order_other_user2     =   " ORDER BY clg.createdAt DESC";
 
                                         break;
 
                                         case 'popular' :
-                                                    query_order_same_user1 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
-                                                    query_order_same_user2 = " ORDER BY temp_clg.totalVote DESC, temp_clg.createdAt DESC";
+                                                    query_order_same_user1      =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
+                                                    query_order_same_user2      =   " ORDER BY temp_clg.totalVote DESC, temp_clg.createdAt DESC";
 
-                                                    query_order_other_user1 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
-                                                    query_order_other_user2 = " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+                                                    query_order_other_user1     =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
+                                                    query_order_other_user2     =   " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
 
                                         break;
                                 }

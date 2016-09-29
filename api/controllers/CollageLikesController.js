@@ -124,7 +124,7 @@ console.log(device_type);
                                                                                                                     //subscribers     :   sails.sockets.subscribers(roomName),
                                                                                                                     //socket          :   sails.sockets.rooms()
                                                                                                                     });
-                                                                                //---------------------------Notification log Insertion---------------------------------
+                                                                                    //-----------Notification log Insertion----------------
                                                                                     
                                                                                 User.findOne({id:foundCollageResults.userId}).exec(function (err, notifySettings){
 																				if(err)

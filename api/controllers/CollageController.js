@@ -313,7 +313,8 @@ module.exports = {
 																				   }   
 																				   else
 																				   {
-																					 if(notifySettings.notifyOpinion==1){
+																					 if(notifySettings.notifyOpinion==1)
+																					 {
                                                                                       tagNotifyArray.push(factor);
 																				     }
 																				     
@@ -321,7 +322,7 @@ module.exports = {
                                                                                 });    
                                                                             });
                                                                             console.log(tagNotifyArray.length);
-                                                                            console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
+                                                                            console.log("Tagged Arrayyyyyyyyyyyyyyyyyyyyyyyyyy in Notification Insertion")
                                                                             console.log(tagNotifyArray);
                                                                             
                                                                             var values ={

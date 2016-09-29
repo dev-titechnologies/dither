@@ -236,7 +236,12 @@ module.exports = {
                                                                                                                         var phoneContactsArray  = [];
 
                                                                                                                         phonecontacts.forEach(function(factor, index){
-                                                                                                                                phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+																															User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+																																if(notifySettings.notifyContact==1)
+																																{
+																																	phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+																																}
+																															});
                                                                                                                         });
 
 

@@ -927,6 +927,7 @@ module.exports = {
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
                                                 " INNER JOIN user usr ON usr.id = temp_clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                                " GROUP BY clgdt.id"+
                                                 query_order_same_user2;
 
                                 }else{
@@ -960,6 +961,7 @@ module.exports = {
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
+                                                " GROUP BY clgdt.id"+
                                                 query_order_other_user2;
 
                                 }

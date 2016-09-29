@@ -922,13 +922,13 @@ module.exports = {
                                                 " WHERE clg.userId = '"+userId+"'"+
                                                 query_offset_data_view_limit+
                                                 query_order_same_user1+
-                                                " LIMIT "+data_view_limit+
                                                 ") AS temp_clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
                                                 " INNER JOIN user usr ON usr.id = temp_clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " GROUP BY clgdt.id"+
-                                                query_order_same_user2;
+                                                query_order_same_user2+
+                                                " LIMIT "+data_view_limit;
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
@@ -952,7 +952,6 @@ module.exports = {
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 query_offset_data_view_limit+
                                                 query_order_other_user1+
-                                                " LIMIT "+data_view_limit+
                                                 " ) AS temp_clg"+
 
                                                 " INNER JOIN collage clg ON clg.id = temp_clg.id"+
@@ -962,7 +961,8 @@ module.exports = {
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
                                                 " GROUP BY clgdt.id"+
-                                                query_order_other_user2;
+                                                query_order_other_user2+
+                                                " LIMIT "+data_view_limit;
 
                                 }
 

@@ -870,7 +870,7 @@ module.exports = {
                     console.log(req.param("focus_dither_id"));
                     var page_type               =   req.param("page_type");
                     var focus_dither_id         =   req.param("focus_dither_id");
-
+                    focus_dither_id_0_order     =   "";
 
                             switch(page_type){
 
@@ -880,6 +880,7 @@ module.exports = {
 
                                         case 'old' :
                                                     offset_data_view_limit =  "< "+focus_dither_id;
+                                                    focus_dither_id_0_order         =   "DESC";
                                         break;
                             }
 
@@ -894,10 +895,10 @@ module.exports = {
                                 //check the focus_dither id 0 or not
                                 if(focus_dither_id == 0){
                                         query_offset_data_view_limit    =   "";
-                                        focus_dither_id_0_order         =   "DESC";
+
                                 }else{
                                         query_offset_data_view_limit    =   " AND clg.id "+offset_data_view_limit;
-                                        focus_dither_id_0_order         =   "";
+
                                 }
                                 //check the dither type (recent or popular)
                                 switch(received_dither_type){

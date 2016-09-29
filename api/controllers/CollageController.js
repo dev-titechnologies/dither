@@ -306,20 +306,20 @@ module.exports = {
                                                                     if(taggedUserArray.length !=0){
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
-                                                                               User.findOne({id:factor}).exec(function (err, notifySettings){  
-																				   if(err)
-																				   {
-																					   console.log(err)
-																				   }   
-																				   else
-																				   {
-																					 if(notifySettings.notifyOpinion==1)
-																					 {
+                                                                               User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                   if(err)
+                                                                                   {
+                                                                                       console.log(err)
+                                                                                   }
+                                                                                   else
+                                                                                   {
+                                                                                     if(notifySettings.notifyOpinion==1)
+                                                                                     {
                                                                                       tagNotifyArray.push(factor);
-																				     }
-																				     
-																				   }
-                                                                                });    
+                                                                                     }
+
+                                                                                   }
+                                                                                });
 
                                                                             });
                                                                             console.log(tagNotifyArray.length);
@@ -877,6 +877,9 @@ module.exports = {
 
                                         case 'new' :
                                                     offset_data_view_limit =  "> "+focus_dither_id;
+                                                    if(focus_dither_id == 0){
+                                                        focus_dither_id_0_order         =   " DESC";
+                                                    }
                                         break;
 
                                         case 'old' :

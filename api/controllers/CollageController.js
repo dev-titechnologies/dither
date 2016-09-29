@@ -306,24 +306,11 @@ module.exports = {
                                                                     if(taggedUserArray.length !=0){
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
-                                                                               User.findOne({id:factor}).exec(function (err, notifySettings){  
-																				   if(err)
-																				   {
-																					   console.log(err)
-																				   }   
-																				   else
-																				   {
-																					 if(notifySettings.notifyOpinion==1){
-                                                                                      tagNotifyArray.push(factor);
-																				     }
-																				     
-																				   }
-                                                                                });    
+                                                                                    tagNotifyArray.push(factor);
                                                                             });
                                                                             console.log(tagNotifyArray.length);
                                                                             console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
                                                                             console.log(tagNotifyArray);
-                                                                            
                                                                             var values ={
                                                                                             notificationTypeId  :   1,
                                                                                             userId              :   userId,
@@ -880,7 +867,7 @@ module.exports = {
 
                                         case 'old' :
                                                     offset_data_view_limit =  "< "+focus_dither_id;
-                                                    focus_dither_id_0_order         =   "DESC";
+                                                    focus_dither_id_0_order         =   " DESC";
                                         break;
                             }
 

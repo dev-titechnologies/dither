@@ -1094,10 +1094,10 @@ module.exports = {
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
 
-                                                                    //recent_dithers                              =       key.sort( predicatBy("mainOrder") );
-                                                                    //popular_dithers                             =       key.sort( predicatBy("totalVote") );
-                                                                    recent_dithers                              =       key;
-                                                                    popular_dithers                             =       key;
+                                                                    recent_dithers                              =       key.sort( predicatBy("mainOrder") );
+                                                                    popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                    //recent_dithers                              =       key;
+                                                                    //popular_dithers                             =       key;
                                                                 }
                                                             }
 

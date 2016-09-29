@@ -320,11 +320,11 @@ module.exports = {
 																				     
 																				   }
                                                                                 });    
+
                                                                             });
                                                                             console.log(tagNotifyArray.length);
                                                                             console.log("Tagged Arrayyyyyyyyyyyyyyyyyyyyyyyyyy in Notification Insertion")
                                                                             console.log(tagNotifyArray);
-                                                                            
                                                                             var values ={
                                                                                             notificationTypeId  :   1,
                                                                                             userId              :   userId,
@@ -871,7 +871,7 @@ module.exports = {
                     console.log(req.param("focus_dither_id"));
                     var page_type               =   req.param("page_type");
                     var focus_dither_id         =   req.param("focus_dither_id");
-
+                    focus_dither_id_0_order     =   "";
 
                             switch(page_type){
 
@@ -881,6 +881,7 @@ module.exports = {
 
                                         case 'old' :
                                                     offset_data_view_limit =  "< "+focus_dither_id;
+                                                    focus_dither_id_0_order         =   " DESC";
                                         break;
                             }
 
@@ -895,10 +896,10 @@ module.exports = {
                                 //check the focus_dither id 0 or not
                                 if(focus_dither_id == 0){
                                         query_offset_data_view_limit    =   "";
-                                        focus_dither_id_0_order         =   "DESC";
+
                                 }else{
                                         query_offset_data_view_limit    =   " AND clg.id "+offset_data_view_limit;
-                                        focus_dither_id_0_order         =   "";
+
                                 }
                                 //check the dither type (recent or popular)
                                 switch(received_dither_type){
@@ -935,12 +936,13 @@ module.exports = {
                                                 " WHERE clg.userId = '"+userId+"'"+
                                                 query_offset_data_view_limit+
                                                 query_order_same_user1+
-                                                " LIMIT "+data_view_limit+
                                                 ") AS temp_clg"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
                                                 " INNER JOIN user usr ON usr.id = temp_clg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
-                                                query_order_same_user2;
+                                                " GROUP BY clgdt.id"+
+                                                query_order_same_user2+
+                                                " LIMIT "+data_view_limit;
 
                                 }else{
                                         console.log("Not a logged User ----------------------------------------------------");
@@ -964,7 +966,6 @@ module.exports = {
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 query_offset_data_view_limit+
                                                 query_order_other_user1+
-                                                " LIMIT "+data_view_limit+
                                                 " ) AS temp_clg"+
 
                                                 " INNER JOIN collage clg ON clg.id = temp_clg.id"+
@@ -973,7 +974,9 @@ module.exports = {
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
                                                 " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
-                                                query_order_other_user2;
+                                                " GROUP BY clgdt.id"+
+                                                query_order_other_user2+
+                                                " LIMIT "+data_view_limit;
 
                                 }
 

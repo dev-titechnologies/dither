@@ -617,7 +617,7 @@ module.exports = {
                             }
                             else
                                 {
-                                    return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
+                                    return res.json(200, {status: 2,status_type:"Success",msg: 'No notification found',notification_data:[]});
                                 }
                             }
                         });

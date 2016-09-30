@@ -306,6 +306,8 @@ module.exports = {
                                                                     if(taggedUserArray.length !=0){
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
+                                                                               console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")     
+                                                                               console.log(factor) 
                                                                                User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                    if(err)
                                                                                    {
@@ -313,6 +315,7 @@ module.exports = {
                                                                                    }
                                                                                    else
                                                                                    {
+																					   
                                                                                      if(notifySettings.notifyOpinion==1)
                                                                                      {
                                                                                       tagNotifyArray.push(factor);
@@ -322,6 +325,8 @@ module.exports = {
                                                                                 });
 
                                                                             });
+                                                                            console.log("++++++++++++++Ntfn++++22222+++++++++++++++++++++++++++++++")
+                                                                            console.log(tagNotifyArray)
                                                                             console.log(tagNotifyArray.length);
                                                                             console.log("Tagged Arrayyyyyyyyyyyyyyyyyyyyyyyyyy in Notification Insertion")
                                                                             console.log(tagNotifyArray);

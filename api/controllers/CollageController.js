@@ -365,8 +365,27 @@ module.exports = {
 
 
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
+                                                                                   var tagNtfyPush = [];
+                                                                                    tagNotifyArray.forEach(function(factor, index){
+																							 User.findOne({id:factor}).exec(function (err, notifySettings){
+																								   if(err)
+																								   {
+																									   console.log(err)
+																								   }
+																								   else
+																								   {
+																									 console.log("???????---Result----?????????")
+																									 console.log(notifySettings)  
+																									 if(notifySettings.notifyOpinion==1)
+																									 {
+																										console.log(factor) 
+																									   tagNtfyPush.push(factor);
+																									 }
 
-
+																								   }
+																								});
+																						});
+																						console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";

@@ -375,11 +375,11 @@ module.exports = {
 																								   else
 																								   {
 																									 console.log("???????---Result----?????????")
-																									 console.log(notifySettings)  
-																									 if(notifySettings.notifyOpinion==1)
+																									 console.log(notifySettings.notifyOpinion)  
+																									 if(notifySettings.notifyOpinion)
 																									 {
 																										console.log(factor) 
-																									   tagNtfyPush.push(factor);
+																										tagNtfyPush.push(factor);
 																									 }
 
 																								   }

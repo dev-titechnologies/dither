@@ -1078,7 +1078,7 @@ module.exports = {
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
                                                                             console.log("+++++++++++++++++++++++++++++---LIKE VOTE ---+++++++++++++++++++++++++++++");
-                                                                            console.log(dataResults[j]["likeUserId"]);
+                                                                            console.log(dataResults[j]["likeStatus"]);
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                         likeStatus = 0;
                                                                             }else{
@@ -1119,7 +1119,7 @@ module.exports = {
                                                                     received_userProfilePic                     =       profilePic_path + dataResults[i]["profilePic"];
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
                                                                     dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
-                                                                    dataResultsObj.dither_like_position         =       like_position;
+                                                                    dataResultsObj.dither_like_position         =       like_position_Array;
                                                                     dataResultsObj.collage_id                   =       collageId_val;
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;

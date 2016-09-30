@@ -308,21 +308,23 @@ module.exports = {
                                                                                     //tagNotifyArray.push({id:factor.user_id});
                                                                                console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")     
                                                                                console.log(factor) 
-                                                                               User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                               tagNotifyArray.push(factor);
+                                                                              /* User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                    if(err)
                                                                                    {
                                                                                        console.log(err)
                                                                                    }
                                                                                    else
                                                                                    {
-																					   
+																					 console.log("???????---Result----?????????")
+																					 console.log(notifySettings)  
                                                                                      if(notifySettings.notifyOpinion==1)
                                                                                      {
                                                                                       tagNotifyArray.push(factor);
                                                                                      }
 
                                                                                    }
-                                                                                });
+                                                                                });*/
 
                                                                             });
                                                                             console.log("++++++++++++++Ntfn++++22222+++++++++++++++++++++++++++++++")

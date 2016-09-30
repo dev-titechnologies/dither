@@ -389,7 +389,7 @@ module.exports = {
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
-                                                                                        User_token.find({userId: tagNotifyArray})
+                                                                                        User_token.find({userId: tagNtfyPush})
                                                                                             .exec(function (err, response) {
 
                                                                                                 response.forEach(function(factor, index){

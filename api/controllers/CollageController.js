@@ -1077,6 +1077,8 @@ module.exports = {
 
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
+                                                                            console.log("+++++++++++++++++++++++++++++---LIKE VOTE ---+++++++++++++++++++++++++++++");
+                                                                            console.log(dataResults[j]["likeUserId"]);
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                         likeStatus = 0;
                                                                             }else{

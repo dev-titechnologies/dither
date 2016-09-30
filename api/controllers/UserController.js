@@ -411,7 +411,7 @@ module.exports = {
                                                                                             // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
                                                                                             console.log("async parallel in Sms Part Success --------------------");
                                                                                             
-																							var imageSrc                    =     profilePic_path_assets + results.profilePic;
+																						/*	var imageSrc                    =     profilePic_path_assets + results.profilePic;
 																							var ext                         =     imageSrc.split('/');
 																							ext                             =     ext[ext.length-1].split('.');
 																							var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
@@ -434,7 +434,12 @@ module.exports = {
                                                                                                                   mobile_number :   results.phoneNumber
                                                                                                             });
 																									}
-																							});
+																							});*/
+																							return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+                                                                                                                  token         :   userTokenDetails.token.token,
+                                                                                                                  user_id       :   results.id,
+                                                                                                                  mobile_number :   results.phoneNumber
+                                                                                                            });
                                                                                        
                                                                                                 //------------------------------------------------------------------------------------------------------
                                                                                         }

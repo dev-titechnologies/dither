@@ -235,14 +235,14 @@ module.exports = {
                                                                                                                         var phonecontacts       = selectContacts;
                                                                                                                         var phoneContactsArray  = [];
 
-                                                                                                                        phonecontacts.forEach(function(factor, index){
+                                                                                                                       /* phonecontacts.forEach(function(factor, index){
 																															User.findOne({id:factor.userId}).exec(function (err, notifySettings){
 																																if(notifySettings.notifyContact==1)
 																																{
 																																	phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
 																																}
 																															});
-                                                                                                                        });
+                                                                                                                        });*/
 
 
                                                                                                                          NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification) {
@@ -410,15 +410,33 @@ module.exports = {
 
                                                                                             // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
                                                                                             console.log("async parallel in Sms Part Success --------------------");
-                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+                                                                                            
+																							var imageSrc                    =     profilePic_path_assets + results.profilePic;
+																							var ext                         =     imageSrc.split('/');
+																							ext                             =     ext[ext.length-1].split('.');
+																							var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																							console.log(imageSrc);
+																							console.log(imageDst);
+																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																									if(err){
+																											console.log(err);
+																											console.log("Error in image resize !!!!");
+																											 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
                                                                                                                   token         :   userTokenDetails.token.token,
                                                                                                                   user_id       :   results.id,
                                                                                                                   mobile_number :   results.phoneNumber
                                                                                                             });
+																									}else{
+																											console.log(imageResizeResults);
+																											 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+                                                                                                                  token         :   userTokenDetails.token.token,
+                                                                                                                  user_id       :   results.id,
+                                                                                                                  mobile_number :   results.phoneNumber
+                                                                                                            });
+																									}
+																							});
+                                                                                       
                                                                                                 //------------------------------------------------------------------------------------------------------
-
-
-
                                                                                         }
 
                                                                         });

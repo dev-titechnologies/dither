@@ -61,7 +61,7 @@ module.exports = {
                                                                if(userId   !=  collageDetails.userId)
                                                                 {
 																	
-																 User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
+																 /*User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
 																	if(err)
 																	{
 																		console.log(err)
@@ -77,7 +77,7 @@ module.exports = {
 																							});
 																		   
 																	   }
-																	   else{
+																	   else{*/
 																	
 																	
                                                                         console.log("inserted comments  Different User Comment");
@@ -107,93 +107,116 @@ module.exports = {
                                                                                                                             notification_id            :       createdNotificationTags.id
                                                                                                                             });
                                                                                     //-----------------------------End OF NotificationLog---------------------------------
-                                                                                    //----------------------------Push Notification For Comment------------------------------------------
-                                                                                    var message   = 'Comment Notification';
-                                                                                    var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
-                                                                                    //var query   =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+collageDetails.userId+"'";
-                                                                                    //User_token.query(query, function(err, getDeviceId) {
-                                                                                    User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
-                                                                                        if(err){
-                                                                                              console.log(err)
-                                                                                              return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
-                                                                                        }else{
-                                                                                            if(!getDeviceId.length){
-                                                                                               console.log("device not found")
-                                                                                               return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-                                                                                                                    comment_id                      :    results.id,
-                                                                                                                    comment_msg                     :    results.msg,
-                                                                                                                    comment_created_date_time       :    results.createdAt,
-                                                                                                            });
-                                                                                            }else{
-                                                                                                  var deviceId_arr  = [];
-                                                                                                   getDeviceId.forEach(function(factor, index){
+                                                                                    
+                                                                                   User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
+																					if(err)
+																					{
+																						console.log(err)
+																						return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
+																					}
+																					else{
+																					   if(notifySettings.notifyComment==0){
+																							
+																							return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																													comment_id                      :    results.id,
+																													comment_msg                     :    results.msg,
+																													comment_created_date_time       :    results.createdAt,
+																											});
+																						   
+																					   }
+																					   else{
+                                                                                    
+                                                                                    
+																							//----------------------------Push Notification For Comment------------------------------------------
+																							var message   = 'Comment Notification';
+																							var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
+																							//var query   =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+collageDetails.userId+"'";
+																							//User_token.query(query, function(err, getDeviceId) {
+																							User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
+																								if(err){
+																									  console.log(err)
+																									  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+																								}else{
+																									if(!getDeviceId.length){
+																									   console.log("device not found")
+																									   return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																															comment_id                      :    results.id,
+																															comment_msg                     :    results.msg,
+																															comment_created_date_time       :    results.createdAt,
+																													});
+																									}else{
+																										  var deviceId_arr  = [];
+																										   getDeviceId.forEach(function(factor, index){
 
-                                                                                                                deviceId_arr.push(factor.deviceId);
-
-
-                                                                                                    });
-                                                                                                if(deviceId_arr.length){
-                                                                                                  var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId};
-                                                                                                  console.log(data)
-                                                                                                    if(device_type=='ios'){
-                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-                                                                                                                if(err){
-                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                    console.log(err)
-                                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
-                                                                                                                }else{
-                                                                                                                    console.log("Push notification result")
-                                                                                                                    console.log(ntfnSend)
-                                                                                                                    console.log("Push Notification sended")
-
-                                                                                                                     return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-                                                                                                                        comment_id                      :    results.id,
-                                                                                                                        comment_msg                     :    results.msg,
-                                                                                                                        comment_created_date_time       :    results.createdAt,
-                                                                                                                     });
-
-                                                                                                                }
-                                                                                                            });
-                                                                                                    }else if(device_type=='android'){
-                                                                                                            console.log("push notification")
-                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-                                                                                                                if(err)
-                                                                                                                {
-                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                    console.log(err)
-                                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
-                                                                                                                }
-                                                                                                                else
-                                                                                                                {
-                                                                                                                    console.log("Push notification result")
-                                                                                                                    console.log(ntfnSend)
-                                                                                                                    console.log("Push Notification sended")
-                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-                                                                                                                        comment_id                      :    results.id,
-                                                                                                                        comment_msg                     :    results.msg,
-                                                                                                                        comment_created_date_time       :    results.createdAt,
-                                                                                                                    });
+																														deviceId_arr.push(factor.deviceId);
 
 
-                                                                                                                }
-                                                                                                            });
-                                                                                                    }else{
-                                                                                                                return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-                                                                                                                        comment_id                      :    results.id,
-                                                                                                                        comment_msg                     :    results.msg,
-                                                                                                                        comment_created_date_time       :    results.createdAt,
-                                                                                                                });
-                                                                                                    }
-                                                                                                }
-                                                                                            }//kkkk
-                                                                                        }
-                                                                                    });
+																											});
+																										if(deviceId_arr.length){
+																										  var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId};
+																										  console.log(data)
+																											if(device_type=='ios'){
+																													NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																														if(err){
+																															console.log("Error in Push Notification Sending")
+																															console.log(err)
+																															return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+																														}else{
+																															console.log("Push notification result")
+																															console.log(ntfnSend)
+																															console.log("Push Notification sended")
+
+																															 return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																comment_id                      :    results.id,
+																																comment_msg                     :    results.msg,
+																																comment_created_date_time       :    results.createdAt,
+																															 });
+
+																														}
+																													});
+																											}else if(device_type=='android'){
+																													console.log("push notification")
+																													NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																														if(err)
+																														{
+																															console.log("Error in Push Notification Sending")
+																															console.log(err)
+																															return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+																														}
+																														else
+																														{
+																															console.log("Push notification result")
+																															console.log(ntfnSend)
+																															console.log("Push Notification sended")
+																															return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																comment_id                      :    results.id,
+																																comment_msg                     :    results.msg,
+																																comment_created_date_time       :    results.createdAt,
+																															});
+
+
+																														}
+																													});
+																											}else{
+																														return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																comment_id                      :    results.id,
+																																comment_msg                     :    results.msg,
+																																comment_created_date_time       :    results.createdAt,
+																														});
+																											}
+																										}
+																									}//kkkk
+																								}
+																							});
+																					}
+																				  }
+																				 }); 
                                                                                 }
                                                                          });
-                                                                     }    
+                                                                     //}    
                                                                      
-																 }
-																});
+																 //}
+																//});
 
                                                                 }else{
                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',

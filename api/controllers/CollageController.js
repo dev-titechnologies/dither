@@ -306,22 +306,29 @@ module.exports = {
                                                                     if(taggedUserArray.length !=0){
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
-                                                                               User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                               console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")     
+                                                                               console.log(factor) 
+                                                                               tagNotifyArray.push(factor);
+                                                                              /* User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                    if(err)
                                                                                    {
                                                                                        console.log(err)
                                                                                    }
                                                                                    else
                                                                                    {
+																					 console.log("???????---Result----?????????")
+																					 console.log(notifySettings)  
                                                                                      if(notifySettings.notifyOpinion==1)
                                                                                      {
                                                                                       tagNotifyArray.push(factor);
                                                                                      }
 
                                                                                    }
-                                                                                });
+                                                                                });*/
 
                                                                             });
+                                                                            console.log("++++++++++++++Ntfn++++22222+++++++++++++++++++++++++++++++")
+                                                                            console.log(tagNotifyArray)
                                                                             console.log(tagNotifyArray.length);
                                                                             console.log("Tagged Arrayyyyyyyyyyyyyyyyyyyyyyyyyy in Notification Insertion")
                                                                             console.log(tagNotifyArray);

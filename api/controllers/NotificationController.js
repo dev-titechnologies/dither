@@ -165,9 +165,7 @@ module.exports = {
                             }
                             else
                             {
-								console.log("*************Notification Result*************")
-                                console.log(results[length])
-
+                               
                                 if(typeof results != 'undefined' && results.length!=0)
                                 {
 

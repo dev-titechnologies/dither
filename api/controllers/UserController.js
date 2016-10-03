@@ -37,7 +37,7 @@ module.exports = {
 
                         console.log(imgUrl);
                         //Download STARTS--------
-                        var download = function(uri, filename, callback){
+                        /*var download = function(uri, filename, callback){
                                 request.head(uri, function(err, res, body){
                                     request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                                 });
@@ -67,7 +67,7 @@ module.exports = {
 								});
                             
 
-                        });
+                        });*/
 
 
 
@@ -400,26 +400,42 @@ module.exports = {
                                                                                                         console.log("#########################################")
                                                                                                 });
 
-                                                                                    },/*
+                                                                                    },
                                                                                     function(callback) {
-                                                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                                                var imageSrc                    =     profilePic_path_assets + results.profilePic;
-                                                                                                var ext                         =     imageSrc.split('/');
-                                                                                                ext                             =     ext[ext.length-1].split('.');
-                                                                                                var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                console.log(imageSrc);
-                                                                                                console.log(imageDst);
-                                                                                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                                                        if(err){
-                                                                                                                console.log(err);
-                                                                                                                console.log("Error in image resize !!!!");
-                                                                                                                callback();
-                                                                                                        }else{
-                                                                                                                console.log(imageResizeResults);
-                                                                                                                callback();
-                                                                                                        }
-                                                                                                });
-                                                                                    },*/
+																						           console.log("+++++++++++++++++++Image Downloadingggggggggggggg+++++++++++++++++++++++++++++++++")
+																								   var download = function(uri, filename, callback){
+																									request.head(uri, function(err, res, body){
+																										console.log("image resizingggggggggggggggggggggggggg")
+																										request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+																								    });
+
+
+																									};
+																									download(imgUrl,'assets/images/profilePics/'+imagename, function()
+																									{
+																										sails.log('done');
+																											var imageSrc                    =     profilePic_path_assets + imagename;
+																											var ext                         =     imageSrc.split('/');
+																											ext                             =     ext[ext.length-1].split('.');
+																											var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																											console.log(imageSrc);
+																											console.log(imageDst);
+																											ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																													if(err){
+																															console.log(err);
+																															console.log("Error in image resize !!!!");
+																															
+																															
+																													}else{
+																															
+																															console.log(imageResizeResults);
+																															 callback();
+																														 }
+																											});
+																										
+
+																									});
+                                                                                    },
                                                                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if (err) {
                                                                                             console.log("async parallel in Sms Part Failure --------------------");

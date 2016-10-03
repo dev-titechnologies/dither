@@ -57,19 +57,13 @@ module.exports = {
 										if(err){
 												console.log(err);
 												console.log("Error in image resize !!!!");
-												 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
-													  token         :   userTokenDetails.token.token,
-													  user_id       :   results.id,
-													  mobile_number :   results.phoneNumber
-												});
+												
+												
 										}else{
+												
 												console.log(imageResizeResults);
-												 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
-													  token         :   userTokenDetails.token.token,
-													  user_id       :   results.id,
-													  mobile_number :   results.phoneNumber
-												});
-										}
+												 
+											 }
 								});
                             
 

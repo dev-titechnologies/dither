@@ -36,42 +36,7 @@ module.exports = {
                         var imagename    = new Date().getTime() + filename;
 
                         console.log(imgUrl);
-                        //Download STARTS--------
-                        /*var download = function(uri, filename, callback){
-                                request.head(uri, function(err, res, body){
-                                    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-                                });
-
-
-                        };
-                        download(imgUrl,'assets/images/profilePics/'+imagename, function()
-                        {
-                            sails.log('done');
-								var imageSrc                    =     profilePic_path_assets + imagename;
-								var ext                         =     imageSrc.split('/');
-								ext                             =     ext[ext.length-1].split('.');
-								var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-								console.log(imageSrc);
-								console.log(imageDst);
-								ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-										if(err){
-												console.log(err);
-												console.log("Error in image resize !!!!");
-												
-												
-										}else{
-												
-												console.log(imageResizeResults);
-												 
-											 }
-								});
-                            
-
-                        });*/
-
-
-
-                        //Download ENDS--------
+                        
                         var OTPCode      = req.param('otp');
                         var deviceId     = req.get('device_id');
                         var device_IMEI  = req.get('device_imei');
@@ -161,6 +126,7 @@ module.exports = {
                                                             }else {
 
                                                                     console.log("Before async parallel in Sign up ===============================================");
+                                                                    //async.series([([ 
                                                                         // Send Email and Sms  Simultaneously
                                                                         async.parallel([
                                                                                     function(callback) {
@@ -305,8 +271,29 @@ module.exports = {
                                                                                                                                     else
                                                                                                                                     {
                                                                                                                                         //-----------PUSH Notification------------------------------------
+                                                                                                                                        
+                                                                                                                                        var contactNtfyPush = [];
+																																		contact_arr.forEach(function(factor, index){
+																																				 User.findOne({id:factor}).exec(function (err, notifySettings){
+																																					   if(err)
+																																					   {
+																																						   console.log(err)
+																																					   }
+																																					   else
+																																					   {
+																																						 console.log("???????---Result----?????????")
+																																						 console.log(notifySettings.notifyContact)
+																																						 if(notifySettings.notifyContact)
+																																						 {
+																																							console.log(factor)
+																																							contactNtfyPush.push(factor);
+																																						 }
 
-                                                                                                                                        User_token.find({userId: contact_arr}).exec(function (err, getDeviceId) {
+																																					   }
+																																					});
+																																			});
+
+                                                                                                                                        User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId) {
                                                                                                                                         //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
                                                                                                                                             if(err)
                                                                                                                                             {
@@ -316,6 +303,7 @@ module.exports = {
                                                                                                                                             else
                                                                                                                                             {
 
+																																				
                                                                                                                                                 var message     =  'signup Notification';
                                                                                                                                                 var ntfn_body   =   results.name +" Joined on Dither";
                                                                                                                                                 //var device_id   =  getDeviceId.deviceId;

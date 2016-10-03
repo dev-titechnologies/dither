@@ -306,8 +306,8 @@ module.exports = {
                                                                     if(taggedUserArray.length !=0){
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
-                                                                               console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")     
-                                                                               console.log(factor) 
+                                                                               console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")
+                                                                               console.log(factor)
                                                                                tagNotifyArray.push(factor);
                                                                               /* User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                    if(err)
@@ -316,8 +316,8 @@ module.exports = {
                                                                                    }
                                                                                    else
                                                                                    {
-																					 console.log("???????---Result----?????????")
-																					 console.log(notifySettings)  
+                                                                                     console.log("???????---Result----?????????")
+                                                                                     console.log(notifySettings)
                                                                                      if(notifySettings.notifyOpinion==1)
                                                                                      {
                                                                                       tagNotifyArray.push(factor);
@@ -367,25 +367,25 @@ module.exports = {
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
                                                                                    var tagNtfyPush = [];
                                                                                     tagNotifyArray.forEach(function(factor, index){
-																							 User.findOne({id:factor}).exec(function (err, notifySettings){
-																								   if(err)
-																								   {
-																									   console.log(err)
-																								   }
-																								   else
-																								   {
-																									 console.log("???????---Result----?????????")
-																									 console.log(notifySettings.notifyOpinion)  
-																									 if(notifySettings.notifyOpinion)
-																									 {
-																										console.log(factor) 
-																										tagNtfyPush.push(factor);
-																									 }
+                                                                                             User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                                   if(err)
+                                                                                                   {
+                                                                                                       console.log(err)
+                                                                                                   }
+                                                                                                   else
+                                                                                                   {
+                                                                                                     console.log("???????---Result----?????????")
+                                                                                                     console.log(notifySettings.notifyOpinion)
+                                                                                                     if(notifySettings.notifyOpinion)
+                                                                                                     {
+                                                                                                        console.log(factor)
+                                                                                                        tagNtfyPush.push(factor);
+                                                                                                     }
 
-																								   }
-																								});
-																						});
-																						console.log(tagNtfyPush)
+                                                                                                   }
+                                                                                                });
+                                                                                        });
+                                                                                        console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
@@ -888,7 +888,9 @@ module.exports = {
                     var received_userId             =     req.param("user_id");
                     var received_dither_type        =     req.param("type");
                     var received_userName, received_userProfilePic;
-                    var query, offset_data_view_limit;
+                    var query,
+                        offset_data_view_limit,
+                        popular_totalVote;
                     console.log("Get all Type Dither  -------------------- ================================================");
                     console.log(received_userId);
                     console.log(received_dither_type);
@@ -939,6 +941,8 @@ module.exports = {
 
                                                     query_order_other_user1     =   " ORDER BY clg.createdAt" +focus_dither_id_0_order;
                                                     query_order_other_user2     =   " ORDER BY clg.createdAt DESC";
+                                                    popular_totalVote           =   "";
+
 
                                         break;
 
@@ -948,6 +952,7 @@ module.exports = {
 
                                                     query_order_other_user1     =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
                                                     query_order_other_user2     =   " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+                                                    popular_totalVote           =   " AND clg.totalVote != 0";
 
                                         break;
                                 }
@@ -963,6 +968,7 @@ module.exports = {
                                                 " SELECT *"+
                                                 " FROM collage clg"+
                                                 " WHERE clg.userId = '"+userId+"'"+
+                                                popular_totalVote+
                                                 query_offset_data_view_limit+
                                                 query_order_same_user1+
                                                 " LIMIT "+data_view_limit+
@@ -995,6 +1001,7 @@ module.exports = {
                                                 " LIMIT "+data_view_limit+
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                popular_totalVote+
                                                 query_offset_data_view_limit+
                                                 query_order_other_user1+
                                                 " ) AS temp_clg"+
@@ -1070,6 +1077,8 @@ module.exports = {
 
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
+                                                                            console.log("+++++++++++++++++++++++++++++---LIKE VOTE ---+++++++++++++++++++++++++++++");
+                                                                            console.log(dataResults[j]["likeStatus"]);
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                         likeStatus = 0;
                                                                             }else{

@@ -186,7 +186,7 @@ module.exports = {
                                                                         " WHERE tg.collageId = "+get_collage_id+
                                                                         " GROUP BY adb.ditherUserId"+
                                                                         " UNION"+
-                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name"+
+                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name, usr.profilePic"+
                                                                         " FROM tags tg"+
                                                                         " INNER JOIN user usr ON usr.id = tg.userId"+
                                                                         " LEFT JOIN fbFriends fbf ON fbf.ditherUserId = tg.userId"+

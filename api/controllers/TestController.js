@@ -836,6 +836,28 @@ module.exports = {
                 });
         },
 
+         /* ==================================================================================================================================
+               Download
+        ==================================================================================================================================== */
+        download: function (req, res) {
+                    console.log("SAILS DOWNLOAD ##################################");
+                    req.file('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/p200x200/11692484_1584512915143266_7884115120613929813_n.jpg?oh=42b7eff448f63708c7f5eedf11a9402e&oe=58154D7A&__gda__=1479562104_5855c5a67913f66449272bf8f4b59dcf').download({dirname: '../../assets/images/test', maxBytes: 10000000},function (err, results) {
+                            if (err)
+                            {
+                                console.log(err);
+
+                            }
+                            else
+                            {
+
+                               console.log(results);
+
+                            }
+                    });
+                    //req.download('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/p200x200/11692484_1584512915143266_7884115120613929813_n.jpg?oh=42b7eff448f63708c7f5eedf11a9402e&oe=58154D7A&__gda__=1479562104_5855c5a67913f66449272bf8f4b59dcf');
+                    //res.download('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/p200x200/11692484_1584512915143266_7884115120613929813_n.jpg?oh=42b7eff448f63708c7f5eedf11a9402e&oe=58154D7A&__gda__=1479562104_5855c5a67913f66449272bf8f4b59dcf');
+         },
+
 };
 
 

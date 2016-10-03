@@ -178,7 +178,7 @@ module.exports = {
                                                             //Query to get tagged users from both addressBook and fbFriends
                                                                 query  = "SELECT *"+
                                                                         " FROM ("+
-                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
+                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name, usr.profilePic"+
                                                                         " FROM tags tg"+
                                                                         " INNER JOIN user usr ON usr.id = tg.userId"+
                                                                         " LEFT JOIN addressBook adb ON adb.ditherUserId = tg.userId"+
@@ -186,7 +186,7 @@ module.exports = {
                                                                         " WHERE tg.collageId = "+get_collage_id+
                                                                         " GROUP BY adb.ditherUserId"+
                                                                         " UNION"+
-                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name"+
+                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name, usr.profilePic"+
                                                                         " FROM tags tg"+
                                                                         " INNER JOIN user usr ON usr.id = tg.userId"+
                                                                         " LEFT JOIN fbFriends fbf ON fbf.ditherUserId = tg.userId"+
@@ -214,7 +214,11 @@ module.exports = {
                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
                                                                                         //console.log("factor");
                                                                                         //console.log(factor);
-                                                                                        taggedUserArrayFinal.push({name: factor.name,userId: factor.ditherUserId});
+                                                                                        taggedUserArrayFinal.push({
+                                                                                                                name            :   factor.name,
+                                                                                                                userId          :   factor.ditherUserId,
+                                                                                                                profile_image   :   profilePic_path + factor.profilePic,
+                                                                                                                });
                                                                                 });
                                                                             }
 

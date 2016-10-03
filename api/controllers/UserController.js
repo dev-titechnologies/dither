@@ -47,6 +47,31 @@ module.exports = {
                         download(imgUrl,'assets/images/profilePics/'+imagename, function()
                         {
                             sails.log('done');
+								var imageSrc                    =     profilePic_path_assets + imagename;
+								var ext                         =     imageSrc.split('/');
+								ext                             =     ext[ext.length-1].split('.');
+								var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+								console.log(imageSrc);
+								console.log(imageDst);
+								ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+										if(err){
+												console.log(err);
+												console.log("Error in image resize !!!!");
+												 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+													  token         :   userTokenDetails.token.token,
+													  user_id       :   results.id,
+													  mobile_number :   results.phoneNumber
+												});
+										}else{
+												console.log(imageResizeResults);
+												 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+													  token         :   userTokenDetails.token.token,
+													  user_id       :   results.id,
+													  mobile_number :   results.phoneNumber
+												});
+										}
+								});
+                            
 
                         });
 
@@ -410,36 +435,13 @@ module.exports = {
 
                                                                                             // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
                                                                                             console.log("async parallel in Sms Part Success --------------------");
-                                                                                            
-																						/*	var imageSrc                    =     profilePic_path_assets + results.profilePic;
-																							var ext                         =     imageSrc.split('/');
-																							ext                             =     ext[ext.length-1].split('.');
-																							var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																							console.log(imageSrc);
-																							console.log(imageDst);
-																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																									if(err){
-																											console.log(err);
-																											console.log("Error in image resize !!!!");
-																											 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
                                                                                                                   token         :   userTokenDetails.token.token,
                                                                                                                   user_id       :   results.id,
                                                                                                                   mobile_number :   results.phoneNumber
                                                                                                             });
-																									}else{
-																											console.log(imageResizeResults);
-																											 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
-                                                                                                                  token         :   userTokenDetails.token.token,
-                                                                                                                  user_id       :   results.id,
-                                                                                                                  mobile_number :   results.phoneNumber
-                                                                                                            });
-																									}
-																							});*/
-																							return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
-                                                                                                                  token         :   userTokenDetails.token.token,
-                                                                                                                  user_id       :   results.id,
-                                                                                                                  mobile_number :   results.phoneNumber
-                                                                                                            });
+																						 
+																							
                                                                                        
                                                                                                 //------------------------------------------------------------------------------------------------------
                                                                                         }

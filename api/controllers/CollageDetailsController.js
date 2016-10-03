@@ -178,7 +178,7 @@ module.exports = {
                                                             //Query to get tagged users from both addressBook and fbFriends
                                                                 query  = "SELECT *"+
                                                                         " FROM ("+
-                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
+                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name, usr.profilePic"+
                                                                         " FROM tags tg"+
                                                                         " INNER JOIN user usr ON usr.id = tg.userId"+
                                                                         " LEFT JOIN addressBook adb ON adb.ditherUserId = tg.userId"+

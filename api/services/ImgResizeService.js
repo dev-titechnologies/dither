@@ -40,8 +40,7 @@ module.exports = {
 		
 	 fs.exists(imageDst, function(exists) {
 		if (exists) {
-			console.log("Resized Image Exists")
-			item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];		
+			console.log("Resized Image Exists")	
 			callback();	
 		}
 		else
@@ -54,7 +53,6 @@ module.exports = {
 						
 				}else{
 						 console.log(imageResizeResults);
-						 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 						 console.log("8888888888888888888888"+item.resized_image)
 						 callback();
 

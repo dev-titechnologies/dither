@@ -5,8 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var util 		= require('util');
-var fs          = require('fs');
+var util = require('util');
 
 module.exports = {
 
@@ -80,26 +79,23 @@ module.exports = {
 
                 console.log("Notification API")
                 console.log(req.options.file_path.profilePic_path)
-                var tokenCheck             =     req.options.tokenCheck;
-                var user_id                =     tokenCheck.tokenDetails.id;
-               // var server_baseUrl       =     req.options.server_baseUrl;
-                var server_baseUrl         =     req.options.server_baseUrl;
-                var server_image_baseUrl   =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                var profilePic_path        =     server_baseUrl + req.options.file_path.profilePic_path;
-                var collageImg_path        =     server_baseUrl + req.options.file_path.collageImg_path;
-                var profilePic_path_assets =     req.options.file_path.profilePic_path_assets;
-                var collageImg_path_assets =	 req.options.file_path.collageImg_path_assets;
-                var device_id              =     tokenCheck.tokenDetails.deviceId;
-                var device_type            =     req.get('device_type');
+                var tokenCheck          =     req.options.tokenCheck;
+                var user_id             =     tokenCheck.tokenDetails.id;
+                var server_baseUrl      =     req.options.server_baseUrl;
+                var profilePic_path     =     server_baseUrl + req.options.file_path.profilePic_path;
+                var collageImg_path     =     server_baseUrl + req.options.file_path.collageImg_path;
+                var device_id           =     tokenCheck.tokenDetails.deviceId;
+                var device_type         =     req.get('device_type');
 
-                notificationVoted          =     "";
-                notificationCommented      =     "";
-                notificationSignup         =     "";
-                notifyVoteArray            =     [];
-                notifyCmntArray            =     [];
-                var page_type              =     req.param("page_type");
-                var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
-                var data_view_limit        =     req.options.global.data_view_limit;
+                notificationVoted       =     "";
+                notificationCommented   =     "";
+                notificationSignup      =     "";
+                notifyVoteArray         =     [];
+                notifyCmntArray         =     [];
+
+                var page_type           =     req.param("page_type");
+                var focus_Ntfn_id       =     req.param("focus_Ntfn_id");
+                var data_view_limit     =     req.options.global.data_view_limit;
 
                 /*if(!focus_Ntfn_id){
                         //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});
@@ -164,7 +160,8 @@ module.exports = {
                             }
                             else
                             {
-                               
+                                console.log(results.length)
+
                                 if(typeof results != 'undefined' && results.length!=0)
                                 {
 
@@ -179,109 +176,45 @@ module.exports = {
                                             //  console.log(item.description)
                                               NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
 
-												if(err)
-												{
-													console.log(err)
-													callback(true,ntfnTypeFound );
-												}
-												else
-												{
+                                                    if(err)
+                                                    {
+                                                        console.log(err)
+                                                        callback(true,ntfnTypeFound );
+                                                    }
+                                                    else
+                                                    {
 
-													console.log(item)
-													notificationCommented = "No notification Found for comments";
-													var notification    = ntfnTypeFound[0].body;
-													item.description    = item.description - 1;
-													console.log(notification)
-													ntfn_body           =   util.format(notification,item.description);
-													item.ntfn_body      =   ntfn_body;
-													item.type           =   ntfnTypeFound[0].type;
-													var imageToResize	=   item.profile_image;
-													var clgImgToResize	=	item.dither_image;
-													item.profile_image  =   profilePic_path + item.profile_image;
-													item.dither_image   =   collageImg_path + item.dither_image;
-													
-													// ------------------------------Generate ThumbnailImage-----------------------------------------------
-													var imageSrc                    =     profilePic_path_assets + imageToResize;
-													var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
-													console.log(clgImgSrc)
-													if(item.description<=0)
-													{
-														console.log("commenteddd")
-														notificationCommented = " commented on your Dither";
-														item.ntfn_body        = notificationCommented;
-													}
-													else
-													{
-															 console.log("77777777777777777777777777777777777777777777777")
-															 notificationCommented =  ntfn_body;
-															 notifyCmntArray       = [];
-															 notifyCmntArray.push({ditherId:item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
-															 console.log(notifyCmntArray)
-															 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-													}
-													
-													async.parallel([
-														function(callback) {
-															
-															var	    ext                         =     imageSrc.split('/');
-																	ext                         =     ext[ext.length-1].split('.');
-															var imageDst                    	=     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-															
-															ImgResizeService.isImageExist(imageSrc, imageDst, function(err, ProfileImgResults) {
-																if(err)
-																{
-																		console.log(err);
-																		callback();
-																		
-																}else{
-																		 console.log(ProfileImgResults);
-																		 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																		 //console.log("8888888888888888888888"+item.resized_image)
-																		 callback();
+                                                            console.log(item)
+                                                            notificationCommented = "No notification Found for comments";
+                                                            var notification    = ntfnTypeFound[0].body;
+                                                            item.description    = item.description - 1;
+                                                            console.log(notification)
+                                                            ntfn_body           =   util.format(notification,item.description);
+                                                            item.ntfn_body      =   ntfn_body;
+                                                            item.type           =   ntfnTypeFound[0].type;
+                                                            item.profile_image  =   profilePic_path + item.profile_image;
+                                                            item.dither_image   =   collageImg_path + item.dither_image;
+                                                            if(item.description<=0)
+                                                            {
+                                                                console.log("commenteddd")
+                                                                notificationCommented = " commented on your Dither";
+                                                                item.ntfn_body        = notificationCommented;
+                                                                callback();
+                                                            }
+                                                            else
+                                                            {
+                                                                     console.log("77777777777777777777777777777777777777777777777")
+                                                                     notificationCommented =  ntfn_body;
+                                                                     notifyCmntArray       = [];
+                                                                     notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+                                                                     console.log(notifyCmntArray)
+                                                                     console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+                                                                     callback();
+                                                            }
+                                                    }
 
-
-																	 }
-															});
-														},	
-														function(callback) {
-																
-															var	    ext                         =     clgImgSrc.split('/');
-																	ext                         =     ext[ext.length-1].split('.');
-															var imageDst                    	=     collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-																
-															ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, ProfileImgResults) {
-																if(err)
-																{
-																		console.log(err);
-																		callback();
-																		
-																}else{
-																		 console.log(ProfileImgResults);
-																		 item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-																		 callback();
-
-																	}
-															});
-														},	
-														], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-																if (err) {
-																	
-																	console.log(err);
-																	callback();
-																	
-																}else{
-
-																		callback();
-																 }
-														});
-																			
-												}
-
-											});
-										  }
-
-                                         //------------------------------------------------------------------------------------------------------
-
+                                                });
+                                          }
                                           else if(item.notificationTypeId==2)
                                               {
 
@@ -297,6 +230,7 @@ module.exports = {
                                                         {
 
                                                             console.log(item.description)
+
                                                             console.log(ntfnTypeFound)
                                                             var notification    = ntfnTypeFound[0].body;
                                                             console.log(notification)
@@ -304,106 +238,23 @@ module.exports = {
                                                             ntfn_body           = util.format(notification,item.description);
                                                             item.ntfn_body      =   ntfn_body;
                                                             item.type           =   ntfnTypeFound[0].type;
-                                                            var imageToResize	=   item.profile_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
-                                                            
-                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
-																var imageSrc                    =     profilePic_path_assets + imageToResize;
+                                                            if(item.description<=0)
+                                                            {
+                                                              notificationVoted = " voted on your Dither";
+                                                              item.ntfn_body    = notificationVoted;
+                                                              callback();
+                                                            }
+                                                            else
+                                                            {
 
-                                                                fs.exists(imageSrc, function(exists) {
-																		if (exists) {
-
-																		console.log("Image exists");
-
-																		var ext                         =     imageSrc.split('/');
-																		ext                             =     ext[ext.length-1].split('.');
-																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		//item.profile_image				=	  		
-																		console.log(imageSrc)
-																		console.log(imageDst)
-																		 fs.exists(imageDst, function(exists) {
-																			 if (exists) {
-																					console.log("Resized Image Exists")
-																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																					 if(item.description<=0)
-																						{
-																						  notificationVoted  = " voted on your Dither";
-																						  item.ntfn_body     = notificationVoted;
-																						  callback();
-																						}
-																						else
-																						{
-
-																							notificationVoted   =  ntfn_body;
-																							notifyVoteArray     = [];
-																							notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																							console.log(notifyVoteArray)
-																							callback();
-																						}
-																					
-																					
-																				}
-																				else
-																				{
-
-																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																						if(err)
-																						{
-																								console.log(err);
-																								
-																						}else{
-																								 console.log(imageResizeResults);
-																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																								 console.log("8888888888888888888888"+item.resized_image)
-																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-																								 if(item.description<=0)
-																								{
-																								  notificationVoted  = " voted on your Dither";
-																								  item.ntfn_body     = notificationVoted;
-																								  callback();
-																								}
-																								else
-																								{
-
-																									notificationVoted   =  ntfn_body;
-																									notifyVoteArray     = [];
-																									notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																									console.log(notifyVoteArray)
-																									callback();
-																								}
-
-
-																						}
-																					});
-																				}	
-																			});	
-
-																		}else{
-																				console.log("Image not exists");
-																				if(item.description<=0)
-																				{
-																				  notificationVoted  = " voted on your Dither";
-																				  item.ntfn_body     = notificationVoted;
-																				  callback();
-																				}
-																				else
-																				{
-
-																					notificationVoted   =  ntfn_body;
-																					notifyVoteArray     = [];
-																					notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																					console.log(notifyVoteArray)
-																					callback();
-																				}
-
-																			}
-                                                                    });
-
-
-																	//------------------------------------------------------------------------------------------------------
-
-                                                           
+                                                                notificationVoted   =  ntfn_body;
+                                                                notifyVoteArray     = [];
+                                                                notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+                                                                console.log(notifyVoteArray)
+                                                                callback();
+                                                            }
                                                         }
 
                                                     });
@@ -428,59 +279,11 @@ module.exports = {
                                                                     ntfn_body           = util.format(notification);
                                                                     item.ntfn_body      =   ntfn_body;
                                                                     item.type           =   ntfnTypeFound[0].type;
-                                                                    var imageToResize	=   item.profile_image;
                                                                     item.profile_image  =   profilePic_path + item.profile_image;
                                                                     item.dither_image   =   collageImg_path + item.dither_image;
                                                                     console.log(ntfn_body)
                                                                     notificationSignup  =  ntfn_body;
-                                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-																		var imageSrc                    =     profilePic_path_assets + imageToResize;
-
-																		fs.exists(imageSrc, function(exists) {
-																				if (exists) {
-
-																				console.log("Image exists");
-
-																				var ext                         =     imageSrc.split('/');
-																				ext                             =     ext[ext.length-1].split('.');
-																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];		
-																				console.log(imageSrc)
-																				console.log(imageDst)
-																				 fs.exists(imageDst, function(exists) {
-																					 if (exists) {
-																							console.log("Resized Image Exists")
-																							item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																							 callback();
-																						}
-																						else
-																						{
-																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																								if(err)
-																								{
-																										console.log(err);
-																										callback();
-																										
-																								}else{
-																										 console.log(imageResizeResults);
-																										 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																										 console.log("8888888888888888888888"+item.resized_image)
-																										 callback();
-																										// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-
-																									 }
-																							});
-																						}	
-																					});	
-
-																				}else{
-																						console.log("Image not exists");
-																						callback();
-
-																					}
-																			});
-
-
-																	//------------------------------------------------------------------------------------------------------
+                                                                    callback();
 
 
                                                             }
@@ -508,64 +311,12 @@ module.exports = {
                                                                 var ntfn_body       = util.format(notification,item.name);
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 item.ntfn_body      =   ntfn_body;
-                                                                var imageToResize	=   item.profile_image;
                                                                 item.profile_image  =   profilePic_path + item.profile_image;
                                                                 item.dither_image   =   collageImg_path + item.dither_image;
                                                                 console.log(item.profile_image)
                                                                 console.log(ntfn_body)
                                                                 notificationTagged  =  ntfn_body;
-                                                                
-                                                                // ------------------------------Generate ThumbnailImage-----------------------------------------------
-																var imageSrc                    =     profilePic_path_assets + imageToResize;
-
-                                                                fs.exists(imageSrc, function(exists) {
-																		if (exists) {
-
-																		console.log("Image exists");
-
-																		var ext                         =     imageSrc.split('/');
-																		ext                             =     ext[ext.length-1].split('.');
-																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		  		
-																		console.log(imageSrc)
-																		console.log(imageDst)
-																		 fs.exists(imageDst, function(exists) {
-																			 if (exists) {
-																					console.log("Resized Image Exists")
-																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																					callback();
-																					
-																				}
-																				else
-																				{
-
-																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																						if(err)
-																						{
-																								console.log(err);
-																								callback();
-																								
-																						}else{
-																								 console.log(imageResizeResults);
-																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																								 console.log("8888888888888888888888"+item.resized_image)
-																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-																								callback();
-
-																						}
-																					});
-																				}	
-																			});	
-
-																		}else{
-																				console.log("Image not exists");
-																				callback();
-																			}
-                                                                    });
-
-
-																	//------------------------------------------------------------------------------------------------------
-
+                                                                callback();
 
                                                             }
 
@@ -591,7 +342,7 @@ module.exports = {
                             }
                             else
                                 {
-                                    return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
+                                    return res.json(200, {status: 2,status_type:"Failure",msg: 'No notification found'});
                                 }
                             }
                         });

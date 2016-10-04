@@ -1,5 +1,7 @@
 
 
+var fs          = require('fs');
+
 module.exports = {
 
 /*  =================================================================================================================================
@@ -32,61 +34,38 @@ module.exports = {
                                       callback(false, {status: 1, status_type: "Success", message: 'Successfully resized the image'});
                               }
                     });
+    },
+    
+    isImageExist: function (imageSrc,imageDst,callback) {
+		
+	 fs.exists(imageDst, function(exists) {
+		if (exists) {
+			console.log("Resized Image Exists")
+			item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];		
+			callback();	
+		}
+		else
+		{
+
+			ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+				if(err)
+				{
+						console.log(err);
+						
+				}else{
+						 console.log(imageResizeResults);
+						 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+						 console.log("8888888888888888888888"+item.resized_image)
+						 callback();
 
 
-
-
-                    //im.convert([imagename, '-resize', '50x50',imageThumb],
-                    /*im.resize({
-                          srcPath: 'http://192.168.1.62:5000/images/abc.jpg',
-                          //srcPath: '/assets/images/abc.jpg',
-                          dstPath: 'resized123.png',
-                          //dstPath: 'http://192.168.1.62:5000/images/resized123.png',
-
-                          width:   256
-                        },
-                    function(err, stdout, stderr){
-                        if (err)
-                        {
-                            console.log(err)
-                            callback(false, {status: 2, status_type: 'Failure' , message: 'Error in ThumbnailCreation'});
-                        }
-                        else
-                        {
-
-
-                            console.log('stderr:' + stderr);
-                             console.log('stdout:'+stdout);
-                             //callback(false, {status: 1, status_type: 'Success' , message: 'Thumbnail Creation success',imageResized:imageThumb});
-                        }
-
-                    });*/
-
-
-
-
-                    /*console.log("image resizinggggggggg")
-                    //------------------Testing Image Resize----------------------------------------------
-                    //var thumbImage        = 'thumb'+imagename;
-                    var ext        = imagename.split('/');
-                    console.log(ext)
-                    console.log(ext[3])
-                    //var thumbImage = imagename.split('.');
-
-                    var thumbnailsCreator = require('lwip-image-thumbnails-creator');
-                    var options           = {outputbasepath: 'assets/images/profilePics/thumb'+ext[3]};
-                    thumbnailsCreator.createThumbnail(imagename, {
-                        maxWidth: 50,
-                        maxHeight: 50
-                    }, options).then(function (res) {
-                        // ok
-                        console.log(res.thumbnail.outputpath);
-                        callback(false, {status: 1, status_type: 'Success' , message: 'Thumbnail Creation success',thumbImage:res.thumbnail.outputpath});
-
-                    }, function (err) {
-                        console.log(err)
-                        callback(false, {status: 2, status_type: 'Failure' , message: 'Error in ThumbnailCreation'});
-
-                    });*/
-    }
+				}
+			});
+		}
+		
+	  });	
+	},
+    
+    
+    
 };

@@ -165,8 +165,7 @@ module.exports = {
                             }
                             else
                             {
-                                console.log(results.length)
-
+                               
                                 if(typeof results != 'undefined' && results.length!=0)
                                 {
 
@@ -324,7 +323,6 @@ module.exports = {
                                                         {
 
                                                             console.log(item.description)
-
                                                             console.log(ntfnTypeFound)
                                                             var notification    = ntfnTypeFound[0].body;
                                                             console.log(notification)
@@ -479,11 +477,9 @@ module.exports = {
 																							console.log("Resized Image Exists")
 																							item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																							 callback();
-																						
 																						}
 																						else
 																						{
-
 																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
 																								if(err)
 																								{
@@ -496,10 +492,8 @@ module.exports = {
 																										 console.log("8888888888888888888888"+item.resized_image)
 																										 callback();
 																										// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-																										
 
-
-																								}
+																									 }
 																							});
 																						}	
 																					});	
@@ -592,7 +586,6 @@ module.exports = {
 																		}else{
 																				console.log("Image not exists");
 																				callback();
-
 																			}
                                                                     });
 
@@ -624,7 +617,7 @@ module.exports = {
                             }
                             else
                                 {
-                                    return res.json(200, {status: 2,status_type:"Failure",msg: 'No notification found'});
+                                    return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
                                 }
                             }
                         });

@@ -68,9 +68,6 @@ module.exports = {
                             console.log(request.dither_title);
                             console.log(request.dither_location);
                             var device_type                 =     req.get('device_type');
-                            console.log("json parse====>>>>");
-                            //console.log(JSON.parse(request));
-                            //Tagged Users ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                             var vote                        =     [];
                             var sortedVote                  =     [];
                             var tagged_fbUser               =   request.tagged_fb_user;
@@ -306,8 +303,8 @@ module.exports = {
                                                                     if(taggedUserArray.length !=0){
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
-                                                                               console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")     
-                                                                               console.log(factor) 
+                                                                               console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")
+                                                                               console.log(factor)
                                                                                tagNotifyArray.push(factor);
                                                                               /* User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                    if(err)
@@ -316,8 +313,8 @@ module.exports = {
                                                                                    }
                                                                                    else
                                                                                    {
-																					 console.log("???????---Result----?????????")
-																					 console.log(notifySettings)  
+                                                                                     console.log("???????---Result----?????????")
+                                                                                     console.log(notifySettings)
                                                                                      if(notifySettings.notifyOpinion==1)
                                                                                      {
                                                                                       tagNotifyArray.push(factor);
@@ -365,12 +362,31 @@ module.exports = {
 
 
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
+                                                                                   var tagNtfyPush = [];
+                                                                                    tagNotifyArray.forEach(function(factor, index){
+                                                                                             User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                                   if(err)
+                                                                                                   {
+                                                                                                       console.log(err)
+                                                                                                   }
+                                                                                                   else
+                                                                                                   {
+                                                                                                     console.log("???????---Result----?????????")
+                                                                                                     console.log(notifySettings.notifyOpinion)
+                                                                                                     if(notifySettings.notifyOpinion)
+                                                                                                     {
+                                                                                                        console.log(factor)
+                                                                                                        tagNtfyPush.push(factor);
+                                                                                                     }
 
-
+                                                                                                   }
+                                                                                                });
+                                                                                        });
+                                                                                        console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
-                                                                                        User_token.find({userId: tagNotifyArray})
+                                                                                        User_token.find({userId: tagNtfyPush})
                                                                                             .exec(function (err, response) {
 
                                                                                                 response.forEach(function(factor, index){
@@ -822,12 +838,6 @@ module.exports = {
                                                                                 console.log("function abcd()++++++++++++++++++++++++++++++++++++++++");
                                                                                 var recent_DitherResults    =   commonKeyFunction(recentResults);
                                                                                 var popular_DitherResults   =   commonKeyFunction(popularResults);
-                                                                                /*console.log("|||||||||||||||||||||||||||||||||||| recent_DitherResults |||||||||||||||||||||||||||||");
-                                                                                console.log(recent_DitherResults);
-                                                                                console.log("|||||||||||||||||||||||||||||||||||| popular_DitherResults |||||||||||||||||||||||||||||");
-                                                                                console.log(popular_DitherResults);
-                                                                                console.log("total_opinion");
-                                                                                console.log(recent_DitherResults.total_opinion);*/
                                                                                 var user_profile_image = "";
                                                                                 if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
                                                                                             user_profile_image  = profilePic_path + foundUserDetails.profilePic;
@@ -869,7 +879,9 @@ module.exports = {
                     var received_userId             =     req.param("user_id");
                     var received_dither_type        =     req.param("type");
                     var received_userName, received_userProfilePic;
-                    var query, offset_data_view_limit;
+                    var query,
+                        offset_data_view_limit,
+                        popular_totalVote;
                     console.log("Get all Type Dither  -------------------- ================================================");
                     console.log(received_userId);
                     console.log(received_dither_type);
@@ -920,6 +932,8 @@ module.exports = {
 
                                                     query_order_other_user1     =   " ORDER BY clg.createdAt" +focus_dither_id_0_order;
                                                     query_order_other_user2     =   " ORDER BY clg.createdAt DESC";
+                                                    popular_totalVote           =   "";
+
 
                                         break;
 
@@ -929,6 +943,7 @@ module.exports = {
 
                                                     query_order_other_user1     =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
                                                     query_order_other_user2     =   " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+                                                    popular_totalVote           =   " AND clg.totalVote != 0";
 
                                         break;
                                 }
@@ -944,6 +959,7 @@ module.exports = {
                                                 " SELECT *"+
                                                 " FROM collage clg"+
                                                 " WHERE clg.userId = '"+userId+"'"+
+                                                popular_totalVote+
                                                 query_offset_data_view_limit+
                                                 query_order_same_user1+
                                                 " LIMIT "+data_view_limit+
@@ -976,6 +992,7 @@ module.exports = {
                                                 " LIMIT "+data_view_limit+
                                                 " ) AS temp_union"+
                                                 " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                popular_totalVote+
                                                 query_offset_data_view_limit+
                                                 query_order_other_user1+
                                                 " ) AS temp_clg"+
@@ -1051,17 +1068,15 @@ module.exports = {
 
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
+                                                                            console.log("+++++++++++++++++++++++++++++---LIKE VOTE ---+++++++++++++++++++++++++++++");
+                                                                            console.log(dataResults[j]["likeStatus"]);
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
                                                                                         likeStatus = 0;
                                                                             }else{
                                                                                     likeStatus = 1;
                                                                                     console.log("Inside ----->>>> likePosition not null");
-                                                                                    //console.log(dataResults[j]["likeUserId"]);
-                                                                                     //console.log(userId);
-                                                                                    //console.log(dataResults[j]["userId"]);
                                                                                     if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                                         console.log("Inside factor like User id check ================ ++++++++++++++");
-                                                                                        //like_position = dataResults[j]["likePosition"];
                                                                                         like_position_Array.push(dataResults[j]["likePosition"]);
                                                                                     }
                                                                             }
@@ -1071,12 +1086,6 @@ module.exports = {
                                                                                             like_status     : likeStatus,
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
-                                                                           /* if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
-                                                                                    like_position = 0;
-                                                                            }else{
-                                                                                    like_position = dataResults[j]["likePosition"];
-                                                                            } */
-
                                                                         }
                                                                     }
                                                                     if(like_position_Array.length != 0){
@@ -1234,15 +1243,6 @@ module.exports = {
                                     });
 
                                     function uniqueDither(resultsRequest, results){
-
-                                            //var results             = "["+results+"]";
-                                            //var resultsRequest      = "["+resultsRequest+"]";
-                                            //console.log("11111111111111111111111111111+++++++++++ get"  + resultsRequest);
-                                            //console.log("2222222222222222222222222222 +++++++++ get"  + results);
-
-                                            //console.log(results.length);
-                                            //console.log(resultsRequest.length);
-
                                             var results               = results.toString().split(',');
                                             var resultsRequest        = resultsRequest.toString().split(',');
                                             var index;
@@ -1250,12 +1250,6 @@ module.exports = {
                                             var results_array         = [];
                                             var resultsRequest_array  = [];
 
-                                            //console.log("11111111111111111111111111111"  + resultsRequest);
-                                            //console.log("2222222222222222222222222222"  + results);
-                                            //return res.send(results, 200);
-                                            //console.log("concat ----------------------------");
-
-                                            //console.log(results_array.length);
                                             results.forEach(function(factor, index){
                                                         if(factor != "" || factor != null){
                                                             results_array.push(factor);

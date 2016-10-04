@@ -68,9 +68,6 @@ module.exports = {
                             console.log(request.dither_title);
                             console.log(request.dither_location);
                             var device_type                 =     req.get('device_type');
-                            console.log("json parse====>>>>");
-                            //console.log(JSON.parse(request));
-                            //Tagged Users ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                             var vote                        =     [];
                             var sortedVote                  =     [];
                             var tagged_fbUser               =   request.tagged_fb_user;
@@ -841,12 +838,6 @@ module.exports = {
                                                                                 console.log("function abcd()++++++++++++++++++++++++++++++++++++++++");
                                                                                 var recent_DitherResults    =   commonKeyFunction(recentResults);
                                                                                 var popular_DitherResults   =   commonKeyFunction(popularResults);
-                                                                                /*console.log("|||||||||||||||||||||||||||||||||||| recent_DitherResults |||||||||||||||||||||||||||||");
-                                                                                console.log(recent_DitherResults);
-                                                                                console.log("|||||||||||||||||||||||||||||||||||| popular_DitherResults |||||||||||||||||||||||||||||");
-                                                                                console.log(popular_DitherResults);
-                                                                                console.log("total_opinion");
-                                                                                console.log(recent_DitherResults.total_opinion);*/
                                                                                 var user_profile_image = "";
                                                                                 if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
                                                                                             user_profile_image  = profilePic_path + foundUserDetails.profilePic;
@@ -1084,12 +1075,8 @@ module.exports = {
                                                                             }else{
                                                                                     likeStatus = 1;
                                                                                     console.log("Inside ----->>>> likePosition not null");
-                                                                                    //console.log(dataResults[j]["likeUserId"]);
-                                                                                     //console.log(userId);
-                                                                                    //console.log(dataResults[j]["userId"]);
                                                                                     if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                                         console.log("Inside factor like User id check ================ ++++++++++++++");
-                                                                                        //like_position = dataResults[j]["likePosition"];
                                                                                         like_position_Array.push(dataResults[j]["likePosition"]);
                                                                                     }
                                                                             }
@@ -1099,12 +1086,6 @@ module.exports = {
                                                                                             like_status     : likeStatus,
                                                                                             vote            : dataResults[j]["vote"]
                                                                                             });
-                                                                           /* if(dataResults[j]["likePosition"] == null || dataResults[j]["likePosition"] == "" || dataResults[j]["likePosition"] == 0){
-                                                                                    like_position = 0;
-                                                                            }else{
-                                                                                    like_position = dataResults[j]["likePosition"];
-                                                                            } */
-
                                                                         }
                                                                     }
                                                                     if(like_position_Array.length != 0){
@@ -1262,15 +1243,6 @@ module.exports = {
                                     });
 
                                     function uniqueDither(resultsRequest, results){
-
-                                            //var results             = "["+results+"]";
-                                            //var resultsRequest      = "["+resultsRequest+"]";
-                                            //console.log("11111111111111111111111111111+++++++++++ get"  + resultsRequest);
-                                            //console.log("2222222222222222222222222222 +++++++++ get"  + results);
-
-                                            //console.log(results.length);
-                                            //console.log(resultsRequest.length);
-
                                             var results               = results.toString().split(',');
                                             var resultsRequest        = resultsRequest.toString().split(',');
                                             var index;
@@ -1278,12 +1250,6 @@ module.exports = {
                                             var results_array         = [];
                                             var resultsRequest_array  = [];
 
-                                            //console.log("11111111111111111111111111111"  + resultsRequest);
-                                            //console.log("2222222222222222222222222222"  + results);
-                                            //return res.send(results, 200);
-                                            //console.log("concat ----------------------------");
-
-                                            //console.log(results_array.length);
                                             results.forEach(function(factor, index){
                                                         if(factor != "" || factor != null){
                                                             results_array.push(factor);

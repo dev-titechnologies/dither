@@ -40,7 +40,7 @@ console.log(values);
                 }
                 else
                 {
-					console.log("kittyada.!!!!");
+
 					    return res.json(200, {status: 1, message: 'success', data: result.id });
                     
 
@@ -57,7 +57,7 @@ console.log(values);
 
 		
 			
-                    query = "SELECT * FROM  `user` ";
+                    query = "SELECT * FROM  `user` ORDER BY createdAt DESC ";
 				
 				User.query(query, function(err, result) {
 					if(err)
@@ -139,7 +139,7 @@ console.log(values);
     getReportedUser: function(req, res){
 		
 			
-                    query = "SELECT u.id,u.profilePic,u.status, u.name, COUNT( ru.userId ) AS RepUserCount FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.userId GROUP BY ru.userId LIMIT 0 , 30";
+                    query = "SELECT u.id,u.profilePic,u.status, u.name, COUNT( ru.userId ) AS RepUserCount FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.userId GROUP BY ru.userId ORDER BY u.createdAt DESC ";
 				
 				User.query(query, function(err, result) {
 					if(err)
@@ -183,7 +183,7 @@ console.log(values);
         /**  get all dither **/
     getAllDithers: function(req,res){
         console.log("inside getAllDithers function");
-        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c LEFT JOIN user as u ON u.id=c.userId ORDER BY c.id ASC";
+        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c LEFT JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC ";
         console.log(query);
                     Collage.query(query, function (err, result) {
                         if (err) {
@@ -231,7 +231,7 @@ console.log(values);
         
 
        // var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
-       var query = "SELECT DISTINCT rd.collageId,u.name AS postedBy,c.imgTitle,c.status, COUNT( rd.collageId ) AS RepDitherCount FROM reportDither AS rd INNER JOIN collage AS c ON c.id=rd.collageId INNER JOIN user AS u ON c.userId=u.id GROUP BY rd.collageId";
+       var query = "SELECT DISTINCT rd.collageId,u.name AS postedBy,c.imgTitle,c.status, COUNT( rd.collageId ) AS RepDitherCount FROM reportDither AS rd INNER JOIN collage AS c ON c.id=rd.collageId INNER JOIN user AS u ON c.userId=u.id GROUP BY rd.collageId ORDER BY rd.createdAt";
 
         console.log(query);
                     ReportDither.query(query, function (err, result) {

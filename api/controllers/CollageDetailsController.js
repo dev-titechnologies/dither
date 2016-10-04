@@ -106,19 +106,6 @@ module.exports = {
                                                                     like_status: like_status,
                                                                     id: factor.imageId
                                                                     });
-                                                        /*if(factor.likeUserId == null || factor.likeUserId == ""){
-                                                                //like_position = 0;
-                                                        }else{
-                                                            if(factor.likeUserId == userId){
-                                                                //like_position = factor.likePosition;
-                                                                like_position_Array.push(factor.likePosition);
-                                                            }
-                                                                if(factor.likePosition == null || factor.likePosition == "" || factor.likePosition == 0){
-                                                                        like_position = 0;
-                                                                }else{
-                                                                        like_position = factor.likePosition;
-                                                                }
-                                                        }*/
                                                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                                             console.log("_______factor.likeUserId__________"+factor.likeUserId);
                                                             console.log("_______factor.collageCreatorId__________"+factor.collageCreatorId);

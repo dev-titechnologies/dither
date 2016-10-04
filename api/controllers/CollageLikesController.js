@@ -28,18 +28,6 @@ console.log(req.params.all());
             //likedImageId                =     128;
             //imgPosition                 =     1;
 console.log(device_type);
-            console.log(req.isSocket);
-            /*if(req.isSocket){
-                     console.log("Socket Present ============================");
-                    //sails.sockets.blast('like-dither', {status : 1, status_type: 'Success', message : "likeDither Blasted successfully"});
-                    var roomName1 = "ditherLike_" + collageId;
-                    var roomName = "ditherDetail_" + collageId;
-                    //sails.sockets.join(req.socket, roomName);
-                    console.log(roomName);
-                    console.log(sails.sockets.subscribers(roomName));
-                    sails.sockets.broadcast(roomName, {status : 1, status_type: 'Success', message : "likeDither Blasted Broadcast successfully", members : sails.sockets.rooms(), joinedMembers: sails.sockets.subscribers(roomName)});
-            }else{*/
-                  console.log("Socket Absent ============================");
             if(!collageId || !likedImageId || !imgPosition || !device_type){
                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the device_type and dither_id and dither_like_image_id and position'});
             }else{
@@ -125,23 +113,7 @@ console.log(device_type);
                                                                                                                     //socket          :   sails.sockets.rooms()
                                                                                                                     });
                                                                                     //-----------Notification log Insertion----------------
-                                                                                    
-                                                                                /*User.findOne({id:foundCollageResults.userId}).exec(function (err, notifySettings){
-																				if(err)
-																				{
-																					console.log(err)
-																					return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
-																				}
-																				else{
-																				   if(notifySettings.notifyVote==0){
-																						
-																						 return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-																												total_like_count       :  updatedVoteCount[0].vote,
-																											  });
-																					   
-																				   }
-																				   else{   */
-                                                                                   
+
                                                                                     var values ={
                                                                                             notificationTypeId  :   2,
                                                                                             userId              :   userId,
@@ -172,24 +144,24 @@ console.log(device_type);
                                                                                                                                     notification_id            :       createdNotificationTags.id
                                                                                                                                     });
                                                                                     //###################################
-                                                                                    
-                                                                                    
+
+
                                                                                    User.findOne({id:foundCollageResults.userId}).exec(function (err, notifySettings){
-																					if(err)
-																					{
-																						console.log(err)
-																						return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
-																					}
-																					else{
-																					   if(notifySettings.notifyVote==0){
-																							
-																							 return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-																													total_like_count       :  updatedVoteCount[0].vote,
-																												  });
-																						   
-																					   }
-																					   else{ 
-                                                                                    
+                                                                                    if(err)
+                                                                                    {
+                                                                                        console.log(err)
+                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
+                                                                                    }
+                                                                                    else{
+                                                                                       if(notifySettings.notifyVote==0){
+
+                                                                                             return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                    total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                  });
+
+                                                                                       }
+                                                                                       else{
+
 
                                                                                             /*------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
                                                                                                                         PUSH NOTIFICATION
@@ -282,16 +254,13 @@ console.log(device_type);
                                                                                                 //------------------------------
                                                                                                 }
                                                                                               });
-																							}
-																							}
-																						});
+                                                                                            }
+                                                                                            }
+                                                                                        });
                                                                                                 //###################################
                                                                                         }
                                                                                     });
-                                                                                    
-                                                                                  // }
-																				//}
-																			//}); 
+
                                                                                     //-----------------------------End OF NotificationLog---------------------------------
 
                                                                             }//Collage totalVote count Update

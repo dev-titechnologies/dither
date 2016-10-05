@@ -217,7 +217,7 @@ module.exports = {
 															}
                                                              // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + imageToResize;
-																var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
+																
 																console.log(clgImgSrc)
                                                                 fs.exists(imageSrc, function(exists) {
 																 if (exists) {
@@ -240,6 +240,38 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																				callback();
+																			}
+																		});
+																		
+																	}	
+																	else
+																	{
+																		callback();
+																	}
+															});
+															var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
+															fs.exists(clgImgSrc, function(exists) {
+																 if (exists) {
+
+																		console.log("collge Image exists");
+
+																		var ext                         =     clgImgSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																			
+																			if(err)
+																			{
+																				console.log(err)
+																				callback();
+																			}
+																			else
+																			{
+																				console.log(imageResizeResults)
+																				item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
 																				callback();
 																			}
 																		});

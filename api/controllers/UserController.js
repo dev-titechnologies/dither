@@ -36,7 +36,8 @@ module.exports = {
                         var imagename    = new Date().getTime() + filename;
 
                         console.log(imgUrl);
-                        
+                        console.log("mention idddddddddddd")
+                        console.log(req.param('mention_id'))
                         var OTPCode      = req.param('otp');
                         var deviceId     = req.get('device_id');
                         var device_IMEI  = req.get('device_imei');
@@ -45,6 +46,7 @@ module.exports = {
                                     name        : req.param('username'),
                                     email       : req.param('email_id'),
                                     fbId        : req.param('fb_uid'),
+                                    mentionId	: req.param('mention_id'),
                                     phoneNumber : req.param('mobile_number'),
                                     profilePic  : imagename,
                         };
@@ -101,8 +103,9 @@ module.exports = {
 
 
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
-                                if(err)
+                                if(err) 
                                 {
+									console.log(err)
                                      return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
                                 }
                                 else
@@ -126,9 +129,48 @@ module.exports = {
                                                             }else {
 
                                                                     console.log("Before async parallel in Sign up ===============================================");
-                                                                    //async.series([([ 
+                                                                   async.series([
+            
+																	function(callback) {
                                                                         // Send Email and Sms  Simultaneously
                                                                         async.parallel([
+                                                                        
+																					function(callback) {
+																						           console.log("+++++++++++++++++++Image Downloadingggggggggggggg+++++++++++++++++++++++++++++++++")
+																								   var download = function(uri, filename, callback){
+																									request.head(uri, function(err, res, body){
+																										console.log("image resizingggggggggggggggggggggggggg")
+																										request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+																								    });
+
+
+																									};
+																									download(imgUrl,'assets/images/profilePics/'+imagename, function()
+																									{
+																										sails.log('done');
+																											var imageSrc                    =     profilePic_path_assets + imagename;
+																											var ext                         =     imageSrc.split('/');
+																											ext                             =     ext[ext.length-1].split('.');
+																											var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																											console.log(imageSrc);
+																											console.log(imageDst);
+																											ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+																													if(err){
+																															console.log(err);
+																															console.log("Error in image resize !!!!");
+																															
+																															
+																													}else{
+																															
+																															console.log(imageResizeResults);
+																															 callback();
+																														 }
+																											});
+																										
+
+																									});
+                                                                                    },
+                                                                        
                                                                                     function(callback) {
                                                                                                 console.log("parallel 1")
                                                                                                 console.log("async parallel in Mailpart ===============================================");
@@ -389,41 +431,31 @@ module.exports = {
                                                                                                 });
 
                                                                                     },
-                                                                                    function(callback) {
-																						           console.log("+++++++++++++++++++Image Downloadingggggggggggggg+++++++++++++++++++++++++++++++++")
-																								   var download = function(uri, filename, callback){
-																									request.head(uri, function(err, res, body){
-																										console.log("image resizingggggggggggggggggggggggggg")
-																										request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-																								    });
+																				   
+                                                                                    ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                                                                        if (err) {
+                                                                                            console.log("async parallel in Sms Part Failure --------------------");
+                                                                                            console.log(err);
+                                                                                            callback();
+                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
+                                                                                        }else{
 
+                                                                                            // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
+                                                                                            console.log("async parallel in Sms Part Success --------------------");
+                                                                                            /*return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
+                                                                                                                  token         :   userTokenDetails.token.token,
+                                                                                                                  user_id       :   results.id,
+                                                                                                                  mobile_number :   results.phoneNumber
+                                                                                                            });*/
+																						 
+																							
+                                                                                       
+                                                                                                //------------------------------------------------------------------------------------------------------
+                                                                                        }
 
-																									};
-																									download(imgUrl,'assets/images/profilePics/'+imagename, function()
-																									{
-																										sails.log('done');
-																											var imageSrc                    =     profilePic_path_assets + imagename;
-																											var ext                         =     imageSrc.split('/');
-																											ext                             =     ext[ext.length-1].split('.');
-																											var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																											console.log(imageSrc);
-																											console.log(imageDst);
-																											ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																													if(err){
-																															console.log(err);
-																															console.log("Error in image resize !!!!");
-																															
-																															
-																													}else{
-																															
-																															console.log(imageResizeResults);
-																															 callback();
-																														 }
-																											});
-																										
-
-																									});
-                                                                                    },
+																					});
+                                                                        },
+                                                                                    
                                                                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if (err) {
                                                                                             console.log("async parallel in Sms Part Failure --------------------");
@@ -433,10 +465,15 @@ module.exports = {
 
                                                                                             // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
                                                                                             console.log("async parallel in Sms Part Success --------------------");
+                                                                                            if(results.mentionId=='')
+                                                                                            {
+																								results.mentionId = results.id;
+																							}
                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
                                                                                                                   token         :   userTokenDetails.token.token,
                                                                                                                   user_id       :   results.id,
-                                                                                                                  mobile_number :   results.phoneNumber
+                                                                                                                  mobile_number :   results.phoneNumber,
+                                                                                                                  mention_id	:	results.mentionId
                                                                                                             });
 																						 
 																							

@@ -36,6 +36,10 @@ module.exports = {
                 type: 'string',
                 unique: true
             },
+        mentionId: {
+                type: 'string',
+                unique: true
+            },   
         phoneNumber: {
                 type: 'string',
                 unique: true

@@ -215,9 +215,10 @@ module.exports = {
 																	 console.log(notifyCmntArray)
 																	 console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
 															}
+															
                                                              // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + imageToResize;
-																
+																var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
 																console.log(clgImgSrc)
                                                                 fs.exists(imageSrc, function(exists) {
 																 if (exists) {
@@ -250,8 +251,8 @@ module.exports = {
 																		callback();
 																	}
 															});
-															var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
-															fs.exists(clgImgSrc, function(exists) {
+															
+															/*fs.exists(clgImgSrc, function(exists) {
 																 if (exists) {
 
 																		console.log("collge Image exists");
@@ -281,7 +282,7 @@ module.exports = {
 																	{
 																		callback();
 																	}
-															});
+															});*/
                                                              
                                                     }
 

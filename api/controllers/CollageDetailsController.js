@@ -134,7 +134,7 @@ module.exports = {
                                             }
 
 
-                                            query = " SELECT clgcmt.id, clgcmt.comment, usr.name, clgcmt.createdAt,usr.profilePic, usr.id userId"+
+                                            query = " SELECT clgcmt.id, clgcmt.comment, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
                                                     " FROM collageComments clgcmt"+
                                                     " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                     " WHERE clgcmt.collageId = "+get_collage_id;
@@ -153,10 +153,15 @@ module.exports = {
                                                                 collageCommentResults.forEach(function(factor, index){
                                                                         //console.log("factor");
                                                                         //console.log(factor);
+                                                                        if(factor.mentionId=='')
+                                                                        {
+																			factor.mentionId = factor.userId;
+																		}
                                                                         commentArray.push({comment_id: factor.id,
                                                                                             user_id: factor.userId,
                                                                                             user_name: factor.name,
                                                                                             user_profile_pic_url : profilePic_path + factor.profilePic,
+                                                                                            mention_id:factor.mentionId,
                                                                                             message: factor.comment,
                                                                                             comment_created_date_time:factor.createdAt
                                                                         });
@@ -165,7 +170,7 @@ module.exports = {
                                                             //Query to get tagged users from both addressBook and fbFriends
                                                                 query  = "SELECT *"+
                                                                         " FROM ("+
-                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name, usr.profilePic"+
+                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name,usr.mentionId, usr.profilePic"+
                                                                         " FROM tags tg"+
                                                                         " INNER JOIN user usr ON usr.id = tg.userId"+
                                                                         " LEFT JOIN addressBook adb ON adb.ditherUserId = tg.userId"+
@@ -201,10 +206,15 @@ module.exports = {
                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
                                                                                         //console.log("factor");
                                                                                         //console.log(factor);
+                                                                                        if(factor.mentionId=='')
+																						{
+																							factor.mentionId = factor.ditherUserId;
+																						}
                                                                                         taggedUserArrayFinal.push({
                                                                                                                 name            :   factor.name,
                                                                                                                 userId          :   factor.ditherUserId,
                                                                                                                 profile_image   :   profilePic_path + factor.profilePic,
+                                                                                                                mention_id		:	factor.mentionId
                                                                                                                 });
                                                                                 });
                                                                             }

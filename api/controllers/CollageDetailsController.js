@@ -170,7 +170,7 @@ module.exports = {
                                                             //Query to get tagged users from both addressBook and fbFriends
                                                                 query  = "SELECT *"+
                                                                         " FROM ("+
-                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name,usr.mentionId, usr.profilePic"+
+                                                                        " SELECT adb.ditherUserId, adb.ditherUsername, usr.name,usr.profilePic,usr.mentionId"+
                                                                         " FROM tags tg"+
                                                                         " INNER JOIN user usr ON usr.id = tg.userId"+
                                                                         " LEFT JOIN addressBook adb ON adb.ditherUserId = tg.userId"+
@@ -178,7 +178,7 @@ module.exports = {
                                                                         " WHERE tg.collageId = "+get_collage_id+
                                                                         " GROUP BY adb.ditherUserId"+
                                                                         " UNION"+
-                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name, usr.profilePic"+
+                                                                        " SELECT fbf.ditherUserId, fbf.ditherUsername, usr.name, usr.profilePic,usr.mentionId"+
                                                                         " FROM tags tg"+
                                                                         " INNER JOIN user usr ON usr.id = tg.userId"+
                                                                         " LEFT JOIN fbFriends fbf ON fbf.ditherUserId = tg.userId"+

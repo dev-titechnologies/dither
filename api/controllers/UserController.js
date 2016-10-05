@@ -129,9 +129,9 @@ module.exports = {
                                                             }else {
 
                                                                     console.log("Before async parallel in Sign up ===============================================");
-                                                                   async.series([
+                                                                   //async.series([
             
-																	function(callback) {
+																	//function(callback) {
                                                                         // Send Email and Sms  Simultaneously
                                                                         async.parallel([
                                                                         
@@ -431,30 +431,7 @@ module.exports = {
                                                                                                 });
 
                                                                                     },
-																				   
-                                                                                    ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                                                                        if (err) {
-                                                                                            console.log("async parallel in Sms Part Failure --------------------");
-                                                                                            console.log(err);
-                                                                                            callback();
-                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
-                                                                                        }else{
-
-                                                                                            // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-                                                                                            console.log("async parallel in Sms Part Success --------------------");
-                                                                                            /*return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
-                                                                                                                  token         :   userTokenDetails.token.token,
-                                                                                                                  user_id       :   results.id,
-                                                                                                                  mobile_number :   results.phoneNumber
-                                                                                                            });*/
-																						 
-																							
-                                                                                       
-                                                                                                //------------------------------------------------------------------------------------------------------
-                                                                                        }
-
-																					});
-                                                                        },
+																				  
                                                                                     
                                                                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if (err) {

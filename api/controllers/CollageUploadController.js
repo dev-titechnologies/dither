@@ -210,12 +210,15 @@ module.exports = {
                                             }else{
                                                     get_dither_images.forEach(function(factor, index){
 
-                                                            var filename                           =    factor.image_url.split('/');
-                                                            filename                               =    filename[filename.length-1];
+                                                            var uploadedfilename                   =    factor.image_url.split('/');
+                                                            uploadedfilename                       =    filename[filename.length-1];
+                                                            var filename                           =    factor.image_name;
                                                             var filename_without_extension         =    filename.split('.');
                                                             filename_without_extension             =    filename_without_extension[0];
                                                             var switchKey                          =    filename_without_extension;
                                                             var position;
+                                                            console.log("switchKey_1================");
+                                                            console.log(switchKey);
                                                             switch(switchKey){
                                                                     case "image_1":    position = 1;
                                                                     break;
@@ -234,7 +237,7 @@ module.exports = {
                                                                     case 'image_0':
                                                                     break;
                                                                     default:
-                                                                            collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
+                                                                            collageDetailImgArray.push({image: uploadedfilename, position: position, collageId: results.id, vote: 0});
                                                                     break;
                                                             }
                                                             console.log("collageDetailImgArray ++++++++++++++++++++++");

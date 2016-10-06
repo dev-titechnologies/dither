@@ -5,6 +5,32 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+//Function to get ordered, by value, in json array key value pair
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return 1;
+      }else if( a[prop] < b[prop] ){
+          return -1;
+      }
+      return 0;
+   }
+}
+
+//Function to avoid duplicate values for a normal array
+function union_arrays (x, y) {
+  var obj = {};
+  for (var i = x.length-1; i >= 0; -- i)
+     obj[x[i]] = x[i];
+  for (var i = y.length-1; i >= 0; -- i)
+     obj[y[i]] = y[i];
+  var res = []
+  for (var k in obj) {
+    if (obj.hasOwnProperty(k))  // <-- optional
+      res.push(obj[k]);
+  }
+  return res;
+}
 module.exports = {
 
 /* ==================================================================================================================================
@@ -33,8 +59,8 @@ module.exports = {
                                 console.log("File length is there ------------->>>>>>>>>>>>>  ");
                                 var collage_imageName = "";
                                 var collageDetailImgArray = [];
-                                var keyArray = [];
-                                var valueArray = [];
+                                //var keyArray = [];
+                                //var valueArray = [];
 
                                 files.forEach(function(factor, index){
                                         console.log(factor);
@@ -47,22 +73,22 @@ module.exports = {
 
                                         var image_name;
 
-                                        keyArray.push(filename_without_extension);
-                                        valueArray.push(collageImg_path + filename);
-                                        //collageDetailImgArray.push({image_name: filename_without_extension, image_url: collageImg_path + filename});
+                                        //keyArray.push(filename_without_extension);
+                                        //valueArray.push(collageImg_path + filename);
+                                        collageDetailImgArray.push({image_name: filename_without_extension, image_url: collageImg_path + filename});
                                 });
                                 console.log("collageDetailImgArray =================");
-                                 var keyValueArray = {},
+                                 /*var keyValueArray = {},
                                         i;
                                 //Merge 2 arrays
                                 for (i = 0; i < keyArray.length; i++) {
                                     keyValueArray[keyArray[i]] = valueArray[i];
                                 }
                                 console.log("Key Value Array");
-                                console.log(keyValueArray);
+                                console.log(keyValueArray);*/
 
                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
-                                                    dither_images : keyValueArray,
+                                                    dither_images : collageDetailImgArray,
                                                     });
                         }
                     }
@@ -82,7 +108,7 @@ module.exports = {
             //console.log(req.param("collage_image"));
             if(!req.param("REQUEST") ){
                     console.log("|||||||||||||||||| Not found");
-                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both REQUEST and collage_image'});
+                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass the REQUEST'});
             }else{
                             console.log(req.param("REQUEST"));
                             console.log(JSON.parse(req.param("REQUEST")));
@@ -159,16 +185,16 @@ module.exports = {
                                     var collage_imageName           =   "";
                                     var collageDetailImgArray       =   [];
                                     get_dither_images.forEach(function(factor, index){
-                                            if(image_name === "image_0"){
+                                            if(factor.image_name === "image_0"){
                                                     collage_imageName       =   factor.image_url.split('/');
                                                     collage_imageName       =   collage_imageName[collage_imageName.length-1];
                                                     console.log(collage_imageName);
                                             }
-                                            var filename                           =    factor.fd.split('/');
+                                            var filename                           =    factor.image_url.split('/');
                                             filename                               =    filename[filename.length-1];
-                                            var filename_without_extension         =    factor.filename.split('.');
+                                            var filename_without_extension         =    filename.split('.');
                                             filename_without_extension             =    filename_without_extension[0];
-                                            var switchKey                          = filename_without_extension;
+                                            var switchKey                          =    filename_without_extension;
                                             var position;
                                             switch(switchKey){
                                                     case "image_1":    position = 1;

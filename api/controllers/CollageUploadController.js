@@ -185,6 +185,13 @@ module.exports = {
                                     var collage_imageName           =   "";
                                     var collageDetailImgArray       =   [];
                                     console.log(request);
+                                    get_dither_images.forEach(function(factor, index){
+                                        if(factor.image_name === "image_0"){
+                                                collage_imageName       =   factor.image_url.split('/');
+                                                collage_imageName       =   collage_imageName[collage_imageName.length-1];
+                                                console.log(collage_imageName);
+                                        }
+                                    });
                                     var values = {
                                         imgTitle        : request.dither_title,
                                         image           : collage_imageName,
@@ -202,11 +209,11 @@ module.exports = {
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
                                             }else{
                                                     get_dither_images.forEach(function(factor, index){
-                                                            if(factor.image_name === "image_0"){
+                                                            /*if(factor.image_name === "image_0"){
                                                                     collage_imageName       =   factor.image_url.split('/');
                                                                     collage_imageName       =   collage_imageName[collage_imageName.length-1];
                                                                     console.log(collage_imageName);
-                                                            }
+                                                            }*/
                                                             var filename                           =    factor.image_url.split('/');
                                                             filename                               =    filename[filename.length-1];
                                                             var filename_without_extension         =    filename.split('.');
@@ -519,6 +526,7 @@ module.exports = {
                                                                             socket          :   sails.sockets.rooms()
                                                                             });
                                     });
+                                    console.log(collageImg_path + collage_results.image);
                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
                                                               profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
                                                               user_name          :     tokenCheck.tokenDetails.name,

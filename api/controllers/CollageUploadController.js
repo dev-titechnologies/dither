@@ -88,9 +88,9 @@ module.exports = {
                                 console.log("Key Value Array");
                                 console.log(keyValueArray);*/
 
-                                /*return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
+                                return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
                                                     dither_images : collageDetailImgArray,
-                                                    });*/
+                                                    });
                         }
                     }
             });

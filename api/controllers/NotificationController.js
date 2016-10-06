@@ -261,7 +261,7 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
-																								item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
 																							}
 																						});
@@ -406,7 +406,7 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
-																								item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
 																							}
 																						});
@@ -502,7 +502,7 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
-																								item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
 																							}
 																						});
@@ -601,7 +601,7 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
-																								item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
 																							}
 																						});

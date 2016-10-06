@@ -11,7 +11,6 @@ module.exports = {
 
                     var im = require('imagemagick');
                     console.log("Image service Api  ====== image magick");
-                    var fs = require('fs');
                     im.resize({
                       //srcData: fs.readFileSync('assets/images/abc.jpg', 'binary'),
                       srcData: fs.readFileSync(imageSrc, 'binary'),
@@ -52,11 +51,9 @@ module.exports = {
 						console.log(err);
 						
 				}else{
-						 console.log(imageResizeResults);
-						 console.log("8888888888888888888888"+item.resized_image)
+						 //console.log(imageResizeResults);
+						 //console.log("8888888888888888888888"+item.resized_image)
 						 callback();
-
-
 				}
 			});
 		}

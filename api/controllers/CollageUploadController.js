@@ -185,7 +185,7 @@ module.exports = {
                                     var collage_imageName           =   "";
                                     var collageDetailImgArray       =   [];
                                     get_dither_images.forEach(function(factor, index){
-                                            if(image_name === "image_0"){
+                                            if(factor.image_name === "image_0"){
                                                     collage_imageName       =   factor.image_url.split('/');
                                                     collage_imageName       =   collage_imageName[collage_imageName.length-1];
                                                     console.log(collage_imageName);

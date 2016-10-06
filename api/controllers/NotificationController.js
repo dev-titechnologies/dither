@@ -130,7 +130,7 @@ module.exports = {
                                         " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                         " WHERE"+
                                         " N.ditherUserId="+user_id+
-                                        " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
+                                        " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
                                         " OR "+
                                         " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT 10";
 
@@ -165,16 +165,18 @@ module.exports = {
                             }
                             else
                             {
+								
                                 console.log(results.length)
 
                                 if(typeof results != 'undefined' && results.length!=0)
                                 {
 
+									
                                     async.forEach(results, function (item, callback){
-                                    if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4)
+                                    if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4 || item.notificationTypeId==7)
                                         {
                                           //----------Comment Notification---------------------------
-
+										  
                                           if(item.notificationTypeId==3)
                                           {
                                             //  console.log(item.description)
@@ -283,37 +285,7 @@ module.exports = {
 																	}
 																});
 															
-															/*fs.exists(clgImgSrc, function(exists) {
-																 if (exists) {
-
-																		console.log("collge Image exists");
-
-																		var ext                         =     clgImgSrc.split('/');
-																		ext                             =     ext[ext.length-1].split('.');
-																		var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		console.log(imageSrc)
-																		console.log(imageDst)
-																		ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-																			
-																			if(err)
-																			{
-																				console.log(err)
-																				callback();
-																			}
-																			else
-																			{
-																				console.log(imageResizeResults)
-																				item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																				callback();
-																			}
-																		});
-																		
-																	}	
-																	else
-																	{
-																		callback();
-																	}
-															});*/
+															
                                                              
                                                     }
 
@@ -543,6 +515,108 @@ module.exports = {
                                                             {
 
                                                                 console.log(item.description)
+                                                                console.log(ntfnTypeFound)
+                                                                var notification    = ntfnTypeFound[0].body;
+                                                                console.log(notification)
+                                                                var ntfn_body       = util.format(notification,item.name);
+                                                                item.type           =   ntfnTypeFound[0].type;
+                                                                item.ntfn_body      =   ntfn_body;
+                                                                var imageToResize	=   item.profile_image;
+                                                                var clgImgToResize	=	item.dither_image;
+                                                                item.profile_image  =   profilePic_path + item.profile_image;
+                                                                item.dither_image   =   collageImg_path + item.dither_image;
+                                                                console.log(item.profile_image)
+                                                                console.log(ntfn_body)
+                                                                notificationTagged  =  ntfn_body;
+                                                                
+                                                                // ------------------------------Generate ThumbnailImage-----------------------------------------------
+																var imageSrc                    =     profilePic_path_assets + imageToResize;
+																var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
+                                                                fs.exists(imageSrc, function(exists) {
+																 if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																			
+																			if(err)
+																			{
+																				console.log(err)
+																				callback();
+																			}
+																			else
+																			{
+																				console.log(imageResizeResults)
+																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																				fs.exists(clgImgSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("collge Image exists");
+
+																						var ext                         =     clgImgSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																							
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+																								callback();
+																							}
+																						});
+																						
+																					}	
+																					else
+																					{
+																						callback();
+																					}
+																				});
+																				//callback();
+																			}
+																		});
+																		
+																	}	
+																	else
+																	{
+																		callback();
+																	}
+																});
+
+                                                            }
+
+                                                    });
+
+
+                                                }
+                                              else if(item.notificationTypeId==7)
+                                              {
+												console.log("Notification lOGGGG")
+
+                                                 NotificationType.find({id:7 }).exec(function(err, ntfnTypeFound){
+
+                                                            if(err)
+                                                            {
+																console.log("+++++++++++++++++++++++++NOTIFICATION ERR+++++++++++++++++++++++")
+                                                                console.log(err)
+                                                            }
+                                                            else
+                                                            {
+
+                                                                
+                                                                console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
                                                                 console.log(ntfnTypeFound)
                                                                 var notification    = ntfnTypeFound[0].body;
                                                                 console.log(notification)

@@ -343,6 +343,7 @@ module.exports = {
                                                             item.ntfn_body      =   ntfn_body;
                                                             item.type           =   ntfnTypeFound[0].type;
                                                             var imageToResize	=   item.profile_image;
+                                                            var clgImgToResize	=	item.dither_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
                                                             if(item.description<=0)
@@ -363,7 +364,7 @@ module.exports = {
                                                             
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + imageToResize;
-
+																var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
                                                                 fs.exists(imageSrc, function(exists) {
 																 if (exists) {
 
@@ -452,13 +453,14 @@ module.exports = {
                                                                     item.ntfn_body      =   ntfn_body;
                                                                     item.type           =   ntfnTypeFound[0].type;
                                                                     var imageToResize	=   item.profile_image;
+                                                                    var clgImgToResize	=	item.dither_image;
                                                                     item.profile_image  =   profilePic_path + item.profile_image;
                                                                     item.dither_image   =   collageImg_path + item.dither_image;
                                                                     console.log(ntfn_body)
                                                                     notificationSignup  =  ntfn_body;
                                                                      // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																	var imageSrc                    =     profilePic_path_assets + imageToResize;
-
+																	var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
 																	fs.exists(imageSrc, function(exists) {
 																	if (exists) {
 
@@ -548,6 +550,7 @@ module.exports = {
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 item.ntfn_body      =   ntfn_body;
                                                                 var imageToResize	=   item.profile_image;
+                                                                var clgImgToResize	=	item.dither_image;
                                                                 item.profile_image  =   profilePic_path + item.profile_image;
                                                                 item.dither_image   =   collageImg_path + item.dither_image;
                                                                 console.log(item.profile_image)
@@ -556,7 +559,7 @@ module.exports = {
                                                                 
                                                                 // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + imageToResize;
-
+																var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
                                                                 fs.exists(imageSrc, function(exists) {
 																 if (exists) {
 

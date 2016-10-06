@@ -19,7 +19,8 @@ module.exports = {
                     var comment                     =     req.param("comment_msg");
                     var device_type                 =     req.get('device_type');
                     var mention_user_id				=     [];
-					var	mention_arr					=     ['test_user','anu_r'];
+					var	mention_arr					=     req.param("mentions");
+					console.log(mention_arr)
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
                     }else{

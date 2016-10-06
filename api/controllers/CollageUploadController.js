@@ -192,7 +192,7 @@ module.exports = {
                                             }
                                             var filename                           =    factor.image_url.split('/');
                                             filename                               =    filename[filename.length-1];
-                                            var filename_without_extension         =    factor.filename.split('.');
+                                            var filename_without_extension         =    filename.split('.');
                                             filename_without_extension             =    filename_without_extension[0];
                                             var switchKey                          =    filename_without_extension;
                                             var position;

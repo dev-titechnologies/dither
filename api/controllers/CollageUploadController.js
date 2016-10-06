@@ -78,6 +78,7 @@ module.exports = {
                                         collageDetailImgArray.push({image_name: filename_without_extension, image_url: collageImg_path + filename});
                                 });
                                 console.log("collageDetailImgArray =================");
+                                console.log(collageDetailImgArray);
                                  /*var keyValueArray = {},
                                         i;
                                 //Merge 2 arrays
@@ -87,9 +88,9 @@ module.exports = {
                                 console.log("Key Value Array");
                                 console.log(keyValueArray);*/
 
-                                return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
+                                /*return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
                                                     dither_images : collageDetailImgArray,
-                                                    });
+                                                    });*/
                         }
                     }
             });

@@ -241,7 +241,38 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				callback();
+																				fs.exists(clgImgSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("collge Image exists");
+
+																						var ext                         =     clgImgSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																							
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								callback();
+																							}
+																						});
+																						
+																					}	
+																					else
+																					{
+																						callback();
+																					}
+																				});
+																				//callback();
 																			}
 																		});
 																		
@@ -354,7 +385,38 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				callback();
+																				fs.exists(clgImgSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("collge Image exists");
+
+																						var ext                         =     clgImgSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																							
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								callback();
+																							}
+																						});
+																						
+																					}	
+																					else
+																					{
+																						callback();
+																					}
+																				});
+																				//callback();
 																			}
 																		});
 																		
@@ -418,7 +480,38 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				callback();
+																				fs.exists(clgImgSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("collge Image exists");
+
+																						var ext                         =     clgImgSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																							
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								callback();
+																							}
+																						});
+																						
+																					}	
+																					else
+																					{
+																						callback();
+																					}
+																				});
+																				//callback();
 																			}
 																		});
 																		
@@ -485,7 +578,38 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				callback();
+																				fs.exists(clgImgSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("collge Image exists");
+
+																						var ext                         =     clgImgSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																							
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								item.dither_image = collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																								callback();
+																							}
+																						});
+																						
+																					}	
+																					else
+																					{
+																						callback();
+																					}
+																				});
+																				//callback();
 																			}
 																		});
 																		

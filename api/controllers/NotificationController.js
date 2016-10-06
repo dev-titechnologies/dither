@@ -250,7 +250,7 @@ module.exports = {
 																	{
 																		callback();
 																	}
-															});
+																});
 															
 															/*fs.exists(clgImgSrc, function(exists) {
 																 if (exists) {
@@ -289,7 +289,7 @@ module.exports = {
                                                 });
                                           }
                                           else if(item.notificationTypeId==2)
-                                              {
+                                             {
 
                                                   console.log("vote?????????")
                                                   NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
@@ -314,103 +314,57 @@ module.exports = {
                                                             var imageToResize	=   item.profile_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
+                                                            if(item.description<=0)
+															{
+															  notificationVoted  = " voted on your Dither";
+															  item.ntfn_body     = notificationVoted;
+															  callback();
+															}
+															else
+															{
+
+																notificationVoted   =  ntfn_body;
+																notifyVoteArray     = [];
+																notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+																console.log(notifyVoteArray)
+																callback();
+															}
                                                             
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + imageToResize;
 
                                                                 fs.exists(imageSrc, function(exists) {
-																		if (exists) {
+																 if (exists) {
 
 																		console.log("Image exists");
 
 																		var ext                         =     imageSrc.split('/');
 																		ext                             =     ext[ext.length-1].split('.');
 																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		item.profile_image				=	  		
 																		console.log(imageSrc)
 																		console.log(imageDst)
-																		 fs.exists(imageDst, function(exists) {
-																			 if (exists) {
-																					console.log("Resized Image Exists")
-																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																					 if(item.description<=0)
-																						{
-																						  notificationVoted  = " voted on your Dither";
-																						  item.ntfn_body     = notificationVoted;
-																						  callback();
-																						}
-																						else
-																						{
-
-																							notificationVoted   =  ntfn_body;
-																							notifyVoteArray     = [];
-																							notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																							console.log(notifyVoteArray)
-																							callback();
-																						}
-																					
-																					
-																				}
-																				else
-																				{
-
-																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																						if(err)
-																						{
-																								console.log(err);
-																								
-																						}else{
-																								 console.log(imageResizeResults);
-																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																								 console.log("8888888888888888888888"+item.resized_image)
-																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-																								 if(item.description<=0)
-																								{
-																								  notificationVoted  = " voted on your Dither";
-																								  item.ntfn_body     = notificationVoted;
-																								  callback();
-																								}
-																								else
-																								{
-
-																									notificationVoted   =  ntfn_body;
-																									notifyVoteArray     = [];
-																									notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																									console.log(notifyVoteArray)
-																									callback();
-																								}
-
-
-																						}
-																					});
-																				}	
-																			});	
-
-																		}else{
-																				console.log("Image not exists");
-																				if(item.description<=0)
-																				{
-																				  notificationVoted  = " voted on your Dither";
-																				  item.ntfn_body     = notificationVoted;
-																				  callback();
-																				}
-																				else
-																				{
-
-																					notificationVoted   =  ntfn_body;
-																					notifyVoteArray     = [];
-																					notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-																					console.log(notifyVoteArray)
-																					callback();
-																				}
-
+																		ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																			
+																			if(err)
+																			{
+																				console.log(err)
+																				callback();
 																			}
-                                                                    });
+																			else
+																			{
+																				console.log(imageResizeResults)
+																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																				callback();
+																			}
+																		});
+																		
+																	}	
+																	else
+																	{
+																		callback();
+																	}
+																});
 
-
-																	//------------------------------------------------------------------------------------------------------
-
-                                                           
                                                         }
 
                                                     });
@@ -441,58 +395,39 @@ module.exports = {
                                                                     console.log(ntfn_body)
                                                                     notificationSignup  =  ntfn_body;
                                                                      // ------------------------------Generate ThumbnailImage-----------------------------------------------
-																		var imageSrc                    =     profilePic_path_assets + imageToResize;
+																	var imageSrc                    =     profilePic_path_assets + imageToResize;
 
-																		fs.exists(imageSrc, function(exists) {
-																				if (exists) {
+																	fs.exists(imageSrc, function(exists) {
+																	if (exists) {
 
-																				console.log("Image exists");
+																		console.log("Image exists");
 
-																				var ext                         =     imageSrc.split('/');
-																				ext                             =     ext[ext.length-1].split('.');
-																				var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];		
-																				console.log(imageSrc)
-																				console.log(imageDst)
-																				 fs.exists(imageDst, function(exists) {
-																					 if (exists) {
-																							console.log("Resized Image Exists")
-																							item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																							 callback();
-																						
-																						}
-																						else
-																						{
-
-																							ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																								if(err)
-																								{
-																										console.log(err);
-																										callback();
-																										
-																								}else{
-																										 console.log(imageResizeResults);
-																										 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																										 console.log("8888888888888888888888"+item.resized_image)
-																										 callback();
-																										// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-																										
-
-
-																								}
-																							});
-																						}	
-																					});	
-
-																				}else{
-																						console.log("Image not exists");
-																						callback();
-
-																					}
-																			});
-
-
-																	//------------------------------------------------------------------------------------------------------
-
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																			
+																			if(err)
+																			{
+																				console.log(err)
+																				callback();
+																			}
+																			else
+																			{
+																				console.log(imageResizeResults)
+																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																				callback();
+																			}
+																		});
+																		
+																	}	
+																	else
+																	{
+																		callback();
+																	}
+																});
 
                                                             }
 
@@ -530,54 +465,36 @@ module.exports = {
 																var imageSrc                    =     profilePic_path_assets + imageToResize;
 
                                                                 fs.exists(imageSrc, function(exists) {
-																		if (exists) {
+																 if (exists) {
 
 																		console.log("Image exists");
 
 																		var ext                         =     imageSrc.split('/');
 																		ext                             =     ext[ext.length-1].split('.');
 																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		  		
 																		console.log(imageSrc)
 																		console.log(imageDst)
-																		 fs.exists(imageDst, function(exists) {
-																			 if (exists) {
-																					console.log("Resized Image Exists")
-																					item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																					callback();
-																					
-																				}
-																				else
-																				{
-
-																					ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																						if(err)
-																						{
-																								console.log(err);
-																								callback();
-																								
-																						}else{
-																								 console.log(imageResizeResults);
-																								 item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																								 console.log("8888888888888888888888"+item.resized_image)
-																								// res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-																								callback();
-
-																						}
-																					});
-																				}	
-																			});	
-
-																		}else{
-																				console.log("Image not exists");
+																		ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																			
+																			if(err)
+																			{
+																				console.log(err)
 																				callback();
-
 																			}
-                                                                    });
-
-
-																	//------------------------------------------------------------------------------------------------------
-
+																			else
+																			{
+																				console.log(imageResizeResults)
+																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																				callback();
+																			}
+																		});
+																		
+																	}	
+																	else
+																	{
+																		callback();
+																	}
+																});
 
                                                             }
 

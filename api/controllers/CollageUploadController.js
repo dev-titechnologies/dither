@@ -227,14 +227,18 @@ module.exports = {
                                                                     break;
                                                             }
                                                             console.log(position);
-                                                            var switchKey = filename_without_extension;
-                                                            switch(switchKey){
+                                                            var switchKey_2 = filename_without_extension;
+                                                            console.log("switchKey_2================");
+                                                            console.log(switchKey_2);
+                                                            switch(switchKey_2){
                                                                     case 'image_0':
                                                                     break;
                                                                     default:
                                                                             collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
                                                                     break;
                                                             }
+                                                            console.log("collageDetailImgArray ++++++++++++++++++++++");
+                                                            console.log(collageDetailImgArray);
                                                     });
 
                                                     CollageDetails.create(collageDetailImgArray).exec(function(err, createdCollageDetails) {

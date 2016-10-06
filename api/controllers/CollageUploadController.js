@@ -190,11 +190,11 @@ module.exports = {
                                                     collage_imageName       =   collage_imageName[collage_imageName.length-1];
                                                     console.log(collage_imageName);
                                             }
-                                            var filename                           =    factor.fd.split('/');
+                                            var filename                           =    factor.image_url.split('/');
                                             filename                               =    filename[filename.length-1];
                                             var filename_without_extension         =    factor.filename.split('.');
                                             filename_without_extension             =    filename_without_extension[0];
-                                            var switchKey                          = filename_without_extension;
+                                            var switchKey                          =    filename_without_extension;
                                             var position;
                                             switch(switchKey){
                                                     case "image_1":    position = 1;

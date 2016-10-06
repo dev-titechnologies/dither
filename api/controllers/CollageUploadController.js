@@ -33,8 +33,8 @@ module.exports = {
                                 console.log("File length is there ------------->>>>>>>>>>>>>  ");
                                 var collage_imageName = "";
                                 var collageDetailImgArray = [];
-                                var keyArray = [];
-                                var valueArray = [];
+                                //var keyArray = [];
+                                //var valueArray = [];
 
                                 files.forEach(function(factor, index){
                                         console.log(factor);
@@ -47,22 +47,22 @@ module.exports = {
 
                                         var image_name;
 
-                                        keyArray.push(filename_without_extension);
-                                        valueArray.push(collageImg_path + filename);
-                                        //collageDetailImgArray.push({image_name: filename_without_extension, image_url: collageImg_path + filename});
+                                        //keyArray.push(filename_without_extension);
+                                        //valueArray.push(collageImg_path + filename);
+                                        collageDetailImgArray.push({image_name: filename_without_extension, image_url: collageImg_path + filename});
                                 });
                                 console.log("collageDetailImgArray =================");
-                                 var keyValueArray = {},
+                                 /*var keyValueArray = {},
                                         i;
                                 //Merge 2 arrays
                                 for (i = 0; i < keyArray.length; i++) {
                                     keyValueArray[keyArray[i]] = valueArray[i];
                                 }
                                 console.log("Key Value Array");
-                                console.log(keyValueArray);
+                                console.log(keyValueArray);*/
 
                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
-                                                    dither_images : keyValueArray,
+                                                    dither_images : collageDetailImgArray,
                                                     });
                         }
                     }

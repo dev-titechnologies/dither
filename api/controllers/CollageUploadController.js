@@ -82,7 +82,7 @@ module.exports = {
             //console.log(req.param("collage_image"));
             if(!req.param("REQUEST") ){
                     console.log("|||||||||||||||||| Not found");
-                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both REQUEST and collage_image'});
+                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass the REQUEST'});
             }else{
                             console.log(req.param("REQUEST"));
                             console.log(JSON.parse(req.param("REQUEST")));

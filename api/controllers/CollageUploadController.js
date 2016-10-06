@@ -5,6 +5,32 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+//Function to get ordered, by value, in json array key value pair
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return 1;
+      }else if( a[prop] < b[prop] ){
+          return -1;
+      }
+      return 0;
+   }
+}
+
+//Function to avoid duplicate values for a normal array
+function union_arrays (x, y) {
+  var obj = {};
+  for (var i = x.length-1; i >= 0; -- i)
+     obj[x[i]] = x[i];
+  for (var i = y.length-1; i >= 0; -- i)
+     obj[y[i]] = y[i];
+  var res = []
+  for (var k in obj) {
+    if (obj.hasOwnProperty(k))  // <-- optional
+      res.push(obj[k]);
+  }
+  return res;
+}
 module.exports = {
 
 /* ==================================================================================================================================

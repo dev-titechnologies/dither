@@ -184,38 +184,6 @@ module.exports = {
                             if(get_dither_images.length != 0){
                                     var collage_imageName           =   "";
                                     var collageDetailImgArray       =   [];
-                                    get_dither_images.forEach(function(factor, index){
-                                            if(factor.image_name === "image_0"){
-                                                    collage_imageName       =   factor.image_url.split('/');
-                                                    collage_imageName       =   collage_imageName[collage_imageName.length-1];
-                                                    console.log(collage_imageName);
-                                            }
-                                            var filename                           =    factor.image_url.split('/');
-                                            filename                               =    filename[filename.length-1];
-                                            var filename_without_extension         =    filename.split('.');
-                                            filename_without_extension             =    filename_without_extension[0];
-                                            var switchKey                          =    filename_without_extension;
-                                            var position;
-                                            switch(switchKey){
-                                                    case "image_1":    position = 1;
-                                                    break;
-                                                    case "image_2":    position = 2;
-                                                    break;
-                                                    case "image_3":    position = 3;
-                                                    break;
-                                                    case "image_4":    position = 4;
-                                                    break;
-                                            }
-                                            var switchKey = filename_without_extension;
-                                            switch(switchKey){
-                                                    case 'image_0':
-                                                    break;
-                                                    default:
-                                                            collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
-                                                    break;
-                                            }
-                                    });
-
                                     console.log(request);
                                     var values = {
                                         imgTitle        : request.dither_title,
@@ -233,6 +201,38 @@ module.exports = {
                                                     console.log(err);
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
                                             }else{
+                                                    get_dither_images.forEach(function(factor, index){
+                                                            if(factor.image_name === "image_0"){
+                                                                    collage_imageName       =   factor.image_url.split('/');
+                                                                    collage_imageName       =   collage_imageName[collage_imageName.length-1];
+                                                                    console.log(collage_imageName);
+                                                            }
+                                                            var filename                           =    factor.image_url.split('/');
+                                                            filename                               =    filename[filename.length-1];
+                                                            var filename_without_extension         =    filename.split('.');
+                                                            filename_without_extension             =    filename_without_extension[0];
+                                                            var switchKey                          =    filename_without_extension;
+                                                            var position;
+                                                            switch(switchKey){
+                                                                    case "image_1":    position = 1;
+                                                                    break;
+                                                                    case "image_2":    position = 2;
+                                                                    break;
+                                                                    case "image_3":    position = 3;
+                                                                    break;
+                                                                    case "image_4":    position = 4;
+                                                                    break;
+                                                            }
+                                                            var switchKey = filename_without_extension;
+                                                            switch(switchKey){
+                                                                    case 'image_0':
+                                                                    break;
+                                                                    default:
+                                                                            collageDetailImgArray.push({image: filename, position: position, collageId: results.id, vote: 0});
+                                                                    break;
+                                                            }
+                                                    });
+
                                                     CollageDetails.create(collageDetailImgArray).exec(function(err, createdCollageDetails) {
                                                             if(err)
                                                             {

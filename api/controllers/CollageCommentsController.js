@@ -68,7 +68,7 @@ module.exports = {
 															function(callback) {
 																
 																    console.log("Im functon callback()")
-																	if(mention_arr.length!=0)
+																	if(mention_arr)
 																		{
 																			console.log("In mention_arr")
 																			User.find({mentionId:mention_arr}).exec(function (err, getUserId){

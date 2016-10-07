@@ -270,21 +270,14 @@ module.exports = {
 																						});
 																						
 																					}	
-																					else
-																					{
-																						console.log("thumbnaillllllllllllll re callback()")
-																						callback();
-																					}
+																					
 																				});
 																				//callback();
 																			}
 																		});
 																		
 																	}	
-																	else
-																	{
-																		callback();
-																	}
+																	
 																});
 															
 															
@@ -386,20 +379,14 @@ module.exports = {
 																						});
 																						
 																					}	
-																					else
-																					{
-																						callback();
-																					}
+																					
 																				});
 																				//callback();
 																			}
 																		});
 																		
 																	}	
-																	else
-																	{
-																		callback();
-																	}
+																	
 																});
 
                                                         }
@@ -482,20 +469,14 @@ module.exports = {
 																						});
 																						
 																					}	
-																					else
-																					{
-																						callback();
-																					}
+																					
 																				});
 																				//callback();
 																			}
 																		});
 																		
 																	}	
-																	else
-																	{
-																		callback();
-																	}
+																	
 																});
 
                                                             }
@@ -581,20 +562,14 @@ module.exports = {
 																						});
 																						
 																					}	
-																					else
-																					{
-																						callback();
-																					}
+																					
 																				});
 																				//callback();
 																			}
 																		});
 																		
 																	}	
-																	else
-																	{
-																		callback();
-																	}
+																	
 																});
 
                                                             }
@@ -683,20 +658,14 @@ module.exports = {
 																						});
 																						
 																					}	
-																					else
-																					{
-																						callback();
-																					}
+																					
 																				});
 																				//callback();
 																			}
 																		});
 																		
 																	}	
-																	else
-																	{
-																		callback();
-																	}
+																	
 																});
 
                                                             }

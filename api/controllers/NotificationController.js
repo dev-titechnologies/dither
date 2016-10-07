@@ -263,8 +263,15 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
+																								if(imageResizeResults==undefined)
+																								{
+																									callback();
+																								}
+																								else
+																								{
 																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
+																								}
 																							}
 																						});
 																						
@@ -378,8 +385,15 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
+																								if(imageResizeResults==undefined)
+																								{
+																									callback();
+																								}
+																								else
+																								{
 																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
+																								}
 																							}
 																						});
 																						
@@ -474,8 +488,15 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
+																								if(imageResizeResults==undefined)
+																								{
+																									callback();
+																								}
+																								else
+																								{
 																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
+																								}
 																							}
 																						});
 																						
@@ -573,8 +594,15 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
+																								if(imageResizeResults==undefined)
+																								{
+																									callback();
+																								}
+																								else
+																								{
 																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
+																								}
 																							}
 																						});
 																						
@@ -675,8 +703,15 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
+																								if(imageResizeResults==undefined)
+																								{
+																									callback();
+																								}
+																								else
+																								{
 																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
+																								}
 																							}
 																						});
 																						

@@ -39,6 +39,7 @@ module.exports = {
                                             //console.log("INSIDE FOR EACH ======================");
                         });*/
                         console.log(req.param('contact_array').length);
+                        console.log(req.param('contact_array'))
                         //phonecontacts           = JSON.parse(req.param('contact_array'));
                         phonecontacts           = req.param('contact_array');
 

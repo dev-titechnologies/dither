@@ -263,6 +263,8 @@ module.exports = {
 																							else
 																							{
 																								console.log(imageResizeResults)
+																								console.log("collge Image checkinggggg");
+																								console.log(item.dither_image)
 																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																								callback();
 																							}

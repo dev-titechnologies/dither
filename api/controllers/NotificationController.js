@@ -254,7 +254,6 @@ module.exports = {
 																						console.log(imageSrc)
 																						console.log(imageDst)
 																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-																							
 																							if(err)
 																							{
 																								console.log(err)
@@ -273,6 +272,7 @@ module.exports = {
 																					}	
 																					else
 																					{
+																						console.log("thumbnaillllllllllllll re callback()")
 																						callback();
 																					}
 																				});

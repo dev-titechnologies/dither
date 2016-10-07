@@ -265,7 +265,7 @@ module.exports = {
 																								console.log(imageResizeResults)
 																								if(imageResizeResults==undefined)
 																								{
-																									callback();
+																									item.dither_image='';
 																								}
 																								else
 																								{
@@ -387,7 +387,7 @@ module.exports = {
 																								console.log(imageResizeResults)
 																								if(imageResizeResults==undefined)
 																								{
-																									callback();
+																									item.dither_image='';
 																								}
 																								else
 																								{
@@ -490,7 +490,7 @@ module.exports = {
 																								console.log(imageResizeResults)
 																								if(imageResizeResults==undefined)
 																								{
-																									callback();
+																									item.dither_image='';
 																								}
 																								else
 																								{
@@ -596,7 +596,7 @@ module.exports = {
 																								console.log(imageResizeResults)
 																								if(imageResizeResults==undefined)
 																								{
-																									callback();
+																									item.dither_image='';
 																								}
 																								else
 																								{
@@ -705,7 +705,7 @@ module.exports = {
 																								console.log(imageResizeResults)
 																								if(imageResizeResults==undefined)
 																								{
-																									callback();
+																									item.dither_image='';
 																								}
 																								else
 																								{

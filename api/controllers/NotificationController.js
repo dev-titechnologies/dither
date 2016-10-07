@@ -165,8 +165,8 @@ module.exports = {
                             }
                             else
                             {
-								
-                                console.log(results.length)
+								console.log("^^^^^^^^^^^^^^^^^^^^^^^^^Result^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+                                console.log(results)
 
                                 if(typeof results != 'undefined' && results.length!=0)
                                 {

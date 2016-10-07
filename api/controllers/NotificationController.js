@@ -243,7 +243,7 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				fs.exists(clgImgSrc, function(exists) {
+																				/*fs.exists(clgImgSrc, function(exists) {
 																				 if (exists) {
 
 																						console.log("collge Image exists");
@@ -271,7 +271,7 @@ module.exports = {
 																						
 																					}	
 																					
-																				});
+																				});*/
 																				//callback();
 																			}
 																		});
@@ -353,7 +353,7 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				fs.exists(clgImgSrc, function(exists) {
+																				/*fs.exists(clgImgSrc, function(exists) {
 																				 if (exists) {
 
 																						console.log("collge Image exists");
@@ -380,8 +380,8 @@ module.exports = {
 																						
 																					}	
 																					
-																				});
-																				//callback();
+																				});*/
+																				callback();
 																			}
 																		});
 																		
@@ -443,7 +443,7 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				fs.exists(clgImgSrc, function(exists) {
+																				/*fs.exists(clgImgSrc, function(exists) {
 																				 if (exists) {
 
 																						console.log("collge Image exists");
@@ -470,8 +470,8 @@ module.exports = {
 																						
 																					}	
 																					
-																				});
-																				//callback();
+																				});*/
+																				callback();
 																			}
 																		});
 																		
@@ -536,7 +536,7 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				fs.exists(clgImgSrc, function(exists) {
+																				/*fs.exists(clgImgSrc, function(exists) {
 																				 if (exists) {
 
 																						console.log("collge Image exists");
@@ -563,8 +563,8 @@ module.exports = {
 																						
 																					}	
 																					
-																				});
-																				//callback();
+																				});*/
+																				callback();
 																			}
 																		});
 																		
@@ -632,7 +632,7 @@ module.exports = {
 																			{
 																				console.log(imageResizeResults)
 																				item.profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				fs.exists(clgImgSrc, function(exists) {
+																				/*fs.exists(clgImgSrc, function(exists) {
 																				 if (exists) {
 
 																						console.log("collge Image exists");
@@ -659,8 +659,8 @@ module.exports = {
 																						
 																					}	
 																					
-																				});
-																				//callback();
+																				});*/
+																				callback();
 																			}
 																		});
 																		

@@ -49,11 +49,12 @@ module.exports = {
         Function to check whether a token is expired or not
     ================================================================================================================================== */
     checkToken: function (token, callback) {
+            var today = new Date().toISOString();
             var query = " SELECT usr.id, usr.name,usr.notifyOpinion,usr.profilePic, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                         " FROM"+
                         " userToken usrtkn"+
                         " INNER JOIN user usr ON usr.id = usrtkn.userId"+
-                        " WHERE usrtkn.token = '"+token+"' AND usrtkn.expiryDate > NOW()";
+                        " WHERE usrtkn.token = '"+token+"' AND usrtkn.expiryDate > '"+today+"'";
             User_token.query(query, function (err, results) {
                 if(err){
                         console.log(err);

@@ -18,7 +18,11 @@ module.exports = {
                     var collageId                   =     req.param("dither_id");
                     var comment                     =     req.param("comment_msg");
                     var device_type                 =     req.get('device_type');
-
+                    var mention_user_id				=     [];
+					var	mention_arr					=     req.param("mentions");
+					//var	mention_arr					=    ['test_user','anu_r'];
+					
+					console.log(mention_arr)
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
                     }else{
@@ -58,8 +62,170 @@ module.exports = {
                                                                 console.log(err)
                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Comments not found!!', error_details: err});
                                                             }else{
+																
+															async.series([
+                                                                        
+															function(callback) {
+																
+																    console.log("Im functon callback()")
+																	if(mention_arr)
+																		{
+																			console.log("In mention_arr")
+																			User.find({mentionId:mention_arr}).exec(function (err, getUserId){
+																				
+																				if(err)
+																				{
+																					console.log("mention")
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("get User Idsssssssss")
+																					console.log(getUserId)
+																					getUserId.forEach(function(factor, index){
+																						
+																						mention_user_id.push(factor.id);
+																					    
+																					console.log("dasdasdasdsadsadsadsad")
+																					console.log(mention_user_id)
+																					 
+                                                                                        
+                                                                                    });    
+                                                                                    var values ={
+                                                                                            notificationTypeId  :   7,
+                                                                                            userId              :   userId,
+                                                                                            collage_id          :   collageId,
+                                                                                            tagged_users        :   mention_user_id
+                                                                                            
+                                                                                        }
+                                                                                       
+                                                                                    NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+																						   if(err)
+																						   {
+																							   console.log(err)
+																							   callback();
+																							   //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
+																						   }
+																						   else
+																						   {
+																							   console.log(createdNotificationTags)
+																							   
+																							User_token.find({userId: mention_user_id}).exec(function (err, getDeviceId) {
+																						//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+																							if(err)
+																							{
+																								  console.log(err);
+																								  callback();
+																								  //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+																							}
+																							else
+																							{
+
+																								
+																								var message     =  'Mention Notification';
+																								var ntfn_body   =   tokenCheck.tokenDetails.name +" has Mentioned You In a Dither";
+																								//var device_id   =  getDeviceId.deviceId;
+																								var mention_deviceId_arr = [];
+
+																								getDeviceId.forEach(function(factor, index){
+
+																									mention_deviceId_arr.push(factor.deviceId);
+
+																								});
+
+																								console.log(results)
+
+																								if(!mention_deviceId_arr.length){
+																										callback();
+																										//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
+																								}else{
+																										//device_id       =  device_id.split(',');sails.log.debug(device_id);
+																										var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId};
+																										var switchKey   =  device_type;
+																										switch(switchKey){
+																												case 'ios' :
+																															NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+																																if(err)
+																																{
+																																	console.log("Error in Push Notification Sending")
+																																	console.log(err)
+																																	callback();
+																																	//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
+																																}
+																																else
+																																{
+																																	console.log("Push notification result")
+																																	console.log(ntfnSend)
+																																	console.log("Push Notification sended")
+																																	callback();
+																																	/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																							comment_id                      :    results.id,
+																																							comment_msg                     :    results.msg,
+																																							comment_created_date_time       :    results.createdAt,
+																																					});*/
+																																	
+																																}
+																															});
+																												break;
+
+																												case 'android' :
+																															NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+																																if(err)
+																																{
+																																	console.log("Error in Push Notification Sending")
+																																	console.log(err)
+																																	callback();
+																																	//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
+																																}
+																																else
+																																{
+																																	console.log("Push notification result")
+																																	console.log(ntfnSend)
+																																	console.log("Push Notification sended")
+																																	callback();
+																																	/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																							comment_id                      :    results.id,
+																																							comment_msg                     :    results.msg,
+																																							comment_created_date_time       :    results.createdAt,
+																																					});*/
+																																	
+																																}
+																															});
+																												break;
+																												default:
+																															callback();
+
+																												break;
+																												
+
+
+																										}
+																								}
+
+																							//------------------------------
+																							}
+																						  });
+
+																							   
+																							   
+																						   }
+																					   }); 
+																				}
+																			});
+																		}
+																		else
+																		{
+																			callback();
+																		}
+															
+															},
+															function(callback) {
+
+															   console.log("Notification For Comment");
+															   console.log(mention_arr)
                                                                if(userId   !=  collageDetails.userId)
                                                                 {
+																	
                                                                         console.log("inserted comments  Different User Comment");
                                                                         console.log("own comment not included")
                                                                         var values ={
@@ -92,16 +258,19 @@ module.exports = {
                                                                                     if(err)
                                                                                     {
                                                                                         console.log(err)
-                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
+                                                                                        callback();
+                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
                                                                                     }
                                                                                     else{
                                                                                        if(notifySettings.notifyComment==0){
-
-                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																						   
+																						    console.log("comment Option turn off")
+																							callback();
+                                                                                            /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
                                                                                                                     comment_id                      :    results.id,
                                                                                                                     comment_msg                     :    results.msg,
                                                                                                                     comment_created_date_time       :    results.createdAt,
-                                                                                                            });
+                                                                                                            });*/
 
                                                                                        }
                                                                                        else{
@@ -115,15 +284,17 @@ module.exports = {
                                                                                             User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
                                                                                                 if(err){
                                                                                                       console.log(err)
-                                                                                                      return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+                                                                                                      callback();
+                                                                                                      //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
                                                                                                 }else{
                                                                                                     if(!getDeviceId.length){
                                                                                                        console.log("device not found")
-                                                                                                       return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                       callback();
+                                                                                                       /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
                                                                                                                             comment_id                      :    results.id,
                                                                                                                             comment_msg                     :    results.msg,
                                                                                                                             comment_created_date_time       :    results.createdAt,
-                                                                                                                    });
+                                                                                                                    });*/
                                                                                                     }else{
                                                                                                           var deviceId_arr  = [];
                                                                                                            getDeviceId.forEach(function(factor, index){
@@ -140,17 +311,18 @@ module.exports = {
                                                                                                                         if(err){
                                                                                                                             console.log("Error in Push Notification Sending")
                                                                                                                             console.log(err)
-                                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+                                                                                                                            callback();
+                                                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
                                                                                                                         }else{
                                                                                                                             console.log("Push notification result")
                                                                                                                             console.log(ntfnSend)
                                                                                                                             console.log("Push Notification sended")
-
-                                                                                                                             return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																															callback();
+                                                                                                                             /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
                                                                                                                                 comment_id                      :    results.id,
                                                                                                                                 comment_msg                     :    results.msg,
                                                                                                                                 comment_created_date_time       :    results.createdAt,
-                                                                                                                             });
+                                                                                                                             });*/
 
                                                                                                                         }
                                                                                                                     });
@@ -161,45 +333,62 @@ module.exports = {
                                                                                                                         {
                                                                                                                             console.log("Error in Push Notification Sending")
                                                                                                                             console.log(err)
-                                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+                                                                                                                            callback();
+                                                                                                                           // return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
                                                                                                                         }
                                                                                                                         else
                                                                                                                         {
                                                                                                                             console.log("Push notification result")
                                                                                                                             console.log(ntfnSend)
                                                                                                                             console.log("Push Notification sended")
-                                                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                                            callback();
+                                                                                                                            /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
                                                                                                                                 comment_id                      :    results.id,
                                                                                                                                 comment_msg                     :    results.msg,
                                                                                                                                 comment_created_date_time       :    results.createdAt,
-                                                                                                                            });
+                                                                                                                            });*/
 
 
                                                                                                                         }
                                                                                                                     });
                                                                                                             }else{
-                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-                                                                                                                                comment_id                      :    results.id,
-                                                                                                                                comment_msg                     :    results.msg,
-                                                                                                                                comment_created_date_time       :    results.createdAt,
-                                                                                                                        });
+                                                                                                                 callback();     
                                                                                                             }
                                                                                                         }
                                                                                                     }//kkkk
                                                                                                 }
                                                                                             });
-                                                                                    }
-                                                                                  }
+																						}
+																					}
                                                                                  });
-                                                                                }
+                                                                               }
                                                                          });
-                                                                }else{
-                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-                                                                                                    comment_id                      :    results.id,
-                                                                                                    comment_msg                     :    results.msg,
-                                                                                                    comment_created_date_time       :    results.createdAt,
-                                                                                            });
-                                                                }
+																	}else{
+																		 console.log("same")
+																		 
+																			callback();
+																			
+																			
+																	}
+                                                                },
+                                                                //=========================================
+                                                                ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                                                                        if (err) {
+                                                                                            
+                                                                                            console.log(err);
+																							return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured Comment Updation', error_details: err});
+                                                                                           
+                                                                                        }else{
+
+																								console.log("result")
+																								return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                                                comment_id                      :    results.id,
+                                                                                                                                comment_msg                     :    results.msg,
+                                                                                                                                comment_created_date_time       :    results.createdAt,
+                                                                                                                        });
+                                                                                        }
+																});
+                                                                
                                                             }
                                                         });
 

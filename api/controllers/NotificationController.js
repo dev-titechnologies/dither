@@ -126,8 +126,8 @@ module.exports = {
                                         " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                         " U.name,U.profilePic as profile_image,"+
                                         " C.image as dither_image"+
-                                        " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-                                        " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                        " FROM  notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
+                                        " INNER JOIN collage as C ON C.id = N.collage_id"+
                                         " WHERE"+
                                         " N.ditherUserId="+user_id+
                                         " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
@@ -143,8 +143,8 @@ module.exports = {
                                     " SELECT"+
                                     " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                     " U.name,U.profilePic as profile_image,C.image as dither_image"+
-                                    " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-                                    " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                    " FROM notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
+                                    " INNER JOIN collage as C ON C.id = N.collage_id"+
                                     " WHERE"+
                                     " N.ditherUserId="+user_id+
                                     " OR"+
@@ -191,17 +191,17 @@ module.exports = {
                                                     {
 													
                                                             console.log(item)
-                                                            notificationCommented = "No notification Found for comments";
-                                                            var notification    = ntfnTypeFound[0].body;
-                                                            item.description    = item.description - 1;
+                                                            notificationCommented 	= 	"No notification Found for comments";
+                                                            var notification    	= 	ntfnTypeFound[0].body;
+                                                            item.description    	= 	item.description - 1;
                                                             console.log(notification)
-                                                            ntfn_body           =   util.format(notification,item.description);
-                                                            item.ntfn_body      =   ntfn_body;
-                                                            item.type           =   ntfnTypeFound[0].type;
-                                                            var imageToResize	=   item.profile_image;
-                                                            var clgImgToResize	=	item.dither_image;
-                                                            item.profile_image  =   profilePic_path + item.profile_image;
-                                                            item.dither_image   =   collageImg_path + item.dither_image;
+                                                            ntfn_body           	=   util.format(notification,item.description);
+                                                            item.ntfn_body      	=   ntfn_body;
+                                                            item.type           	=   ntfnTypeFound[0].type;
+                                                            var imageToResize		=   item.profile_image;
+                                                            var clgImgToResize		=	item.dither_image;
+                                                            item.profile_image  	=   profilePic_path + item.profile_image;
+                                                            item.dither_image   	=   collageImg_path + item.dither_image;
                                                             if(item.description<=0)
 															{
 																console.log("commenteddd")
@@ -254,7 +254,6 @@ module.exports = {
 																						console.log(imageSrc)
 																						console.log(imageDst)
 																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-																							
 																							if(err)
 																							{
 																								console.log(err)
@@ -281,7 +280,37 @@ module.exports = {
 																	}	
 																	else
 																	{
-																		callback();
+																		fs.exists(clgImgSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("collge Image exists");
+
+																						var ext                         =     clgImgSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+																								callback();
+																							}
+																						});
+																						
+																					}	
+																					else
+																					{
+																						callback();
+																					}
+																				});
+																		//callback();
 																	}
 																});
 															
@@ -396,7 +425,38 @@ module.exports = {
 																	}	
 																	else
 																	{
-																		callback();
+																		fs.exists(clgImgSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("collge Image exists");
+
+																						var ext                         =     clgImgSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																							
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+																								callback();
+																							}
+																						});
+																						
+																					}	
+																					else
+																					{
+																						callback();
+																					}
+																				});
+																		//callback();
 																	}
 																});
 
@@ -492,7 +552,38 @@ module.exports = {
 																	}	
 																	else
 																	{
-																		callback();
+																		fs.exists(clgImgSrc, function(exists) {
+																			 if (exists) {
+
+																					console.log("collge Image exists");
+
+																					var ext                         =     clgImgSrc.split('/');
+																					ext                             =     ext[ext.length-1].split('.');
+																					var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																					console.log(imageSrc)
+																					console.log(imageDst)
+																					ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																						
+																						if(err)
+																						{
+																							console.log(err)
+																							callback();
+																						}
+																						else
+																						{
+																							console.log(imageResizeResults)
+																							item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+																							callback();
+																						}
+																					});
+																					
+																				}	
+																				else
+																				{
+																					callback();
+																				}
+																			});
+																		//callback();
 																	}
 																});
 
@@ -591,7 +682,38 @@ module.exports = {
 																	}	
 																	else
 																	{
-																		callback();
+																		fs.exists(clgImgSrc, function(exists) {
+																		 if (exists) {
+
+																				console.log("collge Image exists");
+
+																				var ext                         =     clgImgSrc.split('/');
+																				ext                             =     ext[ext.length-1].split('.');
+																				var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																				console.log(imageSrc)
+																				console.log(imageDst)
+																				ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																					
+																					if(err)
+																					{
+																						console.log(err)
+																						callback();
+																					}
+																					else
+																					{
+																						console.log(imageResizeResults)
+																						item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+																						callback();
+																					}
+																				});
+																				
+																			}	
+																			else
+																			{
+																				callback();
+																			}
+																		});
+																		//callback();
 																	}
 																});
 
@@ -693,7 +815,40 @@ module.exports = {
 																	}	
 																	else
 																	{
-																		callback();
+																		
+																		fs.exists(clgImgSrc, function(exists) {
+																		 if (exists) {
+
+																				console.log("collge Image exists");
+
+																				var ext                         =     clgImgSrc.split('/');
+																				ext                             =     ext[ext.length-1].split('.');
+																				var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																				console.log(imageSrc)
+																				console.log(imageDst)
+																				ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																					
+																					if(err)
+																					{
+																						console.log(err)
+																						callback();
+																					}
+																					else
+																					{
+																						console.log(imageResizeResults)
+																						item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+																						callback();
+																					}
+																				});
+																				
+																			}	
+																			else
+																			{
+																				callback();
+																			}
+																		});
+																		
+																		//callback();
 																	}
 																});
 

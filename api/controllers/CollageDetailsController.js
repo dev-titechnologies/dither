@@ -245,8 +245,13 @@ module.exports = {
 																												console.log(imageResizeResults)
 																												profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																												console.log("--------**********************************************--------")
-																												
-																												
+																												taggedUserArrayFinal.push({
+                                                                                                                name            :   factor.name,
+                                                                                                                userId          :   factor.ditherUserId,
+                                                                                                                profile_image   :   profile_image,
+                                                                                                                mention_id		:	factor.mentionId
+                                                                                                                });
+																												console.log(taggedUserArrayFinal)
 							
 																											}
 																										});
@@ -254,12 +259,7 @@ module.exports = {
 																									
 																							});	
 																						}
-                                                                                        taggedUserArrayFinal.push({
-                                                                                                                name            :   factor.name,
-                                                                                                                userId          :   factor.ditherUserId,
-                                                                                                                profile_image   :   profile_image,
-                                                                                                                mention_id		:	factor.mentionId
-                                                                                                                });
+                                                                                        
                                                                                 });
                                                                             }
 

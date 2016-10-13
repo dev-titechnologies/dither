@@ -74,7 +74,7 @@ module.exports = {
 		console.log("neww devicee  arrayyyyyy")
 		console.log(ntfnArr)
 		
-		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id};
+		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
 		 android = PusherService('android', {
 			  
 				device: [], // Array of string with device tokens
@@ -110,9 +110,9 @@ module.exports = {
 
 //===============================================END OF PUSH==========================================================================================
 
- /* =============================================================================================================================================
+  /*=============================================================================================================================================
 										SERVICE FOR IN APP NOTIFICATION 
-	==============================================================================================================================================
+	==============================================================================================================================================*/
 	
 	
 	NtfnInAPP: function(data, callback) 
@@ -128,7 +128,7 @@ module.exports = {
 						
 			console.log(values)
 		 
-		    NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+		    NotificationLog.create(values).exec(function(err, createdNotificationLogs) {
 					if(err){
 						console.log(err);
 						callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in inserting collage commented users', error_details: err});
@@ -136,14 +136,14 @@ module.exports = {
 						var creator_roomName  = "socket_user_"+collageDetails.userId;
 						sails.sockets.broadcast(creator_roomName,{
 																type                       :       "notification",
-																id                         :       collageId,
-																user_id                    :       userId,
+																id                         :       data.collage_id,
+																user_id                    :       data.userId,
 																message                    :       "Comment Dither - Room Broadcast - to Creator",
-																//roomName                   :       creator_roomName,
-																//subscribers                :       sails.sockets.subscribers(creator_roomName),
-																//socket                     :       sails.sockets.rooms(),
+																//roomName                 :       creator_roomName,
+																//subscribers              :       sails.sockets.subscribers(creator_roomName),
+																//socket                   :       sails.sockets.rooms(),
 																notification_type          :       3,
-																notification_id            :       createdNotificationTags.id
+																notification_id            :       createdNotificationLogs.id
 																});
 						//-----------------------------End OF NotificationLog---------------------------------
 						
@@ -170,21 +170,17 @@ module.exports = {
 								User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
 									if(err){
 										  console.log(err)
-										  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+										  callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in Push Notificationr', error_details: err});
+										  //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
 									}else{
 										if(!getDeviceId.length){
 										   console.log("device not found")
-										   return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-																comment_id                      :    results.id,
-																comment_msg                     :    results.msg,
-																comment_created_date_time       :    results.createdAt,
-														});
+										   callback();
 										}else{
 											  var deviceId_arr  = [];
 											   getDeviceId.forEach(function(factor, index){
 
 															deviceId_arr.push(factor.deviceId);
-
 
 												});
 											if(deviceId_arr.length){
@@ -195,17 +191,18 @@ module.exports = {
 															if(err){
 																console.log("Error in Push Notification Sending")
 																console.log(err)
-																return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+																callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in Push Notificationr', error_details: err});
+																//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
 															}else{
 																console.log("Push notification result")
 																console.log(ntfnSend)
 																console.log("Push Notification sended")
-
-																 return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																callback();
+																/* return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
 																	comment_id                      :    results.id,
 																	comment_msg                     :    results.msg,
 																	comment_created_date_time       :    results.createdAt,
-																 });
+																 });*/
 
 															}
 														});
@@ -216,28 +213,32 @@ module.exports = {
 															{
 																console.log("Error in Push Notification Sending")
 																console.log(err)
-																return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
+																callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in Push Notificationr', error_details: err});
+																//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
 															}
 															else
 															{
 																console.log("Push notification result")
 																console.log(ntfnSend)
 																console.log("Push Notification sended")
-																return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																callback();
+																/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
 																	comment_id                      :    results.id,
 																	comment_msg                     :    results.msg,
 																	comment_created_date_time       :    results.createdAt,
-																});
+																});*/
 
 
 															}
 														});
 												}else{
-															return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+															
+															callback();
+															/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
 																	comment_id                      :    results.id,
 																	comment_msg                     :    results.msg,
 																	comment_created_date_time       :    results.createdAt,
-															});
+															});*/
 												}
 											}
 										}//kkkk
@@ -260,7 +261,7 @@ module.exports = {
 		   
 		    
 		
-	}*/
+	}
 	
 	
 };	

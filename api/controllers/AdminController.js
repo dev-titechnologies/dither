@@ -198,13 +198,15 @@ console.log(values);
     /** Get each dither details **/
     getSingleDitherDetails: function(req,res){
          var ditherId=req.body.id;
+           // var ditherId = 507;
          console.log("inside getSingleDitherDetails function"+ditherId);
-        var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote  FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId  where c.id="+ditherId+" ORDER BY c.id ASC";
+        var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote,cc.comment,cc.createdAt as commentDate  FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId LEFT JOIN collageComments as cc ON cd.collageId=cc.collageId where c.id="+ditherId+" ORDER BY c.id DESC";
         console.log(query);
                     Collage.query(query, function (err, result) {
                         if (err) {
                             return res.json(200, {status: 2, error_details: err});
                         } else {
+                            console.log(result);
                             return res.json(200, {status: 1, message: "success", result: result});
                         }
                     });
@@ -297,6 +299,50 @@ console.log(values);
                         }
                     });
     },
+    getUsersNotification:function(req,res){
+        console.log("go fast, u are on way");
+          var user_id  = req.body.userId;
+        //var user_id = 27;
+        console.log(user_id);
+        console.log(req.body);
+        var query = " SELECT"+
+                   " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+                   " U.name,U.profilePic,"+
+                   " C.image as dither_image"+
+                   " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                   " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                   " WHERE"+
+                   " N.ditherUserId="+user_id+
+                   " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
+                   " OR"+
+                   " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC";
+        Collage.query(query,function(err,result){
+            if(err){
+                console.log("small error..");
+            }
+            else{
+                console.log("Success in notification",result);
+                return res.json(200,{status:1,message:'success',data:result});
+            }
+        });
+    }, 
+    getAllDithersOfUser:function(req,res){
+        console.log("inside getUserAllDithers functin");
+         var user_id = req.body.userId;
+        // console.log(user_id);
+        // var user_id = 87;
+        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c LEFT JOIN user as u ON u.id=c.userId WHERE c.userId = "+user_id+" ORDER BY c.createdAt DESC ";
+        Collage.query(query,function(err,result){
+            if(err){
+                console.log("some error check query");
+                  return res.json(200, {status: 2, error_details: err});
+            }else{
+                console.log(result);
+                 return res.json(200,{status:1,message:'success',result:result});           
+            }
+        });
+
+    },   
     
 };
 

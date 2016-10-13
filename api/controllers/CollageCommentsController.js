@@ -22,6 +22,7 @@ module.exports = {
                     var device_type                 =     req.get('device_type');
                     var mention_user_id				=     [];
 					var	mention_arr					=     req.param("mentions");
+
 					var profilePic_path_assets 		=     req.options.file_path.profilePic_path_assets;
 					var server_baseUrl         		=     req.options.server_baseUrl;
 					var server_image_baseUrl   		=     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -29,6 +30,7 @@ module.exports = {
 					//var	mention_arr					=    ['test_user','anu_r'];
 					var profile_image = '';
 					console.log("mention array")
+
 					console.log(mention_arr)
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
@@ -80,9 +82,7 @@ module.exports = {
 																		{
 																			console.log("In mention_arr")
 																			//var query = "SELECT id FROM user where mention_id=";
-																			
 																			User.find({mentionId: mention_arr}).exec(function (err, getUserId){
-																				
 																				if(err)
 																				{
 																					console.log("mention")
@@ -428,6 +428,7 @@ module.exports = {
 																		}
 																	});
 																},
+
                                                                 //=========================================
                                                                 ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if (err) {

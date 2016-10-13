@@ -400,7 +400,7 @@ module.exports = {
 
                                                                                                 if(deviceId_arr.length!=0)
                                                                                                 {
-                                                                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id};
+                                                                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
 
                                                                                                         var switchKey   =  device_type;
                                                                                                         switch(switchKey){
@@ -648,7 +648,6 @@ module.exports = {
                                 dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                 dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
                                 dataResultsObj.vote                     =       imgDetailsArrayOrder;
-
                                 key.push(dataResultsObj);
                                 dataResultsKeys.push(collageId_val);
                                 total_opinion                           =       dataResults[i]["opinionCount"];
@@ -1404,7 +1403,7 @@ module.exports = {
                     var invite_friends_NUM          =      req.param("invite_friends_NUM");
 
                     if(!imgTitle || !location || !collageId){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_location  and dither_desc and dither_id'});
                     }else{
 
                             var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);

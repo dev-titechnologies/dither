@@ -195,7 +195,7 @@ console.log(device_type);
                                                                                                                                 });
                                                                                                     }else{
                                                                                                             //device_id         =  device_id.split(',');sails.log.debug(device_id);
-                                                                                                            var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:2,id:collageId};
+                                                                                                            var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:2,id:collageId,notification_id:createdNotificationTags.id};
                                                                                                             var switchKey   =  device_type;
                                                                                                             switch(switchKey){
                                                                                                                     case 'ios' :

@@ -363,7 +363,7 @@ module.exports = {
                                                                                                                                                         callback();
                                                                                                                                                 }else{
                                                                                                                                                         //device_id       =  device_id.split(',');sails.log.debug(device_id);
-                                                                                                                                                        var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id};
+                                                                                                                                                        var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
                                                                                                                                                         var switchKey   =  device_type;
                                                                                                                                                         switch(switchKey){
                                                                                                                                                                 case 'ios' :
@@ -472,7 +472,7 @@ module.exports = {
     },
 
  /* ==================================================================================================================================
-               To check for a new User
+               To check for a new User - login
      ==================================================================================================================================== */
     checkForNewUser:  function (req, res) {
 

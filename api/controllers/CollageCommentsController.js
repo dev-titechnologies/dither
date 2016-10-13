@@ -150,7 +150,7 @@ module.exports = {
 																										//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
 																								}else{
 																										//device_id       =  device_id.split(',');sails.log.debug(device_id);
-																										var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId};
+																										var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
 																										var switchKey   =  device_type;
 																										switch(switchKey){
 																												case 'ios' :
@@ -314,7 +314,7 @@ module.exports = {
 
                                                                                                             });
                                                                                                         if(deviceId_arr.length){
-                                                                                                          var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId};
+                                                                                                          var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId,notification_id:createdNotificationTags.id};
                                                                                                           console.log(data)
                                                                                                             if(device_type=='ios'){
                                                                                                                     NotificationService.pushNtfnApn(data, function(err, ntfnSend) {

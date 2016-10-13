@@ -148,7 +148,7 @@ module.exports = {
                                                                 dataResultsObj.profile_image    =   "";
                                                         }else{
 
-                                                                //dataResultsObj.profile_image    =   profilePic_path + dataResults[i]["profilePic"];
+                                                                dataResultsObj.profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                                 
                                                                 
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------

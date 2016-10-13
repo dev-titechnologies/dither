@@ -1853,6 +1853,8 @@ module.exports = {
                                     //console.log(sortedVote);
                                     //console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);
+                                    console.log("********************taggedUserArrayFinal**********************")
+                                    console.log(taggedUserArrayFinal)
                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Succesfully updated the Dither',
                                                           taggedUsers           : taggedUserArrayFinal,
                                                           invite_friends_NUM    : invitedFriends_NUM_Final,

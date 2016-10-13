@@ -150,7 +150,8 @@ module.exports = {
 
                                                                 dataResultsObj.profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                                 
-                                                                
+                                                             if(dataResultsObj.profile_image)
+                                                              {
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
 																//var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
@@ -183,6 +184,7 @@ module.exports = {
 																	}
 																	
 																});		
+															}
                                                                 console.log("llllllllllllllllllllllllllllllllllllllllllllll")
                                                                 console.log(dataResultsObj.profile_image)
                                                         }

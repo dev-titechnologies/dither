@@ -101,6 +101,40 @@ module.exports = {
                                         }else{
 
                                                 var dataResults         =   results;
+                                                if(dataResults[i]["profilePic"])
+                                                {
+													var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
+																//var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
+                                                                fs.exists(imageSrc, function(exists) {
+																 if (exists) {
+
+																		console.log("Image exists");
+
+																		var ext                         =     imageSrc.split('/');
+																		ext                             =     ext[ext.length-1].split('.');
+																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																		console.log(imageSrc)
+																		console.log(imageDst)
+																		ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																			if(err)
+																			{
+																				console.log(err)
+																				console.log("Error in image resizing")
+																			}
+																			else
+																			{
+																				console.log("::::::::::::::::::::::++++++++++:::::::::::::::::::::::::")
+																				console.log(imageResizeResults)
+																				profile_image	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																				console.log(dataResultsObj.profile_image)
+																			}
+						
+																		});
+																		
+																	}
+																	
+																});		
+												}
                                                 var key                 =   [];
                                                 var dataResultsKeys     =   [];
                                                 var imgDetailsArrayOrder,
@@ -149,40 +183,9 @@ module.exports = {
                                                         }else{
 
                                                                 dataResultsObj.profile_image    =   profilePic_path + dataResults[i]["profilePic"];
-                                                                var profile_image;
-                                                             
+                                                                
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
-																var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
-																//var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
-                                                                fs.exists(imageSrc, function(exists) {
-																 if (exists) {
-
-																		console.log("Image exists");
-
-																		var ext                         =     imageSrc.split('/');
-																		ext                             =     ext[ext.length-1].split('.');
-																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		console.log(imageSrc)
-																		console.log(imageDst)
-																		ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-																			if(err)
-																			{
-																				console.log(err)
-																				console.log("Error in image resizing")
-																			}
-																			else
-																			{
-																				console.log("::::::::::::::::::::::++++++++++:::::::::::::::::::::::::")
-																				console.log(imageResizeResults)
-																				profile_image	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				console.log(dataResultsObj.profile_image)
-																			}
-						
-																		});
-																		
-																	}
-																	
-																});		
+																
 															
                                                                 console.log("llllllllllllllllllllllllllllllllllllllllllllll")
                                                                 console.log(dataResultsObj.profile_image)

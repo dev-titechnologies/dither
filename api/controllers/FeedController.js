@@ -151,7 +151,26 @@ module.exports = {
                                                                 dataResultsObj.profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                               }  
                                                              
-                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                           
+                                                                console.log("llllllllllllllllllllllllllllllllllllllllllllll")
+                                                               // console.log(dataResultsObj.profile_image)
+                                                        
+                                                        imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
+                                                        dataResultsObj.user_name                    =       dataResults[i]["name"];
+                                                        dataResultsObj.user_id                      =       dataResults[i]["userId"];
+                                                        dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
+                                                        dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
+                                                        dataResultsObj.dither_like_position         =       like_position;
+                                                        dataResultsObj.collage_id                   =       collageId_val;
+                                                        dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
+                                                        dataResultsObj.vote                         =       imgDetailsArrayOrder;
+                                                        dataResultsObj.mainOrder                    =       i;
+
+                                                        key.push(dataResultsObj);
+                                                        dataResultsKeys.push(collageId_val);
+                                                        feeds              =       key.sort( predicatBy("mainOrder") );
+                                                        console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
+                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
 																//var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
                                                                 fs.exists(imageSrc, function(exists) {
@@ -184,24 +203,6 @@ module.exports = {
 																	
 																});		
 															
-                                                                console.log("llllllllllllllllllllllllllllllllllllllllllllll")
-                                                                console.log(dataResultsObj.profile_image)
-                                                        
-                                                        imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
-                                                        dataResultsObj.user_name                    =       dataResults[i]["name"];
-                                                        dataResultsObj.user_id                      =       dataResults[i]["userId"];
-                                                        dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
-                                                        dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
-                                                        dataResultsObj.dither_like_position         =       like_position;
-                                                        dataResultsObj.collage_id                   =       collageId_val;
-                                                        dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
-                                                        dataResultsObj.vote                         =       imgDetailsArrayOrder;
-                                                        dataResultsObj.mainOrder                    =       i;
-
-                                                        key.push(dataResultsObj);
-                                                        dataResultsKeys.push(collageId_val);
-                                                        feeds              =       key.sort( predicatBy("mainOrder") );
-                                                        console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
                                                         console.log(feeds)
                                                     }
                                                 }

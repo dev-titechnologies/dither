@@ -172,8 +172,10 @@ module.exports = {
 																			}
 																			else
 																			{
+																				console.log("::::::::::::::::::::::++++++++++:::::::::::::::::::::::::")
 																				console.log(imageResizeResults)
 																				dataResultsObj.profile_image	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																				console.log(dataResultsObj.profile_image)
 																			}
 						
 																		});
@@ -198,6 +200,8 @@ module.exports = {
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
                                                         feeds              =       key.sort( predicatBy("mainOrder") );
+                                                        console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
+                                                        console.log(feeds)
                                                     }
                                                 }
                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds',

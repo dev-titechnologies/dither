@@ -4,7 +4,7 @@
  * @description :: Server-side logic for managing collagedetails
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+var fs          = require('fs');
 module.exports = {
 
 /* ==================================================================================================================================
@@ -16,6 +16,8 @@ module.exports = {
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                var profilePic_path_assets 		=     req.options.file_path.profilePic_path_assets;
+                var collageImg_path_assets 		=	  req.options.file_path.collageImg_path_assets;
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 console.log(req.param("dither_id"));
@@ -85,6 +87,11 @@ module.exports = {
                                     if(results.length == 0){
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by this Id'});
                                     }else{
+										   
+											console.log("collage imagee")
+											console.log(results[0].collageImage)
+											
+										
                                             var imageArray = [];
                                             console.log("results  ---------- getLike .....................++++++++++++++++++++");
                                             console.log(results);
@@ -240,29 +247,84 @@ module.exports = {
 
                                                                                                 inviteeArray = [];
                                                                                         }
-                                                                                        var user_profile_image = "";
+                                                                                        var user_profile_image 	  = 	"";
                                                                                         if(results[0].profilePic != "" || results[0].profilePic != null){
-                                                                                                user_profile_image = profilePic_path + results[0].profilePic;
-                                                                                        }
+																							user_profile_image 				= 	  profilePic_path + results[0].profilePic;
+																						}
+																						
+																					async.series([
+                                                                        
+																					  function(callback) {
+																						
+																						    //------------------------------Generate ThumbnailImage-----------------------------------------------
+																							var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
+																							
+																							fs.exists(imageSrc, function(exists) {
+																								 if (exists) {
 
+																										console.log("Image exists");
 
-                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
-                                                                                                             dither_desc                : results[0].imgTitle,
-                                                                                                             dither_created_date_time   : results[0].createdAt,
-                                                                                                             dither_updated_date_time   : results[0].updatedAt,
-                                                                                                             dither_id                  : results[0].collageId,
-                                                                                                             dither_created_username    : results[0].collageCreator,
-                                                                                                             dither_created_userID      : results[0].collageCreatorId,
-                                                                                                             dither_created_profile_pic : user_profile_image,
-                                                                                                             dither_location            : results[0].location,
-                                                                                                             dither_image               : collageImg_path + results[0].collageImage,
-                                                                                                             dither_like_position       : like_position,
-                                                                                                             dithers                    : imageArray,
-                                                                                                             ditherCount                : imageArray.length,
-                                                                                                             taggedUsers                : taggedUserArrayFinal,
-                                                                                                             comments                   : commentArray,
-                                                                                                             invite_friends_NUM         : inviteeArray,
-                                                                                                });
+																										var ext                         =     imageSrc.split('/');
+																										ext                             =     ext[ext.length-1].split('.');
+																										var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																										console.log(imageSrc)
+																										console.log(imageDst)
+																										ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																											if(err)
+																											{
+																												console.log("thumbNail creation error occured")
+																												console.log(err)
+																												callback();
+
+																											}
+																											else
+																											{
+																												console.log(imageResizeResults)
+																												user_profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																												console.log("--------**********************************************--------")
+																												console.log(user_profile_image)
+																												callback();
+							
+																											}
+																										});
+																									}
+																									else
+																									{
+																										callback();
+																									}
+																							});	
+																						},	
+																						
+                                                                              
+																						], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+                                                                                        if (err) {
+                                                                                            
+                                                                                            console.log(err);
+																							return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured Comment Updation', error_details: err});
+                                                                                           
+                                                                                        }else{
+
+																								console.log("result")
+																								return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
+																															 dither_desc                : results[0].imgTitle,
+																															 dither_created_date_time   : results[0].createdAt,
+																															 dither_updated_date_time   : results[0].updatedAt,
+																															 dither_id                  : results[0].collageId,
+																															 dither_created_username    : results[0].collageCreator,
+																															 dither_created_userID      : results[0].collageCreatorId,
+																															 dither_created_profile_pic : user_profile_image,
+																															 dither_location            : results[0].location,
+																															 dither_image               : collageImg_path + results[0].collageImage,
+																															 dither_like_position       : like_position,
+																															 dithers                    : imageArray,
+																															 ditherCount                : imageArray.length,
+																															 taggedUsers                : taggedUserArrayFinal,
+																															 comments                   : commentArray,
+																															 invite_friends_NUM         : inviteeArray,
+																												});
+																							 }
+																						});
+                                                                              
 
                                                                                     }
                                                                             });
@@ -292,6 +354,7 @@ module.exports = {
                     var server_image_baseUrl                     =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var collageImg_path                          =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path                          =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                    var collageImg_path_assets 					 =	   req.options.file_path.collageImg_path_assets;
                     var received_collage_id                      =     req.param("dither_id");
                     var received_single_image_id                 =     req.param("dither_single_id");
                     var query;
@@ -337,14 +400,56 @@ module.exports = {
                                                                             user_pic : profile_image
                                                                             });
                                                 });
-                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
-                                                                      single_image_url              :   collageImg_path + results[0].image,
-                                                                      dither_title                  :   results[0].imgTitle,
-                                                                      dither_image                  :   collageImg_path + results[0].collageImage,
-                                                                      total_vote                    :   results[0].vote,
-                                                                      single_dither_id              :   results[0].single_image_id,
-                                                                      voted_users                   :   votedUsersArray,
-                                                                });
+                                                
+												if(results[0].collageImage)
+												{   
+													var clgImgSrc					=	  collageImg_path_assets + results[0].collageImage;
+													fs.exists(clgImgSrc, function(exists) {
+														 if (exists) {
+
+																console.log("collge Image exists");
+
+																var ext                         =     clgImgSrc.split('/');
+																ext                             =     ext[ext.length-1].split('.');
+																var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																
+																ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																	if(err)
+																	{
+																		console.log(err)
+																		
+																	}
+																	else
+																	{
+																		console.log(imageResizeResults)
+																		dither_image = collageImg_path + results[0].collageImage;
+																		return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
+																							  single_image_url              :   collageImg_path + results[0].image,
+																							  dither_title                  :   results[0].imgTitle,
+																							  dither_image                  :   dither_image,
+																							  total_vote                    :   results[0].vote,
+																							  single_dither_id              :   results[0].single_image_id,
+																							  voted_users                   :   votedUsersArray,
+																						});
+																	}
+																});
+																
+															}	
+															else
+															{
+																dither_image = collageImg_path + results[0].collageImage;
+																return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
+																					  single_image_url              :   collageImg_path + results[0].image,
+																					  dither_title                  :   results[0].imgTitle,
+																					  dither_image                  :   dither_image,
+																					  total_vote                    :   results[0].vote,
+																					  single_dither_id              :   results[0].single_image_id,
+																					  voted_users                   :   votedUsersArray,
+                                                                }				);
+															}
+													});
+												}
+                                                
                                         }
                                     }
                             });

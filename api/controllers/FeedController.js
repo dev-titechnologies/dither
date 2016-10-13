@@ -175,7 +175,7 @@ module.exports = {
 																				console.log("::::::::::::::::::::::++++++++++:::::::::::::::::::::::::")
 																				console.log(imageResizeResults)
 																				profile_image	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				console.log(profile_image)
+																				console.log(dataResultsObj.profile_image)
 																			}
 						
 																		});
@@ -197,7 +197,7 @@ module.exports = {
                                                         dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                         dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                         dataResultsObj.mainOrder                    =       i;
-														dataResultsObj.profile_image				=      profile_image;
+
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
                                                         feeds              =       key.sort( predicatBy("mainOrder") );

@@ -18,6 +18,7 @@ function predicatBy(prop){
 }
 //var data_view_limit = 5;
 var offset_data_view_limit;
+var fs          = require('fs');
 
 module.exports = {
 

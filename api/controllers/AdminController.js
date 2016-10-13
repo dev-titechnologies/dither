@@ -198,13 +198,15 @@ console.log(values);
     /** Get each dither details **/
     getSingleDitherDetails: function(req,res){
          var ditherId=req.body.id;
+          // var ditherId = 271;
          console.log("inside getSingleDitherDetails function"+ditherId);
-        var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote  FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId  where c.id="+ditherId+" ORDER BY c.id ASC";
+        var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote,cc.comment  FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId RIGHT JOIN collageComments as cc ON cd.collageId=cc.collageId where c.id="+ditherId+" ORDER BY c.id ASC";
         console.log(query);
                     Collage.query(query, function (err, result) {
                         if (err) {
                             return res.json(200, {status: 2, error_details: err});
                         } else {
+                            console.log(result);
                             return res.json(200, {status: 1, message: "success", result: result});
                         }
                     });

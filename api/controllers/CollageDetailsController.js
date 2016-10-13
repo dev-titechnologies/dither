@@ -208,7 +208,6 @@ module.exports = {
 
                                                                             console.log(query);
                                                                             //console.log(taggedUsersFinalResults);
-                                                                            var profile_image;
                                                                             var taggedUserArrayFinal = [];
                                                                             if(taggedUsersFinalResults != 0){
                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
@@ -218,50 +217,12 @@ module.exports = {
 																						{
 																							factor.mentionId = factor.ditherUserId;
 																						}
-																						if(factor.profilePic)
-																						{
-																							var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-																							
-																							fs.exists(imageSrc, function(exists) {
-																								 if (exists) {
-
-																										console.log("Image exists");
-
-																										var ext                         =     imageSrc.split('/');
-																										ext                             =     ext[ext.length-1].split('.');
-																										var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																										console.log(imageSrc)
-																										console.log(imageDst)
-																										ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-																											if(err)
-																											{
-																												console.log("thumbNail creation error occured")
-																												console.log(err)
-																												
-
-																											}
-																											else
-																											{
-																												console.log(imageResizeResults)
-																												profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																												console.log("--------**********************************************--------")
-																												console.log(profile_image)
-																												taggedUserArrayFinal.push({
+																						taggedUserArrayFinal.push({
                                                                                                                 name            :   factor.name,
                                                                                                                 userId          :   factor.ditherUserId,
-                                                                                                                profile_image   :   profile_image,
+                                                                                                                profile_image   :   profilePic_path + factor.profilePic,
                                                                                                                 mention_id		:	factor.mentionId
                                                                                                                 });
-																												console.log(taggedUserArrayFinal)
-																											}
-																										});
-																									}
-																									
-																									
-																							});	
-
-																						}
-                                                                                        
                                                                                 });
                                                                             }
 

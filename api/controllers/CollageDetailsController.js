@@ -245,7 +245,7 @@ module.exports = {
 																												console.log(imageResizeResults)
 																												profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																												console.log("--------**********************************************--------")
-																												console.log(user_profile_image)
+																												console.log(profile_image)
 																												
 							
 																											}

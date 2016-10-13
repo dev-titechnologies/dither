@@ -101,10 +101,7 @@ module.exports = {
                                         }else{
 
                                                 var dataResults         =   results;
-                                                if(dataResults[i]["profilePic"])
-                                                {
-													
-												}
+                                                
                                                 var key                 =   [];
                                                 var dataResultsKeys     =   [];
                                                 var imgDetailsArrayOrder,

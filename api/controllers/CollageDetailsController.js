@@ -252,7 +252,7 @@ module.exports = {
                                                                                                                 profile_image   :   profile_image,
                                                                                                                 mention_id		:	factor.mentionId
                                                                                                                 });
-																												
+																												console.log(taggedUserArrayFinal)
 																											}
 																										});
 																									}

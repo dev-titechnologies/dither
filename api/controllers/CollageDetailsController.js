@@ -164,14 +164,64 @@ module.exports = {
                                                                         {
 																			factor.mentionId = factor.userId;
 																		}
-                                                                        commentArray.push({comment_id: factor.id,
+																		if(factor.profilePic)
+																		{
+																			
+																			var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+																			var profile_image;					
+																			fs.exists(imageSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("Image exists");
+
+																						var ext                         =     imageSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																							if(err)
+																							{
+																								console.log("thumbNail creation error occured")
+																								console.log(err)
+																								
+
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								console.log("--------**********************************************--------")
+																								commentArray.push({comment_id: factor.id,
+																													user_id: factor.userId,
+																													user_name: factor.name,
+																													user_profile_pic_url : profile_image,
+																													mention_id:factor.mentionId,
+																													message: factor.comment,
+																													comment_created_date_time:factor.createdAt
+																								});
+																								console.log(commentArray)
+			
+																							}
+																						});
+																					}
+																					else
+																					{
+																						profile_image = profilePic_path + factor.profilePic;
+																						commentArray.push({comment_id: factor.id,
                                                                                             user_id: factor.userId,
                                                                                             user_name: factor.name,
-                                                                                            user_profile_pic_url : profilePic_path + factor.profilePic,
+                                                                                            user_profile_pic_url : profile_image,
                                                                                             mention_id:factor.mentionId,
                                                                                             message: factor.comment,
                                                                                             comment_created_date_time:factor.createdAt
-                                                                        });
+																						});
+																					}
+																					
+																			});	
+																			
+																		}
+                                                                        
                                                                 });
                                                             }
                                                             //Query to get tagged users from both addressBook and fbFriends
@@ -207,6 +257,7 @@ module.exports = {
                                                                         {
 
                                                                             console.log(query);
+                                                                            var profile_image;
                                                                             //console.log(taggedUsersFinalResults);
                                                                             var taggedUserArrayFinal = [];
                                                                             if(taggedUsersFinalResults != 0){
@@ -217,12 +268,58 @@ module.exports = {
 																						{
 																							factor.mentionId = factor.ditherUserId;
 																						}
-																						taggedUserArrayFinal.push({
+																						if(factor.profilePic)
+																						{
+																							var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+																								
+																							fs.exists(imageSrc, function(exists) {
+																								 if (exists) {
+
+																										console.log("Image exists");
+
+																										var ext                         =     imageSrc.split('/');
+																										ext                             =     ext[ext.length-1].split('.');
+																										var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																										console.log(imageSrc)
+																										console.log(imageDst)
+																										ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																											if(err)
+																											{
+																												console.log("thumbNail creation error occured")
+																												console.log(err)
+																												
+
+																											}
+																											else
+																											{
+																												console.log(imageResizeResults)
+																												profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																												console.log("--------**********************************************--------")
+																												taggedUserArrayFinal.push({
                                                                                                                 name            :   factor.name,
                                                                                                                 userId          :   factor.ditherUserId,
-                                                                                                                profile_image   :   profilePic_path + factor.profilePic,
+                                                                                                                profile_image   :   profile_image,
                                                                                                                 mention_id		:	factor.mentionId
                                                                                                                 });
+																												console.log(taggedUserArrayFinal)
+							
+																											}
+																										});
+																									}
+																									else
+																									{
+																										profile_image = profilePic_path + factor.profilePic;
+																										taggedUserArrayFinal.push({
+                                                                                                                name            :   factor.name,
+                                                                                                                userId          :   factor.ditherUserId,
+                                                                                                                profile_image   :   profile_image,
+                                                                                                                mention_id		:	factor.mentionId
+                                                                                                                });
+																									}
+																									
+																							});	
+																						}
+                                                                                        
                                                                                 });
                                                                             }
 

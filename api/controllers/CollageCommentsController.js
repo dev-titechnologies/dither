@@ -4,6 +4,7 @@
  * @description :: Server-side logic for managing collagecomments
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+var fs          = require('fs');
 
 module.exports = {
 
@@ -13,6 +14,7 @@ module.exports = {
         commentDither:  function (req, res) {
 
                     console.log("+++++++++++++ Comment  Dithers api ++++++++++++++++++++");
+                   
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var collageId                   =     req.param("dither_id");
@@ -20,8 +22,15 @@ module.exports = {
                     var device_type                 =     req.get('device_type');
                     var mention_user_id				=     [];
 					var	mention_arr					=     req.param("mentions");
+
+					var profilePic_path_assets 		=     req.options.file_path.profilePic_path_assets;
+					var server_baseUrl         		=     req.options.server_baseUrl;
+					var server_image_baseUrl   		=     req.options.settingsKeyValue.CDN_IMAGE_URL;
+					var profilePic_path        		=     server_baseUrl + req.options.file_path.profilePic_path;
 					//var	mention_arr					=    ['test_user','anu_r'];
-					
+					var profile_image = '';
+					console.log("mention array")
+
 					console.log(mention_arr)
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
@@ -68,11 +77,12 @@ module.exports = {
 															function(callback) {
 																
 																    console.log("Im functon callback()")
+																    console.log(mention_arr)
 																	if(mention_arr)
 																		{
 																			console.log("In mention_arr")
-																			User.find({mentionId:mention_arr}).exec(function (err, getUserId){
-																				
+																			//var query = "SELECT id FROM user where mention_id=";
+																			User.find({mentionId: mention_arr}).exec(function (err, getUserId){
 																				if(err)
 																				{
 																					console.log("mention")
@@ -368,9 +378,57 @@ module.exports = {
 																		 
 																			callback();
 																			
-																			
 																	}
                                                                 },
+                                                                function(callback) {
+																	
+																	User.find({id:userId}).exec(function (err, getUseDetails){
+																		if(err)
+																		{
+																			console.log(err)
+																			callback();
+																		}
+																		else
+																		{
+																			console.log("Image Resizing")
+																			console.log(getUseDetails[0].profilePic)
+																			
+																			  //------------------------------Generate ThumbnailImage-----------------------------------------------
+																			  console.log(getUseDetails[0].profilePic)
+																				var imageSrc                    =     profilePic_path_assets + getUseDetails[0].profilePic;
+																				
+																				fs.exists(imageSrc, function(exists) {
+																				 if (exists) {
+
+																						console.log("Image exists");
+
+																						var ext                         =     imageSrc.split('/');
+																						ext                             =     ext[ext.length-1].split('.');
+																						var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																						console.log(imageSrc)
+																						console.log(imageDst)
+																						ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
+																							
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log(imageResizeResults)
+																								profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																								console.log(profile_image)
+																								callback();
+																							}
+																						});
+																					}
+																				});		
+																			
+																		}
+																	});
+																},
+
                                                                 //=========================================
                                                                 ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if (err) {
@@ -385,6 +443,7 @@ module.exports = {
                                                                                                                                 comment_id                      :    results.id,
                                                                                                                                 comment_msg                     :    results.msg,
                                                                                                                                 comment_created_date_time       :    results.createdAt,
+                                                                                                                                profile_image					:	 profile_image
                                                                                                                         });
                                                                                         }
 																});

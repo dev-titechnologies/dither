@@ -198,9 +198,9 @@ console.log(values);
     /** Get each dither details **/
     getSingleDitherDetails: function(req,res){
          var ditherId=req.body.id;
-          // var ditherId = 271;
+           // var ditherId = 507;
          console.log("inside getSingleDitherDetails function"+ditherId);
-        var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote,cc.comment  FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId RIGHT JOIN collageComments as cc ON cd.collageId=cc.collageId where c.id="+ditherId+" ORDER BY c.id ASC";
+        var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote,cc.comment,cc.createdAt as commentDate  FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId LEFT JOIN collageComments as cc ON cd.collageId=cc.collageId where c.id="+ditherId+" ORDER BY c.id DESC";
         console.log(query);
                     Collage.query(query, function (err, result) {
                         if (err) {

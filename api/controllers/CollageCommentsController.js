@@ -121,7 +121,7 @@ module.exports = {
 																							   console.log(createdNotificationTags)
 																							   
 																							User_token.find({userId: mention_user_id}).exec(function (err, getDeviceId) {
-																							//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+																						//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
 																							if(err)
 																							{
 																								  console.log(err);
@@ -152,26 +152,7 @@ module.exports = {
 																										//device_id       =  device_id.split(',');sails.log.debug(device_id);
 																										var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
 																										var switchKey   =  device_type;
-																										
-																										NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
-																											if(err)
-																											{
-																												console.log("Error in Push Notification Sending")
-																												console.log(err)
-																												callback();
-																											}
-																											else
-																											{
-																												console.log("Push notification result")
-																												console.log(ntfnSend)
-																												console.log("Push Notification sended")
-																												callback();
-																												
-																											}
-																										});
-																										
-																										
-																										/*switch(switchKey){
+																										switch(switchKey){
 																												case 'ios' :
 																															NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																																if(err)
@@ -179,6 +160,7 @@ module.exports = {
 																																	console.log("Error in Push Notification Sending")
 																																	console.log(err)
 																																	callback();
+																																	//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
 																																}
 																																else
 																																{
@@ -186,6 +168,11 @@ module.exports = {
 																																	console.log(ntfnSend)
 																																	console.log("Push Notification sended")
 																																	callback();
+																																	/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																							comment_id                      :    results.id,
+																																							comment_msg                     :    results.msg,
+																																							comment_created_date_time       :    results.createdAt,
+																																					});*/
 																																	
 																																}
 																															});
@@ -198,6 +185,7 @@ module.exports = {
 																																	console.log("Error in Push Notification Sending")
 																																	console.log(err)
 																																	callback();
+																																	//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
 																																}
 																																else
 																																{
@@ -205,6 +193,12 @@ module.exports = {
 																																	console.log(ntfnSend)
 																																	console.log("Push Notification sended")
 																																	callback();
+																																	/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																							comment_id                      :    results.id,
+																																							comment_msg                     :    results.msg,
+																																							comment_created_date_time       :    results.createdAt,
+																																					});*/
+																																	
 																																}
 																															});
 																												break;
@@ -215,7 +209,7 @@ module.exports = {
 																												
 
 
-																										}*/
+																										}
 																								}
 
 																							//------------------------------

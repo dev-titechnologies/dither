@@ -151,25 +151,7 @@ module.exports = {
 																								}else{
 																										//device_id       =  device_id.split(',');sails.log.debug(device_id);
 																										var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
-																										NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
-																											
-																											if(err)
-																											{
-																												console.log("Error in Push Notification Sending")
-																												console.log(err)
-																												callback();
-																											}
-																											else
-																											{
-																												console.log("Push Notification Result")
-																												console.log(ntfnSend)
-																												callback();
-																											}
-																											
-																										});
-																										
-																										
-																										/*var switchKey   =  device_type;
+																										var switchKey   =  device_type;
 																										switch(switchKey){
 																												case 'ios' :
 																															NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
@@ -186,7 +168,12 @@ module.exports = {
 																																	console.log(ntfnSend)
 																																	console.log("Push Notification sended")
 																																	callback();
-																																
+																																	/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																							comment_id                      :    results.id,
+																																							comment_msg                     :    results.msg,
+																																							comment_created_date_time       :    results.createdAt,
+																																					});*/
+																																	
 																																}
 																															});
 																												break;
@@ -206,6 +193,11 @@ module.exports = {
 																																	console.log(ntfnSend)
 																																	console.log("Push Notification sended")
 																																	callback();
+																																	/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+																																							comment_id                      :    results.id,
+																																							comment_msg                     :    results.msg,
+																																							comment_created_date_time       :    results.createdAt,
+																																					});*/
 																																	
 																																}
 																															});
@@ -217,10 +209,10 @@ module.exports = {
 																												
 
 
-																										}*/
+																										}
 																								}
 
-																							
+																							//------------------------------
 																							}
 																						  });
 

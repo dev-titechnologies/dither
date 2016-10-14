@@ -22,6 +22,13 @@ function removeItem(obj, prop, val) {
 
 module.exports = {
         socketConnection  : function (req, res) {
+                console.log("++++++++++++++++++++++++++++++++++++ req.params.all() +++++++++++++++++++++++++++++++++++++++++++++");
+                console.log(req.params.all());
+                console.log("++++++++++++++++++++++++++++++++++++ req.params.all() +++++++++++++++++++++++++++++++++++++++++++++");
+
+                console.log("++++++++++++++++++++++++++++++++++++ dither_id_array +++++++++++++++++++++++++++++++++++++++++++++");
+                console.log(req.param("dither_id_array"));
+                console.log("++++++++++++++++++++++++++++++++++++ dither_id_array +++++++++++++++++++++++++++++++++++++++++++++");
 
                 if(req.isSocket){
                     console.log("--------------------------------------    Socket_connection     --------------------------------");

@@ -21,13 +21,13 @@ module.exports = {
                     var comment                     =     req.param("comment_msg");
                     var device_type                 =     req.get('device_type');
                     var mention_user_id				=     [];
-					var	mention_arr					=     req.param("mentions");
+					//var	mention_arr					=     req.param("mentions");
 
 					var profilePic_path_assets 		=     req.options.file_path.profilePic_path_assets;
 					var server_baseUrl         		=     req.options.server_baseUrl;
 					var server_image_baseUrl   		=     req.options.settingsKeyValue.CDN_IMAGE_URL;
 					var profilePic_path        		=     server_baseUrl + req.options.file_path.profilePic_path;
-					//var	mention_arr					=    ['test_user','anu_r'];
+					var	mention_arr					=    ['test_user','anu_r'];
 					var profile_image = '';
 					console.log("mention array")
 
@@ -121,7 +121,7 @@ module.exports = {
 																							   console.log(createdNotificationTags)
 																							   
 																							User_token.find({userId: mention_user_id}).exec(function (err, getDeviceId) {
-																						//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+																							//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
 																							if(err)
 																							{
 																								  console.log(err);
@@ -152,7 +152,26 @@ module.exports = {
 																										//device_id       =  device_id.split(',');sails.log.debug(device_id);
 																										var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
 																										var switchKey   =  device_type;
-																										switch(switchKey){
+																										
+																										NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
+																												if(err)
+																												{
+																													console.log("Error in Push Notification Sending")
+																													console.log(err)
+																													callback();
+																												}
+																												else
+																												{
+																													console.log("Push notification result")
+																													console.log(ntfnSend)
+																													console.log("Push Notification sended")
+																													callback();
+																													
+																												}
+																										});
+																										
+																										
+																										/*switch(switchKey){
 																												case 'ios' :
 																															NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																																if(err)
@@ -160,7 +179,6 @@ module.exports = {
 																																	console.log("Error in Push Notification Sending")
 																																	console.log(err)
 																																	callback();
-																																	//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
 																																}
 																																else
 																																{
@@ -168,11 +186,6 @@ module.exports = {
 																																	console.log(ntfnSend)
 																																	console.log("Push Notification sended")
 																																	callback();
-																																	/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-																																							comment_id                      :    results.id,
-																																							comment_msg                     :    results.msg,
-																																							comment_created_date_time       :    results.createdAt,
-																																					});*/
 																																	
 																																}
 																															});
@@ -185,7 +198,6 @@ module.exports = {
 																																	console.log("Error in Push Notification Sending")
 																																	console.log(err)
 																																	callback();
-																																	//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
 																																}
 																																else
 																																{
@@ -193,12 +205,6 @@ module.exports = {
 																																	console.log(ntfnSend)
 																																	console.log("Push Notification sended")
 																																	callback();
-																																	/*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-																																							comment_id                      :    results.id,
-																																							comment_msg                     :    results.msg,
-																																							comment_created_date_time       :    results.createdAt,
-																																					});*/
-																																	
 																																}
 																															});
 																												break;
@@ -209,7 +215,7 @@ module.exports = {
 																												
 
 
-																										}
+																										}*/
 																								}
 
 																							//------------------------------

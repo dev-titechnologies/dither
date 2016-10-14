@@ -131,7 +131,6 @@ module.exports = {
 																							else
 																							{
 
-																								
 																								var message     =  'Mention Notification';
 																								var ntfn_body   =   tokenCheck.tokenDetails.name +" has Mentioned You In a Dither";
 																								//var device_id   =  getDeviceId.deviceId;

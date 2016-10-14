@@ -21,13 +21,13 @@ module.exports = {
                     var comment                     =     req.param("comment_msg");
                     var device_type                 =     req.get('device_type');
                     var mention_user_id				=     [];
-					//var	mention_arr					=     req.param("mentions");
+					var	mention_arr					=     req.param("mentions");
 
 					var profilePic_path_assets 		=     req.options.file_path.profilePic_path_assets;
 					var server_baseUrl         		=     req.options.server_baseUrl;
 					var server_image_baseUrl   		=     req.options.settingsKeyValue.CDN_IMAGE_URL;
 					var profilePic_path        		=     server_baseUrl + req.options.file_path.profilePic_path;
-					var	mention_arr					=    ['test_user','anu_r'];
+					//var	mention_arr					=    ['test_user','anu_r'];
 					var profile_image = '';
 					console.log("mention array")
 

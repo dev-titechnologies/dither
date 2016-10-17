@@ -152,7 +152,7 @@ module.exports = {
 																										var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
 																										var switchKey   =  device_type;
 																										
-																											NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
+																											/*NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
 																													if(err)
 																													{
 																														console.log("Error in Push Notification Sending")
@@ -167,10 +167,10 @@ module.exports = {
 																														callback();
 																														
 																													}
-																											});
+																											});*/
 																										
 																										
-																										/*switch(switchKey){
+																										switch(switchKey){
 																												case 'ios' :
 																															NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																																if(err)
@@ -214,7 +214,7 @@ module.exports = {
 																												
 
 
-																										}*/
+																										}
 																								}
 
 																							//------------------------------
@@ -281,7 +281,11 @@ module.exports = {
 																						   
 																						    console.log("comment Option turn off")
 																							callback();
-                                                                                            
+                                                                                            /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                                    comment_id                      :    results.id,
+                                                                                                                    comment_msg                     :    results.msg,
+                                                                                                                    comment_created_date_time       :    results.createdAt,
+                                                                                                            });*/
 
                                                                                        }
                                                                                        else{
@@ -301,7 +305,11 @@ module.exports = {
                                                                                                     if(!getDeviceId.length){
                                                                                                        console.log("device not found")
                                                                                                        callback();
-                                                                                                       
+                                                                                                       /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                                            comment_id                      :    results.id,
+                                                                                                                            comment_msg                     :    results.msg,
+                                                                                                                            comment_created_date_time       :    results.createdAt,
+                                                                                                                    });*/
                                                                                                     }else{
                                                                                                           var deviceId_arr  = [];
                                                                                                            getDeviceId.forEach(function(factor, index){
@@ -313,27 +321,7 @@ module.exports = {
                                                                                                         if(deviceId_arr.length){
                                                                                                           var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId,notification_id:createdNotificationTags.id};
                                                                                                           console.log(data)
-                                                                                                          NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
-                                                                                                                        if(err)
-                                                                                                                        {
-                                                                                                                            console.log("Error in Push Notification Sending")
-                                                                                                                            console.log(err)
-                                                                                                                            callback();
-                                                                                                                           // return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
-                                                                                                                        }
-                                                                                                                        else
-                                                                                                                        {
-                                                                                                                            console.log("Push notification result")
-                                                                                                                            console.log(ntfnSend)
-                                                                                                                            console.log("Push Notification sended")
-                                                                                                                            callback();
-                                                                                                                      
-                                                                                                                        }
-                                                                                                           });
-																											
-                                                                                                          
-                                                                                                          
-                                                                                                            /*if(device_type=='ios'){
+                                                                                                            if(device_type=='ios'){
                                                                                                                     NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
                                                                                                                         if(err){
                                                                                                                             console.log("Error in Push Notification Sending")
@@ -345,7 +333,11 @@ module.exports = {
                                                                                                                             console.log(ntfnSend)
                                                                                                                             console.log("Push Notification sended")
 																															callback();
-                                                                                                                             
+                                                                                                                             /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                                                comment_id                      :    results.id,
+                                                                                                                                comment_msg                     :    results.msg,
+                                                                                                                                comment_created_date_time       :    results.createdAt,
+                                                                                                                             });*/
 
                                                                                                                         }
                                                                                                                     });
@@ -365,14 +357,18 @@ module.exports = {
                                                                                                                             console.log(ntfnSend)
                                                                                                                             console.log("Push Notification sended")
                                                                                                                             callback();
-                                                                                                                           
+                                                                                                                            /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
+                                                                                                                                comment_id                      :    results.id,
+                                                                                                                                comment_msg                     :    results.msg,
+                                                                                                                                comment_created_date_time       :    results.createdAt,
+                                                                                                                            });*/
 
 
                                                                                                                         }
                                                                                                                     });
                                                                                                             }else{
                                                                                                                  callback();     
-                                                                                                            }*/
+                                                                                                            }
                                                                                                         }
                                                                                                     }//kkkk
                                                                                                 }
@@ -436,7 +432,6 @@ module.exports = {
 																			
 																		}
 																	});
-																	callback();
 																},
 
                                                                 //=========================================

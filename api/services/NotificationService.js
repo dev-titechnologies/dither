@@ -120,6 +120,8 @@ module.exports = {
 		console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{")
 		console.log("**************device_Type******************")
 		console.log(device_type)
+		console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
+		console.log(data)
 		var switchKey   =  device_type;
 		switch(switchKey){
 				case 'ios' :

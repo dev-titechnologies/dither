@@ -152,7 +152,7 @@ module.exports = {
 																										var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
 																										var switchKey   =  device_type;
 																										
-																											NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
+																											/*NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
 																													if(err)
 																													{
 																														console.log("Error in Push Notification Sending")
@@ -167,10 +167,10 @@ module.exports = {
 																														callback();
 																														
 																													}
-																											});
+																											});*/
 																										
 																										
-																										/*switch(switchKey){
+																										switch(switchKey){
 																												case 'ios' :
 																															NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
 																																if(err)
@@ -214,7 +214,7 @@ module.exports = {
 																												
 
 
-																										}*/
+																										}
 																								}
 
 																							//------------------------------

@@ -176,24 +176,6 @@ module.exports = {
 																				console.log(imageResizeResults)
 																				dataResultsObj.profile_image	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 																				console.log(dataResultsObj.profile_image)
-																				imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
-																				dataResultsObj.user_name                    =       dataResults[i]["name"];
-																				dataResultsObj.user_id                      =       dataResults[i]["userId"];
-																				dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
-																				dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
-																				dataResultsObj.dither_like_position         =       like_position;
-																				dataResultsObj.collage_id                   =       collageId_val;
-																				dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
-																				dataResultsObj.vote                         =       imgDetailsArrayOrder;
-																				dataResultsObj.mainOrder                    =       i;
-
-																				key.push(dataResultsObj);
-																				dataResultsKeys.push(collageId_val);
-																				feeds              =       key.sort( predicatBy("mainOrder") );
-																				console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
-																				console.log(feeds)
-																				
-																				
 																			}
 						
 																		});
@@ -205,7 +187,7 @@ module.exports = {
                                                                 console.log("llllllllllllllllllllllllllllllllllllllllllllll")
                                                                 console.log(dataResultsObj.profile_image)
                                                         }
-                                                        /*imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
+                                                        imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                         dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                         dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
@@ -220,7 +202,7 @@ module.exports = {
                                                         dataResultsKeys.push(collageId_val);
                                                         feeds              =       key.sort( predicatBy("mainOrder") );
                                                         console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
-                                                        console.log(feeds)*/
+                                                        console.log(feeds)
                                                     }
                                                 }
                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds',

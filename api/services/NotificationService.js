@@ -134,7 +134,7 @@ module.exports = {
 								}
 								else
 								{
-									console.log("Push notification result")
+									console.log("Push notification result i nIOS")
 									
 									callback();
 									
@@ -152,7 +152,7 @@ module.exports = {
 								}
 								else
 								{
-									console.log("Push notification result")
+									console.log("Push notification result IN Android")
 									console.log(ntfnSend)
 									console.log("Push Notification sended")
 									callback();

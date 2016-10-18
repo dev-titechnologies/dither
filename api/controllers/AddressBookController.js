@@ -78,6 +78,8 @@ module.exports = {
                         console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
                         //console.log(phoneContactsArray);
                         //console.log(JSON.parse(phoneContactsArray));
+					if(fbUser.length!=0)
+					{	
 						
                         fbUser.forEach(function(factor, index){
                              var contact_name = factor.fb_name;
@@ -87,7 +89,7 @@ module.exports = {
                              //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
                              fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.fb_userid+"', now(), now())");
                         });
-
+				    }
                     async.series([
 
                               function(callback) {

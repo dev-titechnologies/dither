@@ -33,13 +33,13 @@ module.exports = {
 
 
 
-                        console.log("iosss contacts")
+                       
                        // console.log(req.param('contact_array'));
                         /*req.param('contact_array').forEach(function(factor, index){
                                             //console.log("INSIDE FOR EACH ======================");
                         });*/
                         console.log(req.param('contact_array').length);
-                        console.log(req.param('contact_array'))
+                        //console.log(req.param('contact_array'))
                         //phonecontacts           = JSON.parse(req.param('contact_array'));
                         phonecontacts           = req.param('contact_array');
 
@@ -112,9 +112,14 @@ module.exports = {
 
                                  function(callback) {
 
-                                                                console.log("----------insertion------------------")
-
-                                                                var query = "INSERT INTO addressBook"+
+                                                        console.log("----------insertion------------------")
+														if(!phonecontacts.length)
+														{
+															console.log("empty contact list")
+															callback();
+														}
+														else
+                                                          {      var query = "INSERT INTO addressBook"+
                                                                             " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
                                                                             " VALUES"+phoneContactsArray;
 
@@ -141,6 +146,7 @@ module.exports = {
 
                                                                         }
                                                                 });
+                                                            }
                                                     },
                                 function(callback) {
                                                                  console.log("=====contactsssssssss?????????????????????????????????????????????????")
@@ -232,7 +238,14 @@ module.exports = {
 
 
                                                 console.log("insertion fb friendssssssssssssssssssssss")
-
+												
+												if(!fbUser.length)
+														{
+															console.log("empty FB-contact list")
+															callback();
+														}
+														else
+                                                          {
                                                                 var query = "INSERT INTO fbFriends"+
                                                                             " (userId,ditherUserName, fbId, createdAt, updatedAt)"+
                                                                             " VALUES"+fbUserArray;
@@ -256,6 +269,7 @@ module.exports = {
 
                                                                         }
                                                                 });
+                                                         }
                                 },
                                 function(callback) {
 

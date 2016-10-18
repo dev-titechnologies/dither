@@ -153,6 +153,8 @@ console.log(device_type);
                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
                                                                                     }
                                                                                     else{
+																						console.log("--------------------------notifySettings------------------")
+																						console.log(notifySettings)
                                                                                        if(notifySettings.notifyVote==0){
 
                                                                                              return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
@@ -177,6 +179,7 @@ console.log(device_type);
                                                                                                 }
                                                                                                 else
                                                                                                 {
+																									console.log("Get-------------Device--------------ID")
                                                                                                     console.log(getDeviceId)
                                                                                                     var message     =  'Vote Notification';
                                                                                                     var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
@@ -193,7 +196,8 @@ console.log(device_type);
                                                                                                             return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                                             total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                                 });
-                                                                                                    }else{
+                                                                                                    }else
+                                                                                                    {
                                                                                                             //device_id         =  device_id.split(',');sails.log.debug(device_id);
                                                                                                             var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:2,id:collageId,notification_id:createdNotificationTags.id};
                                                                                                             NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
@@ -214,61 +218,9 @@ console.log(device_type);
 																														});
 																													}
 																											});
-                                                                                                            /*switch(switchKey){
-                                                                                                                    case 'ios' :
-                                                                                                                               NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-                                                                                                                                    if(err)
-                                                                                                                                    {
-                                                                                                                                        console.log("Error in Push Notification Sending")
-                                                                                                                                        console.log(err)
-                                                                                                                                        //callback();
-                                                                                                                                    }
-                                                                                                                                    else
-                                                                                                                                    {
-                                                                                                                                        console.log("Push notification result")
-                                                                                                                                        console.log(ntfnSend)
-                                                                                                                                        console.log("Push Notification sended")
-                                                                                                                                        //callback();
-                                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                            total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                                                        });
-                                                                                                                                    }
-                                                                                                                                });
-                                                                                                                    break;
-
-                                                                                                                    case 'android' :
-                                                                                                                                NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-                                                                                                                                    if(err)
-                                                                                                                                    {
-                                                                                                                                        console.log("Error in Push Notification Sending")
-                                                                                                                                        console.log(err)
-                                                                                                                                        //callback();
-                                                                                                                                    }
-                                                                                                                                    else
-                                                                                                                                    {
-                                                                                                                                        console.log("Push notification result")
-                                                                                                                                        console.log(ntfnSend)
-                                                                                                                                        console.log("Push Notification sended")
-                                                                                                                                        //callback();
-                                                                                                                                        return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                                total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                                                        });
-                                                                                                                                    }
-                                                                                                                                });
-                                                                                                                    break;
-
-                                                                                                                    default:
-                                                                                                                                return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                                                            total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                                                });
-
-                                                                                                                    break;
-
-
-                                                                                                            }*/
+                                                                                                            
                                                                                                     }
-
-                                                                                                //------------------------------
+																									//------------------------------
                                                                                                 }
                                                                                               });
                                                                                             }

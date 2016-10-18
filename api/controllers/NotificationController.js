@@ -609,7 +609,7 @@ module.exports = {
                                                                 console.log(ntfnTypeFound)
                                                                 var notification    = ntfnTypeFound[0].body;
                                                                 console.log(notification)
-                                                                var ntfn_body       = util.format(notification,item.name);
+                                                                var ntfn_body       = util.format(notification);
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 item.ntfn_body      =   ntfn_body;
                                                                 var imageToResize   =   item.profile_image;

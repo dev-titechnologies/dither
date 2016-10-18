@@ -140,6 +140,8 @@ module.exports = {
         },
 
         Socket_disconnection  : function (req, res) {
+                 console.log(req.params.all());
+                 console.log(req.body);
                 /*console.log("--------------------------------------    Socket_disconnection     --------------------------------");
                 console.log(sails.sockets.getId(req));
                 console.log(sails.sockets.socketRooms(req.socket));

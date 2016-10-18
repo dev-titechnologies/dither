@@ -54,7 +54,7 @@ module.exports = {
                         //var phonecontacts      = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
                         //var fbUser               = JSON.parse(req.param('fb_array'));
                         var fbUser               = req.param('fb_array');
-
+		
 
                         var data_check1 = "";
                         //console.log(phonecontacts)
@@ -78,8 +78,11 @@ module.exports = {
                         console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
                         //console.log(phoneContactsArray);
                         //console.log(JSON.parse(phoneContactsArray));
-					if(fbUser.length!=0)
+					if(!fbUser.length)
 					{	
+						console.log("empty fb")
+					}
+					else{
 						
                         fbUser.forEach(function(factor, index){
                              var contact_name = factor.fb_name;

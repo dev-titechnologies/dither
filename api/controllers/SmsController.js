@@ -52,14 +52,14 @@
 								}
 								else if(getResult[0].mentionId==mention_id)
 								{
-									message = "mention_id Already Exist";
+									message = "Username Already Exist.";
 								}
 								else if(getResult[0].phoneNumber==mobile)
 								{
 									message = "Phonenumber Already Exist";
 								}
 								
-								console.log("llllllllllllllllllllllllllllllllllllllllllllllllll")	
+								//console.log("llllllllllllllllllllllllllllllllllllllllllllllllll")	
 								console.log(getResult)
 								return res.json(200, {status: 2, status_type: 'Failure' , message: message});
 								

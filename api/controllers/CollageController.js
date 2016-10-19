@@ -916,10 +916,12 @@ module.exports = {
                                 var query_offset_data_view_limit;
                                 //check the focus_dither id 0 or not
                                 if(focus_dither_id == 0){
-                                        query_offset_data_view_limit    =   " LIMIT "+offset_data_view_limit;
+                                        query_offset_data_view_limit             =   "";
+                                        query_offset_data_view_limit_for_zero    =   " LIMIT "+data_view_limit;
 
                                 }else{
-                                        query_offset_data_view_limit    =   " AND clg.id "+offset_data_view_limit;
+                                        query_offset_data_view_limit             =   " AND clg.id "+offset_data_view_limit;
+                                        query_offset_data_view_limit_for_zero     =  "";
 
                                 }
                                 //check the dither type (recent or popular)
@@ -996,6 +998,7 @@ module.exports = {
                                                 popular_totalVote+
                                                 query_offset_data_view_limit+
                                                 query_order_other_user1+
+                                                query_offset_data_view_limit_for_zero+
                                                 //" ) AS temp_union"+
                                                 //" INNER JOIN collage clg ON clg.id = temp_union.id"+
                                                 //popular_totalVote+

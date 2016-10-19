@@ -190,7 +190,7 @@ module.exports = {
 
 															   console.log("Notification For Comment");
 															   console.log(mention_arr)
-															   var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"' group by `userId`";
+															   var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"'";
 															   CollageComments.query("SELECT * FROM user", function(err, CountComments){
 																  if(err)
 																  {

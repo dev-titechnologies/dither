@@ -364,8 +364,25 @@ module.exports = {
                                                                                                                                                 }else{
                                                                                                                                                         //device_id       =  device_id.split(',');sails.log.debug(device_id);
                                                                                                                                                         var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
-                                                                                                                                                        var switchKey   =  device_type;
-                                                                                                                                                        switch(switchKey){
+                                                                                                                                                        //var switchKey   =  device_type;
+                                                                                                                                                        console.log(device_type)
+                                                                                                                                                        NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
+																																							if(err)
+																																							{
+																																								console.log("Error in Push Notification Sending")
+																																								console.log(err)
+																																								callback();
+																																							}
+																																							else
+																																							{
+																																								console.log("Push notification result")
+																																								console.log(ntfnSend)
+																																								console.log("Push Notification sended")
+																																								callback();
+																																							}
+                                                                                                                                                        });
+                                                                                                                                                        
+                                                                                                                                                        /*switch(switchKey){
                                                                                                                                                                 case 'ios' :
                                                                                                                                                                             NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
                                                                                                                                                                                 if(err)
@@ -410,7 +427,7 @@ module.exports = {
                                                                                                                                                                 break;
 
 
-                                                                                                                                                        }
+                                                                                                                                                        }*/
                                                                                                                                                 }
 
                                                                                                                                             //------------------------------

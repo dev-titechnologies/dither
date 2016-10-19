@@ -29,8 +29,9 @@ module.exports = {
 					var profilePic_path        		=     server_baseUrl + req.options.file_path.profilePic_path;
 					//var	mention_arr					=    ['test_user','anu_r'];
 					var profile_image = '';
+					console.log("token details")
+					console.log(tokenCheck)
 					console.log("mention array")
-
 					console.log(mention_arr)
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
@@ -189,146 +190,122 @@ module.exports = {
 
 															   console.log("Notification For Comment");
 															   console.log(mention_arr)
-                                                               if(userId   !=  collageDetails.userId)
-                                                                {
-																	
-                                                                        console.log("inserted comments  Different User Comment");
-                                                                        console.log("own comment not included")
-                                                                        var values ={
-                                                                                        notificationTypeId  :   3,
-                                                                                        userId              :   userId,
-                                                                                        ditherUserId        :   collageDetails.userId,
-                                                                                        collage_id          :   collageId,
-                                                                                        description         :   commentDetails.length
-                                                                                    }
-                                                                        NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-                                                                                if(err){
-                                                                                    console.log(err);
-                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage commented users', error_details: err});
-                                                                                }else{
-                                                                                    var creator_roomName  = "socket_user_"+collageDetails.userId;
-                                                                                    sails.sockets.broadcast(creator_roomName,{
-                                                                                                                            type                       :       "notification",
-                                                                                                                            id                         :       collageId,
-                                                                                                                            user_id                    :       userId,
-                                                                                                                            message                    :       "Comment Dither - Room Broadcast - to Creator",
-                                                                                                                            //roomName                   :       creator_roomName,
-                                                                                                                            //subscribers                :       sails.sockets.subscribers(creator_roomName),
-                                                                                                                            //socket                     :       sails.sockets.rooms(),
-                                                                                                                            notification_type          :       3,
-                                                                                                                            notification_id            :       createdNotificationTags.id
-                                                                                                                            });
-                                                                                    //-----------------------------End OF NotificationLog---------------------------------
-
-                                                                                   User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
-                                                                                    if(err)
-                                                                                    {
-                                                                                        console.log(err)
-                                                                                        callback();
-                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
-                                                                                    }
-                                                                                    else{
-                                                                                       if(notifySettings.notifyComment==0){
-																						   
-																						    console.log("comment Option turn off")
-																							callback();
-                                                                                           
-                                                                                       }
-                                                                                       else{
-
-
-                                                                                            //----------------------------Push Notification For Comment------------------------------------------
-                                                                                            var message   = 'Comment Notification';
-                                                                                            var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
-                                                                                            User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
-                                                                                                if(err){
-                                                                                                      console.log(err)
-                                                                                                      callback();
-                                                                                                      
-                                                                                                }else{
-                                                                                                    if(!getDeviceId.length){
-                                                                                                       console.log("device not found")
-                                                                                                       callback();
-
-                                                                                                    }else{
-                                                                                                          var deviceId_arr  = [];
-                                                                                                           getDeviceId.forEach(function(factor, index){
-
-                                                                                                                        deviceId_arr.push(factor.deviceId);
-
-
-                                                                                                            });
-                                                                                                        if(deviceId_arr.length){
-                                                                                                          var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId,notification_id:createdNotificationTags.id};
-                                                                                                         
-                                                                                                          console.log(data)
-                                                                                                           NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) 
-                                                                                                           {
-																												if(err){
-																														console.log("Error in Push Notification Sending")
-																														console.log(err)
-																														callback();
-																														
-																												}else{
-																														console.log("Push notification result")
-																														console.log(ntfnSend)
-																														console.log("Push Notification sended")
-																														callback();
-                                                                                                                                                                                                                                                    }
-                                                                                                           });
-                                                                                                          
-                                                                                                          
-                                                                                                            /*if(device_type=='ios'){
-                                                                                                                    NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-                                                                                                                        if(err){
-                                                                                                                            console.log("Error in Push Notification Sending")
-                                                                                                                            console.log(err)
-                                                                                                                            callback();
-                                                                                                                            
-                                                                                                                        }else{
-                                                                                                                            console.log("Push notification result")
-                                                                                                                            console.log(ntfnSend)
-                                                                                                                            console.log("Push Notification sended")
-																															callback();
-                                                                                                                                                                                                                                                    }
-                                                                                                                    });
-                                                                                                            }else if(device_type=='android'){
-                                                                                                                    console.log("push notification")
-                                                                                                                    NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-                                                                                                                        if(err)
-                                                                                                                        {
-                                                                                                                            console.log("Error in Push Notification Sending")
-                                                                                                                            console.log(err)
-                                                                                                                            callback();
-                                                                                                                           
-                                                                                                                        }
-                                                                                                                        else
-                                                                                                                        {
-                                                                                                                            console.log("Push notification result")
-                                                                                                                            console.log(ntfnSend)
-                                                                                                                            console.log("Push Notification sended")
-                                                                                                                            callback();
-                                                                                                                            
-                                                                                                                        }
-                                                                                                                    });
-                                                                                                            }else{
-                                                                                                                 callback();     
-                                                                                                            }*/
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            });
-																						}
-																					}
-                                                                                 });
-                                                                               }
-                                                                         });
-																	}else{
-																		 console.log("same")
-																		 
-																			callback();
+															   var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"' group by `userId`";
+															   CollageComments.query("SELECT * FROM user", function(err, CountComments){
+																  if(err)
+																  {
+																	  console.log("err in count comments ")
+																	  callback();
+																  }
+																  else
+																  { 
+																	  console.log("===========Count======================")
+																	  console.log(CountComments)
+																	   if(userId   !=  collageDetails.userId)
+																		{
 																			
-																	}
+																				console.log("inserted comments  Different User Comment");
+																				console.log("own comment not included")
+																				var values ={
+																								notificationTypeId  :   3,
+																								userId              :   userId,
+																								ditherUserId        :   collageDetails.userId,
+																								collage_id          :   collageId,
+																								description         :   CountComments.length
+																							}
+																				NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+																						if(err){
+																							console.log(err);
+																							callback();
+																							//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage commented users', error_details: err});
+																						}else{
+																							var creator_roomName  = "socket_user_"+collageDetails.userId;
+																							sails.sockets.broadcast(creator_roomName,{
+																																	type                       :       "notification",
+																																	id                         :       collageId,
+																																	user_id                    :       userId,
+																																	message                    :       "Comment Dither - Room Broadcast - to Creator",
+																																	//roomName                   :       creator_roomName,
+																																	//subscribers                :       sails.sockets.subscribers(creator_roomName),
+																																	//socket                     :       sails.sockets.rooms(),
+																																	notification_type          :       3,
+																																	notification_id            :       createdNotificationTags.id
+																																	});
+																							//-----------------------------End OF NotificationLog---------------------------------
+
+																						   User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																								
+																							}
+																							else{
+																							   if(notifySettings.notifyComment==0){
+																								   
+																									console.log("comment Option turn off")
+																									callback();
+																								   
+																							   }
+																							   else{
+
+
+																									//----------------------------Push Notification For Comment------------------------------------------
+																									var message   = 'Comment Notification';
+																									var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
+																									User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
+																										if(err){
+																											  console.log(err)
+																											  callback();
+																											  
+																										}else{
+																											if(!getDeviceId.length){
+																											   console.log("device not found")
+																											   callback();
+
+																											}else{
+																												  var deviceId_arr  = [];
+																												   getDeviceId.forEach(function(factor, index){
+
+																																deviceId_arr.push(factor.deviceId);
+
+
+																													});
+																												if(deviceId_arr.length){
+																												  var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId,notification_id:createdNotificationTags.id};
+																												 
+																												  console.log(data)
+																												   NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) 
+																												   {
+																														if(err){
+																																console.log("Error in Push Notification Sending")
+																																console.log(err)
+																																callback();
+																																
+																														}else{
+																																console.log("Push notification result")
+																																console.log(ntfnSend)
+																																console.log("Push Notification sended")
+																																callback();
+																																																															}
+																												   });
+																											   
+																												}
+																											}
+																										}
+																									});
+																								}
+																							}
+																						 });
+																					   }
+																				 });
+																			}else{
+																				 console.log("same")
+																				 
+																					callback();
+																					
+																		}	}
+																 });
                                                                 },
                                                                 function(callback) {
 																	

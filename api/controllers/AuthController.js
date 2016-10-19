@@ -15,9 +15,9 @@ module.exports = {
     authenticate : function(req, res, next) {
             var userToken;
             if(req.isSocket){
-                    console.log(req.socket.handshake);
+                    //console.log(req.socket.handshake);
                     console.log("is Socket true");
-                    console.log(req.socket);
+                    //console.log(req.socket);
                     userToken = req.socket.handshake.query.token;
             }else{
                     console.log("is Socket false");

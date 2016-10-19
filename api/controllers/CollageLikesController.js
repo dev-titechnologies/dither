@@ -120,7 +120,7 @@ console.log(device_type);
                                                                                             ditherUserId        :   foundCollageResults.userId,
                                                                                             collage_id          :   collageId,
                                                                                             image_id            :   likedImageId,
-                                                                                            //description         :   likeDetails.length
+                                                                                            description         :   parseInt(foundCollageResults.totalVote) + 1
                                                                                     }
                                                                                     NotificationLog.create(values).exec(function(err, createdNotificationTags) {
                                                                                         if(err)

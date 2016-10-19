@@ -916,7 +916,7 @@ module.exports = {
                                 var query_offset_data_view_limit;
                                 //check the focus_dither id 0 or not
                                 if(focus_dither_id == 0){
-                                        query_offset_data_view_limit    =   "";
+                                        query_offset_data_view_limit    =   " LIMIT "+offset_data_view_limit;
 
                                 }else{
                                         query_offset_data_view_limit    =   " AND clg.id "+offset_data_view_limit;

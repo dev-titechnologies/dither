@@ -978,30 +978,36 @@ module.exports = {
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
                                                 " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
-
                                                 " FROM("+
-                                                " SELECT temp_union.* FROM ("+
+                                                //" SELECT temp_union.* FROM ("+
+                                                //" SELECT clg.id"+
+                                                //" FROM collage clg"+
+                                                //" WHERE clg.userId = '"+received_userId+"'"+
+                                                //" UNION"+
+                                                //" SELECT tg.collageId AS id"+
+                                                //" FROM tags tg"+
+                                                //" WHERE tg.userId = '"+userId+"'"+
+                                                //" LIMIT "+data_view_limit+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+
-                                                " WHERE clg.userId = '"+received_userId+"'"+
-                                                " UNION"+
-                                                " SELECT tg.collageId AS id"+
-                                                " FROM tags tg"+
-                                                " WHERE tg.userId = '"+userId+"'"+
-                                                " LIMIT "+data_view_limit+
-                                                " ) AS temp_union"+
-                                                " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                " INNER JOIN tags tg ON tg.collageId = clg.id"+
+                                                " WHERE tg.userId =  '"+userId+"'"+
+                                                " AND clg.userId =  '"+received_userId+"'"+
                                                 popular_totalVote+
                                                 query_offset_data_view_limit+
                                                 query_order_other_user1+
+                                                //" ) AS temp_union"+
+                                                //" INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                //popular_totalVote+
+                                                //query_offset_data_view_limit+
+                                                //query_order_other_user1+
                                                 " ) AS temp_clg"+
-
                                                 " INNER JOIN collage clg ON clg.id = temp_clg.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
-                                                " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
+                                                //" WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
                                                 " GROUP BY clgdt.id"+
                                                 query_order_other_user2;
 

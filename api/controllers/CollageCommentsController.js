@@ -191,7 +191,7 @@ module.exports = {
 															   console.log("Notification For Comment");
 															   console.log(mention_arr)
 															   var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"'";
-															   CollageComments.query("SELECT * FROM user", function(err, CountComments){
+															   CollageComments.query(query, function(err, CountComments){
 																  if(err)
 																  {
 																	  console.log("err in count comments ")
@@ -200,7 +200,7 @@ module.exports = {
 																  else
 																  { 
 																	  console.log("============Count======================")
-																	  console.log(CountComments)
+																	  console.log(CountComments.count)
 																	   if(userId   !=  collageDetails.userId)
 																		{
 																			

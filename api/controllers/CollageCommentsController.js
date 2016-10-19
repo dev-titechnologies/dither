@@ -187,6 +187,24 @@ module.exports = {
 															
 															},
 															function(callback) {
+																
+															   var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
+															   NotificationLog.query(query, function(err, deleteCommentNtfn){
+																   if(err)
+																   {
+																	   console.log(err)
+																	   callback();
+																   }
+																   else
+																   {
+																	   console.log("deleted")
+																	   console.log(deleteCommentNtfn)
+																	   callback();
+																   }
+															   });
+																
+															},
+															function(callback) {
 
 															   console.log("Notification For Comment");
 															   console.log(mention_arr)
@@ -238,7 +256,7 @@ module.exports = {
 																							{
 																								console.log(err)
 																								callback();
-																								
+																								 
 																							}
 																							else{
 																							   if(notifySettings.notifyComment==0){

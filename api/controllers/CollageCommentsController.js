@@ -199,7 +199,7 @@ module.exports = {
 																  }
 																  else
 																  { 
-																	  console.log("===========Count======================")
+																	  console.log("============Count======================")
 																	  console.log(CountComments)
 																	   if(userId   !=  collageDetails.userId)
 																		{

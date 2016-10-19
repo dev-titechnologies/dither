@@ -1076,6 +1076,7 @@ module.exports = {
 
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
+                                                                            console.log(dataResults[j]["id"]);
                                                                             console.log("+++++++++++++++++++++++++++++---LIKE VOTE ---+++++++++++++++++++++++++++++");
                                                                             console.log(dataResults[j]["likeStatus"]);
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
@@ -1118,8 +1119,12 @@ module.exports = {
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
 
-                                                                    recent_dithers                              =       key.sort( predicatBy("mainOrder") );
-                                                                    popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                    if(received_dither_type == "recent"){
+                                                                            recent_dithers                              =       key.sort( predicatBy("mainOrder") );
+                                                                    }
+                                                                    if(received_dither_type == "popular"){
+                                                                            popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                    }
                                                                     //recent_dithers                              =       key;
                                                                     //popular_dithers                             =       key;
                                                                 }

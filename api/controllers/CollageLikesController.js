@@ -113,6 +113,18 @@ console.log(device_type);
                                                                                                                     //socket          :   sails.sockets.rooms()
                                                                                                                     });
                                                                                     //-----------Notification log Insertion----------------
+                                                                                    var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 2";
+																					 NotificationLog.query(query, function(err, deleteLikeNtfn){
+																						   if(err)
+																						   {
+																							   console.log(err)
+																							   //callback();
+																						   }
+																						   else{
+																						   
+																							   console.log("deleted")
+																							   console.log(deleteLikeNtfn)
+																							
 
                                                                                     var values ={
                                                                                             notificationTypeId  :   2,
@@ -230,9 +242,10 @@ console.log(device_type);
                                                                                         }
                                                                                     });
 
-                                                                                    //-----------------------------End OF NotificationLog---------------------------------
+                                                                                  }
+                                                                                 });   //-----------------------------End OF NotificationLog---------------------------------
 
-                                                                            }//Collage totalVote count Update
+																				}//Collage totalVote count Update
                                                                             });
 
                                                                         }//CollageDetails vote count Update

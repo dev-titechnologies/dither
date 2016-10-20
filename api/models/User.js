@@ -67,7 +67,10 @@ module.exports = {
                 type: 'boolean',
                 defaultsTo: true
             },
-
+		notifyMention: {
+                type: 'boolean',
+                defaultsTo: true
+            },
         createdAt: {
                 type: 'datetime',
             },

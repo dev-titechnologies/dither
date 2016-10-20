@@ -21,6 +21,7 @@ module.exports = {
                     var notifyVote      =   req.param('vote');
                     var notifyComment   =   req.param('comment');
                     var notifyContact   =   req.param('contact');
+                    var notifyMention   =   req.param('mention');
                     var token           =   req.get('token');
                     console.log(token)
                     console.log(req.param('opinion'))
@@ -39,7 +40,7 @@ module.exports = {
 
                                             sails.log(results.userId)
 
-                                            var data     = {notifyOpinion:notifyOpinion, notifyVote:notifyVote,notifyComment:notifyComment,notifyContact:notifyContact};
+                                            var data     = {notifyOpinion:notifyOpinion, notifyVote:notifyVote,notifyComment:notifyComment,notifyContact:notifyContact,notifyMention:notifyMention};
                                             var criteria = {id: results.userId};
 
                                             User.update(criteria, data).exec(function(err, updatedUser) {
@@ -51,7 +52,7 @@ module.exports = {
                                                 else
                                                 {
                                                     console.log(updatedUser[0])
-                                                    return res.json(200, {status: 1, status_type: 'Success' ,msg: 'Settings updated Successfully',opinion:updatedUser[0].notifyOpinion,vote:updatedUser[0].notifyVote,comment:updatedUser[0].notifyComment,contact:updatedUser[0].notifyContact});
+                                                    return res.json(200, {status: 1, status_type: 'Success' ,msg: 'Settings updated Successfully',opinion:updatedUser[0].notifyOpinion,vote:updatedUser[0].notifyVote,comment:updatedUser[0].notifyComment,contact:updatedUser[0].notifyContact,mention:updatedUser[0].notifyMention});
 
                                                 }
                                             });

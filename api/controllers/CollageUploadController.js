@@ -374,6 +374,8 @@ module.exports = {
                                                                                                                                         roomName                   :       taggedUser_roomName,
                                                                                                                                         subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
                                                                                                                                         socket                     :       sails.sockets.rooms(),
+                                                                                                                                        notification_type          :       1,
+                                                                                                                                        notification_id            :       createdNotificationTags.id,
                                                                                                                                         });
                                                                                         });
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");

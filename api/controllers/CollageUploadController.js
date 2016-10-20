@@ -355,7 +355,7 @@ module.exports = {
                                                                                             userId              :   userId,
                                                                                             collage_id          :   collage_results.id,
                                                                                             tagged_users        :   tagNotifyArray,
-                                                                                            description         :   tagNotifyArray.length
+                                                                                            //description         :   tagNotifyArray.length
                                                                                         }
                                                                             console.log(values);
                                                                             NotificationLog.create(values).exec(function(err, createdNotificationTags) {

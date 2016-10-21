@@ -671,7 +671,7 @@ module.exports = {
                                             " temp.*,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
+                                            " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
@@ -692,7 +692,7 @@ module.exports = {
                                             " temp.*,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
+                                            " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
@@ -716,7 +716,7 @@ module.exports = {
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                            " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp.id"+

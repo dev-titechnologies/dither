@@ -865,6 +865,36 @@ module.exports = {
                     //res.download('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/p200x200/11692484_1584512915143266_7884115120613929813_n.jpg?oh=42b7eff448f63708c7f5eedf11a9402e&oe=58154D7A&__gda__=1479562104_5855c5a67913f66449272bf8f4b59dcf');
          },
 
+        /* ==================================================================================================================================
+               E-mail
+        ==================================================================================================================================== */
+        email: function (req, res) {
+                var global_settingsKeyValue     =   req.options.settingsKeyValue;
+                var email_to                    =   "tittoxp@gmail.com";
+                var email_subject               =   'Welcome to Dither';
+                var email_template              =   'signup';
+                var email_context               =   {receiverName: "Titto xavier"};
+                EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
+                    if(err)
+                    {
+                            console.log(err);
+                            console.log("async parallel in Mailpart Error");
+                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
+
+                    }else{
+                            //console.log(results);
+                            console.log(email_to);
+                            console.log(email_subject);
+                            console.log(email_template);
+                            console.log(email_context);
+                            console.log("async parallel in Mailpart Success");
+                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                    }
+
+
+                });
+        },
+
 };
 
 

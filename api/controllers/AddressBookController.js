@@ -157,7 +157,7 @@ module.exports = {
                                                                  console.log("=====contactsssssssss?????????????????????????????????????????????????")
                                                                 // console.log(phoneContactsArray1)
                                                                 console.log("Address book updation")
-                                                                console.log(phonecontacts.length)
+                                                                //console.log(phonecontacts.length)
                                                                 async.forEach(phonecontacts, function (factor, callback){
                                                                 //phonecontacts.forEach(function(factor, index){
 
@@ -482,7 +482,7 @@ module.exports = {
                                                                 else
                                                                 {
 
-                                                                       console.log(selectedDitherFbf);
+                                                                       //console.log(selectedDitherFbf);
                                                                        ditherUserInFbFriends = selectedDitherFbf;
 
                                                                        ditherUserInFbFriends.forEach(function(factor, index){

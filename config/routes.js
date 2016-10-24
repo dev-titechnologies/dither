@@ -55,7 +55,7 @@ module.exports.routes = {
   '/socketSettings/*'                     :           ['auth.authenticate'],
   '/collageUpload/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
   //'/test/delete_Socket'                 :           ['SocketSettings.Socket_connection'],
-  '/test/imagemagick'                     :           ['settings.settingsKeyValue','helper.file_path'],
+  '/test/*'                               :           ['settings.settingsKeyValue','helper.file_path'],
 
 
  /* 'GET /user/join': {

@@ -355,7 +355,7 @@ module.exports = {
                                                                                             userId              :   userId,
                                                                                             collage_id          :   collage_results.id,
                                                                                             tagged_users        :   tagNotifyArray,
-                                                                                            description         :   tagNotifyArray.length
+                                                                                            //description         :   tagNotifyArray.length
                                                                                         }
                                                                             console.log(values);
                                                                             NotificationLog.create(values).exec(function(err, createdNotificationTags) {
@@ -374,6 +374,8 @@ module.exports = {
                                                                                                                                         roomName                   :       taggedUser_roomName,
                                                                                                                                         subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
                                                                                                                                         socket                     :       sails.sockets.rooms(),
+                                                                                                                                        notification_type          :       1,
+                                                                                                                                        notification_id            :       createdNotificationTags.id,
                                                                                                                                         });
                                                                                         });
                                                                                         console.log("Successfully Inserted to---->>. NotificationLog table");

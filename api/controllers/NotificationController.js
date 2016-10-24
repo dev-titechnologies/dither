@@ -166,18 +166,18 @@ module.exports = {
                             }
                             else
                             {
-                                
+
                                 console.log(results.length)
 
                                 if(typeof results != 'undefined' && results.length!=0)
                                 {
 
-                                    
+
                                     async.forEach(results, function (item, callback){
                                     if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4 || item.notificationTypeId==7)
                                         {
                                           //----------Comment Notification---------------------------
-                                          
+
                                           if(item.notificationTypeId==3)
                                           {
                                             //  console.log(item.description)
@@ -190,7 +190,7 @@ module.exports = {
                                                     }
                                                     else
                                                     {
-                                                    
+
                                                             console.log(item)
                                                             notificationCommented   =   "No notification Found for comments";
                                                             var notification        =   ntfnTypeFound[0].body;
@@ -218,7 +218,7 @@ module.exports = {
                                                                      console.log(notifyCmntArray)
                                                                      console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
                                                             }
-                                                            
+
                                                              // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
@@ -234,7 +234,7 @@ module.exports = {
                                                                         console.log(imageSrc)
                                                                         console.log(imageDst)
                                                                         ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                            
+
                                                                             if(err)
                                                                             {
                                                                                 console.log(err)
@@ -267,8 +267,8 @@ module.exports = {
                                                                                                 callback();
                                                                                             }
                                                                                         });
-                                                                                        
-                                                                                    }   
+
+                                                                                    }
                                                                                     else
                                                                                     {
                                                                                         callback();
@@ -277,8 +277,8 @@ module.exports = {
                                                                                 //callback();
                                                                             }
                                                                         });
-                                                                        
-                                                                    }   
+
+                                                                    }
                                                                     else
                                                                     {
                                                                         fs.exists(clgImgSrc, function(exists) {
@@ -304,8 +304,8 @@ module.exports = {
                                                                                                 callback();
                                                                                             }
                                                                                         });
-                                                                                        
-                                                                                    }   
+
+                                                                                    }
                                                                                     else
                                                                                     {
                                                                                         callback();
@@ -314,9 +314,9 @@ module.exports = {
                                                                         //callback();
                                                                     }
                                                                 });
-                                                            
-                                                            
-                                                             
+
+
+
                                                     }
 
                                                 });
@@ -352,7 +352,7 @@ module.exports = {
                                                             {
                                                               notificationVoted  = " voted on your Dither";
                                                               item.ntfn_body     = notificationVoted;
-                                                              
+
                                                             }
                                                             else
                                                             {
@@ -361,9 +361,9 @@ module.exports = {
                                                                 notifyVoteArray     = [];
                                                                 notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
                                                                 console.log(notifyVoteArray)
-                                                                
+
                                                             }
-                                                            
+
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
@@ -378,7 +378,7 @@ module.exports = {
                                                                         console.log(imageSrc)
                                                                         console.log(imageDst)
                                                                         ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                            
+
                                                                             if(err)
                                                                             {
                                                                                 console.log(err)
@@ -399,7 +399,7 @@ module.exports = {
                                                                                         console.log(imageSrc)
                                                                                         console.log(imageDst)
                                                                                         ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-                                                                                            
+
                                                                                             if(err)
                                                                                             {
                                                                                                 console.log(err)
@@ -412,8 +412,8 @@ module.exports = {
                                                                                                 callback();
                                                                                             }
                                                                                         });
-                                                                                        
-                                                                                    }   
+
+                                                                                    }
                                                                                     else
                                                                                     {
                                                                                         callback();
@@ -422,8 +422,8 @@ module.exports = {
                                                                                 //callback();
                                                                             }
                                                                         });
-                                                                        
-                                                                    }   
+
+                                                                    }
                                                                     else
                                                                     {
                                                                         fs.exists(clgImgSrc, function(exists) {
@@ -437,7 +437,7 @@ module.exports = {
                                                                                         console.log(imageSrc)
                                                                                         console.log(imageDst)
                                                                                         ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-                                                                                            
+
                                                                                             if(err)
                                                                                             {
                                                                                                 console.log(err)
@@ -450,8 +450,8 @@ module.exports = {
                                                                                                 callback();
                                                                                             }
                                                                                         });
-                                                                                        
-                                                                                    }   
+
+                                                                                    }
                                                                                     else
                                                                                     {
                                                                                         callback();
@@ -505,7 +505,7 @@ module.exports = {
                                                                         console.log(imageSrc)
                                                                         console.log(imageDst)
                                                                         ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                            
+
                                                                             if(err)
                                                                             {
                                                                                 console.log(err)
@@ -526,7 +526,7 @@ module.exports = {
                                                                                         console.log(imageSrc)
                                                                                         console.log(imageDst)
                                                                                         ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-                                                                                            
+
                                                                                             if(err)
                                                                                             {
                                                                                                 console.log(err)
@@ -539,8 +539,8 @@ module.exports = {
                                                                                                 callback();
                                                                                             }
                                                                                         });
-                                                                                        
-                                                                                    }   
+
+                                                                                    }
                                                                                     else
                                                                                     {
                                                                                         callback();
@@ -549,8 +549,8 @@ module.exports = {
                                                                                 //callback();
                                                                             }
                                                                         });
-                                                                        
-                                                                    }   
+
+                                                                    }
                                                                     else
                                                                     {
                                                                         fs.exists(clgImgSrc, function(exists) {
@@ -564,7 +564,7 @@ module.exports = {
                                                                                     console.log(imageSrc)
                                                                                     console.log(imageDst)
                                                                                     ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-                                                                                        
+
                                                                                         if(err)
                                                                                         {
                                                                                             console.log(err)
@@ -577,8 +577,8 @@ module.exports = {
                                                                                             callback();
                                                                                         }
                                                                                     });
-                                                                                    
-                                                                                }   
+
+                                                                                }
                                                                                 else
                                                                                 {
                                                                                     callback();
@@ -620,7 +620,7 @@ module.exports = {
                                                                 console.log(item.profile_image)
                                                                 console.log(ntfn_body)
                                                                 notificationTagged  =  ntfn_body;
-                                                                
+
                                                                 // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
@@ -635,7 +635,7 @@ module.exports = {
                                                                         console.log(imageSrc)
                                                                         console.log(imageDst)
                                                                         ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                            
+
                                                                             if(err)
                                                                             {
                                                                                 console.log(err)
@@ -656,7 +656,7 @@ module.exports = {
                                                                                         console.log(imageSrc)
                                                                                         console.log(imageDst)
                                                                                         ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-                                                                                            
+
                                                                                             if(err)
                                                                                             {
                                                                                                 console.log(err)
@@ -669,8 +669,8 @@ module.exports = {
                                                                                                 callback();
                                                                                             }
                                                                                         });
-                                                                                        
-                                                                                    }   
+
+                                                                                    }
                                                                                     else
                                                                                     {
                                                                                         callback();
@@ -679,8 +679,8 @@ module.exports = {
                                                                                 //callback();
                                                                             }
                                                                         });
-                                                                        
-                                                                    }   
+
+                                                                    }
                                                                     else
                                                                     {
                                                                         fs.exists(clgImgSrc, function(exists) {
@@ -694,7 +694,7 @@ module.exports = {
                                                                                 console.log(imageSrc)
                                                                                 console.log(imageDst)
                                                                                 ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-                                                                                    
+
                                                                                     if(err)
                                                                                     {
                                                                                         console.log(err)
@@ -707,8 +707,8 @@ module.exports = {
                                                                                         callback();
                                                                                     }
                                                                                 });
-                                                                                
-                                                                            }   
+
+                                                                            }
                                                                             else
                                                                             {
                                                                                 callback();
@@ -738,7 +738,7 @@ module.exports = {
                                                             else
                                                             {
 
-                                                                
+
                                                                 console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
                                                                 console.log(ntfnTypeFound)
                                                                 var notification    = ntfnTypeFound[0].body;
@@ -753,7 +753,7 @@ module.exports = {
                                                                 console.log(item.profile_image)
                                                                 console.log(ntfn_body)
                                                                 notificationTagged  =  ntfn_body;
-                                                                
+
                                                                 // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
@@ -768,7 +768,7 @@ module.exports = {
                                                                         console.log(imageSrc)
                                                                         console.log(imageDst)
                                                                         ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                            
+
                                                                             if(err)
                                                                             {
                                                                                 console.log(err)
@@ -789,7 +789,7 @@ module.exports = {
                                                                                         console.log(imageSrc)
                                                                                         console.log(imageDst)
                                                                                         ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-                                                                                            
+
                                                                                             if(err)
                                                                                             {
                                                                                                 console.log(err)
@@ -802,8 +802,8 @@ module.exports = {
                                                                                                 callback();
                                                                                             }
                                                                                         });
-                                                                                        
-                                                                                    }   
+
+                                                                                    }
                                                                                     else
                                                                                     {
                                                                                         callback();
@@ -812,11 +812,11 @@ module.exports = {
                                                                                 //callback();
                                                                             }
                                                                         });
-                                                                        
-                                                                    }   
+
+                                                                    }
                                                                     else
                                                                     {
-                                                                        
+
                                                                         fs.exists(clgImgSrc, function(exists) {
                                                                          if (exists) {
 
@@ -828,7 +828,7 @@ module.exports = {
                                                                                 console.log(imageSrc)
                                                                                 console.log(imageDst)
                                                                                 ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-                                                                                    
+
                                                                                     if(err)
                                                                                     {
                                                                                         console.log(err)
@@ -841,14 +841,14 @@ module.exports = {
                                                                                         callback();
                                                                                     }
                                                                                 });
-                                                                                
-                                                                            }   
+
+                                                                            }
                                                                             else
                                                                             {
                                                                                 callback();
                                                                             }
                                                                         });
-                                                                        
+
                                                                         //callback();
                                                                     }
                                                                 });
@@ -908,7 +908,7 @@ module.exports = {
                                     " usr.name, usr.profilePic,"+
                                     " clg.image as collageImage"+
                                     " FROM notificationLog ntlg"+
-                                    " INNER JOIN user usr ON usr.id = ntlg.ditherUserId"+
+                                    " INNER JOIN user usr ON usr.id = ntlg.userId"+
                                     " INNER JOIN collage clg ON clg.id = ntlg.collage_id"+
                                     " WHERE"+
                                     " ntlg.id = "+notificationId;
@@ -959,7 +959,7 @@ module.exports = {
 
                                                                 ntfn_body               =   notification;
 
-                                                                if(results[0].description > 0){
+                                                                if(results[0].description > 0 ){
                                                                     notification                =       ntfnFoundResults.body;
                                                                     results[0].description      =       results[0].description - 1;
                                                                     ntfn_body                   =       util.format(notification, results[0].description);

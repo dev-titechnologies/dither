@@ -33,7 +33,7 @@ module.exports = {
 
 
 
-                       
+
                        // console.log(req.param('contact_array'));
                         /*req.param('contact_array').forEach(function(factor, index){
                                             //console.log("INSIDE FOR EACH ======================");
@@ -46,15 +46,18 @@ module.exports = {
 
 
 
-                        console.log("---------------------------------------------------------------------PPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                        console.log("---------------------------------------FB array ----Before Parse--------------------------PPPPPPPPPPPPPPPPPPPPPPPPPPP");
                         console.log(req.param('fb_array'))
+
+                        console.log("---------------------------------------FB array ----After Parse--------------------------PPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                        //console.log(JSON.parse(req.param('fb_array')));
                         //console.log(phonecontacts);
                          //fbUser                = JSON.parse(req.param('fb_array'));
 
                         //var phonecontacts      = [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
                         //var fbUser               = JSON.parse(req.param('fb_array'));
                         var fbUser               = req.param('fb_array');
-		
+
 
                         var data_check1 = "";
                         //console.log(phonecontacts)
@@ -78,12 +81,12 @@ module.exports = {
                         console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
                         //console.log(phoneContactsArray);
                         //console.log(JSON.parse(phoneContactsArray));
-					if(!fbUser.length)
-					{	
-						console.log("empty fb")
-					}
-					else{
-						
+                    if(!fbUser.length)
+                    {
+                        console.log("empty fb")
+                    }
+                    else{
+
                         fbUser.forEach(function(factor, index){
                              var contact_name = factor.fb_name;
                             //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
@@ -92,7 +95,7 @@ module.exports = {
                              //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
                              fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.fb_userid+"', now(), now())");
                         });
-				    }
+                    }
                     async.series([
 
                               function(callback) {
@@ -118,12 +121,12 @@ module.exports = {
                                  function(callback) {
 
                                                         console.log("----------insertion------------------")
-														if(!phonecontacts.length)
-														{
-															console.log("empty contact list")
-															callback();
-														}
-														else
+                                                        if(!phonecontacts.length)
+                                                        {
+                                                            console.log("empty contact list")
+                                                            callback();
+                                                        }
+                                                        else
                                                           {      var query = "INSERT INTO addressBook"+
                                                                             " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
                                                                             " VALUES"+phoneContactsArray;
@@ -243,13 +246,13 @@ module.exports = {
 
 
                                                 console.log("insertion fb friendssssssssssssssssssssss")
-												
-												if(!fbUser.length)
-														{
-															console.log("empty FB-contact list")
-															callback();
-														}
-														else
+
+                                                if(!fbUser.length)
+                                                        {
+                                                            console.log("empty FB-contact list")
+                                                            callback();
+                                                        }
+                                                        else
                                                           {
                                                                 var query = "INSERT INTO fbFriends"+
                                                                             " (userId,ditherUserName, fbId, createdAt, updatedAt)"+

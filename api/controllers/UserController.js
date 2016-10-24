@@ -528,7 +528,7 @@ module.exports = {
                                                     }
                                                     else{
                                                         var notifyArray = [];
-                                                        notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion,mention:notifyMention});
+                                                        notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion,mention:results.notifyMention});
                                                         var profile_image       =   profilePic_path + results.profilePic;
                                                         return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
                                                                               email             :   results.email,

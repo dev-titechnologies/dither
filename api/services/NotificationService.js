@@ -122,52 +122,107 @@ module.exports = {
 		console.log(device_type)
 		console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
 		console.log(data)
-		var switchKey   =  device_type;
-		switch(switchKey){
-				case 'ios' :
-							NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-								if(err)
-								{
-									console.log("Error in Push Notification Sending")
-									console.log(err)
-									callback();
-								}
-								else
-								{
-									console.log("Push notification result i nIOS")
-									
-									callback();
-									
-								}
-							});
-				break;
+		if(device_type.length==1)
+		{
+			
+				var switchKey   =  device_type[0];
+				switch(switchKey){
+						case 'ios' :
+									NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+										if(err)
+										{
+											console.log("Error in Push Notification Sending")
+											console.log(err)
+											callback();
+										}
+										else
+										{
+											console.log("Push notification result i nIOS")
+											
+											callback();
+											
+										}
+									});
+						break;
 
-				case 'android' :
-							NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-								if(err)
-								{
-									console.log("Error in Push Notification Sending")
-									console.log(err)
+						case 'android' :
+									NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+										if(err)
+										{
+											console.log("Error in Push Notification Sending")
+											console.log(err)
+											callback();
+										}
+										else
+										{
+											console.log("Push notification result IN Android")
+											console.log(ntfnSend)
+											console.log("Push Notification sended")
+											callback();
+										}
+									});
+						break;
+						default:
 									callback();
-								}
-								else
-								{
-									console.log("Push notification result IN Android")
-									console.log(ntfnSend)
-									console.log("Push Notification sended")
-									callback();
-								}
-							});
-				break;
-				default:
-							callback();
 
-				break;
-				
+						break;
+						
 
 
+				}
 		}
-		    
+		else
+		{
+			async.series([
+                                                                        
+				function(callback) {
+						NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
+							if(err)
+							{
+								console.log("Error in Push Notification Sending")
+								console.log(err)
+								callback();
+							}
+							else
+							{
+								console.log("Push notification result i nIOS")
+								
+								callback();
+								
+							}
+						});
+				},
+				function(callback) {
+						NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
+							if(err)
+							{
+								console.log("Error in Push Notification Sending")
+								console.log(err)
+								callback();
+							}
+							else
+							{
+								console.log("Push notification result IN Android")
+								console.log(ntfnSend)
+								console.log("Push Notification sended")
+								callback();
+							}
+						});
+				},
+			 ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
+					if (err) {
+						
+							console.log(err);
+							callback();
+					   
+					}else{
+
+							console.log("result")
+							callback();
+					}
+			});
+			
+		}
 		
 	}
 	

@@ -41,6 +41,7 @@ module.exports = {
                         var OTPCode      = req.param('otp');
                         var deviceId     = req.get('device_id');
                         var device_IMEI  = req.get('device_imei');
+                        var device_Type  = req.get('device_type');
                         var values = {
 
                                     name        : req.param('username'),
@@ -122,7 +123,7 @@ module.exports = {
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
                                                 }else{
                                                         // Create new access token on login
-                                                        UsertokenService.createToken(results.id, deviceId,device_IMEI, function (err, userTokenDetails) {
+                                                        UsertokenService.createToken(results.id, deviceId,device_IMEI,device_Type, function (err, userTokenDetails) {
                                                             if (err) {
                                                                         sails.log(userTokenDetails)
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
@@ -496,6 +497,7 @@ module.exports = {
         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
         var device_IMEI                 =     req.get('device_imei');
+        var device_Type                 =     req.get('device_type');
         if(req.param('fb_uid') || req.get('device_id'))
             {
 
@@ -522,7 +524,7 @@ module.exports = {
                                             if(err){
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                             }else{
-                                                UsertokenService.createToken(results.id,deviceId,device_IMEI, function (err, userTokenDetails){
+                                                UsertokenService.createToken(results.id,deviceId,device_IMEI,device_Type, function (err, userTokenDetails){
                                                     if (err){
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                     }

@@ -36,6 +36,10 @@ module.exports = {
                 type: 'string'
                 
         },
+        device_Type: {
+                type: 'string'
+                
+        },
         expiryDate: {
                 type: 'datetime',
         },

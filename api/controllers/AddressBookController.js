@@ -50,7 +50,7 @@ module.exports = {
                         console.log(req.param('fb_array'))
 
                         console.log("---------------------------------------FB array ----After Parse--------------------------PPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                        console.log(JSON.parse(req.param('fb_array')));
+                        //console.log(JSON.parse(req.param('fb_array')));
                         //console.log(phonecontacts);
                          //fbUser                = JSON.parse(req.param('fb_array'));
 

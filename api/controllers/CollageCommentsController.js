@@ -105,35 +105,7 @@ module.exports = {
 																					console.log(mention_user_id)
 																					 
                                                                                         
-                                                                                    });  
-                                                                                    
-																				   User_token.findOne({id:collageDetails.userId}).exec(function (err, resultData){
-																					   if(err)
-																					   {
-																						   console.log("error")
-																						   callback();
-																					   }
-																					   else
-																						{
-																							console.log(resultData.device_Type)
-																							/*var data = {NotificationID:7,loginUserId:userId,collage_id:collageId,tagged_users:mention_user_id,loginName:tokenCheck.tokenDetails.name,collageUserId:collageDetails.userId,device_type:resultData.device_Type};
-																							NotificationService.nTFnAction(data,device_type, function(err, ntfnSend) {
-																									if(err)
-																									{
-																										console.log("Error in Push Notification Sending")
-																										console.log(err)
-																										callback();
-																									}
-																									else
-																									{
-																										console.log("Push notification result")
-																										console.log(ntfnSend)
-																										console.log("Push Notification sended")
-																										callback();
-																										
-																									}
-																							});  */
-																						
+                                                                                    });    
                                                                                     var values ={
                                                                                             notificationTypeId  :   7,
                                                                                             userId              :   userId,
@@ -205,7 +177,7 @@ module.exports = {
 																														var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
 																														var switchKey   =  device_type;
 																														
-																														NotificationService.NtfnInAPP(data,resultData.device_Type, function(err, ntfnSend) {
+																														NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
 																																if(err)
 																																{
 																																	console.log("Error in Push Notification Sending")
@@ -232,9 +204,6 @@ module.exports = {
 
 																						   }
 																					   }); 
-																					 }	
-																				 });  
-																					   
 																				}
 																			});
 																		}

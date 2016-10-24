@@ -43,7 +43,9 @@ module.exports = {
      ==================================================================================================================================== */
 
         createDither:  function (req, res) {
-            console.log("createDither   api ++++++++++++++++++++++++++++++++++++++++++");
+             return res.json(200, {status: 2, status_type: 'Error', message: 'This url changed please contact android team',
+                                    });
+           /* console.log("createDither   api ++++++++++++++++++++++++++++++++++++++++++");
             console.log(req.param("REQUEST"));
             //console.log(req.param("collage_image"));
             if(!req.param("REQUEST") ){
@@ -306,22 +308,6 @@ module.exports = {
                                                                                console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")
                                                                                console.log(factor)
                                                                                tagNotifyArray.push(factor);
-                                                                              /* User.findOne({id:factor}).exec(function (err, notifySettings){
-                                                                                   if(err)
-                                                                                   {
-                                                                                       console.log(err)
-                                                                                   }
-                                                                                   else
-                                                                                   {
-                                                                                     console.log("???????---Result----?????????")
-                                                                                     console.log(notifySettings)
-                                                                                     if(notifySettings.notifyOpinion==1)
-                                                                                     {
-                                                                                      tagNotifyArray.push(factor);
-                                                                                     }
-
-                                                                                   }
-                                                                                });*/
 
                                                                             });
                                                                             console.log("++++++++++++++Ntfn++++22222+++++++++++++++++++++++++++++++")
@@ -556,7 +542,7 @@ module.exports = {
                                 }
             });
 
-        }
+        }*/
 
         },
 

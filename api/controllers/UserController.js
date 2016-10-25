@@ -199,18 +199,19 @@ module.exports = {
                                                                                     console.log("parallel 3")
                                                                                     console.log(req.param('mobile_number'))
                                                                                     var mobile_number  = req.param('mobile_number');
-                                                                                    var validNo1       = mobile_number.replace('-','');
-                                                                                    var validNo2       = mobile_number.split('-').pop();
-                                                                                    var validNo3       = '0'+validNo2;
-                                                                                    var validNo4       = validNo1.replace('+','');
-                                                                                    console.log("nnnnnnnnnnnnnnnnnnn"+validNo1)
-                                                                                    console.log("nnnnnnnnnnnnnnnnnnn"+validNo2)
-                                                                                    console.log("nnnnnnnnnnnnnnnnnnn"+validNo3)
-                                                                                    console.log("nnnnnnnnnnnnnnnnnnn"+validNo4)
-                                                                                    var query  = 'SELECT userId FROM invitation where phoneNumber="'+validNo1+'" OR  phoneNumber="'+validNo2+'" OR  phoneNumber="'+validNo4+'" OR phoneNumber="'+validNo3+'" ';
-                                                                                    console.log(query)
-                                                                                    Invitation.query(query, function(err, selectContacts){
-                                                                                        //Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
+                                                                                    //var validNo1       = mobile_number.replace('-','');
+                                                                                    //var validNo2       = mobile_number.split('-').pop();
+                                                                                    //var validNo3       = '0'+validNo2;
+                                                                                    //var validNo4       = validNo1.replace('+','');
+                                                                                   // console.log("nnnnnnnnnnnnnnnnnnn"+validNo1)
+                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo2)
+                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo3)
+                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo4)
+                                                                                    //var query  = 'SELECT userId FROM invitation where phoneNumber="'+validNo1+'" OR  phoneNumber="'+validNo2+'" OR  phoneNumber="'+validNo4+'" OR phoneNumber="'+validNo3+'" ';
+                                                                                    //var query  = 'SELECT userId FROM invitation where phoneNumber = "'+mobile_number+'"';
+                                                                                    //console.log(query)
+                                                                                    //Invitation.query(query, function(err, selectContacts){
+                                                                                    Invitation.find({phoneNumber : mobile_number}).exec(function (err, selectContacts){
                                                                                                 if(err){
                                                                                                     console.log(err);
                                                                                                     callback();
@@ -224,14 +225,17 @@ module.exports = {
                                                                                                                     contact_arr.push(factor.userId);
                                                                                                         });
                                                                                                         //Notification Log Insertion
-                                                                                                        var phonecontacts       = selectContacts;
-                                                                                                        var phoneContactsArray  = [];
-                                                                                                        phonecontacts.forEach(function(factor, index){
+                                                                                                        //var phonecontacts       = selectContacts;
+                                                                                                        var phoneContactsArray        = [];
+                                                                                                        var invited_collage_Array     = [];
+                                                                                                        selectContacts.forEach(function(factor, index){
                                                                                                             User.findOne({id:factor.userId}).exec(function (err, notifySettings){
                                                                                                                 if(notifySettings.notifyContact==1){
                                                                                                                     phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
                                                                                                                 }
                                                                                                             });
+                                                                                                            //invited_collage_Array.push(collageId : factor.collageId, userId: results.id);
+                                                                                                            invited_collage_Array.push("("+factor.collageId+",'"+results.id+"', now(), now())");
                                                                                                         });
                                                                                                         NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification){
                                                                                                             if(err){
@@ -260,58 +264,93 @@ module.exports = {
                                                                                                                             console.log(err);
                                                                                                                             callback();
                                                                                                                     }else{
-                                                                                                                        //-----------PUSH Notification------------------------------------
-                                                                                                                        var contactNtfyPush = [];
-                                                                                                                        contact_arr.forEach(function(factor, index){
-                                                                                                                            User.findOne({id:factor}).exec(function (err, notifySettings){
-                                                                                                                                    if(err){
-                                                                                                                                        console.log(err)
-                                                                                                                                    }else{
-                                                                                                                                        console.log("???????---Result----?????????")
-                                                                                                                                        console.log(notifySettings.notifyContact)
-                                                                                                                                        if(notifySettings.notifyContact){
-                                                                                                                                            console.log(factor)
-                                                                                                                                            contactNtfyPush.push(factor);
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                            });
-                                                                                                                        });
-                                                                                                                        User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId){
-                                                                                                                        //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+                                                                                                                        //Tags.create({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation){
+                                                                                                                        var query = "INSERT INTO tags"+
+                                                                                                                                    " (collageId, userId, createdAt, updatedAt)"+
+                                                                                                                                    " VALUES"+invited_collage_Array;
+                                                                                                                        console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+                                                                                                                        console.log(invited_collage_Array);
+                                                                                                                        console.log(query);
+                                                                                                                        console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+                                                                                                                        Tags.query(query, function(err, insertTagsResult){
                                                                                                                             if(err){
-                                                                                                                                  console.log(err);
-                                                                                                                                  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+                                                                                                                                console.log(err);
+                                                                                                                                callback();
                                                                                                                             }else{
-                                                                                                                                var message     =  'signup Notification';
-                                                                                                                                var ntfn_body   =   results.name +" Joined on Dither";
-                                                                                                                                //var device_id   =  getDeviceId.deviceId;
-                                                                                                                                getDeviceId.forEach(function(factor, index){
-                                                                                                                                    deviceId_arr.push(factor.deviceId);
-                                                                                                                                });
-                                                                                                                                console.log(results)
-                                                                                                                                if(!deviceId_arr.length){
-                                                                                                                                        callback();
-                                                                                                                                }else{
-                                                                                                                                    //device_id       =  device_id.split(',');sails.log.debug(device_id);
-                                                                                                                                    var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
-                                                                                                                                    //var switchKey   =  device_type;
-                                                                                                                                    console.log(device_type)
-                                                                                                                                    NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend){
-                                                                                                                                        if(err){
-                                                                                                                                            console.log("Error in Push Notification Sending")
-                                                                                                                                            console.log(err)
-                                                                                                                                            callback();
-                                                                                                                                        }else{
-                                                                                                                                            console.log("Push notification result")
-                                                                                                                                            console.log(ntfnSend)
-                                                                                                                                            console.log("Push Notification sended")
-                                                                                                                                            callback();
-                                                                                                                                        }
+                                                                                                                                    //----------PUSH Notification------------------------------------
+                                                                                                                                    var contactNtfyPush = [];
+                                                                                                                                    contact_arr.forEach(function(factor, index){
+                                                                                                                                        User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                                                                                if(err){
+                                                                                                                                                    console.log(err)
+                                                                                                                                                    callback();
+                                                                                                                                                }else{
+                                                                                                                                                    console.log("???????---Result----?????????")
+                                                                                                                                                    console.log(notifySettings.notifyContact)
+                                                                                                                                                    if(notifySettings.notifyContact){
+                                                                                                                                                        console.log(factor)
+                                                                                                                                                        contactNtfyPush.push(factor);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                        });
                                                                                                                                     });
-                                                                                                                                }
-                                                                                                                            //------------------------------
+
+                                                                                                                                    contact_arr.forEach(function(factor, index){
+                                                                                                                                        User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                                                                                if(err){
+                                                                                                                                                    console.log(err)
+                                                                                                                                                    callback();
+                                                                                                                                                }else{
+                                                                                                                                                    console.log("???????---Result----?????????")
+                                                                                                                                                    console.log(notifySettings.notifyContact)
+                                                                                                                                                    if(notifySettings.notifyContact){
+                                                                                                                                                        console.log(factor)
+                                                                                                                                                        contactNtfyPush.push(factor);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                        });
+                                                                                                                                    });
+
+                                                                                                                                    User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId){
+                                                                                                                                    //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+                                                                                                                                        if(err){
+                                                                                                                                              console.log(err);
+                                                                                                                                              callback();
+                                                                                                                                              //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+                                                                                                                                        }else{
+                                                                                                                                            var message     =  'signup Notification';
+                                                                                                                                            var ntfn_body   =   results.name +" Joined on Dither";
+                                                                                                                                            //var device_id   =  getDeviceId.deviceId;
+                                                                                                                                            getDeviceId.forEach(function(factor, index){
+                                                                                                                                                deviceId_arr.push(factor.deviceId);
+                                                                                                                                            });
+                                                                                                                                            console.log(results)
+                                                                                                                                            if(!deviceId_arr.length){
+                                                                                                                                                    callback();
+                                                                                                                                            }else{
+                                                                                                                                                //device_id       =  device_id.split(',');sails.log.debug(device_id);
+                                                                                                                                                var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
+                                                                                                                                                //var switchKey   =  device_type;
+                                                                                                                                                console.log(device_type)
+                                                                                                                                                NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend){
+                                                                                                                                                    if(err){
+                                                                                                                                                        console.log("Error in Push Notification Sending")
+                                                                                                                                                        console.log(err)
+                                                                                                                                                        callback();
+                                                                                                                                                    }else{
+                                                                                                                                                        console.log("Push notification result")
+                                                                                                                                                        console.log(ntfnSend)
+                                                                                                                                                        console.log("Push Notification sended")
+                                                                                                                                                        callback();
+                                                                                                                                                    }
+                                                                                                                                                });
+                                                                                                                                            }
+                                                                                                                                        //------------------------------
+                                                                                                                                        }
+                                                                                                                                    });//getDeviceId
+
                                                                                                                             }
-                                                                                                                        });
+                                                                                                                        });  //Insert to tags table
                                                                                                                     }
                                                                                                                 });
                                                                                                             }

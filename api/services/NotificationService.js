@@ -122,9 +122,7 @@ module.exports = {
 		console.log(device_type)
 		console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
 		console.log(data)
-		if(device_type.length==1)
-		{
-			
+		
 				var switchKey   =  device_type[0];
 				switch(switchKey){
 						case 'ios' :
@@ -170,8 +168,8 @@ module.exports = {
 
 
 				}
-		}
-		else
+		
+		/*else
 		{
 			async.series([
                                                                         
@@ -222,7 +220,7 @@ module.exports = {
 					}
 			});
 			
-		}
+		}*/
 		
 	}
 	

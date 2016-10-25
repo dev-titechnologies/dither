@@ -112,6 +112,7 @@ module.exports = {
 																					   }
 																					   else
 																						{
+																							console.log(collageDetails.userId)
 																							console.log("********device_type*******")
 																							console.log(resultData)
 																							var dev_type = [];

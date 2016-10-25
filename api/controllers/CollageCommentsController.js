@@ -105,14 +105,15 @@ module.exports = {
                                                                                         
                                                                                     });  
                                                                                     
-																				   /*User_token.find({id:collageDetails.userId}).exec(function (err, resultData){
+                                                                                    
+																				   User_token.find({id:collageDetails.userId}).exec(function (err, resultData){
 																					   if(err)
 																					   {
 																						   console.log("error")
 																						   callback();
 																					   }
 																					   else
-																						{*/
+																						{
 																							console.log("********device_type*******")
 																							console.log(resultData.length)
 																							var dev_type = [];
@@ -226,8 +227,8 @@ module.exports = {
 
 																														}
 
-																													//}
-																												  //});
+																													}
+																												  });
 
 																										   }
 																									   }); 

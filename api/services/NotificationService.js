@@ -16,7 +16,7 @@ module.exports = {
 	{
 		console.log("Push Notification Apn")
 		ios = PusherService('ios', {
-			device: [data.device_id], // Array of string with device tokens
+			device: data.device_id, // Array of string with device tokens
 			provider: {
 				cert: 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
 				key: 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
@@ -50,7 +50,7 @@ module.exports = {
 			
 	
 			ios
-			  .send([data.device_id], {
+			  .send(data.device_id, {
 				body: data.NtfnBody
 			  })
 			  .then(console.log.bind(console))
@@ -119,10 +119,12 @@ module.exports = {
 	{
 		console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{")
 		console.log("**************device_Type******************")
-		console.log(device_type)
+		console.log(device_type.length)
 		console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
 		console.log(data)
-		
+		if(device_type.length==1)
+		{
+			
 				var switchKey   =  device_type[0];
 				switch(switchKey){
 						case 'ios' :
@@ -168,8 +170,8 @@ module.exports = {
 
 
 				}
-		
-		/*else
+		}
+		else
 		{
 			async.series([
                                                                         
@@ -220,7 +222,7 @@ module.exports = {
 					}
 			});
 			
-		}*/
+		}
 		
 	}
 	

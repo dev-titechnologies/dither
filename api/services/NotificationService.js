@@ -15,8 +15,12 @@ module.exports = {
 	pushNtfnApn: function(data, callback) 
 	{
 		console.log("Push Notification Apn")
+		console.log()
+		var ntfnArr = [];
+		ntfnArr	 	= data.device_id;
+		console.log(data.device_id)
 		ios = PusherService('ios', {
-			device: [data.device_id], // Array of string with device tokens
+			device: [], // Array of string with device tokens
 			provider: {
 				cert: 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
 				key: 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
@@ -50,7 +54,7 @@ module.exports = {
 			
 	
 			ios
-			  .send([data.device_id], {
+			  .send(ntfnArr, {
 				body: data.NtfnBody
 			  })
 			  .then(console.log.bind(console))

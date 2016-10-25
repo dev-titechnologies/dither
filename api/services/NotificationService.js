@@ -119,9 +119,16 @@ module.exports = {
 	{
 		console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{")
 		console.log("**************device_Type******************")
-		console.log(device_type.length)
+		//console.log(device_type.length)
 		console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
 		console.log(data)
+		if(device_type==undefined)
+		{
+			callback();
+		}
+		else
+		{
+		
 		if(device_type.length==1)
 		{
 			
@@ -223,6 +230,7 @@ module.exports = {
 			});
 			
 		}
+	  }	
 		
 	}
 	

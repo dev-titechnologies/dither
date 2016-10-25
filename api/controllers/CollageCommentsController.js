@@ -50,7 +50,6 @@ module.exports = {
                                         if(!collageDetails){
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage found'});
                                         }else{
-											
                                             CollageComments.create(values).exec(function(err, results){
                                                     if(err){
                                                             console.log(err);
@@ -67,11 +66,6 @@ module.exports = {
                                                                                         //subscribers     : sails.sockets.subscribers(roomName),
                                                                                         //socket          : sails.sockets.rooms()
                                                                                         });
-                                                                                        
-                                                                                        
-                                                                                 
-                                                                                        
-                                                                                        
                                                     //-----------Notification log Insertion----------------
                                                         CollageComments.find({collageId:collageId}).exec(function(err, commentDetails){
                                                             if(err){
@@ -107,138 +101,105 @@ module.exports = {
 																					console.log(mention_user_id)
 																					 
                                                                                         
-                                                                                    });  
-                                                                                    
-																				   User_token.find({userId:collageDetails.userId}).exec(function (err, resultData){
-																					   if(err)
-																					   {
-																						   console.log("error")
-																						   callback();
-																					   }
-																					   else
-																						{
-																							console.log(collageDetails.userId)
-																							console.log("********device_type*******")
-																							console.log(resultData)
-																							var dev_type = [];
-																							
-																									var values =	{
-																														notificationTypeId  :   7,
-																														userId              :   userId,
-																														collage_id          :   collageId,
-																														tagged_users        :   mention_user_id
-																											
-																													}
-																									   
-																									NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-																										   if(err)
-																										   {
-																											   console.log(err)
-																											   callback();
-																											   //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
-																										   }
-																										   else
-																										   {
-																													//console.log(createdNotificationTags)
-																											   
-																													User_token.find({userId: mention_user_id}).exec(function (err, getDeviceId) {
-																													//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
-																													if(err)
-																													{
-																														  console.log(err);
-																														  callback();
-																														  //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
-																													}
-																													else
-																													{
+                                                                                    });    
+                                                                                    var values ={
+                                                                                            notificationTypeId  :   7,
+                                                                                            userId              :   userId,
+                                                                                            collage_id          :   collageId,
+                                                                                            tagged_users        :   mention_user_id
+                                                                                            
+                                                                                        }
+                                                                                       
+                                                                                    NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+																						   if(err)
+																						   {
+																							   console.log(err)
+																							   callback();
+																							   //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
+																						   }
+																						   else
+																						   {
+																									console.log(createdNotificationTags)
+																							   
+																									User_token.find({userId: mention_user_id}).exec(function (err, getDeviceId) {
+																									//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+																									if(err)
+																									{
+																										  console.log(err);
+																										  callback();
+																										  //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+																									}
+																									else
+																									{
 
-																														var message     =  'Mention Notification';
-																														var ntfn_body   =   tokenCheck.tokenDetails.name +" has Mentioned You In a Dither";
-																														//var device_id   =  getDeviceId.deviceId;
-																														var mention_deviceId_arr = [];
+																										var message     =  'Mention Notification';
+																										var ntfn_body   =   tokenCheck.tokenDetails.name +" has Mentioned You In a Dither";
+																										//var device_id   =  getDeviceId.deviceId;
+																										var mention_deviceId_arr = [];
 
-																														getDeviceId.forEach(function(factor, index){
+																										getDeviceId.forEach(function(factor, index){
 
-																															mention_deviceId_arr.push(factor.deviceId);
+																											mention_deviceId_arr.push(factor.deviceId);
 
-																														});
+																										});
 
-																														//console.log(results)
+																										console.log(results)
 
-																														if(!mention_deviceId_arr.length){
-																																callback();
-																																//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
-																														}else{
-																																//device_id       =  device_id.split(',');sails.log.debug(device_id);
-																																
-																																
-																															 User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
+																										if(!mention_deviceId_arr.length){
+																												callback();
+																												//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
+																										}else{
+																												//device_id       =  device_id.split(',');sails.log.debug(device_id);
+																												
+																												
+																											 User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
+																												if(err)
+																												{
+																													console.log(err)
+																													callback();
+																													 
+																												}
+																												else{
+																												   if(notifySettings.notifyMention==0){
+																													   
+																														console.log("commentMention Option turn off")
+																														callback();
+																													   
+																												   }
+																												   else{
+																												
+																												
+																												
+																														var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
+																														var switchKey   =  device_type;
+																														
+																														NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
 																																if(err)
 																																{
+																																	console.log("Error in Push Notification Sending")
 																																	console.log(err)
 																																	callback();
-																																	 
 																																}
-																																else{
-																																   if(notifySettings.notifyMention==0){
-																																	   
-																																		console.log("commentMention Option turn off")
-																																		callback();
-																																	   
-																																   }
-																																   else{
-																																
-																																	  if(!resultData.length)
-																																		{
-																																			console.log("resultdata")
-																																			callback();
-																																		}
-																																		else{
-																																			
-																																		resultData.forEach(function(factor, index){
+																																else
+																																{
+																																	console.log("Push notification result")
+																																	console.log(ntfnSend)
+																																	console.log("Push Notification sended")
+																																	callback();
+																																	
+																																}
+																														});
+																											        }
+																											   }
+																										   });	
 
-																																			dev_type.push(factor.device_Type);
+																										}
 
-																																		});
-																																		console.log("**************device_type arrayyy**********************")
-																																		console.log(dev_type)
-																																		
-																																		var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id,dev_type:dev_type};
-																																		//var switchKey   =  device_type;
-																																		
-																																		NotificationService.NtfnInAPP(data,dev_type, function(err, ntfnSend) {
-																																				if(err)
-																																				{
-																																					console.log("Error in Push Notification Sending")
-																																					console.log(err)
-																																					callback();
-																																				}
-																																				else
-																																				{
-																																					console.log("Push notification result")
-																																					console.log(ntfnSend)
-																																					console.log("Push Notification sended")
-																																					callback();
-																																					
-																																				}
-																																		});
-																																		
-																																		
-																																	  }
-																																	}
-																															   }
-																														   });	
+																									}
+																								  });
 
-																														}
-
-																													}
-																												  });
-
-																										   }
-																									   }); 
-																					 }	
-																				 });  
-																					   
+																						   }
+																					   }); 
 																				}
 																			});
 																		}
@@ -284,17 +245,8 @@ module.exports = {
 																	   if(userId   !=  collageDetails.userId)
 																		{
 																			
-																		console.log("inserted comments  Different User Comment");
-																		console.log("own comment not included")
-																				
-																		User_token.find({userId:collageDetails.userId}).exec(function (err, resultData){
-																		   if(err)
-																		   {
-																			   console.log("error")
-																			   callback();
-																		   }
-																		   else	{	
-																				
+																				console.log("inserted comments  Different User Comment");
+																				console.log("own comment not included")
 																				var values ={
 																								notificationTypeId  :   3,
 																								userId              :   userId,
@@ -388,9 +340,6 @@ module.exports = {
 																						 });
 																					   }
 																				 });
-																				}
-																			 });	
-																				 
 																			}else{
 																				 console.log("same")
 																				 

@@ -895,6 +895,36 @@ module.exports = {
                 });
         },
 
+ /* ==================================================================================================================================
+               E-mail
+        ==================================================================================================================================== */
+        select_dither : function (req, res) {
+                        console.log("------------------------- SELECT DITHER -----------------");
+                        console.log(req.params.all());
+                        if(!req.param("id")){
+                                    return res.json(200, {status: 2, status_type: 'FAILURE' , message: 'Please pass an id',
+
+                                                });
+                        }else{
+                                var query = "SELECT * FROM collage where id = "+req.param("id");
+                                Collage.query(query, function(err, results) {
+                                        if(err){
+                                            console.log(err);
+                                            console.log("Error in select_dither");
+                                            //callback();
+                                        }else{
+                                            console.log("Select dither success ++++++++++++");
+                                            console.log(results);
+                                             return res.json(200, {status: 1, status_type: 'SUCCESS' , message: 'Successfully got',
+                                                          results: results,
+
+                                                });
+
+                                        }
+                                });
+                        }
+        },
+
 };
 
 

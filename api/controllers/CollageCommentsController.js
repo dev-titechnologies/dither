@@ -21,13 +21,13 @@ module.exports = {
                     var comment                     =     req.param("comment_msg");
                     var device_type                 =     req.get('device_type');
                     var mention_user_id				=     [];
-					var	mention_arr					=     req.param("mentions");
+					//var	mention_arr					=     req.param("mentions");
 
 					var profilePic_path_assets 		=     req.options.file_path.profilePic_path_assets;
 					var server_baseUrl         		=     req.options.server_baseUrl;
 					var server_image_baseUrl   		=     req.options.settingsKeyValue.CDN_IMAGE_URL;
 					var profilePic_path        		=     server_baseUrl + req.options.file_path.profilePic_path;
-					//var	mention_arr					=    ['test_user','anu_r'];
+					var	mention_arr					=    ['test_user','anu_r'];
 					var profile_image = '';
 					console.log("token details")
 					console.log(tokenCheck)
@@ -50,9 +50,6 @@ module.exports = {
                                         if(!collageDetails){
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage found'});
                                         }else{
-											var query = "INSERT INTO collageComments "
-											var query = "INSERT INTO `collageComments` (`id`, `collageId`, `userId`, `comment`, `createdAt`, `updatedAt`) VALUES (NULL, '"+collageId+"', '"+userId+"', '"+comment+"', NOW(), NOW())";
-
 											
                                             CollageComments.create(values).exec(function(err, results){
                                                     if(err){
@@ -107,7 +104,7 @@ module.exports = {
                                                                                         
                                                                                     });  
                                                                                     
-																				   User_token.find({id:collageDetails.userId}).exec(function (err, resultData){
+																				   User_token.find({userId:collageDetails.userId}).exec(function (err, resultData){
 																					   if(err)
 																					   {
 																						   console.log("error")
@@ -116,16 +113,16 @@ module.exports = {
 																					   else
 																						{
 																							console.log("********device_type*******")
-																							console.log(resultData.length)
+																							console.log(resultData)
 																							var dev_type = [];
 																							
-																									var values ={
-																											notificationTypeId  :   7,
-																											userId              :   userId,
-																											collage_id          :   collageId,
-																											tagged_users        :   mention_user_id
+																									var values =	{
+																														notificationTypeId  :   7,
+																														userId              :   userId,
+																														collage_id          :   collageId,
+																														tagged_users        :   mention_user_id
 																											
-																										}
+																													}
 																									   
 																									NotificationLog.create(values).exec(function(err, createdNotificationTags) {
 																										   if(err)
@@ -136,7 +133,7 @@ module.exports = {
 																										   }
 																										   else
 																										   {
-																													console.log(createdNotificationTags)
+																													//console.log(createdNotificationTags)
 																											   
 																													User_token.find({userId: mention_user_id}).exec(function (err, getDeviceId) {
 																													//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
@@ -160,7 +157,7 @@ module.exports = {
 
 																														});
 
-																														console.log(results)
+																														//console.log(results)
 
 																														if(!mention_deviceId_arr.length){
 																																callback();
@@ -197,7 +194,7 @@ module.exports = {
 																																			dev_type.push(factor.device_Type);
 
 																																		});
-																																		console.log("device_type arrayyy")
+																																		console.log("**************device_type arrayyy**********************")
 																																		console.log(dev_type)
 																																		
 																																		var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id,dev_type:dev_type};

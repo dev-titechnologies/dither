@@ -1391,6 +1391,7 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     console.log("Edit Dithers ===== api");
+                    console.log(req.params.all());
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
                     console.log(req.param("dither_location"));
@@ -1409,7 +1410,8 @@ module.exports = {
 
                             var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
                             var taggedUserArrayFinal        =      [];
-                            var inviteFriends               =      JSON.parse(invite_friends_NUM);
+                            //var inviteFriends               =      JSON.parse(invite_friends_NUM);
+                            var inviteFriends               =      invite_friends_NUM;
                             var inviteFriendsArray          =      [];
                             var invitedFriends_NUM_Final;
                             var collage_results             =      "";

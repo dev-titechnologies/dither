@@ -16,7 +16,7 @@ module.exports = {
 	{
 		console.log("Push Notification Apn")
 		ios = PusherService('ios', {
-			device: data.device_id, // Array of string with device tokens
+			device: [device_id], // Array of string with device tokens
 			provider: {
 				cert: 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
 				key: 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
@@ -50,7 +50,7 @@ module.exports = {
 			
 	
 			ios
-			  .send(data.device_id, {
+			  .send([device_id], {
 				body: data.NtfnBody
 			  })
 			  .then(console.log.bind(console))
@@ -62,7 +62,7 @@ module.exports = {
 	
 	//-----------ANDROID---------------------------------
 	
-	pushNtfnGcm: function(data, callback) 
+	pushNtfnGcm: function(data,device_id, callback) 
 	{
 		
 		console.log("Push Notification GCM")
@@ -96,7 +96,7 @@ module.exports = {
 		console.log("device arrayyyyyyyyyyyyyyyyy")
 		console.log(ntfnArr)
 		android
-			.send(ntfnArr, {
+			.send([device_id], {
              		body: details
 				})
 			.then(console.log.bind(console))
@@ -122,57 +122,82 @@ module.exports = {
 		console.log(device_type)
 		console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
 		console.log(data)
+		var arr = data.device_id;
 		
-			
-					var switchKey   =  device_type;
-					switch(switchKey){
-							case 'ios' :
-										NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-											if(err)
-											{
-												console.log("Error in Push Notification Sending")
-												console.log(err)
-												callback();
-											}
-											else
-											{
-												console.log("Push notification result i nIOS")
-												
-												callback();
-												
-											}
-										});
-							break;
-
-							case 'android' :
-										NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-											if(err)
-											{
-												console.log("Error in Push Notification Sending")
-												console.log(err)
-												callback();
-											}
-											else
-											{
-												console.log("Push notification result IN Android")
-												console.log(ntfnSend)
-												console.log("Push Notification sended")
-												callback();
-											}
-										});
-							break;
-							default:
-										callback();
-
-							break;
-							
-
-
+		console.log(arr)
+		if(arr)
+		{
+			arr.forEach(function(factor, index)
+			{
+				User_token.findOne({deviceId:factor }).exec(function (err, getDeviceType){
+					if(err)
+					{
+						console.log("error")
 					}
-			
-		
-		
-		
+					else
+					{
+						console.log(getDeviceType)
+						var deviceId	=  factor;
+						var switchKey   =  getDeviceType.device_Type;
+						switch(switchKey){
+								case 'ios' :
+											NotificationService.pushNtfnApn(data,deviceId, function(err, ntfnSend) {
+												if(err)
+												{
+													console.log("Error in Push Notification Sending")
+													console.log(err)
+													callback();
+												}
+												else
+												{
+													console.log("Push notification result i nIOS")
+													
+													callback();
+													
+												}
+											});
+								break;
+
+								case 'android' :
+											NotificationService.pushNtfnGcm(data,deviceId, function(err, ntfnSend) {
+												if(err)
+												{
+													console.log("Error in Push Notification Sending")
+													console.log(err)
+													callback();
+												}
+												else
+												{
+													console.log("Push notification result IN Android")
+													console.log(ntfnSend)
+													console.log("Push Notification sended")
+													callback();
+												}
+											});
+								break;
+								default:
+											callback();
+
+								break;
+								
+
+
+						}
+						
+						
+					}
+				});
+				
+
+			});
+				
+		}
+		else
+		{
+			callback();
+		}
+					
+	
 	}
 	
 	

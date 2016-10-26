@@ -137,7 +137,9 @@ module.exports = {
 					}
 					else
 					{
-						console.log(getDeviceType)
+					 console.log(getDeviceType)
+					 if(factor!=0)
+					 {	
 						var deviceId	=  factor;
 						var switchKey   =  getDeviceType.device_Type;
 						switch(switchKey){
@@ -186,7 +188,7 @@ module.exports = {
 
 						}
 						
-						
+					}
 					}
 				});
 				

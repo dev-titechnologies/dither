@@ -402,9 +402,28 @@ module.exports = {
 
                                                                                                 if(deviceId_arr.length!=0)
                                                                                                 {
+																									
+																									
+																									
                                                                                                         var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id};
+                                                                                                        NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
+																																if(err)
+																																{
+																																	console.log("Error in Push Notification Sending")
+																																	console.log(err)
+																																	callback();
+																																}
+																																else
+																																{
+																																	console.log("Push notification result")
+																																	console.log(ntfnSend)
+																																	console.log("Push Notification sended")
+																																	callback();
+																																	
+																																}
+																														});
 
-                                                                                                        var switchKey   =  device_type;
+                                                                                                       /* var switchKey   =  device_type;
                                                                                                         switch(switchKey){
                                                                                                                 case 'ios' :
                                                                                                                             NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
@@ -449,7 +468,7 @@ module.exports = {
                                                                                                                 break;
 
 
-                                                                                                        }
+                                                                                                        }*/
 
                                                                                                 }
                                                                                                 else

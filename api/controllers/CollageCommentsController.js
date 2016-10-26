@@ -273,7 +273,8 @@ module.exports = {
 																																	notification_id            :       createdNotificationTags.id
 																																	});
 																							//-----------------------------End OF NotificationLog---------------------------------
-
+																						   console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+																						   console.log(collageDetails.userId)
 																						   User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
 																							if(err)
 																							{
@@ -282,6 +283,7 @@ module.exports = {
 																								 
 																							}
 																							else{
+																								 console.log("hh8888888888888888888888888888888888888888h")
 																								console.log(notifySettings)
 																							   if(notifySettings.notifyComment==0){
 																								   

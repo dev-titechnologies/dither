@@ -95,6 +95,7 @@ module.exports = {
 		console.log(android)
 		console.log("device arrayyyyyyyyyyyyyyyyy")
 		console.log(ntfnArr)
+		console.log(device_id)
 		android
 			.send([device_id], {
              		body: details

@@ -12,7 +12,7 @@ module.exports = {
 	
 	//-----------IOS---------------------------------	
 	
-	pushNtfnApn: function(data, callback) 
+	pushNtfnApn: function(data,device_id, callback) 
 	{
 		console.log("Push Notification Apn")
 		ios = PusherService('ios', {

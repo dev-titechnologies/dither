@@ -67,7 +67,7 @@ module.exports = {
 		
 		console.log("Push Notification GCM")
 		console.log(data)
-		console.log(data.device_id)
+		console.log(device_id)
 		console.log("counttttttttttttttttttt"+data.device_id.length)
 		var ntfnArr = [];
 		ntfnArr	 	= data.device_id;
@@ -142,6 +142,8 @@ module.exports = {
 					 {	
 						var deviceId	=  factor;
 						var switchKey   =  getDeviceType.device_Type;
+						console.log("factorrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+						console.log(deviceId)
 						switch(switchKey){
 								case 'ios' :
 											NotificationService.pushNtfnApn(data,deviceId, function(err, ntfnSend) {

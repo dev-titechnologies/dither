@@ -915,10 +915,10 @@ module.exports = {
                                         }else{
                                             console.log("Select dither success ++++++++++++");
                                             console.log(results);
-                                             return res.json(200, {status: 1, status_type: 'SUCCESS' , message: 'Successfully got',
+                                            return res.json(200, {status: 1, status_type: 'SUCCESS' , message: 'Successfully got',
                                                           results: results,
 
-                                                });
+                                            });
 
                                         }
                                 });

@@ -15,6 +15,7 @@ module.exports = {
 	pushNtfnApn: function(data,device_id, callback) 
 	{
 		console.log("Push Notification Apn")
+		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
 		ios = PusherService('ios', {
 			device: [device_id], // Array of string with device tokens
 			provider: {
@@ -46,12 +47,12 @@ module.exports = {
 			  }
 			});
 			
-			console.log(ios)
+			//console.log(ios)
 			
 	
 			ios
 			  .send([device_id], {
-				body: data.NtfnBody
+				body: details
 			  })
 			  .then(console.log.bind(console))
 			  .catch(console.error.bind(console));

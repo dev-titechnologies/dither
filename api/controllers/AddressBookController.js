@@ -18,8 +18,8 @@ module.exports = {
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var server_baseUrl              =     req.options.server_baseUrl;
                 //console.log(tokenCheck);
-                //var phoneContactsArray          =     [];
-                //var fbUserArray                 =     [];
+                var phoneContactsArray          =     [];
+                var fbUserArray                 =     [];
                 //var phoneContactsArray1         =     [];
                 //var device_type                 =     req.get('device_type');
                 //var phonecontacts               =     [];

@@ -1447,7 +1447,7 @@ module.exports = {
                                                             console.log("++++++++++++++ -------------- taggedUserArray -------------- +++++++++++++  STARTS");
                                                             console.log(taggedUserArray);
                                                             console.log("++++++++++++++ ---------------- taggedUserArray -------------- +++++++++++++  ENDS");
-                                                            if(taggedUserArray.length != 0){
+                                                            if(taggedUserArray.length){
                                                                     taggedUserArray.forEach(function(factor, index){
                                                                             var taggedUser_roomName  = "socket_user_"+factor;
                                                                             sails.sockets.broadcast(taggedUser_roomName,{
@@ -1522,7 +1522,7 @@ module.exports = {
                                                                                 " UNION"+
                                                                                 " SELECT"+
                                                                                 " fbf.userId, fbf.ditherUsername, usr.name"+
-                                                                                " FROM addressBook fbf"+
+                                                                                " FROM fbFriends fbf"+
                                                                                 " INNER JOIN user usr ON usr.id = fbf.userId"+
                                                                                 " LEFT JOIN tags tg ON tg.userId = usr.id"+
                                                                                 " LEFT JOIN collage clg ON clg.id = tg.collageId"+
@@ -1542,7 +1542,7 @@ module.exports = {
                                                                                     console.log(taggedUsersFinalResults);
                                                                                     console.log(taggedUsersFinalResults.length);
 
-                                                                                    if(taggedUsersFinalResults != 0){
+                                                                                    if(taggedUsersFinalResults){
                                                                                         taggedUsersFinalResults.forEach(function(factor, index){
                                                                                                 console.log("factor ------------))))))))))))))))======================");
                                                                                                 console.log(factor);
@@ -1550,7 +1550,7 @@ module.exports = {
                                                                                         });
                                                                                     }
 
-                                                                                    if(taggedUserArray.length !=0){
+                                                                                    if(taggedUserArray.length){
                                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                                     //tagNotifyArray.push({id:factor.user_id});
                                                                                                     tagNotifyArray.push(factor.user_id);

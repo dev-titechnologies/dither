@@ -282,6 +282,7 @@ module.exports = {
 																								 
 																							}
 																							else{
+																								console.log(notifySettings)
 																							   if(notifySettings.notifyComment==0){
 																								   
 																									console.log("comment Option turn off")

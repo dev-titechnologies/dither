@@ -146,13 +146,13 @@ module.exports = {
 												{
 													console.log("Error in Push Notification Sending")
 													console.log(err)
-													callback();
+													//callback();
 												}
 												else
 												{
 													console.log("Push notification result i nIOS")
 													
-													callback();
+													//callback();
 													
 												}
 											});
@@ -164,19 +164,20 @@ module.exports = {
 												{
 													console.log("Error in Push Notification Sending")
 													console.log(err)
-													callback();
+													//callback();
 												}
 												else
 												{
 													console.log("Push notification result IN Android")
 													console.log(ntfnSend)
 													console.log("Push Notification sended")
-													callback();
+													//callback();
 												}
 											});
 								break;
 								default:
-											callback();
+											console.log("default")
+											//callback();
 
 								break;
 								
@@ -189,7 +190,7 @@ module.exports = {
 				});
 				
 
-			});
+			},callback());
 				
 		}
 		else

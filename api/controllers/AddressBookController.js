@@ -114,8 +114,8 @@ module.exports = {
                                                                         console.log(err)
                                                                         callback();
                                                                 }else{
-                                                                        //console.log("#########contactsssss resultttt################################")
-                                                                        //console.log(selectDContacts.length)
+                                                                        console.log("#########contactsssss resultttt################################")
+                                                                        console.log(selectDContacts)
                                                                         if(selectDContacts.length){
                                                                                 //updation
                                                                                 var data     = {ditherUserId:selectDContacts[0].id};
@@ -126,7 +126,7 @@ module.exports = {
                                                                                                 console.log(err)
                                                                                         }else{
                                                                                                 console.log("update recordsssss in contacts")
-                                                                                                //console.log(updatedRecords)
+                                                                                                console.log(updatedRecords)
                                                                                                 //callback();
                                                                                         }
                                                                                 });

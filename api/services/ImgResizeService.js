@@ -14,7 +14,7 @@ module.exports = {
                     im.resize({
                       //srcData: fs.readFileSync('assets/images/abc.jpg', 'binary'),
                       srcData: fs.readFileSync(imageSrc, 'binary'),
-                      width:   50
+                      width:   70
                     }, function(err, stdout, stderr){
                               if (err)
                               {

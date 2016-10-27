@@ -109,6 +109,7 @@ module.exports = {
                                                         //phonecontacts.forEach(function(factor, index){
                                                         //var query   = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
                                                         //User.query(query, function(err, selectDContacts) {
+                                                       if(factor.number){
                                                         User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
                                                                 if(err){
                                                                         console.log(err)
@@ -134,6 +135,7 @@ module.exports = {
                                                                         }
                                                                 }
                                                         });
+													  }
                                                     },callback());
                                                     //callback();
                                             }else{

@@ -419,7 +419,7 @@ module.exports = {
                                 }else{
 
                                         //delete existing token
-                                        var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"' and deviceId='"+deviceId+"'";
+                                        var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
                                         User_token.query(query, function(err, result) {
                                        // User_token.destroy({userId: results.id,deviceId:deviceId}).exec(function (err, result) {
                                             if(err){
@@ -484,7 +484,7 @@ module.exports = {
                return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token,device_id,device_imei'});
         }else{
 
-
+       
                  var query = "DELETE FROM userToken WHERE device_IMEI='"+device_IMEI+"'";
                 console.log(query)
                 User_token.query(query, function(err, result) {

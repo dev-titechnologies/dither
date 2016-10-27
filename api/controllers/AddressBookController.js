@@ -230,7 +230,7 @@ module.exports = {
 
                                 function(callback) {
 
-
+											 if(fbUser.length){
                                                 console.log("insertion fb friendssssssssssssssssssssss")
 
                                                                 var query = "INSERT INTO fbFriends"+
@@ -256,9 +256,15 @@ module.exports = {
 
                                                                         }
                                                                 });
+															}
+															else
+															{
+																callback();
+															}
                                 },
                                 function(callback) {
-
+										
+										 if(fbUser.length){
                                                console.log("updationnnnn fb friendsssssssssssssssssssssss")
                                                async.forEach(fbUser, function (factor, callback){
                                                //fbUser.forEach(function(factor, index){
@@ -297,6 +303,7 @@ module.exports = {
                                                       });
 
                                                 },callback());
+											}
                                                 //callback();
                                 },
 

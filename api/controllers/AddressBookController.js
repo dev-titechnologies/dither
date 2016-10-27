@@ -91,6 +91,7 @@ module.exports = {
                                                                 data_check1 = createdAddressBook;
                                                                 //console.log(createdAddressBook.insertId);
                                                                 console.log("createdAddressBook ?????????????????????????????????????????????");
+                                                                console.log(createdAddressBook)
                                                                 callback();
                                                             }
                                                     });

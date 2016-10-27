@@ -383,12 +383,33 @@ module.exports = {
 
 
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
+																					  
+																					var tagNtfyPush = [];
+                                                                                    tagNotifyArray.forEach(function(factor, index){
+                                                                                             User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                                   if(err)
+                                                                                                   {
+                                                                                                       console.log(err)
+                                                                                                   }
+                                                                                                   else
+                                                                                                   {
+                                                                                                     console.log("???????---Result----?????????")
+                                                                                                     console.log(notifySettings.notifyOpinion)
+                                                                                                     if(notifySettings.notifyOpinion)
+                                                                                                     {
+                                                                                                        console.log(factor)
+                                                                                                        tagNtfyPush.push(factor);
+                                                                                                     }
+
+                                                                                                   }
+                                                                                                });
+                                                                                        });
 
 
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
-                                                                                        User_token.find({userId: tagNotifyArray})
+                                                                                        User_token.find({userId: tagNtfyPush})
                                                                                             .exec(function (err, response) {
 
                                                                                                 response.forEach(function(factor, index){
@@ -421,7 +442,7 @@ module.exports = {
 																																	callback();
 																																	
 																																}
-																														});
+																										});
 
                                                                                                        /* var switchKey   =  device_type;
                                                                                                         switch(switchKey){

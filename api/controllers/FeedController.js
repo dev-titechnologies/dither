@@ -151,40 +151,6 @@ module.exports = {
 
                                                                 dataResultsObj.profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                                 
-																// ------------------------------Generate ThumbnailImage-----------------------------------------------
-																var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
-																//var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
-                                                               /* fs.exists(imageSrc, function(exists) {
-																 if (exists) {
-
-																		console.log("Image exists");
-
-																		var ext                         =     imageSrc.split('/');
-																		ext                             =     ext[ext.length-1].split('.');
-																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		console.log(imageSrc)
-																		console.log(imageDst)
-																		ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-																			if(err)
-																			{
-																				console.log(err)
-																				console.log("Error in image resizing")
-																			}
-																			else
-																			{
-																				console.log("::::::::::::::::::::::++++++++++:::::::::::::::::::::::::")
-																				console.log(imageResizeResults)
-																				dataResultsObj.profile_image	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				console.log(dataResultsObj.profile_image)
-																			}
-						
-																		});
-																		
-																		
-																	}
-																	
-																});*/		
-															
                                                                 console.log("llllllllllllllllllllllllllllllllllllllllllllll")
                                                                 console.log(dataResultsObj.profile_image)
                                                         }
@@ -199,11 +165,14 @@ module.exports = {
                                                         dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                         dataResultsObj.mainOrder                    =       i;
 
+
+
+
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
                                                         feeds              =       key.sort( predicatBy("mainOrder") );
-                                                        console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
-                                                        console.log(feeds)
+                                                       // console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
+                                                       // console.log(feeds)
                                                     }
                                                 }
                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds',

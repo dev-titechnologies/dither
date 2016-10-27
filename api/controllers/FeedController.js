@@ -154,7 +154,7 @@ module.exports = {
 																// ------------------------------Generate ThumbnailImage-----------------------------------------------
 																var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
 																//var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
-                                                                fs.exists(imageSrc, function(exists) {
+                                                               /* fs.exists(imageSrc, function(exists) {
 																 if (exists) {
 
 																		console.log("Image exists");
@@ -182,7 +182,7 @@ module.exports = {
 																		
 																	}
 																	
-																});		
+																});*/		
 															
                                                                 console.log("llllllllllllllllllllllllllllllllllllllllllllll")
                                                                 console.log(dataResultsObj.profile_image)

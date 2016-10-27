@@ -882,9 +882,9 @@ module.exports = {
 
                                         case 'new' :
                                                     offset_data_view_limit =  "> "+focus_dither_id;
-                                                    if(focus_dither_id == 0){
+                                                    //if(focus_dither_id == 0 || received_dither_type == "popular"){
                                                         focus_dither_id_0_order         =   " DESC";
-                                                    }
+                                                    //}
                                         break;
 
                                         case 'old' :
@@ -926,10 +926,10 @@ module.exports = {
                                         break;
 
                                         case 'popular' :
-                                                    query_order_same_user1      =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
+                                                    query_order_same_user1      =   " ORDER BY clg.totalVote "+focus_dither_id_0_order+", clg.createdAt "+focus_dither_id_0_order;
                                                     query_order_same_user2      =   " ORDER BY temp_clg.totalVote DESC, temp_clg.createdAt DESC";
 
-                                                    query_order_other_user1     =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
+                                                    query_order_other_user1     =   " ORDER BY clg.totalVote "+focus_dither_id_0_order+", clg.createdAt "+focus_dither_id_0_order;
                                                     query_order_other_user2     =   " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
                                                     popular_totalVote           =   " AND clg.totalVote != 0";
 
@@ -1097,6 +1097,7 @@ module.exports = {
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
                                                                     dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
                                                                     dataResultsObj.dither_like_position         =       like_position;
+                                                                    dataResultsObj.totalVote                    =       dataResults[i]["totalVote"];
                                                                     dataResultsObj.collage_id                   =       collageId_val;
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
@@ -1110,7 +1111,9 @@ module.exports = {
                                                                             recent_dithers                              =       key.sort( predicatBy("mainOrder") );
                                                                     }
                                                                     if(received_dither_type == "popular"){
-                                                                            popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                            popular_dithers                             =       key.sort( predicatBy("totalVote") ).reverse();
+                                                                            console.log("popular_dithers =====================");
+                                                                            //console.log(popular_dithers);
                                                                     }
                                                                     //recent_dithers                              =       key;
                                                                     //popular_dithers                             =       key;

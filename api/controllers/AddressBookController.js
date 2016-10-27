@@ -215,7 +215,7 @@ module.exports = {
                                                         callback();
                                             }
                             },
-                            /*function(callback) {
+                            function(callback) {
                                             console.log("-------------------------- SERIES-7 --------------------------");
                                             query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
                                                     " FROM addressBook adb"+
@@ -278,7 +278,7 @@ module.exports = {
                                                 }
                                         });
 
-                            },*/
+                            },
                             function(callback) {
                                         console.log("-------------------------- SERIES -><- 9 --------------------------");
                                         console.log("address book updated")

@@ -12,7 +12,7 @@ module.exports = {
         addUserContacts: function (req, res) {
 
                 console.log("==========================  addUserContacts  Api =-=============");
-                console.log(req.params.all());
+                //console.log(req.params.all());
                 //console.log(req.options.tokenCheck.tokenDetails.userId)
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
@@ -85,7 +85,7 @@ module.exports = {
                                                                                 //phonecontacts.forEach(function(factor, index){
                                                                                 //var query   = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
                                                                                 //User.query(query, function(err, selectDContacts) {
-                                                                                console.log(factor.number)
+                                                                                //console.log(factor.number)
                                                                                 if(factor.number){
                                                                                     User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
                                                                                             if(err){
@@ -102,9 +102,9 @@ module.exports = {
                                                                                                                             console.log(err)
                                                                                                                     }else{
                                                                                                                             console.log("update recordsssss in contacts")
-                                                                                                                            console.log(updatedRecords)
+                                                                                                                            //console.log(updatedRecords)
                                                                                                                             //callback();
-                                                                                                                            console.log("----------------SERIES 3 Success ----------------------");
+                                                                                                                            //console.log("----------------SERIES 3 Success ----------------------");
                                                                                                                     }
                                                                                                             });
                                                                                                             //invitation table Insertion
@@ -180,9 +180,10 @@ module.exports = {
                                                                                                     FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
                                                                                                         if(err){
                                                                                                             console.log(err);
+                                                                                                            callback();
                                                                                                         }else{
-                                                                                                            console.log("update recordsssss in fbbbbb");
-                                                                                                            console.log("----------------SERIES 6 Success ----------------------");
+                                                                                                            //console.log("update recordsssss in fbbbbb");
+                                                                                                            //console.log("----------------SERIES 6 Success ----------------------");
                                                                                                         }
                                                                                                     });
                                                                                                 }
@@ -220,7 +221,7 @@ module.exports = {
                                                                 }else{
                                                                         factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
                                                                         //console.log(factor.profilePic)
-                                                                        console.log("----------------SERIES 7 Success ----------------------");
+                                                                        //console.log("----------------SERIES 7 Success ----------------------");
                                                                 }
                                                             }, callback());
 
@@ -244,19 +245,19 @@ module.exports = {
                                                         callback();
                                                         //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting dither users from Fb Friends', error_details: err});
                                                 }else{
-                                                        console.log("selectedDitherFbf >>>>>>>>>>>>///////////");
-                                                        console.log(selectedDitherFbf);
+                                                        //console.log("selectedDitherFbf >>>>>>>>>>>>///////////");
+                                                        //console.log(selectedDitherFbf);
                                                         ditherUserInFbFriends = selectedDitherFbf;
                                                         ditherUserInFbFriends.forEach(function(factor, index){
                                                                 if(factor.profilePic==''){
                                                                     factor.profilePic='';
                                                                 }else{
-                                                                    console.log("----------------SERIES 8 Success ----------------------");
+                                                                   // console.log("----------------SERIES 8 Success ----------------------");
                                                                     factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
                                                                     //console.log(factor.profilePic)
                                                                 }
                                                         }, callback());
-                                                        console.log("selectedDitherFbf ++++++++++++++++++++++++++++++++++++++++++++++++");
+                                                        //console.log("selectedDitherFbf ++++++++++++++++++++++++++++++++++++++++++++++++");
 
                                                 }
                                         });
@@ -267,9 +268,9 @@ module.exports = {
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                         }else{
-                                            console.log("Success -----------------------in contacts------------------");
+                                            //console.log("Success -----------------------in contacts------------------");
                                             console.log(ditherUserInAddressBook)
-                                            console.log("Success -------------in fbbbbb----------------------------");
+                                            //console.log("Success -------------in fbbbbb----------------------------");
                                             console.log(ditherUserInFbFriends)
                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends',
                                                                   ditherPhoneContact: ditherUserInAddressBook,

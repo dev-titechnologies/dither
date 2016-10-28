@@ -31,7 +31,7 @@ module.exports = {
                 //console.log("++++++++++++++++++++++++++++++++++++ dither_id_array +++++++++++++++++++++++++++++++++++++++++++++");
 
                 if(req.isSocket){
-                    console.log("--------------------------------------    Socket_connection     --------------------------------");
+                    //console.log("--------------------------------------    Socket_connection     --------------------------------");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
 
@@ -83,7 +83,7 @@ module.exports = {
                     console.log(roomName);
                     sails.sockets.join(req.socket, roomName);*/
                 }else{
-                        console.log("--------------------------------------    Socket_connection Else Socket Disconnected    --------------------------------");
+                        //console.log("--------------------------------------    Socket_connection Else Socket Disconnected    --------------------------------");
 
                 }
 
@@ -94,7 +94,7 @@ module.exports = {
 
                 if(req.isSocket){
 
-                            console.log("--------------------------------------    socketDitherDetail     --------------------------------");
+                            //console.log("--------------------------------------    socketDitherDetail     --------------------------------");
                             var tokenCheck                  =     req.options.tokenCheck;
                             var userId                      =     tokenCheck.tokenDetails.userId;
 
@@ -108,14 +108,14 @@ module.exports = {
                             sails.sockets.join(req.socket, dither_roomName);
                             //console.log(sails.sockets.rooms());
                 }else{
-                        console.log("--------------------------------------    socketDitherDetail Else Socket Disconnected    --------------------------------");
+                        //console.log("--------------------------------------    socketDitherDetail Else Socket Disconnected    --------------------------------");
 
                 }
         },
 
         socketTyping  : function (req, res) {
 
-                    console.log("--------------------------------------    socketTyping     --------------------------------");
+                    //console.log("--------------------------------------    socketTyping     --------------------------------");
                     if(req.isSocket){
                             console.log(req.param("dither_id"));
                             var tokenCheck               =     req.options.tokenCheck;
@@ -134,7 +134,7 @@ module.exports = {
                                                         socket          :   sails.sockets.rooms()
                                                         });
                     }else{
-                            console.log("--------------------------------------    socketDitherDetail Else Socket Disconnected    --------------------------------");
+                            //console.log("--------------------------------------    socketDitherDetail Else Socket Disconnected    --------------------------------");
 
                     }
         },

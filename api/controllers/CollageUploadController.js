@@ -405,7 +405,7 @@ module.exports = {
                                                                                                 });
                                                                                         });
 
-
+																					if(tagNtfyPush.length){
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
@@ -424,7 +424,7 @@ module.exports = {
                                                                                                 if(deviceId_arr.length!=0)
                                                                                                 {
 																									
-																									
+																									console.log("=============PUSH NTFN============================")
 																									
                                                                                                         var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id};
                                                                                                         NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
@@ -444,52 +444,7 @@ module.exports = {
 																																}
 																										});
 
-                                                                                                       /* var switchKey   =  device_type;
-                                                                                                        switch(switchKey){
-                                                                                                                case 'ios' :
-                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-                                                                                                                                if(err)
-                                                                                                                                {
-                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                    console.log(err)
-                                                                                                                                    //callback();
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
-                                                                                                                                    console.log("Push notification result")
-                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                    callback();
-                                                                                                                                    //return res.json(200, {status: 1 ,status_type: 'success', message: 'sended'});
-                                                                                                                                }
-                                                                                                                            });
-                                                                                                                break;
-
-                                                                                                                case 'android' :
-                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-                                                                                                                                if(err)
-                                                                                                                                {
-                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                    console.log(err)
-                                                                                                                                    //callback();
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
-                                                                                                                                    console.log("Push notification result")
-                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                    callback();
-
-                                                                                                                                }
-                                                                                                                            });
-                                                                                                                break;
-
-                                                                                                                default:
-                                                                                                                            callback();
-                                                                                                                break;
-
-
-                                                                                                        }*/
+                                                                                                      
 
                                                                                                 }
                                                                                                 else
@@ -500,7 +455,11 @@ module.exports = {
 
                                                                                             });
 
-
+																					}
+																					else
+																					{
+																						callback();
+																					}
                                                                                  //-------------------END Of PUSH Notification-------------------------------------------------------------------
                                                                                       //  callback();
 

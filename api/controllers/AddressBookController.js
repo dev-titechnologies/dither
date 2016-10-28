@@ -244,8 +244,8 @@ module.exports = {
                                                                         //console.log(factor.profilePic)
                                                                         console.log("----------------SERIES 7 Success ----------------------");
                                                                 }
-                                                            });
-                                                            callback();
+                                                            }, callback());
+
                                                     }
                                             });
 
@@ -265,7 +265,8 @@ module.exports = {
                                                         callback();
                                                         //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting dither users from Fb Friends', error_details: err});
                                                 }else{
-                                                        //console.log(selectedDitherFbf);
+                                                        console.log("selectedDitherFbf >>>>>>>>>>>>///////////");
+                                                        console.log(selectedDitherFbf);
                                                         ditherUserInFbFriends = selectedDitherFbf;
                                                         ditherUserInFbFriends.forEach(function(factor, index){
                                                                 if(factor.profilePic==''){
@@ -275,9 +276,9 @@ module.exports = {
                                                                     factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
                                                                     //console.log(factor.profilePic)
                                                                 }
-                                                        });
+                                                        }, callback());
                                                         console.log("selectedDitherFbf ++++++++++++++++++++++++++++++++++++++++++++++++");
-                                                        callback();
+
                                                 }
                                         });
 

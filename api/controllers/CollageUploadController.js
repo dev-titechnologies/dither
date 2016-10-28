@@ -413,9 +413,16 @@ module.exports = {
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
-                                                                                        User_token.find({userId: tagNtfyPush})
-                                                                                            .exec(function (err, response) {
-
+                                                                                        User_token.find({userId: tagNtfyPush}).exec(function (err, response) {
+																							if(err)
+																							{
+																								console.log(err)
+																								callback();
+																							}
+																							else
+																							{
+																								console.log("----------------------------------")
+																								console.log(response)
                                                                                                 response.forEach(function(factor, index){
 
                                                                                                     if(factor.deviceId!=req.get('device_id'))
@@ -456,6 +463,7 @@ module.exports = {
                                                                                                     console.log("No deviceId")
                                                                                                     callback();
                                                                                                 }
+                                                                                               } 
 
                                                                                             });
 																						}

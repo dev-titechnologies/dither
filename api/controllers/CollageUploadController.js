@@ -408,7 +408,7 @@ module.exports = {
                                                                                         });
 
 																					
-																						consoel.log("Asking for your opinoin")
+																						console.log("Asking for your opinoin")
 																						console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';

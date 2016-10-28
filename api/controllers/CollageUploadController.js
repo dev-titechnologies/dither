@@ -385,6 +385,8 @@ module.exports = {
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
 																					  
 																					var tagNtfyPush = [];
+																					console.log(tagNotifyArray)
+																				  if(tagNotifyArray.length)	{
                                                                                     tagNotifyArray.forEach(function(factor, index){
                                                                                              User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                                    if(err)
@@ -405,7 +407,7 @@ module.exports = {
                                                                                                 });
                                                                                         });
 
-																					if(tagNtfyPush.length){
+																					
 																						consoel.log("Asking for your opinoin")
 																						console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
@@ -423,7 +425,7 @@ module.exports = {
 
                                                                                                 });
 
-                                                                                                if(deviceId_arr.length!=0)
+                                                                                                if(deviceId_arr.length)
                                                                                                 {
 																									
 																									console.log("=============PUSH NTFN============================")
@@ -456,12 +458,7 @@ module.exports = {
                                                                                                 }
 
                                                                                             });
-
-																					}
-																					else
-																					{
-																						callback();
-																					}
+																						}
                                                                                  //-------------------END Of PUSH Notification-------------------------------------------------------------------
                                                                                       //  callback();
 

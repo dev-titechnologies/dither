@@ -64,7 +64,7 @@ module.exports = {
                                                                 var query = "INSERT INTO addressBook"+
                                                                             " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
                                                                             " VALUES"+phoneContactsArray;
-                                                                console.log(query)
+                                                                //console.log(query)
                                                                 //var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
                                                                 AddressBook.query(query,function(err, createdAddressBook){
                                                                 //AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
@@ -269,9 +269,9 @@ module.exports = {
                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                         }else{
                                             //console.log("Success -----------------------in contacts------------------");
-                                            console.log(ditherUserInAddressBook)
+                                            //console.log(ditherUserInAddressBook)
                                             //console.log("Success -------------in fbbbbb----------------------------");
-                                            console.log(ditherUserInFbFriends)
+                                            //console.log(ditherUserInFbFriends)
                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends',
                                                                   ditherPhoneContact: ditherUserInAddressBook,
                                                                   ditherFBuser: ditherUserInFbFriends

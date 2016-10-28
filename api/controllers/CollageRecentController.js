@@ -109,7 +109,7 @@ module.exports = {
                                                             console.log(err);
                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                         }else{
-                                                                    console.log(foundUserDetails);
+                                                                    //console.log(foundUserDetails);
                                                                     if(!foundUserDetails){
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage and no user found',
                                                                                             username                : "",

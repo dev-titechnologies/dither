@@ -38,7 +38,7 @@ module.exports = {
                                             keyValue[keys[i]] = values[i];
                                         }
                                         //console.log("Key Value");
-                                        console.log(keyValue);
+                                        //console.log(keyValue);
 
                                         req.options.settingsKeyValue = keyValue;
                                         next();

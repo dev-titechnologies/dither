@@ -106,7 +106,7 @@ module.exports = {
                                                 console.log(err);
                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                             }else{
-                                                        console.log(foundUserDetails);
+                                                        //console.log(foundUserDetails);
                                                         if(!foundUserDetails){
                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage and no user found',
                                                                                 username                : "",
@@ -159,10 +159,10 @@ module.exports = {
                                                 }
                                             }
                                             if(like_position_Array.length != 0){
-                                                        console.log("like_position_Array === >>>  length != 0");
+                                                        //console.log("like_position_Array === >>>  length != 0");
                                                         like_position = like_position_Array[0];
                                             }else{
-                                                        console.log("like_position_Array === >>>  length == 0");
+                                                        //console.log("like_position_Array === >>>  length == 0");
                                                         like_position = 0;
                                             }
                                             imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));

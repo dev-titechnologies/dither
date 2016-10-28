@@ -406,9 +406,11 @@ module.exports = {
                                                                                         });
 
 																					if(tagNtfyPush.length){
+																						consoel.log("Asking for your opinoin")
+																						console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
-                                                                                        var ntfn_body =  tokenCheck.tokenDetails.name +" Asking for Your Opinion";
+                                                                                        var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
                                                                                         User_token.find({userId: tagNtfyPush})
                                                                                             .exec(function (err, response) {
 

@@ -114,6 +114,36 @@ module.exports = {
                                                                                 }
                                                                             },callback());
                                                                             //callback();
+
+
+                                                                            console.log("-------------------------- SERIES-7 --------------------------");
+                                                                            query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
+                                                                                    " FROM addressBook adb"+
+                                                                                    " INNER JOIN user usr ON usr.id = adb.ditherUserId"+
+                                                                                    " WHERE adb.userId = "+userId+
+                                                                                    " AND adb.ditherUserId IS NOT NULL";
+                                                                            console.log(query);
+                                                                            AddressBook.query(query, function(err, selectedDitherAdb) {
+                                                                                    if(err){
+                                                                                            console.log("selecetion errorr"+err);
+                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                            callback();
+                                                                                            //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting dither users from Address Book', error_details: err});
+                                                                                    }else{
+                                                                                            //console.log(selectedDitherAdb);
+                                                                                            ditherUserInAddressBook = selectedDitherAdb;
+                                                                                            ditherUserInAddressBook.forEach(function(factor, index){
+                                                                                                if(factor.profilePic==''){
+                                                                                                        factor.profilePic='';
+                                                                                                }else{
+                                                                                                        factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
+                                                                                                        //console.log(factor.profilePic)
+                                                                                                        //console.log("----------------SERIES 7 Success ----------------------");
+                                                                                                }
+                                                                                            }, callback());
+
+                                                                                    }
+                                                                            });
                                                                         }
                                                                 });
                                                             }
@@ -191,77 +221,45 @@ module.exports = {
                                                                                     });
                                                                                 },callback());
                                                                                 //callback();
+
+
+                                                                                console.log("-------------------------- SERIES -><- 8 --------------------------");
+                                                                                query = " SELECT DISTINCT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
+                                                                                            " FROM fbFriends fbf"+
+                                                                                            " INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
+                                                                                            " WHERE fbf.userId = "+userId+
+                                                                                            " AND fbf.ditherUserId IS NOT NULL";
+                                                                                console.log(query);
+                                                                                FbFriends.query(query, function(err, selectedDitherFbf) {
+                                                                                        if(err){
+                                                                                                console.log("fb friends selection"+err);
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                callback();
+                                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting dither users from Fb Friends', error_details: err});
+                                                                                        }else{
+                                                                                                //console.log("selectedDitherFbf >>>>>>>>>>>>///////////");
+                                                                                                //console.log(selectedDitherFbf);
+                                                                                                ditherUserInFbFriends = selectedDitherFbf;
+                                                                                                ditherUserInFbFriends.forEach(function(factor, index){
+                                                                                                        if(factor.profilePic==''){
+                                                                                                            factor.profilePic='';
+                                                                                                        }else{
+                                                                                                           // console.log("----------------SERIES 8 Success ----------------------");
+                                                                                                            factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
+                                                                                                            //console.log(factor.profilePic)
+                                                                                                        }
+                                                                                                }, callback());
+                                                                                                //console.log("selectedDitherFbf ++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                                                                                        }
+                                                                                });
                                                                         }
                                                                 });
                                                             }
                                                     });
+                                            }else{
+                                                callback();
                                             }
-                            },
-                            function(callback) {
-                                            console.log("----------------SERIES MAIN - III ----------------------");
-                                            console.log("-------------------------- SERIES-7 --------------------------");
-                                            query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
-                                                    " FROM addressBook adb"+
-                                                    " INNER JOIN user usr ON usr.id = adb.ditherUserId"+
-                                                    " WHERE adb.userId = "+userId+
-                                                    " AND adb.ditherUserId IS NOT NULL";
-                                            console.log(query);
-                                            AddressBook.query(query, function(err, selectedDitherAdb) {
-                                                    if(err){
-                                                            console.log("selecetion errorr"+err);
-                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                            callback();
-                                                            //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting dither users from Address Book', error_details: err});
-                                                    }else{
-                                                            //console.log(selectedDitherAdb);
-                                                            ditherUserInAddressBook = selectedDitherAdb;
-                                                            ditherUserInAddressBook.forEach(function(factor, index){
-                                                                if(factor.profilePic==''){
-                                                                        factor.profilePic='';
-                                                                }else{
-                                                                        factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
-                                                                        //console.log(factor.profilePic)
-                                                                        //console.log("----------------SERIES 7 Success ----------------------");
-                                                                }
-                                                            }, callback());
-
-                                                    }
-                                            });
-
-                            },
-                            function(callback) {
-                                        console.log("----------------SERIES MAIN - IV ----------------------");
-                                        console.log("-------------------------- SERIES -><- 8 --------------------------");
-                                        query = " SELECT DISTINCT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
-                                                    " FROM fbFriends fbf"+
-                                                    " INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
-                                                    " WHERE fbf.userId = "+userId+
-                                                    " AND fbf.ditherUserId IS NOT NULL";
-                                        console.log(query);
-                                        FbFriends.query(query, function(err, selectedDitherFbf) {
-                                                if(err){
-                                                        console.log("fb friends selection"+err);
-                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                        callback();
-                                                        //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting dither users from Fb Friends', error_details: err});
-                                                }else{
-                                                        //console.log("selectedDitherFbf >>>>>>>>>>>>///////////");
-                                                        //console.log(selectedDitherFbf);
-                                                        ditherUserInFbFriends = selectedDitherFbf;
-                                                        ditherUserInFbFriends.forEach(function(factor, index){
-                                                                if(factor.profilePic==''){
-                                                                    factor.profilePic='';
-                                                                }else{
-                                                                   // console.log("----------------SERIES 8 Success ----------------------");
-                                                                    factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
-                                                                    //console.log(factor.profilePic)
-                                                                }
-                                                        }, callback());
-                                                        //console.log("selectedDitherFbf ++++++++++++++++++++++++++++++++++++++++++++++++");
-
-                                                }
-                                        });
-
                             },
                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                         if (err) {

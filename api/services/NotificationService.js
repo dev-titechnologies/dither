@@ -15,6 +15,7 @@ module.exports = {
 	pushNtfnApn: function(data,device_id, callback) 
 	{
 		console.log("Push Notification Apn")
+		console.log(device_id)
 		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
 		ios = PusherService('ios', {
 			device: [], // Array of string with device tokens
@@ -138,11 +139,15 @@ module.exports = {
 					}
 					else
 					{
+						
+					 console.log("device token---------------------")	
+					 console.log(factor)
 					 console.log(getDeviceType)
 					 if(factor!=0)
 					 {	
 						var deviceId	=  factor;
 						var switchKey   =  getDeviceType.device_Type;
+						console.log(switchKey)
 						console.log("factorrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
 						console.log(deviceId)
 						switch(switchKey){

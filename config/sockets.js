@@ -128,7 +128,7 @@ module.exports.sockets = {
     },*/
 
     //onConnect: function (socket, session, req) {
-    onConnect: function (handshake, socket, cb) {
+    /*onConnect: function (handshake, socket, cb) {
             //var currentSocketId;
             console.log("On connect entered  =====>>>>>   ");
             //console.log(socket.getId());
@@ -156,7 +156,7 @@ module.exports.sockets = {
             //socket.on('some_event', function(data) {
                 // handle event here
             //});
-    },
+    },*/
 
   /***************************************************************************
   *                                                                          *

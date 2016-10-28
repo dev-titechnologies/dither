@@ -122,7 +122,7 @@ module.exports = {
                             var userId                   =     tokenCheck.tokenDetails.userId;
                             var collageId                =     req.param("dither_id");
                             var dither_roomName          =     "socket_dither_"+collageId;
-                            console.log(dither_roomName);
+                            //console.log(dither_roomName);
 
                             sails.sockets.broadcast(dither_roomName,{
                                                         type            :   "typing",
@@ -140,8 +140,8 @@ module.exports = {
         },
 
         Socket_disconnection  : function (req, res) {
-                 console.log(req.params.all());
-                 console.log(req.body);
+                 //console.log(req.params.all());
+                 //console.log(req.body);
                 /*console.log("--------------------------------------    Socket_disconnection     --------------------------------");
                 console.log(sails.sockets.getId(req));
                 console.log(sails.sockets.socketRooms(req.socket));

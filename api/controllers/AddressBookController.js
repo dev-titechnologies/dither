@@ -112,7 +112,7 @@ module.exports = {
                                                                                             }
                                                                                     });
                                                                                 }
-                                                                            });
+                                                                            }, callback());
                                                                             //callback();
 
 
@@ -132,8 +132,8 @@ module.exports = {
                                                                                     }else{
                                                                                             //console.log(selectedDitherAdb);
                                                                                             ditherUserInAddressBook = selectedDitherAdb;
-                                                                                            async.forEach(ditherUserInAddressBook, function (factor, callback){
-                                                                                            //ditherUserInAddressBook.forEach(function(factor, index){
+                                                                                            //async.forEach(ditherUserInAddressBook, function (factor, callback){
+                                                                                            ditherUserInAddressBook.forEach(function(factor, index){
                                                                                                 if(factor.profilePic==''){
                                                                                                         factor.profilePic='';
                                                                                                 }else{
@@ -141,8 +141,8 @@ module.exports = {
                                                                                                         //console.log(factor.profilePic)
                                                                                                         //console.log("----------------SERIES 7 Success ----------------------");
                                                                                                 }
-                                                                                            }, callback());
-
+                                                                                            });
+                                                                                            callback();
                                                                                     }
                                                                             });
                                                                         }
@@ -241,8 +241,8 @@ module.exports = {
                                                                                                 //console.log("selectedDitherFbf >>>>>>>>>>>>///////////");
                                                                                                 //console.log(selectedDitherFbf);
                                                                                                 ditherUserInFbFriends = selectedDitherFbf;
-                                                                                                async.forEach(ditherUserInFbFriends, function (factor, callback){
-                                                                                                //ditherUserInFbFriends.forEach(function(factor, index){
+                                                                                                //async.forEach(ditherUserInFbFriends, function (factor, callback){
+                                                                                                ditherUserInFbFriends.forEach(function(factor, index){
                                                                                                         if(factor.profilePic==''){
                                                                                                             factor.profilePic='';
                                                                                                         }else{
@@ -250,7 +250,8 @@ module.exports = {
                                                                                                             factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
                                                                                                             //console.log(factor.profilePic)
                                                                                                         }
-                                                                                                }, callback());
+                                                                                                });
+                                                                                                callback();
                                                                                                 //console.log("selectedDitherFbf ++++++++++++++++++++++++++++++++++++++++++++++++");
 
                                                                                         }

@@ -18,7 +18,7 @@ module.exports = {
 		console.log(device_id)
 		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
 		ios = PusherService('ios', {
-			device: [], // Array of string with device tokens
+			device: [device_id], // Array of string with device tokens
 			provider: {
 				cert: 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
 				key: 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
@@ -73,8 +73,8 @@ module.exports = {
 		console.log("counttttttttttttttttttt"+data.device_id.length)
 		var ntfnArr = [];
 		ntfnArr	 	= data.device_id;
-		console.log("neww devicee  arrayyyyyy")
-		console.log(ntfnArr)
+		//console.log("neww devicee  arrayyyyyy")
+		//console.log(ntfnArr)
 		
 		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
 		 android = PusherService('android', {
@@ -94,9 +94,9 @@ module.exports = {
 							payload : {}// Custom data to send within Push Notification
 						},			
 		 });
-		console.log(android)
+		//console.log(android)
 		console.log("device arrayyyyyyyyyyyyyyyyy")
-		console.log(ntfnArr)
+		//console.log(ntfnArr)
 		console.log(device_id)
 		android
 			.send([device_id], {

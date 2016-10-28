@@ -112,7 +112,7 @@ module.exports = {
                                                                                             }
                                                                                     });
                                                                                 }
-                                                                            },callback());
+                                                                            });
                                                                             //callback();
 
 
@@ -132,7 +132,8 @@ module.exports = {
                                                                                     }else{
                                                                                             //console.log(selectedDitherAdb);
                                                                                             ditherUserInAddressBook = selectedDitherAdb;
-                                                                                            ditherUserInAddressBook.forEach(function(factor, index){
+                                                                                            async.forEach(ditherUserInAddressBook, function (factor, callback){
+                                                                                            //ditherUserInAddressBook.forEach(function(factor, index){
                                                                                                 if(factor.profilePic==''){
                                                                                                         factor.profilePic='';
                                                                                                 }else{
@@ -240,7 +241,8 @@ module.exports = {
                                                                                                 //console.log("selectedDitherFbf >>>>>>>>>>>>///////////");
                                                                                                 //console.log(selectedDitherFbf);
                                                                                                 ditherUserInFbFriends = selectedDitherFbf;
-                                                                                                ditherUserInFbFriends.forEach(function(factor, index){
+                                                                                                async.forEach(ditherUserInFbFriends, function (factor, callback){
+                                                                                                //ditherUserInFbFriends.forEach(function(factor, index){
                                                                                                         if(factor.profilePic==''){
                                                                                                             factor.profilePic='';
                                                                                                         }else{

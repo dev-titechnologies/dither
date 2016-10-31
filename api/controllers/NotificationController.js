@@ -194,9 +194,9 @@ module.exports = {
                                                             console.log(item)
                                                             notificationCommented   =   "No notification Found for comments";
                                                             var notification        =   ntfnTypeFound[0].body;
-                                                            item.description        =   item.description - 1;
+                                                            //item.description        =   item.description - 1;
                                                             console.log(notification)
-                                                            ntfn_body               =   util.format(notification,item.description);
+                                                            //ntfn_body               =   util.format(notification,item.description);
                                                             item.ntfn_body          =   ntfn_body;
                                                             item.type               =   ntfnTypeFound[0].type;
                                                             var imageToResize       =   item.profile_image;
@@ -209,9 +209,19 @@ module.exports = {
                                                                 notificationCommented = " commented on your Dither";
                                                                 item.ntfn_body        = notificationCommented;
                                                             }
-                                                            else
-                                                            {
+                                                            else if(item.description==1){
+																     
+																     ntfn_body             =   util.format(notification,item.description);
+																	 notificationCommented =  ntfn_body;
+                                                                     notifyCmntArray       = [];
+                                                                     notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+                                                                     console.log(notifyCmntArray)
+                                                                     console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
+															}
+															else{
                                                                      console.log("77777777777777777777777777777777777777777777777")
+                                                                     item.description        =   item.description - 1;
+                                                                     ntfn_body               =   util.format(notification,item.description);
                                                                      notificationCommented =  ntfn_body;
                                                                      notifyCmntArray       = [];
                                                                      notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
@@ -354,9 +364,18 @@ module.exports = {
                                                               item.ntfn_body     = notificationVoted;
 
                                                             }
-                                                            else
+                                                            else if(item.description==1){
+																ntfn_body           = util.format(notification,item.description);
+                                                                notificationVoted   =  ntfn_body;
+                                                                notifyVoteArray     = [];
+                                                                notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
+                                                                console.log(notifyVoteArray)
+															}
+															else
                                                             {
-
+																
+																item.description    = item.description - 1;
+																ntfn_body           = util.format(notification,item.description);
                                                                 notificationVoted   =  ntfn_body;
                                                                 notifyVoteArray     = [];
                                                                 notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});

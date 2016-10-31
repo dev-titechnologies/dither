@@ -124,6 +124,10 @@ module.exports = {
                                                         {
                                                             if(dataResults[j]["collageId"]==collageId_val)
                                                             {
+                                                                console.log("likeStatus +++++++++++++++++++++++++++++++++++++");
+                                                                console.log(dataResults[j]["likeStatus"]);
+                                                                console.log(dataResults[j]["likePosition"]);
+                                                                console.log("likePosition  ------------------------------------");
                                                                 /*if(!dataResults[j]["likeStatus"]){
                                                                         likeStatus = 0;
                                                                 }else{*/
@@ -141,9 +145,14 @@ module.exports = {
                                                                                     });
                                                             }
                                                         }
-                                                        if(like_position_Array.length){
+
+                                                        if(like_position_Array){
                                                                 like_position = like_position_Array[0];
                                                         }
+                                                        console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");
+                                                        console.log(like_position_Array);
+                                                        console.log(like_position);
+                                                        console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");
                                                         if(!dataResults[i]["profilePic"]){
                                                                 dataResultsObj.profile_image    =   "";
                                                         }else{

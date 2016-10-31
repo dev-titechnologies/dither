@@ -87,7 +87,7 @@ module.exports = {
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
-                                            " GROUP BY clgdt.id"+
+                                            //" GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
 
                             console.log(query);

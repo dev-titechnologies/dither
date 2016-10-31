@@ -78,7 +78,7 @@ module.exports = {
                         console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
                         //console.log(phoneContactsArray);
                         //console.log(JSON.parse(phoneContactsArray));
-						
+
                         fbUser.forEach(function(factor, index){
                              var contact_name = factor.fb_name;
                             //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
@@ -230,7 +230,7 @@ module.exports = {
 
                                 function(callback) {
 
-
+                                             if(fbUser.length){
                                                 console.log("insertion fb friendssssssssssssssssssssss")
 
                                                                 var query = "INSERT INTO fbFriends"+
@@ -256,9 +256,15 @@ module.exports = {
 
                                                                         }
                                                                 });
+                                                            }
+                                                            else
+                                                            {
+                                                                callback();
+                                                            }
                                 },
                                 function(callback) {
 
+                                         if(fbUser.length){
                                                console.log("updationnnnn fb friendsssssssssssssssssssssss")
                                                async.forEach(fbUser, function (factor, callback){
                                                //fbUser.forEach(function(factor, index){
@@ -297,6 +303,11 @@ module.exports = {
                                                       });
 
                                                 },callback());
+                                            }
+                                            else
+                                            {
+                                                callback();
+                                            }
                                                 //callback();
                                 },
 

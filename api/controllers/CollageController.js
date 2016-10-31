@@ -43,7 +43,9 @@ module.exports = {
      ==================================================================================================================================== */
 
         createDither:  function (req, res) {
-            console.log("createDither   api ++++++++++++++++++++++++++++++++++++++++++");
+             return res.json(200, {status: 2, status_type: 'Error', message: 'This url changed please contact android team',
+                                    });
+           /* console.log("createDither   api ++++++++++++++++++++++++++++++++++++++++++");
             console.log(req.param("REQUEST"));
             //console.log(req.param("collage_image"));
             if(!req.param("REQUEST") ){
@@ -306,22 +308,6 @@ module.exports = {
                                                                                console.log("++++++++++++++Ntfn++++1111111+++++++++++++++++++++++++++++++")
                                                                                console.log(factor)
                                                                                tagNotifyArray.push(factor);
-                                                                              /* User.findOne({id:factor}).exec(function (err, notifySettings){
-                                                                                   if(err)
-                                                                                   {
-                                                                                       console.log(err)
-                                                                                   }
-                                                                                   else
-                                                                                   {
-                                                                                     console.log("???????---Result----?????????")
-                                                                                     console.log(notifySettings)
-                                                                                     if(notifySettings.notifyOpinion==1)
-                                                                                     {
-                                                                                      tagNotifyArray.push(factor);
-                                                                                     }
-
-                                                                                   }
-                                                                                });*/
 
                                                                             });
                                                                             console.log("++++++++++++++Ntfn++++22222+++++++++++++++++++++++++++++++")
@@ -400,7 +386,7 @@ module.exports = {
 
                                                                                                 if(deviceId_arr.length!=0)
                                                                                                 {
-                                                                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id};
+                                                                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
 
                                                                                                         var switchKey   =  device_type;
                                                                                                         switch(switchKey){
@@ -556,7 +542,7 @@ module.exports = {
                                 }
             });
 
-        }
+        }*/
 
         },
 
@@ -648,7 +634,6 @@ module.exports = {
                                 dataResultsObj.collage_image            =       collageImg_path + dataResults[i]["collage_image"];
                                 dataResultsObj.totalVote                =       dataResults[i]["totalVote"];
                                 dataResultsObj.vote                     =       imgDetailsArrayOrder;
-
                                 key.push(dataResultsObj);
                                 dataResultsKeys.push(collageId_val);
                                 total_opinion                           =       dataResults[i]["opinionCount"];
@@ -672,7 +657,7 @@ module.exports = {
                                             " temp.*,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
+                                            " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
@@ -693,7 +678,7 @@ module.exports = {
                                             " temp.*,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
+                                            " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
@@ -717,7 +702,7 @@ module.exports = {
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " (SELECT count(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                            " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp.id"+
@@ -747,6 +732,7 @@ module.exports = {
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
+                                             " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
                                             " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp.id"+
@@ -896,9 +882,9 @@ module.exports = {
 
                                         case 'new' :
                                                     offset_data_view_limit =  "> "+focus_dither_id;
-                                                    if(focus_dither_id == 0){
+                                                    //if(focus_dither_id == 0 || received_dither_type == "popular"){
                                                         focus_dither_id_0_order         =   " DESC";
-                                                    }
+                                                    //}
                                         break;
 
                                         case 'old' :
@@ -917,10 +903,12 @@ module.exports = {
                                 var query_offset_data_view_limit;
                                 //check the focus_dither id 0 or not
                                 if(focus_dither_id == 0){
-                                        query_offset_data_view_limit    =   "";
+                                        query_offset_data_view_limit             =   "";
+                                        query_offset_data_view_limit_for_zero    =   " LIMIT "+data_view_limit;
 
                                 }else{
-                                        query_offset_data_view_limit    =   " AND clg.id "+offset_data_view_limit;
+                                        query_offset_data_view_limit             =   " AND clg.id "+offset_data_view_limit;
+                                        query_offset_data_view_limit_for_zero     =  "";
 
                                 }
                                 //check the dither type (recent or popular)
@@ -938,10 +926,10 @@ module.exports = {
                                         break;
 
                                         case 'popular' :
-                                                    query_order_same_user1      =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
+                                                    query_order_same_user1      =   " ORDER BY clg.totalVote "+focus_dither_id_0_order+", clg.createdAt "+focus_dither_id_0_order;
                                                     query_order_same_user2      =   " ORDER BY temp_clg.totalVote DESC, temp_clg.createdAt DESC";
 
-                                                    query_order_other_user1     =   " ORDER BY clg.totalVote, clg.createdAt "+focus_dither_id_0_order;
+                                                    query_order_other_user1     =   " ORDER BY clg.totalVote "+focus_dither_id_0_order+", clg.createdAt "+focus_dither_id_0_order;
                                                     query_order_other_user2     =   " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
                                                     popular_totalVote           =   " AND clg.totalVote != 0";
 
@@ -979,30 +967,37 @@ module.exports = {
                                                 " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                                 " usr.profilePic, usr.name,"+
                                                 " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
-
                                                 " FROM("+
-                                                " SELECT temp_union.* FROM ("+
+                                                //" SELECT temp_union.* FROM ("+
+                                                //" SELECT clg.id"+
+                                                //" FROM collage clg"+
+                                                //" WHERE clg.userId = '"+received_userId+"'"+
+                                                //" UNION"+
+                                                //" SELECT tg.collageId AS id"+
+                                                //" FROM tags tg"+
+                                                //" WHERE tg.userId = '"+userId+"'"+
+                                                //" LIMIT "+data_view_limit+
                                                 " SELECT clg.id"+
                                                 " FROM collage clg"+
-                                                " WHERE clg.userId = '"+received_userId+"'"+
-                                                " UNION"+
-                                                " SELECT tg.collageId AS id"+
-                                                " FROM tags tg"+
-                                                " WHERE tg.userId = '"+userId+"'"+
-                                                " LIMIT "+data_view_limit+
-                                                " ) AS temp_union"+
-                                                " INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                " INNER JOIN tags tg ON tg.collageId = clg.id"+
+                                                " WHERE tg.userId =  '"+userId+"'"+
+                                                " AND clg.userId =  '"+received_userId+"'"+
                                                 popular_totalVote+
                                                 query_offset_data_view_limit+
                                                 query_order_other_user1+
+                                                query_offset_data_view_limit_for_zero+
+                                                //" ) AS temp_union"+
+                                                //" INNER JOIN collage clg ON clg.id = temp_union.id"+
+                                                //popular_totalVote+
+                                                //query_offset_data_view_limit+
+                                                //query_order_other_user1+
                                                 " ) AS temp_clg"+
-
                                                 " INNER JOIN collage clg ON clg.id = temp_clg.id"+
                                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                                 " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                                 " INNER JOIN user usr ON usr.id = tg.userId"+
                                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
-                                                " WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
+                                                //" WHERE clg.userId = '"+received_userId+"' AND tg.userId = '"+userId+"'"+
                                                 " GROUP BY clgdt.id"+
                                                 query_order_other_user2;
 
@@ -1068,6 +1063,7 @@ module.exports = {
 
                                                                         if(dataResults[j]["collageId"]==collageId_val)
                                                                         {
+                                                                            console.log(dataResults[j]["id"]);
                                                                             console.log("+++++++++++++++++++++++++++++---LIKE VOTE ---+++++++++++++++++++++++++++++");
                                                                             console.log(dataResults[j]["likeStatus"]);
                                                                             if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
@@ -1101,6 +1097,7 @@ module.exports = {
                                                                     dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
                                                                     dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
                                                                     dataResultsObj.dither_like_position         =       like_position;
+                                                                    dataResultsObj.totalVote                    =       dataResults[i]["totalVote"];
                                                                     dataResultsObj.collage_id                   =       collageId_val;
                                                                     dataResultsObj.collage_image                =       collageImg_path + dataResults[i]["collage_image"];
                                                                     dataResultsObj.vote                         =       imgDetailsArrayOrder;
@@ -1110,8 +1107,14 @@ module.exports = {
                                                                     key.push(dataResultsObj);
                                                                     dataResultsKeys.push(collageId_val);
 
-                                                                    recent_dithers                              =       key.sort( predicatBy("mainOrder") );
-                                                                    popular_dithers                             =       key.sort( predicatBy("totalVote") );
+                                                                    if(received_dither_type == "recent"){
+                                                                            recent_dithers                              =       key.sort( predicatBy("mainOrder") );
+                                                                    }
+                                                                    if(received_dither_type == "popular"){
+                                                                            popular_dithers                             =       key.sort( predicatBy("totalVote") ).reverse();
+                                                                            console.log("popular_dithers =====================");
+                                                                            //console.log(popular_dithers);
+                                                                    }
                                                                     //recent_dithers                              =       key;
                                                                     //popular_dithers                             =       key;
                                                                 }
@@ -1391,6 +1394,7 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     console.log("Edit Dithers ===== api");
+                    console.log(req.params.all());
                     console.log(req.param("dither_id"));
                     console.log(req.param("dither_desc"));
                     console.log(req.param("dither_location"));
@@ -1404,12 +1408,13 @@ module.exports = {
                     var invite_friends_NUM          =      req.param("invite_friends_NUM");
 
                     if(!imgTitle || !location || !collageId){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and dither_desc and dither_location'});
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_location  and dither_desc and dither_id'});
                     }else{
 
                             var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
                             var taggedUserArrayFinal        =      [];
-                            var inviteFriends               =      JSON.parse(invite_friends_NUM);
+                            //var inviteFriends               =      JSON.parse(invite_friends_NUM);
+                            var inviteFriends               =      invite_friends_NUM;
                             var inviteFriendsArray          =      [];
                             var invitedFriends_NUM_Final;
                             var collage_results             =      "";
@@ -1445,7 +1450,7 @@ module.exports = {
                                                             console.log("++++++++++++++ -------------- taggedUserArray -------------- +++++++++++++  STARTS");
                                                             console.log(taggedUserArray);
                                                             console.log("++++++++++++++ ---------------- taggedUserArray -------------- +++++++++++++  ENDS");
-                                                            if(taggedUserArray.length != 0){
+                                                            if(taggedUserArray.length){
                                                                     taggedUserArray.forEach(function(factor, index){
                                                                             var taggedUser_roomName  = "socket_user_"+factor;
                                                                             sails.sockets.broadcast(taggedUser_roomName,{
@@ -1520,7 +1525,7 @@ module.exports = {
                                                                                 " UNION"+
                                                                                 " SELECT"+
                                                                                 " fbf.userId, fbf.ditherUsername, usr.name"+
-                                                                                " FROM addressBook fbf"+
+                                                                                " FROM fbFriends fbf"+
                                                                                 " INNER JOIN user usr ON usr.id = fbf.userId"+
                                                                                 " LEFT JOIN tags tg ON tg.userId = usr.id"+
                                                                                 " LEFT JOIN collage clg ON clg.id = tg.collageId"+
@@ -1540,7 +1545,7 @@ module.exports = {
                                                                                     console.log(taggedUsersFinalResults);
                                                                                     console.log(taggedUsersFinalResults.length);
 
-                                                                                    if(taggedUsersFinalResults != 0){
+                                                                                    if(taggedUsersFinalResults){
                                                                                         taggedUsersFinalResults.forEach(function(factor, index){
                                                                                                 console.log("factor ------------))))))))))))))))======================");
                                                                                                 console.log(factor);
@@ -1548,7 +1553,7 @@ module.exports = {
                                                                                         });
                                                                                     }
 
-                                                                                    if(taggedUserArray.length !=0){
+                                                                                    if(taggedUserArray.length){
                                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                                     //tagNotifyArray.push({id:factor.user_id});
                                                                                                     tagNotifyArray.push(factor.user_id);
@@ -1854,6 +1859,8 @@ module.exports = {
                                     //console.log(sortedVote);
                                     //console.log(taggedUserArrayFinal);
                                     //console.log(invite_friends_NUM);
+                                    console.log("********************taggedUserArrayFinal**********************")
+                                    console.log(taggedUserArrayFinal)
                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Succesfully updated the Dither',
                                                           taggedUsers           : taggedUserArrayFinal,
                                                           invite_friends_NUM    : invitedFriends_NUM_Final,

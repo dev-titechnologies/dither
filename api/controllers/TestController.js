@@ -865,6 +865,77 @@ module.exports = {
                     //res.download('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/p200x200/11692484_1584512915143266_7884115120613929813_n.jpg?oh=42b7eff448f63708c7f5eedf11a9402e&oe=58154D7A&__gda__=1479562104_5855c5a67913f66449272bf8f4b59dcf');
          },
 
+        /* ==================================================================================================================================
+               E-mail
+        ==================================================================================================================================== */
+        email: function (req, res) {
+                var global_settingsKeyValue     =   req.options.settingsKeyValue;
+                var email_to                    =   "tittoxp@gmail.com";
+                var email_subject               =   'Welcome to Dither';
+                var email_template              =   'signup';
+                var email_context               =   {receiverName: "Titto xavier"};
+                EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
+                    if(err)
+                    {
+                            console.log(err);
+                            console.log("async parallel in Mailpart Error");
+                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
+
+                    }else{
+                            //console.log(results);
+                            console.log(email_to);
+                            console.log(email_subject);
+                            console.log(email_template);
+                            console.log(email_context);
+                            console.log("async parallel in Mailpart Success");
+                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                    }
+
+
+                });
+        },
+
+ /* ==================================================================================================================================
+               E-mail
+        ==================================================================================================================================== */
+        select_dither : function (req, res) {
+                        console.log("------------------------- SELECT DITHER -----------------");
+                        console.log(req.params.all());
+                        if(!req.param("id")){
+                                    return res.json(200, {status: 2, status_type: 'FAILURE' , message: 'Please pass an id',
+
+                                                });
+                        }else{
+                                var query = "SELECT * FROM collage where id = "+req.param("id");
+                                Collage.query(query, function(err, results) {
+                                        if(err){
+                                            console.log(err);
+                                            console.log("Error in select_dither");
+                                            //callback();
+                                        }else{
+                                            console.log("Select dither success ++++++++++++");
+                                            console.log(results);
+                                            return res.json(200, {status: 1, status_type: 'SUCCESS' , message: 'Successfully got',
+                                                          results: results,
+
+                                            });
+
+                                        }
+                                });
+                        }
+        },
+
+/* ==================================================================================================================================
+              Write
+  ==================================================================================================================================== */
+    write_file : function (req, res) {
+            fs.writeFile("test.txt", "Hey there!", function(err) {
+                if(err){
+                    return console.log(err);
+                }
+                console.log("The file was saved!");
+            });
+    },
 };
 
 

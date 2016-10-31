@@ -19,39 +19,35 @@ module.exports = {
     signup: function (req, res) {
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                 var profilePic_path             =     req.options.file_path.profilePic_path;
-
                 var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
-
-
-
                 console.log("signup---------------- api")
                 console.log(req.body);
                 console.log(req.get('device_id'));
-                var device_type  = req.get('device_type');
-                var imgUrl       = req.param('profilepic');
-                if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('fb_uid') || !req.param('email_id') || !req.param('username') || !req.param('otp')){
-                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and fb_uid and email_id and username and otp'}); //If an error occured, we let express/connect handle it by calling the "next" function
-                }else{
-                        var filename     =  "image.png";
-                        var imagename    = new Date().getTime() + filename;
+                var device_type                 =     req.get('device_type');
+                var imgUrl                      =     req.param('profilepic');
+                var OTPCode                     =     req.param('otp');
+                var deviceId                    =     req.get('device_id');
+                var device_IMEI                 =     req.get('device_imei');
+                var device_Type                 =     req.get('device_type');
 
+                if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')){
+                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei'}); //If an error occured, we let express/connect handle it by calling the "next" function
+                }else{
+                        var filename            =    "image.png";
+                        var imagename           =    new Date().getTime() + filename;
                         console.log(imgUrl);
                         console.log("mention idddddddddddd")
                         console.log(req.param('mention_id'))
-                        var OTPCode      = req.param('otp');
-                        var deviceId     = req.get('device_id');
-                        var device_IMEI  = req.get('device_imei');
-                        var values = {
-
-                                    name        : req.param('username'),
-                                    email       : req.param('email_id'),
-                                    fbId        : req.param('fb_uid'),
-                                    mentionId	: req.param('mention_id'),
-                                    phoneNumber : req.param('mobile_number'),
-                                    profilePic  : imagename,
-                        };
-                        var deviceId_arr  = [];
-                        var contact_arr   = [];
+                        var values              =    {
+                                                        name        : req.param('username'),
+                                                        email       : req.param('email_id'),
+                                                        fbId        : req.param('fb_uid'),
+                                                        mentionId   : req.param('mention_id'),
+                                                        phoneNumber : req.param('mobile_number'),
+                                                        profilePic  : imagename,
+                                                     };
+                        var deviceId_arr        =    [];
+                        var contact_arr         =    [];
                         //--------OTP CHECKING----------------------
                        /* if(OTPCode)
                         {
@@ -98,23 +94,15 @@ module.exports = {
                             });
 
                         }*/
-
-
-
-
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
-                                if(err) 
-                                {
-									console.log(err)
-                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
-                                }
-                                else
-                                {
-
-                                    console.log("fbid checkinggggggggggg")
-                                    console.log(resultData);
+                                if(err){
+                                        console.log(err)
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
+                                }else{
+                                        console.log("fbid checkinggggggggggg")
+                                        console.log(resultData);
                                     if(resultData){
-                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User'});
+                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User'});
                                     }else{
                                         User.create(values).exec(function(err, results){
                                                 if(err){
@@ -122,348 +110,279 @@ module.exports = {
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
                                                 }else{
                                                         // Create new access token on login
-                                                        UsertokenService.createToken(results.id, deviceId,device_IMEI, function (err, userTokenDetails) {
-                                                            if (err) {
+                                                        UsertokenService.createToken(results.id, deviceId,device_IMEI,device_Type, function (err, userTokenDetails) {
+                                                            if(err){
                                                                         sails.log(userTokenDetails)
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
-                                                            }else {
-
+                                                            }else{
                                                                     console.log("Before async parallel in Sign up ===============================================");
                                                                    //async.series([
-            
-																	//function(callback) {
+
+                                                                    //function(callback) {
                                                                         // Send Email and Sms  Simultaneously
                                                                         async.parallel([
-                                                                        
-																					function(callback) {
-																						           console.log("+++++++++++++++++++Image Downloadingggggggggggggg+++++++++++++++++++++++++++++++++")
-																								   var download = function(uri, filename, callback){
-																									request.head(uri, function(err, res, body){
-																										console.log("image resizingggggggggggggggggggggggggg")
-																										request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-																								    });
-
-
-																									};
-																									download(imgUrl,'assets/images/profilePics/'+imagename, function()
-																									{
-																										sails.log('done');
-																											var imageSrc                    =     profilePic_path_assets + imagename;
-																											var ext                         =     imageSrc.split('/');
-																											ext                             =     ext[ext.length-1].split('.');
-																											var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																											console.log(imageSrc);
-																											console.log(imageDst);
-																											ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-																													if(err){
-																															console.log(err);
-																															console.log("Error in image resize !!!!");
-																															
-																															
-																													}else{
-																															
-																															console.log(imageResizeResults);
-																															 callback();
-																														 }
-																											});
-																										
-
-																									});
-                                                                                    },
-                                                                        
-                                                                                    function(callback) {
-                                                                                                console.log("parallel 1")
-                                                                                                console.log("async parallel in Mailpart ===============================================");
-                                                                                                var global_settingsKeyValue = req.options.settingsKeyValue;
-                                                                                                var email_to        = results.email;
-                                                                                                var email_subject   = 'Welcome to Dither';
-                                                                                                var email_template  = 'signup';
-                                                                                                var email_context   = {receiverName: results.name};
-                                                                                                EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
-                                                                                                    if(err)
-                                                                                                    {
+                                                                            function(callback){
+                                                                                    console.log("+++++++++++++++++++Image Downloadingggggggggggggg+++++++++++++++++++++++++++++++++")
+                                                                                    var download = function(uri, filename, callback){
+                                                                                        request.head(uri, function(err, res, body){
+                                                                                            console.log("image resizingggggggggggggggggggggggggg")
+                                                                                            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+                                                                                        });
+                                                                                    };
+                                                                                    download(imgUrl,'assets/images/profilePics/'+imagename, function(){
+                                                                                            sails.log('done');
+                                                                                            var imageSrc                    =     profilePic_path_assets + imagename;
+                                                                                            var ext                         =     imageSrc.split('/');
+                                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                                            var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                                            console.log(imageSrc);
+                                                                                            console.log(imageDst);
+                                                                                            ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
+                                                                                                    if(err){
                                                                                                             console.log(err);
-                                                                                                            console.log("async parallel in Mailpart Error");
-                                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
+                                                                                                            console.log("Error in image resize !!!!");
+                                                                                                    }else{
+                                                                                                            console.log(imageResizeResults);
                                                                                                              callback();
-                                                                                                    }else{
-                                                                                                            //console.log(results);
-                                                                                                            console.log(email_to);
-                                                                                                            console.log(email_subject);
-                                                                                                            console.log(email_template);
-                                                                                                            console.log(email_context);
-                                                                                                            console.log("async parallel in Mailpart Success");
-                                                                                                            callback();
-                                                                                                            //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
                                                                                                     }
-
-
-                                                                                                });
-
-                                                                                    },
-                                                                                    function(callback) {
-                                                                                                console.log("parallel 2")
-                                                                                                var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
-                                                                                                var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
-                                                                                                var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
-                                                                                                console.log(req.options.settingsKeyValue);
-
-                                                                                                /*SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
-                                                                                                    if(err)
-                                                                                                    {
-                                                                                                            console.log(err);
-                                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                                                                                            callback();
-                                                                                                    }else{
-                                                                                                            //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                                                                                            callback();
-                                                                                                    }
-                                                                                                });*/
-                                                                                                console.log("async parallel in Sms Part");
+                                                                                            });
+                                                                                    });
+                                                                            },
+                                                                            function(callback){
+                                                                                    console.log("parallel 1")
+                                                                                    console.log("async parallel in Mailpart ===============================================");
+                                                                                    var global_settingsKeyValue = req.options.settingsKeyValue;
+                                                                                    var email_to        = results.email;
+                                                                                    var email_subject   = 'Welcome to Dither';
+                                                                                    var email_template  = 'signup';
+                                                                                    var email_context   = {receiverName: results.name};
+                                                                                    EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
+                                                                                        if(err){
+                                                                                                console.log(err);
+                                                                                                console.log("async parallel in Mailpart Error");
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
                                                                                                 callback();
-                                                                                    },
-                                                                                    function(callback) {
-                                                                                                //Notification Log insertion
-                                                                                                console.log("parallel 3")
-                                                                                                console.log(req.param('mobile_number'))
-                                                                                                 var mobile_number  = req.param('mobile_number');
-                                                                                                 var validNo1       = mobile_number.replace('-','');
-                                                                                                 var validNo2       = mobile_number.split('-').pop();
-                                                                                                 var validNo3       = '0'+validNo2;
-                                                                                                 var validNo4       = validNo1.replace('+','');
-                                                                                                console.log("nnnnnnnnnnnnnnnnnnn"+validNo1)
-                                                                                                console.log("nnnnnnnnnnnnnnnnnnn"+validNo2)
-                                                                                                console.log("nnnnnnnnnnnnnnnnnnn"+validNo3)
-                                                                                                console.log("nnnnnnnnnnnnnnnnnnn"+validNo4)
-                                                                                                 var query  = 'SELECT userId FROM invitation where phoneNumber="'+validNo1+'" OR  phoneNumber="'+validNo2+'" OR  phoneNumber="'+validNo4+'" OR phoneNumber="'+validNo3+'" ';
-                                                                                                 console.log(query)
-                                                                                                Invitation.query(query, function(err, selectContacts){
-
-                                                                                                //Invitation.find({phoneNumber:req.param('mobile_number')}).exec(function (err, selectContacts){
-                                                                                                        if(err)
-                                                                                                        {
-                                                                                                            console.log(err);
+                                                                                        }else{
+                                                                                                //console.log(results);
+                                                                                                console.log(email_to);
+                                                                                                console.log(email_subject);
+                                                                                                console.log(email_template);
+                                                                                                console.log(email_context);
+                                                                                                console.log("async parallel in Mailpart Success");
+                                                                                                callback();
+                                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                        }
+                                                                                    });
+                                                                            },
+                                                                            function(callback){
+                                                                                    console.log("parallel 2")
+                                                                                    var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                                                                                    var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                                                                                    var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
+                                                                                    console.log(req.options.settingsKeyValue);
+                                                                                    /*SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
+                                                                                        if(err)
+                                                                                        {
+                                                                                                console.log(err);
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+                                                                                                callback();
+                                                                                        }else{
+                                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                callback();
+                                                                                        }
+                                                                                    });*/
+                                                                                    console.log("async parallel in Sms Part");
+                                                                                    callback();
+                                                                            },
+                                                                            function(callback){
+                                                                                    //Notification Log insertion
+                                                                                    console.log("parallel 3")
+                                                                                    console.log(req.param('mobile_number'))
+                                                                                    var mobile_number  = req.param('mobile_number');
+                                                                                    //var validNo1       = mobile_number.replace('-','');
+                                                                                    //var validNo2       = mobile_number.split('-').pop();
+                                                                                    //var validNo3       = '0'+validNo2;
+                                                                                    //var validNo4       = validNo1.replace('+','');
+                                                                                   // console.log("nnnnnnnnnnnnnnnnnnn"+validNo1)
+                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo2)
+                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo3)
+                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo4)
+                                                                                    //var query  = 'SELECT userId FROM invitation where phoneNumber="'+validNo1+'" OR  phoneNumber="'+validNo2+'" OR  phoneNumber="'+validNo4+'" OR phoneNumber="'+validNo3+'" ';
+                                                                                    //var query  = 'SELECT userId FROM invitation where phoneNumber = "'+mobile_number+'"';
+                                                                                    //console.log(query)
+                                                                                    //Invitation.query(query, function(err, selectContacts){
+                                                                                    Invitation.find({phoneNumber : mobile_number}).exec(function (err, selectContacts){
+                                                                                                if(err){
+                                                                                                    console.log(err);
+                                                                                                    callback();
+                                                                                                }else{
+                                                                                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+                                                                                                    //console.log(selectContacts[0].userId)
+                                                                                                    if(selectContacts.length == 0){
                                                                                                             callback();
-                                                                                                        }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-                                                                                                            //console.log(selectContacts[0].userId)
-                                                                                                            if(selectContacts.length == 0)
-                                                                                                            {
-                                                                                                                    callback();
+                                                                                                    }else{
+                                                                                                        selectContacts.forEach(function(factor, index){
+                                                                                                                    contact_arr.push(factor.userId);
+                                                                                                        });
+                                                                                                        //Notification Log Insertion
+                                                                                                        //var phonecontacts       = selectContacts;
+                                                                                                        var phoneContactsArray        = [];
+                                                                                                        var invited_collage_Array     = [];
+                                                                                                        selectContacts.forEach(function(factor, index){
+                                                                                                            User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+                                                                                                                if(notifySettings.notifyContact==1){
+                                                                                                                    phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+                                                                                                                }
+                                                                                                            });
+                                                                                                            //invited_collage_Array.push(collageId : factor.collageId, userId: results.id);
+                                                                                                            invited_collage_Array.push("("+factor.collageId+",'"+results.id+"', now(), now())");
+                                                                                                        });
+                                                                                                        NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification){
+                                                                                                            if(err){
+                                                                                                                console.log(err);
+                                                                                                                callback();
+                                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
                                                                                                             }else{
-
-                                                                                                                        selectContacts.forEach(function(factor, index){
-
-                                                                                                                                    contact_arr.push(factor.userId);
-                                                                                                                        });
-                                                                                                                        //Notification Log Insertion
-                                                                                                                        var phonecontacts       = selectContacts;
-                                                                                                                        var phoneContactsArray  = [];
-
-                                                                                                                       /* phonecontacts.forEach(function(factor, index){
-																															User.findOne({id:factor.userId}).exec(function (err, notifySettings){
-																																if(notifySettings.notifyContact==1)
-																																{
-																																	phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
-																																}
-																															});
-                                                                                                                        });*/
-
-
-                                                                                                                         NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification) {
-                                                                                                                            if(err)
-                                                                                                                            {
+                                                                                                                console.log(createdNotification);
+                                                                                                                //-------Socket brodcast------------------------------
+                                                                                                                contact_arr.forEach(function(factor, index){
+                                                                                                                    var roomName  = "socket_user_"+factor.userId;
+                                                                                                                    sails.sockets.broadcast(roomName,{
+                                                                                                                                                    type                : "notification",
+                                                                                                                                                    user_id             : factor.userId,
+                                                                                                                                                    message             : "Signup Dither - Room Broadcast",
+                                                                                                                                                    roomName            : roomName,
+                                                                                                                                                    subscribers         : sails.sockets.subscribers(roomName),
+                                                                                                                                                    socket              : sails.sockets.rooms(),
+                                                                                                                                                    notification_type   : 4,
+                                                                                                                                                    notification_id     : createdNotification.id
+                                                                                                                                        });
+                                                                                                                });
+                                                                                                                //------------end of socket---------------------------------------
+                                                                                                                Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
+                                                                                                                    if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            callback();
+                                                                                                                    }else{
+                                                                                                                        //Tags.create({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation){
+                                                                                                                        var query = "INSERT INTO tags"+
+                                                                                                                                    " (collageId, userId, createdAt, updatedAt)"+
+                                                                                                                                    " VALUES"+invited_collage_Array;
+                                                                                                                        console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+                                                                                                                        console.log(invited_collage_Array);
+                                                                                                                        console.log(query);
+                                                                                                                        console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+                                                                                                                        Tags.query(query, function(err, insertTagsResult){
+                                                                                                                            if(err){
                                                                                                                                 console.log(err);
                                                                                                                                 callback();
-                                                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
-                                                                                                                            }
-                                                                                                                            else
-                                                                                                                            {
-                                                                                                                                console.log(createdNotification);
-
-                                                                                                                                 //-------Socket brodcast------------------------------
-
-                                                                                                                                contact_arr.forEach(function(factor, index){
-
-                                                                                                                                    var roomName  = "socket_user_"+factor.userId;
-
-                                                                                                                                    sails.sockets.broadcast(roomName,{
-                                                                                                                                                                    type                : "notification",
-                                                                                                                                                                    user_id             : factor.userId,
-                                                                                                                                                                    message             : "Signup Dither - Room Broadcast",
-                                                                                                                                                                    roomName            : roomName,
-                                                                                                                                                                    subscribers         : sails.sockets.subscribers(roomName),
-                                                                                                                                                                    socket              : sails.sockets.rooms(),
-                                                                                                                                                                    notification_type   : 4,
-                                                                                                                                                                    notification_id     : createdNotification.id
-
-                                                                                                                                                                    });
-
-                                                                                                                                  });
-                                                                                                                                //------------end of socket---------------------------------------
-
-                                                                                                                                Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
-                                                                                                                                    if(err)
-                                                                                                                                    {
-                                                                                                                                        console.log(err);
-                                                                                                                                        callback();
-                                                                                                                                    }
-                                                                                                                                    else
-                                                                                                                                    {
-                                                                                                                                        //-----------PUSH Notification------------------------------------
-                                                                                                                                        
-                                                                                                                                        var contactNtfyPush = [];
-																																		contact_arr.forEach(function(factor, index){
-																																				 User.findOne({id:factor}).exec(function (err, notifySettings){
-																																					   if(err)
-																																					   {
-																																						   console.log(err)
-																																					   }
-																																					   else
-																																					   {
-																																						 console.log("???????---Result----?????????")
-																																						 console.log(notifySettings.notifyContact)
-																																						 if(notifySettings.notifyContact)
-																																						 {
-																																							console.log(factor)
-																																							contactNtfyPush.push(factor);
-																																						 }
-
-																																					   }
-																																					});
-																																			});
-
-                                                                                                                                        User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId) {
-                                                                                                                                        //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
-                                                                                                                                            if(err)
-                                                                                                                                            {
-                                                                                                                                                  console.log(err);
-                                                                                                                                                  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
-                                                                                                                                            }
-                                                                                                                                            else
-                                                                                                                                            {
-
-																																				
-                                                                                                                                                var message     =  'signup Notification';
-                                                                                                                                                var ntfn_body   =   results.name +" Joined on Dither";
-                                                                                                                                                //var device_id   =  getDeviceId.deviceId;
-
-
-                                                                                                                                                getDeviceId.forEach(function(factor, index){
-
-                                                                                                                                                    deviceId_arr.push(factor.deviceId);
-
-                                                                                                                                                });
-
-                                                                                                                                                console.log(results)
-
-                                                                                                                                                if(!deviceId_arr.length){
-                                                                                                                                                        callback();
+                                                                                                                            }else{
+                                                                                                                                    //----------PUSH Notification------------------------------------
+                                                                                                                                    var contactNtfyPush = [];
+                                                                                                                                    contact_arr.forEach(function(factor, index){
+                                                                                                                                        User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                                                                                if(err){
+                                                                                                                                                    console.log(err)
+                                                                                                                                                    callback();
                                                                                                                                                 }else{
-                                                                                                                                                        //device_id       =  device_id.split(',');sails.log.debug(device_id);
-                                                                                                                                                        var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id};
-                                                                                                                                                        var switchKey   =  device_type;
-                                                                                                                                                        switch(switchKey){
-                                                                                                                                                                case 'ios' :
-                                                                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-                                                                                                                                                                                if(err)
-                                                                                                                                                                                {
-                                                                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                                                                    console.log(err)
-                                                                                                                                                                                    callback();
-                                                                                                                                                                                }
-                                                                                                                                                                                else
-                                                                                                                                                                                {
-                                                                                                                                                                                    console.log("Push notification result")
-                                                                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                                                                    callback();
-
-                                                                                                                                                                                }
-                                                                                                                                                                            });
-                                                                                                                                                                break;
-
-                                                                                                                                                                case 'android' :
-                                                                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-                                                                                                                                                                                if(err)
-                                                                                                                                                                                {
-                                                                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                                                                    console.log(err)
-                                                                                                                                                                                    callback();
-                                                                                                                                                                                }
-                                                                                                                                                                                else
-                                                                                                                                                                                {
-                                                                                                                                                                                    console.log("Push notification result")
-                                                                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                                                                    callback();
-
-                                                                                                                                                                                }
-                                                                                                                                                                            });
-                                                                                                                                                                break;
-
-                                                                                                                                                                default:
-                                                                                                                                                                            callback();
-
-                                                                                                                                                                break;
-
-
-                                                                                                                                                        }
+                                                                                                                                                    console.log("???????---Result----?????????")
+                                                                                                                                                    console.log(notifySettings.notifyContact)
+                                                                                                                                                    if(notifySettings.notifyContact){
+                                                                                                                                                        console.log(factor)
+                                                                                                                                                        contactNtfyPush.push(factor);
+                                                                                                                                                    }
                                                                                                                                                 }
+                                                                                                                                        });
+                                                                                                                                    });
 
-                                                                                                                                            //------------------------------
+                                                                                                                                    contact_arr.forEach(function(factor, index){
+                                                                                                                                        User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                                                                                if(err){
+                                                                                                                                                    console.log(err)
+                                                                                                                                                    callback();
+                                                                                                                                                }else{
+                                                                                                                                                    console.log("???????---Result----?????????")
+                                                                                                                                                    console.log(notifySettings.notifyContact)
+                                                                                                                                                    if(notifySettings.notifyContact){
+                                                                                                                                                        console.log(factor)
+                                                                                                                                                        contactNtfyPush.push(factor);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                        });
+                                                                                                                                    });
+
+                                                                                                                                    User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId){
+                                                                                                                                    //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+                                                                                                                                        if(err){
+                                                                                                                                              console.log(err);
+                                                                                                                                              callback();
+                                                                                                                                              //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+                                                                                                                                        }else{
+                                                                                                                                            var message     =  'signup Notification';
+                                                                                                                                            var ntfn_body   =   results.name +" Joined on Dither";
+                                                                                                                                            //var device_id   =  getDeviceId.deviceId;
+                                                                                                                                            getDeviceId.forEach(function(factor, index){
+                                                                                                                                                deviceId_arr.push(factor.deviceId);
+                                                                                                                                            });
+                                                                                                                                            console.log(results)
+                                                                                                                                            if(!deviceId_arr.length){
+                                                                                                                                                    callback();
+                                                                                                                                            }else{
+                                                                                                                                                //device_id       =  device_id.split(',');sails.log.debug(device_id);
+                                                                                                                                                var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
+                                                                                                                                                //var switchKey   =  device_type;
+                                                                                                                                                console.log(device_type)
+                                                                                                                                                NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend){
+                                                                                                                                                    if(err){
+                                                                                                                                                        console.log("Error in Push Notification Sending")
+                                                                                                                                                        console.log(err)
+                                                                                                                                                        callback();
+                                                                                                                                                    }else{
+                                                                                                                                                        console.log("Push notification result")
+                                                                                                                                                        console.log(ntfnSend)
+                                                                                                                                                        console.log("Push Notification sended")
+                                                                                                                                                        callback();
+                                                                                                                                                    }
+                                                                                                                                                });
                                                                                                                                             }
-                                                                                                                                          });
-
-
-                                                                                                                                    }
-                                                                                                                                 });
-
+                                                                                                                                        //------------------------------
+                                                                                                                                        }
+                                                                                                                                    });//getDeviceId
 
                                                                                                                             }
-                                                                                                                        });
-
+                                                                                                                        });  //Insert to tags table
+                                                                                                                    }
+                                                                                                                });
                                                                                                             }
-                                                                                                        }
-                                                                                                        console.log("#########################################")
-                                                                                                });
-
-                                                                                    },
-																				  
-                                                                                    
-                                                                        ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                                                                        if (err) {
+                                                                                                        });
+                                                                                                    }
+                                                                                                }
+                                                                                                console.log("#########################################")
+                                                                                    });
+                                                                            },
+                                                                        ], function(err){ //This function gets called after the two tasks have called their "task callbacks"
+                                                                                        if(err){
                                                                                             console.log("async parallel in Sms Part Failure --------------------");
                                                                                             console.log(err);
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                                         }else{
-
                                                                                             // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
                                                                                             console.log("async parallel in Sms Part Success --------------------");
-                                                                                            if(results.mentionId=='')
-                                                                                            {
-																								results.mentionId = results.id;
-																							}
+                                                                                            if(results.mentionId==''){
+                                                                                                results.mentionId = results.id;
+                                                                                            }
                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup',
                                                                                                                   token         :   userTokenDetails.token.token,
                                                                                                                   user_id       :   results.id,
                                                                                                                   mobile_number :   results.phoneNumber,
-                                                                                                                  mention_id	:	results.mentionId
+                                                                                                                  mention_id    :   results.mentionId
                                                                                                             });
-																						 
-																							
-                                                                                       
                                                                                                 //------------------------------------------------------------------------------------------------------
                                                                                         }
-
                                                                         });
                                                             }
                                                         });
                                                 }
-
-
                                         });
                                     }
                                 }
@@ -472,13 +391,14 @@ module.exports = {
     },
 
  /* ==================================================================================================================================
-               To check for a new User
+               To check for a new User - login
      ==================================================================================================================================== */
     checkForNewUser:  function (req, res) {
 
         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
         var device_IMEI                 =     req.get('device_imei');
+        var device_Type                 =     req.get('device_type');
         if(req.param('fb_uid') || req.get('device_id'))
             {
 
@@ -499,19 +419,19 @@ module.exports = {
                                 }else{
 
                                         //delete existing token
-                                        var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"' and deviceId='"+deviceId+"'";
+                                        var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
                                         User_token.query(query, function(err, result) {
                                        // User_token.destroy({userId: results.id,deviceId:deviceId}).exec(function (err, result) {
                                             if(err){
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                             }else{
-                                                UsertokenService.createToken(results.id,deviceId,device_IMEI, function (err, userTokenDetails){
+                                                UsertokenService.createToken(results.id,deviceId,device_IMEI,device_Type, function (err, userTokenDetails){
                                                     if (err){
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                     }
                                                     else{
                                                         var notifyArray = [];
-                                                        notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion});
+                                                        notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion,mention:results.notifyMention});
                                                         var profile_image       =   profilePic_path + results.profilePic;
                                                         return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
                                                                               email             :   results.email,
@@ -564,7 +484,7 @@ module.exports = {
                return res.json(200, {status: 2,  status_type: 'Failure' , message: 'Please provide the token,device_id,device_imei'});
         }else{
 
-
+       
                  var query = "DELETE FROM userToken WHERE device_IMEI='"+device_IMEI+"'";
                 console.log(query)
                 User_token.query(query, function(err, result) {
@@ -651,7 +571,7 @@ module.exports = {
                                                             return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
 
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
-																var imageSrc                    =     profilePic_path_assets + imageName;
+                                                                var imageSrc                    =     profilePic_path_assets + imageName;
 
                                                                 fs.exists(imageSrc, function(exists) {
                                                                 if (exists) {

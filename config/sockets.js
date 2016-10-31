@@ -166,7 +166,7 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-   afterDisconnect: function(session, socket, cb) {
+   /*afterDisconnect: function(session, socket, cb) {
 
             //afterDisconnect: function(session, socket, cb) {
                  // By default: do nothing.
@@ -179,7 +179,7 @@ module.exports.sockets = {
             console.log("socket Rooms");
             //console.log(sails.sockets.rooms(socket));
             //console.log(socket);
-   },
+   },*/
 
   /* onDisconnect: function (session, socket, cb) {
             console.log("On connect entered  =====>>>>>   ");

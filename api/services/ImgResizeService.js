@@ -14,7 +14,7 @@ module.exports = {
                     im.resize({
                       //srcData: fs.readFileSync('assets/images/abc.jpg', 'binary'),
                       srcData: fs.readFileSync(imageSrc, 'binary'),
-                      width:   50
+                      width:   70
                     }, function(err, stdout, stderr){
                               if (err)
                               {
@@ -34,33 +34,30 @@ module.exports = {
                               }
                     });
     },
-    
-    isImageExist: function (imageSrc,imageDst,callback) {
-		
-	 fs.exists(imageDst, function(exists) {
-		if (exists) {
-			console.log("Resized Image Exists")	
-			callback();	
-		}
-		else
-		{
 
-			ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-				if(err)
-				{
-						console.log(err);
-						
-				}else{
-						 //console.log(imageResizeResults);
-						 //console.log("8888888888888888888888"+item.resized_image)
-						 callback();
-				}
-			});
-		}
-		
-	  });	
-	},
-    
-    
-    
+    isImageExist: function (imageSrc,imageDst,callback) {
+
+        fs.exists(imageDst, function(exists) {
+            if(exists){
+                console.log("Resized Image Exists")
+                callback();
+            }else{
+                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+                    if(err){
+                            console.log(err);
+                            console.log("is image exist error");
+                            callback();
+                    }else{
+                             //console.log(imageResizeResults);
+                             //console.log("8888888888888888888888"+item.resized_image)
+                             callback();
+                    }
+                });
+            }
+
+        });
+    },
+
+
+
 };

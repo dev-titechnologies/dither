@@ -12,11 +12,13 @@ module.exports = {
 	
 	//-----------IOS---------------------------------	
 	
-	pushNtfnApn: function(data, callback) 
+	pushNtfnApn: function(data,device_id, callback) 
 	{
 		console.log("Push Notification Apn")
+		console.log(device_id)
+		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
 		ios = PusherService('ios', {
-			device: [data.device_id], // Array of string with device tokens
+			device: [device_id], // Array of string with device tokens
 			provider: {
 				cert: 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
 				key: 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
@@ -46,12 +48,12 @@ module.exports = {
 			  }
 			});
 			
-			console.log(ios)
+			//console.log(ios)
 			
 	
 			ios
-			  .send([data.device_id], {
-				body: data.NtfnBody
+			  .send([device_id], {
+				body: details
 			  })
 			  .then(console.log.bind(console))
 			  .catch(console.error.bind(console));
@@ -62,19 +64,19 @@ module.exports = {
 	
 	//-----------ANDROID---------------------------------
 	
-	pushNtfnGcm: function(data, callback) 
+	pushNtfnGcm: function(data,device_id, callback) 
 	{
 		
 		console.log("Push Notification GCM")
 		console.log(data)
-		console.log(data.device_id)
+		console.log(device_id)
 		console.log("counttttttttttttttttttt"+data.device_id.length)
 		var ntfnArr = [];
 		ntfnArr	 	= data.device_id;
-		console.log("neww devicee  arrayyyyyy")
-		console.log(ntfnArr)
+		//console.log("neww devicee  arrayyyyyy")
+		//console.log(ntfnArr)
 		
-		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id};
+		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
 		 android = PusherService('android', {
 			  
 				device: [], // Array of string with device tokens
@@ -92,11 +94,12 @@ module.exports = {
 							payload : {}// Custom data to send within Push Notification
 						},			
 		 });
-		console.log(android)
+		//console.log(android)
 		console.log("device arrayyyyyyyyyyyyyyyyy")
-		console.log(ntfnArr)
+		//console.log(ntfnArr)
+		console.log(device_id)
 		android
-			.send(ntfnArr, {
+			.send([device_id], {
              		body: details
 				})
 			.then(console.log.bind(console))
@@ -110,157 +113,104 @@ module.exports = {
 
 //===============================================END OF PUSH==========================================================================================
 
- /* =============================================================================================================================================
+  /*=============================================================================================================================================
 										SERVICE FOR IN APP NOTIFICATION 
-	==============================================================================================================================================
+	==============================================================================================================================================*/
 	
 	
-	NtfnInAPP: function(data, callback) 
+	NtfnInAPP: function(data,device_type,callback) 
 	{
+		console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{")
+		console.log("**************device_Type******************")
+		console.log(device_type)
+		console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
+		console.log(data)
+		var arr = data.device_id;
 		
-			var values ={
-							notificationTypeId  :   data.notificationTypeId,
-							userId              :   data.userId,
-							ditherUserId        :   data.ditherUserId,
-							collage_id          :   data.collage_id,
-							description         :   data.description
-						}
-						
-			console.log(values)
-		 
-		    NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-					if(err){
-						console.log(err);
-						callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in inserting collage commented users', error_details: err});
-					}else{
-						var creator_roomName  = "socket_user_"+collageDetails.userId;
-						sails.sockets.broadcast(creator_roomName,{
-																type                       :       "notification",
-																id                         :       collageId,
-																user_id                    :       userId,
-																message                    :       "Comment Dither - Room Broadcast - to Creator",
-																//roomName                   :       creator_roomName,
-																//subscribers                :       sails.sockets.subscribers(creator_roomName),
-																//socket                     :       sails.sockets.rooms(),
-																notification_type          :       3,
-																notification_id            :       createdNotificationTags.id
-																});
-						//-----------------------------End OF NotificationLog---------------------------------
-						
-					   User.findOne({id:data.ditherUserId}).exec(function (err, notifySettings){
-						if(err)
-						{
-							console.log(err)
-							callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in retrieving user details', error_details: err});
-						}
-						else{
-						   if(notifySettings.notifyComment==0){
-							   
-								callback(true, {status: 1, status_type: "Success", message: 'Succesfully commented against the dither', error_details: err});
-								
-						   }
-						   else{
-						
-						
-								//----------------------------Push Notification For Comment------------------------------------------
-								var message   = 'Comment Notification';
-								var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
-								//var query   =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+collageDetails.userId+"'";
-								//User_token.query(query, function(err, getDeviceId) {
-								User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
-									if(err){
-										  console.log(err)
-										  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
-									}else{
-										if(!getDeviceId.length){
-										   console.log("device not found")
-										   return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-																comment_id                      :    results.id,
-																comment_msg                     :    results.msg,
-																comment_created_date_time       :    results.createdAt,
-														});
-										}else{
-											  var deviceId_arr  = [];
-											   getDeviceId.forEach(function(factor, index){
-
-															deviceId_arr.push(factor.deviceId);
-
-
-												});
-											if(deviceId_arr.length){
-											  var data    = {message:message, device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:3,id:collageId};
-											  console.log(data)
-												if(device_type=='ios'){
-														NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-															if(err){
-																console.log("Error in Push Notification Sending")
-																console.log(err)
-																return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
-															}else{
-																console.log("Push notification result")
-																console.log(ntfnSend)
-																console.log("Push Notification sended")
-
-																 return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-																	comment_id                      :    results.id,
-																	comment_msg                     :    results.msg,
-																	comment_created_date_time       :    results.createdAt,
-																 });
-
-															}
-														});
-												}else if(device_type=='android'){
-														console.log("push notification")
-														NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-															if(err)
-															{
-																console.log("Error in Push Notification Sending")
-																console.log(err)
-																return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Push Notification', error_details: err});
-															}
-															else
-															{
-																console.log("Push notification result")
-																console.log(ntfnSend)
-																console.log("Push Notification sended")
-																return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-																	comment_id                      :    results.id,
-																	comment_msg                     :    results.msg,
-																	comment_created_date_time       :    results.createdAt,
-																});
-
-
-															}
-														});
-												}else{
-															return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
-																	comment_id                      :    results.id,
-																	comment_msg                     :    results.msg,
-																	comment_created_date_time       :    results.createdAt,
-															});
-												}
-											}
-										}//kkkk
-									}
-								});
-							}
-						 }
-					  }); 
+		console.log(arr)
+		if(arr)
+		{
+			arr.forEach(function(factor, index)
+			{
+				User_token.findOne({deviceId:factor }).exec(function (err, getDeviceType){
+					if(err)
+					{
+						console.log("error")
 					}
-				
-					
-			 });
-				 //}    
-				 
-			 //}
-			//});
+					else
+					{
+						
+					 console.log("device token---------------------")	
+					 console.log(factor)
+					 console.log(getDeviceType)
+					 if(factor!=0)
+					 {	
+						var deviceId	=  factor;
+						var switchKey   =  getDeviceType.device_Type;
+						console.log(switchKey)
+						console.log("factorrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+						console.log(deviceId)
+						switch(switchKey){
+								case 'ios' :
+											NotificationService.pushNtfnApn(data,deviceId, function(err, ntfnSend) {
+												if(err)
+												{
+													console.log("Error in Push Notification Sending")
+													console.log(err)
+													//callback();
+												}
+												else
+												{
+													console.log("Push notification result i nIOS")
+													
+													//callback();
+													
+												}
+											});
+								break;
 
-			
-		    
-		   
-		    
-		
-	}*/
+								case 'android' :
+											NotificationService.pushNtfnGcm(data,deviceId, function(err, ntfnSend) {
+												if(err)
+												{
+													console.log("Error in Push Notification Sending")
+													console.log(err)
+													//callback();
+												}
+												else
+												{
+													console.log("Push notification result IN Android")
+													console.log(ntfnSend)
+													console.log("Push Notification sended")
+													//callback();
+												}
+											});
+								break;
+								default:
+											console.log("default")
+											//callback();
+
+								break;
+								
+
+
+						}
+						
+					}
+					}
+				});
+				
+
+			},callback());
+				
+		}
+		else
+		{
+			callback();
+		}
+					
+	
+	}
 	
 	
 };	

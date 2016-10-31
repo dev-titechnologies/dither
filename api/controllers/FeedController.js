@@ -33,18 +33,18 @@ module.exports = {
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                    var collageImg_path_assets 		=	  req.options.file_path.collageImg_path_assets;
-                    var profilePic_path_assets 		=     req.options.file_path.profilePic_path_assets;
+                    var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
+                    var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                     var data_view_limit             =     req.options.global.data_view_limit;
                     var query,
                         offset_data_view_limit;
-                    var page_type               	=   req.param("page_type");
-                    var focus_dither_id         	=   req.param("focus_dither_id");
-					var dither_image				= 	'';
+                    var page_type                   =   req.param("page_type");
+                    var focus_dither_id             =   req.param("focus_dither_id");
+                    var dither_image                =   '';
                     if(!page_type || !focus_dither_id){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_dither_id'});
                     }else{
-                            console.log(req.params.all());
+                            //console.log(req.params.all());
                             switch(page_type){
 
                                         case 'new' :
@@ -101,7 +101,7 @@ module.exports = {
                                         }else{
 
                                                 var dataResults         =   results;
-                                                
+
                                                 var key                 =   [];
                                                 var dataResultsKeys     =   [];
                                                 var imgDetailsArrayOrder,
@@ -150,42 +150,9 @@ module.exports = {
                                                         }else{
 
                                                                 dataResultsObj.profile_image    =   profilePic_path + dataResults[i]["profilePic"];
-                                                                
-                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
-																var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
-																//var clgImgSrc					=	  collageImg_path_assets + clgImgToResize;
-                                                                fs.exists(imageSrc, function(exists) {
-																 if (exists) {
 
-																		console.log("Image exists");
-
-																		var ext                         =     imageSrc.split('/');
-																		ext                             =     ext[ext.length-1].split('.');
-																		var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		console.log(imageSrc)
-																		console.log(imageDst)
-																		ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-																			if(err)
-																			{
-																				console.log(err)
-																				console.log("Error in image resizing")
-																			}
-																			else
-																			{
-																				console.log("::::::::::::::::::::::++++++++++:::::::::::::::::::::::::")
-																				console.log(imageResizeResults)
-																				profile_image	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-																				console.log(dataResultsObj.profile_image)
-																			}
-						
-																		});
-																		
-																	}
-																	
-																});		
-															
-                                                                console.log("llllllllllllllllllllllllllllllllllllllllllllll")
-                                                                console.log(dataResultsObj.profile_image)
+                                                                //console.log("llllllllllllllllllllllllllllllllllllllllllllll")
+                                                                //console.log(dataResultsObj.profile_image)
                                                         }
                                                         imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
@@ -198,11 +165,14 @@ module.exports = {
                                                         dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                         dataResultsObj.mainOrder                    =       i;
 
+
+
+
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
                                                         feeds              =       key.sort( predicatBy("mainOrder") );
-                                                        console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
-                                                        console.log(feeds)
+                                                       // console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
+                                                       // console.log(feeds)
                                                     }
                                                 }
                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds',

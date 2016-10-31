@@ -109,8 +109,8 @@ module.exports = {
 
                                                 for (var i = dataResults.length - 1; i >= 0; i--) {
                                                     var like_position_Array = [];
-                                                    var like_position = 0;
-                                                    var likeStatus = 0;
+                                                    var like_position;
+                                                    var likeStatus;
                                                     var dataResultsObj  =   new Object();
                                                     var collageId_val   =   dataResults[i]["collageId"];
 
@@ -131,9 +131,16 @@ module.exports = {
                                                                 /*if(!dataResults[j]["likeStatus"]){
                                                                         likeStatus = 0;
                                                                 }else{*/
-                                                                if(dataResults[j]["likeStatus"]){
+                                                                if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
+                                                                        likeStatus = 0;
+                                                                }else{
                                                                         likeStatus = dataResults[j]["likeStatus"];
+                                                                        console.log("Inside like status +++++++++++++++++++");
+                                                                        console.log("collage Id -----------------"+dataResults[j]["collageId"]);
+                                                                        console.log("Like User Id -----------------"+dataResults[j]["likeUserId"]);
+                                                                        console.log("userId -----------------------"+userId);
                                                                         if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                            console.log("Inside if condition #######################################" + dataResults[j]["likeUserId"] + "==" +userId+ "///"+dataResults[j]["userId"]+ "!="+userId);
                                                                             like_position_Array.push(dataResults[j]["likePosition"]);
                                                                         }
                                                                 }
@@ -146,14 +153,16 @@ module.exports = {
                                                             }
                                                         }
 
-                                                        if(like_position_Array){
+                                                        if(like_position_Array.length){
                                                                 like_position = like_position_Array[0];
+                                                        }else{
+                                                                like_position = 0;
                                                         }
                                                         console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");
                                                         console.log(like_position_Array);
                                                         console.log(like_position);
                                                         console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");
-                                                        if(!dataResults[i]["profilePic"]){
+                                                        if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                 dataResultsObj.profile_image    =   "";
                                                         }else{
 

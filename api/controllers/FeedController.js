@@ -135,7 +135,11 @@ module.exports = {
                                                                         likeStatus = 0;
                                                                 }else{
                                                                         likeStatus = dataResults[j]["likeStatus"];
+                                                                        console.log("Inside like status +++++++++++++++++++");
+                                                                        console.log("Like User Id -----------------"+dataResults[j]["likeUserId"]);
+                                                                        console.log("userId -----------------------"+userId);
                                                                         if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                            console.log("Inside if condition #######################################" + dataResults[j]["likeUserId"] + "==" +userId+ "///"+dataResults[j]["userId"]+ "!="+userId);
                                                                             like_position_Array.push(dataResults[j]["likePosition"]);
                                                                         }
                                                                 }

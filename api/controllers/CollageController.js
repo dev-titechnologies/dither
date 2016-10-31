@@ -1393,6 +1393,7 @@ module.exports = {
         editDither:  function (req, res) {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
+                    var device_type					= 	  req.get('device_type');
                     console.log("Edit Dithers ===== api");
                     console.log(req.params.all());
                     console.log(req.param("dither_id"));
@@ -1552,15 +1553,30 @@ module.exports = {
                                                                                                 taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
                                                                                         });
                                                                                     }
+																					callback();
+                                                                                    /*if(taggedUserArray.length){
+																						taggedUserArray.forEach(function(factor, index){
+																								//tagNotifyArray.push({id:factor.user_id});
+																								tagNotifyArray.push(factor.user_id);
 
-                                                                                    if(taggedUserArray.length){
-                                                                                            taggedUserArray.forEach(function(factor, index){
-                                                                                                    //tagNotifyArray.push({id:factor.user_id});
-                                                                                                    tagNotifyArray.push(factor.user_id);
-
-                                                                                            });
-                                                                                            console.log(tagNotifyArray.length);
-                                                                                            console.log(tagNotifyArray);
+																						});
+																						console.log(tagNotifyArray.length);
+																						console.log(tagNotifyArray);
+                                                                                        var query = "SELECT notificationTypeId,tagged_users FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1"; 
+																					   var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1";
+																					   NotificationLog.query(query, function(err, deleteCommentNtfn){
+																						   if(err)
+																						   {
+																							   console.log(err)
+																							   callback();
+																						   }
+																						   else
+																						   {
+																							   console.log("deleted")
+																							   console.log(deleteCommentNtfn)
+																							   
+																						  
+                                                                                            
                                                                                             var values ={
                                                                                                             notificationTypeId  :   1,
                                                                                                             userId              :   userId,
@@ -1594,11 +1610,14 @@ module.exports = {
 
                                                                                                 }
                                                                                             });
+                                                                                           }
+                                                                                        });    
+                                                                                            
                                                                                     }else{
 
                                                                                         callback();
 
-                                                                                    }
+                                                                                    }*/
                                                                                 }
 
                                                                         });
@@ -1659,6 +1678,158 @@ module.exports = {
                                 }
                                 //callback();
                     },
+                    function(callback)
+                    {
+					  console.log("===============CALLBACK 3=====NOTIFICATION===============================")	
+						
+					  if(taggedUserArray.length){
+						    var ntfyArr = [];
+							taggedUserArray.forEach(function(factor, index){
+								//tagNotifyArray.push({id:factor.user_id});
+								tagNotifyArray.push(factor);
+								console.log(tagNotifyArray)
+								var query = "SELECT notificationTypeId,tagged_users FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1 and FIND_IN_SET("+factor+",tagged_users)"; 	
+								console.log(query)
+								NotificationLog.query(query, function(err, selectNotification){
+									if(err)
+									{
+										console.log(err)
+									}
+									else
+									{
+										if(selectNotification.length)
+										{
+											ntfyArr.push(factor);
+										}
+									}
+								});
+								
+
+							});
+							
+							
+							
+							console.log(tagNotifyArray);
+							console.log("-------------------Norify Array--------------------")
+							console.log(ntfyArr);
+						    if(tagNotifyArray.length)
+						    {
+								
+							var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1";
+						    NotificationLog.query(query, function(err, deleteCommentNtfn){
+							 if(err)
+							  {
+								console.log(err)
+								callback();
+							  }
+							  else
+							  {
+								var values ={
+												notificationTypeId  :   1,
+												userId              :   userId,
+												collage_id          :   collage_results.id,
+												tagged_users        :   tagNotifyArray,
+												description         :   tagNotifyArray.length
+											}
+								console.log(values);
+								NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+									if(err)
+									{
+										console.log(err);
+										callback();
+									}else{
+
+											taggedUserArray.forEach(function(factor, index){
+													var taggedUser_roomName  = "socket_user_"+factor;
+													sails.sockets.broadcast(taggedUser_roomName,{
+																			type                       :       "notification",
+																			id                         :       collageId,
+																			message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
+																			roomName                   :       taggedUser_roomName,
+																			subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+																			socket                     :       sails.sockets.rooms(),
+																			});
+											});
+
+											console.log("Successfully Inserted to---->>. NotificationLog table");
+											console.log(createdNotificationTags);
+
+											console.log("====================PUSH NOTIFICATION =======================")
+											console.log(ntfyArr)
+											var deviceId_arr    = [];
+											var message   = 'Notification For Opinion';
+											var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
+											User_token.find({userId: ntfyArr}).exec(function (err, response) {
+												if(err)
+												{
+													console.log(err)
+													callback();
+												}
+												else
+												{
+													console.log("--------------device idssssssssss--------------------")
+													console.log(response)
+													response.forEach(function(factor, index){
+
+														if(factor.deviceId!=req.get('device_id'))
+														{
+															deviceId_arr.push(factor.deviceId);
+														}
+
+													});
+
+													if(deviceId_arr.length)
+													{
+														
+														console.log("=============PUSH NTFN FOR EDIT TAGGING============================")
+														
+														var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id};
+														console.log(data)
+														NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
+																				if(err)
+																				{
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					console.log("Push notification result")
+																					console.log(ntfnSend)
+																					console.log("Push Notification sended")
+																					callback();
+																					
+																				}
+														});
+
+														  
+
+													}
+													else
+													{
+														console.log("No deviceId")
+														callback();
+													}
+												} 
+
+										    });
+									}
+								});
+							  }
+							});	
+							}	
+							else
+							{
+								callback();
+							}
+							  
+						}else{
+
+							callback();
+
+						}
+						
+					},
                     function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 //[5,6,7,8,9,10,11]

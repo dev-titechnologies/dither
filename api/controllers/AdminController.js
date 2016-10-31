@@ -9,14 +9,16 @@ var crypto = require('crypto');
  var fs          = require('fs');
  var request     = require('request');
  var path        = require('path');
+
  // var  googleapis = require('googleapis');
  // var  key        = require('service-account-credentials.json');
  // const VIEW_ID   = 'ga:130989248';
   
+
 module.exports = {
 
-	// Admin Login
-	     adminLogin: function (req, res) {
+    // Admin Login
+         adminLogin: function (req, res) {
         console.log("userLogin  .....");
          var password = crypto.createHash('md5').update(req.body.password).digest("hex");
          console.log(password);
@@ -44,8 +46,8 @@ console.log(values);
                 else
                 {
 
-					    return res.json(200, {status: 1, message: 'success', data: result.id });
-                    
+                        return res.json(200, {status: 1, message: 'success', data: result.id });
+
 
                 }
 
@@ -53,135 +55,135 @@ console.log(values);
         });
 
 
-                
+
     },
-    	//   List all users
+        //   List all users
      getCompleteUser: function(req, res){
 
-		
-			
+
+
                     query = "SELECT * FROM  `user` ORDER BY createdAt DESC ";
-				
-				User.query(query, function(err, result) {
-					if(err)
-					{
-						// console.log(err);
-						return res.json(200, { status: 2, error_details: 'db error' });
-					}
-					else
-					{
-						
-						//console.log(result);
-						return res.json(200, {status: 1, message: "success", data: result});
-					}
-				});
-                
+
+                User.query(query, function(err, result) {
+                    if(err)
+                    {
+                        // console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }
+                    else
+                    {
+
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result});
+                    }
+                });
+
     },
     // View Details of every single User
     getUserDetails: function(req, res){
-					userId=req.body.userId;
+                    userId=req.body.userId;
                     query = "SELECT * FROM  `user` WHERE id="+userId;
-				
-				User.query(query, function(err, result) {
-					if(err)
-					{
-						// console.log(err);
-						return res.json(200, { status: 2, error_details: 'db error' });
-					}
-					else
-					{
-						
-						//console.log(result);
-						return res.json(200, {status: 1, message: "success", data: result});
-					}
-				});
-                
+
+                User.query(query, function(err, result) {
+                    if(err)
+                    {
+                        // console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }
+                    else
+                    {
+
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result});
+                    }
+                });
+
     },
     //Delete a particular User
     deleteUser: function(req, res){
-					criteria={id: req.body.userId};
-					data= {status: 'delete'};
-				User.update(criteria, data).exec(function (err, result) {
-					if(err)
-					{
-						// console.log(err);
-						return res.json(200, { status: 2, error_details: 'db error' });
-					}
-					else
-					{
-						
-						//console.log(result);
-						return res.json(200, {status: 1, message: "success", data: result});
-					}
-				});
-                
-    },
-    // Activate Deactivate User 
-    userStatus: function(req, res){
-					//key=req.body.key;
-					criteria={id: req.body.userId};
-					data= {status: req.body.status};
+                    criteria={id: req.body.userId};
+                    data= {status: 'delete'};
+                User.update(criteria, data).exec(function (err, result) {
+                    if(err)
+                    {
+                        // console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }
+                    else
+                    {
 
-				User.update(criteria, data).exec(function (err, result) {
-					if(err)
-					{
-						 console.log(err);
-						return res.json(200, { status: 2, error_details: 'db error' });
-					}
-					else
-					{
-						
-						console.log(result);
-						return res.json(200, {status: 1, message: "success", data: result});
-					}
-				});
-                
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result});
+                    }
+                });
+
     },
-    
+    // Activate Deactivate User
+    userStatus: function(req, res){
+                    //key=req.body.key;
+                    criteria={id: req.body.userId};
+                    data= {status: req.body.status};
+
+                User.update(criteria, data).exec(function (err, result) {
+                    if(err)
+                    {
+                         console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }
+                    else
+                    {
+
+                        console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result});
+                    }
+                });
+
+    },
+
     // Get Reported User List
     getReportedUser: function(req, res){
-		
-			
+
+
                     query = "SELECT u.id,u.profilePic,u.status, u.name, COUNT( ru.userId ) AS RepUserCount FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.userId GROUP BY ru.userId ORDER BY u.createdAt DESC ";
-				
-				User.query(query, function(err, result) {
-					if(err)
-					{
-						// console.log(err);
-						return res.json(200, { status: 2, error_details: 'db error' });
-					}
-					else
-					{
-						
-						//console.log(result);
-						return res.json(200, {status: 1, message: "success", data: result});
-					}
-				});
-                
+
+                User.query(query, function(err, result) {
+                    if(err)
+                    {
+                        // console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }
+                    else
+                    {
+
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result});
+                    }
+                });
+
     },
-    
+
     // Get One User Reported List
     getReportList: function(req, res){
-		
-			console.log(req.body.userId);
-                    query = "SELECT u.profilePic, u.name, rt.description, ru.report, ru.createdAt FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.reporterId LEFT JOIN reportType AS rt ON rt.id = ru.reportType WHERE ru.userId ="+req.body.userId+" LIMIT 0 , 30";
-				User.query(query, function(err, result) {
-					if(err)
-					{
-						// console.log(err);
-						return res.json(200, { status: 2, error_details: 'db error' });
-					}
-					else
-					{
-						
-						//console.log(result);
-						return res.json(200, {status: 1, message: "success", data: result});
-					}
-				});
 
-                
+            console.log(req.body.userId);
+                    query = "SELECT u.profilePic, u.name, rt.description, ru.report, ru.createdAt FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.reporterId LEFT JOIN reportType AS rt ON rt.id = ru.reportType WHERE ru.userId ="+req.body.userId+" LIMIT 0 , 30";
+                User.query(query, function(err, result) {
+                    if(err)
+                    {
+                        // console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }
+                    else
+                    {
+
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result});
+                    }
+                });
+
+
     },
-    
+
     /************************************************************* SULTHAN AREA ******************************************************/
         /**  get all dither **/
     getAllDithers: function(req,res){
@@ -192,7 +194,7 @@ console.log(values);
                         if (err) {
                             return res.json(200, {status: 2, error_details: err});
                         } else {
-                            
+
                             return res.json(200, {status: 1, message: "success", result: result});
                         }
                     });
@@ -234,7 +236,7 @@ console.log(values);
 
     //** get reported dither details **/
     getReportDither: function(req,res){
-        
+
 
        // var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
        var query = "SELECT DISTINCT rd.collageId,u.name AS postedBy,c.imgTitle,c.status, COUNT( rd.collageId ) AS RepDitherCount FROM reportDither AS rd INNER JOIN collage AS c ON c.id=rd.collageId INNER JOIN user AS u ON c.userId=u.id GROUP BY rd.collageId ORDER BY rd.createdAt";
@@ -250,7 +252,7 @@ console.log(values);
                         }
                     });
     },
-    
+
     //** suspend a dither
     suspendDither: function(req,res){
 
@@ -329,7 +331,7 @@ console.log(values);
                 return res.json(200,{status:1,message:'success',data:result});
             }
         });
-    }, 
+    },
     getAllDithersOfUser:function(req,res){
         console.log("inside getUserAllDithers functin");
          var user_id = req.body.userId;
@@ -342,7 +344,7 @@ console.log(values);
                   return res.json(200, {status: 2, error_details: err});
             }else{
                 console.log(result);
-                 return res.json(200,{status:1,message:'success',result:result});           
+                 return res.json(200,{status:1,message:'success',result:result});
             }
         });
 
@@ -360,6 +362,7 @@ console.log(values);
             console.log(result);
             return res.json(200,{status:1,message:'success',result:result});
         }
+
       });           
     },  
 //     getDoughnutData:function(req,res){
@@ -535,8 +538,5 @@ console.log(values);
 //   });
 // },
 
-
-
-    
 };
 

@@ -1393,6 +1393,7 @@ module.exports = {
         editDither:  function (req, res) {
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
+                    var device_type					= 	  req.get('device_type');
                     console.log("Edit Dithers ===== api");
                     console.log(req.params.all());
                     console.log(req.param("dither_id"));

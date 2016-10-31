@@ -1767,7 +1767,7 @@ module.exports = {
 												}
 												else
 												{
-													console.log("----------------------------------")
+													console.log("--------------device idssssssssss--------------------")
 													console.log(response)
 													response.forEach(function(factor, index){
 
@@ -1784,6 +1784,7 @@ module.exports = {
 														console.log("=============PUSH NTFN FOR EDIT TAGGING============================")
 														
 														var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id};
+														console.log(data)
 														NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
 																				if(err)
 																				{

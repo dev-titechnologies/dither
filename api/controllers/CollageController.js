@@ -1552,7 +1552,7 @@ module.exports = {
                                                                                                 taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
                                                                                         });
                                                                                     }
-
+																					callback();
                                                                                     /*if(taggedUserArray.length){
 																						taggedUserArray.forEach(function(factor, index){
 																								//tagNotifyArray.push({id:factor.user_id});

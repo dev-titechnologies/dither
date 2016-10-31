@@ -131,13 +131,13 @@ module.exports = {
                                                                 /*if(!dataResults[j]["likeStatus"]){
                                                                         likeStatus = 0;
                                                                 }else{*/
-                                                                if(dataResults[j]["likeStatus"]){
+                                                                if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
+                                                                        likeStatus = 0;
+                                                                }else{
                                                                         likeStatus = dataResults[j]["likeStatus"];
                                                                         if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                             like_position_Array.push(dataResults[j]["likePosition"]);
                                                                         }
-                                                                }else{
-                                                                        likeStatus = 0;
                                                                 }
                                                                 imgDetailsArray.push({
                                                                                     image_id        : dataResults[j]["imgId"],
@@ -157,7 +157,7 @@ module.exports = {
                                                         console.log(like_position_Array);
                                                         console.log(like_position);
                                                         console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");
-                                                        if(!dataResults[i]["profilePic"]){
+                                                        if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
                                                                 dataResultsObj.profile_image    =   "";
                                                         }else{
 

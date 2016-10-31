@@ -61,7 +61,7 @@ module.exports = {
                                         ") AS temp_clg"+
                                         " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
                                         " INNER JOIN user usr ON usr.id = temp_clg.userId"+
-                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                         " GROUP BY clgdt.id"+
                                         " ORDER BY temp_clg.createdAt";
 
@@ -88,7 +88,7 @@ module.exports = {
                                         " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                         " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " INNER JOIN user usr ON usr.id = tg.userId"+
-                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                         " GROUP BY clgdt.id"+
                                         " ORDER BY clg.createdAt";
                             }

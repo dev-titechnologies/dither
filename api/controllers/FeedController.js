@@ -141,9 +141,15 @@ module.exports = {
                                                                                     });
                                                             }
                                                         }
+
                                                         if(like_position_Array.length){
                                                                 like_position = like_position_Array[0];
                                                         }
+                                                        console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");
+                                                        console.log(like_position_Array);
+                                                        console.log(like_position);
+
+                                                        console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");
                                                         if(!dataResults[i]["profilePic"]){
                                                                 dataResultsObj.profile_image    =   "";
                                                         }else{

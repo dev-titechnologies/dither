@@ -1687,6 +1687,7 @@ module.exports = {
 								//tagNotifyArray.push({id:factor.user_id});
 								tagNotifyArray.push(factor.user_id);
 								var query = "SELECT notificationTypeId,tagged_users FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1 and FIND_IN_SET("+factor.user_id+",tagged_users)"; 	
+								console.log(query)
 								NotificationLog.query(query, function(err, selectNotification){
 									if(err)
 									{

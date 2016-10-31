@@ -109,8 +109,8 @@ module.exports = {
 
                                                 for (var i = dataResults.length - 1; i >= 0; i--) {
                                                     var like_position_Array = [];
-                                                    var like_position;
-                                                    var likeStatus;
+                                                    var like_position = 0;
+                                                    var likeStatus = 0;
                                                     var dataResultsObj  =   new Object();
                                                     var collageId_val   =   dataResults[i]["collageId"];
 
@@ -124,9 +124,10 @@ module.exports = {
                                                         {
                                                             if(dataResults[j]["collageId"]==collageId_val)
                                                             {
-                                                                if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
+                                                                /*if(!dataResults[j]["likeStatus"]){
                                                                         likeStatus = 0;
-                                                                }else{
+                                                                }else{*/
+                                                                if(dataResults[j]["likeStatus"]){
                                                                         likeStatus = dataResults[j]["likeStatus"];
                                                                         if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                             like_position_Array.push(dataResults[j]["likePosition"]);
@@ -140,12 +141,10 @@ module.exports = {
                                                                                     });
                                                             }
                                                         }
-                                                        if(like_position_Array.length != 0){
+                                                        if(like_position_Array.length){
                                                                 like_position = like_position_Array[0];
-                                                        }else{
-                                                                like_position = 0;
                                                         }
-                                                        if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
+                                                        if(!dataResults[i]["profilePic"]){
                                                                 dataResultsObj.profile_image    =   "";
                                                         }else{
 
@@ -165,12 +164,9 @@ module.exports = {
                                                         dataResultsObj.vote                         =       imgDetailsArrayOrder;
                                                         dataResultsObj.mainOrder                    =       i;
 
-
-
-
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
-                                                        feeds              =       key.sort( predicatBy("mainOrder") );
+                                                        feeds                                       =       key.sort( predicatBy("mainOrder") );
                                                        // console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
                                                        // console.log(feeds)
                                                     }

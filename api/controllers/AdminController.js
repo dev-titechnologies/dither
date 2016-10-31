@@ -9,7 +9,10 @@ var crypto = require('crypto');
  var fs          = require('fs');
  var request     = require('request');
  var path        = require('path');
-
+ var  googleapis = require('googleapis');
+ var  key        = require('service-account-credentials.json');
+ const VIEW_ID   = 'ga:130989248';
+  
 module.exports = {
 
 	// Admin Login
@@ -198,9 +201,10 @@ console.log(values);
     /** Get each dither details **/
     getSingleDitherDetails: function(req,res){
          var ditherId=req.body.id;
-           // var ditherId = 507;
+            // var ditherId = 507;
          console.log("inside getSingleDitherDetails function"+ditherId);
-        var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote,cc.comment,cc.createdAt as commentDate  FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId LEFT JOIN collageComments as cc ON cd.collageId=cc.collageId where c.id="+ditherId+" ORDER BY c.id DESC";
+         var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId  where c.id="+ditherId+" ORDER BY c.id DESC";
+
         console.log(query);
                     Collage.query(query, function (err, result) {
                         if (err) {
@@ -301,8 +305,8 @@ console.log(values);
     },
     getUsersNotification:function(req,res){
         console.log("go fast, u are on way");
-          var user_id  = req.body.userId;
-        //var user_id = 27;
+           var user_id  = req.body.userId;
+       // var user_id = 87;
         console.log(user_id);
         console.log(req.body);
         var query = " SELECT"+
@@ -342,7 +346,182 @@ console.log(values);
             }
         });
 
-    },   
+    },
+    getComments:function(req,res){
+     console.log("inside getcomment fnsssss");
+     var collageId = req.body.id;
+     // var collageId = 300;
+     var query = "SELECT u.name as commentedPerson,u.id as commentedPersonId,u.profilePic,cc.comment,cc.createdAt as commentedDate FROM collageComments as cc JOIN user as u ON cc.userId = u.id WHERE cc.collageId = "+collageId+" ORDER BY cc.createdAt DESC ";
+                  // "WHERE cc.collageId = "+collageId+" ORDER BY cc.createdAt DESC";
+      CollageComments.query(query,function(err,result){
+        if(err){
+            console.log("errrRRRRRRRRR");
+        }else{
+            console.log(result);
+            return res.json(200,{status:1,message:'success',result:result});
+        }
+      });           
+    },  
+    getDoughnutData:function(req,res){
+           var jwtClient = new googleapis.auth.JWT(
+      key.client_email, null, key.private_key,
+      ['https://www.googleapis.com/auth/analytics.readonly'], null);
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      var analytics = googleapis.analytics('v3');
+      queryData(analytics);
+    });
+     function queryData(analytics) {
+      analytics.data.ga.get({
+        'auth': jwtClient,
+        'ids': VIEW_ID,
+        // 'metrics': 'ga:uniquePageviews',
+        // 'dimensions': 'ga:pagePath',
+        // 'start-date': '30daysAgo',
+        // 'end-date': 'yesterday',
+        // 'sort': '-ga:uniquePageviews',
+        // 'max-results': 10,
+        // 'filters': 'ga:pagePath=~/ch_[-a-z0-9]+[.]html$',
+        'start-date': '30daysAgo',
+        'end-date': 'yesterday',
+        'dimensions':'ga:mobileDeviceInfo',
+        'metrics':'ga:sessions',
+        //'segment': 'mobile',
+      }, function (err, response) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        // console.log(JSON.stringify(response.rows, null, 4));
+        return res.json(200,{status:1,message:'success',result:response.rows});
+      });  
+    }
+},
+getMapData:function(req,res){
+    var jwtClient = new googleapis.auth.JWT(
+    key.client_email, null, key.private_key,
+    ['https://www.googleapis.com/auth/analytics.readonly'], null);
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      var analytics = googleapis.analytics('v3');
+      queryData1(analytics);
+    });
+     function queryData1(analytics) {
+      analytics.data.ga.get({
+        'auth': jwtClient,
+        'ids': VIEW_ID,        
+        'start-date': 'today',
+        'end-date': 'today',
+        'dimensions':'ga:countryIsoCode,ga:country',        
+        'metrics':'ga:sessions,ga:users',
+      }, function (err, response) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        // console.log(JSON.stringify(response.rows, null, 4));
+        return res.json(200,{status:1,message:'success',result:response.rows});
+      });  
+    }
+     
+}, 
+getBarChartData:function(req,res){
+      var jwtClient = new googleapis.auth.JWT(
+    key.client_email, null, key.private_key,
+    ['https://www.googleapis.com/auth/analytics.readonly'], null);
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      var analytics = googleapis.analytics('v3');
+      queryData1(analytics);
+    });
+      function queryData1(analytics) {
+      analytics.data.ga.get({
+        'auth': jwtClient,
+        'ids': VIEW_ID,        
+        'start-date': 'today',
+        'end-date': 'today',
+        'dimensions':'ga:browser',        
+        'metrics':'ga:sessions',        
+      }, function (err, response) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        // console.log(JSON.stringify(response.rows, null, 4));
+        return res.json(200,{status:1,message:'success',result:response.rows});
+      });  
+    }
+},
+getPieChartData:function(req,res){
+      var jwtClient = new googleapis.auth.JWT(
+    key.client_email, null, key.private_key,
+    ['https://www.googleapis.com/auth/analytics.readonly'], null);
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      var analytics = googleapis.analytics('v3');
+      queryData1(analytics);
+    });
+      function queryData1(analytics) {
+      analytics.data.ga.get({
+        'auth': jwtClient,
+        'ids': VIEW_ID,        
+        'start-date': 'today',
+        'end-date': 'today',
+        'dimensions':'ga:sessionCount,ga:date',   
+        'metrics':'ga:sessions,ga:avgSessionDuration,ga:users,ga:percentNewSessions',        
+      }, function (err, response) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        // console.log(JSON.stringify(response.rows, null, 4));
+        return res.json(200,{status:1,message:'success',result:response.rows});
+      });  
+    }
+}, 
+getLineChartData:function(req,res){
+      var jwtClient = new googleapis.auth.JWT(
+    key.client_email, null, key.private_key,
+    ['https://www.googleapis.com/auth/analytics.readonly'], null);
+    jwtClient.authorize(function (err, tokens) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      var analytics = googleapis.analytics('v3');
+      queryData1(analytics);
+    });
+      function queryData1(analytics) {
+      analytics.data.ga.get({
+        'auth': jwtClient,
+        'ids': VIEW_ID,        
+        'start-date': '30daysAgo',
+        'end-date': 'today',
+        'dimensions':'ga:sessionCount,ga:sessionDurationBucket,ga:yearMonth,ga:date',   
+        'metrics':'ga:sessions',
+        'sort':'ga:date',
+      }, function (err, response) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log(JSON.stringify(response.rows, null, 4));
+        return res.json(200,{status:1,message:'success',result:response.rows});
+      });  
+    }
+}  
     
 };
 

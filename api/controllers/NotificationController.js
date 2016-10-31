@@ -197,7 +197,7 @@ module.exports = {
                                                             //item.description        =   item.description - 1;
                                                             console.log(notification)
                                                             //ntfn_body               =   util.format(notification,item.description);
-                                                            item.ntfn_body          =   ntfn_body;
+                                                            //item.ntfn_body          =   ntfn_body;
                                                             item.type               =   ntfnTypeFound[0].type;
                                                             var imageToResize       =   item.profile_image;
                                                             var clgImgToResize      =   item.dither_image;
@@ -213,6 +213,7 @@ module.exports = {
 																     
 																     ntfn_body             =   util.format(notification,item.description);
 																	 notificationCommented =  ntfn_body;
+																	 item.ntfn_body          =   ntfn_body;
                                                                      notifyCmntArray       = [];
                                                                      notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
                                                                      console.log(notifyCmntArray)
@@ -222,8 +223,9 @@ module.exports = {
                                                                      console.log("77777777777777777777777777777777777777777777777")
                                                                      item.description        =   item.description - 1;
                                                                      ntfn_body               =   util.format(notification,item.description);
-                                                                     notificationCommented =  ntfn_body;
-                                                                     notifyCmntArray       = [];
+                                                                     notificationCommented   =  ntfn_body;
+                                                                     item.ntfn_body          =   ntfn_body;
+                                                                     notifyCmntArray         = [];
                                                                      notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
                                                                      console.log(notifyCmntArray)
                                                                      console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
@@ -350,9 +352,9 @@ module.exports = {
                                                             console.log(ntfnTypeFound)
                                                             var notification    = ntfnTypeFound[0].body;
                                                             console.log(notification)
-                                                            item.description    = item.description - 1;
-                                                            ntfn_body           = util.format(notification,item.description);
-                                                            item.ntfn_body      =   ntfn_body;
+                                                            //item.description    = item.description - 1;
+                                                            //ntfn_body           = util.format(notification,item.description);
+                                                            //item.ntfn_body      =   ntfn_body;
                                                             item.type           =   ntfnTypeFound[0].type;
                                                             var imageToResize   =   item.profile_image;
                                                             var clgImgToResize  =   item.dither_image;
@@ -367,6 +369,7 @@ module.exports = {
                                                             else if(item.description==1){
 																ntfn_body           = util.format(notification,item.description);
                                                                 notificationVoted   =  ntfn_body;
+                                                                item.ntfn_body      =   ntfn_body;
                                                                 notifyVoteArray     = [];
                                                                 notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
                                                                 console.log(notifyVoteArray)
@@ -377,6 +380,7 @@ module.exports = {
 																item.description    = item.description - 1;
 																ntfn_body           = util.format(notification,item.description);
                                                                 notificationVoted   =  ntfn_body;
+                                                                item.ntfn_body      =   ntfn_body;
                                                                 notifyVoteArray     = [];
                                                                 notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
                                                                 console.log(notifyVoteArray)

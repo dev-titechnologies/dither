@@ -109,8 +109,8 @@ module.exports = {
 
                                                 for (var i = dataResults.length - 1; i >= 0; i--) {
                                                     var like_position_Array = [];
-                                                    var like_position = 0;
-                                                    var likeStatus = 0;
+                                                    var like_position;
+                                                    var likeStatus;
                                                     var dataResultsObj  =   new Object();
                                                     var collageId_val   =   dataResults[i]["collageId"];
 
@@ -136,6 +136,8 @@ module.exports = {
                                                                         if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                             like_position_Array.push(dataResults[j]["likePosition"]);
                                                                         }
+                                                                }else{
+                                                                        likeStatus = 0;
                                                                 }
                                                                 imgDetailsArray.push({
                                                                                     image_id        : dataResults[j]["imgId"],
@@ -146,8 +148,10 @@ module.exports = {
                                                             }
                                                         }
 
-                                                        if(like_position_Array){
+                                                        if(like_position_Array.length){
                                                                 like_position = like_position_Array[0];
+                                                        }else{
+                                                                like_position = 0;
                                                         }
                                                         console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");
                                                         console.log(like_position_Array);

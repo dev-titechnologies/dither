@@ -1707,11 +1707,23 @@ module.exports = {
 
 							});
 							
+							
+							
 							console.log(tagNotifyArray);
 							console.log("-------------------Norify Array--------------------")
 							console.log(ntfyArr);
 						    if(tagNotifyArray.length)
 						    {
+								
+							var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1";
+						    NotificationLog.query(query, function(err, deleteCommentNtfn){
+							 if(err)
+							  {
+								console.log(err)
+								callback();
+							  }
+							  else
+							  {
 								var values ={
 												notificationTypeId  :   1,
 												userId              :   userId,
@@ -1802,6 +1814,8 @@ module.exports = {
 										    });
 									}
 								});
+							  }
+							});	
 							}	
 							else
 							{

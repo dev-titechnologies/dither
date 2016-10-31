@@ -136,6 +136,7 @@ module.exports = {
                                                                 }else{
                                                                         likeStatus = dataResults[j]["likeStatus"];
                                                                         console.log("Inside like status +++++++++++++++++++");
+                                                                        console.log("collage Id -----------------"+dataResults[j]["collageId"]);
                                                                         console.log("Like User Id -----------------"+dataResults[j]["likeUserId"]);
                                                                         console.log("userId -----------------------"+userId);
                                                                         if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){

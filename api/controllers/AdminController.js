@@ -9,9 +9,11 @@ var crypto = require('crypto');
  var fs          = require('fs');
  var request     = require('request');
  var path        = require('path');
- var  googleapis = require('googleapis');
- //var  key        = require('service-account-credentials.json');
- const VIEW_ID   = 'ga:130989248';
+
+ // var  googleapis = require('googleapis');
+ // var  key        = require('service-account-credentials.json');
+ // const VIEW_ID   = 'ga:130989248';
+  
 
 module.exports = {
 
@@ -360,168 +362,181 @@ console.log(values);
             console.log(result);
             return res.json(200,{status:1,message:'success',result:result});
         }
-      });
-    },
-    getDoughnutData:function(req,res){
-           var jwtClient = new googleapis.auth.JWT(
-      key.client_email, null, key.private_key,
-      ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData(analytics);
-    });
-     function queryData(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,
-        // 'metrics': 'ga:uniquePageviews',
-        // 'dimensions': 'ga:pagePath',
-        // 'start-date': '30daysAgo',
-        // 'end-date': 'yesterday',
-        // 'sort': '-ga:uniquePageviews',
-        // 'max-results': 10,
-        // 'filters': 'ga:pagePath=~/ch_[-a-z0-9]+[.]html$',
-        'start-date': '30daysAgo',
-        'end-date': 'yesterday',
-        'dimensions':'ga:mobileDeviceInfo',
-        'metrics':'ga:sessions',
-        //'segment': 'mobile',
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        // console.log(JSON.stringify(response.rows, null, 4));
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });
-    }
-},
-getMapData:function(req,res){
-    var jwtClient = new googleapis.auth.JWT(
-    key.client_email, null, key.private_key,
-    ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData1(analytics);
-    });
-     function queryData1(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,
-        'start-date': 'today',
-        'end-date': 'today',
-        'dimensions':'ga:countryIsoCode,ga:country',
-        'metrics':'ga:sessions,ga:users',
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        // console.log(JSON.stringify(response.rows, null, 4));
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });
-    }
 
-},
-getBarChartData:function(req,res){
-      var jwtClient = new googleapis.auth.JWT(
-    key.client_email, null, key.private_key,
-    ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData1(analytics);
-    });
-      function queryData1(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,
-        'start-date': 'today',
-        'end-date': 'today',
-        'dimensions':'ga:browser',
-        'metrics':'ga:sessions',
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        // console.log(JSON.stringify(response.rows, null, 4));
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });
-    }
-},
-getPieChartData:function(req,res){
-      var jwtClient = new googleapis.auth.JWT(
-    key.client_email, null, key.private_key,
-    ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData1(analytics);
-    });
-      function queryData1(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,
-        'start-date': 'today',
-        'end-date': 'today',
-        'dimensions':'ga:sessionCount,ga:date',
-        'metrics':'ga:sessions,ga:avgSessionDuration,ga:users,ga:percentNewSessions',
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        // console.log(JSON.stringify(response.rows, null, 4));
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });
-    }
-},
-getLineChartData:function(req,res){
-      var jwtClient = new googleapis.auth.JWT(
-    key.client_email, null, key.private_key,
-    ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData1(analytics);
-    });
-      function queryData1(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,
-        'start-date': '30daysAgo',
-        'end-date': 'today',
-        'dimensions':'ga:sessionCount,ga:sessionDurationBucket,ga:yearMonth,ga:date',
-        'metrics':'ga:sessions',
-        'sort':'ga:date',
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log(JSON.stringify(response.rows, null, 4));
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });
-    }
-}
+      });           
+    },  
+//     getDoughnutData:function(req,res){
+//            var jwtClient = new googleapis.auth.JWT(
+//       key.client_email, null, key.private_key,
+//       ['https://www.googleapis.com/auth/analytics.readonly'], null);
+//     jwtClient.authorize(function (err, tokens) {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       }
+//       var analytics = googleapis.analytics('v3');
+//       queryData(analytics);
+//     });
+//      function queryData(analytics) {
+//       analytics.data.ga.get({
+//         'auth': jwtClient,
+//         'ids': VIEW_ID,
+//         // 'metrics': 'ga:uniquePageviews',
+//         // 'dimensions': 'ga:pagePath',
+//         // 'start-date': '30daysAgo',
+//         // 'end-date': 'yesterday',
+//         // 'sort': '-ga:uniquePageviews',
+//         // 'max-results': 10,
+//         // 'filters': 'ga:pagePath=~/ch_[-a-z0-9]+[.]html$',
+//         'start-date': '30daysAgo',
+//         'end-date': 'yesterday',
+//         'dimensions':'ga:mobileDeviceInfo',
+//         'metrics':'ga:sessions',
+//         //'segment': 'mobile',
+//       }, function (err, response) {
+//         if (err) {
+//           console.log(err);
+//           return;
+//         }
+//         // console.log(JSON.stringify(response.rows, null, 4));
+//         return res.json(200,{status:1,message:'success',result:response.rows});
+//       });  
+//     }
+// },
+// getMapData:function(req,res){
+//     var jwtClient = new googleapis.auth.JWT(
+//     key.client_email, null, key.private_key,
+//     ['https://www.googleapis.com/auth/analytics.readonly'], null);
+//     jwtClient.authorize(function (err, tokens) {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       }
+//       var analytics = googleapis.analytics('v3');
+//       queryData1(analytics);
+//     });
+//      function queryData1(analytics) {
+//       analytics.data.ga.get({
+//         'auth': jwtClient,
+//         'ids': VIEW_ID,        
+//         'start-date': 'today',
+//         'end-date': 'today',
+//         'dimensions':'ga:countryIsoCode,ga:country',        
+//         'metrics':'ga:sessions,ga:users',
+//       }, function (err, response) {
+//         if (err) {
+//           console.log(err);
+//           return;
+//         }
+//         // console.log(JSON.stringify(response.rows, null, 4));
+//         return res.json(200,{status:1,message:'success',result:response.rows});
+//       });  
+//     }
+     
+// }, 
+// getBarChartData:function(req,res){
+//       var jwtClient = new googleapis.auth.JWT(
+//     key.client_email, null, key.private_key,
+//     ['https://www.googleapis.com/auth/analytics.readonly'], null);
+//     jwtClient.authorize(function (err, tokens) {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       }
+//       var analytics = googleapis.analytics('v3');
+//       queryData1(analytics);
+//     });
+//       function queryData1(analytics) {
+//       analytics.data.ga.get({
+//         'auth': jwtClient,
+//         'ids': VIEW_ID,        
+//         'start-date': 'today',
+//         'end-date': 'today',
+//         'dimensions':'ga:browser',        
+//         'metrics':'ga:sessions',        
+//       }, function (err, response) {
+//         if (err) {
+//           console.log(err);
+//           return;
+//         }
+//         // console.log(JSON.stringify(response.rows, null, 4));
+//         return res.json(200,{status:1,message:'success',result:response.rows});
+//       });  
+//     }
+// },
+// getPieChartData:function(req,res){
+//       var jwtClient = new googleapis.auth.JWT(
+//     key.client_email, null, key.private_key,
+//     ['https://www.googleapis.com/auth/analytics.readonly'], null);
+//     jwtClient.authorize(function (err, tokens) {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       }
+//       var analytics = googleapis.analytics('v3');
+//       queryData1(analytics);
+//     });
+//       function queryData1(analytics) {
+//       analytics.data.ga.get({
+//         'auth': jwtClient,
+//         'ids': VIEW_ID,        
+//         'start-date': 'today',
+//         'end-date': 'today',
+//         'dimensions':'ga:sessionCount,ga:date',   
+//         'metrics':'ga:sessions,ga:avgSessionDuration,ga:users,ga:percentNewSessions',        
+//       }, function (err, response) {
+//         if (err) {
+//           console.log(err);
+//           return;
+//         }
+//         // console.log(JSON.stringify(response.rows, null, 4));
+//         return res.json(200,{status:1,message:'success',result:response.rows});
+//       });  
+//     }
+// }, 
+// getLineChartData:function(req,res){
+//       var jwtClient = new googleapis.auth.JWT(
+//     key.client_email, null, key.private_key,
+//     ['https://www.googleapis.com/auth/analytics.readonly'], null);
+//     jwtClient.authorize(function (err, tokens) {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       }
+//       var analytics = googleapis.analytics('v3');
+//       queryData1(analytics);
+//     });
+//       function queryData1(analytics) {
+//       analytics.data.ga.get({
+//         'auth': jwtClient,
+//         'ids': VIEW_ID,        
+//         'start-date': 'today',
+//         'end-date': 'today',
+//         'dimensions':'ga:sessionCount,ga:sessionDurationBucket,ga:yearMonth,ga:date',   
+//         'metrics':'ga:sessions',
+//         'sort':'ga:date',
+//       }, function (err, response) {
+//         if (err) {
+//           console.log(err);
+//           return;
+//         }
+//         console.log(JSON.stringify(response.rows, null, 4));
+//         return res.json(200,{status:1,message:'success',result:response.rows});
+//       });  
+//     }
+// },
+// getSettingsData:function(req,res){
+//   var query = "SELECT * FROM settings";
+
+//   Settings.query(query,function(err,result){
+//     if(err){
+//       console.log("errrr",err);
+//     }else{
+//       console.log("success in settings");
+//       return res.json(200,{status:1,message:'success',result:result});
+//     }
+//   });
+// },
 
 };
 

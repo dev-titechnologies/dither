@@ -146,7 +146,7 @@ module.exports = {
                                                             }
                                                         }
 
-                                                        if(like_position_Array.length){
+                                                        if(like_position_Array){
                                                                 like_position = like_position_Array[0];
                                                         }
                                                         console.log("like_position_Array check +++++++++++++++++++++++++++++++++++++");

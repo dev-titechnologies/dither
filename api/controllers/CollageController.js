@@ -1685,8 +1685,9 @@ module.exports = {
 						    var ntfyArr = [];
 							taggedUserArray.forEach(function(factor, index){
 								//tagNotifyArray.push({id:factor.user_id});
-								tagNotifyArray.push(factor.user_id);
-								var query = "SELECT notificationTypeId,tagged_users FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1 and FIND_IN_SET("+factor.user_id+",tagged_users)"; 	
+								tagNotifyArray.push(factor);
+								console.log(tagNotifyArray)
+								var query = "SELECT notificationTypeId,tagged_users FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1 and FIND_IN_SET("+factor+",tagged_users)"; 	
 								console.log(query)
 								NotificationLog.query(query, function(err, selectNotification){
 									if(err)
@@ -1697,7 +1698,7 @@ module.exports = {
 									{
 										if(selectNotification.length)
 										{
-											ntfyArr.push(factor.user_id);
+											ntfyArr.push(factor);
 										}
 									}
 								});

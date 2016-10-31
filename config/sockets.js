@@ -128,7 +128,7 @@ module.exports.sockets = {
     },*/
 
     //onConnect: function (socket, session, req) {
-    onConnect: function (handshake, socket, cb) {
+    /*onConnect: function (handshake, socket, cb) {
             //var currentSocketId;
             console.log("On connect entered  =====>>>>>   ");
             //console.log(socket.getId());
@@ -156,7 +156,7 @@ module.exports.sockets = {
             //socket.on('some_event', function(data) {
                 // handle event here
             //});
-    },
+    },*/
 
   /***************************************************************************
   *                                                                          *
@@ -166,7 +166,7 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-   afterDisconnect: function(session, socket, cb) {
+   /*afterDisconnect: function(session, socket, cb) {
 
             //afterDisconnect: function(session, socket, cb) {
                  // By default: do nothing.
@@ -179,7 +179,7 @@ module.exports.sockets = {
             console.log("socket Rooms");
             //console.log(sails.sockets.rooms(socket));
             //console.log(socket);
-   },
+   },*/
 
   /* onDisconnect: function (session, socket, cb) {
             console.log("On connect entered  =====>>>>>   ");

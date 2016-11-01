@@ -230,7 +230,7 @@ module.exports = {
                                                                      console.log(notifyCmntArray)
                                                                      console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
                                                             }
-
+                                                            
                                                              // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
@@ -387,6 +387,7 @@ module.exports = {
 
                                                             }
 
+															
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;

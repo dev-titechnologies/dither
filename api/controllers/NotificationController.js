@@ -203,22 +203,13 @@ module.exports = {
                                                             var clgImgToResize      =   item.dither_image;
                                                             item.profile_image      =   profilePic_path + item.profile_image;
                                                             item.dither_image       =   collageImg_path + item.dither_image;
-                                                            if(item.description<=0)
+                                                            if(item.description<=1)
                                                             {
                                                                 console.log("commenteddd")
                                                                 notificationCommented = " commented on your Dither";
                                                                 item.ntfn_body        = notificationCommented;
                                                             }
-                                                            else if(item.description==1){
-																     
-																     ntfn_body             =   util.format(notification,item.description);
-																	 notificationCommented =  ntfn_body;
-																	 item.ntfn_body          =   ntfn_body;
-                                                                     notifyCmntArray       = [];
-                                                                     notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
-                                                                     console.log(notifyCmntArray)
-                                                                     console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
-															}
+                                                           
 															else{
                                                                      console.log("77777777777777777777777777777777777777777777777")
                                                                      item.description        =   item.description - 1;
@@ -360,20 +351,13 @@ module.exports = {
                                                             var clgImgToResize  =   item.dither_image;
                                                             item.profile_image  =   profilePic_path + item.profile_image;
                                                             item.dither_image   =   collageImg_path + item.dither_image;
-                                                            if(item.description<=0)
+                                                            if(item.description<=1)
                                                             {
                                                               notificationVoted  = " voted on your Dither";
                                                               item.ntfn_body     = notificationVoted;
 
                                                             }
-                                                            else if(item.description==1){
-																ntfn_body           = util.format(notification,item.description);
-                                                                notificationVoted   =  ntfn_body;
-                                                                item.ntfn_body      =   ntfn_body;
-                                                                notifyVoteArray     = [];
-                                                                notifyVoteArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationVoted});
-                                                                console.log(notifyVoteArray)
-															}
+                                                           
 															else
                                                             {
 																

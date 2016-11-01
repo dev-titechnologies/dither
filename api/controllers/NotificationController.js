@@ -945,7 +945,7 @@ module.exports = {
                                                                 console.log(ntfnFoundResults);
                                                                 user_id                 =   results[0].ditherUserId;
                                                                 var tagged_users            =   [];
-                                                                var switchKey = notificationTypeId;
+                                                                var switchKey = results[0].notificationTypeId;
                                                                 switch(switchKey){
 
                                                                     case 1:
@@ -954,6 +954,7 @@ module.exports = {
                                                                     break;
 
                                                                     case 2:
+                                                                    
                                                                             notification            =   " voted on your Dither";
 
                                                                     break;

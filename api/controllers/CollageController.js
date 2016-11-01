@@ -693,7 +693,7 @@ module.exports = {
                                             " WHERE"+
                                             " temp.userId = '"+userId+"'"+
                                             " GROUP BY clgdt.id"+
-                                            " ORDER BY temp.totalVote DESC";
+                                            " ORDER BY temp.totalVote DESC, temp.createdAt DESC";
 
                             }else{
                                     console.log("Not a logged User ----------------------------------------------------");
@@ -757,7 +757,7 @@ module.exports = {
                                             " INNER JOIN user usr ON usr.id = tg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                             " GROUP BY clgdt.id"+
-                                            " ORDER BY clg.totalVote DESC";
+                                            " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
 
                             }
 

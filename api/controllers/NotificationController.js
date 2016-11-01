@@ -346,6 +346,8 @@ module.exports = {
                                                             //item.description    = item.description - 1;
                                                             //ntfn_body           = util.format(notification,item.description);
                                                             //item.ntfn_body      =   ntfn_body;
+                                                            console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")	
+															console.log(item.description)
                                                             item.type           =   ntfnTypeFound[0].type;
                                                             var imageToResize   =   item.profile_image;
                                                             var clgImgToResize  =   item.dither_image;
@@ -353,6 +355,7 @@ module.exports = {
                                                             item.dither_image   =   collageImg_path + item.dither_image;
                                                             if(item.description<=1)
                                                             {
+															 console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")	
                                                               notificationVoted  = " voted on your Dither";
                                                               item.ntfn_body     = notificationVoted;
 

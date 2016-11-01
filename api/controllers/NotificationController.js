@@ -941,6 +941,7 @@ module.exports = {
                                                                     return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification body/msg'});
 
                                                             }else{
+																console.log("---------Notifictaion Resultsss-------------")
                                                                 console.log(ntfnFoundResults);
                                                                 user_id                 =   results[0].ditherUserId;
                                                                 var tagged_users            =   [];
@@ -969,8 +970,10 @@ module.exports = {
                                                                 }
 
                                                                 ntfn_body               =   notification;
-
+																console.log("------------Ntfn Body-----------------")
+																console.log(ntfn_body)
                                                                 if(results[0].description > 1 ){
+																	console.log(results[0].description)
                                                                     notification                =       ntfnFoundResults.body;
                                                                     results[0].description      =       results[0].description - 1;
                                                                     ntfn_body                   =       util.format(notification, results[0].description);

@@ -970,7 +970,7 @@ module.exports = {
 
                                                                 ntfn_body               =   notification;
 
-                                                                if(results[0].description > 0 ){
+                                                                if(results[0].description > 1 ){
                                                                     notification                =       ntfnFoundResults.body;
                                                                     results[0].description      =       results[0].description - 1;
                                                                     ntfn_body                   =       util.format(notification, results[0].description);

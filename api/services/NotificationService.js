@@ -118,7 +118,7 @@ module.exports = {
 	==============================================================================================================================================*/
 	
 	
-	NtfnInAPP: function(data,device_type,callback) 
+	NtfnInAPP: function(data,callback) 
 	{
 		console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
 		console.log(data)

@@ -220,7 +220,7 @@ module.exports = {
                                                                                                         async.series([
 
                                                                                                         function(callback) {
-                                                                                                            NotificationService.NtfnInAPP(data,device_type, function(err, ntfnSend) {
+                                                                                                            NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
                                                                                                                     if(err)
                                                                                                                     {
                                                                                                                         console.log("Error in Push Notification Sending")

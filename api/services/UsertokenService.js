@@ -58,7 +58,8 @@ module.exports = {
     ================================================================================================================================== */
     checkToken: function (token, callback) {
             var today = new Date().toISOString();
-            var query = " SELECT usr.id, usr.name,usr.notifyOpinion,usr.profilePic, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
+            var query = " SELECT usr.id, usr.name, usr.notifyOpinion, usr.profilePic, usr.email, usr.fbId, usr.phoneNumber,"+
+                        " usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                         " FROM"+
                         " userToken usrtkn"+
                         " INNER JOIN user usr ON usr.id = usrtkn.userId"+

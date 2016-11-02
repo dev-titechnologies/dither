@@ -1697,6 +1697,8 @@ module.exports = {
                                     }
                                     else
                                     {
+										console.log(selectNotification)
+										console.log(selectNotification.length)
                                         if(selectNotification.length)
                                         {
                                             ntfyArr.push(factor);

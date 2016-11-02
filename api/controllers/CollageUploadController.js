@@ -380,14 +380,15 @@ module.exports = {
                                                                                                                                         notification_id            :       createdNotificationTags.id,
                                                                                                                                         });
                                                                                         });
-                                                                                        //console.log("Successfully Inserted to---->>. NotificationLog table");
-                                                                                        //console.log(createdNotificationTags);
+                                                                                        console.log("Successfully Inserted to---->>. NotificationLog table");
+                                                                                        console.log(createdNotificationTags);
 
 
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
 
-                                                                                    var tagNtfyPush = [];
-                                                                                    //console.log(tagNotifyArray)
+                                                                                  var tagNtfyPush = [];
+                                                                                  console.log("--------------------Tag Notify ArRAy---------------")
+                                                                                  console.log(tagNotifyArray)
                                                                                   if(tagNotifyArray.length) {
                                                                                       //console.log("inside tagging")
                                                                                     /*tagNotifyArray.forEach(function(factor, index){
@@ -424,8 +425,8 @@ module.exports = {
                                                                                             }
                                                                                             else
                                                                                             {
-                                                                                                //console.log("----------------------------------")
-                                                                                                //console.log(response)
+                                                                                                console.log("------------Tag Notification Response----------------------")
+                                                                                                console.log(response)
                                                                                                 response.forEach(function(factor, index){
 
                                                                                                     if(factor.deviceId!=req.get('device_id'))

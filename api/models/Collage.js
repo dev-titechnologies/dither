@@ -63,6 +63,10 @@ module.exports = {
             defaultsTo: 'active'
         },
 
+        expiryDate: {
+            type: 'datetime',
+        },
+
         createdAt: {
             type: 'datetime',
         },

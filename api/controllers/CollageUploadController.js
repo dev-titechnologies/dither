@@ -204,8 +204,8 @@ module.exports = {
                                         userId          : userId,
                                         expiryDate      : expiry_date,
                                     };
-                                    //console.log("values---------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                                    //console.log(values);
+                                    console.log("values---------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                                    console.log(values);
                                     Collage.create(values).exec(function(err, results){
                                             if(err){
                                                     console.log(err);

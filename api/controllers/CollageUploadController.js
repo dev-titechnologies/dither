@@ -116,6 +116,8 @@ module.exports = {
 
                             var server_baseUrl              =     req.options.server_baseUrl;
                             var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                            var dither_expiry_hour          =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
+                            var expiry_date                 =     new Date(new Date().getTime() + (dither_expiry_hour*1000*60*60));
                             var tokenCheck                  =     req.options.tokenCheck;
                             var userId                      =     tokenCheck.tokenDetails.userId;
                             var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
@@ -200,7 +202,7 @@ module.exports = {
                                         latitude        : request.latitude,
                                         longitude       : request.longitude,
                                         userId          : userId,
-                                        vote            : 0,
+                                        expiryDate      : expiry_date,
                                     };
                                     //console.log("values---------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>");
                                     //console.log(values);

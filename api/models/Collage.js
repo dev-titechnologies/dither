@@ -57,11 +57,6 @@ module.exports = {
             type: 'string',
             defaultsTo: 'active'
         },
-         //true means 0 = active, false means 1 = inactive
-        status: {
-            type: 'string',
-            defaultsTo: 'active'
-        },
 
         expiryDate: {
             type: 'datetime',

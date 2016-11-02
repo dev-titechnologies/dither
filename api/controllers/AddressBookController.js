@@ -12,22 +12,15 @@ module.exports = {
         addUserContacts: function (req, res) {
 
                 console.log("==========================  addUserContacts  Api =-=============");
-                //console.log(req.params.all());
-                //console.log(req.options.tokenCheck.tokenDetails.userId)
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var server_baseUrl              =     req.options.server_baseUrl;
-                //console.log(tokenCheck);
                 var phoneContactsArray          =     [];
                 var fbUserArray                 =     [];
-                //var phoneContactsArray1         =     [];
-                //var device_type                 =     req.get('device_type');
-                //var phonecontacts               =     [];
-                //var fbUser                      =     [];
                 var query,
                     ditherUserInAddressBook,
                     ditherUserInFbFriends;
-                var phonecontacts                   =     req.param('contact_array');
+                var phonecontacts               =     req.param('contact_array');
                 //var phonecontacts               =     [{name:'Melita Nora',number:'(8281442870)'},{name:'Rena Acosta',number:'(7689-4564-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Jacklyn Simon',number:'(7689-8679-89)'},{name:'Elizabeth Evangeline',number:'(9887-8989-89)'},{name:'Kris Hardine',number:'(9889-8989-89)'}];
                 //var fbUser                      =     JSON.parse(req.param('fb_array'));
                 var fbUser                      =     req.param('fb_array');

@@ -24,7 +24,6 @@ module.exports = {
                 console.log("signup---------------- api")
                 console.log(req.body);
                 console.log(req.get('device_id'));
-                var device_type                 =     req.get('device_type');
                 var imgUrl                      =     req.param('profilepic');
                 var OTPCode                     =     req.param('otp');
                 var deviceId                    =     req.get('device_id');
@@ -331,8 +330,6 @@ module.exports = {
                                                                                                                                             }else{
                                                                                                                                                 //device_id       =  device_id.split(',');sails.log.debug(device_id);
                                                                                                                                                 var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
-                                                                                                                                                //var switchKey   =   device_type;
-                                                                                                                                                console.log(device_type)
                                                                                                                                                 NotificationService.NtfnInAPP(data, function(err, ntfnSend){
                                                                                                                                                     if(err){
                                                                                                                                                         console.log("Error in Push Notification Sending")

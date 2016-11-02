@@ -4,7 +4,7 @@
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
-
+console.log(new Date());
 module.exports = {
 
   tableName : 'user',
@@ -39,7 +39,7 @@ module.exports = {
         mentionId: {
                 type: 'string',
                 unique: true
-            },   
+            },
         phoneNumber: {
                 type: 'string',
                 unique: true
@@ -67,7 +67,7 @@ module.exports = {
                 type: 'boolean',
                 defaultsTo: true
             },
-		notifyMention: {
+        notifyMention: {
                 type: 'boolean',
                 defaultsTo: true
             },

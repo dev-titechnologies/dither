@@ -413,7 +413,7 @@ module.exports = {
 
 
                                                                                         //console.log("Asking for your opinoin")
-                                                                                        //console.log(tagNtfyPush)
+                                                                                        //console.log(tagNtfyPush) 
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
@@ -441,7 +441,7 @@ module.exports = {
 
                                                                                                     console.log("=============PUSH NTFN============================")
 
-                                                                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id};
+                                                                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
                                                                                                         NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
                                                                                                                                 if(err)
                                                                                                                                 {

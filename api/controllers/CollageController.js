@@ -1783,7 +1783,7 @@ module.exports = {
 
                                                         console.log("=============PUSH NTFN FOR EDIT TAGGING============================")
 
-                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id};
+                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
                                                         console.log(data)
                                                         NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
                                                                                 if(err)

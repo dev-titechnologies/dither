@@ -14,6 +14,7 @@ module.exports = {
                 console.log("==========================  addUserContacts  Api =-=============");
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
+                var userPhoneNumber             =     tokenCheck.tokenDetails.phoneNumber;
                 var server_baseUrl              =     req.options.server_baseUrl;
                 var phoneContactsArray          =     [];
                 var fbUserArray                 =     [];
@@ -80,7 +81,12 @@ module.exports = {
                                                                                 //User.query(query, function(err, selectDContacts) {
                                                                                 //console.log(factor.number)
                                                                                 if(factor.number){
-                                                                                    User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+                                                                                    var query = "SELECT *"+
+                                                                                                " FROM user"+
+                                                                                                " WHERE phoneNumber =  '"+factor.number+"'"+
+                                                                                                " AND phoneNumber !=  '"+userPhoneNumber+"'";
+                                                                                    //User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+                                                                                    User.query(query, function(err, selectDContacts) {
                                                                                             if(err){
                                                                                                     console.log(err)
                                                                                                     callback();
@@ -229,7 +235,8 @@ module.exports = {
                                                 " FROM addressBook adb"+
                                                 " INNER JOIN user usr ON usr.id = adb.ditherUserId"+
                                                 " WHERE adb.userId = "+userId+
-                                                " AND adb.ditherUserId IS NOT NULL";
+                                                " AND adb.ditherUserId IS NOT NULL"+
+                                                " ORDER BY usr.name";
                                         console.log(query);
                                         AddressBook.query(query, function(err, selectedDitherAdb) {
                                                 if(err){
@@ -261,7 +268,8 @@ module.exports = {
                                                     " FROM fbFriends fbf"+
                                                     " INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
                                                     " WHERE fbf.userId = "+userId+
-                                                    " AND fbf.ditherUserId IS NOT NULL";
+                                                    " AND fbf.ditherUserId IS NOT NULL"+
+                                                    " ORDER BY usr.name";
                                         console.log(query);
                                         FbFriends.query(query, function(err, selectedDitherFbf) {
                                                 if(err){

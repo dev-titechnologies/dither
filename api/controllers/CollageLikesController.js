@@ -33,7 +33,7 @@ module.exports = {
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding user voted the image earlier or not', error_details: err});
                     }else{
                         if(found){
-                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'User already voted against this image'});
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'You already voted against this image'});
                         }else{
 
                             //To check the collage is existing or not
@@ -170,8 +170,8 @@ module.exports = {
                                                                                     }
                                                                                     else{
                                                                                         //console.log("--------------------------notifySettings------------------")
-                                                                                        //console.log(notifySettings)
-                                                                                       if(notifySettings.notifyVote==0){
+                                                                                        console.log(notifySettings)
+                                                                                       if(!notifySettings){
 
                                                                                              return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                     total_like_count       :  updatedVoteCount[0].vote,
@@ -180,7 +180,13 @@ module.exports = {
                                                                                        }
                                                                                        else{
 
+                                                                                            if(notifySettings.notifyVote == 0){
 
+                                                                                                     return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                            total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                                          });
+
+                                                                                            }else{
                                                                                             /*-------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
                                                                                                                         PUSH NOTIFICATION
                                                                                              -------------------------------------------------------------------------------------*/
@@ -256,6 +262,7 @@ module.exports = {
                                                                                                     //------------------------------
                                                                                                 }
                                                                                               });
+                                                                                                }
                                                                                             }
                                                                                             }
                                                                                         });

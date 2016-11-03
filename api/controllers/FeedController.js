@@ -67,7 +67,8 @@ module.exports = {
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             //" clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                            " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
+                                           // " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
+                                            " clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
                                             " FROM ("+
@@ -142,7 +143,7 @@ module.exports = {
                                                                     //}
                                                                     console.log(dataResults[j]["imgId"]);
                                                                     console.log(dataResults[j]["position"]);
-                                                                    console.log(dataResults[j]["likeStatus"]);
+                                                                    //console.log(dataResults[j]["likeStatus"]);
                                                                     console.log(dataResults[j]["vote"]);
                                                                     imgDetailsArray.push({
                                                                                         image_id        : dataResults[j]["imgId"],

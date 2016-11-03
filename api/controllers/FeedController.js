@@ -133,6 +133,10 @@ module.exports = {
                                                                                 like_position_Array.push(dataResults[j]["likePosition"]);
                                                                             }
                                                                     }
+                                                                    console.log(dataResults[j]["imgId"]);
+                                                                    console.log(dataResults[j]["position"]);
+                                                                    console.log(like_status);
+                                                                    console.log(dataResults[j]["vote"]);
                                                                     imgDetailsArray.push({
                                                                                         image_id        : dataResults[j]["imgId"],
                                                                                         position        : dataResults[j]["position"],
@@ -141,6 +145,8 @@ module.exports = {
                                                                                         });
                                                                 }
                                                         }
+                                                        console.log("imgDetailsArray ----------------------");
+                                                        console.log(imgDetailsArray);
                                                         if(like_position_Array.length){
                                                                 like_position = like_position_Array[0];
                                                         }else{

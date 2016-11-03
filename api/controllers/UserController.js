@@ -197,9 +197,9 @@ module.exports = {
                                                                             function (callback)
                                                                             {
 																				console.log("parallel 3")
-																				var mobile_number  		  = req.param('mobile_number');
+																				var number  		  = req.param('mobile_number');
 																				var phoneContactsArray    = [];
-                                                                                AddressBook.find({ditherUserPhoneNumber : mobile_number}).exec(function (err, UserContacts){   
+                                                                                AddressBook.find({ditherUserPhoneNumber : number}).exec(function (err, UserContacts){   
 																					  if(err) 
 																					  {
 																						  callback();
@@ -304,8 +304,10 @@ module.exports = {
 																												});//getDeviceId
 
 																											}
-																										
-																										
+																										    else
+																										    {
+																												callback();
+																											}
 																										
 																									 }
                                                                                                 });    

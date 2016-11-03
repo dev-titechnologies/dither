@@ -135,7 +135,7 @@ module.exports = {
                                                                     }
                                                                     console.log(dataResults[j]["imgId"]);
                                                                     console.log(dataResults[j]["position"]);
-                                                                    console.log(like_status);
+                                                                    console.log(dataResults[j]["likeStatus"]);
                                                                     console.log(dataResults[j]["vote"]);
                                                                     imgDetailsArray.push({
                                                                                         image_id        : dataResults[j]["imgId"],

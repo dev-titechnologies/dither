@@ -281,7 +281,7 @@ module.exports = {
                                                                                                                 }
                                                                                                             });
                                                                                                });
-                                                                                                
+                                                                                                console.log("hhhhhhhhhhhhhhhhhhhhhhh")
                                                                                                console.log(contact_arr)
                                                                                                var values ={
 																										notificationTypeId  :   4,

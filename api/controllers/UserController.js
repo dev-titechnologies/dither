@@ -194,6 +194,63 @@ module.exports = {
                                                                                     console.log("async parallel in Sms Part");
                                                                                     callback();
                                                                             },
+                                                                            
+                                                                            function(callback){
+                                                                                    //Notification Log insertion
+                                                                                    console.log("parallel 4")
+                                                                                    console.log(req.param('mobile_number'))
+                                                                                    var mobile_number  = req.param('mobile_number');
+                                                                                   
+                                                                                    Invitation.find({phoneNumber : mobile_number}).exec(function (err, selectContacts){
+                                                                                                if(err){
+                                                                                                    console.log(err);
+                                                                                                    callback();
+                                                                                                }else{
+                                                                                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+                                                                                                    //console.log(selectContacts[0].userId)
+                                                                                                    if(selectContacts.length == 0){
+                                                                                                            callback();
+                                                                                                    }else{
+                                                                                                       
+                                                                                                        var invited_collage_Array     = [];
+                                                                                                        selectContacts.forEach(function(factor, index){
+                                                                                                            
+                                                                                                            //invited_collage_Array.push(collageId : factor.collageId, userId: results.id);
+                                                                                                            invited_collage_Array.push("("+factor.collageId+",'"+results.id+"', now(), now())");
+                                                                                                        });
+                                                                                                       
+                                                                                                                Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
+                                                                                                                    if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            callback();
+                                                                                                                    }else{
+																															//Tags.create({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation){
+																															var query = "INSERT INTO tags"+
+																																		" (collageId, userId, createdAt, updatedAt)"+
+																																		" VALUES"+invited_collage_Array;
+																															console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+																															console.log(invited_collage_Array);
+																															console.log(query);
+																															console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+																															Tags.query(query, function(err, insertTagsResult){
+																																if(err){
+																																	console.log(err);
+																																	callback();
+																																}else{
+																																		
+																																		console.log(insertTagsResult)
+																																		callback();
+																																}
+																															});  //Insert to tags table
+                                                                                                                    }
+                                                                                                                });
+                                                                                                            //}
+                                                                                                        //});
+                                                                                                    }
+                                                                                                }
+                                                                                                console.log("#########################################")
+                                                                                    });
+                                                                            },
                                                                             function (callback)
                                                                             {
 																				console.log("parallel 3")
@@ -318,62 +375,6 @@ module.exports = {
 																				 });
 																				
 																			},
-                                                                            function(callback){
-                                                                                    //Notification Log insertion
-                                                                                    console.log("parallel 4")
-                                                                                    console.log(req.param('mobile_number'))
-                                                                                    var mobile_number  = req.param('mobile_number');
-                                                                                   
-                                                                                    Invitation.find({phoneNumber : mobile_number}).exec(function (err, selectContacts){
-                                                                                                if(err){
-                                                                                                    console.log(err);
-                                                                                                    callback();
-                                                                                                }else{
-                                                                                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-                                                                                                    //console.log(selectContacts[0].userId)
-                                                                                                    if(selectContacts.length == 0){
-                                                                                                            callback();
-                                                                                                    }else{
-                                                                                                       
-                                                                                                        var invited_collage_Array     = [];
-                                                                                                        selectContacts.forEach(function(factor, index){
-                                                                                                            
-                                                                                                            //invited_collage_Array.push(collageId : factor.collageId, userId: results.id);
-                                                                                                            invited_collage_Array.push("("+factor.collageId+",'"+results.id+"', now(), now())");
-                                                                                                        });
-                                                                                                       
-                                                                                                                Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
-                                                                                                                    if(err){
-                                                                                                                            console.log(err);
-                                                                                                                            callback();
-                                                                                                                    }else{
-																															//Tags.create({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation){
-																															var query = "INSERT INTO tags"+
-																																		" (collageId, userId, createdAt, updatedAt)"+
-																																		" VALUES"+invited_collage_Array;
-																															console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
-																															console.log(invited_collage_Array);
-																															console.log(query);
-																															console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
-																															Tags.query(query, function(err, insertTagsResult){
-																																if(err){
-																																	console.log(err);
-																																	callback();
-																																}else{
-																																		
-																																		console.log(insertTagsResult)
-																																		callback();
-																																}
-																															});  //Insert to tags table
-                                                                                                                    }
-                                                                                                                });
-                                                                                                            //}
-                                                                                                        //});
-                                                                                                    }
-                                                                                                }
-                                                                                                console.log("#########################################")
-                                                                                    });
-                                                                            },
                                                                         ], function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if(err){
                                                                                             console.log("async parallel in Sms Part Failure --------------------");

@@ -289,7 +289,7 @@ module.exports = {
 																										tagged_users        :   contact_arr
 																										//description         :   tagNotifyArray.length
 																									}	
-                                                                                               NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification){
+                                                                                               NotificationLog.create(values).exec(function(err, createdNotification){
 																									if(err){
 																										console.log(err);
 																										callback();

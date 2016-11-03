@@ -105,12 +105,11 @@ module.exports = {
                                         }else{
 
                                                 var dataResults         =   results;
-
                                                 var key                 =   [];
                                                 var dataResultsKeys     =   [];
                                                 var imgDetailsArrayOrder,
                                                     feeds;
-                                                for (var i = dataResults.length - 1; i >= 0; i--) {
+                                                for (var i = dataResults.length - 1; i >= 0; i--){
                                                     var like_position_Array = [];
                                                     var like_position;
                                                     var likeStatus;
@@ -123,32 +122,17 @@ module.exports = {
                                                         var likeStatusArray             = [];
                                                         var imgIdArray                  = [];
                                                         var imgDetailsArray             = [];
-                                                        for (var j = dataResults.length - 1; j >= 0; j--)
-                                                        {
-                                                                if(dataResults[j]["collageId"]==collageId_val)
-                                                                {
-                                                                    //console.log(" ##################### dataResults Starts #################### ");
-                                                                            //console.log(dataResults);
-                                                                    //console.log(" ##################### dataResults Ends #################### ");
-                                                                    //if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
-                                                                            //likeStatus = 0;
-                                                                    //}else{
-
-                                                                            if(dataResults[j]["likePosition"] == dataResults[j]["position"]){
-                                                                                console.log("likeStatus if ==============");
-                                                                                likeStatus = 1;
-                                                                            }else{
-                                                                                likeStatus = 0;
-                                                                            }
-                                                                            if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
-                                                                                like_position_Array.push(dataResults[j]["likePosition"]);
-                                                                            }
-                                                                    //}
-                                                                    console.log(dataResults[j]["imgId"]);
-                                                                    console.log(dataResults[j]["position"]);
-                                                                    console.log(dataResults[j]["likePosition"]);
-                                                                    //console.log(dataResults[j]["likeStatus"]);
-                                                                    console.log(dataResults[j]["vote"]);
+                                                        for (var j = dataResults.length - 1; j >= 0; j--){
+                                                                if(dataResults[j]["collageId"]==collageId_val){
+                                                                    if(dataResults[j]["likePosition"] == dataResults[j]["position"]){
+                                                                        console.log("likeStatus if ==============");
+                                                                        likeStatus = 1;
+                                                                    }else{
+                                                                        likeStatus = 0;
+                                                                    }
+                                                                    if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                        like_position_Array.push(dataResults[j]["likePosition"]);
+                                                                    }
                                                                     imgDetailsArray.push({
                                                                                         image_id        : dataResults[j]["imgId"],
                                                                                         position        : dataResults[j]["position"],
@@ -157,8 +141,6 @@ module.exports = {
                                                                                         });
                                                                 }
                                                         }
-                                                        console.log("imgDetailsArray ----------------------");
-                                                        console.log(imgDetailsArray);
                                                         if(like_position_Array.length){
                                                                 like_position = like_position_Array[0];
                                                         }else{

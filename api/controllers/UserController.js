@@ -292,7 +292,7 @@ module.exports = {
 																											var contactNtfyPush = [];
 																											//-------Socket brodcast------------------------------
 																											contact_arr.forEach(function(factor, index){
-																												var roomName  = "socket_user_"+factor.userId;
+																												var roomName  = "socket_user_"+factor;
 																												sails.sockets.broadcast(roomName,{
 																																				type                : "notification",
 																																				user_id             : factor.userId,
@@ -305,9 +305,9 @@ module.exports = {
 																																	});
 																											
 																										
-																											//----------PUSH Notification------------------------------------
+																											console.log("----------PUSH Notification------------------------------------");
 																											
-																											
+																											   console.log(factor)
 																												User.findOne({id:factor}).exec(function (err, notifySettings){
 																														if(err){
 																															console.log(err)

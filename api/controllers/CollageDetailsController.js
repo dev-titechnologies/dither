@@ -104,7 +104,7 @@ module.exports = {
                                                     //console.log(factor.likeStatus);
                                                     var like_status;
 
-                                                    if(factor.likeStatus == null || factor.likeStatus == "" || factor.likeStatus == 0){
+                                                    if(factor.like_status == null || factor.like_status == "" || factor.like_status == 0){
                                                             like_status = 0;
                                                     }else{
                                                             like_status = 1;
@@ -122,7 +122,7 @@ module.exports = {
                                                             //console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                                         if(factor.likeUserId != null || factor.likeUserId != "" ){
                                                                 //console.log("Inside factor likeUserId not null ==============");
-                                                                if(factor.likePosition != "" || factor.likePosition !== null){
+                                                                if(factor.likePosition != "" || factor.likePosition != null){
                                                                     if(factor.likeUserId == userId && factor.collageCreatorId != userId){
                                                                         //like_position = factor.likePosition;
                                                                         //console.log("Inside factor like User id check ================");

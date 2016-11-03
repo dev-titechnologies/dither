@@ -313,7 +313,7 @@ module.exports = {
 																															console.log(err)
 																															callback();
 																														}else{
-																															console.log("???????---Result----?????????")
+																															
 																															console.log(notifySettings.notifyContact)
 																															if(notifySettings.notifyContact){
 																																console.log(factor)
@@ -322,9 +322,8 @@ module.exports = {
 																														}
 																												});
 																											});
-
-																											if(contactNtfyPush.length)
-																											{
+																												console.log("???????---Result----?????????")	
+																											  console.log(contactNtfyPush)	
 																												User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId){
 																												//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
 																													if(err){
@@ -361,11 +360,7 @@ module.exports = {
 																													}
 																												});//getDeviceId
 
-																											}
-																										    else
-																										    {
-																												callback();
-																											}
+																											
 																										
 																									 }
                                                                                                 });    

@@ -504,7 +504,8 @@ module.exports = {
                                     " FROM"+
                                     " collageDetails clgdt"+
                                     " INNER JOIN collage clg ON clg.id = clgdt.collageId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                    //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                    " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id"+
                                     " INNER JOIN user usr ON usr.id = clglk.userId"+
                                     " WHERE"+
                                     " clgdt.collageId = '"+received_collage_id+"' AND clgdt.id = '"+received_single_image_id+"'";
@@ -517,7 +518,7 @@ module.exports = {
                                     }
                                     else
                                     {
-                                        if(results.length == 0){
+                                        if(!results.length){
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No users voted to this image'});
                                         }else{
                                                 var votedUsersArray = [];

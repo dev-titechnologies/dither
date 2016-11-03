@@ -126,6 +126,9 @@ module.exports = {
                                                         {
                                                                 if(dataResults[j]["collageId"]==collageId_val)
                                                                 {
+                                                                    console.log(" ##################### dataResults Starts #################### ");
+                                                                            console.log(dataResults);
+                                                                    console.log(" ##################### dataResults Ends #################### ");
                                                                     if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
                                                                             likeStatus = 0;
                                                                     }else{

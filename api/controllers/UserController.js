@@ -306,15 +306,16 @@ module.exports = {
 																											
 																										
 																											console.log("----------PUSH Notification------------------------------------");
-																											
+																										  });
+																										  contact_arr.forEach(function(factor, index){
 																											   console.log(factor)
 																												User.findOne({id:factor}).exec(function (err, notifySettings){
 																														if(err){
 																															console.log(err)
 																															callback();
 																														}else{
-																															
-																															console.log(notifySettings.notifyContact)
+																															console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+																															console.log(notifySettings)
 																															if(notifySettings.notifyContact){
 																																console.log(factor)
 																																contactNtfyPush.push(factor);

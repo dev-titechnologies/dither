@@ -283,6 +283,12 @@ module.exports = {
                                                                                                });
                                                                                                 
                                                                                                console.log(contact_arr)
+                                                                                               var values ={
+																										notificationTypeId  :   4,
+																										userId              :   results.id,
+																										tagged_users        :   contact_arr
+																										//description         :   tagNotifyArray.length
+																									}	
                                                                                                NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification){
 																									if(err){
 																										console.log(err);

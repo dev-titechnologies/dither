@@ -127,8 +127,8 @@ module.exports = {
                                         " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                         " U.name,U.profilePic as profile_image,"+
                                         " C.image as dither_image"+
-                                        " FROM  notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
-                                        " INNER JOIN collage as C ON C.id = N.collage_id"+
+                                        " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                        " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                         " WHERE"+
                                         " N.ditherUserId="+user_id+
                                         " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
@@ -144,8 +144,8 @@ module.exports = {
                                     " SELECT"+
                                     " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                     " U.name,U.profilePic as profile_image,C.image as dither_image"+
-                                    " FROM notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
-                                    " INNER JOIN collage as C ON C.id = N.collage_id"+
+                                    " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                    " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                     " WHERE"+
                                     " N.ditherUserId="+user_id+
                                     " OR"+

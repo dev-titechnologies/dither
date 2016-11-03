@@ -296,7 +296,7 @@ module.exports = {
 																												var roomName  = "socket_user_"+factor;
 																												sails.sockets.broadcast(roomName,{
 																																				type                : "notification",
-																																				user_id             : factor.userId,
+																																				user_id             : factor,
 																																				message             : "Signup Dither - Room Broadcast",
 																																				roomName            : roomName,
 																																				subscribers         : sails.sockets.subscribers(roomName),

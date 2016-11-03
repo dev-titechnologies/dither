@@ -204,7 +204,7 @@ module.exports = {
                                                                            // ext                             =     ext[ext.length-1].split('.');
                                                                             //profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                             //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-
+                                                                            var imageSrc                    =     profilePic_path_assets + factor.profilePic;
                                                                             fs.exists(imageSrc, function(exists) {
                                                                                  if (exists) {
 

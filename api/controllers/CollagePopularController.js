@@ -65,7 +65,8 @@ module.exports = {
                                         ") AS temp_clg"+
                                         " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
                                         " INNER JOIN user usr ON usr.id = temp_clg.userId"+
-                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                        //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                         " GROUP BY clgdt.id"+
                                         " ORDER BY temp_clg.totalVote, temp_clg.createdAt";
                         }else{
@@ -89,7 +90,8 @@ module.exports = {
                                         " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                         " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " INNER JOIN user usr ON usr.id = tg.userId"+
-                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                        //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                         " GROUP BY clgdt.id"+
                                         " ORDER BY clg.totalVote, clg.createdAt";
 
@@ -128,41 +130,36 @@ module.exports = {
                                     var dataResultsKeys     =   [];
                                     var popular_dithers,
                                         imgDetailsArrayOrder;
-                                    for (var i = dataResults.length - 1; i >= 0; i--) {
+                                    for (var i = dataResults.length - 1; i >= 0; i--){
                                         var like_position_Array = [];
                                         var like_position;
                                         var likeStatus;
                                         var dataResultsObj      =  new Object();
                                         var collageId_val       =  dataResults[i]["collageId"];
-                                        if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
-                                        {
+                                        if ( dataResultsKeys.indexOf( collageId_val ) == -1 ){
                                             var imgDetailsArray = [];
-                                            for (var j = dataResults.length - 1; j >= 0; j--)
-                                            {
-
-                                                if(dataResults[j]["collageId"]==collageId_val)
-                                                {
-                                                    if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == 0){
+                                            for (var j = dataResults.length - 1; j >= 0; j--){
+                                                if(dataResults[j]["collageId"]==collageId_val){
+                                                            if(dataResults[j]["likePosition"] == dataResults[j]["position"]){
+                                                                console.log("likeStatus if ==============");
+                                                                likeStatus = 1;
+                                                            }else{
                                                                 likeStatus = 0;
-                                                    }else{
-                                                            likeStatus = 1;
+                                                            }
                                                             if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                 like_position_Array.push(dataResults[j]["likePosition"]);
                                                             }
-                                                    }
-                                                    imgDetailsArray.push({
-                                                                    image_id        : dataResults[j]["imgId"],
-                                                                    position        : dataResults[j]["position"],
-                                                                    like_status     : likeStatus,
-                                                                    vote            : dataResults[j]["vote"]
-                                                                    });
+                                                            imgDetailsArray.push({
+                                                                                image_id        : dataResults[j]["imgId"],
+                                                                                position        : dataResults[j]["position"],
+                                                                                like_status     : likeStatus,
+                                                                                vote            : dataResults[j]["vote"]
+                                                                                });
                                                 }
                                             }
-                                            if(like_position_Array.length != 0){
-                                                        //console.log("like_position_Array === >>>  length != 0");
+                                            if(like_position_Array.length){
                                                         like_position = like_position_Array[0];
                                             }else{
-                                                        //console.log("like_position_Array === >>>  length == 0");
                                                         like_position = 0;
                                             }
                                             imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));

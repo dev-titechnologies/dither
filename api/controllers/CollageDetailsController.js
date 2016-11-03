@@ -394,6 +394,7 @@ module.exports = {
                                                                                             }else{
                                                                                                     callback();
                                                                                             }*/
+                                                                                            var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
                                                                                             fs.exists(imageSrc, function(exists) {
                                                                                                     if (exists) {
                                                                                                         console.log("Image exists");

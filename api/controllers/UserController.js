@@ -194,18 +194,134 @@ module.exports = {
                                                                                     console.log("async parallel in Sms Part");
                                                                                     callback();
                                                                             },
-                                                                            function(callback){
-																				//Notification Log insertion
+                                                                            function (callback)
+                                                                            {
 																				console.log("parallel 3")
-																				console.log(req.param('mobile_number'))
-																				var mobile_number  = req.param('mobile_number');
+																				var mobile_number  		  = req.param('mobile_number');
+																				var phoneContactsArray    = [];
                                                                                 AddressBook.find({ditherUserPhoneNumber : mobile_number}).exec(function (err, UserContacts){   
-                                                                                  if(err) 
-                                                                                  {
-																					  callback();
-																				  } 
-                                                                                   else
-                                                                                   { 
+																					  if(err) 
+																					  {
+																						  callback();
+																					  } 
+																					  else
+																					  {
+																						  console.log(UserContacts)
+																						  if(!UserContacts.length)
+																						  {
+																								callback();
+																						  }
+																						  else
+																						  {
+																							  
+																							  UserContacts.forEach(function(factor, index){
+																									
+																									 phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+																									 User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+                                                                                                                if(notifySettings.notifyContact==1){
+                                                                                                                    //phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+                                                                                                                    contact_arr.push(factor.userId);
+                                                                                                                }
+                                                                                                            });
+                                                                                               });
+                                                                                               NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification){
+																									if(err){
+																										console.log(err);
+																										callback();
+																										//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
+																									}else{
+																								            console.log(createdNotification);
+																											var contactNtfyPush = [];
+																											//-------Socket brodcast------------------------------
+																											contact_arr.forEach(function(factor, index){
+																												var roomName  = "socket_user_"+factor.userId;
+																												sails.sockets.broadcast(roomName,{
+																																				type                : "notification",
+																																				user_id             : factor.userId,
+																																				message             : "Signup Dither - Room Broadcast",
+																																				roomName            : roomName,
+																																				subscribers         : sails.sockets.subscribers(roomName),
+																																				socket              : sails.sockets.rooms(),
+																																				notification_type   : 4,
+																																				notification_id     : createdNotification.id
+																																	});
+																											
+																										
+																											//----------PUSH Notification------------------------------------
+																											
+																											
+																												User.findOne({id:factor}).exec(function (err, notifySettings){
+																														if(err){
+																															console.log(err)
+																															callback();
+																														}else{
+																															console.log("???????---Result----?????????")
+																															console.log(notifySettings.notifyContact)
+																															if(notifySettings.notifyContact){
+																																console.log(factor)
+																																contactNtfyPush.push(factor);
+																															}
+																														}
+																												});
+																											});
+
+																											if(contactNtfyPush.length)
+																											{
+																												User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId){
+																												//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+																													if(err){
+																														  console.log(err);
+																														  callback();
+																														  //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+																													}else{
+																														var message     =  'signup Notification';
+																														var ntfn_body   =   results.name +" Joined on Dither";
+																														//var device_id   =  getDeviceId.deviceId;
+																														getDeviceId.forEach(function(factor, index){
+																															deviceId_arr.push(factor.deviceId);
+																														});
+																														console.log(results)
+																														if(!deviceId_arr.length){
+																																callback();
+																														}else{
+																															//device_id       =  device_id.split(',');sails.log.debug(device_id);
+																															var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
+																															NotificationService.NtfnInAPP(data, function(err, ntfnSend){
+																																if(err){
+																																	console.log("Error in Push Notification Sending")
+																																	console.log(err)
+																																	callback();
+																																}else{
+																																	console.log("Push notification result")
+																																	console.log(ntfnSend)
+																																	console.log("Push Notification sended")
+																																	callback();
+																																}
+																															});
+																														}
+																													//------------------------------
+																													}
+																												});//getDeviceId
+
+																											}
+																										
+																										
+																										
+																									 }
+                                                                                                });    
+                                                                                               
+                                                                                               
+																						  }
+																					  }
+																				 });
+																				
+																			},
+                                                                            function(callback){
+                                                                                    //Notification Log insertion
+                                                                                    console.log("parallel 4")
+                                                                                    console.log(req.param('mobile_number'))
+                                                                                    var mobile_number  = req.param('mobile_number');
+                                                                                   
                                                                                     Invitation.find({phoneNumber : mobile_number}).exec(function (err, selectContacts){
                                                                                                 if(err){
                                                                                                     console.log(err);
@@ -216,144 +332,45 @@ module.exports = {
                                                                                                     if(selectContacts.length == 0){
                                                                                                             callback();
                                                                                                     }else{
-                                                                                                        UserContacts.forEach(function(factor, index){
-                                                                                                                    contact_arr.push(factor.userId);
-                                                                                                        });
-                                                                                                        //Notification Log Insertion
-                                                                                                        //var phonecontacts       = selectContacts;
-                                                                                                        var phoneContactsArray        = [];
+                                                                                                       
                                                                                                         var invited_collage_Array     = [];
                                                                                                         selectContacts.forEach(function(factor, index){
-                                                                                                            User.findOne({id:factor.userId}).exec(function (err, notifySettings){
-                                                                                                                if(notifySettings.notifyContact==1){
-                                                                                                                    phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
-                                                                                                                }
-                                                                                                            });
+                                                                                                            
                                                                                                             //invited_collage_Array.push(collageId : factor.collageId, userId: results.id);
                                                                                                             invited_collage_Array.push("("+factor.collageId+",'"+results.id+"', now(), now())");
                                                                                                         });
-                                                                                                        NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification){
-                                                                                                            if(err){
-                                                                                                                console.log(err);
-                                                                                                                callback();
-                                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
-                                                                                                            }else{
-                                                                                                                console.log(createdNotification);
-                                                                                                                //-------Socket brodcast------------------------------
-                                                                                                                contact_arr.forEach(function(factor, index){
-                                                                                                                    var roomName  = "socket_user_"+factor.userId;
-                                                                                                                    sails.sockets.broadcast(roomName,{
-                                                                                                                                                    type                : "notification",
-                                                                                                                                                    user_id             : factor.userId,
-                                                                                                                                                    message             : "Signup Dither - Room Broadcast",
-                                                                                                                                                    roomName            : roomName,
-                                                                                                                                                    subscribers         : sails.sockets.subscribers(roomName),
-                                                                                                                                                    socket              : sails.sockets.rooms(),
-                                                                                                                                                    notification_type   : 4,
-                                                                                                                                                    notification_id     : createdNotification.id
-                                                                                                                                        });
-                                                                                                                });
-                                                                                                                //------------end of socket---------------------------------------
+                                                                                                       
                                                                                                                 Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
                                                                                                                     if(err){
                                                                                                                             console.log(err);
                                                                                                                             callback();
                                                                                                                     }else{
-                                                                                                                        //Tags.create({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation){
-                                                                                                                        var query = "INSERT INTO tags"+
-                                                                                                                                    " (collageId, userId, createdAt, updatedAt)"+
-                                                                                                                                    " VALUES"+invited_collage_Array;
-                                                                                                                        console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
-                                                                                                                        console.log(invited_collage_Array);
-                                                                                                                        console.log(query);
-                                                                                                                        console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
-                                                                                                                        Tags.query(query, function(err, insertTagsResult){
-                                                                                                                            if(err){
-                                                                                                                                console.log(err);
-                                                                                                                                callback();
-                                                                                                                            }else{
-                                                                                                                                    //----------PUSH Notification------------------------------------
-                                                                                                                                    var contactNtfyPush = [];
-                                                                                                                                    contact_arr.forEach(function(factor, index){
-                                                                                                                                        User.findOne({id:factor}).exec(function (err, notifySettings){
-                                                                                                                                                if(err){
-                                                                                                                                                    console.log(err)
-                                                                                                                                                    callback();
-                                                                                                                                                }else{
-                                                                                                                                                    console.log("???????---Result----?????????")
-                                                                                                                                                    console.log(notifySettings.notifyContact)
-                                                                                                                                                    if(notifySettings.notifyContact){
-                                                                                                                                                        console.log(factor)
-                                                                                                                                                        contactNtfyPush.push(factor);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                        });
-                                                                                                                                    });
-
-                                                                                                                                    contact_arr.forEach(function(factor, index){
-                                                                                                                                        User.findOne({id:factor}).exec(function (err, notifySettings){
-                                                                                                                                                if(err){
-                                                                                                                                                    console.log(err)
-                                                                                                                                                    callback();
-                                                                                                                                                }else{
-                                                                                                                                                    console.log("???????---Result----?????????")
-                                                                                                                                                    console.log(notifySettings.notifyContact)
-                                                                                                                                                    if(notifySettings.notifyContact){
-                                                                                                                                                        console.log(factor)
-                                                                                                                                                        contactNtfyPush.push(factor);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                        });
-                                                                                                                                    });
-
-                                                                                                                                    User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId){
-                                                                                                                                    //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
-                                                                                                                                        if(err){
-                                                                                                                                              console.log(err);
-                                                                                                                                              callback();
-                                                                                                                                              //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
-                                                                                                                                        }else{
-                                                                                                                                            var message     =  'signup Notification';
-                                                                                                                                            var ntfn_body   =   results.name +" Joined on Dither";
-                                                                                                                                            //var device_id   =  getDeviceId.deviceId;
-                                                                                                                                            getDeviceId.forEach(function(factor, index){
-                                                                                                                                                deviceId_arr.push(factor.deviceId);
-                                                                                                                                            });
-                                                                                                                                            console.log(results)
-                                                                                                                                            if(!deviceId_arr.length){
-                                                                                                                                                    callback();
-                                                                                                                                            }else{
-                                                                                                                                                //device_id       =  device_id.split(',');sails.log.debug(device_id);
-                                                                                                                                                var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
-                                                                                                                                                NotificationService.NtfnInAPP(data, function(err, ntfnSend){
-                                                                                                                                                    if(err){
-                                                                                                                                                        console.log("Error in Push Notification Sending")
-                                                                                                                                                        console.log(err)
-                                                                                                                                                        callback();
-                                                                                                                                                    }else{
-                                                                                                                                                        console.log("Push notification result")
-                                                                                                                                                        console.log(ntfnSend)
-                                                                                                                                                        console.log("Push Notification sended")
-                                                                                                                                                        callback();
-                                                                                                                                                    }
-                                                                                                                                                });
-                                                                                                                                            }
-                                                                                                                                        //------------------------------
-                                                                                                                                        }
-                                                                                                                                    });//getDeviceId
-
-                                                                                                                            }
-                                                                                                                        });  //Insert to tags table
+																															//Tags.create({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation){
+																															var query = "INSERT INTO tags"+
+																																		" (collageId, userId, createdAt, updatedAt)"+
+																																		" VALUES"+invited_collage_Array;
+																															console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+																															console.log(invited_collage_Array);
+																															console.log(query);
+																															console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+																															Tags.query(query, function(err, insertTagsResult){
+																																if(err){
+																																	console.log(err);
+																																	callback();
+																																}else{
+																																		
+																																		console.log(insertTagsResult)
+																																		callback();
+																																}
+																															});  //Insert to tags table
                                                                                                                     }
                                                                                                                 });
-                                                                                                            }
-                                                                                                        });
+                                                                                                            //}
+                                                                                                        //});
                                                                                                     }
                                                                                                 }
                                                                                                 console.log("#########################################")
                                                                                     });
-																				}
-																			});
                                                                             },
                                                                         ], function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if(err){

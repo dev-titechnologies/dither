@@ -161,23 +161,14 @@ module.exports = {
                                                                 collageCommentResults.forEach(function(factor, index){
                                                                         //console.log("factor");
                                                                         //console.log(factor);
-                                                                        commentArray.push({comment_id: factor.id,
-                                                                                            user_id: factor.userId,
-                                                                                            user_name: factor.name,
-                                                                                            user_profile_pic_url : profile_image,
-                                                                                            mention_id:factor.mentionId,
-                                                                                            message: factor.comment,
-                                                                                            comment_created_date_time:factor.createdAt
-                                                                        });
-                                                                        if(factor.mentionId=='')
-                                                                        {
-                                                                            factor.mentionId = factor.userId;
-                                                                        }
-                                                                        if(factor.profilePic)
-                                                                        {
-
+                                                                        var profile_image  = "";
+                                                                        if(factor.profilePic){
                                                                             var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                            var profile_image;
+                                                                            var ext                         =     imageSrc.split('/');
+                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                            //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                            /*var profile_image;
                                                                             fs.exists(imageSrc, function(exists) {
                                                                                  if (exists) {
 
@@ -210,9 +201,16 @@ module.exports = {
                                                                                         profile_image = profilePic_path + factor.profilePic;
                                                                                     }
 
-                                                                            });
-
+                                                                            });*/
                                                                         }
+                                                                        commentArray.push({comment_id: factor.id,
+                                                                                            user_id: factor.userId,
+                                                                                            user_name: factor.name,
+                                                                                            user_profile_pic_url : profile_image,
+                                                                                            mention_id:factor.mentionId,
+                                                                                            message: factor.comment,
+                                                                                            comment_created_date_time:factor.createdAt
+                                                                        });
 
                                                                 });
                                                             }

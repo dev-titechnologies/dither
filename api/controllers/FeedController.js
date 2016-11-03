@@ -129,8 +129,9 @@ module.exports = {
                                                                     if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
                                                                             likeStatus = 0;
                                                                     }else{
-                                                                            likeStatus = dataResults[j]["likeStatus"];
+                                                                            likeStatus = 0;
                                                                             if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
+                                                                                likeStatus = dataResults[j]["likeStatus"];
                                                                                 like_position_Array.push(dataResults[j]["likePosition"]);
                                                                             }
                                                                     }

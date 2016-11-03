@@ -145,7 +145,7 @@ module.exports = {
                                                     " FROM collageComments clgcmt"+
                                                     " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                     " WHERE clgcmt.collageId = "+get_collage_id+
-                                                    " ORDER BY clgcmt.createdAt DESC";
+                                                    " ORDER BY clgcmt.createdAt";
 
                                             CollageComments.query(query, function(err, collageCommentResults) {
                                                     if(err)

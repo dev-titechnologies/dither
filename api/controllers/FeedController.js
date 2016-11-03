@@ -129,15 +129,17 @@ module.exports = {
                                                                     //console.log(" ##################### dataResults Starts #################### ");
                                                                             //console.log(dataResults);
                                                                     //console.log(" ##################### dataResults Ends #################### ");
-                                                                    if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
+                                                                    //if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
+                                                                            //likeStatus = 0;
+                                                                    //}else{
                                                                             likeStatus = 0;
-                                                                    }else{
-                                                                            likeStatus = 0;
+                                                                            if(dataResults[j]["likePosition"] == dataResults[j]["position"]){
+                                                                                likeStatus = 1;
+                                                                            }
                                                                             if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
-                                                                                likeStatus = dataResults[j]["likeStatus"];
                                                                                 like_position_Array.push(dataResults[j]["likePosition"]);
                                                                             }
-                                                                    }
+                                                                    //}
                                                                     console.log(dataResults[j]["imgId"]);
                                                                     console.log(dataResults[j]["position"]);
                                                                     console.log(dataResults[j]["likeStatus"]);

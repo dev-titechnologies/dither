@@ -72,8 +72,8 @@ module.exports = {
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
-                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
+                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                 " WHERE clg.id = "+get_collage_id+
                                 " GROUP BY clgdt.id";
                         console.log(query);
@@ -131,14 +131,29 @@ module.exports = {
                                                                 }
                                                         }
                                                         //console.log(like_position_Array);*/
-                                                        if(factor.likePosition == factor.position){
+                                                        /*if(factor.likePosition == factor.position){
                                                             console.log("like_status if ==============");
                                                             like_status = 1;
                                                         }else{
                                                             like_status = 0;
                                                         }
+                                                        if(factor.likeStatus == null || factor.likeStatus == "" || factor.likeStatus == 0){
+                                                            like_status = 0;
+                                                        }else{
+                                                                like_status = 1;
+                                                        }
                                                         if(factor.likeUserId == userId && factor.userId != userId){
                                                             like_position_Array.push(factor.likePosition);
+                                                        }*/
+                                                        if(factor.likeUserId != null || factor.likeUserId != "" ){
+                                                                //console.log("Inside factor likeUserId not null ==============");
+                                                                if(factor.likePosition != "" || factor.likePosition !== null){
+                                                                    if(factor.likeUserId == userId && factor.collageCreatorId != userId){
+                                                                        //like_position = factor.likePosition;
+                                                                        //console.log("Inside factor like User id check ================");
+                                                                        like_position_Array.push(factor.likePosition);
+                                                                    }
+                                                                }
                                                         }
                                                         imageArray.push({
                                                                     imageUrl        :   collageImg_path + factor.image,

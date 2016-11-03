@@ -64,8 +64,8 @@ module.exports = {
                         " userToken usrtkn"+
                         " INNER JOIN user usr ON usr.id = usrtkn.userId"+
                         " WHERE usrtkn.token = '"+token+"' AND usrtkn.expiryDate > '"+today+"'";
-            console.log("check token ----------------------query");
-            console.log(query);
+            //console.log("check token ----------------------query");
+            //console.log(query);
             User_token.query(query, function (err, results) {
                 if(err){
                         console.log(err);

@@ -144,7 +144,8 @@ module.exports = {
                                             query = " SELECT clgcmt.id, clgcmt.comment, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
                                                     " FROM collageComments clgcmt"+
                                                     " INNER JOIN user usr ON usr.id = clgcmt.userId"+
-                                                    " WHERE clgcmt.collageId = "+get_collage_id;
+                                                    " WHERE clgcmt.collageId = "+get_collage_id+
+                                                    " GROUP BY clgcmt.createdAt DESC";
 
                                             CollageComments.query(query, function(err, collageCommentResults) {
                                                     if(err)
@@ -160,6 +161,14 @@ module.exports = {
                                                                 collageCommentResults.forEach(function(factor, index){
                                                                         //console.log("factor");
                                                                         //console.log(factor);
+                                                                        commentArray.push({comment_id: factor.id,
+                                                                                            user_id: factor.userId,
+                                                                                            user_name: factor.name,
+                                                                                            user_profile_pic_url : profile_image,
+                                                                                            mention_id:factor.mentionId,
+                                                                                            message: factor.comment,
+                                                                                            comment_created_date_time:factor.createdAt
+                                                                        });
                                                                         if(factor.mentionId=='')
                                                                         {
                                                                             factor.mentionId = factor.userId;
@@ -191,31 +200,14 @@ module.exports = {
                                                                                             {
                                                                                                 //console.log(imageResizeResults)
                                                                                                 profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                console.log("--------**********************************************--------")
-                                                                                                commentArray.push({comment_id: factor.id,
-                                                                                                                    user_id: factor.userId,
-                                                                                                                    user_name: factor.name,
-                                                                                                                    user_profile_pic_url : profile_image,
-                                                                                                                    mention_id:factor.mentionId,
-                                                                                                                    message: factor.comment,
-                                                                                                                    comment_created_date_time:factor.createdAt
-                                                                                                });
+                                                                                                console.log("--------**********************************************--------");
                                                                                                 //console.log(commentArray)
-
                                                                                             }
                                                                                         });
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         profile_image = profilePic_path + factor.profilePic;
-                                                                                        commentArray.push({comment_id: factor.id,
-                                                                                            user_id: factor.userId,
-                                                                                            user_name: factor.name,
-                                                                                            user_profile_pic_url : profile_image,
-                                                                                            mention_id:factor.mentionId,
-                                                                                            message: factor.comment,
-                                                                                            comment_created_date_time:factor.createdAt
-                                                                                        });
                                                                                     }
 
                                                                             });

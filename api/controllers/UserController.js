@@ -195,22 +195,17 @@ module.exports = {
                                                                                     callback();
                                                                             },
                                                                             function(callback){
-                                                                                    //Notification Log insertion
-                                                                                    console.log("parallel 3")
-                                                                                    console.log(req.param('mobile_number'))
-                                                                                    var mobile_number  = req.param('mobile_number');
-                                                                                    //var validNo1       = mobile_number.replace('-','');
-                                                                                    //var validNo2       = mobile_number.split('-').pop();
-                                                                                    //var validNo3       = '0'+validNo2;
-                                                                                    //var validNo4       = validNo1.replace('+','');
-                                                                                   // console.log("nnnnnnnnnnnnnnnnnnn"+validNo1)
-                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo2)
-                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo3)
-                                                                                    //console.log("nnnnnnnnnnnnnnnnnnn"+validNo4)
-                                                                                    //var query  = 'SELECT userId FROM invitation where phoneNumber="'+validNo1+'" OR  phoneNumber="'+validNo2+'" OR  phoneNumber="'+validNo4+'" OR phoneNumber="'+validNo3+'" ';
-                                                                                    //var query  = 'SELECT userId FROM invitation where phoneNumber = "'+mobile_number+'"';
-                                                                                    //console.log(query)
-                                                                                    //Invitation.query(query, function(err, selectContacts){
+																				//Notification Log insertion
+																				console.log("parallel 3")
+																				console.log(req.param('mobile_number'))
+																				var mobile_number  = req.param('mobile_number');
+                                                                                AddressBook.find({ditherUserPhoneNumber : mobile_number}).exec(function (err, UserContacts){   
+                                                                                  if(err) 
+                                                                                  {
+																					  callback();
+																				  } 
+                                                                                   else
+                                                                                   { 
                                                                                     Invitation.find({phoneNumber : mobile_number}).exec(function (err, selectContacts){
                                                                                                 if(err){
                                                                                                     console.log(err);
@@ -221,7 +216,7 @@ module.exports = {
                                                                                                     if(selectContacts.length == 0){
                                                                                                             callback();
                                                                                                     }else{
-                                                                                                        selectContacts.forEach(function(factor, index){
+                                                                                                        UserContacts.forEach(function(factor, index){
                                                                                                                     contact_arr.push(factor.userId);
                                                                                                         });
                                                                                                         //Notification Log Insertion
@@ -357,6 +352,8 @@ module.exports = {
                                                                                                 }
                                                                                                 console.log("#########################################")
                                                                                     });
+																				}
+																			});
                                                                             },
                                                                         ], function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if(err){

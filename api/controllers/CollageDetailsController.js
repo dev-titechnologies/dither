@@ -85,7 +85,7 @@ module.exports = {
                                 }
                                 else
                                 {
-                                    if(!results.length){
+                                    if(results.length == 0){
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by this Id'});
                                     }else{
 

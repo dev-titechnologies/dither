@@ -133,9 +133,12 @@ module.exports = {
                                                                     //if(dataResults[j]["likeStatus"] == null || dataResults[j]["likeStatus"] == "" || dataResults[j]["likeStatus"] == "null"){
                                                                             //likeStatus = 0;
                                                                     //}else{
-                                                                            likeStatus = 0;
+
                                                                             if(dataResults[j]["likePosition"] == dataResults[j]["position"]){
+                                                                                console.log("likeStatus if ==============");
                                                                                 likeStatus = 1;
+                                                                            }else{
+                                                                                likeStatus = 0;
                                                                             }
                                                                             if(dataResults[j]["likeUserId"] == userId && dataResults[j]["userId"] != userId){
                                                                                 like_position_Array.push(dataResults[j]["likePosition"]);
@@ -143,6 +146,7 @@ module.exports = {
                                                                     //}
                                                                     console.log(dataResults[j]["imgId"]);
                                                                     console.log(dataResults[j]["position"]);
+                                                                    console.log(dataResults[j]["likePosition"]);
                                                                     //console.log(dataResults[j]["likeStatus"]);
                                                                     console.log(dataResults[j]["vote"]);
                                                                     imgDetailsArray.push({

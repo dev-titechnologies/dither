@@ -281,6 +281,7 @@ module.exports = {
                                                                                                                 }
                                                                                                             });
                                                                                                });
+                                                                                                
                                                                                                console.log(contact_arr)
                                                                                                NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification){
 																									if(err){
@@ -307,25 +308,10 @@ module.exports = {
 																										
 																											console.log("----------PUSH Notification------------------------------------");
 																										  });
-																										  contact_arr.forEach(function(factor, index){
-																											   console.log(factor)
-																												User.findOne({id:factor}).exec(function (err, notifySettings){
-																														if(err){
-																															console.log(err)
-																															callback();
-																														}else{
-																															console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-																															console.log(notifySettings)
-																															if(notifySettings.notifyContact){
-																																console.log(factor)
-																																contactNtfyPush.push(factor);
-																															}
-																														}
-																												});
-																											});
+																										 
 																												console.log("???????---Result----?????????")	
 																											  console.log(contactNtfyPush)	
-																												User_token.find({userId: contactNtfyPush}).exec(function (err, getDeviceId){
+																												User_token.find({userId: contact_arr}).exec(function (err, getDeviceId){
 																												//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
 																													if(err){
 																														  console.log(err);

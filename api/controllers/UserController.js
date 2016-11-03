@@ -281,6 +281,7 @@ module.exports = {
                                                                                                                 }
                                                                                                             });
                                                                                                });
+                                                                                               console.log(contact_arr)
                                                                                                NotificationLog.create(phoneContactsArray).exec(function(err, createdNotification){
 																									if(err){
 																										console.log(err);

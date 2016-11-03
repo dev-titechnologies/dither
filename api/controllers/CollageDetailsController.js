@@ -72,7 +72,8 @@ module.exports = {
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                 " WHERE clg.id = "+get_collage_id+
                                 " GROUP BY clgdt.id";
                         console.log(query);
@@ -84,7 +85,7 @@ module.exports = {
                                 }
                                 else
                                 {
-                                    if(results.length == 0){
+                                    if(!results.length){
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by this Id'});
                                     }else{
 
@@ -97,8 +98,9 @@ module.exports = {
                                             //console.log(results);
                                             var like_position_Array = [];
                                             var like_position;
+                                            var like_status;
                                             results.forEach(function(factor, index){
-                                                    //console.log("factor");
+                                                    /*//console.log("factor");
                                                     //console.log(factor.likeStatus);
                                                     var like_status;
 
@@ -128,15 +130,31 @@ module.exports = {
                                                                     }
                                                                 }
                                                         }
-                                                        //console.log(like_position_Array);
+                                                        //console.log(like_position_Array);*/
+                                                        if(factor.likePosition == factor.position){
+                                                            console.log("like_status if ==============");
+                                                            like_status = 1;
+                                                        }else{
+                                                            like_status = 0;
+                                                        }
+                                                        if(factor.likeUserId == userId && factor.userId != userId){
+                                                            like_position_Array.push(factor.likePosition);
+                                                        }
+                                                        imageArray.push({
+                                                                    imageUrl        :   collageImg_path + factor.image,
+                                                                    like_count      :   factor.vote,
+                                                                    like_status     :   like_status,
+                                                                    id              :   factor.imageId
+                                                                    });
+
+
+
                                             });
                                             //console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                             //console.log(like_position_Array);
-                                            if(like_position_Array.length != 0){
-                                                        //console.log("like_position_Array === >>>  length != 0");
+                                            if(like_position_Array.length){
                                                         like_position = like_position_Array[0];
                                             }else{
-                                                        //console.log("like_position_Array === >>>  length == 0");
                                                         like_position = 0;
                                             }
 
@@ -157,7 +175,7 @@ module.exports = {
                                                     {
                                                             //console.log(collageCommentResults);
                                                             var commentArray = [];
-                                                            if(collageCommentResults.length !== 0){
+                                                            if(collageCommentResults.length){
                                                                 collageCommentResults.forEach(function(factor, index){
                                                                         //console.log("factor");
                                                                         //console.log(factor);
@@ -247,22 +265,21 @@ module.exports = {
                                                                         {
 
                                                                             console.log(query);
-                                                                            var profile_image;
+                                                                            var profile_image = "";
                                                                             //console.log(taggedUsersFinalResults);
                                                                             var taggedUserArrayFinal = [];
-                                                                            if(taggedUsersFinalResults != 0){
+                                                                            if(taggedUsersFinalResults){
                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
                                                                                         //console.log("factor");
                                                                                         //console.log(factor);
-                                                                                        if(factor.mentionId=='')
-                                                                                        {
-                                                                                            factor.mentionId = factor.ditherUserId;
-                                                                                        }
-                                                                                        if(factor.profilePic)
-                                                                                        {
+                                                                                        if(factor.profilePic){
                                                                                             var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                                                                                            var ext                         =     imageSrc.split('/');
+                                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                            //console.log("--------**********************************************--------")
 
-                                                                                            fs.exists(imageSrc, function(exists) {
+                                                                                            /*fs.exists(imageSrc, function(exists) {
                                                                                                  if (exists) {
 
                                                                                                         //console.log("Image exists");
@@ -307,8 +324,14 @@ module.exports = {
                                                                                                                 });
                                                                                                     }
 
-                                                                                            });
+                                                                                            });*/
                                                                                         }
+                                                                                        taggedUserArrayFinal.push({
+                                                                                                    name            :   factor.name,
+                                                                                                    userId          :   factor.ditherUserId,
+                                                                                                    profile_image   :   profile_image,
+                                                                                                    mention_id      :   factor.mentionId
+                                                                                        });
 
                                                                                 });
                                                                             }
@@ -327,7 +350,7 @@ module.exports = {
                                                                                     {
                                                                                         //console.log("Invited Users =============>>>>>>>>>>>>>>>>>>   ");
                                                                                         var inviteeArray;
-                                                                                        if(invitedUsersFinalResults.length != 0){
+                                                                                        if(invitedUsersFinalResults.length){
 
                                                                                                 inviteeArray = invitedUsersFinalResults;
                                                                                         }else{
@@ -335,18 +358,25 @@ module.exports = {
                                                                                                 inviteeArray = [];
                                                                                         }
                                                                                         var user_profile_image    =     "";
-                                                                                        if(results[0].profilePic != "" || results[0].profilePic != null){
-                                                                                            user_profile_image              =     profilePic_path + results[0].profilePic;
-                                                                                        }
+                                                                                        //if(results[0].profilePic != "" || results[0].profilePic != null){
+                                                                                            //user_profile_image              =     profilePic_path + results[0].profilePic;
+                                                                                        //}
 
                                                                                     async.series([
 
                                                                                       function(callback) {
 
                                                                                             //------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                                            var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
-
-                                                                                            fs.exists(imageSrc, function(exists) {
+                                                                                            if(results[0].profilePic){
+                                                                                                    var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
+                                                                                                    var ext                         =     imageSrc.split('/');
+                                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                                    user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                            /*fs.exists(imageSrc, function(exists) {
                                                                                                  if (exists) {
 
                                                                                                         console.log("Image exists");
@@ -379,7 +409,7 @@ module.exports = {
                                                                                                     {
                                                                                                         callback();
                                                                                                     }
-                                                                                            });
+                                                                                            });*/
                                                                                         },
 
 
@@ -469,7 +499,7 @@ module.exports = {
                                     }
                                     else
                                     {
-                                        if(results.length == 0){
+                                        if(!results.length){
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No users voted to this image'});
                                         }else{
                                                 var votedUsersArray = [];

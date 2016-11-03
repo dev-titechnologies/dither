@@ -52,30 +52,29 @@ module.exports = {
 
                         console.log("files ========================= >>>>>>>>>>>>>>  ");
                         console.log(files);
-                        if(files.length == 0){
+                        if(!files.length){
                                 //console.log("File length zero ------------->>>>>>>>>>>>>  ");
                                 return res.json(200, {status: 2, status_type: 'Failure', message: 'Please pass an image'});
                         }else{
                                 //console.log("File length is there ------------->>>>>>>>>>>>>  ");
-                                var collage_imageName = "";
-                                var collageDetailImgArray = [];
+                                var collage_imageName           =   "";
+                                var collageDetailImgArray       =   [];
                                 //var keyArray = [];
                                 //var valueArray = [];
-
                                 files.forEach(function(factor, index){
                                         //console.log(factor);
                                         //console.log("++++++++++++++++");
-                                        var filename = factor.fd.split('/');
-                                        filename = filename[filename.length-1];
-
-                                        var filename_without_extension         =   factor.filename.split('.');
-                                        filename_without_extension             =   filename_without_extension[0];
-
+                                        var filename                        =   factor.fd.split('/');
+                                        filename                            =   filename[filename.length-1];
+                                        var filename_without_extension      =   factor.filename.split('.');
+                                        filename_without_extension          =   filename_without_extension[0];
                                         var image_name;
-
                                         //keyArray.push(filename_without_extension);
                                         //valueArray.push(collageImg_path + filename);
-                                        collageDetailImgArray.push({image_name: filename_without_extension, image_url: collageImg_path + filename});
+                                        collageDetailImgArray.push({
+                                                    image_name      :   filename_without_extension,
+                                                    image_url       :   collageImg_path + filename
+                                                    });
                                 });
                                 //console.log("collageDetailImgArray =================");
                                 //console.log(collageDetailImgArray);
@@ -87,7 +86,6 @@ module.exports = {
                                 }
                                 console.log("Key Value Array");
                                 console.log(keyValueArray);*/
-
                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
                                                     dither_images : collageDetailImgArray,
                                                     });
@@ -413,7 +411,7 @@ module.exports = {
 
 
                                                                                         //console.log("Asking for your opinoin")
-                                                                                        //console.log(tagNtfyPush) 
+                                                                                        //console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";

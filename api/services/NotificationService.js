@@ -41,7 +41,7 @@ module.exports = {
 			  },
 			  notification: {
 				title: data.NtfnBody, // Indicates notification title
-				body: 'Hey, there!', // Indicates notification body text
+				body: '', // Indicates notification body text
 				icon: '', // Indicates notification icon
 				sound: '', // Indicates sound to be played
 				badge: '1', // Indicates the badge on client app home icon
@@ -53,11 +53,7 @@ module.exports = {
 		
 			ios
 			  .send([device_id], {
-				body    		  : 	'',
-				"message"		  :		data.NtfnBody,
-				"type"			  :		data.NtfnType,
-				"id"			  :		data.id,
-				"notification_id" :		data.notification_id
+				body    		  : 	''
 				
 			  })
 			  .then(console.log.bind(console))

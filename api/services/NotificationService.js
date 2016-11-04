@@ -49,7 +49,7 @@ module.exports = {
 			  }
 			});
 			
-			//console.log(ios)
+			console.log(ios)
 		
 			ios
 			  .send([device_id], {

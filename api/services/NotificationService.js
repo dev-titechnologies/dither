@@ -16,10 +16,10 @@ module.exports = {
         console.log("Push Notification Apn")
         console.log(device_id)
         var details  =  {
-                        message             :   data.NtfnBody,
-                        type                :   data.NtfnType,
-                        id                  :   data.id,
-                        notification_id     :   data.notification_id
+                        "message"             :   data.NtfnBody,
+                        "type"                :   data.NtfnType,
+                        "id"                  :   data.id,
+                        "notification_id"     :   data.notification_id
                     };
         console.log(details);
         ios = PusherService('ios', {
@@ -49,12 +49,13 @@ module.exports = {
                                 icon        : '', // Indicates notification icon
                                 sound       : '', // Indicates sound to be played
                                 badge       : '', // Indicates the badge on client app home icon
-                                payload     : {
+                                payload     : details,
+                                /*payload     : {
                                                 "message"           :   data.NtfnBody,
                                                 "type"              :   data.NtfnType,
                                                 "id"                :   data.id,
                                                 "notification_id"   :   data.notification_id
-                                            }, // Custom data to send within Push Notification
+                                            }, // Custom data to send within Push Notification*/
             }
         });
 
@@ -97,7 +98,7 @@ module.exports = {
                                     icon    : '', // Indicates notification icon
                                     sound   : '', // Indicates sound to be played
                                     badge   : '', // Indicates the badge on client app home icon
-                                    payload : details// Custom data to send within Push Notification
+                                    payload : {}// Custom data to send within Push Notification
                                 },
         });
         //console.log(android)

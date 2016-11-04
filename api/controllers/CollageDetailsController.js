@@ -229,24 +229,33 @@ module.exports = {
                                                                                                 profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                                 console.log("--------**********************************************--------");
                                                                                                 //console.log(commentArray)
+                                                                                                commentArray.push({comment_id                   : factor.id,
+                                                                                                                    user_id                     : factor.userId,
+                                                                                                                    user_name                   : factor.name,
+                                                                                                                    user_profile_pic_url        : profile_image,
+                                                                                                                    mention_id                  : factor.mentionId,
+                                                                                                                    message                     : factor.comment,
+                                                                                                                    comment_created_date_time   : factor.createdAt
+                                                                                                });
                                                                                             }
                                                                                         });
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         profile_image = profilePic_path + factor.profilePic;
-                                                                                    }
-
-                                                                            });
-                                                                        }
-                                                                        commentArray.push({comment_id                   : factor.id,
+                                                                                        commentArray.push({comment_id                   : factor.id,
                                                                                             user_id                     : factor.userId,
                                                                                             user_name                   : factor.name,
                                                                                             user_profile_pic_url        : profile_image,
                                                                                             mention_id                  : factor.mentionId,
                                                                                             message                     : factor.comment,
                                                                                             comment_created_date_time   : factor.createdAt
-                                                                        });
+                                                                                        });
+                                                                                    }
+
+                                                                            });
+                                                                        }
+
 
                                                                 });
                                                             }

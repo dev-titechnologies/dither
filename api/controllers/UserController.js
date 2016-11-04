@@ -197,7 +197,7 @@ module.exports = {
                                                                             
                                                                             function(callback){
                                                                                     //Notification Log insertion
-                                                                                    console.log("parallel 4")
+                                                                                    console.log("parallel 3")
                                                                                     console.log(req.param('mobile_number'))
                                                                                     var mobile_number  = req.param('mobile_number');
                                                                                    
@@ -253,7 +253,7 @@ module.exports = {
                                                                             },
                                                                             function (callback)
                                                                             {
-																				console.log("parallel 3")
+																				console.log("parallel 4")
 																				var number  		  = req.param('mobile_number');
 																				var phoneContactsArray    = [];
                                                                                 AddressBook.find({ditherUserPhoneNumber : number}).exec(function (err, UserContacts){   
@@ -278,6 +278,7 @@ module.exports = {
                                                                                                                 if(notifySettings.notifyContact==1){
                                                                                                                     //phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
                                                                                                                     contact_arr.push(factor.userId);
+                                                                                                                    console.log(factor.userId)
                                                                                                                 }
                                                                                                             });
                                                                                                });

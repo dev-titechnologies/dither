@@ -32,7 +32,7 @@ module.exports = {
 				rejectUnauthorized: true, // Reject Unauthorized property to be passed through to tls.connect()
 				cacheLength: 1000, // Number of notifications to cache for error purposes
 				autoAdjustCache: true, // Whether the cache should grow in response to messages being lost after errors
-				maxConnections: 10, // The maximum number of connections to create for sending messages
+				maxConnections: 1, // The maximum number of connections to create for sending messages
 				connectTimeout: 10000, // The duration of time the module should wait, in milliseconds
 				connectionTimeout: 3600000, // The duration the socket should stay alive with no activity in milliseconds
 				connectionRetryLimit: 10, // The maximum number of connection failures that will be tolerated before apn will "terminate"
@@ -45,7 +45,7 @@ module.exports = {
 				icon: '', // Indicates notification icon
 				sound: '', // Indicates sound to be played
 				badge: '', // Indicates the badge on client app home icon
-				payload: {} // Custom data to send within Push Notification
+				payload: details // Custom data to send within Push Notification
 			  }
 			});
 			

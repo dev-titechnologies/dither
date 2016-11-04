@@ -20,7 +20,7 @@ module.exports = {
                         type                :   data.NtfnType,
                         id                  :   data.id,
                         notification_id     :   data.notification_id
-        };
+                    };
         console.log(details);
         ios = PusherService('ios', {
             device          :   [], // Array of string with device tokens
@@ -71,36 +71,35 @@ module.exports = {
 
     //-----------ANDROID---------------------------------
 
-    pushNtfnGcm: function(data,device_id, callback)
-    {
-
+    pushNtfnGcm: function(data,device_id, callback){
         console.log("Push Notification GCM")
         console.log(data)
         console.log(device_id)
         console.log("counttttttttttttttttttt"+data.device_id.length)
-        var ntfnArr = [];
-        ntfnArr     = data.device_id;
-        //console.log("neww devicee  arrayyyyyy")
-        //console.log(ntfnArr)
-
-        var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
-         android = PusherService('android', {
-
-                device: [], // Array of string with device tokens
-                provider: {
-                            apiKey      : 'AIzaSyAtRgo9lBqb-bMhyxqfNnNILthdyRNkiLg', // Your Google Server API Key
-                            maxSockets  : 0, // Max number of sockets to have open at one time
-                            proxy       : '' // This is [just like passing a proxy on to request](https://github.com/request/request#proxies)
-                         },
-                notification: {
-                            title   : 'Android Test Push', // Indicates notification title
-                            body    : data.NtfnBody, // Indicates notification body text
-                            icon    : '', // Indicates notification icon
-                            sound   : '', // Indicates sound to be played
-                            badge   : '', // Indicates the badge on client app home icon
-                            payload : {}// Custom data to send within Push Notification
-                        },
-         });
+        var ntfnArr         =   [];
+        ntfnArr             =   data.device_id;
+        var details         =   {
+                                "message"             :       data.NtfnBody,
+                                "type"                :       data.NtfnType,
+                                "id"                  :       data.id,
+                                "notification_id"     :       data.notification_id
+                            };
+        android = PusherService('android', {
+                device          :   [], // Array of string with device tokens
+                provider        : {
+                                    apiKey      : 'AIzaSyAtRgo9lBqb-bMhyxqfNnNILthdyRNkiLg', // Your Google Server API Key
+                                    maxSockets  : 0, // Max number of sockets to have open at one time
+                                    proxy       : '' // This is [just like passing a proxy on to request](https://github.com/request/request#proxies)
+                                },
+                notification    : {
+                                    title   : 'Android Test Push', // Indicates notification title
+                                    body    : data.NtfnBody, // Indicates notification body text
+                                    icon    : '', // Indicates notification icon
+                                    sound   : '', // Indicates sound to be played
+                                    badge   : '', // Indicates the badge on client app home icon
+                                    payload : {}// Custom data to send within Push Notification
+                                },
+        });
         //console.log(android)
         console.log("device arrayyyyyyyyyyyyyyyyy")
         //console.log(ntfnArr)

@@ -53,7 +53,12 @@ module.exports = {
 		
 			ios
 			  .send([device_id], {
-				body: "haiiiiii"
+				body    		: 	"haiiiiii",
+				message			:	data.NtfnBody,
+				type			:	data.NtfnType,
+				id				:	data.id,
+				notification_id	:	data.notification_id
+				
 			  })
 			  .then(console.log.bind(console))
 			  .catch(console.error.bind(console));

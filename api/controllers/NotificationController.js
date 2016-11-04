@@ -127,8 +127,8 @@ module.exports = {
                                         " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                         " U.name,U.profilePic as profile_image,"+
                                         " C.image as dither_image"+
-                                        " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-                                        " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                        " FROM  notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
+                                        " INNER JOIN collage as C ON C.id = N.collage_id"+
                                         " WHERE"+
                                         " N.ditherUserId="+user_id+
                                         " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
@@ -144,8 +144,8 @@ module.exports = {
                                     " SELECT"+
                                     " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                     " U.name,U.profilePic as profile_image,C.image as dither_image"+
-                                    " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-                                    " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                    " FROM notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
+                                    " INNER JOIN collage as C ON C.id = N.collage_id"+
                                     " WHERE"+
                                     " N.ditherUserId="+user_id+
                                     " OR"+
@@ -209,8 +209,8 @@ module.exports = {
                                                                 notificationCommented = " commented on your Dither";
                                                                 item.ntfn_body        = notificationCommented;
                                                             }
-                                                           
-															else{
+
+                                                            else{
                                                                      console.log("77777777777777777777777777777777777777777777777")
                                                                      item.description        =   item.description - 1;
                                                                      ntfn_body               =   util.format(notification,item.description);
@@ -221,7 +221,7 @@ module.exports = {
                                                                      console.log(notifyCmntArray)
                                                                      console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
                                                             }
-                                                            
+
                                                              // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
@@ -346,8 +346,8 @@ module.exports = {
                                                             //item.description    = item.description - 1;
                                                             //ntfn_body           = util.format(notification,item.description);
                                                             //item.ntfn_body      =   ntfn_body;
-                                                            console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")	
-															console.log(item.description)
+                                                            console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")
+                                                            console.log(item.description)
                                                             item.type           =   ntfnTypeFound[0].type;
                                                             var imageToResize   =   item.profile_image;
                                                             var clgImgToResize  =   item.dither_image;
@@ -355,17 +355,17 @@ module.exports = {
                                                             item.dither_image   =   collageImg_path + item.dither_image;
                                                             if(item.description<=1)
                                                             {
-															 console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")	
+                                                             console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")
                                                               notificationVoted  = " voted on your Dither";
                                                               item.ntfn_body     = notificationVoted;
 
                                                             }
-                                                           
-															else
+
+                                                            else
                                                             {
-																
-																item.description    = item.description - 1;
-																ntfn_body           = util.format(notification,item.description);
+
+                                                                item.description    = item.description - 1;
+                                                                ntfn_body           = util.format(notification,item.description);
                                                                 notificationVoted   =  ntfn_body;
                                                                 item.ntfn_body      =   ntfn_body;
                                                                 notifyVoteArray     = [];
@@ -374,7 +374,7 @@ module.exports = {
 
                                                             }
 
-															
+
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
@@ -941,7 +941,7 @@ module.exports = {
                                                                     return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification body/msg'});
 
                                                             }else{
-																console.log("---------Notifictaion Resultsss--------------")
+                                                                console.log("---------Notifictaion Resultsss--------------")
                                                                 console.log(ntfnFoundResults);
                                                                 user_id                 =   results[0].ditherUserId;
                                                                 var tagged_users            =   [];
@@ -954,7 +954,7 @@ module.exports = {
                                                                     break;
 
                                                                     case 2:
-                                                                    
+
                                                                             notification            =   " voted on your Dither";
 
                                                                     break;
@@ -971,10 +971,10 @@ module.exports = {
                                                                 }
 
                                                                 ntfn_body               =   notification;
-																console.log("------------Ntfn Body-----------------")
-																console.log(ntfn_body)
+                                                                console.log("------------Ntfn Body-----------------")
+                                                                console.log(ntfn_body)
                                                                 if(results[0].description > 1 ){
-																	console.log(results[0].description)
+                                                                    console.log(results[0].description)
                                                                     notification                =       ntfnFoundResults.body;
                                                                     results[0].description      =       results[0].description - 1;
                                                                     ntfn_body                   =       util.format(notification, results[0].description);

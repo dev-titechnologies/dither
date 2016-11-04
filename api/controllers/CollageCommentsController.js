@@ -353,7 +353,7 @@ module.exports = {
                                                                 },
                                                                 function(callback) {
 
-                                                                    User.find({id:userId}).exec(function (err, getUseDetails){
+                                                                    User.findOne({id:userId}).exec(function (err, getUseDetails){
                                                                         if(err)
                                                                         {
                                                                             console.log(err)
@@ -361,41 +361,47 @@ module.exports = {
                                                                         }
                                                                         else
                                                                         {
-                                                                            //console.log("Image Resizing")
-                                                                            //console.log(getUseDetails[0].profilePic)
+                                                                            if(!getUseDetails){
+                                                                                //console.log("Image Resizing")
+                                                                                //console.log(getUseDetails[0].profilePic)
 
-                                                                              //------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                              //console.log(getUseDetails[0].profilePic)
-                                                                                var imageSrc                    =     profilePic_path_assets + getUseDetails[0].profilePic;
+                                                                                  //------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                                                  //console.log(getUseDetails[0].profilePic)
+                                                                                    var imageSrc                    =     profilePic_path_assets + getUseDetails.profilePic;
+                                                                                    var ext                         =     imageSrc.split('/');
+                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                    profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                    callback();
+                                                                                    /*fs.exists(imageSrc, function(exists) {
+                                                                                     if (exists) {
 
-                                                                                fs.exists(imageSrc, function(exists) {
-                                                                                 if (exists) {
+                                                                                            //console.log("Image exists");
 
-                                                                                        //console.log("Image exists");
+                                                                                            var ext                         =     imageSrc.split('/');
+                                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                                            var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                                            //console.log(imageSrc)
+                                                                                            //console.log(imageDst)
+                                                                                            ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
 
-                                                                                        var ext                         =     imageSrc.split('/');
-                                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                                        var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                                        //console.log(imageSrc)
-                                                                                        //console.log(imageDst)
-                                                                                        ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-
-                                                                                            if(err)
-                                                                                            {
-                                                                                                console.log(err)
-                                                                                                callback();
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                //console.log(imageResizeResults)
-                                                                                                profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                //console.log(profile_image)
-                                                                                                callback();
-                                                                                            }
-                                                                                        });
-                                                                                    }
-                                                                                });
-
+                                                                                                if(err)
+                                                                                                {
+                                                                                                    console.log(err)
+                                                                                                    callback();
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    //console.log(imageResizeResults)
+                                                                                                    profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                    //console.log(profile_image)
+                                                                                                    callback();
+                                                                                                }
+                                                                                            });
+                                                                                        }
+                                                                                    });*/
+                                                                            }else{
+                                                                                    callback();
+                                                                            }
                                                                         }
                                                                     });
                                                                 },

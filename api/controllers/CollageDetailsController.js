@@ -72,7 +72,8 @@ module.exports = {
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
+                                " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                 " WHERE clg.id = "+get_collage_id+
                                 " GROUP BY clgdt.id";
                         console.log(query);
@@ -97,21 +98,28 @@ module.exports = {
                                             //console.log(results);
                                             var like_position_Array = [];
                                             var like_position;
+                                            var like_status, like_count;
                                             results.forEach(function(factor, index){
                                                     //console.log("factor");
                                                     //console.log(factor.likeStatus);
                                                     var like_status;
 
-                                                    if(factor.likeStatus == null || factor.likeStatus == "" || factor.likeStatus == 0){
+                                                    /*if(factor.like_status == null || factor.like_status == "" || factor.like_status == 0){
                                                             like_status = 0;
                                                     }else{
                                                             like_status = 1;
+                                                    }*/
+                                                    if(factor.likePosition == factor.position){
+                                                            console.log("like_status if ==============");
+                                                            like_status = 1;
+                                                    }else{
+                                                            like_status = 0;
                                                     }
                                                     imageArray.push({
-                                                                    imageUrl : collageImg_path + factor.image,
-                                                                    like_count: factor.vote,
-                                                                    like_status: like_status,
-                                                                    id: factor.imageId
+                                                                    imageUrl        : collageImg_path + factor.image,
+                                                                    like_count      : factor.vote,
+                                                                    like_status     : like_status,
+                                                                    id              : factor.imageId
                                                                     });
                                                             //console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                                             //console.log("_______factor.likeUserId__________"+factor.likeUserId);
@@ -119,6 +127,31 @@ module.exports = {
                                                             //console.log("_______userId__________"+userId);
                                                             //console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                                         if(factor.likeUserId != null || factor.likeUserId != "" ){
+                                                                //console.log("Inside factor likeUserId not null ==============");
+                                                                if(factor.likePosition != "" || factor.likePosition != null){
+                                                                    if(factor.likeUserId == userId && factor.collageCreatorId != userId){
+                                                                        //like_position = factor.likePosition;
+                                                                        //console.log("Inside factor like User id check ================");
+                                                                        like_position_Array.push(factor.likePosition);
+                                                                    }
+                                                                }
+                                                        }
+                                                        //console.log(like_position_Array);*/
+                                                        /*if(factor.likePosition == factor.position){
+                                                            console.log("like_status if ==============");
+                                                            like_status = 1;
+                                                        }else{
+                                                            like_status = 0;
+                                                        }
+                                                        if(factor.likeStatus == null || factor.likeStatus == "" || factor.likeStatus == 0){
+                                                            like_status = 0;
+                                                        }else{
+                                                                like_status = 1;
+                                                        }
+                                                        if(factor.likeUserId == userId && factor.userId != userId){
+                                                            like_position_Array.push(factor.likePosition);
+                                                        }*/
+                                                        /*if(factor.likeUserId != null || factor.likeUserId != "" ){
                                                                 //console.log("Inside factor likeUserId not null ==============");
                                                                 if(factor.likePosition != "" || factor.likePosition !== null){
                                                                     if(factor.likeUserId == userId && factor.collageCreatorId != userId){
@@ -128,15 +161,22 @@ module.exports = {
                                                                     }
                                                                 }
                                                         }
-                                                        //console.log(like_position_Array);
+                                                        imageArray.push({
+                                                                    imageUrl        :   collageImg_path + factor.image,
+                                                                    like_count      :   factor.vote,
+                                                                    like_status     :   like_status,
+                                                                    id              :   factor.imageId
+                                                                    });
+                                                        */
+
+
+
                                             });
                                             //console.log("like_position+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                             //console.log(like_position_Array);
                                             if(like_position_Array.length != 0){
-                                                        //console.log("like_position_Array === >>>  length != 0");
                                                         like_position = like_position_Array[0];
                                             }else{
-                                                        //console.log("like_position_Array === >>>  length == 0");
                                                         like_position = 0;
                                             }
 
@@ -157,18 +197,20 @@ module.exports = {
                                                     {
                                                             //console.log(collageCommentResults);
                                                             var commentArray = [];
-                                                            if(collageCommentResults.length !== 0){
+                                                            if(collageCommentResults.length){
                                                                 collageCommentResults.forEach(function(factor, index){
                                                                         //console.log("factor");
                                                                         //console.log(factor);
-                                                                        var profile_image  = "";
-                                                                        if(factor.profilePic){
-                                                                            var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                            var ext                         =     imageSrc.split('/');
-                                                                            ext                             =     ext[ext.length-1].split('.');
-                                                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                        var profile_image;
+                                                                        if(factor.profilePic == null || factor.profilePic == ""){
+                                                                             profile_image  = "";
+                                                                        }else{
+                                                                            //var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                                                                           // var ext                         =     imageSrc.split('/');
+                                                                           // ext                             =     ext[ext.length-1].split('.');
+                                                                            //profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                             //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                            /*var profile_image;
+                                                                            var imageSrc                    =     profilePic_path_assets + factor.profilePic;
                                                                             fs.exists(imageSrc, function(exists) {
                                                                                  if (exists) {
 
@@ -193,24 +235,33 @@ module.exports = {
                                                                                                 profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                                 console.log("--------**********************************************--------");
                                                                                                 //console.log(commentArray)
+                                                                                                commentArray.push({comment_id                   : factor.id,
+                                                                                                                    user_id                     : factor.userId,
+                                                                                                                    user_name                   : factor.name,
+                                                                                                                    user_profile_pic_url        : profile_image,
+                                                                                                                    mention_id                  : factor.mentionId,
+                                                                                                                    message                     : factor.comment,
+                                                                                                                    comment_created_date_time   : factor.createdAt
+                                                                                                });
                                                                                             }
                                                                                         });
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         profile_image = profilePic_path + factor.profilePic;
+                                                                                        commentArray.push({comment_id                   : factor.id,
+                                                                                            user_id                     : factor.userId,
+                                                                                            user_name                   : factor.name,
+                                                                                            user_profile_pic_url        : profile_image,
+                                                                                            mention_id                  : factor.mentionId,
+                                                                                            message                     : factor.comment,
+                                                                                            comment_created_date_time   : factor.createdAt
+                                                                                        });
                                                                                     }
 
-                                                                            });*/
+                                                                            });
                                                                         }
-                                                                        commentArray.push({comment_id: factor.id,
-                                                                                            user_id: factor.userId,
-                                                                                            user_name: factor.name,
-                                                                                            user_profile_pic_url : profile_image,
-                                                                                            mention_id:factor.mentionId,
-                                                                                            message: factor.comment,
-                                                                                            comment_created_date_time:factor.createdAt
-                                                                        });
+
 
                                                                 });
                                                             }
@@ -247,23 +298,22 @@ module.exports = {
                                                                         {
 
                                                                             console.log(query);
-                                                                            var profile_image;
+                                                                            var profile_image = "";
                                                                             //console.log(taggedUsersFinalResults);
                                                                             var taggedUserArrayFinal = [];
-                                                                            if(taggedUsersFinalResults != 0){
+                                                                            if(taggedUsersFinalResults){
                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
                                                                                         //console.log("factor");
                                                                                         //console.log(factor);
-                                                                                        if(factor.mentionId=='')
-                                                                                        {
-                                                                                            factor.mentionId = factor.ditherUserId;
-                                                                                        }
-                                                                                        if(factor.profilePic)
-                                                                                        {
+                                                                                        if(factor.profilePic){
                                                                                             var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                                                                                            //var ext                         =     imageSrc.split('/');
+                                                                                            //ext                             =     ext[ext.length-1].split('.');
+                                                                                            //profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                            //console.log("--------**********************************************--------")
 
                                                                                             fs.exists(imageSrc, function(exists) {
-                                                                                                 if (exists) {
+                                                                                                    if (exists) {
 
                                                                                                         //console.log("Image exists");
 
@@ -309,6 +359,12 @@ module.exports = {
 
                                                                                             });
                                                                                         }
+                                                                                        /*taggedUserArrayFinal.push({
+                                                                                                    name            :   factor.name,
+                                                                                                    userId          :   factor.ditherUserId,
+                                                                                                    profile_image   :   profile_image,
+                                                                                                    mention_id      :   factor.mentionId
+                                                                                        });*/
 
                                                                                 });
                                                                             }
@@ -327,7 +383,7 @@ module.exports = {
                                                                                     {
                                                                                         //console.log("Invited Users =============>>>>>>>>>>>>>>>>>>   ");
                                                                                         var inviteeArray;
-                                                                                        if(invitedUsersFinalResults.length != 0){
+                                                                                        if(invitedUsersFinalResults.length){
 
                                                                                                 inviteeArray = invitedUsersFinalResults;
                                                                                         }else{
@@ -344,13 +400,20 @@ module.exports = {
                                                                                       function(callback) {
 
                                                                                             //------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                                                            /*if(results[0].profilePic){
+                                                                                                    var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
+                                                                                                    var ext                         =     imageSrc.split('/');
+                                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                                    user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }*/
                                                                                             var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
-
                                                                                             fs.exists(imageSrc, function(exists) {
-                                                                                                 if (exists) {
-
+                                                                                                    if (exists) {
                                                                                                         console.log("Image exists");
-
+                                                                                                        var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
                                                                                                         var ext                         =     imageSrc.split('/');
                                                                                                         ext                             =     ext[ext.length-1].split('.');
                                                                                                         var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
@@ -456,7 +519,8 @@ module.exports = {
                                     " FROM"+
                                     " collageDetails clgdt"+
                                     " INNER JOIN collage clg ON clg.id = clgdt.collageId"+
-                                    " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                    //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position"+
+                                    " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id"+
                                     " INNER JOIN user usr ON usr.id = clglk.userId"+
                                     " WHERE"+
                                     " clgdt.collageId = '"+received_collage_id+"' AND clgdt.id = '"+received_single_image_id+"'";
@@ -469,7 +533,7 @@ module.exports = {
                                     }
                                     else
                                     {
-                                        if(results.length == 0){
+                                        if(!results.length){
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No users voted to this image'});
                                         }else{
                                                 var votedUsersArray = [];

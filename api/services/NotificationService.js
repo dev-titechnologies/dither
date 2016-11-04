@@ -45,7 +45,7 @@ module.exports = {
 				icon: '', // Indicates notification icon
 				sound: '', // Indicates sound to be played
 				badge: '1', // Indicates the badge on client app home icon
-				payload: {"alert":"Hello from APNs Tester.","badge":"1","payload":"1"}, // Custom data to send within Push Notification
+				payload: {"alert":"Hello from APNs Tester.","badge":"1","payload":"1","message":data.NtfnBody,"type":data.NtfnType,"id":data.id,"notification_id":data.notification_id}, // Custom data to send within Push Notification
 			  }
 			});
 			

@@ -97,7 +97,7 @@ module.exports = {
                                     icon    : '', // Indicates notification icon
                                     sound   : '', // Indicates sound to be played
                                     badge   : '', // Indicates the badge on client app home icon
-                                    payload : {}// Custom data to send within Push Notification
+                                    payload : details// Custom data to send within Push Notification
                                 },
         });
         //console.log(android)

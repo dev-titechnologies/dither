@@ -52,7 +52,7 @@ module.exports = {
 			console.log(ios)
 		
 			ios
-			  .send([device_id], {
+			  .send(device_id, {
 				body: details
 			  })
 			  .then(console.log.bind(console))

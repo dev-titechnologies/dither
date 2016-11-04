@@ -104,17 +104,12 @@ module.exports = {
                                                     //console.log(factor.likeStatus);
                                                     var like_status;
 
-                                                    /*if(factor.like_status == null || factor.like_status == "" || factor.like_status == 0){
+                                                    if(factor.likeStatus == null || factor.likeStatus == "" || factor.likeStatus == 0){
                                                             like_status = 0;
                                                     }else{
                                                             like_status = 1;
-                                                    }*/
-                                                    if(factor.likePosition == factor.position){
-                                                            console.log("like_status if ==============");
-                                                            like_status = 1;
-                                                    }else{
-                                                            like_status = 0;
                                                     }
+
                                                     imageArray.push({
                                                                     imageUrl        : collageImg_path + factor.image,
                                                                     like_count      : factor.vote,

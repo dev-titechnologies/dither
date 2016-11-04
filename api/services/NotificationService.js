@@ -19,7 +19,7 @@ module.exports = {
 		var details ={message:data.NtfnBody,type:data.NtfnType,id:data.id,notification_id:data.notification_id};
 		console.log(details)
 		ios = PusherService('ios', {
-			device: [], // Array of string with device tokens
+			device: ['5071f159ee25c3d6327f54d917bf724b9b91d36be88f3149b1735b0a473116bf'], // Array of string with device tokens
 			provider: {
 				cert: 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
 				key: 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
@@ -54,7 +54,7 @@ module.exports = {
 			//console.log(ios)
 		
 			ios
-			  .send([device_id], {
+			  .send(['5071f159ee25c3d6327f54d917bf724b9b91d36be88f3149b1735b0a473116bf'], {
 				body: details
 			  })
 			  .then(console.log.bind(console))

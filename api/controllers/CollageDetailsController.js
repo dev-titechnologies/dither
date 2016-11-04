@@ -98,22 +98,28 @@ module.exports = {
                                             //console.log(results);
                                             var like_position_Array = [];
                                             var like_position;
-                                            var like_status;
+                                            var like_status, like_count;
                                             results.forEach(function(factor, index){
                                                     //console.log("factor");
                                                     //console.log(factor.likeStatus);
                                                     var like_status;
 
-                                                    if(factor.like_status == null || factor.like_status == "" || factor.like_status == 0){
+                                                    /*if(factor.like_status == null || factor.like_status == "" || factor.like_status == 0){
                                                             like_status = 0;
                                                     }else{
                                                             like_status = 1;
+                                                    }*/
+                                                    if(factor.likePosition == factor.position){
+                                                            console.log("like_status if ==============");
+                                                            like_status = 1;
+                                                    }else{
+                                                            like_status = 0;
                                                     }
                                                     imageArray.push({
-                                                                    imageUrl : collageImg_path + factor.image,
-                                                                    like_count: factor.vote,
-                                                                    like_status: like_status,
-                                                                    id: factor.imageId
+                                                                    imageUrl        : collageImg_path + factor.image,
+                                                                    like_count      : factor.vote,
+                                                                    like_status     : like_status,
+                                                                    id              : factor.imageId
                                                                     });
                                                             //console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                                             //console.log("_______factor.likeUserId__________"+factor.likeUserId);

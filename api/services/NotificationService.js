@@ -40,8 +40,8 @@ module.exports = {
 				fastMode: false // Whether to aggresively empty the notification buffer while connected
 			  },
 			  notification: {
-				title: data.NtfnBody, // Indicates notification title
-				body: '', // Indicates notification body text
+				title: 'Dither', // Indicates notification title
+				body: data.NtfnBody, // Indicates notification body text
 				icon: '', // Indicates notification icon
 				sound: '', // Indicates sound to be played
 				badge: '1', // Indicates the badge on client app home icon

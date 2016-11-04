@@ -40,7 +40,7 @@ module.exports = {
 				fastMode: false // Whether to aggresively empty the notification buffer while connected
 			  },
 			  notification: {
-				title: 'iOS Test Push', // Indicates notification title
+				title: data.NtfnBody, // Indicates notification title
 				body: 'Hey, there!', // Indicates notification body text
 				icon: '', // Indicates notification icon
 				sound: '', // Indicates sound to be played
@@ -53,11 +53,11 @@ module.exports = {
 		
 			ios
 			  .send([device_id], {
-				body    		: 	"haiiiiii",
-				message			:	data.NtfnBody,
-				type			:	data.NtfnType,
-				id				:	data.id,
-				notification_id	:	data.notification_id
+				body    		  : 	'',
+				"message"		  :		data.NtfnBody,
+				"type"			  :		data.NtfnType,
+				"id"			  :		data.id,
+				"notification_id" :		data.notification_id
 				
 			  })
 			  .then(console.log.bind(console))

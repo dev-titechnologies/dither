@@ -45,7 +45,9 @@ module.exports = {
 				icon: '', // Indicates notification icon
 				sound: '', // Indicates sound to be played
 				badge: '1', // Indicates the badge on client app home icon
-				payload: {} // Custom data to send within Push Notification
+				payload: {}, // Custom data to send within Push Notification
+				alert: "Hello from APNs Tester."
+				
 			  }
 			});
 			

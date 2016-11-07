@@ -399,7 +399,7 @@ module.exports = {
                                                                                                    {
                                                                                                      console.log("???????---Result----?????????")
                                                                                                      console.log(notifySettings.notifyOpinion)
-                                                                                                     if(notifySettings.notifyOpinion)
+                                                                                                     if(notifySettings.notifyOpinion==0)
                                                                                                      {
                                                                                                         console.log(factor)
                                                                                                         tagNtfyPush.push(factor);

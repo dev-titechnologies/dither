@@ -649,7 +649,8 @@ module.exports = {
                                                 }
                                                 else
                                                 {
-
+													  if(resultData.profilePic)
+													  {
                                                         var data     = {profilePic: " "};
                                                         var criteria = {id: userId};
                                                         User.update(criteria,data).exec(function(err, datas) {
@@ -667,6 +668,8 @@ module.exports = {
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                             }
                                                         });
+													  }
+													  
                                                 }
                                         }
                                     });

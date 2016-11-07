@@ -420,6 +420,7 @@ module.exports = {
 																								},
 																								function(callback) {   
 																									console.log("call backkk")
+																									callback();
 																								},	
 																								function(callback) {	
 																									//console.log("Asking for your opinoin")

@@ -108,12 +108,20 @@ module.exports = {
                                                                         if(factor.profilePic == null || factor.profilePic == ""){
                                                                              profile_image  = "";
                                                                         }else{
-                                                                            //var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                           // var ext                         =     imageSrc.split('/');
-                                                                           // ext                             =     ext[ext.length-1].split('.');
-                                                                            //profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                            //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
                                                                             var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                                                                            var ext                         =     imageSrc.split('/');
+                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                            commentArray.push({comment_id                   : factor.id,
+                                                                                                user_id                     : factor.userId,
+                                                                                                user_name                   : factor.name,
+                                                                                                user_profile_pic_url        : profile_image,
+                                                                                                mention_id                  : factor.mentionId,
+                                                                                                message                     : factor.comment,
+                                                                                                comment_created_date_time   : factor.createdAt
+                                                                            });
+                                                                            //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                            /*var imageSrc                    =     profilePic_path_assets + factor.profilePic;
                                                                             fs.exists(imageSrc, function(exists){
                                                                                  if (exists){
                                                                                         //console.log("Image exists");
@@ -155,7 +163,7 @@ module.exports = {
                                                                                         });
                                                                                     }
 
-                                                                            });
+                                                                            });*/
                                                                         }
 
 
@@ -273,7 +281,10 @@ module.exports = {
                                                                                         }
                                                                                         var user_profile_image    =     "";
                                                                                         if(results[0].profilePic != "" || results[0].profilePic != null){
-                                                                                            user_profile_image              =     profilePic_path + results[0].profilePic;
+                                                                                                var imageSrc                    =     results[0].profilePic;
+                                                                                                var ext                         =     imageSrc.split('.');
+                                                                                                user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                //user_profile_image              =     profilePic_path + results[0].profilePic;
                                                                                         }
 
                                                                                     async.series([
@@ -410,8 +421,10 @@ module.exports = {
                                                         if(factor.profilePic == null || factor.profilePic == ""){
                                                                     profile_image = "";
                                                         }else{
-
-                                                                    profile_image = profilePic_path + factor.profilePic;
+                                                                var imageSrc                    =     results[0].profilePic;
+                                                                var ext                         =     imageSrc.split('.');
+                                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                //profile_image = profilePic_path + factor.profilePic;
                                                         }
                                                         votedUsersArray.push({
                                                                             user_id : factor.user_id,
@@ -419,8 +432,29 @@ module.exports = {
                                                                             user_pic : profile_image
                                                                             });
                                                 });
-                                                if(results[0].collageImage){
+
+                                                var dither_image                    =     collageImg_path + results[0].collageImage;
+                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
+                                                                      single_image_url              :   collageImg_path + results[0].image,
+                                                                      dither_title                  :   results[0].imgTitle,
+                                                                      dither_image                  :   dither_image,
+                                                                      total_vote                    :   results[0].vote,
+                                                                      single_dither_id              :   results[0].single_image_id,
+                                                                      voted_users                   :   votedUsersArray,
+                                                                });
+                                                /*if(results[0].collageImage){
                                                     var clgImgSrc                   =     collageImg_path_assets + results[0].collageImage;
+                                                    var ext                         =     clgImgSrc.split('/');
+                                                    ext                             =     ext[ext.length-1].split('.');
+                                                    dither_image                    =     collageImg_path + results[0].collageImage;
+                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
+                                                                          single_image_url              :   collageImg_path + results[0].image,
+                                                                          dither_title                  :   results[0].imgTitle,
+                                                                          dither_image                  :   dither_image,
+                                                                          total_vote                    :   results[0].vote,
+                                                                          single_dither_id              :   results[0].single_image_id,
+                                                                          voted_users                   :   votedUsersArray,
+                                                                    });
                                                     fs.exists(clgImgSrc, function(exists){
                                                         if(exists){
                                                                 console.log("collge Image exists");
@@ -456,7 +490,7 @@ module.exports = {
                                                                 }               );
                                                             }
                                                     });
-                                                }
+                                                }*/
                                         }
                                     }
                             });

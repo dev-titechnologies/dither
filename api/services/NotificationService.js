@@ -125,99 +125,73 @@ module.exports = {
     ==============================================================================================================================================*/
 
 
-    NtfnInAPP: function(data,callback)
-    {
+    NtfnInAPP: function(data,callback){
         console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
         console.log(data)
         var arr = data.device_id;
         console.log("/////////----Device array----//////////")
         console.log(arr)
-        if(arr)
-        {
-            arr.forEach(function(factor, index)
-            {
+        if(arr){
+            arr.forEach(function(factor, index){
                 User_token.findOne({deviceId:factor }).exec(function (err, getDeviceType){
-                    if(err)
-                    {
+                    if(err){
                         console.log("error")
-                    }
-                    else
-                    {
+                    }else{
+                        console.log("device token---------------------")
+                        console.log(factor)
+                        console.log(getDeviceType)
+                        if(factor!=0){
+                                var deviceId    =  factor;
+                                var switchKey   =  getDeviceType.device_Type;
+                                console.log(switchKey)
+                                console.log("factorrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+                                console.log(deviceId)
+                                switch(switchKey){
+                                        case 'ios' :
+                                                    NotificationService.pushNtfnApn(data,deviceId, function(err, ntfnSend) {
+                                                        if(err){
+                                                            console.log("Error in Push Notification Sending")
+                                                            console.log(err)
+                                                            //callback();
+                                                        }else{
+                                                            console.log("Push notification result i nIOS")
+                                                            console.log(ntfnSend)
+                                                            console.log("push notification sended")
+                                                            //callback();
 
-                     console.log("device token---------------------")
-                     console.log(factor)
-                     console.log(getDeviceType)
-                     if(factor!=0)
-                     {
-                        var deviceId    =  factor;
-                        var switchKey   =  getDeviceType.device_Type;
-                        console.log(switchKey)
-                        console.log("factorrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-                        console.log(deviceId)
-                        switch(switchKey){
-                                case 'ios' :
-                                            NotificationService.pushNtfnApn(data,deviceId, function(err, ntfnSend) {
-                                                if(err)
-                                                {
-                                                    console.log("Error in Push Notification Sending")
-                                                    console.log(err)
+                                                        }
+                                                    });
+                                        break;
+
+                                        case 'android' :
+                                                    NotificationService.pushNtfnGcm(data,deviceId, function(err, ntfnSend) {
+                                                        if(err){
+                                                            console.log("Error in Push Notification Sending")
+                                                            console.log(err)
+                                                            //callback();
+                                                        }else{
+                                                            console.log("Push notification result IN Android")
+                                                            console.log(ntfnSend)
+                                                            console.log("Push Notification sended")
+                                                            //callback();
+                                                        }
+                                                    });
+                                        break;
+                                        default:
+                                                    console.log("default")
                                                     //callback();
-                                                }
-                                                else
-                                                {
-                                                    console.log("Push notification result i nIOS")
-                                                    console.log(ntfnSend)
-                                                    console.log("push notification sended")
-                                                    //callback();
 
-                                                }
-                                            });
-                                break;
-
-                                case 'android' :
-                                            NotificationService.pushNtfnGcm(data,deviceId, function(err, ntfnSend) {
-                                                if(err)
-                                                {
-                                                    console.log("Error in Push Notification Sending")
-                                                    console.log(err)
-                                                    //callback();
-                                                }
-                                                else
-                                                {
-                                                    console.log("Push notification result IN Android")
-                                                    console.log(ntfnSend)
-                                                    console.log("Push Notification sended")
-                                                    //callback();
-                                                }
-                                            });
-                                break;
-                                default:
-                                            console.log("default")
-                                            //callback();
-
-                                break;
-
-
-
+                                        break;
+                                }
                         }
-
-                    }
                     }
                 });
-
-
             },callback());
 
-        }
-        else
-        {
+        }else{
             callback();
         }
-
-
     }
-
-
 };
 
 

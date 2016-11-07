@@ -278,6 +278,7 @@ module.exports = {
                     },
                     function(callback) {
                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                var tagNtfyPush = [];
                                 if(taggedUserArray.length != 0){
                                         //console.log(collage_results);
                                         //console.log("results.id+++++++++++++++++");
@@ -410,7 +411,7 @@ module.exports = {
 
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
 
-                                                                                  var tagNtfyPush = [];
+
                                                                                   console.log("--------------------Tag Notify ArRAy---------------")
                                                                                   console.log(tagNotifyArray)
                                                                                   

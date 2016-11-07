@@ -672,6 +672,32 @@ module.exports = {
                               }
                               else
                               {
+								   var tagNtfyPush = [];
+									ntfyArr.forEach(function(factor, index){
+										//tagNotifyArray.push({id:factor.user_id});
+										tagNotifyArray.push(factor);
+										User.findOne({id:factor}).exec(function (err, notifySettings){
+										   if(err)
+										   {
+											   console.log(err)
+										   }
+										   else
+										   {
+											 console.log("???????---Result----?????????")
+											 console.log(notifySettings)
+											 //console.log(notifySettings.notifyOpinion)
+											 if(notifySettings.notifyOpinion)
+											 {
+												console.log(factor)
+												tagNtfyPush.push(factor);
+											 }
+
+										   }
+										});
+								}); 
+								  
+								  
+								  
                                 var values ={
                                                 notificationTypeId  :   1,
                                                 userId              :   userId,
@@ -707,7 +733,7 @@ module.exports = {
                                             var deviceId_arr    = [];
                                             var message   = 'Notification For Opinion';
                                             var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
-                                            User_token.find({userId: ntfyArr}).exec(function (err, response) {
+                                            User_token.find({userId: tagNtfyPush}).exec(function (err, response) {
                                                 if(err)
                                                 {
                                                     console.log(err)

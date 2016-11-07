@@ -389,85 +389,108 @@ module.exports = {
                                                                                   console.log(tagNotifyArray)
                                                                                   if(tagNotifyArray.length) {
                                                                                       //console.log("inside tagging")
-                                                                                    /*tagNotifyArray.forEach(function(factor, index){
-                                                                                             User.findOne({id:factor}).exec(function (err, notifySettings){
-                                                                                                   if(err)
-                                                                                                   {
-                                                                                                       console.log(err)
-                                                                                                   }
-                                                                                                   else
-                                                                                                   {
-                                                                                                     console.log("???????---Result----?????????")
-                                                                                                     console.log(notifySettings.notifyOpinion)
-                                                                                                     if(notifySettings.notifyOpinion)
-                                                                                                     {
-                                                                                                        console.log(factor)
-                                                                                                        tagNtfyPush.push(factor);
-                                                                                                     }
+                                                                                      
+                                                                                    async.series([
+																								function(callback) {   
+																									
+																									                                                                                      
+																									   async.forEach(tagNotifyArray, function (factor, callback){
+																										//tagNotifyArray.forEach(function(factor, index){
+																												 User.findOne({id:factor}).exec(function (err, notifySettings){
+																													   if(err)
+																													   {
+																														   console.log(err)
+																													   }
+																													   else
+																													   {
+																														 console.log("???????---Result----?????????")
+																														 console.log(notifySettings)
+																														 console.log(notifySettings.notifyOpinion)
+																														 if(notifySettings.notifyOpinion)
+																														 {
+																															console.log(factor)
+																															tagNtfyPush.push(factor);
+																														 }
 
-                                                                                                   }
-                                                                                                });
-                                                                                        });*/
+																													   }
+																													});
+																											},callback());
+
+																									
+																								},
+																								function(callback) {   
+																									
+																									
+																									//console.log("Asking for your opinoin")
+																									//console.log(tagNtfyPush)
+																									var deviceId_arr    = [];
+																									var message   = 'Notification For Opinion';
+																									var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
+																									User_token.find({userId: tagNtfyPush}).exec(function (err, response) {
+																										if(err)
+																										{
+																											console.log(err)
+																											callback();
+																										}
+																										else
+																										{
+																											console.log("------------Tag Notification Response----------------------")
+																											console.log(response)
+																											response.forEach(function(factor, index){
+
+																												if(factor.deviceId!=req.get('device_id'))
+																												{
+																													deviceId_arr.push(factor.deviceId);
+																												}
+
+																											});
+
+																											if(deviceId_arr.length)
+																											{
+
+																												console.log("=============PUSH NTFN============================")
+
+																													var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
+																													NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
+																																			if(err)
+																																			{
+																																				console.log("Error in Push Notification Sending")
+																																				console.log(err)
+																																				callback();
+																																			}
+																																			else
+																																			{
+																																				console.log("Push notification result")
+																																				console.log(ntfnSend)
+																																				console.log("Push Notification sended")
+																																				callback();
+
+																																			}
+																													});
 
 
-                                                                                        //console.log("Asking for your opinoin")
-                                                                                        //console.log(tagNtfyPush)
-                                                                                        var deviceId_arr    = [];
-                                                                                        var message   = 'Notification For Opinion';
-                                                                                        var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
-                                                                                        User_token.find({userId: tagNotifyArray}).exec(function (err, response) {
-                                                                                            if(err)
-                                                                                            {
-                                                                                                console.log(err)
-                                                                                                callback();
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                console.log("------------Tag Notification Response----------------------")
-                                                                                                console.log(response)
-                                                                                                response.forEach(function(factor, index){
 
-                                                                                                    if(factor.deviceId!=req.get('device_id'))
-                                                                                                    {
-                                                                                                        deviceId_arr.push(factor.deviceId);
-                                                                                                    }
+																											}
+																											else
+																											{
+																												console.log("No deviceId")
+																												callback();
+																											}
+																										   }
 
-                                                                                                });
+																										});
+																								},
+																								], function(err) {
+																									if(err)
+																									{
+																										callback();
+																									}
+																									else
+																									{
+																										callback();
+																									}
+																								});
 
-                                                                                                if(deviceId_arr.length)
-                                                                                                {
-
-                                                                                                    console.log("=============PUSH NTFN============================")
-
-                                                                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
-                                                                                                        NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
-                                                                                                                                if(err)
-                                                                                                                                {
-                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                    console.log(err)
-                                                                                                                                    callback();
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
-                                                                                                                                    console.log("Push notification result")
-                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                    callback();
-
-                                                                                                                                }
-                                                                                                        });
-
-
-
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    console.log("No deviceId")
-                                                                                                    callback();
-                                                                                                }
-                                                                                               }
-
-                                                                                            });
                                                                                         }
                                                                                  //-------------------END Of PUSH Notification-------------------------------------------------------------------
                                                                                       //  callback();

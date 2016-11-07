@@ -205,14 +205,14 @@ module.exports = {
                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
                                                                                         //console.log("factor");
                                                                                         //console.log(factor);
+                                                                                        profile_image                   =   "";
                                                                                         if(factor.profilePic){
-                                                                                            var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                                            //var ext                         =     imageSrc.split('/');
-                                                                                            //ext                             =     ext[ext.length-1].split('.');
-                                                                                            //profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                            var imageSrc                    =     factor.profilePic;
+                                                                                            var ext                         =     imageSrc.split('.');
+                                                                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                             //console.log("--------**********************************************--------")
 
-                                                                                            fs.exists(imageSrc, function(exists){
+                                                                                            /*fs.exists(imageSrc, function(exists){
                                                                                                     if(exists){
                                                                                                         //console.log("Image exists");
                                                                                                         var ext                         =     imageSrc.split('/');
@@ -250,14 +250,15 @@ module.exports = {
                                                                                                                 });
                                                                                                     }
 
-                                                                                            });
+                                                                                            });*/
                                                                                         }
-                                                                                        /*taggedUserArrayFinal.push({
+
+                                                                                        taggedUserArrayFinal.push({
                                                                                                     name            :   factor.name,
                                                                                                     userId          :   factor.ditherUserId,
                                                                                                     profile_image   :   profile_image,
                                                                                                     mention_id      :   factor.mentionId
-                                                                                        });*/
+                                                                                        });
 
                                                                                 });
                                                                             }
@@ -290,16 +291,13 @@ module.exports = {
                                                                                     async.series([
                                                                                       function(callback) {
                                                                                             //------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                                            /*if(results[0].profilePic){
-                                                                                                    var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
-                                                                                                    var ext                         =     imageSrc.split('/');
-                                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                            user_profile_image                     =  "";
+                                                                                            if(results[0].profilePic){
+                                                                                                    var imageSrc                    =     results[0].profilePic;
+                                                                                                    var ext                         =     imageSrc.split('.');
                                                                                                     user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                    callback();
-                                                                                            }else{
-                                                                                                    callback();
-                                                                                            }*/
-                                                                                            var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
+                                                                                            }
+                                                                                            /*var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
                                                                                             fs.exists(imageSrc, function(exists) {
                                                                                                     if(exists){
                                                                                                         console.log("Image exists");
@@ -327,7 +325,8 @@ module.exports = {
                                                                                                     }else{
                                                                                                         callback();
                                                                                                     }
-                                                                                            });
+                                                                                            });*/
+                                                                                            callback();
                                                                                         },
 
 

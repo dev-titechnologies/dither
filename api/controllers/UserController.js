@@ -664,6 +664,7 @@ module.exports = {
                                                                 console.log(datas)
                                                                 var profileImage    =   profilePic_path + resultData.profilePic;
                                                                 console.log(profileImage)
+                                                                console.log(profilePic_unlink_path + resultData.profilePic)
                                                                 fs.unlink(profilePic_unlink_path + resultData.profilePic);
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                             }

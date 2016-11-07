@@ -419,7 +419,7 @@ module.exports = {
                                                 var profile_image   =  "";
                                                 results.forEach(function(factor, index){
                                                         if(factor.profilePic){
-                                                                var imageSrc                    =     results[0].profilePic;
+                                                                var imageSrc                    =     factor.profilePic;
                                                                 var ext                         =     imageSrc.split('.');
                                                                 profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                 //profile_image = profilePic_path + factor.profilePic;

@@ -334,7 +334,7 @@ module.exports = {
                                                                     //console.log(taggedUsersFinalResults.length);
 
 
-                                                                    if(taggedUsersFinalResults != 0){
+                                                                    if(taggedUsersFinalResults){
                                                                         taggedUsersFinalResults.forEach(function(factor, index){
                                                                                 //console.log("factor ------------))))))))))))))))======================");
                                                                                 //console.log(factor);
@@ -342,7 +342,7 @@ module.exports = {
                                                                         });
                                                                     }
 
-                                                                    if(taggedUserArray.length !=0){
+                                                                    if(taggedUserArray.length){
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
                                                                                     tagNotifyArray.push(factor);
@@ -356,7 +356,7 @@ module.exports = {
 																						 console.log("???????---Result----?????????")
 																						 console.log(notifySettings)
 																						 //console.log(notifySettings.notifyOpinion)
-																						 if(notifySettings!=undefined)
+																						 if(notifySettings)
 																						 {	 if(notifySettings.notifyOpinion)
 																							 {
 																								console.log(factor)

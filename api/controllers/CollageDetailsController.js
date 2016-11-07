@@ -108,12 +108,20 @@ module.exports = {
                                                                         if(factor.profilePic == null || factor.profilePic == ""){
                                                                              profile_image  = "";
                                                                         }else{
-                                                                            //var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                           // var ext                         =     imageSrc.split('/');
-                                                                           // ext                             =     ext[ext.length-1].split('.');
-                                                                            //profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                            //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
                                                                             var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                                                                            var ext                         =     imageSrc.split('/');
+                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                            commentArray.push({comment_id                   : factor.id,
+                                                                                                user_id                     : factor.userId,
+                                                                                                user_name                   : factor.name,
+                                                                                                user_profile_pic_url        : profile_image,
+                                                                                                mention_id                  : factor.mentionId,
+                                                                                                message                     : factor.comment,
+                                                                                                comment_created_date_time   : factor.createdAt
+                                                                            });
+                                                                            //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                            /*var imageSrc                    =     profilePic_path_assets + factor.profilePic;
                                                                             fs.exists(imageSrc, function(exists){
                                                                                  if (exists){
                                                                                         //console.log("Image exists");
@@ -155,7 +163,7 @@ module.exports = {
                                                                                         });
                                                                                     }
 
-                                                                            });
+                                                                            });*/
                                                                         }
 
 

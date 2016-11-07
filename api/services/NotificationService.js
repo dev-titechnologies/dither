@@ -49,13 +49,7 @@ module.exports = {
                                 icon        : '', // Indicates notification icon
                                 sound       : '', // Indicates sound to be played
                                 badge       : '', // Indicates the badge on client app home icon
-                                payload     : details,
-                                /*payload     : {
-                                                "message"           :   data.NtfnBody,
-                                                "type"              :   data.NtfnType,
-                                                "id"                :   data.id,
-                                                "notification_id"   :   data.notification_id
-                                            }, // Custom data to send within Push Notification*/
+                                payload     : details,// Custom data to send within Push Notification*/
             }
         });
 

@@ -672,32 +672,32 @@ module.exports = {
                               }
                               else
                               {
-								   var tagNtfyPush = [];
-									ntfyArr.forEach(function(factor, index){
-										//tagNotifyArray.push({id:factor.user_id});
-										tagNotifyArray.push(factor);
-										User.findOne({id:factor}).exec(function (err, notifySettings){
-										   if(err)
-										   {
-											   console.log(err)
-										   }
-										   else
-										   {
-											 console.log("???????---Result----?????????")
-											 console.log(notifySettings)
-											 //console.log(notifySettings.notifyOpinion)
-											 if(notifySettings.notifyOpinion)
-											 {
-												console.log(factor)
-												tagNtfyPush.push(factor);
-											 }
+                                   var tagNtfyPush = [];
+                                    ntfyArr.forEach(function(factor, index){
+                                        //tagNotifyArray.push({id:factor.user_id});
+                                        tagNotifyArray.push(factor);
+                                        User.findOne({id:factor}).exec(function (err, notifySettings){
+                                           if(err)
+                                           {
+                                               console.log(err)
+                                           }
+                                           else
+                                           {
+                                             console.log("???????---Result----?????????")
+                                             console.log(notifySettings)
+                                             //console.log(notifySettings.notifyOpinion)
+                                             if(notifySettings.notifyOpinion)
+                                             {
+                                                console.log(factor)
+                                                tagNtfyPush.push(factor);
+                                             }
 
-										   }
-										});
-								}); 
-								  
-								  
-								  
+                                           }
+                                        });
+                                });
+
+
+
                                 var values ={
                                                 notificationTypeId  :   1,
                                                 userId              :   userId,
@@ -1043,7 +1043,9 @@ module.exports = {
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
                                             }else{
                                                     //Unlinking collage image
-                                                    fs.unlink(collage_unlink_path + foundCollage.image);
+                                                    if(foundCollage.image){
+                                                            fs.unlink(collage_unlink_path + foundCollage.image);
+                                                    }
                                                     //Finding the collageDetails
                                                     CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
                                                             if(err){

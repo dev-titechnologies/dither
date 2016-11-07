@@ -427,8 +427,29 @@ module.exports = {
                                                                             user_pic : profile_image
                                                                             });
                                                 });
-                                                if(results[0].collageImage){
+
+                                                var dither_image                    =     collageImg_path + results[0].collageImage;
+                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
+                                                                      single_image_url              :   collageImg_path + results[0].image,
+                                                                      dither_title                  :   results[0].imgTitle,
+                                                                      dither_image                  :   dither_image,
+                                                                      total_vote                    :   results[0].vote,
+                                                                      single_dither_id              :   results[0].single_image_id,
+                                                                      voted_users                   :   votedUsersArray,
+                                                                });
+                                                /*if(results[0].collageImage){
                                                     var clgImgSrc                   =     collageImg_path_assets + results[0].collageImage;
+                                                    var ext                         =     clgImgSrc.split('/');
+                                                    ext                             =     ext[ext.length-1].split('.');
+                                                    dither_image                    =     collageImg_path + results[0].collageImage;
+                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Single Dither Details',
+                                                                          single_image_url              :   collageImg_path + results[0].image,
+                                                                          dither_title                  :   results[0].imgTitle,
+                                                                          dither_image                  :   dither_image,
+                                                                          total_vote                    :   results[0].vote,
+                                                                          single_dither_id              :   results[0].single_image_id,
+                                                                          voted_users                   :   votedUsersArray,
+                                                                    });
                                                     fs.exists(clgImgSrc, function(exists){
                                                         if(exists){
                                                                 console.log("collge Image exists");
@@ -464,7 +485,7 @@ module.exports = {
                                                                 }               );
                                                             }
                                                     });
-                                                }
+                                                }*/
                                         }
                                     }
                             });

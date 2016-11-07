@@ -276,6 +276,45 @@ module.exports = {
 
                                 });*/
                     },
+                    function(callback)
+                    {
+						taggedUserArray.forEach(function(factor, index){
+								//tagNotifyArray.push({id:factor.user_id});
+								tagNotifyArray.push(factor);
+						});
+						//console.log(tagNotifyArray.length);
+						//console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
+						//console.log(tagNotifyArray);
+						if(tagNotifyArray.length) {
+								  console.log("inside tagging")
+							   
+							   tagNotifyArray.forEach(function(factor, index){
+									console.log("----factorrrrrrrr----------")
+										 User.findOne({id:factor}).exec(function (err, notifySettings){
+											   if(err)
+											   {
+												   console.log(err)
+											   }
+											   else
+											   {
+												 console.log("???????---Result----?????????")
+												 console.log(notifySettings.notifyOpinion)
+												 if(notifySettings.notifyOpinion==0)
+												 {
+													console.log(factor)
+													tagNtfyPush.push(factor);
+												 }
+
+											   }
+											});
+									});
+									callback();
+						}
+						else
+						{
+							callback();
+						}
+					},
                     function(callback) {
                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                 var tagNtfyPush = [];
@@ -351,7 +390,7 @@ module.exports = {
                                                                             //console.log(tagNotifyArray.length);
                                                                             //console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
                                                                             //console.log(tagNotifyArray);
-                                                                            if(tagNotifyArray.length) {
+                                                                           /* if(tagNotifyArray.length) {
                                                                                       console.log("inside tagging")
                                                                                    
                                                                                    tagNotifyArray.forEach(function(factor, index){
@@ -374,7 +413,7 @@ module.exports = {
                                                                                                    }
                                                                                                 });
                                                                                         });
-                                                                            }
+                                                                            }*/
                                                                             
                                                                             
                                                                             var values ={

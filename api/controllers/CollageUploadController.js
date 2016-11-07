@@ -390,6 +390,7 @@ module.exports = {
                                                                                   if(tagNotifyArray.length) {
                                                                                       console.log("inside tagging")
                                                                                     tagNotifyArray.forEach(function(factor, index){
+																						console.log("----factorrrrrrrr----------")
                                                                                              User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                                    if(err)
                                                                                                    {

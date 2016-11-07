@@ -56,7 +56,6 @@ module.exports = {
         //console.log(ios)
         ios
           .send([device_id], {
-                body: details
           })
           .then(console.log.bind(console))
           .catch(console.error.bind(console));

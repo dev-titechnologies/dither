@@ -389,7 +389,7 @@ module.exports = {
                                                                                   console.log(tagNotifyArray)
                                                                                   if(tagNotifyArray.length) {
                                                                                       //console.log("inside tagging")
-                                                                                    /*tagNotifyArray.forEach(function(factor, index){
+                                                                                    tagNotifyArray.forEach(function(factor, index){
                                                                                              User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                                    if(err)
                                                                                                    {
@@ -407,7 +407,7 @@ module.exports = {
 
                                                                                                    }
                                                                                                 });
-                                                                                        });*/
+                                                                                        });
 
 
                                                                                         //console.log("Asking for your opinoin")
@@ -415,7 +415,7 @@ module.exports = {
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
-                                                                                        User_token.find({userId: tagNotifyArray}).exec(function (err, response) {
+                                                                                        User_token.find({userId: tagNtfyPush}).exec(function (err, response) {
                                                                                             if(err)
                                                                                             {
                                                                                                 console.log(err)

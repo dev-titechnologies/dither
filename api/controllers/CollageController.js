@@ -1002,9 +1002,7 @@ module.exports = {
 
                     console.log("Delete Dithers ===== api");
                     console.log(req.param("dither_id"));
-
                     var collageId                   =      req.param("dither_id");
-
                     if(!collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id'});
                     }else{
@@ -1061,8 +1059,16 @@ module.exports = {
                                                                                                                                     console.log(err);
                                                                                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
                                                                                                                             }else {
+                                                                                                                                //Deleting from notificationLog Table
+                                                                                                                                NotificationLog.destroy({collage_id: collageId}).exec(function (err, deleteNotificationLog) {
+                                                                                                                                    if (err){
+                                                                                                                                            console.log(err);
+                                                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither NotificationLog', error_details: err});
+                                                                                                                                    }else {
+                                                                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
 
-                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
+                                                                                                                                    }
+                                                                                                                                });
                                                                                                                             }
                                                                                                                         });
 

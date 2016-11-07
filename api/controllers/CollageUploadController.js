@@ -389,7 +389,7 @@ module.exports = {
                                                                                   console.log(tagNotifyArray)
                                                                                   if(tagNotifyArray.length) {
                                                                                       console.log("inside tagging")
-                                                                                    tagNotifyArray.forEach(function(factor, index){
+                                                                                   tagNotifyArray.forEach(function(factor, index){
 																						console.log("----factorrrrrrrr----------")
                                                                                              User.findOne({id:factor}).exec(function (err, notifySettings){
                                                                                                    if(err)
@@ -410,8 +410,8 @@ module.exports = {
                                                                                                 });
                                                                                         });
 
-
-                                                                                        //console.log("Asking for your opinoin")
+                                                                                     if(tagNtfyPush.length)
+                                                                                      {  //console.log("Asking for your opinoin")
                                                                                         //console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
@@ -469,6 +469,7 @@ module.exports = {
                                                                                                }
 
                                                                                             });
+																						}
                                                                                         }
                                                                                  //-------------------END Of PUSH Notification-------------------------------------------------------------------
                                                                                       //  callback();

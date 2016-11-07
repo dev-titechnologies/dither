@@ -89,7 +89,7 @@ module.exports = {
                 var profilePic_path_assets =     req.options.file_path.profilePic_path_assets;
                 var collageImg_path_assets =     req.options.file_path.collageImg_path_assets;
                 var device_id              =     tokenCheck.tokenDetails.deviceId;
-                var device_type            =     req.get('device_type');
+                //var device_type            =     req.get('device_type');
 
                 notificationVoted          =     "";
                 notificationCommented      =     "";
@@ -97,7 +97,7 @@ module.exports = {
                 notifyVoteArray            =     [];
                 notifyCmntArray            =     [];
 
-                var page_type              =     req.param("page_type");
+                //var page_type              =     req.param("page_type");
                 var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
                 var data_view_limit        =     req.options.global.data_view_limit;
 
@@ -119,7 +119,7 @@ module.exports = {
                 {*/
 
 
-                if(focus_Ntfn_id == 0||!focus_Ntfn_id){
+                if(focus_Ntfn_id == 0 || !focus_Ntfn_id){
 
                     var query   =   " SELECT"+
                                         " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
@@ -159,7 +159,9 @@ module.exports = {
                         console.log(err)
                     }else{
                         console.log(results.length)
-                        if(typeof results != 'undefined' && results.length!=0){
+                        if(!results.length){
+                              return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
+                        }else{
                             async.forEach(results, function (item, callback){
                                 if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4 || item.notificationTypeId==7){
                                   //----------Comment Notification---------------------------
@@ -669,10 +671,8 @@ module.exports = {
                                     console.log(results)
                                     return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
                             });
-                        }else{
-                                    return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
-                            }
                         }
+                    }
                 });
                 //}
         },

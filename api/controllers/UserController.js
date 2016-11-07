@@ -270,19 +270,25 @@ module.exports = {
 																						  }
 																						  else
 																						  {
+																							async.series([
+																								function(callback) {   
 																							  
-																							  UserContacts.forEach(function(factor, index){
-																									
-																									 phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
-																									 User.findOne({id:factor.userId}).exec(function (err, notifySettings){
-                                                                                                                if(notifySettings.notifyContact==1){
-                                                                                                                    //phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
-                                                                                                                    contact_arr.push(factor.userId);
-                                                                                                                    console.log(factor.userId)
-                                                                                                                }
-                                                                                                            });
-                                                                                               });
-                                                                                                console.log("hhhhhhhhhhhhhhhhhhhhhhh")
+																							              async.forEach(UserContacts, function (factor, callback){
+																										 // UserContacts.forEach(function(factor, index){
+																												
+																												 phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+																												 User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+																															if(notifySettings.notifyContact==1){
+																																//phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+																																contact_arr.push(factor.userId);
+																																console.log(factor.userId)
+																															}
+																														});
+																										   },callback());
+                                                                                               },
+																							  function(callback) { 
+                                                                                               
+                                                                                               console.log("hhhhhhhhhhhhhhhhhhhhhhh")
                                                                                                console.log(contact_arr)
                                                                                                var values ={
 																										notificationTypeId  :   4,
@@ -358,9 +364,18 @@ module.exports = {
 																											
 																										
 																									 }
-                                                                                                });    
-                                                                                               
-                                                                                               
+                                                                                                });  //  
+                                                                                               },
+                                                                                               ], function(err){
+                                                                                                     if(err)
+                                                                                                     {
+																										 callback();
+																									 }
+																									 else
+																									 {
+																										 callback();
+																									 }
+																									});
 																						  }
 																					  }
 																				 });

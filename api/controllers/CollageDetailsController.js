@@ -281,7 +281,10 @@ module.exports = {
                                                                                         }
                                                                                         var user_profile_image    =     "";
                                                                                         if(results[0].profilePic != "" || results[0].profilePic != null){
-                                                                                            user_profile_image              =     profilePic_path + results[0].profilePic;
+                                                                                                var imageSrc                    =     results[0].profilePic;
+                                                                                                var ext                         =     imageSrc.split('.');
+                                                                                                user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                //user_profile_image              =     profilePic_path + results[0].profilePic;
                                                                                         }
 
                                                                                     async.series([
@@ -418,8 +421,10 @@ module.exports = {
                                                         if(factor.profilePic == null || factor.profilePic == ""){
                                                                     profile_image = "";
                                                         }else{
-
-                                                                    profile_image = profilePic_path + factor.profilePic;
+                                                                var imageSrc                    =     results[0].profilePic;
+                                                                var ext                         =     imageSrc.split('.');
+                                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                //profile_image = profilePic_path + factor.profilePic;
                                                         }
                                                         votedUsersArray.push({
                                                                             user_id : factor.user_id,

@@ -168,7 +168,7 @@ module.exports = {
                             //console.log(inviteFriendsArray.length);
                             var inviteFinalArray            =  [];
                             var tagNotifyArray              =  [];
-
+							var tagNtfyPush 				=  [];
                             var collage_results             =  "";
             async.series([
                     function(callback) {
@@ -346,6 +346,24 @@ module.exports = {
                                                                             taggedUserArray.forEach(function(factor, index){
                                                                                     //tagNotifyArray.push({id:factor.user_id});
                                                                                     tagNotifyArray.push(factor);
+                                                                                    User.findOne({id:factor}).exec(function (err, notifySettings){
+																					   if(err)
+																					   {
+																						   console.log(err)
+																					   }
+																					   else
+																					   {
+																						 console.log("???????---Result----?????????")
+																						 console.log(notifySettings)
+																						 //console.log(notifySettings.notifyOpinion)
+																						 if(notifySettings.notifyOpinion)
+																						 {
+																							console.log(factor)
+																							tagNtfyPush.push(factor);
+																						 }
+
+																					   }
+																					});
                                                                             });
                                                                             //console.log(tagNotifyArray.length);
                                                                             //console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
@@ -384,18 +402,18 @@ module.exports = {
 
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
 
-                                                                                  var tagNtfyPush = [];
+                                                                                 
                                                                                   console.log("--------------------Tag Notify ArRAy---------------")
                                                                                   console.log(tagNotifyArray)
                                                                                   if(tagNotifyArray.length) {
                                                                                       //console.log("inside tagging")
                                                                                       
-                                                                                    async.series([
-																								function(callback) {   
+                                                                                    //async.series([
+																								//function(callback) {   
 																									
 																									                                                                                      
-																									   async.forEach(tagNotifyArray, function (factor, callback){
-																										//tagNotifyArray.forEach(function(factor, index){
+																									   /*async.forEach(tagNotifyArray, function (factor, callback){
+																										tagNotifyArray.forEach(function(factor, index){
 																												 User.findOne({id:factor}).exec(function (err, notifySettings){
 																													   if(err)
 																													   {
@@ -414,15 +432,11 @@ module.exports = {
 
 																													   }
 																													});
-																											},callback());
+																											});*/
 
 																									
-																								},
-																								function(callback) {   
-																									console.log("call backkk")
-																									callback();
-																								},	
-																								function(callback) {	
+																								//},	
+																								//function(callback) {	
 																									//console.log("Asking for your opinoin")
 																									//console.log(tagNtfyPush)
 																									var deviceId_arr    = [];
@@ -481,7 +495,7 @@ module.exports = {
 																										   }
 
 																										});
-																								},
+																								/*},
 																								], function(err) {
 																									if(err)
 																									{
@@ -491,7 +505,7 @@ module.exports = {
 																									{
 																										callback();
 																									}
-																								});
+																								});*/
 
                                                                                         }
                                                                                  //-------------------END Of PUSH Notification-------------------------------------------------------------------

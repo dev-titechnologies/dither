@@ -649,7 +649,7 @@ module.exports = {
                                                 }
                                                 else
                                                 {
-													  if(resultData.profilePic)
+													  if(resultData.profilePic!=null || resultData.profilePic!='' || resultData.profilePic)
 													  {
                                                         var data     = {profilePic: " "};
                                                         var criteria = {id: userId};
@@ -668,9 +668,13 @@ module.exports = {
                                                                 fs.unlink(profilePic_unlink_path + resultData.profilePic);
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                             }
+                                                            
                                                         });
 													  }
-													  
+													  else
+														{
+															return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
+														}
                                                 }
                                         }
                                     });

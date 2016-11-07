@@ -276,48 +276,8 @@ module.exports = {
 
                                 });*/
                     },
-                    function(callback)
-                    {
-						taggedUserArray.forEach(function(factor, index){
-								//tagNotifyArray.push({id:factor.user_id});
-								tagNotifyArray.push(factor);
-						});
-						//console.log(tagNotifyArray.length);
-						//console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
-						//console.log(tagNotifyArray);
-						if(tagNotifyArray.length) {
-								  console.log("inside tagging")
-							   
-							   tagNotifyArray.forEach(function(factor, index){
-									console.log("----factorrrrrrrr----------")
-										 User.findOne({id:factor}).exec(function (err, notifySettings){
-											   if(err)
-											   {
-												   console.log(err)
-											   }
-											   else
-											   {
-												 console.log("???????---Result----?????????")
-												 console.log(notifySettings.notifyOpinion)
-												 if(notifySettings.notifyOpinion==0)
-												 {
-													console.log(factor)
-													tagNtfyPush.push(factor);
-												 }
-
-											   }
-											});
-									},callback());
-									
-						}
-						else
-						{
-							callback();
-						}
-					},
                     function(callback) {
                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                var tagNtfyPush = [];
                                 if(taggedUserArray.length != 0){
                                         //console.log(collage_results);
                                         //console.log("results.id+++++++++++++++++");
@@ -390,32 +350,6 @@ module.exports = {
                                                                             //console.log(tagNotifyArray.length);
                                                                             //console.log("tagged arrayyyyyyyyyyyyyyyyyyyyyyyyyy")
                                                                             //console.log(tagNotifyArray);
-                                                                           /* if(tagNotifyArray.length) {
-                                                                                      console.log("inside tagging")
-                                                                                   
-                                                                                   tagNotifyArray.forEach(function(factor, index){
-																						console.log("----factorrrrrrrr----------")
-                                                                                             User.findOne({id:factor}).exec(function (err, notifySettings){
-                                                                                                   if(err)
-                                                                                                   {
-                                                                                                       console.log(err)
-                                                                                                   }
-                                                                                                   else
-                                                                                                   {
-                                                                                                     console.log("???????---Result----?????????")
-                                                                                                     console.log(notifySettings.notifyOpinion)
-                                                                                                     if(notifySettings.notifyOpinion==0)
-                                                                                                     {
-                                                                                                        console.log(factor)
-                                                                                                        tagNtfyPush.push(factor);
-                                                                                                     }
-
-                                                                                                   }
-                                                                                                });
-                                                                                        });
-                                                                            }*/
-                                                                            
-                                                                            
                                                                             var values ={
                                                                                             notificationTypeId  :   1,
                                                                                             userId              :   userId,
@@ -450,17 +384,39 @@ module.exports = {
 
                                                                                    //---------------------Push Notification In Tagged Users--------------------------------
 
-
+                                                                                  var tagNtfyPush = [];
                                                                                   console.log("--------------------Tag Notify ArRAy---------------")
                                                                                   console.log(tagNotifyArray)
-                                                                                  
+                                                                                  if(tagNotifyArray.length) {
+                                                                                      //console.log("inside tagging")
+                                                                                   async.forEach(tagNotifyArray, function (factor, callback){
+                                                                                    //tagNotifyArray.forEach(function(factor, index){
+                                                                                             User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                                                                   if(err)
+                                                                                                   {
+                                                                                                       console.log(err)
+                                                                                                   }
+                                                                                                   else
+                                                                                                   {
+                                                                                                     console.log("???????---Result----?????????")
+                                                                                                     console.log(notifySettings.notifyOpinion)
+                                                                                                     if(notifySettings.notifyOpinion)
+                                                                                                     {
+                                                                                                        console.log(factor)
+                                                                                                        tagNtfyPush.push(factor);
+                                                                                                     }
+
+                                                                                                   }
+                                                                                                });
+                                                                                        },callback());
+
 
                                                                                         //console.log("Asking for your opinoin")
                                                                                         //console.log(tagNtfyPush)
                                                                                         var deviceId_arr    = [];
                                                                                         var message   = 'Notification For Opinion';
                                                                                         var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
-                                                                                        User_token.find({userId: tagNtfyPush}).exec(function (err, response) {
+                                                                                        User_token.find({userId: tagNotifyArray}).exec(function (err, response) {
                                                                                             if(err)
                                                                                             {
                                                                                                 console.log(err)
@@ -513,8 +469,7 @@ module.exports = {
                                                                                                }
 
                                                                                             });
-																						
-                                                                                       
+                                                                                        }
                                                                                  //-------------------END Of PUSH Notification-------------------------------------------------------------------
                                                                                       //  callback();
 

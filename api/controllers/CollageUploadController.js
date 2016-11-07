@@ -405,12 +405,14 @@ module.exports = {
 																													   {
 																														 console.log("???????---Result----?????????")
 																														 console.log(notifySettings)
+																														if(notifySettings.length){
 																														 console.log(notifySettings.notifyOpinion)
 																														 if(notifySettings.notifyOpinion)
 																														 {
 																															console.log(factor)
 																															tagNtfyPush.push(factor);
 																														 }
+																														}
 
 																													   }
 																													});

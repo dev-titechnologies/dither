@@ -151,7 +151,7 @@ module.exports = {
                                                                                                         }else{
                                                                                                                 //device_id       =  device_id.split(',');sails.log.debug(device_id);
 
-
+																											console.log(collageDetails.userId)
                                                                                                              User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
                                                                                                                 if(err)
                                                                                                                 {
@@ -160,6 +160,8 @@ module.exports = {
 
                                                                                                                 }
                                                                                                                 else{
+																													console.log("mention notification")
+																													console.log(notifySettings)
                                                                                                                    if(notifySettings.notifyMention==0){
 
                                                                                                                         console.log("commentMention Option turn off")

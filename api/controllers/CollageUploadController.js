@@ -419,8 +419,9 @@ module.exports = {
 																									
 																								},
 																								function(callback) {   
-																									
-																									
+																									console.log("call backkk")
+																								},	
+																								function(callback) {	
 																									//console.log("Asking for your opinoin")
 																									//console.log(tagNtfyPush)
 																									var deviceId_arr    = [];

@@ -112,14 +112,7 @@ module.exports = {
                                                                             var ext                         =     imageSrc.split('/');
                                                                             ext                             =     ext[ext.length-1].split('.');
                                                                             profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                            commentArray.push({comment_id                   : factor.id,
-                                                                                                user_id                     : factor.userId,
-                                                                                                user_name                   : factor.name,
-                                                                                                user_profile_pic_url        : profile_image,
-                                                                                                mention_id                  : factor.mentionId,
-                                                                                                message                     : factor.comment,
-                                                                                                comment_created_date_time   : factor.createdAt
-                                                                            });
+
                                                                             //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
                                                                             /*var imageSrc                    =     profilePic_path_assets + factor.profilePic;
                                                                             fs.exists(imageSrc, function(exists){
@@ -165,6 +158,14 @@ module.exports = {
 
                                                                             });*/
                                                                         }
+                                                                        commentArray.push({comment_id                   : factor.id,
+                                                                                                user_id                     : factor.userId,
+                                                                                                user_name                   : factor.name,
+                                                                                                user_profile_pic_url        : profile_image,
+                                                                                                mention_id                  : factor.mentionId,
+                                                                                                message                     : factor.comment,
+                                                                                                comment_created_date_time   : factor.createdAt
+                                                                            });
 
 
                                                                 });
@@ -205,14 +206,14 @@ module.exports = {
                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
                                                                                         //console.log("factor");
                                                                                         //console.log(factor);
+                                                                                        profile_image                   =   "";
                                                                                         if(factor.profilePic){
-                                                                                            var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                                            //var ext                         =     imageSrc.split('/');
-                                                                                            //ext                             =     ext[ext.length-1].split('.');
-                                                                                            //profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                            var imageSrc                    =     factor.profilePic;
+                                                                                            var ext                         =     imageSrc.split('.');
+                                                                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                             //console.log("--------**********************************************--------")
 
-                                                                                            fs.exists(imageSrc, function(exists){
+                                                                                            /*fs.exists(imageSrc, function(exists){
                                                                                                     if(exists){
                                                                                                         //console.log("Image exists");
                                                                                                         var ext                         =     imageSrc.split('/');
@@ -250,14 +251,15 @@ module.exports = {
                                                                                                                 });
                                                                                                     }
 
-                                                                                            });
+                                                                                            });*/
                                                                                         }
-                                                                                        /*taggedUserArrayFinal.push({
+
+                                                                                        taggedUserArrayFinal.push({
                                                                                                     name            :   factor.name,
                                                                                                     userId          :   factor.ditherUserId,
                                                                                                     profile_image   :   profile_image,
                                                                                                     mention_id      :   factor.mentionId
-                                                                                        });*/
+                                                                                        });
 
                                                                                 });
                                                                             }
@@ -290,16 +292,13 @@ module.exports = {
                                                                                     async.series([
                                                                                       function(callback) {
                                                                                             //------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                                            /*if(results[0].profilePic){
-                                                                                                    var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
-                                                                                                    var ext                         =     imageSrc.split('/');
-                                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                            user_profile_image                     =  "";
+                                                                                            if(results[0].profilePic){
+                                                                                                    var imageSrc                    =     results[0].profilePic;
+                                                                                                    var ext                         =     imageSrc.split('.');
                                                                                                     user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                    callback();
-                                                                                            }else{
-                                                                                                    callback();
-                                                                                            }*/
-                                                                                            var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
+                                                                                            }
+                                                                                            /*var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
                                                                                             fs.exists(imageSrc, function(exists) {
                                                                                                     if(exists){
                                                                                                         console.log("Image exists");
@@ -327,7 +326,8 @@ module.exports = {
                                                                                                     }else{
                                                                                                         callback();
                                                                                                     }
-                                                                                            });
+                                                                                            });*/
+                                                                                            callback();
                                                                                         },
 
 
@@ -416,12 +416,10 @@ module.exports = {
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No users voted to this image'});
                                         }else{
                                                 var votedUsersArray = [];
-                                                var profile_image;
+                                                var profile_image   =  "";
                                                 results.forEach(function(factor, index){
-                                                        if(factor.profilePic == null || factor.profilePic == ""){
-                                                                    profile_image = "";
-                                                        }else{
-                                                                var imageSrc                    =     results[0].profilePic;
+                                                        if(factor.profilePic){
+                                                                var imageSrc                    =     factor.profilePic;
                                                                 var ext                         =     imageSrc.split('.');
                                                                 profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                 //profile_image = profilePic_path + factor.profilePic;

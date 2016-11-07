@@ -28,7 +28,7 @@ module.exports = {
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                     //var   mention_arr                 =    ['test_user','anu_r'];
-                    var profile_image = '';
+                    var profile_image               =     '';
                     //console.log("token details")
                     //console.log(tokenCheck)
                     //console.log("mention array")
@@ -367,10 +367,14 @@ module.exports = {
 
                                                                                   //------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                                   //console.log(getUseDetails[0].profilePic)
-                                                                                    var imageSrc                    =     profilePic_path_assets + getUseDetails.profilePic;
-                                                                                    var ext                         =     imageSrc.split('/');
-                                                                                    ext                             =     ext[ext.length-1].split('.');
-                                                                                    profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                    if(getUseDetails.profilePic == null || getUseDetails.profilePic == ""){
+                                                                                            profile_image                   =     "";
+                                                                                    }else{
+                                                                                            var imageSrc                    =     getUseDetails.profilePic;
+                                                                                            var ext                         =     imageSrc.split('.');
+                                                                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                    }
+
                                                                                     callback();
                                                                                     /*fs.exists(imageSrc, function(exists) {
                                                                                      if (exists) {

@@ -146,10 +146,25 @@ module.exports = {
                                                         }else{
                                                                 like_position = 0;
                                                         }
-                                                        var profile_image    =   "";
-                                                        if(dataResults[i]["profilePic"] != null || dataResults[i]["profilePic"] != ""){
+                                                        console.log(dataResults[i]["profilePic"]);
+                                                        var profile_image;
+                                                        if(dataResults[i]["profilePic"] == "" || dataResults[i]["profilePic"] == " " || dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == "null" || !dataResults[i]["profilePic"]){
+                                                                console.log("if ---------->>>>");
+                                                                profile_image    =   "";
+                                                        }else{
+                                                                console.log("else ---------->>>>");
                                                                 profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                         }
+                                                        var test;
+                                                        if(dataResults[i]["profilePic"]){
+                                                                console.log("test if ---------->>>>");
+                                                                test = "if ha aha aha a";
+                                                        }else{
+                                                                console.log("test else ---------->>>>");
+                                                                test = "else ha aha aha a";
+                                                        }
+
+                                                        console.log(test);
                                                         imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                         dataResultsObj.user_id                      =       dataResults[i]["userId"];

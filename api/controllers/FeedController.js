@@ -153,7 +153,6 @@ module.exports = {
                                                                 profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                         }
 
-                                                        console.log(test);
                                                         imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                         dataResultsObj.user_id                      =       dataResults[i]["userId"];

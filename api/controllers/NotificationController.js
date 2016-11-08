@@ -197,9 +197,9 @@ module.exports = {
                                                             console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
                                                     }
                                                      // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    var imageSrc                    =     item.profile_image;
+                                                    /*var imageSrc                    =     item.profile_image;
 													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
+													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; */
                                                      
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                     console.log(clgImgSrc)
@@ -263,9 +263,10 @@ module.exports = {
                                                         console.log(notifyVoteArray)
                                                     }
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    var imageSrc                    =     item.profile_image;
+                                                    /*var imageSrc                    =     item.profile_image;
 													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
+													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; */
+													
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                             
 															fs.exists(clgImgSrc, function(exists) {
@@ -310,9 +311,9 @@ module.exports = {
                                                         console.log(ntfn_body)
                                                         notificationSignup  =  ntfn_body;
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                        var imageSrc                    =     item.profile_image;
+                                                       /* var imageSrc                    =     item.profile_image;
 														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
+														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  */
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
                                                             fs.exists(clgImgSrc, function(exists){
@@ -363,9 +364,9 @@ module.exports = {
 
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                        var imageSrc                    =     item.profile_image;
+                                                       /* var imageSrc                    =     item.profile_image;
 														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];   
+														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];   */
                                                                 fs.exists(clgImgSrc, function(exists) {
                                                                     if(exists){
                                                                         console.log("collge Image exists");
@@ -412,9 +413,9 @@ module.exports = {
                                                     notificationTagged  =  ntfn_body;
 
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    var imageSrc                    =     item.profile_image;
+                                                  /*  var imageSrc                    =     item.profile_image;
 													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
+													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; */
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         
                                                             fs.exists(clgImgSrc, function(exists) {

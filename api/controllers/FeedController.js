@@ -16,7 +16,6 @@ function predicatBy(prop){
       return 0;
    }
 }
-//var data_view_limit = 5;
 var offset_data_view_limit;
 var fs          = require('fs');
 
@@ -36,7 +35,6 @@ module.exports = {
                     var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                     var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                     var data_view_limit             =     req.options.global.data_view_limit;
-                    //var data_view_limit            =   2;
                     var query,
                         offset_data_view_limit;
                     var page_type                   =   req.param("page_type");
@@ -45,9 +43,7 @@ module.exports = {
                     if(!page_type || !focus_dither_id){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_dither_id'});
                     }else{
-                            //console.log(req.params.all());
                             switch(page_type){
-
                                         case 'new' :
                                                     offset_data_view_limit =  "> "+focus_dither_id;
                                         break;
@@ -65,9 +61,7 @@ module.exports = {
                             query  = " SELECT"+
                                             " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                             " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                            //" clgdt.collageId, clgdt.position, clgdt.vote,"+
                                             " usr.profilePic, usr.name,"+
-                                           // " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                             " clglk.likePosition, clglk.userId likeUserId"+
                                             " FROM ("+
                                             " SELECT temp1.*"+
@@ -89,7 +83,6 @@ module.exports = {
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
-                                            //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
@@ -100,10 +93,9 @@ module.exports = {
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting collages of logged user', error_details: err});
                                     }else{
-                                        if(results.length == 0){
+                                        if(!results.length){
                                                 return res.json(200, {status: 1, status_type: 'Success' ,message: 'No collage Found by the user', feeds: []});
                                         }else{
-
                                                 var dataResults         =   results;
                                                 var key                 =   [];
                                                 var dataResultsKeys     =   [];
@@ -122,10 +114,9 @@ module.exports = {
                                                         var likeStatusArray             = [];
                                                         var imgIdArray                  = [];
                                                         var imgDetailsArray             = [];
-                                                        for (var j = dataResults.length - 1; j >= 0; j--){
+                                                        for(var j = dataResults.length - 1; j >= 0; j--){
                                                                 if(dataResults[j]["collageId"]==collageId_val){
                                                                     if(dataResults[j]["likePosition"] == dataResults[j]["position"]){
-                                                                        console.log("likeStatus if ==============");
                                                                         likeStatus = 1;
                                                                     }else{
                                                                         likeStatus = 0;
@@ -168,8 +159,6 @@ module.exports = {
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
                                                         feeds                                       =       key.sort( predicatBy("mainOrder") );
-                                                       // console.log(")))))))))))))))))))+++++++++++++++++++++((((((((((((((((((((((((((")
-                                                       // console.log(feeds)
                                                     }
                                                 }
                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Feeds',

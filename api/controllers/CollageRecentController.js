@@ -54,14 +54,12 @@ module.exports = {
                                         " SELECT *"+
                                         " FROM collage clg"+
                                         " WHERE clg.userId =  '"+userId+"'"+
-                                        //" AND clg.totalVote !=0"+
                                         " ORDER BY clg.createdAt DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+
                                         ") AS temp_clg"+
                                         " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
                                         " INNER JOIN user usr ON usr.id = temp_clg.userId"+
-                                        //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                         " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                         " GROUP BY clgdt.id"+
                                         " ORDER BY temp_clg.createdAt";
@@ -79,7 +77,6 @@ module.exports = {
                                         " FROM ("+
                                         " SELECT clg.id FROM collage clg INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " WHERE"+
-                                        //" tg.userId =  '"+received_userId+"' AND clg.userId =  '"+userId+"' AND clg.totalVote != 0"+
                                         " tg.userId =  '"+userId+"' AND clg.userId =  '"+received_userId+"'"+
                                         " ORDER BY clg.createdAt  DESC"+
                                         " ) AS temp"+
@@ -89,25 +86,19 @@ module.exports = {
                                         " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                         " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " INNER JOIN user usr ON usr.id = tg.userId"+
-                                        //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                         " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                         " GROUP BY clgdt.id"+
                                         " ORDER BY clg.createdAt";
                             }
                             console.log(query);
                             Collage.query(query, function(err, results) {
-                                    if(err)
-                                    {
+                                    if(err){
                                         console.log(err);
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting dithers with type', error_details: err});
-                                    }
-                                    else
-                                    {
-                                        //console.log(results);
-                                        //console.log(results.length);
+                                    }else{
                                         if(!results.length){
                                                 User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
-                                                        if (err) {
+                                                        if(err){
                                                             console.log(err);
                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                         }else{

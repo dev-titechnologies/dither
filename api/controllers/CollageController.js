@@ -53,7 +53,6 @@ module.exports = {
                 var received_userId             =     req.param("user_id");
                 var received_userName, received_userProfilePic;
                 var query;
-                console.log("Get Dither Other Profile  -------------------- ================================================");
                 console.log("received_userId ------------------------------");
                 console.log(received_userId);
                 console.log("userId ------------------------------");
@@ -71,17 +70,15 @@ module.exports = {
                             popular_dithers,
                             imgDetailsArrayOrder,
                             total_opinion;
-                        for (var i = dataResults.length - 1; i >= 0; i--) {
+                        for (var i = dataResults.length - 1; i >= 0; i--){
                             var like_position_Array = [];
                             var like_position;
                             var likeStatus;
                             var dataResultsObj      =  new Object();
                             var collageId_val       =  dataResults[i]["collageId"];
-                            if ( dataResultsKeys.indexOf( collageId_val ) == -1 )
-                            {
+                            if ( dataResultsKeys.indexOf( collageId_val ) == -1 ){
                                 var imgDetailsArray = [];
-                                for (var j = dataResults.length - 1; j >= 0; j--)
-                                {
+                                for (var j = dataResults.length - 1; j >= 0; j--){
                                     if(dataResults[j]["collageId"]==collageId_val){
                                                 if(dataResults[j]["likePosition"] == dataResults[j]["position"]){
                                                     console.log("likeStatus if ==============");
@@ -100,7 +97,6 @@ module.exports = {
                                                                     });
                                     }
                                 }
-
                                 if(like_position_Array.length){
                                             like_position = like_position_Array[0];
                                 }else{
@@ -110,7 +106,8 @@ module.exports = {
                                 if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
                                         received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
                                 }
-                                imgDetailsArrayOrder                    =       imgDetailsArray.reverse();
+
+                                imgDetailsArrayOrder                    =       imgDetailsArray.sort(predicatBy("position"));
                                 received_userName                       =       dataResults[i]["name"];
                                 received_userProfilePic                 =       received_userProfilePic;
                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
@@ -132,8 +129,6 @@ module.exports = {
                                 common_dithers      :    common_dithers,
                                 };
                 }
-
-
                 if(!received_userId){
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass user_id'});
                 }else{
@@ -154,7 +149,6 @@ module.exports = {
                                             " ) AS temp"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp.id"+
                                             " INNER JOIN user usr ON usr.id = temp.userId"+
-                                            //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                             " WHERE"+
                                             " temp.userId = '"+userId+"'"+
@@ -176,7 +170,6 @@ module.exports = {
                                             " ) AS temp"+
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp.id"+
                                             " INNER JOIN user usr ON usr.id = temp.userId"+
-                                           // " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                             " WHERE"+
                                             " temp.userId = '"+userId+"'"+
@@ -195,10 +188,6 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT temp.id"+
                                             " FROM ("+
-                                            //" SELECT clg.id"+
-                                            //" FROM collage clg"+
-                                            //" WHERE clg.userId =  '"+received_userId+"'"+
-                                            //" UNION SELECT tg.collageId AS id"+
                                             " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
                                             " WHERE tg.userId =  '"+userId+"'"+
@@ -212,7 +201,6 @@ module.exports = {
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = tg.userId"+
-                                           // " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.createdAt DESC";
@@ -226,10 +214,6 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT temp.id"+
                                             " FROM ("+
-                                            //" SELECT clg.id"+
-                                            //" FROM collage clg"+
-                                           // " WHERE clg.userId =  '"+received_userId+"'"+
-                                            //" UNION SELECT tg.collageId AS id"+
                                             " SELECT tg.collageId AS id"+
                                             " FROM tags tg"+
                                             " WHERE tg.userId =  '"+userId+"'"+
@@ -244,7 +228,6 @@ module.exports = {
                                             " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                             " INNER JOIN tags tg ON tg.collageId = clg.id"+
                                             " INNER JOIN user usr ON usr.id = tg.userId"+
-                                            //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                             " GROUP BY clgdt.id"+
                                             " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
@@ -254,30 +237,23 @@ module.exports = {
                             console.log(query_recent);
                             console.log(query_popular);
                             Collage.query(query_recent, function(err, recentResults) {
-                                    if(err)
-                                    {
+                                    if(err){
                                         console.log(err);
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting recent collages of the user', error_details: err});
-                                    }
-                                    else
-                                    {
+                                    }else{
 
                                         Collage.query(query_popular, function(err, popularResults) {
-                                                if(err)
-                                                {
+                                                if(err){
                                                     console.log(err);
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting popular collages of the user', error_details: err});
-                                                }
-                                                else
-                                                {
+                                                }else{
                                                     //console.log(recentResults);
                                                     if(recentResults.length == 0 && popularResults.length == 0){
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
-                                                                    if (err) {
+                                                                    if(err){
                                                                         console.log(err);
                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                                     }else{
-
                                                                         if(!foundUserDetails){
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                                     username                : "",
@@ -296,13 +272,11 @@ module.exports = {
                                                                     }
                                                             });
                                                     }else{
-
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
-                                                                    if (err) {
+                                                                    if(err){
                                                                            console.log(err);
                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                                                                     }else{
-
                                                                         if(!foundUserDetails){
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                                     username                : "",
@@ -311,7 +285,6 @@ module.exports = {
                                                                                                     popular_dithers         : []
                                                                                 });
                                                                         }else{
-                                                                                console.log("function abcd()++++++++++++++++++++++++++++++++++++++++");
                                                                                 var recent_DitherResults    =   commonKeyFunction(recentResults);
                                                                                 var popular_DitherResults   =   commonKeyFunction(popularResults);
                                                                                 var user_profile_image = "";
@@ -344,13 +317,10 @@ module.exports = {
                To Edit Dither
      ==================================================================================================================================== */
         editDither:  function (req, res) {
-                    var tokenCheck                  =     req.options.tokenCheck;
-                    var userId                      =     tokenCheck.tokenDetails.userId;
                     console.log("Edit Dithers ===== api");
                     console.log(req.params.all());
-                    console.log(req.param("dither_id"));
-                    console.log(req.param("dither_desc"));
-                    console.log(req.param("dither_location"));
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
                     var collageId                   =      req.param("dither_id");
                     var imgTitle                    =      req.param("dither_desc");
                     var location                    =      req.param("dither_location");
@@ -379,7 +349,6 @@ module.exports = {
                                 Collage.findOne({id: collageId}).exec(function (err, foundCollage){
                                         if(err){
                                                     console.log(err);
-                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
                                                     callback();
                                         }else{
 
@@ -392,17 +361,10 @@ module.exports = {
                                                                             location           :    location,
                                                                         };
                                                     Collage.update(criteria, values).exec(function(err, updatedCollage) {
-                                                        if(err)
-                                                        {
+                                                        if(err){
                                                             console.log(err);
-                                                            //return res.json(200, {status: 2, status_type: 'Failure', message: 'Some error has occured in Updating the Dither'});
                                                             callback();
-                                                        }
-                                                        else
-                                                        {
-                                                            console.log("++++++++++++++ -------------- taggedUserArray -------------- +++++++++++++  STARTS");
-                                                            console.log(taggedUserArray);
-                                                            console.log("++++++++++++++ ---------------- taggedUserArray -------------- +++++++++++++  ENDS");
+                                                        }else{
                                                             if(taggedUserArray.length){
                                                                     taggedUserArray.forEach(function(factor, index){
                                                                             var taggedUser_roomName  = "socket_user_"+factor;
@@ -417,166 +379,73 @@ module.exports = {
                                                                                                                     });
                                                                     });
                                                             }
-                                                            console.log("Successfully updated =======================");
-                                                            console.log(updatedCollage);
                                                             collage_results = foundCollage;
                                                             callback();
-
                                                         }
                                                     });
                                             }
                                         }
                                 });
                     },
-                    function(callback) {
+                    function(callback){
                             console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                if(taggedUserArray.length != 0){
-                                        console.log(collage_results);
-                                        console.log("results.id+++++++++++++++++");
-                                        console.log(collage_results.id);
-
+                                if(taggedUserArray.length){
                                         var tagCollageArray         = [];
                                         var deleteTagCollageArray   = [];
                                         taggedUserArray.forEach(function(factor, index){
-                                            console.log("Refy tagged User ======>>>>> factor");
-                                            console.log(factor);
                                             tagCollageArray.push({collageId: collage_results.id, userId: factor});
-                                            //deleteTagCollageArray.push({collageId: collage_results.id});
                                         });
-                                        console.log("tagCollageArray }}}}}}}}}}}}}}}}}}}}}}}}");
-                                        console.log(tagCollageArray);
-
-
                                         //Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
-                                            Tags.destroy({collageId: collage_results.id}).exec(function(err, deleteCollageTags){
-                                                    if(err)
-                                                    {
+                                        Tags.destroy({collageId: collage_results.id}).exec(function(err, deleteCollageTags){
+                                                if(err){
                                                         console.log(err);
-                                                        console.log("Error in Deleting Collage Tags");
                                                         callback();
-                                                    }else{
-                                                        Tags.create(tagCollageArray).exec(function(err, createdCollageTags) {
-                                                                if(err)
-                                                                {
+                                                }else{
+                                                    Tags.create(tagCollageArray).exec(function(err, createdCollageTags){
+                                                            if(err){
                                                                     console.log(err);
-                                                                    console.log("+++++++++++++++++++++++++");
                                                                     callback();
-                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
-                                                                }
-                                                                else
-                                                                {
-                                                                        //Query to get tagged users from both addressBook and fbFriends
-                                                                        query = " SELECT"+
-                                                                                " adb.userId, adb.ditherUsername, usr.name"+
-                                                                                " FROM addressBook adb"+
-                                                                                " INNER JOIN user usr ON usr.id = adb.userId"+
-                                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
-                                                                                " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                                                                " WHERE"+
-                                                                                " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
-                                                                                " GROUP BY adb.userId"+
-                                                                                " UNION"+
-                                                                                " SELECT"+
-                                                                                " fbf.userId, fbf.ditherUsername, usr.name"+
-                                                                                " FROM fbFriends fbf"+
-                                                                                " INNER JOIN user usr ON usr.id = fbf.userId"+
-                                                                                " LEFT JOIN tags tg ON tg.userId = usr.id"+
-                                                                                " LEFT JOIN collage clg ON clg.id = tg.collageId"+
-                                                                                " WHERE"+
-                                                                                " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
-                                                                                " GROUP BY fbf.userId";
-                                                                        console.log(query);
-                                                                        AddressBook.query(query, function(err, taggedUsersFinalResults) {
-                                                                                if(err)
-                                                                                {
-                                                                                    console.log(err);
-                                                                                    callback();
+                                                            }else{
+                                                                    //Query to get tagged users from both addressBook and fbFriends
+                                                                    query = " SELECT"+
+                                                                            " adb.userId, adb.ditherUsername, usr.name"+
+                                                                            " FROM addressBook adb"+
+                                                                            " INNER JOIN user usr ON usr.id = adb.userId"+
+                                                                            " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                            " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                            " WHERE"+
+                                                                            " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
+                                                                            " GROUP BY adb.userId"+
+                                                                            " UNION"+
+                                                                            " SELECT"+
+                                                                            " fbf.userId, fbf.ditherUsername, usr.name"+
+                                                                            " FROM fbFriends fbf"+
+                                                                            " INNER JOIN user usr ON usr.id = fbf.userId"+
+                                                                            " LEFT JOIN tags tg ON tg.userId = usr.id"+
+                                                                            " LEFT JOIN collage clg ON clg.id = tg.collageId"+
+                                                                            " WHERE"+
+                                                                            " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
+                                                                            " GROUP BY fbf.userId";
+                                                                    console.log(query);
+                                                                    AddressBook.query(query, function(err, taggedUsersFinalResults){
+                                                                            if(err){
+                                                                                console.log(err);
+                                                                                callback();
+                                                                            }else{
+                                                                                console.log(query);
+                                                                                if(taggedUsersFinalResults.length){
+                                                                                    taggedUsersFinalResults.forEach(function(factor, index){
+                                                                                            taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                                                    });
                                                                                 }
-                                                                                else
-                                                                                {
-                                                                                    console.log(query);
-                                                                                    console.log(taggedUsersFinalResults);
-                                                                                    console.log(taggedUsersFinalResults.length);
+                                                                                callback();
+                                                                            }
 
-                                                                                    if(taggedUsersFinalResults){
-                                                                                        taggedUsersFinalResults.forEach(function(factor, index){
-                                                                                                console.log("factor ------------))))))))))))))))======================");
-                                                                                                console.log(factor);
-                                                                                                taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
-                                                                                        });
-                                                                                    }
-                                                                                    callback();
-                                                                                    /*if(taggedUserArray.length){
-                                                                                        taggedUserArray.forEach(function(factor, index){
-                                                                                                //tagNotifyArray.push({id:factor.user_id});
-                                                                                                tagNotifyArray.push(factor.user_id);
-
-                                                                                        });
-                                                                                        console.log(tagNotifyArray.length);
-                                                                                        console.log(tagNotifyArray);
-                                                                                        var query = "SELECT notificationTypeId,tagged_users FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1";
-                                                                                       var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1";
-                                                                                       NotificationLog.query(query, function(err, deleteCommentNtfn){
-                                                                                           if(err)
-                                                                                           {
-                                                                                               console.log(err)
-                                                                                               callback();
-                                                                                           }
-                                                                                           else
-                                                                                           {
-                                                                                               console.log("deleted")
-                                                                                               console.log(deleteCommentNtfn)
-
-
-
-                                                                                            var values ={
-                                                                                                            notificationTypeId  :   1,
-                                                                                                            userId              :   userId,
-                                                                                                            collage_id          :   collage_results.id,
-                                                                                                            tagged_users        :   tagNotifyArray,
-                                                                                                            description         :   tagNotifyArray.length
-                                                                                                        }
-                                                                                            console.log(values);
-                                                                                            NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-                                                                                                if(err)
-                                                                                                {
-                                                                                                    console.log(err);
-                                                                                                    callback();
-                                                                                                }else{
-
-                                                                                                        taggedUserArray.forEach(function(factor, index){
-                                                                                                                var taggedUser_roomName  = "socket_user_"+factor;
-                                                                                                                sails.sockets.broadcast(taggedUser_roomName,{
-                                                                                                                                        type                       :       "notification",
-                                                                                                                                        id                         :       collageId,
-                                                                                                                                        message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
-                                                                                                                                        roomName                   :       taggedUser_roomName,
-                                                                                                                                        subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
-                                                                                                                                        socket                     :       sails.sockets.rooms(),
-                                                                                                                                        });
-                                                                                                        });
-
-                                                                                                        console.log("Successfully Inserted to---->>. NotificationLog table");
-                                                                                                        console.log(createdNotificationTags);
-                                                                                                        callback();
-
-                                                                                                }
-                                                                                            });
-                                                                                           }
-                                                                                        });
-
-                                                                                    }else{
-
-                                                                                        callback();
-
-                                                                                    }*/
-                                                                                }
-
-                                                                        });
-                                                                }
-                                                        });
-                                                    }
-                                            });
+                                                                    });
+                                                            }
+                                                    });
+                                                }
+                                        });
 
                                 }else{
 
@@ -602,20 +471,16 @@ module.exports = {
                                             " GROUP BY fbf.userId";
                                     console.log(query);
                                     AddressBook.query(query, function(err, taggedUsersFinalResults) {
-                                            if(err)
-                                            {
+                                            if(err){
                                                 console.log(err);
                                                 callback();
-                                            }
-                                            else
-                                            {
-                                                console.log(query);
-                                                console.log(taggedUsersFinalResults);
-                                                console.log(taggedUsersFinalResults.length);
-
-                                                if(taggedUsersFinalResults != 0){
+                                            }else{
+                                                if(taggedUsersFinalResults.length){
                                                     taggedUsersFinalResults.forEach(function(factor, index){
-                                                            taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                            taggedUserArrayFinal.push({
+                                                                                    name        : factor.name,
+                                                                                    userId      : factor.userId
+                                                                                    });
                                                     });
                                                     callback();
                                                 }else{
@@ -624,207 +489,116 @@ module.exports = {
 
                                             }
                                     });
-
-
-
                                 }
                                 //callback();
                     },
-                    function(callback)
-                    {
-                      console.log("===============CALLBACK 3=====NOTIFICATION===============================")
-
-                      if(taggedUserArray.length){
+                    function(callback){
+                        console.log("===============CALLBACK 3=====NOTIFICATION===============================")
+                        if(taggedUserArray.length){
                             var ntfyArr = [];
                             taggedUserArray.forEach(function(factor, index){
                                 //tagNotifyArray.push({id:factor.user_id});
                                 tagNotifyArray.push(factor);
-                                console.log(tagNotifyArray)
                                 var query = "SELECT notificationTypeId,tagged_users FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1 and FIND_IN_SET("+factor+",tagged_users)";
                                 console.log(query)
                                 NotificationLog.query(query, function(err, selectNotification){
-                                    if(err)
-                                    {
+                                    if(err){
                                         console.log(err)
-                                    }
-                                    else
-                                    {
-                                        if(!selectNotification.length)
-                                        {
+                                    }else{
+                                        if(!selectNotification.length){
                                             ntfyArr.push(factor);
                                         }
                                     }
                                 });
-
-
                             });
-
-
-
-                            console.log(tagNotifyArray);
-                            console.log("-------------------Norify Array--------------------")
-                            console.log(ntfyArr);
-                            if(tagNotifyArray.length)
-                            {
-
-                            var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1";
-                            NotificationLog.query(query, function(err, deleteCommentNtfn){
-                             if(err)
-                              {
-                                console.log(err)
-                                callback();
-                              }
-                              else
-                              {
-                                   var tagNtfyPush = [];
-                                    ntfyArr.forEach(function(factor, index){
-                                        //tagNotifyArray.push({id:factor.user_id});
-                                        tagNotifyArray.push(factor);
-                                        User.findOne({id:factor}).exec(function (err, notifySettings){
-                                           if(err)
-                                           {
-                                               console.log(err)
-                                           }
-                                           else
-                                           {
-                                             console.log("???????---Result----?????????")
-                                             console.log(notifySettings)
-                                             //console.log(notifySettings.notifyOpinion)
-                                             if(notifySettings.notifyOpinion)
-                                             {
-                                                console.log(factor)
-                                                tagNtfyPush.push(factor);
-                                             }
-
-                                           }
-                                        });
-                                });
-
-
-
-                                var values ={
-                                                notificationTypeId  :   1,
-                                                userId              :   userId,
-                                                collage_id          :   collage_results.id,
-                                                tagged_users        :   tagNotifyArray,
-                                                description         :   tagNotifyArray.length
-                                            }
-                                console.log(values);
-                                NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-                                    if(err)
-                                    {
-                                        console.log(err);
+                            if(tagNotifyArray.length){
+                                var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 1";
+                                NotificationLog.query(query, function(err, deleteCommentNtfn){
+                                    if(err){
+                                        console.log(err)
                                         callback();
                                     }else{
-
-                                            taggedUserArray.forEach(function(factor, index){
-                                                    var taggedUser_roomName  = "socket_user_"+factor;
-                                                    sails.sockets.broadcast(taggedUser_roomName,{
-                                                                            type                       :       "notification",
-                                                                            id                         :       collageId,
-                                                                            message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
-                                                                            roomName                   :       taggedUser_roomName,
-                                                                            subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
-                                                                            socket                     :       sails.sockets.rooms(),
-                                                                            });
-                                            });
-
-                                            console.log("Successfully Inserted to---->>. NotificationLog table");
-                                            console.log(createdNotificationTags);
-
-                                            console.log("====================PUSH NOTIFICATION =======================")
-                                            console.log(ntfyArr)
-                                            var deviceId_arr    = [];
-                                            var message   = 'Notification For Opinion';
-                                            var ntfn_body =  tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
-                                            User_token.find({userId: tagNtfyPush}).exec(function (err, response) {
-                                                if(err)
-                                                {
-                                                    console.log(err)
-                                                    callback();
+                                        var tagNtfyPush = [];
+                                        ntfyArr.forEach(function(factor, index){
+                                            //tagNotifyArray.push({id:factor.user_id});
+                                            tagNotifyArray.push(factor);
+                                            User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                if(err){
+                                                   console.log(err)
+                                                }else{
+                                                    if(notifySettings.notifyOpinion){
+                                                        tagNtfyPush.push(factor);
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    console.log("--------------device idssssssssss--------------------")
-                                                    console.log(response)
-                                                    response.forEach(function(factor, index){
-
-                                                        if(factor.deviceId!=req.get('device_id'))
-                                                        {
-                                                            deviceId_arr.push(factor.deviceId);
-                                                        }
-
+                                            });
+                                        });
+                                        var values ={
+                                                        notificationTypeId  :   1,
+                                                        userId              :   userId,
+                                                        collage_id          :   collage_results.id,
+                                                        tagged_users        :   tagNotifyArray,
+                                                        description         :   tagNotifyArray.length
+                                                    }
+                                        NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+                                            if(err){
+                                                console.log(err);
+                                                callback();
+                                            }else{
+                                                    taggedUserArray.forEach(function(factor, index){
+                                                            var taggedUser_roomName  = "socket_user_"+factor;
+                                                            sails.sockets.broadcast(taggedUser_roomName,{
+                                                                                    type                       :       "notification",
+                                                                                    id                         :       collageId,
+                                                                                    message                    :       "Edit Dither - Room Broadcast - to Tagged Users",
+                                                                                    roomName                   :       taggedUser_roomName,
+                                                                                    subscribers                :       sails.sockets.subscribers(taggedUser_roomName),
+                                                                                    socket                     :       sails.sockets.rooms(),
+                                                                                    });
                                                     });
-
-                                                    if(deviceId_arr.length)
-                                                    {
-
-                                                        console.log("=============PUSH NTFN FOR EDIT TAGGING============================")
-
-                                                        var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
-                                                        console.log(data)
-                                                        NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
-                                                                                if(err)
-                                                                                {
-                                                                                    console.log("Error in Push Notification Sending")
-                                                                                    console.log(err)
-                                                                                    callback();
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    console.log("Push notification result")
-                                                                                    console.log(ntfnSend)
-                                                                                    console.log("Push Notification sended")
-                                                                                    callback();
-
-                                                                                }
-                                                        });
-
-
-
-                                                    }
-                                                    else
-                                                    {
-                                                        console.log("No deviceId")
-                                                        callback();
-                                                    }
-                                                }
-
-                                            });
-                                    }
+                                                    var deviceId_arr    =   [];
+                                                    var message         =   'Notification For Opinion';
+                                                    var ntfn_body       =   tokenCheck.tokenDetails.name +" is Asking for Your Opinion";
+                                                    User_token.find({userId: tagNtfyPush}).exec(function (err, response){
+                                                        if(err){
+                                                            console.log(err)
+                                                            callback();
+                                                        }else{
+                                                            response.forEach(function(factor, index){
+                                                                if(factor.deviceId!=req.get('device_id')){
+                                                                    deviceId_arr.push(factor.deviceId);
+                                                                }
+                                                            });
+                                                            if(deviceId_arr.length){
+                                                                var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
+                                                                NotificationService.NtfnInAPP(data, function(err, ntfnSend){
+                                                                        if(err){
+                                                                            console.log(err)
+                                                                            callback();
+                                                                        }else{
+                                                                            callback();
+                                                                        }
+                                                                });
+                                                            }else{
+                                                                console.log("No deviceId")
+                                                                callback();
+                                                            }
+                                                        }
+                                                    });
+                                            }
+                                        });
+                                  }
                                 });
-                              }
-                            });
-                            }
-                            else
-                            {
+                            }else{
                                 callback();
                             }
 
                         }else{
-
                             callback();
-
                         }
-
                     },
-                    function(callback) {
+                    function(callback){
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                //[5,6,7,8,9,10,11]
-                                /*var inviteFriends = [
-                                                    {"phone_number": "5", "name":"A"},
-                                                    {"phone_number": "6", "name":"B"},
-                                                    {"phone_number": "7", "name":"C"},
-                                                    {"phone_number": "8", "name":"D"},
-                                                    {"phone_number": "9", "name":"E"},
-                                                    {"phone_number": "10", "name":"F"},
-                                                    {"phone_number": "11", "name":"G"},
-                                                    ];*/
-                                             //inviteFriends    =   ["5","6","7","8","9","10","11"];
-                                if(inviteFriends.length != 0){
-                                    //phoneNumber
-                                    //userId
-                                    console.log(userId);
+                                if(inviteFriends.length){
                                     var foundInvitePNFinalArray         =       [];
                                     var unique_push_array               =       [];
                                     var duplicate_push_array            =       [];
@@ -832,54 +606,15 @@ module.exports = {
                                     var inviteFinalArray                =       [];
                                     Invitation.find({collageId: collage_results.id}).exec(function (err, foundInvitationCollage){
                                             if(err){
-                                                       // console.log(err);
-                                                       // return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                                      console.log(err);
+                                                      callback();
                                             }else{
-                                                    //var foundInvitationCollage = [1,2,3,4,5,6,7];
-
-                                                    /*console.log("^^^^^^^^^^^^^^^^^^^^ foundInvitationCollage ^^^^^^^^^^^^^^^^^^^^");
-                                                    console.log(foundInvitationCollage);
+                                                    var foundInvitePNFinal_Array = [];
                                                     foundInvitationCollage.forEach(function(factor, index){
-                                                             foundInvitePNFinalArray.push(factor.phoneNumber);
-
+                                                         foundInvitePNFinal_Array.push(factor.phoneNumber);
                                                     });
-
-                                                    console.log("^^^^^^^^^^^^^^^^foundInvitePNFinalArray^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                                    console.log(foundInvitePNFinalArray);
-                                                    console.log("^^^^^^^^^^^^^^^^foundInvitePNFinalArray^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                                    inviteFriends.forEach(function(factor, index){
-                                                             inviteFriends_onlyPNArray.push(factor.phoneNumber);
-                                                    });*/
-                                                  //  console.log(inviteFriends);
-                                                    /*var foundInvitation_Collage =[
-                                                                                {"phoneNumber": "1", "name":"P"},
-                                                                                {"phoneNumber": "2", "name":"Q"},
-                                                                                {"phoneNumber": "3", "name":"R"},
-                                                                                {"phoneNumber": "4", "name":"S"},
-                                                                                {"phoneNumber": "5", "name":"T"},
-                                                                                {"phoneNumber": "6", "name":"U"},
-                                                                                {"phoneNumber": "7", "name":"V"},
-                                                                                ];*/
-                                                        //foundInvitationCollage = ["1","2","3","4","5","6","7"];
-                                                        var foundInvitePNFinal_Array = [];
-                                                        foundInvitationCollage.forEach(function(factor, index){
-                                                             console.log("factor----------->>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<");
-                                                             console.log(factor);
-
-                                                             foundInvitePNFinal_Array.push(factor.phoneNumber);
-                                                        });
-
-                                                        console.log("ONLY NUM ARRAY -------------foundInvitePNFinalArray");
-                                                        console.log(foundInvitePNFinal_Array);
-
-                                                    for (var i=0; i<inviteFriends.length; i++) {
-                                                            console.log("Loop Started  +++++++++++++++++++++++++++++++");
-                                                            console.log(inviteFriends[i]);
-                                                            console.log(inviteFriends[i].phone_number);
-                                                            console.log("Loop Started  +++++++++++++++++++++++++++++++");
+                                                    for (var i=0; i<inviteFriends.length; i++){
                                                             index = foundInvitePNFinal_Array.indexOf(inviteFriends[i].phone_number);
-                                                            console.log("index===========");
-                                                            console.log(inviteFriends[i].phone_number+"------------------------------------------>>>>>>>>>>"+index);
                                                             //Removing the Duplicate Values
                                                             if(index == -1){
                                                                     unique_push_array.push({name: inviteFriends[i].name, phone_number : inviteFriends[i].phone_number});
@@ -888,34 +623,19 @@ module.exports = {
                                                                     duplicate_push_array.push({name: inviteFriends[i].name, phone_number : inviteFriends[i].phone_number});
                                                             }
                                                     }
-
-                                                    console.log("unique push array ++++++++++++++++++++++");
-                                                    console.log(unique_push_array);
-
-                                                    console.log("duplicate_push_array ++++++++++++++++++++++");
-                                                    console.log(duplicate_push_array);
-
-
                                                     async.series([
                                                             function(callback) {
                                                                             console.log("------------------- SERIES callback--1-----------------");
-                                                                            if(unique_push_array.length != 0){
+                                                                            if(unique_push_array.length){
                                                                                     unique_push_array.forEach(function(factor, index){
                                                                                              inviteFinalArray.push({userId: parseInt(userId), collageId: collage_results.id, phoneNumber: factor.phone_number, invitee: factor.name});
                                                                                     });
-                                                                                    console.log("inviteFinalArray =============");
-                                                                                    console.log(inviteFinalArray);
                                                                                     Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
                                                                                             if(err)
                                                                                             {
-                                                                                                console.log("Invitation error ============>>>>>>>>>>>>>");
                                                                                                 console.log(err);
                                                                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                                                                             }else{
-                                                                                                    console.log("Successfully inserted Invitation New Invitation");
-
-                                                                                                    //duplicate_push_array
-                                                                                                    //SMS HERE
                                                                                                     callback();
                                                                                             }
                                                                                     });
@@ -926,7 +646,7 @@ module.exports = {
                                                             },
                                                             function(callback) {
                                                                             console.log("------------------- SERIES callback--2-----------------");
-                                                                            if(duplicate_push_array.length != 0){
+                                                                            if(duplicate_push_array.length){
                                                                                 async.forEach(duplicate_push_array, function (factor, callback){
                                                                                         var criteria            =   {
                                                                                                                         collageId       :   collage_results.id,
@@ -938,16 +658,11 @@ module.exports = {
 
                                                                                         Invitation.update(criteria,values).exec(function(err, updateInvitation) {
 
-                                                                                                console.log("Invite update name");
-                                                                                                //console.log(updateInvitation);
-                                                                                                //callback();
                                                                                          });
                                                                                 },callback());
 
                                                                             }else{
-
                                                                                     callback();
-
                                                                             }
                                                                             //callback();
 
@@ -958,16 +673,11 @@ module.exports = {
                                                                                     " FROM invitation invt"+
                                                                                     " WHERE invt.collageId = "+collageId;
                                                                             Invitation.query(query, function(err, inviteFriend_Results) {
-                                                                                    if(err)
-                                                                                    {
+                                                                                    if(err){
                                                                                         console.log(err);
                                                                                         callback();
                                                                                         //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Selecting tagged users from both address book and fb friends'});
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        console.log("==========Selected Invited Members --------");
-                                                                                        console.log(inviteFriend_Results);
+                                                                                    }else{
                                                                                         invitedFriends_NUM_Final = inviteFriend_Results;
                                                                                         callback();
                                                                                     }
@@ -976,17 +686,14 @@ module.exports = {
 
                                                             }
                                                     ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                                                        if (err) {
+                                                                        if(err){
                                                                             console.log(err);
                                                                             callback();
                                                                             //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Edit Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                         }else{
-                                                                            console.log("Edit Dither =============>>>>>>>>>>>>>>");
                                                                             callback();
                                                                         }
                                                     });
-
-
                                             }
                                     });
 
@@ -996,32 +703,20 @@ module.exports = {
                                 //callback();
                     },
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                if (err) {
+                                if(err){
                                     console.log(err);
                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Edit Dither', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                 }else{
-                                    console.log("Edit Dither =============>>>>>>>>>>>>>>");
                                     //sails.sockets.blast('edit-dither', {status : "success", name : "editDither"});
                                     sails.sockets.blast('edit-dither', {status : 1, status_type: 'Success', message : "editDither Blasted successfully",
                                                                         dither_id:collageId,
                                                                         dither_type:'details'});
-                                    //console.log(sortedVote);
-                                    //console.log(taggedUserArrayFinal);
-                                    //console.log(invite_friends_NUM);
-                                    console.log("********************taggedUserArrayFinal**********************")
-                                    console.log(taggedUserArrayFinal)
                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Succesfully updated the Dither',
                                                           taggedUsers           : taggedUserArrayFinal,
                                                           invite_friends_NUM    : invitedFriends_NUM_Final,
                                                          });
-                                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends', ditherPhoneContact: ditherUserInAddressBook, ditherFBuser: ditherUserInFbFriends});
                                 }
             });
-
-
-                                                                   // return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully updated the Dither'});
-
-
                     }
         },
 

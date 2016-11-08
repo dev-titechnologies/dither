@@ -39,15 +39,12 @@ module.exports = {
                                 " WHERE clg.id = "+get_collage_id+
                                 " GROUP BY clgdt.id";
                         console.log(query);
-                        Collage.query(query, function(err, results) {
-                                if(err)
-                                {
+                        Collage.query(query, function(err, results){
+                                if(err){
                                     console.log(err);
                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Details'});
-                                }
-                                else
-                                {
-                                    if(results.length == 0){
+                                }else{
+                                    if(!results.length){
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by this Id'});
                                     }else{
                                             var imageArray = [];
@@ -55,16 +52,12 @@ module.exports = {
                                             var like_position;
                                             var like_status, like_count;
                                             results.forEach(function(factor, index){
-                                                    //console.log("factor");
-                                                    //console.log(factor.likeStatus);
                                                     var like_status;
-
                                                     if(factor.likeStatus == null || factor.likeStatus == "" || factor.likeStatus == 0){
                                                             like_status = 0;
                                                     }else{
                                                             like_status = 1;
                                                     }
-
                                                     imageArray.push({
                                                                     imageUrl        : collageImg_path + factor.image,
                                                                     like_count      : factor.vote,
@@ -72,11 +65,8 @@ module.exports = {
                                                                     id              : factor.imageId
                                                                     });
                                                         if(factor.likeUserId != null || factor.likeUserId != "" ){
-                                                                //console.log("Inside factor likeUserId not null ==============");
                                                                 if(factor.likePosition != "" || factor.likePosition != null){
                                                                     if(factor.likeUserId == userId && factor.collageCreatorId != userId){
-                                                                        //like_position = factor.likePosition;
-                                                                        //console.log("Inside factor like User id check ================");
                                                                         like_position_Array.push(factor.likePosition);
                                                                     }
                                                                 }
@@ -112,60 +102,15 @@ module.exports = {
                                                                             var ext                         =     imageSrc.split('/');
                                                                             ext                             =     ext[ext.length-1].split('.');
                                                                             profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-
-                                                                            //var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                            /*var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                            fs.exists(imageSrc, function(exists){
-                                                                                 if (exists){
-                                                                                        //console.log("Image exists");
-                                                                                        var ext                         =     imageSrc.split('/');
-                                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                                        var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                                        //console.log(imageSrc)
-                                                                                        //console.log(imageDst)
-                                                                                        ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                                            if(err){
-                                                                                                console.log("thumbNail creation error occured")
-                                                                                                console.log(err)
-
-
-                                                                                            }else{
-                                                                                                //console.log(imageResizeResults)
-                                                                                                profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                console.log("--------**********************************************--------");
-                                                                                                //console.log(commentArray)
-                                                                                                commentArray.push({comment_id                   : factor.id,
-                                                                                                                    user_id                     : factor.userId,
-                                                                                                                    user_name                   : factor.name,
-                                                                                                                    user_profile_pic_url        : profile_image,
-                                                                                                                    mention_id                  : factor.mentionId,
-                                                                                                                    message                     : factor.comment,
-                                                                                                                    comment_created_date_time   : factor.createdAt
-                                                                                                });
-                                                                                            }
-                                                                                        });
-                                                                                    }else{
-                                                                                        profile_image = profilePic_path + factor.profilePic;
-                                                                                        commentArray.push({comment_id                   : factor.id,
+                                                                        }
+                                                                        commentArray.push({comment_id                   : factor.id,
                                                                                             user_id                     : factor.userId,
                                                                                             user_name                   : factor.name,
                                                                                             user_profile_pic_url        : profile_image,
                                                                                             mention_id                  : factor.mentionId,
                                                                                             message                     : factor.comment,
                                                                                             comment_created_date_time   : factor.createdAt
-                                                                                        });
-                                                                                    }
-
-                                                                            });*/
-                                                                        }
-                                                                        commentArray.push({comment_id                   : factor.id,
-                                                                                                user_id                     : factor.userId,
-                                                                                                user_name                   : factor.name,
-                                                                                                user_profile_pic_url        : profile_image,
-                                                                                                mention_id                  : factor.mentionId,
-                                                                                                message                     : factor.comment,
-                                                                                                comment_created_date_time   : factor.createdAt
-                                                                            });
+                                                                        });
 
 
                                                                 });
@@ -202,7 +147,7 @@ module.exports = {
                                                                             var profile_image = "";
                                                                             //console.log(taggedUsersFinalResults);
                                                                             var taggedUserArrayFinal = [];
-                                                                            if(taggedUsersFinalResults){
+                                                                            if(taggedUsersFinalResults.length){
                                                                                 taggedUsersFinalResults.forEach(function(factor, index){
                                                                                         //console.log("factor");
                                                                                         //console.log(factor);
@@ -211,56 +156,13 @@ module.exports = {
                                                                                             var imageSrc                    =     factor.profilePic;
                                                                                             var ext                         =     imageSrc.split('.');
                                                                                             profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                            //console.log("--------**********************************************--------")
-
-                                                                                            /*fs.exists(imageSrc, function(exists){
-                                                                                                    if(exists){
-                                                                                                        //console.log("Image exists");
-                                                                                                        var ext                         =     imageSrc.split('/');
-                                                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                                                        var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                        //console.log(imageSrc)
-                                                                                                        //console.log(imageDst)
-                                                                                                        ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                                                            if(err){
-                                                                                                                console.log("thumbNail creation error occured")
-                                                                                                                console.log(err)
-
-
-                                                                                                            }else{
-                                                                                                                //console.log(imageResizeResults)
-                                                                                                                profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                                //console.log("--------**********************************************--------")
-                                                                                                                taggedUserArrayFinal.push({
-                                                                                                                name            :   factor.name,
-                                                                                                                userId          :   factor.ditherUserId,
-                                                                                                                profile_image   :   profile_image,
-                                                                                                                mention_id      :   factor.mentionId
-                                                                                                                });
-                                                                                                                //console.log(taggedUserArrayFinal)
-
-                                                                                                            }
-                                                                                                        });
-                                                                                                    }else{
-                                                                                                        profile_image = profilePic_path + factor.profilePic;
-                                                                                                        taggedUserArrayFinal.push({
-                                                                                                                name            :   factor.name,
-                                                                                                                userId          :   factor.ditherUserId,
-                                                                                                                profile_image   :   profile_image,
-                                                                                                                mention_id      :   factor.mentionId
-                                                                                                                });
-                                                                                                    }
-
-                                                                                            });*/
                                                                                         }
-
                                                                                         taggedUserArrayFinal.push({
                                                                                                     name            :   factor.name,
                                                                                                     userId          :   factor.ditherUserId,
                                                                                                     profile_image   :   profile_image,
                                                                                                     mention_id      :   factor.mentionId
                                                                                         });
-
                                                                                 });
                                                                             }
                                                                             query = " SELECT invt.phoneNumber, invt.invitee"+
@@ -275,10 +177,8 @@ module.exports = {
                                                                                         //console.log("Invited Users =============>>>>>>>>>>>>>>>>>>   ");
                                                                                         var inviteeArray;
                                                                                         if(invitedUsersFinalResults.length){
-
                                                                                                 inviteeArray = invitedUsersFinalResults;
                                                                                         }else{
-
                                                                                                 inviteeArray = [];
                                                                                         }
                                                                                         var user_profile_image    =     "";
@@ -288,59 +188,7 @@ module.exports = {
                                                                                                 user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                                 //user_profile_image              =     profilePic_path + results[0].profilePic;
                                                                                         }
-
-                                                                                    async.series([
-                                                                                      function(callback) {
-                                                                                            //------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                                            user_profile_image                     =  "";
-                                                                                            if(results[0].profilePic){
-                                                                                                    var imageSrc                    =     results[0].profilePic;
-                                                                                                    var ext                         =     imageSrc.split('.');
-                                                                                                    user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                            }
-                                                                                            /*var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
-                                                                                            fs.exists(imageSrc, function(exists) {
-                                                                                                    if(exists){
-                                                                                                        console.log("Image exists");
-                                                                                                        var imageSrc                    =     profilePic_path_assets + results[0].profilePic;
-                                                                                                        var ext                         =     imageSrc.split('/');
-                                                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                                                        var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                        //console.log(imageSrc)
-                                                                                                        //console.log(imageDst)
-                                                                                                        ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                                                            if(err){
-                                                                                                                console.log("thumbNail creation error occured")
-                                                                                                                console.log(err)
-                                                                                                                callback();
-
-                                                                                                            }else{
-                                                                                                                //console.log(imageResizeResults)
-                                                                                                                user_profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                                //console.log("--------**********************************************--------")
-                                                                                                                //console.log(user_profile_image)
-                                                                                                                callback();
-
-                                                                                                            }
-                                                                                                        });
-                                                                                                    }else{
-                                                                                                        callback();
-                                                                                                    }
-                                                                                            });*/
-                                                                                            callback();
-                                                                                        },
-
-
-                                                                                        ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                                                                        if(err){
-
-                                                                                            console.log(err);
-                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured Comment Updation', error_details: err});
-
-                                                                                        }else{
-
-                                                                                                console.log("result")
-                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
+                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                                              dither_desc                : results[0].imgTitle,
                                                                                                                              dither_created_date_time   : results[0].createdAt,
                                                                                                                              dither_updated_date_time   : results[0].updatedAt,
@@ -357,10 +205,6 @@ module.exports = {
                                                                                                                              comments                   : commentArray,
                                                                                                                              invite_friends_NUM         : inviteeArray,
                                                                                                                 });
-                                                                                             }
-                                                                                        });
-
-
                                                                                     }
                                                                             });
 

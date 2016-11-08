@@ -19,7 +19,6 @@ module.exports = {
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var collageId                   =     req.param("dither_id");
                     var comment                     =     req.param("comment_msg");
-                    var device_type                 =     req.get('device_type');
                     var mention_user_id             =     [];
                     var mention_arr                 =     req.param("mentions");
 
@@ -29,10 +28,6 @@ module.exports = {
                     var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                     //var   mention_arr                 =    ['test_user','anu_r'];
                     var profile_image               =     '';
-                    //console.log("token details")
-                    //console.log(tokenCheck)
-                    //console.log("mention array")
-                    //console.log(mention_arr)
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
                     }else{
@@ -83,7 +78,7 @@ module.exports = {
                                                                         {
                                                                             //console.log("In mention_arr")
                                                                             //var query = "SELECT id FROM user where mention_id=";
-                                                                            User.find({mentionId: mention_arr}).exec(function (err, getUserId){ 
+                                                                            User.find({mentionId: mention_arr}).exec(function (err, getUserId){
                                                                                 if(err)
                                                                                 {
                                                                                     console.log("mention")
@@ -97,28 +92,25 @@ module.exports = {
                                                                                     getUserId.forEach(function(factor, index){
 
                                                                                         mention_user_id.push(factor.id);
-																						User.findOne({id:factor.id}).exec(function (err, notifySettings){
-																						   if(err)
-																						   {
-																							   console.log(err)
-																						   }
-																						   else
-																						   {
-																							 console.log("???????---Result----?????????")
-																							 console.log(notifySettings)
-																							 //console.log(notifySettings.notifyOpinion)
-																							 if(notifySettings)
-																							 {	 if(notifySettings.notifyMention)
-																								 {
-																									console.log(factor)
-																									mentionPushArr.push(factor.id);
-																								 }
-																							 }
-																						   }
-																						});
-                                                                                    //console.log("dasdasdasdsadsadsadsad")
-                                                                                    //console.log(mention_user_id)
-
+                                                                                        User.findOne({id:factor.id}).exec(function (err, notifySettings){
+                                                                                           if(err)
+                                                                                           {
+                                                                                               console.log(err)
+                                                                                           }
+                                                                                           else
+                                                                                           {
+                                                                                             console.log("???????---Result----?????????")
+                                                                                             console.log(notifySettings)
+                                                                                             //console.log(notifySettings.notifyOpinion)
+                                                                                             if(notifySettings)
+                                                                                             {   if(notifySettings.notifyMention)
+                                                                                                 {
+                                                                                                    console.log(factor)
+                                                                                                    mentionPushArr.push(factor.id);
+                                                                                                 }
+                                                                                             }
+                                                                                           }
+                                                                                        });
 
                                                                                     });
                                                                                     var values ={
@@ -168,29 +160,7 @@ module.exports = {
                                                                                                                 callback();
                                                                                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
                                                                                                         }else{
-                                                                                                                //device_id       =  device_id.split(',');sails.log.debug(device_id);
-
-																											console.log(collageDetails.userId)
-                                                                                                           /*  User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
-                                                                                                                if(err)
-                                                                                                                {
-                                                                                                                    console.log(err)
-                                                                                                                    callback();
-
-                                                                                                                }
-                                                                                                                else{
-																													console.log("mention notification")
-																													console.log(notifySettings)
-                                                                                                                   if(notifySettings.notifyMention==0){
-
-                                                                                                                        console.log("commentMention Option turn off")
-                                                                                                                        callback();
-
-                                                                                                                   }
-                                                                                                                   else{*/
-
-
-
+                                                                                                            console.log(collageDetails.userId)
                                                                                                                         var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
                                                                                                                         var switchKey   =  device_type;
 
@@ -203,17 +173,9 @@ module.exports = {
                                                                                                                                 }
                                                                                                                                 else
                                                                                                                                 {
-                                                                                                                                    //console.log("Push  notification result")
-                                                                                                                                    //console.log(ntfnSend)
-                                                                                                                                    //console.log("Push Notification sended")
                                                                                                                                     callback();
-
                                                                                                                                 }
                                                                                                                         });
-                                                                                                                    //}
-                                                                                                               //}
-                                                                                                          // });
-
                                                                                                         }
 
                                                                                                     }
@@ -241,17 +203,12 @@ module.exports = {
                                                                    }
                                                                    else
                                                                    {
-                                                                       //console.log("deleted")
-                                                                       //console.log(deleteCommentNtfn)
                                                                        callback();
                                                                    }
                                                                });
 
                                                             },
                                                             function(callback) {
-
-                                                               //console.log("Notification For Comment");
-                                                               //console.log(mention_arr)
                                                                var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"'";
                                                                CollageComments.query(query, function(err, CountComments){
                                                                   if(err)
@@ -261,13 +218,8 @@ module.exports = {
                                                                   }
                                                                   else
                                                                   {
-                                                                      //console.log("============Count======================")
-                                                                      //console.log(CountComments.count)
                                                                        if(userId   !=  collageDetails.userId)
                                                                         {
-
-                                                                                //console.log("inserted comments  Different User Comment");
-                                                                                //console.log("own comment not included")
                                                                                 var values ={
                                                                                                 notificationTypeId  :   3,
                                                                                                 userId              :   userId,
@@ -294,8 +246,6 @@ module.exports = {
                                                                                                                                     notification_id            :       createdNotificationTags.id
                                                                                                                                     });
                                                                                             //-----------------------------End OF NotificationLog---------------------------------
-                                                                                           //console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
-                                                                                           //console.log(collageDetails.userId)
                                                                                            User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
                                                                                             if(err)
                                                                                             {
@@ -304,17 +254,10 @@ module.exports = {
 
                                                                                             }
                                                                                             else{
-                                                                                                 //console.log("hh8888888888888888888888888888888888888888h")
-                                                                                                //console.log(notifySettings)
                                                                                                if(notifySettings.notifyComment==0){
-
-                                                                                                    //console.log("comment Option turn off")
                                                                                                     callback();
-
                                                                                                }
                                                                                                else{
-
-
                                                                                                     //----------------------------Push Notification For Comment------------------------------------------
                                                                                                     var message   = 'Comment Notification';
                                                                                                     var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
@@ -348,9 +291,6 @@ module.exports = {
                                                                                                                                 callback();
 
                                                                                                                         }else{
-                                                                                                                                //console.log("Push notification result")
-                                                                                                                                //console.log(ntfnSend)
-                                                                                                                                //console.log("Push Notification sended")
                                                                                                                                 callback();
                                                                                                                                                                                                                                                             }
                                                                                                                    });
@@ -383,11 +323,6 @@ module.exports = {
                                                                         else
                                                                         {
                                                                             if(!getUseDetails){
-                                                                                //console.log("Image Resizing")
-                                                                                //console.log(getUseDetails[0].profilePic)
-
-                                                                                  //------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                                  //console.log(getUseDetails[0].profilePic)
                                                                                     if(getUseDetails.profilePic == null || getUseDetails.profilePic == ""){
                                                                                             profile_image                   =     "";
                                                                                     }else{
@@ -397,33 +332,6 @@ module.exports = {
                                                                                     }
 
                                                                                     callback();
-                                                                                    /*fs.exists(imageSrc, function(exists) {
-                                                                                     if (exists) {
-
-                                                                                            //console.log("Image exists");
-
-                                                                                            var ext                         =     imageSrc.split('/');
-                                                                                            ext                             =     ext[ext.length-1].split('.');
-                                                                                            var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                                            //console.log(imageSrc)
-                                                                                            //console.log(imageDst)
-                                                                                            ImgResizeService.isImageExist(imageSrc, imageDst, function(err, imageResizeResults) {
-
-                                                                                                if(err)
-                                                                                                {
-                                                                                                    console.log(err)
-                                                                                                    callback();
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    //console.log(imageResizeResults)
-                                                                                                    profile_image = profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                                    //console.log(profile_image)
-                                                                                                    callback();
-                                                                                                }
-                                                                                            });
-                                                                                        }
-                                                                                    });*/
                                                                             }else{
                                                                                     callback();
                                                                             }

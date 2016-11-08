@@ -121,9 +121,10 @@ module.exports = {
                 async.series([
                         function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                if(get_dither_images.length == 0){
+                                if(!get_dither_images.length){
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Image found to add'});
                                 }else{
+                                    console.log("Success Entered");
                                         var collage_imageName           =   "";
                                         var collageDetailImgArray       =   [];
                                         get_dither_images.forEach(function(factor, index){
@@ -186,6 +187,7 @@ module.exports = {
                                                                             console.log(err);
                                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
                                                                         }else{
+                                                                            console.log("44444444444444444444");
                                                                             createdCollageDetails.forEach(function(factor, index){
                                                                                     vote.push({
                                                                                             image_id        : factor.id,

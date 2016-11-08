@@ -161,9 +161,14 @@ module.exports = {
                                                                                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Mention Push Notification', error_details: err});
                                                                                                         }else{
                                                                                                             console.log(collageDetails.userId)
-                                                                                                                        var data        =  {message:message,device_id:mention_deviceId_arr,NtfnBody:ntfn_body,NtfnType:7,id:collageId,notification_id:createdNotificationTags.id};
-                                                                                                                        var switchKey   =  device_type;
-
+                                                                                                                        var data        =  {
+                                                                                                                                        message             :   message,
+                                                                                                                                        device_id           :   mention_deviceId_arr,
+                                                                                                                                        NtfnBody            :   ntfn_body,
+                                                                                                                                        NtfnType            :   7,
+                                                                                                                                        id                  :   collageId,
+                                                                                                                                        notification_id     :   createdNotificationTags.id
+                                                                                                                                        };
                                                                                                                         NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
                                                                                                                                 if(err)
                                                                                                                                 {

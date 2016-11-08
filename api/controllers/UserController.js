@@ -534,7 +534,7 @@ module.exports = {
 
                                                                             }else{
 																					console.log(imageResizeResults)
-																					profileImage	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+																					//profileImage	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                     return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
 
 

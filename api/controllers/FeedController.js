@@ -155,7 +155,16 @@ module.exports = {
                                                                 console.log("else ---------->>>>");
                                                                 profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                         }
-                                                        //console.log(profile_image);
+                                                        var test;
+                                                        if(dataResults[i]["profilePic"]){
+                                                                console.log("test if ---------->>>>");
+                                                                test = "if ha aha aha a";
+                                                        }else{
+                                                                console.log("test else ---------->>>>");
+                                                                test = "else ha aha aha a";
+                                                        }
+
+                                                        console.log(test);
                                                         imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                         dataResultsObj.user_id                      =       dataResults[i]["userId"];

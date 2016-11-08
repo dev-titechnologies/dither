@@ -148,7 +148,7 @@ module.exports = {
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
                                                 }else{
                                                         console.log("22222222222222222222");
-                                                        if(!results.length){
+                                                        if(!results){
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Collage not created'});
                                                         }else{
                                                             console.log("3333333333333333333");

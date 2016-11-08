@@ -147,9 +147,11 @@ module.exports = {
                                                         console.log(err);
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
                                                 }else{
+                                                        console.log("22222222222222222222");
                                                         if(!results.length){
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Collage not created'});
                                                         }else{
+                                                            console.log("3333333333333333333");
                                                                 get_dither_images.forEach(function(factor, index){
                                                                         var uploadedfilename                   =    factor.image_url.split('/');
                                                                         uploadedfilename                       =    uploadedfilename[uploadedfilename.length-1];
@@ -182,6 +184,7 @@ module.exports = {
                                                                                 break;
                                                                         }
                                                                 });
+                                                                console.log("after switch 3333333333333333333");
                                                                 CollageDetails.create(collageDetailImgArray).exec(function(err, createdCollageDetails) {
                                                                         if(err){
                                                                             console.log(err);

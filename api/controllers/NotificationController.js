@@ -197,9 +197,9 @@ module.exports = {
                                                             console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
                                                     }
                                                      // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    /*var imageSrc                    =     item.profile_image;
+                                                    var imageSrc                    =     imageToResize;
 													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; */
+													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
                                                      
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                     console.log(clgImgSrc)
@@ -243,7 +243,7 @@ module.exports = {
                                                     item.type               =   ntfnTypeFound[0].type;
                                                     var imageToResize       =   item.profile_image;
                                                     var clgImgToResize      =   item.dither_image;
-                                                    item.profile_image      =   profilePic_path + item.profile_image;
+                                                    //item.profile_image      =   profilePic_path + item.profile_image;
                                                     item.dither_image       =   collageImg_path + item.dither_image;
                                                     if(item.description<=1){
                                                         console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")
@@ -263,9 +263,9 @@ module.exports = {
                                                         console.log(notifyVoteArray)
                                                     }
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    /*var imageSrc                    =     item.profile_image;
+                                                    var imageSrc                    =     imageToResize;
 													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; */
+													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
 													
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                             
@@ -306,14 +306,14 @@ module.exports = {
                                                         item.type           =   ntfnTypeFound[0].type;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
-                                                        item.profile_image  =   profilePic_path + item.profile_image;
+                                                        //item.profile_image  =   profilePic_path + item.profile_image;
                                                         item.dither_image   =   collageImg_path + item.dither_image;
                                                         console.log(ntfn_body)
                                                         notificationSignup  =  ntfn_body;
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                       /* var imageSrc                    =     item.profile_image;
+                                                        var imageSrc                    =     imageToResize;
 														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  */
+														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
                                                             fs.exists(clgImgSrc, function(exists){
@@ -356,7 +356,7 @@ module.exports = {
                                                         item.ntfn_body      =   ntfn_body;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
-                                                        item.profile_image  =   profilePic_path + item.profile_image;
+                                                        //item.profile_image  =   profilePic_path + item.profile_image;
                                                         item.dither_image   =   collageImg_path + item.dither_image;
                                                         console.log(item.profile_image)
                                                         console.log(ntfn_body)
@@ -364,9 +364,9 @@ module.exports = {
 
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                       /* var imageSrc                    =     item.profile_image;
+                                                       var imageSrc                    =     imageToResize;
 														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];   */
+														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
                                                                 fs.exists(clgImgSrc, function(exists) {
                                                                     if(exists){
                                                                         console.log("collge Image exists");
@@ -406,16 +406,16 @@ module.exports = {
                                                     item.ntfn_body      =   ntfn_body;
                                                     var imageToResize   =   item.profile_image;
                                                     var clgImgToResize  =   item.dither_image;
-                                                    item.profile_image  =   profilePic_path + item.profile_image;
+                                                    //item.profile_image  =   profilePic_path + item.profile_image;
                                                     item.dither_image   =   collageImg_path + item.dither_image;
                                                     console.log(item.profile_image)
                                                     console.log(ntfn_body)
                                                     notificationTagged  =  ntfn_body;
 
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                  /*  var imageSrc                    =     item.profile_image;
+                                                    var imageSrc                    =     imageToResize;
 													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; */
+													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         
                                                             fs.exists(clgImgSrc, function(exists) {

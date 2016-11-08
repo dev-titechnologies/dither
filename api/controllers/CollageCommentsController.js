@@ -111,7 +111,7 @@ module.exports = {
 																							 {	 if(notifySettings.notifyMention)
 																								 {
 																									console.log(factor)
-																									mentionPushArr.push(factor);
+																									mentionPushArr.push(factor.id);
 																								 }
 																							 }
 																						   }

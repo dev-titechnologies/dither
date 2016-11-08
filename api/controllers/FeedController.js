@@ -148,7 +148,7 @@ module.exports = {
                                                         }
                                                         console.log(dataResults[i]["profilePic"]);
                                                         var profile_image;
-                                                        if(dataResults[i]["profilePic"] == "" || dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == "null" || !dataResults[i]["profilePic"]){
+                                                        if(dataResults[i]["profilePic"] == "" || dataResults[i]["profilePic"] == " " || dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == "null" || !dataResults[i]["profilePic"]){
                                                                 console.log("if ---------->>>>");
                                                                 profile_image    =   "";
                                                         }else{

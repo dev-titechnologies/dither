@@ -150,7 +150,6 @@ module.exports = {
                                             }else{
                                                     notificationCommented   =   "No notification Found for comments";
                                                     var notification        =   ntfnTypeFound[0].body;
-                                                    console.log(notification)
                                                     item.type               =   ntfnTypeFound[0].type;
                                                     var imageToResize       =   item.profile_image;
                                                     var clgImgToResize      =   item.dither_image;
@@ -176,7 +175,6 @@ module.exports = {
 													}
                                                      
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                    console.log(clgImgSrc)
                                                        
 														fs.exists(clgImgSrc, function(exists){
 																if(exists){
@@ -357,7 +355,6 @@ module.exports = {
                                                 }else{
                                                     console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
                                                     var notification    = ntfnTypeFound[0].body;
-                                                    console.log(notification)
                                                     var ntfn_body       = util.format(notification);
                                                     item.type           =   ntfnTypeFound[0].type;
                                                     item.ntfn_body      =   ntfn_body;

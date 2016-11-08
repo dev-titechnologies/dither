@@ -418,7 +418,7 @@ module.exports = {
                                                 var votedUsersArray = [];
                                                 var profile_image   =  "";
                                                 results.forEach(function(factor, index){
-                                                        if(factor.profilePic){
+                                                        if(factor.profilePic != "" || factor.profilePic != null){
                                                                 var imageSrc                    =     factor.profilePic;
                                                                 var ext                         =     imageSrc.split('.');
                                                                 profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];

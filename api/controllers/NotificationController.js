@@ -211,8 +211,8 @@ module.exports = {
 																	var ext                         =     clgImgSrc.split('/');
 																	ext                             =     ext[ext.length-1].split('.');
 																	var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																	console.log(imageSrc)
-																	console.log(imageDst)
+																	//console.log(imageSrc)
+																	//console.log(imageDst)
 																	ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
 																		if(err){
 																			console.log(err)
@@ -281,8 +281,8 @@ module.exports = {
 																		var ext                         =     clgImgSrc.split('/');
 																		ext                             =     ext[ext.length-1].split('.');
 																		var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		console.log(imageSrc)
-																		console.log(imageDst)
+																		//console.log(imageSrc)
+																		//console.log(imageDst)
 																		ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
 																			if(err){
 																				console.log(err)
@@ -332,8 +332,8 @@ module.exports = {
                                                                         var ext                         =     clgImgSrc.split('/');
                                                                         ext                             =     ext[ext.length-1].split('.');
                                                                         var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                        console.log(imageSrc)
-                                                                        console.log(imageDst)
+                                                                        //console.log(imageSrc)
+                                                                       // console.log(imageDst)
                                                                         ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
 
                                                                             if(err)
@@ -378,7 +378,7 @@ module.exports = {
                                                         notificationTagged  =  ntfn_body;
 
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                        var imageSrc                    =     profilePic_path_assets + imageToResize;
+                                                        //var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         //fs.exists(imageSrc, function(exists) {
                                                            
@@ -388,8 +388,8 @@ module.exports = {
                                                                         var ext                         =     clgImgSrc.split('/');
                                                                         ext                             =     ext[ext.length-1].split('.');
                                                                         var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                        console.log(imageSrc)
-                                                                        console.log(imageDst)
+                                                                       // console.log(imageSrc)
+                                                                       // console.log(imageDst)
                                                                         ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
                                                                             if(err){
                                                                                 console.log(err)
@@ -432,7 +432,7 @@ module.exports = {
                                                     notificationTagged  =  ntfn_body;
 
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    var imageSrc                    =     profilePic_path_assets + imageToResize;
+                                                   // var imageSrc                    =     profilePic_path_assets + imageToResize;
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                    // fs.exists(imageSrc, function(exists) {
                                                         
@@ -442,8 +442,8 @@ module.exports = {
                                                                     var ext                         =     clgImgSrc.split('/');
                                                                     ext                             =     ext[ext.length-1].split('.');
                                                                     var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                    console.log(imageSrc)
-                                                                    console.log(imageDst)
+                                                                   // console.log(imageSrc)
+                                                                   // console.log(imageDst)
                                                                     ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
                                                                         if(err){
                                                                             console.log(err)

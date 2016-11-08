@@ -146,10 +146,13 @@ module.exports = {
                                                         }else{
                                                                 like_position = 0;
                                                         }
-                                                        var profile_image    =   "";
-                                                        if(dataResults[i]["profilePic"] != null || dataResults[i]["profilePic"] != ""){
+                                                        var profile_image;
+                                                        if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == "" || !dataResults[i]["profilePic"]){
+                                                                profile_image    =   "";
+                                                        }else{
                                                                 profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                         }
+                                                        console.log(profile_image);
                                                         imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                         dataResultsObj.user_id                      =       dataResults[i]["userId"];

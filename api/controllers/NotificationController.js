@@ -180,7 +180,6 @@ module.exports = {
                                                        
 														fs.exists(clgImgSrc, function(exists){
 																if(exists){
-																	console.log("collge Image exists");
 																	var ext                         =     clgImgSrc.split('/');
 																	ext                             =     ext[ext.length-1].split('.');
 																	var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
@@ -282,7 +281,6 @@ module.exports = {
 
                                                             fs.exists(clgImgSrc, function(exists){
                                                                 if(exists){
-                                                                        console.log("collge Image exists");
                                                                         var ext                         =     clgImgSrc.split('/');
                                                                         ext                             =     ext[ext.length-1].split('.');
                                                                         var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
@@ -379,7 +377,6 @@ module.exports = {
                                                         
                                                             fs.exists(clgImgSrc, function(exists) {
                                                                 if(exists){
-                                                                    console.log("collge Image exists");
                                                                     var ext                         =     clgImgSrc.split('/');
                                                                     ext                             =     ext[ext.length-1].split('.');
                                                                     var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];

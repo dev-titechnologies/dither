@@ -78,10 +78,8 @@ module.exports = {
 
         notification: function(req, res) {
                 console.log("Notification API")
-                console.log(req.options.file_path.profilePic_path)
                 var tokenCheck             =     req.options.tokenCheck;
                 var user_id                =     tokenCheck.tokenDetails.id;
-               // var server_baseUrl       =     req.options.server_baseUrl;
                 var server_baseUrl         =     req.options.server_baseUrl;
                 var server_image_baseUrl   =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                 var profilePic_path        =     server_baseUrl + req.options.file_path.profilePic_path;
@@ -89,35 +87,13 @@ module.exports = {
                 var profilePic_path_assets =     req.options.file_path.profilePic_path_assets;
                 var collageImg_path_assets =     req.options.file_path.collageImg_path_assets;
                 var device_id              =     tokenCheck.tokenDetails.deviceId;
-                //var device_type            =     req.get('device_type');
-
                 notificationVoted          =     "";
                 notificationCommented      =     "";
                 notificationSignup         =     "";
                 notifyVoteArray            =     [];
                 notifyCmntArray            =     [];
-
-                //var page_type              =     req.param("page_type");
                 var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
                 var data_view_limit        =     req.options.global.data_view_limit;
-
-                /*if(!focus_Ntfn_id){
-                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_Notfn_id'});
-                        var query   =   " SELECT"+
-                                        " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
-                                        " U.name,U.profilePic as profile_image,"+
-                                        " C.image as dither_image"+
-                                        " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-                                        " LEFT JOIN collage as C ON C.id = N.collage_id"+
-                                        " WHERE"+
-                                        " N.ditherUserId="+user_id+
-                                        " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4)"+
-                                        " OR "+
-                                        " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT 10";
-                }
-                else
-                {*/
-
 
                 if(focus_Ntfn_id == 0 || !focus_Ntfn_id){
 
@@ -166,13 +142,12 @@ module.exports = {
                                 if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4 || item.notificationTypeId==7){
                                   //----------Comment Notification---------------------------
                                     if(item.notificationTypeId==3){
-                                        //  console.log(item.description)
+										console.log("comment?????????")
                                         NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
                                             if(err){
                                                 console.log(err)
                                                 callback(true,ntfnTypeFound );
                                             }else{
-                                                    console.log(item)
                                                     notificationCommented   =   "No notification Found for comments";
                                                     var notification        =   ntfnTypeFound[0].body;
                                                     console.log(notification)
@@ -182,19 +157,15 @@ module.exports = {
                                                     item.profile_image      =   profilePic_path + item.profile_image;
                                                     item.dither_image       =   collageImg_path + item.dither_image;
                                                     if(item.description<=1){
-                                                            console.log("commenteddd")
                                                             notificationCommented = " commented on your Dither";
                                                             item.ntfn_body        = notificationCommented;
                                                     }else{
-                                                            console.log("77777777777777777777777777777777777777777777777")
                                                             item.description        =   item.description - 1;
                                                             ntfn_body               =   util.format(notification,item.description);
                                                             notificationCommented   =  ntfn_body;
                                                             item.ntfn_body          =   ntfn_body;
                                                             notifyCmntArray         = [];
                                                             notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
-                                                            console.log(notifyCmntArray)
-                                                            console.log("PUSHH NOtiFiCationnnnnnnnnnnnnn")
                                                     }
                                                      // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                     var imageSrc                    =     imageToResize;
@@ -215,7 +186,6 @@ module.exports = {
 																			console.log(err)
 																			callback();
 																		}else{
-																			console.log(imageResizeResults)
 																			item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																			callback();
 																		}
@@ -234,19 +204,12 @@ module.exports = {
                                                     console.log(err)
                                                     callback(true,ntfnTypeFound );
                                                 }else{
-                                                    console.log(item.description)
-                                                    console.log(ntfnTypeFound)
                                                     var notification        = ntfnTypeFound[0].body;
-                                                    console.log(notification)
-                                                    console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")
-                                                    console.log(item.description)
                                                     item.type               =   ntfnTypeFound[0].type;
                                                     var imageToResize       =   item.profile_image;
                                                     var clgImgToResize      =   item.dither_image;
-                                                    //item.profile_image      =   profilePic_path + item.profile_image;
                                                     item.dither_image       =   collageImg_path + item.dither_image;
                                                     if(item.description<=1){
-                                                        console.log("==============VOteeeeeeeeeeeeee COUNTTTTTT")
                                                         notificationVoted   = " voted on your Dither";
                                                         item.ntfn_body      = notificationVoted;
                                                     }else{
@@ -260,7 +223,6 @@ module.exports = {
                                                                             userId      :   item.ditherUserId,
                                                                             msg         :   notificationVoted
                                                                             });
-                                                        console.log(notifyVoteArray)
                                                     }
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                     var imageSrc                    =     imageToResize;
@@ -271,7 +233,6 @@ module.exports = {
                                                             
 															fs.exists(clgImgSrc, function(exists) {
 																if (exists) {
-																		console.log("collge Image exists");
 																		var ext                         =     clgImgSrc.split('/');
 																		ext                             =     ext[ext.length-1].split('.');
 																		var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
@@ -280,7 +241,6 @@ module.exports = {
 																				console.log(err)
 																				callback();
 																			}else{
-																				console.log(imageResizeResults)
 																				item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
 																				callback();
 																			}
@@ -298,17 +258,13 @@ module.exports = {
                                                         console.log(err)
                                                         callback(true,ntfnTypeFound );
                                                 }else{
-                                                        console.log(ntfnTypeFound)
                                                         var notification    = ntfnTypeFound[0].body;
-                                                        console.log(notification)
                                                         ntfn_body           = util.format(notification);
                                                         item.ntfn_body      =   ntfn_body;
                                                         item.type           =   ntfnTypeFound[0].type;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
-                                                        //item.profile_image  =   profilePic_path + item.profile_image;
                                                         item.dither_image   =   collageImg_path + item.dither_image;
-                                                        console.log(ntfn_body)
                                                         notificationSignup  =  ntfn_body;
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                         var imageSrc                    =     imageToResize;
@@ -331,7 +287,6 @@ module.exports = {
                                                                             }
                                                                             else
                                                                             {
-                                                                                console.log(imageResizeResults)
                                                                                 item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                 callback();
                                                                             }
@@ -347,19 +302,13 @@ module.exports = {
                                                     if(err){
                                                         console.log(err)
                                                     }else{
-                                                        console.log(item.description)
-                                                        console.log(ntfnTypeFound)
                                                         var notification    = ntfnTypeFound[0].body;
-                                                        console.log(notification)
                                                         var ntfn_body       = util.format(notification);
                                                         item.type           =   ntfnTypeFound[0].type;
                                                         item.ntfn_body      =   ntfn_body;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
-                                                        //item.profile_image  =   profilePic_path + item.profile_image;
                                                         item.dither_image   =   collageImg_path + item.dither_image;
-                                                        console.log(item.profile_image)
-                                                        console.log(ntfn_body)
                                                         notificationTagged  =  ntfn_body;
 
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
@@ -369,7 +318,6 @@ module.exports = {
 														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
                                                                 fs.exists(clgImgSrc, function(exists) {
                                                                     if(exists){
-                                                                        console.log("collge Image exists");
                                                                         var ext                         =     clgImgSrc.split('/');
                                                                         ext                             =     ext[ext.length-1].split('.');
                                                                         var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
@@ -378,7 +326,6 @@ module.exports = {
                                                                                 console.log(err) 
                                                                                 callback();
                                                                             }else{
-                                                                                console.log(imageResizeResults)
                                                                                 item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                 callback();
                                                                             }
@@ -391,14 +338,13 @@ module.exports = {
                                                     }
                                         });
                                     }else if(item.notificationTypeId==7){
-                                        console.log("Notification lOGGGG")
+                                        console.log("Notification Mention")
                                         NotificationType.find({id:7 }).exec(function(err, ntfnTypeFound){
                                                 if(err){
                                                     console.log("+++++++++++++++++++++++++NOTIFICATION ERR+++++++++++++++++++++++")
                                                     console.log(err)
                                                 }else{
                                                     console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
-                                                    console.log(ntfnTypeFound)
                                                     var notification    = ntfnTypeFound[0].body;
                                                     console.log(notification)
                                                     var ntfn_body       = util.format(notification);
@@ -406,10 +352,7 @@ module.exports = {
                                                     item.ntfn_body      =   ntfn_body;
                                                     var imageToResize   =   item.profile_image;
                                                     var clgImgToResize  =   item.dither_image;
-                                                    //item.profile_image  =   profilePic_path + item.profile_image;
                                                     item.dither_image   =   collageImg_path + item.dither_image;
-                                                    console.log(item.profile_image)
-                                                    console.log(ntfn_body)
                                                     notificationTagged  =  ntfn_body;
 
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
@@ -429,7 +372,6 @@ module.exports = {
                                                                             console.log(err)
                                                                             callback();
                                                                         }else{
-                                                                            console.log(imageResizeResults)
                                                                             item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
                                                                             callback();
                                                                         }
@@ -445,8 +387,6 @@ module.exports = {
                                     callback();
                                 }
                             }, function(err) {
-                                    console.log("resulttt dataaa")
-                                    console.log(results)
                                     return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
                             });
                         }
@@ -464,7 +404,6 @@ module.exports = {
 
                     var notificationTypeId          =   req.param("notification_type");
                     var notificationId              =   req.param("notification_id");
-                    console.log(req.params.all());
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
@@ -482,14 +421,12 @@ module.exports = {
                                     " WHERE"+
                                     " ntlg.id = "+notificationId;
 
-                            console.log(query);
                             NotificationLog.query(query, function(err,results) {
                                     if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification'});
                                     }
                                     else{
-                                            console.log(results);
                                             if(results.length == 0){
                                                     return res.json(200, {status: 2, status_type:"Failure", msg: 'No notification Found'});
                                             }else{
@@ -499,8 +436,6 @@ module.exports = {
                                                                     return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification body/msg'});
 
                                                             }else{
-                                                                console.log("---------Notifictaion Resultsss--------------")
-                                                                console.log(ntfnFoundResults);
                                                                 user_id                 =   results[0].ditherUserId;
                                                                 var tagged_users            =   [];
                                                                 var switchKey = results[0].notificationTypeId;
@@ -529,16 +464,11 @@ module.exports = {
                                                                 }
 
                                                                 ntfn_body               =   notification;
-                                                                console.log("------------Ntfn Body-----------------")
-                                                                console.log(ntfn_body)
                                                                 if(results[0].description > 1 ){
-                                                                    console.log(results[0].description)
                                                                     notification                =       ntfnFoundResults.body;
                                                                     results[0].description      =       results[0].description - 1;
                                                                     ntfn_body                   =       util.format(notification, results[0].description);
-                                                                    console.log(notification);
                                                                 }
-                                                                console.log(ntfn_body);
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
                                                                                       id                    :   notificationId,
                                                                                       userId                :   results[0].userId,

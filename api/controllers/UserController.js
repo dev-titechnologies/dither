@@ -17,90 +17,65 @@ module.exports = {
                To signup
      ==================================================================================================================================== */
     signup: function (req, res) {
-                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                var token_expiry_hour           =     req.options.settingsKeyValue.TOKEN_EXPIRY_HOUR;
-                var profilePic_path             =     req.options.file_path.profilePic_path;
-                var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
-                console.log("signup---------------- api")
-                console.log(req.body);
-                console.log(req.get('device_id'));
-                var imgUrl                      =     req.param('profilepic');
-                var OTPCode                     =     req.param('otp');
-                var deviceId                    =     req.get('device_id');
-                var device_IMEI                 =     req.get('device_imei');
-                var device_Type                 =     req.get('device_type');
+		var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+		var token_expiry_hour           =     req.options.settingsKeyValue.TOKEN_EXPIRY_HOUR;
+		var profilePic_path             =     req.options.file_path.profilePic_path;
+		var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+		console.log("signup---------------- api")
+		var imgUrl                      =     req.param('profilepic');
+		var OTPCode                     =     req.param('otp');
+		var deviceId                    =     req.get('device_id');
+		var device_IMEI                 =     req.get('device_imei');
+		var device_Type                 =     req.get('device_type');
 
-                if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')){
-                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei'}); //If an error occured, we let express/connect handle it by calling the "next" function
-                }else{
-                        var filename            =    "image.png";
-                        var imagename           =    new Date().getTime() + filename;
-                        console.log(imgUrl);
-                        console.log("mention idddddddddddd")
-                        console.log(req.param('mention_id'))
-                        var values              =    {
-                                                        name        : req.param('username'),
-                                                        email       : req.param('email_id'),
-                                                        fbId        : req.param('fb_uid'),
-                                                        mentionId   : req.param('mention_id'),
-                                                        phoneNumber : req.param('mobile_number'),
-                                                        profilePic  : imagename,
-                                                     };
-                        var deviceId_arr        =    [];
-                        var contact_arr         =    [];
-                        //--------OTP CHECKING----------------------
-                       /* if(OTPCode)
-                        {
-                            var query = "SELECT OTPCode FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"' AND Id = (SELECT MAX(Id) FROM smsDetails where mobile_no = '"+req.param('mobile_number')+"')"
-                            Sms.query(query, function (err, details) {
+		if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')){
+				return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei'}); //If an error occured, we let express/connect handle it by calling the "next" function
+		}else{
+				var filename            =    "image.png";
+				var imagename           =    new Date().getTime() + filename;
+				var values              =    {
+												name        : req.param('username'),
+												email       : req.param('email_id'),
+												fbId        : req.param('fb_uid'),
+												mentionId   : req.param('mention_id'),
+												phoneNumber : req.param('mobile_number'),
+												profilePic  : imagename,
+											 };
+				var deviceId_arr        =    [];
+				var contact_arr         =    [];
+				//--------OTP CHECKING----------------------
+			   /* if(OTPCode)
+				{
+				var query = "SELECT OTPCode FROM smsDetails WHERE mobile_no = '"+req.param('mobile_number')+"' AND Id = (SELECT MAX(Id) FROM smsDetails where mobile_no = '"+req.param('mobile_number')+"')";
+				console.log(query)
+				Sms.query(query, function (err, details) {
 
-                             if(err)
-                             {
-                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'OTP Not Found'});
-                             }
-                             else
-                             {
+				 if(err)
+				 {
+					 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'OTP Not Found'});
+				 }
+				 else
+				 {
 
-                                    if(details[0].OTPCode==OTPCode)
-                                    {
-                                       //save signup details
-                                        sails.log("OTP match success")
-                                        var data     = {smsVerified:true};
-                                        var criteria = {OTPCode:details[0].OTPCode};
-                                        Sms.update(criteria,data).exec(function(err, updatedRecords) {
+				 if(details[0].OTPCode==OTPCode)
+				 {
+				  console.log("OTP match success")
+				  var data     = {smsVerified:true};
+				  var criteria = {OTPCode:details[0].OTPCode};
+				  Sms.update(criteria,data).exec(function(err, updatedRecords) {
 
-                                            if(err)
-                                            {
-                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification Updation Failed'});
-                                            }
-                                            else
-                                            {
-                                                return res.json(200, {status: 1, status_type: 'Success' ,message: 'SMS verification updation Success'});
-                                            }
-
-                                        });
-
-
-                                    }
-                                    else
-                                    {
-
-                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification updation Failed,OTP Mismatch'});
-
-                                    }
-
-                             }
-
-                            });
-
-                        }*/
+					if(err)
+					{
+						return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification Updation Failed'});
+					}
+					else
+					{*/
+										
                         User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
                                 if(err){
                                         console.log(err)
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
                                 }else{
-                                        console.log("fbid checkinggggggggggg")
-                                        console.log(resultData);
                                     if(resultData){
                                              return res.json(200, {status: 2, status_type: 'Failure' ,message: 'This is an existing User'});
                                     }else{
@@ -116,16 +91,13 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
                                                             }else{
                                                                     console.log("Before async parallel in Sign up ===============================================");
-                                                                   //async.series([
-
-                                                                    //function(callback) {
-                                                                        // Send Email and Sms  Simultaneously
+                                                                   
                                                                         async.parallel([
                                                                             function(callback){
+																					console.log("parallel 1")
                                                                                     console.log("+++++++++++++++++++Image Downloadingggggggggggggg+++++++++++++++++++++++++++++++++")
                                                                                     var download = function(uri, filename, callback){
                                                                                         request.head(uri, function(err, res, body){
-                                                                                            console.log("image resizingggggggggggggggggggggggggg")
                                                                                             request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
                                                                                         });
                                                                                     };
@@ -142,14 +114,13 @@ module.exports = {
                                                                                                             console.log(err);
                                                                                                             console.log("Error in image resize !!!!");
                                                                                                     }else{
-                                                                                                            console.log(imageResizeResults);
                                                                                                              callback();
                                                                                                     }
                                                                                             });
                                                                                     });
                                                                             },
                                                                             function(callback){
-                                                                                    console.log("parallel 1")
+                                                                                    console.log("parallel 2")
                                                                                     console.log("async parallel in Mailpart ===============================================");
                                                                                     var global_settingsKeyValue = req.options.settingsKeyValue;
                                                                                     var email_to        = results.email;
@@ -160,22 +131,14 @@ module.exports = {
                                                                                         if(err){
                                                                                                 console.log(err);
                                                                                                 console.log("async parallel in Mailpart Error");
-                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
                                                                                                 callback();
                                                                                         }else{
-                                                                                                //console.log(results);
-                                                                                                console.log(email_to);
-                                                                                                console.log(email_subject);
-                                                                                                console.log(email_template);
-                                                                                                console.log(email_context);
-                                                                                                console.log("async parallel in Mailpart Success");
                                                                                                 callback();
-                                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
                                                                                         }
                                                                                     });
                                                                             },
                                                                             function(callback){
-                                                                                    console.log("parallel 2")
+                                                                                    console.log("parallel 3")
                                                                                     var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
                                                                                     var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
                                                                                     var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
@@ -191,13 +154,12 @@ module.exports = {
                                                                                                 callback();
                                                                                         }
                                                                                     });*/
-                                                                                    console.log("async parallel in Sms Part");
                                                                                     callback();
                                                                             },
                                                                             
                                                                             function(callback){
                                                                                     //Notification Log insertion
-                                                                                    console.log("parallel 3")
+                                                                                    console.log("parallel 4")
                                                                                     console.log(req.param('mobile_number'))
                                                                                     var mobile_number  = req.param('mobile_number');
                                                                                    
@@ -206,8 +168,6 @@ module.exports = {
                                                                                                     console.log(err);
                                                                                                     callback();
                                                                                                 }else{
-                                                                                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-                                                                                                    //console.log(selectContacts[0].userId)
                                                                                                     if(selectContacts.length == 0){
                                                                                                             callback();
                                                                                                     }else{
@@ -215,7 +175,6 @@ module.exports = {
                                                                                                         var invited_collage_Array     = [];
                                                                                                         selectContacts.forEach(function(factor, index){
                                                                                                             
-                                                                                                            //invited_collage_Array.push(collageId : factor.collageId, userId: results.id);
                                                                                                             invited_collage_Array.push("("+factor.collageId+",'"+results.id+"', now(), now())");
                                                                                                         });
                                                                                                        
@@ -228,32 +187,26 @@ module.exports = {
 																															var query = "INSERT INTO tags"+
 																																		" (collageId, userId, createdAt, updatedAt)"+
 																																		" VALUES"+invited_collage_Array;
-																															console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
-																															console.log(invited_collage_Array);
-																															console.log(query);
-																															console.log("|||||||||||||||||||||||||||||||||||||||||||| Tag insert query ||||||||||||||||||||||||||||||||||||||||");
+																															
 																															Tags.query(query, function(err, insertTagsResult){
 																																if(err){
 																																	console.log(err);
 																																	callback();
 																																}else{
 																																		
-																																		console.log(insertTagsResult)
 																																		callback();
 																																}
 																															});  //Insert to tags table
                                                                                                                     }
                                                                                                                 });
-                                                                                                            //}
-                                                                                                        //});
+                                                                                                           
                                                                                                     }
                                                                                                 }
-                                                                                                console.log("#########################################")
                                                                                     });
                                                                             },
                                                                             function (callback)
                                                                             {
-																				console.log("parallel 4")
+																				console.log("parallel 5")
 																				var number  		  = req.param('mobile_number');
 																				var phoneContactsArray    = [];
                                                                                 AddressBook.find({ditherUserPhoneNumber : number}).exec(function (err, UserContacts){   
@@ -263,7 +216,6 @@ module.exports = {
 																					  } 
 																					  else
 																					  {
-																						  console.log(UserContacts)
 																						  if(!UserContacts.length)
 																						  {
 																								callback();
@@ -274,31 +226,23 @@ module.exports = {
 																							  UserContacts.forEach(function(factor, index){
 																									
 																									tagNotifyArray.push(factor.userId);
-																									 //phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
 																									 User.findOne({id:factor.userId}).exec(function (err, notifySettings){
                                                                                                                 if(notifySettings.notifyContact==1){
-                                                                                                                    //phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
                                                                                                                     contact_arr.push(factor.userId);
-                                                                                                                    console.log(factor.userId)
                                                                                                                 }
                                                                                                             });
                                                                                                });
-                                                                                                console.log("hhhhhhhhhhhhhhhhhhhhhhh")
-                                                                                               console.log(contact_arr)
                                                                                                var values ={
 																										notificationTypeId  :   4,
 																										userId              :   results.id,
 																										tagged_users        :   tagNotifyArray
-																										//description         :   tagNotifyArray.length
 																									}	
 																									console.log(values)
                                                                                                NotificationLog.create(values).exec(function(err, createdNotification){
 																									if(err){
 																										console.log(err);
 																										callback();
-																										//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting Notification', error_details: err});
 																									}else{
-																								            console.log(createdNotification);
 																											var contactNtfyPush = [];
 																											//-------Socket brodcast------------------------------
 																											contact_arr.forEach(function(factor, index){
@@ -315,29 +259,21 @@ module.exports = {
 																																	});
 																											
 																										
-																											console.log("----------PUSH Notification------------------------------------");
 																										  });
 																										 
-																												console.log("???????---Result----?????????")	
-																											  console.log(contactNtfyPush)	
 																												User_token.find({userId: contact_arr}).exec(function (err, getDeviceId){
-																												//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
 																													if(err){
 																														  console.log(err);
 																														  callback();
-																														  //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
 																													}else{
 																														var message     =  'signup Notification';
 																														var ntfn_body   =   results.name +" Joined on Dither";
-																														//var device_id   =  getDeviceId.deviceId;
 																														getDeviceId.forEach(function(factor, index){
 																															deviceId_arr.push(factor.deviceId);
 																														});
-																														console.log(results)
 																														if(!deviceId_arr.length){
 																																callback();
 																														}else{
-																															//device_id       =  device_id.split(',');sails.log.debug(device_id);
 																															var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
 																															NotificationService.NtfnInAPP(data, function(err, ntfnSend){
 																																if(err){
@@ -374,7 +310,7 @@ module.exports = {
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send OR i Emai Send on signup', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                                                         }else{
                                                                                             // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
-                                                                                            console.log("async parallel in Sms Part Success --------------------");
+                                                                                            console.log("signup Success --------------------");
                                                                                             if(results.mentionId==''){
                                                                                                 results.mentionId = results.id;
                                                                                             }
@@ -394,6 +330,26 @@ module.exports = {
                                     }
                                 }
                         });
+                        
+                        /*-----------THIS IS FOR SMS OTP-------------------
+                        
+                           }
+						});
+
+						}
+						else
+						{
+
+							return res.json(200, {status: 2, status_type: 'Failure' ,message: 'SMS verification updation Failed,OTP Mismatch'});
+
+						}
+					  }
+					});
+				   }
+                        
+                        //-----------------------------------------*/
+                        
+                        
                 }
     },
 
@@ -410,17 +366,12 @@ module.exports = {
         if(req.param('fb_uid') || req.get('device_id'))
             {
 
-                console.log(req.options.settingKeyValue);
-                console.log(req.param('fbId'));
-
                 var deviceId    = req.get('device_id');
-                console.log(deviceId)
                 User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
                         if (err) {
                                sails.log("jguguu"+err);
                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                         }else{
-                                sails.log(results)
                                 if(typeof(results) == 'undefined'){
 
                                       return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
@@ -429,7 +380,6 @@ module.exports = {
                                         //delete existing token
                                         var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
                                         User_token.query(query, function(err, result) {
-                                       // User_token.destroy({userId: results.id,deviceId:deviceId}).exec(function (err, result) {
                                             if(err){
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                             }else{
@@ -459,7 +409,6 @@ module.exports = {
                                         });
 
                                 }
-                              //console.log(results);
 
                         }
 
@@ -467,7 +416,6 @@ module.exports = {
         }
         else
         {
-            console.log("no parammmmmm")
             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Parameter missing'}); //If an error occured, we let express/connect handle it by calling the "next" function
 
         }
@@ -483,9 +431,6 @@ module.exports = {
         var deviceId        = req.get('device_id');
         var device_IMEI     = req.get('device_imei');
         console.log("-----------------IMEI____________???")
-        console.log(device_IMEI)
-        console.log(req.get('token'))
-        console.log(req.get('device_id'))
         if(!device_IMEI && !deviceId && !userToken){
 
               console.log("error")
@@ -494,14 +439,11 @@ module.exports = {
 
 
                  var query = "DELETE FROM userToken WHERE device_IMEI='"+device_IMEI+"'";
-                console.log(query)
                 User_token.query(query, function(err, result) {
                     if(err) {
                         console.log(err)
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
-                        console.log("logout")
-                        console.log(result)
                         return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });
@@ -518,9 +460,7 @@ module.exports = {
 
       editProfile:  function (req, res) {
 
-                sails.log(req.get('token'))
 
-                //var fs                        =     require('file-system');
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -531,13 +471,12 @@ module.exports = {
                 var edit_type                   =     req.param('edit_type');
                 var fileName                    =     req.file('profile_image');
 
-                console.log(req.file('profile_image'))
 
                 var switchKey = edit_type;
                 switch(switchKey){
                         case '1' :
                                     //-------------Change only ProfilePic------------------------------------
-                                    console.log("type 1")
+                                    console.log("Type 1-change Profile PIc")
                                     var imageName ;
                                     req.file('profile_image').upload({dirname: '../../assets/images/profilePics',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults) {
                                         if (err)
@@ -558,10 +497,8 @@ module.exports = {
                                              {
 
                                                     console.log("profileImages   ------->>> Uploaded");
-                                                    //console.log(profileUploadResults)
                                                     imageName = profileUploadResults[0].fd.split('/');
                                                     imageName = imageName[imageName.length-1];
-                                                    //console.log(imageName)
                                                     var data     = {profilePic:imageName};
                                                     var criteria = {id: userId};
                                                     User.update(criteria,data).exec(function(err, data) {
@@ -584,10 +521,6 @@ module.exports = {
                                                                 fs.exists(imageSrc, function(exists) {
                                                                 if (exists) {
 
-                                                                console.log("Image exists");
-
-
-
                                                                         var ext                         =     imageSrc.split('/');
                                                                         ext                             =     ext[ext.length-1].split('.');
                                                                         var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
@@ -600,8 +533,6 @@ module.exports = {
                                                                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in image resize', error_details: err});
 
                                                                             }else{
-                                                                                    console.log(imageResizeResults);
-                                                                                    // res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully Resized the image'});
                                                                                     return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
 
 
@@ -633,7 +564,7 @@ module.exports = {
 
                         case '2' :
                                     //----------------------------Remove only ProfilePic-----------------------------------------------
-                                    console.log("type 2")
+                                    console.log("Type 2-Remove ProfilePic")
                                     User.findOne({id:userId}).exec(function (err, resultData){
                                         if(err)
                                         {
@@ -662,10 +593,7 @@ module.exports = {
                                                             }
                                                             else
                                                             {
-                                                                console.log(datas)
                                                                 var profileImage    =   profilePic_path + resultData.profilePic;
-                                                                console.log(profileImage)
-                                                                console.log(profilePic_unlink_path + resultData.profilePic)
                                                                 fs.unlink(profilePic_unlink_path + resultData.profilePic);
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                             }

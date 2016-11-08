@@ -16,14 +16,14 @@ module.exports = {
             var userToken;
             if(req.isSocket){
                     //console.log(req.socket.handshake);
-                    console.log("is Socket true");
+                    //console.log("is Socket true");
                     //console.log(req.socket);
                     userToken = req.socket.handshake.query.token;
             }else{
-                    console.log("is Socket false");
+                    //console.log("is Socket false");
                     userToken = req.get('token');
             }
-            console.log(userToken);
+            //console.log(userToken);
             if(userToken){
                     UsertokenService.checkToken(userToken, function(err, tokenCheck) {
                         if(err)

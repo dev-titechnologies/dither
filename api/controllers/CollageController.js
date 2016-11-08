@@ -81,7 +81,6 @@ module.exports = {
                                 for (var j = dataResults.length - 1; j >= 0; j--){
                                     if(dataResults[j]["collageId"]==collageId_val){
                                                 if(dataResults[j]["likePosition"] == dataResults[j]["position"]){
-                                                    console.log("likeStatus if ==============");
                                                     likeStatus = 1;
                                                 }else{
                                                     likeStatus = 0;
@@ -123,7 +122,6 @@ module.exports = {
                                 common_dithers                          =       key;
                             }
                         }
-                        //return  [total_opinion, recent_dithers, popular_dithers];
                         return  {
                                 total_opinion       :    total_opinion,
                                 common_dithers      :    common_dithers,
@@ -393,7 +391,10 @@ module.exports = {
                                         var tagCollageArray         = [];
                                         var deleteTagCollageArray   = [];
                                         taggedUserArray.forEach(function(factor, index){
-                                            tagCollageArray.push({collageId: collage_results.id, userId: factor});
+                                            tagCollageArray.push({
+                                                                collageId   : collage_results.id,
+                                                                userId      : factor
+                                                                });
                                         });
                                         //Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
                                         Tags.destroy({collageId: collage_results.id}).exec(function(err, deleteCollageTags){
@@ -435,7 +436,10 @@ module.exports = {
                                                                                 console.log(query);
                                                                                 if(taggedUsersFinalResults.length){
                                                                                     taggedUsersFinalResults.forEach(function(factor, index){
-                                                                                            taggedUserArrayFinal.push({name: factor.name,userId: factor.userId});
+                                                                                            taggedUserArrayFinal.push({
+                                                                                                                    name        : factor.name,
+                                                                                                                    userId      : factor.userId
+                                                                                                                    });
                                                                                     });
                                                                                 }
                                                                                 callback();
@@ -617,10 +621,16 @@ module.exports = {
                                                             index = foundInvitePNFinal_Array.indexOf(inviteFriends[i].phone_number);
                                                             //Removing the Duplicate Values
                                                             if(index == -1){
-                                                                    unique_push_array.push({name: inviteFriends[i].name, phone_number : inviteFriends[i].phone_number});
+                                                                    unique_push_array.push({
+                                                                                        name            : inviteFriends[i].name,
+                                                                                        phone_number    : inviteFriends[i].phone_number
+                                                                                    });
                                                             }
                                                             if(index != -1){
-                                                                    duplicate_push_array.push({name: inviteFriends[i].name, phone_number : inviteFriends[i].phone_number});
+                                                                    duplicate_push_array.push({
+                                                                                        name            : inviteFriends[i].name,
+                                                                                        phone_number    : inviteFriends[i].phone_number
+                                                                                        });
                                                             }
                                                     }
                                                     async.series([
@@ -628,7 +638,12 @@ module.exports = {
                                                                             console.log("------------------- SERIES callback--1-----------------");
                                                                             if(unique_push_array.length){
                                                                                     unique_push_array.forEach(function(factor, index){
-                                                                                             inviteFinalArray.push({userId: parseInt(userId), collageId: collage_results.id, phoneNumber: factor.phone_number, invitee: factor.name});
+                                                                                             inviteFinalArray.push({
+                                                                                                                userId          : parseInt(userId),
+                                                                                                                collageId       : collage_results.id,
+                                                                                                                phoneNumber     : factor.phone_number,
+                                                                                                                invitee         : factor.name
+                                                                                                                });
                                                                                     });
                                                                                     Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
                                                                                             if(err)

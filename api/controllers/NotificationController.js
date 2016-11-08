@@ -168,9 +168,12 @@ module.exports = {
                                                             notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
                                                     }
                                                      // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    var imageSrc                    =     imageToResize;
-													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
+                                                    if(imageToResize)
+                                                    {
+														var imageSrc                    =     imageToResize;
+														var ext                         =     imageSrc.split('.');
+														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
+													}
                                                      
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                     console.log(clgImgSrc)
@@ -225,10 +228,12 @@ module.exports = {
                                                                             });
                                                     }
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    var imageSrc                    =     imageToResize;
-													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
-													
+                                                    if(imageToResize)
+                                                    {
+														var imageSrc                    =     imageToResize;
+														var ext                         =     imageSrc.split('.');
+														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
+													}
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                             
 															fs.exists(clgImgSrc, function(exists) {
@@ -267,9 +272,12 @@ module.exports = {
                                                         item.dither_image   =   collageImg_path + item.dither_image;
                                                         notificationSignup  =  ntfn_body;
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                        if(imageToResize)
+                                                        {
                                                         var imageSrc                    =     imageToResize;
 														var ext                         =     imageSrc.split('.');
 														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
+														}
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
                                                             fs.exists(clgImgSrc, function(exists){
@@ -312,10 +320,15 @@ module.exports = {
                                                         notificationTagged  =  ntfn_body;
 
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                        if(imageToResize)
+                                                        {
+															var imageSrc                    =     imageToResize;
+															var ext                         =     imageSrc.split('.');
+															item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
+														}
+														
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                       var imageSrc                    =     imageToResize;
-														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
+                                                        
                                                                 fs.exists(clgImgSrc, function(exists) {
                                                                     if(exists){
                                                                         var ext                         =     clgImgSrc.split('/');
@@ -356,9 +369,12 @@ module.exports = {
                                                     notificationTagged  =  ntfn_body;
 
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    var imageSrc                    =     imageToResize;
-													var ext                         =     imageSrc.split('.');
-													item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                    if(imageToResize)
+                                                    {
+														var imageSrc                    =     imageToResize;
+														var ext                         =     imageSrc.split('.');
+														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+													}	
                                                     var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         
                                                             fs.exists(clgImgSrc, function(exists) {

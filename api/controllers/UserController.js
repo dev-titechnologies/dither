@@ -513,7 +513,6 @@ module.exports = {
 
                                                             var profileImage        =   profilePic_path + imageName;
 
-                                                            return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
 
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                                 var imageSrc                    =     profilePic_path_assets + imageName;

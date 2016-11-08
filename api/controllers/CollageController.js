@@ -110,7 +110,8 @@ module.exports = {
                                 if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
                                         received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
                                 }
-                                imgDetailsArrayOrder                    =       imgDetailsArray.reverse();
+
+                                imgDetailsArrayOrder                    =       imgDetailsArray.sort(predicatBy("position"));
                                 received_userName                       =       dataResults[i]["name"];
                                 received_userProfilePic                 =       received_userProfilePic;
                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];

@@ -270,10 +270,11 @@ module.exports = {
 																						  }
 																						  else
 																						  {
-																							  
+																							  var tagNotifyArray = [];
 																							  UserContacts.forEach(function(factor, index){
 																									
-																									 phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
+																									tagNotifyArray.push(factor.userId);
+																									 //phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
 																									 User.findOne({id:factor.userId}).exec(function (err, notifySettings){
                                                                                                                 if(notifySettings.notifyContact==1){
                                                                                                                     //phoneContactsArray.push({notificationTypeId:4,userId:results.id, ditherUserId:factor.userId});
@@ -287,7 +288,7 @@ module.exports = {
                                                                                                var values ={
 																										notificationTypeId  :   4,
 																										userId              :   results.id,
-																										tagged_users        :   contact_arr
+																										tagged_users        :   tagNotifyArray
 																										//description         :   tagNotifyArray.length
 																									}	
 																									console.log(values)

@@ -148,12 +148,14 @@ module.exports = {
                                                         }
                                                         console.log(dataResults[i]["profilePic"]);
                                                         var profile_image;
-                                                        if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == "" || !dataResults[i]["profilePic"]){
+                                                        if(!dataResults[i]["profilePic"] || dataResults[i]["profilePic"] == "" || dataResults[i]["profilePic"] == null){
+                                                                console.log("if ---------->>>>");
                                                                 profile_image    =   "";
                                                         }else{
+                                                                console.log("else ---------->>>>");
                                                                 profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                         }
-                                                        console.log(profile_image);
+                                                        //console.log(profile_image);
                                                         imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                         dataResultsObj.user_id                      =       dataResults[i]["userId"];

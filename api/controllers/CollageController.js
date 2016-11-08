@@ -106,9 +106,13 @@ module.exports = {
                                 }else{
                                             like_position = 0;
                                 }
+                                var received_userProfilePic    = "";
+                                if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
+                                        received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
+                                }
                                 imgDetailsArrayOrder                    =       imgDetailsArray.reverse();
                                 received_userName                       =       dataResults[i]["name"];
-                                received_userProfilePic                 =       profilePic_path + dataResults[i]["profilePic"];
+                                received_userProfilePic                 =       received_userProfilePic;
                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                 dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
                                 dataResultsObj.dither_like_position     =       like_position;

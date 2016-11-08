@@ -146,14 +146,14 @@ module.exports = {
                                                         }else{
                                                                 like_position = 0;
                                                         }
-                                                        if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
-                                                                dataResultsObj.profile_image    =   "";
-                                                        }else{
-                                                                dataResultsObj.profile_image    =   profilePic_path + dataResults[i]["profilePic"];
+                                                        var profile_image    =   "";
+                                                        if(dataResults[i]["profilePic"] != null || dataResults[i]["profilePic"] != ""){
+                                                                profile_image    =   profilePic_path + dataResults[i]["profilePic"];
                                                         }
                                                         imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                         dataResultsObj.user_id                      =       dataResults[i]["userId"];
+                                                        dataResultsObj.profile_image                =       profile_image;
                                                         dataResultsObj.created_date_time            =       dataResults[i]["createdAt"];
                                                         dataResultsObj.updated_date_time            =       dataResults[i]["updatedAt"];
                                                         dataResultsObj.dither_like_position         =       like_position;

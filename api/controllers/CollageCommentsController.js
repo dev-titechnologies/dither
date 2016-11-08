@@ -83,7 +83,7 @@ module.exports = {
                                                                         {
                                                                             //console.log("In mention_arr")
                                                                             //var query = "SELECT id FROM user where mention_id=";
-                                                                            User.find({mentionId: mention_arr}).exec(function (err, getUserId){
+                                                                            User.find({mentionId: mention_arr}).exec(function (err, getUserId){ 
                                                                                 if(err)
                                                                                 {
                                                                                     console.log("mention")
@@ -93,10 +93,29 @@ module.exports = {
                                                                                 {
                                                                                     //console.log("get User Idsssssssss")
                                                                                     //console.log(getUserId)
+                                                                                    var mentionPushArr = [];
                                                                                     getUserId.forEach(function(factor, index){
 
                                                                                         mention_user_id.push(factor.id);
-
+																						User.findOne({id:factor.id}).exec(function (err, notifySettings){
+																						   if(err)
+																						   {
+																							   console.log(err)
+																						   }
+																						   else
+																						   {
+																							 console.log("???????---Result----?????????")
+																							 console.log(notifySettings)
+																							 //console.log(notifySettings.notifyOpinion)
+																							 if(notifySettings)
+																							 {	 if(notifySettings.notifyMention)
+																								 {
+																									console.log(factor)
+																									mentionPushArr.push(factor);
+																								 }
+																							 }
+																						   }
+																						});
                                                                                     //console.log("dasdasdasdsadsadsadsad")
                                                                                     //console.log(mention_user_id)
 
@@ -121,7 +140,7 @@ module.exports = {
                                                                                            {
                                                                                                     //console.log(createdNotificationTags)
 
-                                                                                                    User_token.find({userId: mention_user_id}).exec(function (err, getDeviceId) {
+                                                                                                    User_token.find({userId: mentionPushArr}).exec(function (err, getDeviceId) {
                                                                                                     //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
                                                                                                     if(err)
                                                                                                     {
@@ -152,7 +171,7 @@ module.exports = {
                                                                                                                 //device_id       =  device_id.split(',');sails.log.debug(device_id);
 
 																											console.log(collageDetails.userId)
-                                                                                                             User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
+                                                                                                           /*  User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
                                                                                                                 if(err)
                                                                                                                 {
                                                                                                                     console.log(err)
@@ -168,7 +187,7 @@ module.exports = {
                                                                                                                         callback();
 
                                                                                                                    }
-                                                                                                                   else{
+                                                                                                                   else{*/
 
 
 
@@ -191,9 +210,9 @@ module.exports = {
 
                                                                                                                                 }
                                                                                                                         });
-                                                                                                                    }
-                                                                                                               }
-                                                                                                           });
+                                                                                                                    //}
+                                                                                                               //}
+                                                                                                          // });
 
                                                                                                         }
 

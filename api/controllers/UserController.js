@@ -470,7 +470,7 @@ module.exports = {
                 var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                 var edit_type                   =     req.param('edit_type');
                 var fileName                    =     req.file('profile_image');
-
+				
 
                 var switchKey = edit_type;
                 switch(switchKey){
@@ -533,6 +533,8 @@ module.exports = {
                                                                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in image resize', error_details: err});
 
                                                                             }else{
+																					console.log(imageResizeResults)
+																					profileImage	=	profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                     return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
 
 
@@ -544,7 +546,7 @@ module.exports = {
                                                                         return res.json(200, {status: 1, status_type: 'Success',message: 'Profile image not exist', });
 
                                                                     }
-                                                                    });
+                                                                  });
 
 
                                                             //------------------------------------------------------------------------------------------------------

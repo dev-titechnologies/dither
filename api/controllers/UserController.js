@@ -651,7 +651,7 @@ module.exports = {
                                                 {
 													  if(resultData.profilePic!=null || resultData.profilePic!='' || resultData.profilePic)
 													  {
-                                                        var data     = {profilePic: " "};
+                                                        var data     = {profilePic: ""};
                                                         var criteria = {id: userId};
                                                         User.update(criteria,data).exec(function(err, datas) {
                                                             if(err)

@@ -146,6 +146,7 @@ module.exports = {
                                                         }else{
                                                                 like_position = 0;
                                                         }
+                                                        console.log(dataResults[i]["profilePic"]);
                                                         var profile_image;
                                                         if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == "" || !dataResults[i]["profilePic"]){
                                                                 profile_image    =   "";

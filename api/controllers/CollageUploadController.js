@@ -121,7 +121,7 @@ module.exports = {
                 async.series([
                         function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                if(!get_dither_images.length){
+                                if(get_dither_images.length == 0){
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Image found to add'});
                                 }else{
                                         var collage_imageName           =   "";

@@ -25,8 +25,8 @@ module.exports = {
         ios = PusherService('ios', {
             device          :   [], // Array of string with device tokens
             provider        :   {
-                                cert                    : 'assets/push_Ntfn_certificates/PushChatCert.pem', // The filename of the connection certificate to load from disk
-                                key                     : 'assets/push_Ntfn_certificates/PushChatKey.pem', // The filename of the connection key to load from disk
+                                cert                    : 'assets/push_Ntfn_certificates/apns-pro-cert.pem', // The filename of the connection certificate to load from disk
+                                key                     : 'assets/push_Ntfn_certificates/apns-pro-key.pem', // The filename of the connection key to load from disk
                                 ca                      : [], // An array of trusted certificates
                                 pfx                     : '', // File path for private key, certificate and CA certs in PFX or PKCS12 format
                                 passphrase              : '123456789', // The passphrase for the connection key

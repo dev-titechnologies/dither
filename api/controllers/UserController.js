@@ -582,7 +582,7 @@ module.exports = {
                                                                     fs.unlink(profileImage);
                                                         }
                                                         console.log("below unlink if");
-                                                        /*var data     = {profilePic: ""};
+                                                        var data     = {profilePic: ""};
                                                         var criteria = {id: userId};
                                                         User.update(criteria,data).exec(function(err, datas) {
                                                             if(err){
@@ -592,10 +592,15 @@ module.exports = {
                                                                 console.log("Success update");
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                             }
-                                                        });*/
+                                                        });
                                                 }
                                         }
                                     });
+                        break;
+                        default:
+								console.log("default")
+								//callback();
+
                         break;
                 }
 

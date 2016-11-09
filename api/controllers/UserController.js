@@ -593,6 +593,7 @@ module.exports = {
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                             }
                                                         });*/
+                                                        return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                 }
                                         }
                                     });

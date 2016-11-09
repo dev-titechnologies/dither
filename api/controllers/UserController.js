@@ -473,9 +473,8 @@ module.exports = {
 
 
                 var switchKey = edit_type;
-                if(edit_type==1){
-               // switch(switchKey){
-                       // case '1' :
+                switch(switchKey){
+                        case '1' :
                                     //-------------Change only ProfilePic------------------------------------
                                     console.log("Type 1-change Profile PIc")
                                     var imageName ;
@@ -562,7 +561,9 @@ module.exports = {
                                         }
                                     });
 
-					}else if(edit_type==2){
+                        break;
+
+                        case '2' :
                                     //----------------------------Remove only ProfilePic-----------------------------------------------
                                     console.log("Type 2-Remove ProfilePic")
                                     User.findOne({id:userId}).exec(function (err, resultData){
@@ -575,11 +576,11 @@ module.exports = {
                                                         return res.json(200, {status: 2, status_type: 'Failure',message: 'User Not Found'});
                                                 }else{
                                                          console.log(resultData);
-                                                        if(resultData.profilePic != null || resultData.profilePic != ''){
+                                                        /*if(resultData.profilePic != null || resultData.profilePic != ''){
                                                                     console.log("Entered unlink if ----->>>>");
                                                                     var profileImage    =   profilePic_unlink_path + resultData.profilePic;
                                                                     fs.unlink(profileImage);
-                                                        }
+                                                        }*/
                                                         console.log("below unlink if");
 														var data     = {profilePic: ""};
                                                         var criteria = {id: userId};
@@ -595,14 +596,9 @@ module.exports = {
                                                 }
                                         }
                                     });
-								}
-								else
-								{
-									return res.json(200, {status: 2, status_type: 'Failure', message: 'please pass editType'});
-								}
-                       // break;
+                        break;
                        
-                //}
+                }
 
       },
 

@@ -571,6 +571,7 @@ module.exports = {
                                             console.log(err)
                                             return res.json(200, {status: 2, status_type: 'Failure',message:'error occured in profilePic selection in delete profile'});
                                         }else{
+                                               console.log(resultData);
                                                 if(!resultData){
                                                         return res.json(200, {status: 2, status_type: 'Failure',message: 'User Not Found'});
                                                 }else{
@@ -579,6 +580,7 @@ module.exports = {
                                                                     var profileImage    =   profilePic_path + resultData.profilePic;
                                                                     fs.unlink(profileImage);
                                                         }
+                                                        console.log("below unlink if");
                                                         var data     = {profilePic: ""};
                                                         var criteria = {id: userId};
                                                         User.update(criteria,data).exec(function(err, datas) {
@@ -586,6 +588,7 @@ module.exports = {
                                                                 sails.log(err)
                                                                 return res.json(200, {status: 2, status_type: 'Failure', message: 'profile image deletion failure'});
                                                             }else{
+                                                                console.log("Success update");
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                             }
                                                         });

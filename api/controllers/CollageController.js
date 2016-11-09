@@ -761,7 +761,7 @@ module.exports = {
                                                             console.log("Unlinking collage image======");
                                                             var resize_collage_image  = foundCollage.image;
                                                             var ext                   = resize_collage_image.split('.');
-                                                            fs.unlink(collage_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
+                                                            //fs.unlink(collage_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
                                                             fs.unlink(collage_unlink_path + foundCollage.image);
                                                     }
                                                     //Finding the collageDetails

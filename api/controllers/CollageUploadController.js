@@ -208,6 +208,24 @@ module.exports = {
                         },
                         function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                var imageSrc                    =     collageImg_path_assets + collage_results.image;
+                                var ext                         =     imageSrc.split('/');
+                                ext                             =     ext[ext.length-1].split('.');
+                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                console.log(imageSrc);
+                                console.log(imageDst);
+                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+                                        if(err){
+                                                console.log(err);
+                                                console.log("Error in image resize !!!!");
+                                                callback();
+                                        }else{
+                                                callback();
+                                        }
+                                });
+                        },
+                        function(callback) {
+                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                     if(taggedUserArray.length){
                                             var tagCollageArray = [];
                                             taggedUserArray.forEach(function(factor, index){
@@ -349,7 +367,7 @@ module.exports = {
                                     }
                         },
                         function(callback) {
-                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----4 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                     if(inviteFriends.length){
                                         inviteFriends.forEach(function(factor, index){
                                                  inviteFinalArray.push({

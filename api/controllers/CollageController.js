@@ -762,7 +762,7 @@ module.exports = {
                                                             var resize_collage_image  = foundCollage.image;
                                                             var ext                   = resize_collage_image.split('.');
                                                             //fs.unlink(collage_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
-                                                            fs.unlink(collage_unlink_path + foundCollage.image);
+                                                            //fs.unlink(collage_unlink_path + foundCollage.image);
                                                     }
                                                     //Finding the collageDetails
                                                     CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
@@ -774,7 +774,7 @@ module.exports = {
                                                                     foundCollageDetails.forEach(function(factor, index){
                                                                             if(factor.image != null || factor.image != ""){
                                                                                 console.log("Unlinking collageDetail image======");
-                                                                                fs.unlink(collage_unlink_path + factor.image);
+                                                                                //fs.unlink(collage_unlink_path + factor.image);
                                                                             }
                                                                     });
 

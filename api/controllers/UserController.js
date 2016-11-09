@@ -469,7 +469,7 @@ module.exports = {
                 var imageUploadDirectoryPath    =     '../../assets/images/profilePics';
                 var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                 var edit_type                   =     req.param('edit_type');
-                var fileName                    =     req.file('profile_image');
+                //var fileName                    =     req.file('profile_image');
 
 
                 var switchKey = edit_type;

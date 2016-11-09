@@ -759,6 +759,9 @@ module.exports = {
                                                     //Unlinking collage image
                                                     if(foundCollage.image != null || foundCollage.image != ""){
                                                             console.log("Unlinking collage image======");
+                                                            var resize_collage_image  = foundCollage.image;
+                                                            var ext                   = resize_collage_image.split('.');
+                                                            fs.unlink(collage_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
                                                             fs.unlink(collage_unlink_path + foundCollage.image);
                                                     }
                                                     //Finding the collageDetails
@@ -769,7 +772,10 @@ module.exports = {
                                                             }else{
                                                                     //Unlinking collageDetail image
                                                                     foundCollageDetails.forEach(function(factor, index){
-                                                                            fs.unlink(collage_unlink_path + factor.image);
+                                                                            if(factor.image != null || factor.image != ""){
+                                                                                console.log("Unlinking collageDetail image======");
+                                                                                fs.unlink(collage_unlink_path + factor.image);
+                                                                            }
                                                                     });
 
                                                                     //Deleting from collage Table

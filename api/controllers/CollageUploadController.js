@@ -43,7 +43,7 @@ module.exports = {
             var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
             var collageUploadDirectoryPath  =     '../../assets/images/collage';
 
-            req.file('collage_image').upload({dirname: collageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000, adapter: require('skipper-disk')},function (err, files) {
+            req.file('collage_image').upload({dirname: collageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
                     if(err){
                         console.log(err);
                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage image', error_details: err});

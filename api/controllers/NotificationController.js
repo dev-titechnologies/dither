@@ -254,7 +254,7 @@ module.exports = {
                                                 }
                                             });
                                     }else if(item.notificationTypeId==4){
-                                            console.log("signuppp")
+                                            console.log("signuppp ")
                                             NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
                                                 if(err){
                                                         console.log(err)

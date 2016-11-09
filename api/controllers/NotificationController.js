@@ -124,7 +124,7 @@ module.exports = {
                                     " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
                                     ") as temp"+
                                     " where temp.id <"+focus_Ntfn_id+
-                                    " LIMIT 10";
+                                    " LIMIT "+data_view_limit+"";
 
                     //--------------------------------------------------------------------
                 }

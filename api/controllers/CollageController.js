@@ -757,7 +757,8 @@ module.exports = {
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
                                             }else{
                                                     //Unlinking collage image
-                                                    if(foundCollage.image){
+                                                    if(foundCollage.image != null || foundCollage.image != ""){
+                                                            console.log("Unlinking collage image======");
                                                             fs.unlink(collage_unlink_path + foundCollage.image);
                                                     }
                                                     //Finding the collageDetails

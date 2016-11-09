@@ -99,6 +99,7 @@ module.exports = {
                             var userId                      =     tokenCheck.tokenDetails.userId;
                             var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                             var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                            var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                             var request                     =     JSON.parse(req.param("REQUEST"));
                             var device_type                 =     req.get('device_type');
                             var vote                        =     [];

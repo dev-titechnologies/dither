@@ -76,7 +76,7 @@ module.exports = {
                                                                                                          return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
                                                                                                 }else{
 																										//device_id 		=  device_id.split(',');sails.log.debug(device_id);
-																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,id:userId};
+																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,id:userId,NtfnType:6};
 																										console.log(data)
 																										
 																										 NotificationService.NtfnInAPP(data, function(err, ntfnSend){

@@ -473,8 +473,9 @@ module.exports = {
 
 
                 var switchKey = edit_type;
-                switch(switchKey){
-                        case '1' :
+                if(edit_type==1){
+               // switch(switchKey){
+                       // case '1' :
                                     //-------------Change only ProfilePic------------------------------------
                                     console.log("Type 1-change Profile PIc")
                                     var imageName ;
@@ -561,9 +562,7 @@ module.exports = {
                                         }
                                     });
 
-                        break;
-
-                        case '2' :
+					}else if(edit_type==2){
                                     //----------------------------Remove only ProfilePic-----------------------------------------------
                                     console.log("Type 2-Remove ProfilePic")
                                     User.findOne({id:userId}).exec(function (err, resultData){
@@ -582,7 +581,7 @@ module.exports = {
                                                                     fs.unlink(profileImage);
                                                         }
                                                         console.log("below unlink if");
-                                                       /* var data     = {profilePic: ""};
+														var data     = {profilePic: ""};
                                                         var criteria = {id: userId};
                                                         User.update(criteria,data).exec(function(err, datas) {
                                                             if(err){
@@ -592,14 +591,18 @@ module.exports = {
                                                                 console.log("Success update");
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
                                                             }
-                                                        });*/
-                                                        return res.json(200, {status: 1, status_type: 'Success', message: 'profile image deletion Success'});
+                                                        });
                                                 }
                                         }
                                     });
-                        break;
+								}
+								else
+								{
+									return res.json(200, {status: 2, status_type: 'Failure', message: 'please pass editType'});
+								}
+                       // break;
                        
-                }
+                //}
 
       },
 

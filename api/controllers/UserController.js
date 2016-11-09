@@ -576,11 +576,11 @@ module.exports = {
                                                         return res.json(200, {status: 2, status_type: 'Failure',message: 'User Not Found'});
                                                 }else{
                                                          console.log(resultData);
-                                                        /*if(resultData.profilePic != null || resultData.profilePic != ''){
+                                                        if(resultData.profilePic != null || resultData.profilePic != ''){
                                                                     console.log("Entered unlink if ----->>>>");
                                                                     var profileImage    =   profilePic_unlink_path + resultData.profilePic;
                                                                     fs.unlink(profileImage);
-                                                        }*/
+                                                        }
                                                         console.log("below unlink if");
 														var data     = {profilePic: ""};
                                                         var criteria = {id: userId};
@@ -597,7 +597,7 @@ module.exports = {
                                         }
                                     });
                         break;
-                       
+                        
                 }
 
       },

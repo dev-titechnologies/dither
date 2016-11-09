@@ -30,7 +30,7 @@ module.exports = {
                                 ca                      : [], // An array of trusted certificates
                                 pfx                     : '', // File path for private key, certificate and CA certs in PFX or PKCS12 format
                                 passphrase              : '123456789', // The passphrase for the connection key
-                                production              : false, // Specifies which environment to connect to: Production (if true) or Sandbox
+                                production              : true, // Specifies which environment to connect to: Production (if true) or Sandbox
                                 voip                    : false, // Enable when you are using a VoIP certificate to enable paylods up to 4096 bytes
                                 port                    : 2195, // Gateway port
                                 rejectUnauthorized      : true, // Reject Unauthorized property to be passed through to tls.connect()

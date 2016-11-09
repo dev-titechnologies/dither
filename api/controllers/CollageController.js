@@ -758,6 +758,7 @@ module.exports = {
                                             }else{
                                                     //Unlinking collage image
                                                     if(foundCollage.image != null || foundCollage.image != ""){
+                                                            console.log("Unlinking collage image======");
                                                             fs.unlink(collage_unlink_path + foundCollage.image);
                                                     }
                                                     //Finding the collageDetails

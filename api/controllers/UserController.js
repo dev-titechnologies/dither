@@ -575,6 +575,7 @@ module.exports = {
                                                 if(!resultData){
                                                         return res.json(200, {status: 2, status_type: 'Failure',message: 'User Not Found'});
                                                 }else{
+                                                         console.log(resultData);
                                                         if(resultData.profilePic != null || resultData.profilePic != ''){
                                                                     console.log("Entered unlink if ----->>>>");
                                                                     var profileImage    =   profilePic_unlink_path + resultData.profilePic;

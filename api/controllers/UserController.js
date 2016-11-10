@@ -259,7 +259,7 @@ module.exports = {
                                                                                                                                     });
 
 
-                                                                                                          });
+                                                                                                              });
 
                                                                                                                 User_token.find({userId: contact_arr}).exec(function (err, getDeviceId){
                                                                                                                     if(err){
@@ -267,7 +267,7 @@ module.exports = {
                                                                                                                           callback();
                                                                                                                     }else{
                                                                                                                         var message     =  'signup Notification';
-                                                                                                                        var ntfn_body   =   results.name +" Joined on Dither";
+                                                                                                                        var ntfn_body   =   "Your contact"+results.name +" is now on Dither";
                                                                                                                         getDeviceId.forEach(function(factor, index){
                                                                                                                             deviceId_arr.push(factor.deviceId);
                                                                                                                         });

@@ -158,7 +158,14 @@ module.exports = {
                                                     if(item.description<=1){
                                                             notificationCommented = " commented on your Dither";
                                                             item.ntfn_body        = notificationCommented;
-                                                    }else{
+                                                    }else if(item.description==2)
+                                                    {
+															notificationCommented =  " and 1 other commented on your Dither";
+															item.ntfn_body        = notificationCommented;
+													}
+                                                    else
+                                                    {
+														
                                                             item.description        =   item.description - 1;
                                                             ntfn_body               =   util.format(notification,item.description);
                                                             notificationCommented   =  ntfn_body;
@@ -204,20 +211,25 @@ module.exports = {
                                                     console.log(err)
                                                     callback(true,ntfnTypeFound );
                                                 }else{
-                                                    var notification        = ntfnTypeFound[0].body;
+                                                    var notification        =   ntfnTypeFound[0].body;
                                                     item.type               =   ntfnTypeFound[0].type;
                                                     var imageToResize       =   item.profile_image;
                                                     var clgImgToResize      =   item.dither_image;
                                                     item.dither_image       =   collageImg_path + item.dither_image;
                                                     if(item.description<=1){
-                                                        notificationVoted   = " voted on your Dither";
-                                                        item.ntfn_body      = notificationVoted;
-                                                    }else{
-                                                        item.description    = item.description - 1;
-                                                        ntfn_body           = util.format(notification,item.description);
-                                                        notificationVoted   =  ntfn_body;
+                                                        notificationVoted   =   " voted on your Dither";
+                                                        item.ntfn_body      =   notificationVoted;
+                                                    }else if(item.description==2)
+                                                    {
+															notificationCommented =  " and 1 other voted on your Dither";
+															item.ntfn_body        = notificationCommented;
+													}
+                                                    else{
+                                                        item.description    =   item.description - 1;
+                                                        ntfn_body           =   util.format(notification,item.description);
+                                                        notificationVoted   =   ntfn_body;
                                                         item.ntfn_body      =   ntfn_body;
-                                                        notifyVoteArray     = [];
+                                                        notifyVoteArray     =   [];
                                                         notifyVoteArray.push({
                                                                             ditherId    :   item.collage_id,
                                                                             userId      :   item.ditherUserId,
@@ -231,7 +243,7 @@ module.exports = {
 														var ext                         =     imageSrc.split('.');
 														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
 													}
-                                                    var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                        var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                             
 															fs.exists(clgImgSrc, function(exists) {
 																if (exists) {
@@ -260,14 +272,14 @@ module.exports = {
                                                         console.log(err)
                                                         callback(true,ntfnTypeFound );
                                                 }else{
-                                                        var notification    = ntfnTypeFound[0].body;
-                                                        ntfn_body           = util.format(notification);
+                                                        var notification    =   ntfnTypeFound[0].body;
+                                                        ntfn_body           =   util.format(notification);
                                                         item.ntfn_body      =   ntfn_body;
                                                         item.type           =   ntfnTypeFound[0].type;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
                                                         item.dither_image   =   collageImg_path + item.dither_image;
-                                                        notificationSignup  =  ntfn_body;
+                                                        notificationSignup  =   ntfn_body;
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                         if(imageToResize)
                                                         {
@@ -323,7 +335,7 @@ module.exports = {
 															item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
 														}
 														
-                                                        var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+															var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         
                                                                 fs.exists(clgImgSrc, function(exists) {
                                                                     if(exists){
@@ -370,7 +382,7 @@ module.exports = {
 														var ext                         =     imageSrc.split('.');
 														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 													}	
-                                                    var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+														var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         
                                                             fs.exists(clgImgSrc, function(exists) {
                                                                 if(exists){

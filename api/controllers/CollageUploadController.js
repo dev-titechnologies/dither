@@ -43,7 +43,7 @@ module.exports = {
             var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
             var collageUploadDirectoryPath  =     '../../assets/images/collage';
 
-            req.file('collage_image').upload({dirname: collageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000},function (err, files) {
+            req.file('collage_image').upload({dirname: collageUploadDirectoryPath, maxBytes: 100 * 1000 * 1000, adapter: require('skipper-disk')},function (err, files) {
                     if(err){
                         console.log(err);
                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading collage image', error_details: err});
@@ -99,6 +99,7 @@ module.exports = {
                             var userId                      =     tokenCheck.tokenDetails.userId;
                             var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                             var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                            var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                             var request                     =     JSON.parse(req.param("REQUEST"));
                             var device_type                 =     req.get('device_type');
                             var vote                        =     [];
@@ -208,6 +209,24 @@ module.exports = {
                         },
                         function(callback) {
                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----2 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                var imageSrc                    =     collageImg_path_assets + collage_results.image;
+                                var ext                         =     imageSrc.split('/');
+                                ext                             =     ext[ext.length-1].split('.');
+                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                console.log(imageSrc);
+                                console.log(imageDst);
+                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
+                                        if(err){
+                                                console.log(err);
+                                                console.log("Error in image resize !!!!");
+                                                callback();
+                                        }else{
+                                                callback();
+                                        }
+                                });
+                        },
+                        function(callback) {
+                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                     if(taggedUserArray.length){
                                             var tagCollageArray = [];
                                             taggedUserArray.forEach(function(factor, index){
@@ -349,7 +368,7 @@ module.exports = {
                                     }
                         },
                         function(callback) {
-                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----3 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----4 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                                     if(inviteFriends.length){
                                         inviteFriends.forEach(function(factor, index){
                                                  inviteFinalArray.push({

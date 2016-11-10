@@ -526,15 +526,17 @@ module.exports = {
                                         ntfyArr.forEach(function(factor, index){
                                             //tagNotifyArray.push({id:factor.user_id});
                                             tagNotifyArray.push(factor);
-                                            User.findOne({id:factor}).exec(function (err, notifySettings){
-                                                if(err){
-                                                   console.log(err)
-                                                }else{
-                                                    if(notifySettings.notifyOpinion){
-                                                        tagNtfyPush.push(factor);
-                                                    }
-                                                }
-                                            });
+                                            if(factor!=0){
+												User.findOne({id:factor}).exec(function (err, notifySettings){
+													if(err){
+													   console.log(err)
+													}else{
+														if(notifySettings.notifyOpinion){
+															tagNtfyPush.push(factor);
+														}
+													}
+												});
+											}
                                         });
                                         var values ={
                                                         notificationTypeId  :   1,

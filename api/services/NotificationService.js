@@ -119,7 +119,7 @@ module.exports = {
     ==============================================================================================================================================*/
 
 
-    NtfnInAPP: function(data,callback){
+    NotificationPush: function(data,callback){
         console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
         console.log(data)
         var arr = data.device_id;

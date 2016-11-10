@@ -182,7 +182,7 @@ module.exports = {
                                                                                                                                                             };
                                                                                                                                         async.series([
                                                                                                                                         function(callback) {
-                                                                                                                                            NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
+                                                                                                                                            NotificationService.NotificationPush(data, function(err, ntfnSend) {
                                                                                                                                                     if(err){
                                                                                                                                                         console.log("Error in Push Notification Sending")
                                                                                                                                                         console.log(err)

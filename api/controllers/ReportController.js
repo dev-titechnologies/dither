@@ -78,7 +78,7 @@ module.exports = {
 																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,id:userId,NtfnType:6};
 																										console.log(data)
 																										
-																										 NotificationService.NtfnInAPP(data, function(err, ntfnSend){
+																										 NotificationService.NotificationPush(data, function(err, ntfnSend){
 																											if(err){
 																													console.log("Error in Push Notification Sending")
 																													console.log(err)

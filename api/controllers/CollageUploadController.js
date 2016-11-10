@@ -318,7 +318,7 @@ module.exports = {
                                                                                                                     id                  :   collage_results.id,
                                                                                                                     notification_id     :   createdNotificationTags.id
                                                                                                                 };
-                                                                                                NotificationService.NtfnInAPP(data, function(err, ntfnSend) {
+                                                                                                NotificationService.NotificationPush(data, function(err, ntfnSend) {
                                                                                                         if(err){
                                                                                                             console.log("Error in Push Notification Sending")
                                                                                                             console.log(err)

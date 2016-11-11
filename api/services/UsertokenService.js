@@ -82,8 +82,8 @@ module.exports = {
                                         if(statusResults.status == 'active'){
                                                 callback(false, {status: 1, status_type: "Success", message: 'Valid token and active user', tokenDetails: results[0]});
                                         }else{
-                                                callback(false, {status: 2, status_type: "Failure", message: 'status'});
-                                                //return res.json(200, {status: 1, status_type: "Success", message: 'Valid token and InActive user'});
+                                                //callback(false, {status: 2, status_type: "Failure", message: 'status'});
+                                                return res.json(200, {status: 3, status_type: "Success", message: 'Valid token and InActive user'});
                                         }
                                 }
                             });

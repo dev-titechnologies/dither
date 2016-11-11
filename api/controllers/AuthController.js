@@ -38,7 +38,7 @@ module.exports = {
                                     return res.json(200, {status: 3, status_type: 'Failure' , message: 'Token expired'});
                                 }else if(tokenCheck.message == 'status'){
                                     console.log("Not an active user");
-                                    return res.json(200, {status: 3, status_type: 'Failure' , message: 'Not an active user'});
+                                    return res.json(200, {status: 3, status_type: 'Failure' , message: 'Your account seems to be suspended! If you believe this is in error, please contact admin@dither.com'});
                                 }
                             }
                         }

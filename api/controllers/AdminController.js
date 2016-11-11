@@ -13,6 +13,7 @@ var crypto = require('crypto');
  var  googleapis = require('googleapis');
  var  key        = require('service-account-credentials.json');
  const VIEW_ID   = 'ga:130989248';
+ 
   
 
 module.exports = {

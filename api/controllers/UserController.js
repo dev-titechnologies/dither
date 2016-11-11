@@ -579,7 +579,7 @@ module.exports = {
                                                         if(resultData.profilePic != null || resultData.profilePic != ''){
                                                                     console.log("Entered unlink if ----->>>>");
                                                                     var profileImage    =   profilePic_unlink_path + resultData.profilePic;
-                                                                    fs.unlink(profileImage);
+                                                                   // fs.unlink(profileImage);
                                                         }
                                                         console.log("below unlink if");
 														var data     = {profilePic: ""};

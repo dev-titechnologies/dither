@@ -376,7 +376,13 @@ module.exports = {
 
                                       return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                                 }else{
-
+									
+									  if(results.status=='inactive')
+									  {
+										  return res.json(200, {status: 2, status_type: 'Success' ,  message: "This is not an active user", isNewUser: false});
+									  }
+									  else
+									  {
                                         //delete existing token
                                         var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
                                         User_token.query(query, function(err, result) {
@@ -407,7 +413,7 @@ module.exports = {
 
                                             }
                                         });
-
+								   }
                                 }
 
                         }

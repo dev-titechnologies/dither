@@ -36,7 +36,7 @@ module.exports = {
 
         global : function(req, res, next) {
 
-                        var data_view_limit         = 10;
+                        var data_view_limit         = 20;
                         req.options.global = {
                                                     data_view_limit     : data_view_limit,
                                              };

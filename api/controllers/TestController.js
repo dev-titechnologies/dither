@@ -936,6 +936,51 @@ module.exports = {
                 console.log("The file was saved!");
             });
     },
+
+/*  =================================================================================================================================
+            checking userToken Expiry
+    ================================================================================================================================== */
+    checkExpiryToken: function (req, res) {
+            console.log("user token >>>>>>>>>>");
+            console.log(req.params.all());
+            console.log(req.param("hours"));
+            //Get token expiry time from datatbase
+            //var param = 3600;
+            //var expHours = param / 60;
+            var expHours = req.param("hours");
+            console.log("Before Expiry Date-------------------------");
+            //Get expiry date
+            var expiry_date = new Date();
+            expiry_date.setHours(expiry_date.getHours() + expHours);
+            console.log("Before Generate Token");
+            //console.log("param -------------"+param);
+            //console.log("expHours -------------"+param / 60);
+            //console.log("setHours(24) -------------"+expiry_date.setHours(expiry_date.getHours() + expHours));
+            //console.log("expiry_date -------------"+expiry_date);
+            console.log("current date -------------"+new Date());
+           // console.log("add Hours -------------"+expiry_date.setHours(expiry_date.getHours()+2));
+            //console.log("add Hours "+new Date(expiry_date.setHours(expiry_date.getHours()+2)) );
+            console.log("last date -------------"+new Date(new Date().getTime() + (expHours*1000*60*60)));
+
+            //Generate token
+            /*var token = crypto.randomBytes(12).toString('hex');
+            var tokenValues = {userId: userId, token: token, deviceId: deviceId,device_IMEI:device_IMEI,device_Type:device_Type,expiryDate: expiry_date};
+            console.log("tokenValues------------------------------------------" );
+            console.log(tokenValues);
+            User_token.create(tokenValues).exec(function (err, resultToken){
+                if(err){
+                        console.log("Error Create Token Response");
+                        console.log(err);
+                        callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in create token service', error_details: err});
+                }else{
+                        console.log("Success Create Token Response");
+                        callback(false, {status: 1, status_type: "Success", message: 'CreateToken service success', token: resultToken});
+                }
+            });*/
+    },
+
+
+
 };
 
 

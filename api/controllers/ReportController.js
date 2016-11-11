@@ -75,57 +75,22 @@ module.exports = {
                                                                                                 if(!deviceId_arr.length){
                                                                                                          return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
                                                                                                 }else{
-																										//device_id 		=  device_id.split(',');sails.log.debug(device_id);
-																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,id:userId};
+																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,id:userId,NtfnType:6};
 																										console.log(data)
-																										console.log(device_type)
-                                                                                                        var switchKey  	=  device_type;
-                                                                                                        switch(switchKey){
-                                                                                                                case 'ios' :
-                                                                                                                            NotificationService.pushNtfnApn(data, function(err, ntfnSend) {
-                                                                                                                                if(err)
-                                                                                                                                {
-                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                    console.log(err)
-                                                                                                                                    //callback();
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
-                                                                                                                                    console.log("Push notification result")
-                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                    //callback();
-                                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
-                                                                                                                                }
-                                                                                                                            });
-                                                                                                                break;
+																										
+																										 NotificationService.NotificationPush(data, function(err, ntfnSend){
+																											if(err){
+																													console.log("Error in Push Notification Sending")
+																													console.log(err)
+																													return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
 
-                                                                                                                case 'android' :
-                                                                                                                            NotificationService.pushNtfnGcm(data, function(err, ntfnSend) {
-                                                                                                                                if(err)
-                                                                                                                                {
-                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                    console.log(err)
-                                                                                                                                    //callback();
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
-                                                                                                                                    console.log("Push notification result")
-                                                                                                                                    console.log(ntfnSend)
-                                                                                                                                    console.log("Push Notification sended")
-                                                                                                                                    //callback();
-                                                                                                                                     return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
-                                                                                                                                }
-                                                                                                                            });
-                                                                                                                break;
-
-                                                                                                                default:
-                                                                                                                             return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
-
-                                                                                                                break;
-
-
-                                                                                                        }
+																											}else{
+																													return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+																											}
+																										});
+																										
+																										
+																										
                                                                                                 }
 
                                                                                             //------------------------------

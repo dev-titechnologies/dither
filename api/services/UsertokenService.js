@@ -3,19 +3,27 @@ module.exports = {
 /*  =================================================================================================================================
             Function to create new token
     ================================================================================================================================== */
-    createToken: function (userId, deviceId,device_IMEI,device_Type,callback) {
+    createToken: function (userId, deviceId, device_IMEI, device_Type, token_expiry_hour, callback) {
             console.log("user token >>>>>>>>>>");
             //Get token expiry time from datatbase
-            var param = 3600;
-            var expHours = param / 60;
-            console.log("Before Expiry Date-------------------------");
+            //var param = 3600;
+            //var expHours = param / 60;
+            //console.log("Before Expiry Date-------------------------");
             //Get expiry date
-            var expiry_date = new Date();
-            expiry_date.setHours(expiry_date.getHours() + expHours);
-            console.log("Before Generate Token");
+            //var expiry_date = new Date();
+            //expiry_date.setHours(expiry_date.getHours() + expHours);
+            //console.log("Before Generate Token");
             //Generate token
-            var token = crypto.randomBytes(12).toString('hex');
-            var tokenValues = {userId: userId, token: token, deviceId: deviceId,device_IMEI:device_IMEI,device_Type:device_Type,expiryDate: expiry_date};
+            var expiry_date         =       new Date(new Date().getTime() + (token_expiry_hour*1000*60*60));
+            var token               =       crypto.randomBytes(12).toString('hex');
+            var tokenValues         =       {
+                                                userId: userId,
+                                                token: token,
+                                                deviceId: deviceId,
+                                                device_IMEI:device_IMEI,
+                                                device_Type:device_Type,
+                                                expiryDate: expiry_date
+                                            };
             console.log("tokenValues------------------------------------------" );
             console.log(tokenValues);
             User_token.create(tokenValues).exec(function (err, resultToken){
@@ -50,11 +58,14 @@ module.exports = {
     ================================================================================================================================== */
     checkToken: function (token, callback) {
             var today = new Date().toISOString();
-            var query = " SELECT usr.id, usr.name,usr.notifyOpinion,usr.profilePic, usr.email, usr.fbId, usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
+            var query = " SELECT usr.id, usr.name, usr.notifyOpinion, usr.profilePic, usr.email, usr.fbId, usr.phoneNumber,"+
+                        " usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                         " FROM"+
                         " userToken usrtkn"+
                         " INNER JOIN user usr ON usr.id = usrtkn.userId"+
                         " WHERE usrtkn.token = '"+token+"' AND usrtkn.expiryDate > '"+today+"'";
+            //console.log("check token ----------------------query");
+            //console.log(query);
             User_token.query(query, function (err, results) {
                 if(err){
                         console.log(err);

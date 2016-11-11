@@ -12,7 +12,7 @@ module.exports = {
                                                 Authenticate the request
  ====================================================================================================================================*/
 
-    authenticate : function(req, res, next) {
+    authenticate : function(req, res, next){
             var userToken;
             if(req.isSocket){
                     //console.log(req.socket.handshake);
@@ -25,39 +25,21 @@ module.exports = {
             }
             //console.log(userToken);
             if(userToken){
-                    UsertokenService.checkToken(userToken, function(err, tokenCheck) {
-                        if(err)
-                        {
+                    UsertokenService.checkToken(userToken, function(err, tokenCheck){
+                        if(err){
                             return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in checkToken' , error_details: err});
-                        }
-                        else
-                        {
-                             if(tokenCheck.status == 1)
-                            {
+                        }else{
+                             if(tokenCheck.status == 1){
                                 req.options.tokenCheck = tokenCheck;
                                 next();
-                            }
-                            else
-                            {
+                            }else{
                                 if(tokenCheck.message == 'token'){
-
-                                    /* TokenService.deleteToken(userToken, function(err, result) {
-                                        if(err) {
-                                             return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
-                                        } else {
-
-                                            return res.json(200, {status: 1,  status_type: 'Success' , message: 'success'});
-                                        }
-                                    });*/
-
                                     console.log("Token expired");
                                     return res.json(200, {status: 3, status_type: 'Failure' , message: 'Token expired'});
-                                }
-                                else if(tokenCheck.message == 'status'){
+                                }else if(tokenCheck.message == 'status'){
                                     console.log("Not an active user");
-                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'Not an active user'});
+                                    return res.json(200, {status: 3, status_type: 'Failure' , message: 'Not an active user'});
                                 }
-
                             }
                         }
                     });

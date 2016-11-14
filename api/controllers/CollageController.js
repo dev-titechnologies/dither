@@ -102,6 +102,8 @@ module.exports = {
                                             like_position = 0;
                                 }
                                 var received_userProfilePic    = "";
+                                console.log("iiiiiiiiiiiiiiiiiiiiiiiiii")
+                                console.log(dataResults[i]["profilePic"])
                                 if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
                                         received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
                                 }

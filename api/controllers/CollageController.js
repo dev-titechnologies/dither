@@ -60,7 +60,7 @@ module.exports = {
 
 
                 function commonKeyFunction(commonResults){
-                        console.log(commonResults);
+                        //console.log(recentResults);
                         var dataResults         = commonResults;
                         var key                 = [];
                         var dataResultsKeys     = [];
@@ -102,8 +102,7 @@ module.exports = {
                                             like_position = 0;
                                 }
                                 var received_userProfilePic    = "";
-                                
-                                if(dataResults[i]["profilePic"] != '' || dataResults[i]["profilePic"] != null){
+                                if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
                                         received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
                                 }
 

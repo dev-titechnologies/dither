@@ -428,8 +428,7 @@ getMapData:function(req,res){
           console.log(err);
           return;
         }
-        console.log("map data");
-        console.log(JSON.stringify(response.rows, null, 4));
+        
         return res.json(200,{status:1,message:'success',result:response.rows});
       });  
     }
@@ -490,7 +489,7 @@ getPieChartData:function(req,res){
           console.log(err);
           return;
         }
-        console.log(JSON.stringify(response.rows, null, 4));
+       
         return res.json(200,{status:1,message:'success',result:response.rows});
       });  
     }
@@ -524,9 +523,7 @@ getBarChartData:function(req,res){
           return;
         }
         // console.log(JSON.stringify(response.rows, null, 4));
-         console.log(startDate);
-         console.log(endDate);
-         console.log(response.rows);
+        
 
         return res.json(200,{status:1,message:'success',result:response.rows});
       });  

@@ -372,17 +372,17 @@ module.exports = {
                                sails.log("jguguu"+err);
                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                         }else{
-                                if(typeof(results) == 'undefined'){
+                                if(!results){
 
                                       return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                                 }else{
-									
-									  if(results.status=='inactive')
-									  {
-										  return res.json(200, {status: 2, status_type: 'Success' ,  message: "This is not an active user", isNewUser: false});
-									  }
-									  else
-									  {
+
+                                      if(results.status=='inactive')
+                                      {
+                                          return res.json(200, {status: 2, status_type: 'Success' ,  message: 'Your account seems to be suspended! If you believe this is in error, please contact admin@dither.com', isNewUser: false});
+                                      }
+                                      else
+                                      {
                                         //delete existing token
                                         var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
                                         User_token.query(query, function(err, result) {
@@ -413,7 +413,7 @@ module.exports = {
 
                                             }
                                         });
-								   }
+                                   }
                                 }
 
                         }
@@ -588,7 +588,7 @@ module.exports = {
                                                                    // fs.unlink(profileImage);
                                                         }
                                                         console.log("below unlink if");
-														var data     = {profilePic: ""};
+                                                        var data     = {profilePic: ""};
                                                         var criteria = {id: userId};
                                                         User.update(criteria,data).exec(function(err, datas) {
                                                             if(err){
@@ -603,7 +603,7 @@ module.exports = {
                                         }
                                     });
                         break;
-                        
+
                 }
 
       },

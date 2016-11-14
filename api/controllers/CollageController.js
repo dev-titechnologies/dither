@@ -103,7 +103,7 @@ module.exports = {
                                 }
                                 var received_userProfilePic    = "";
                                 
-                                if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
+                                if(dataResults[i]["profilePic"] != '' || dataResults[i]["profilePic"] != null){
                                         received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
                                 }
 

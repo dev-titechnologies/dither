@@ -227,11 +227,11 @@ module.exports = {
                                                                                               UserContacts.forEach(function(factor, index){
 
                                                                                                     tagNotifyArray.push(factor.userId);
-                                                                                                    /* User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+                                                                                                     User.findOne({id:factor.userId}).exec(function (err, notifySettings){
                                                                                                                 if(notifySettings.notifyContact==1){
                                                                                                                     contact_arr.push(factor.userId);
                                                                                                                 }
-                                                                                                            });*/
+                                                                                                            });
                                                                                                });
                                                                                                var values ={
                                                                                                         notificationTypeId  :   4,

@@ -104,11 +104,12 @@ module.exports = {
                                 console.log("profilePic  --------------------");
                                 console.log(dataResults[i]["profilePic"]);
                                 console.log("profilePic  --------------------");
-                                var received_userProfilePic    = "";
-                                if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
+                                if(dataResults[i]["profilePic"] == "" || dataResults[i]["profilePic"] == null){
                                         received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
+                                }else{
+                                        received_userProfilePic    = "";
                                 }
-                                if(dataResults[i]["profilePic"] != " "){
+                                if(dataResults[i]["profilePic"] == " "){
                                     console.log("profilePic SPACE SPACE SPACE --------------------");
                                 }
 

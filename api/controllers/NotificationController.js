@@ -94,15 +94,15 @@ module.exports = {
                 notifyCmntArray            =     [];
                 var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
                 var data_view_limit        =     req.options.global.data_view_limit;
-
+                var today 				   = 	 new Date().toISOString();
                 if(focus_Ntfn_id == 0 || !focus_Ntfn_id){
 
                     var query   =   " SELECT"+
                                         " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                         " U.name,U.profilePic as profile_image,"+
-                                        " C.image as dither_image"+
+                                        " C.image as dither_image,C.expiryDate"+
                                         " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-                                        " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                        " LEFT JOIN collage as C ON C.id = N.collage_id AND C.expiryDate = '"+today+"'"+
                                         " WHERE"+
                                         " N.ditherUserId="+user_id+
                                         " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
@@ -115,9 +115,9 @@ module.exports = {
                                     " ("+
                                     " SELECT"+
                                     " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
-                                    " U.name,U.profilePic as profile_image,C.image as dither_image"+
+                                    " U.name,U.profilePic as profile_image,C.image as dither_image,C.expiryDate"+
                                     " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-                                    " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                    " LEFT JOIN collage as C ON C.id = N.collage_id AND C.expiryDate = '"+today+"'"+
                                     " WHERE"+
                                     " N.ditherUserId="+user_id+
                                     " OR"+
@@ -154,14 +154,8 @@ module.exports = {
                                                     item.type               =   ntfnTypeFound[0].type;
                                                     var imageToResize       =   item.profile_image;
                                                     var clgImgToResize      =   item.dither_image;
-                                                    if(item.profile_image!='' || item.profile_image!=null)
-                                                    {
-														item.profile_image      =   profilePic_path + item.profile_image;
-													}
-													if(item.dither_image!='' || item.dither_image!=null)
-													{
-														item.dither_image       =   collageImg_path + item.dither_image;
-													}
+                                                    item.profile_image      =   profilePic_path + item.profile_image;
+                                                    item.dither_image       =   collageImg_path + item.dither_image;
                                                     if(item.description<=1){
                                                             notificationCommented = " commented on your Dither";
                                                             item.ntfn_body        = notificationCommented;
@@ -181,15 +175,24 @@ module.exports = {
                                                             notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
                                                     }
                                                      // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    if(imageToResize)
+                                                    if(imageToResize==""||imageToResize==null)
+                                                    {
+														item.profile_image="";
+													}
+													else
                                                     {
 														var imageSrc                    =     imageToResize;
 														var ext                         =     imageSrc.split('.');
 														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
 													}
-                                                     
-                                                    var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                       
+                                                     if(clgImgToResize==""||clgImgToResize==null)
+                                                     {
+														item.dither_image="";
+													 }
+													 else
+													 {
+														var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                      
 														fs.exists(clgImgSrc, function(exists){
 																if(exists){
 																	var ext                         =     clgImgSrc.split('/');
@@ -208,7 +211,7 @@ module.exports = {
 																	callback();
 																}
 														});
-                                                               
+                                                     }          
                                             }
                                         });
                                     }else if(item.notificationTypeId==2){
@@ -222,15 +225,7 @@ module.exports = {
                                                     item.type               =   ntfnTypeFound[0].type;
                                                     var imageToResize       =   item.profile_image;
                                                     var clgImgToResize      =   item.dither_image;
-                                                    if(item.profile_image!='' || item.profile_image!=null)
-                                                    {
-														item.profile_image      =   profilePic_path + item.profile_image;
-													}
-													if(item.dither_image!='' || item.dither_image!=null)
-													{
-														item.dither_image       =   collageImg_path + item.dither_image;
-													}
-                                                    //item.dither_image       =   collageImg_path + item.dither_image;
+                                                    item.dither_image       =   collageImg_path + item.dither_image;
                                                     if(item.description<=1){
                                                         notificationVoted   =   " voted on your Dither";
                                                         item.ntfn_body      =   notificationVoted;
@@ -252,12 +247,22 @@ module.exports = {
                                                                             });
                                                     }
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    if(imageToResize)
+                                                    if(imageToResize==""||imageToResize==null)
                                                     {
+														item.profile_image = "";
+													}
+													else
+													{
 														var imageSrc                    =     imageToResize;
 														var ext                         =     imageSrc.split('.');
 														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
 													}
+													if(clgImgToResize==""||clgImgToResize==null)
+                                                     {
+														item.dither_image="";
+													 }
+													 else
+													 {
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                             
 															fs.exists(clgImgSrc, function(exists) {
@@ -278,6 +283,7 @@ module.exports = {
 																		callback();
 																}
 															});
+													 }		
                                                 }
                                             });
                                     }else if(item.notificationTypeId==4){
@@ -293,47 +299,50 @@ module.exports = {
                                                         item.type           =   ntfnTypeFound[0].type;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
-                                                        if(item.profile_image!='' || item.profile_image!=null)
-														{
-															item.profile_image      =   profilePic_path + item.profile_image;
-														}
-														if(item.dither_image!='' || item.dither_image!=null)
-														{
-															item.dither_image       =   collageImg_path + item.dither_image;
-														}
-                                                        //item.dither_image   =   collageImg_path + item.dither_image;
+                                                        item.dither_image   =   collageImg_path + item.dither_image;
                                                         notificationSignup  =   ntfn_body;
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                        if(imageToResize)
+                                                        if(imageToResize==""||imageToResize==null)
                                                         {
-                                                        var imageSrc                    =     imageToResize;
-														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
+															item.profile_image  = "";
 														}
-                                                        var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                        else
+                                                        {
+															var imageSrc                    =     imageToResize;
+															var ext                         =     imageSrc.split('.');
+															item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
+														}
+														if(clgImgToResize==""||clgImgToResize==null)
+														 {
+															item.dither_image="";
+														 }
+														else
+														{
+															var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
-                                                            fs.exists(clgImgSrc, function(exists){
-                                                                if(exists){
-                                                                        var ext                         =     clgImgSrc.split('/');
-                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                        var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                        ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+																fs.exists(clgImgSrc, function(exists){
+																	if(exists){
+																			var ext                         =     clgImgSrc.split('/');
+																			ext                             =     ext[ext.length-1].split('.');
+																			var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																			ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
 
-                                                                            if(err)
-                                                                            {
-                                                                                console.log(err)
-                                                                                callback();
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                callback();
-                                                                            }
-                                                                        });
-                                                                }else{
-                                                                    callback();
-                                                                }
-                                                            });
+																				if(err)
+																				{
+																					console.log(err)
+																					callback();
+																				}
+																				else
+																				{
+																					item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+																					callback();
+																				}
+																			});
+																	}else{
+																		callback();
+																	}
+																});
+                                                        } 
                                                 }
                                             });
                                     }else if(item.notificationTypeId==1){
@@ -347,25 +356,26 @@ module.exports = {
                                                         item.ntfn_body      =   ntfn_body;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
-                                                        if(item.profile_image!='' || item.profile_image!=null)
-														{
-															item.profile_image      =   profilePic_path + item.profile_image;
-														}
-														if(item.dither_image!='' || item.dither_image!=null)
-														{
-															item.dither_image       =   collageImg_path + item.dither_image;
-														}
-                                                       // item.dither_image   =   collageImg_path + item.dither_image;
+                                                        item.dither_image   =   collageImg_path + item.dither_image;
                                                         notificationTagged  =  ntfn_body;
 
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                        if(imageToResize)
+                                                        if(imageToResize==""||imageToResize==null)
+                                                        {
+															item.profile_image  = "";
+														}
+                                                        else
                                                         {
 															var imageSrc                    =     imageToResize;
 															var ext                         =     imageSrc.split('.');
 															item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
 														}
-														
+														if(clgImgToResize==""||clgImgToResize==null)
+														 {
+															item.dither_image="";
+														 }
+														else
+														{
 															var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         
                                                                 fs.exists(clgImgSrc, function(exists) {
@@ -386,7 +396,7 @@ module.exports = {
                                                                         callback();
                                                                     }
                                                                 });
-                                                                
+                                                        }       
                                                     }
                                         });
                                     }else if(item.notificationTypeId==7){
@@ -403,25 +413,26 @@ module.exports = {
                                                     item.ntfn_body      =   ntfn_body;
                                                     var imageToResize   =   item.profile_image;
                                                     var clgImgToResize  =   item.dither_image;
-                                                    if(item.profile_image!='' || item.profile_image!=null)
-													{
-														item.profile_image      =   profilePic_path + item.profile_image;
-													}
-													if(item.dither_image!='' || item.dither_image!=null)
-													{
-														item.dither_image       =   collageImg_path + item.dither_image;
-													}
-                                                    //item.dither_image   =   collageImg_path + item.dither_image;
+                                                    item.dither_image   =   collageImg_path + item.dither_image;
                                                     notificationTagged  =  ntfn_body;
 
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    if(imageToResize)
+                                                    if(imageToResize==""||imageToResize==null)
+													{
+														item.profile_image  = "";
+													}
+                                                    else
                                                     {
 														var imageSrc                    =     imageToResize;
 														var ext                         =     imageSrc.split('.');
 														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
 													}	
-														var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+													if(clgImgToResize==""||clgImgToResize==null)
+													 {
+														item.dither_image="";
+													 }
+													 else{
+															var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         
                                                             fs.exists(clgImgSrc, function(exists) {
                                                                 if(exists){
@@ -441,9 +452,68 @@ module.exports = {
                                                                     callback();
                                                                 }
                                                             });
+                                                        }    
                                                 }
                                         });
-                                    }
+                                    }/*else if(item.notificationTypeId==8){
+										console.log("----------Dither Closing Notification---------------")
+										NotificationType.find({id:8 }).exec(function(err, ntfnTypeFound){
+                                                if(err){
+                                                    console.log("+++++++++++++++++++++++++NOTIFICATION ERR+++++++++++++++++++++++")
+                                                    console.log(err)
+                                                }else{
+                                                    console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
+                                                    var notification    = 	ntfnTypeFound[0].body;
+                                                    var ntfn_body       = 	util.format(notification);
+                                                    item.type           =   ntfnTypeFound[0].type;
+                                                    item.ntfn_body      =   ntfn_body;
+                                                    item.dither_image   =   collageImg_path + item.dither_image;
+                                                   /* var imageToResize   =   item.profile_image;
+                                                    var clgImgToResize  =   item.dither_image;
+                                                    item.dither_image   =   collageImg_path + item.dither_image;
+                                                    notificationTagged  =  ntfn_body;
+
+                                                    // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                    if(imageToResize==""||imageToResize==null)
+													{
+														item.profile_image  = "";
+													}
+                                                    else
+                                                    {
+														var imageSrc                    =     imageToResize;
+														var ext                         =     imageSrc.split('.');
+														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+													}	
+													if(clgImgToResize==""||clgImgToResize==null)
+													 {
+														item.dither_image="";
+													 }
+													 else{
+															var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                        
+                                                            fs.exists(clgImgSrc, function(exists) {
+                                                                if(exists){
+                                                                    var ext                         =     clgImgSrc.split('/');
+                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                    var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                    ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
+                                                                        if(err){
+                                                                            console.log(err)
+                                                                            callback();
+                                                                        }else{
+                                                                            item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                            callback();
+                                                                        }
+                                                                    });
+                                                                }else{
+                                                                    callback();
+                                                                }
+                                                            });
+                                                        }    
+                                                }
+                                        });
+										 
+									}*/
                                 }else{
                                     callback();
                                 }

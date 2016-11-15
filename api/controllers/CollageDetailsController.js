@@ -64,8 +64,10 @@ module.exports = {
                                                                     like_status     : like_status,
                                                                     id              : factor.imageId
                                                                     });
-                                                        if(factor.likeUserId != null || factor.likeUserId != "" ){
-                                                                if(factor.likePosition != "" || factor.likePosition != null){
+                                                        if(factor.likeUserId == null || factor.likeUserId == "" ){
+                                                        }else{
+                                                                if(factor.likePosition == "" || factor.likePosition == null){
+                                                                }else{
                                                                     if(factor.likeUserId == userId && factor.collageCreatorId != userId){
                                                                         like_position_Array.push(factor.likePosition);
                                                                     }
@@ -181,8 +183,11 @@ module.exports = {
                                                                                         }else{
                                                                                                 inviteeArray = [];
                                                                                         }
-                                                                                        var user_profile_image    =     "";
-                                                                                        if(results[0].profilePic != "" || results[0].profilePic != null){
+                                                                                        var user_profile_image;
+                                                                                        if(results[0].profilePic == "" || results[0].profilePic == null){
+                                                                                                user_profile_image    =     ""
+                                                                                        }else{
+
                                                                                                 var imageSrc                    =     results[0].profilePic;
                                                                                                 var ext                         =     imageSrc.split('.');
                                                                                                 user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];

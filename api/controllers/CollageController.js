@@ -107,7 +107,7 @@ module.exports = {
                                 //if(dataResults[i]["profilePic"] == "" || dataResults[i]["profilePic"] == null){
                                         //received_userProfilePic    = "";
                                 //}else{
-                                        received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
+                                        //received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
                                 //}
                                 //if(dataResults[i]["profilePic"] == " "){
                                     //console.log("profilePic SPACE SPACE SPACE --------------------");
@@ -768,7 +768,9 @@ module.exports = {
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
                                             }else{
                                                     //Unlinking collage image
-                                                    if(foundCollage.image != null || foundCollage.image != ""){
+                                                    if(foundCollage.image == null || foundCollage.image == ""){
+
+                                                    }else{
                                                             console.log("Unlinking collage image======");
                                                             var resize_collage_image  = foundCollage.image;
                                                             var ext                   = resize_collage_image.split('.');
@@ -783,7 +785,8 @@ module.exports = {
                                                             }else{
                                                                     //Unlinking collageDetail image
                                                                     foundCollageDetails.forEach(function(factor, index){
-                                                                            if(factor.image != null || factor.image != ""){
+                                                                            if(factor.image == null || factor.image == ""){
+                                                                            }else{
                                                                                 console.log("Unlinking collageDetail image======");
                                                                                 //fs.unlink(collage_unlink_path + factor.image);
                                                                             }

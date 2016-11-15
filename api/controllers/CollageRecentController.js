@@ -190,9 +190,11 @@ module.exports = {
                                                                                     recent_dithers          : recent_dithers,
                                                                                     });
                                                             }else{
-                                                                    var user_profile_image = "";
-                                                                    if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
-                                                                                user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                    var user_profile_image;
+                                                                    if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){
+                                                                            user_profile_image = "";
+                                                                    }else{
+                                                                            user_profile_image  = profilePic_path + foundUserDetails.profilePic;
                                                                     }
                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the recent Dithers',
                                                                                     username                : foundUserDetails.name,

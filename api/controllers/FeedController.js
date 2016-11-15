@@ -74,7 +74,7 @@ module.exports = {
                                             " SELECT tg.collageId AS id, clg.createdAt"+
                                             " FROM tags tg"+
                                             " INNER JOIN collage clg ON clg.id = tg.collageId"+
-                                            " WHERE tg.userId = "+userId+" AND clg.expiryDate > '"+today+"'";
+                                            " WHERE tg.userId = "+userId+" AND clg.expiryDate > '"+today+"'"+
                                             " )"+
                                             " ) AS temp1"+
                                             query_offset_data_view_limit+

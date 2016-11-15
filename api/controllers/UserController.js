@@ -110,14 +110,14 @@ module.exports = {
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
                                                                                             callback();
-                                                                                            /*ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
+                                                                                            ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
                                                                                                             console.log("Error in image resize !!!!");
                                                                                                     }else{
                                                                                                              callback();
                                                                                                     }
-                                                                                            });*/
+                                                                                            });
                                                                                     });
                                                                             },
                                                                             function(callback){

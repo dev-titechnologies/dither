@@ -51,6 +51,7 @@ module.exports = {
                 var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var received_userId             =     req.param("user_id");
+                var today                       =     new Date().toISOString();
                 var received_userName, received_userProfilePic;
                 var query;
                 console.log("received_userId ------------------------------");
@@ -101,21 +102,8 @@ module.exports = {
                                 }else{
                                             like_position = 0;
                                 }
-                                //console.log("profilePic  --------------------");
-                                //console.log(dataResults[i]["profilePic"]);
-                                //console.log("profilePic  --------------------");
-                                //if(dataResults[i]["profilePic"] == "" || dataResults[i]["profilePic"] == null){
-                                        //received_userProfilePic    = "";
-                                //}else{
-                                        //received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
-                                //}
-                                //if(dataResults[i]["profilePic"] == " "){
-                                    //console.log("profilePic SPACE SPACE SPACE --------------------");
-                                //}
 
                                 imgDetailsArrayOrder                    =       imgDetailsArray.sort(predicatBy("position"));
-                                //received_userName                       =       dataResults[i]["name"];
-                                //received_userProfilePic                 =       received_userProfilePic;
                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                 dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
                                 dataResultsObj.dither_like_position     =       like_position;
@@ -198,7 +186,7 @@ module.exports = {
                                             " WHERE tg.userId =  '"+userId+"'"+
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
-                                            " WHERE clg.userId = "+received_userId+
+                                            " WHERE clg.userId = "+received_userId+" AND clg.expiryDate > '"+today+"'"+
                                             " ORDER BY clg.createdAt DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp_union"+
@@ -225,7 +213,7 @@ module.exports = {
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
                                             " WHERE clg.totalVote != 0"+
-                                            " AND clg.userId = "+received_userId+
+                                            " AND clg.userId = "+received_userId+" AND clg.expiryDate > '"+today+"'"+
                                             " ORDER BY clg.totalVote DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp_union"+

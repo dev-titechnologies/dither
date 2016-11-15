@@ -101,9 +101,15 @@ module.exports = {
                                 }else{
                                             like_position = 0;
                                 }
+                                console.log("profilePic  --------------------");
+                                console.log(dataResults[i]["profilePic"]);
+                                console.log("profilePic  --------------------");
                                 var received_userProfilePic    = "";
                                 if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
                                         received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
+                                }
+                                if(dataResults[i]["profilePic"] != " "){
+                                    console.log("profilePic SPACE SPACE SPACE --------------------");
                                 }
 
                                 imgDetailsArrayOrder                    =       imgDetailsArray.sort(predicatBy("position"));
@@ -527,16 +533,16 @@ module.exports = {
                                             //tagNotifyArray.push({id:factor.user_id});
                                             tagNotifyArray.push(factor);
                                             if(factor!=0){
-												User.findOne({id:factor}).exec(function (err, notifySettings){
-													if(err){
-													   console.log(err)
-													}else{
-														if(notifySettings.notifyOpinion){
-															tagNtfyPush.push(factor);
-														}
-													}
-												});
-											}
+                                                User.findOne({id:factor}).exec(function (err, notifySettings){
+                                                    if(err){
+                                                       console.log(err)
+                                                    }else{
+                                                        if(notifySettings.notifyOpinion){
+                                                            tagNtfyPush.push(factor);
+                                                        }
+                                                    }
+                                                });
+                                            }
                                         });
                                         var values ={
                                                         notificationTypeId  :   1,

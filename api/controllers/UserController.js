@@ -109,14 +109,15 @@ module.exports = {
                                                                                             var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
-                                                                                            ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
+                                                                                            callback();
+                                                                                            /*ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
                                                                                                             console.log("Error in image resize !!!!");
                                                                                                     }else{
                                                                                                              callback();
                                                                                                     }
-                                                                                            });
+                                                                                            });*/
                                                                                     });
                                                                             },
                                                                             function(callback){
@@ -226,11 +227,11 @@ module.exports = {
                                                                                               UserContacts.forEach(function(factor, index){
 
                                                                                                     tagNotifyArray.push(factor.userId);
-                                                                                                     User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+                                                                                                    /* User.findOne({id:factor.userId}).exec(function (err, notifySettings){
                                                                                                                 if(notifySettings.notifyContact==1){
                                                                                                                     contact_arr.push(factor.userId);
                                                                                                                 }
-                                                                                                            });
+                                                                                                            });*/
                                                                                                });
                                                                                                var values ={
                                                                                                         notificationTypeId  :   4,

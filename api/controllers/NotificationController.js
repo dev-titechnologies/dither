@@ -138,6 +138,7 @@ module.exports = {
                         if(!results.length){
                               return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
                         }else{
+							console.log(results)
                             async.forEach(results, function (item, callback){
                                 if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4 || item.notificationTypeId==7){
                                   //----------Comment Notification---------------------------

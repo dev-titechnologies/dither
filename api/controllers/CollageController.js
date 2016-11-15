@@ -105,9 +105,9 @@ module.exports = {
                                 console.log(dataResults[i]["profilePic"]);
                                 console.log("profilePic  --------------------");
                                 if(dataResults[i]["profilePic"] == "" || dataResults[i]["profilePic"] == null){
-                                        received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
-                                }else{
                                         received_userProfilePic    = "";
+                                }else{
+                                        received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
                                 }
                                 if(dataResults[i]["profilePic"] == " "){
                                     console.log("profilePic SPACE SPACE SPACE --------------------");

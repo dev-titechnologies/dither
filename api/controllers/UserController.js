@@ -589,7 +589,7 @@ module.exports = {
                                                                    // fs.unlink(profileImage);
                                                         }
                                                         console.log("below unlink if");
-                                                        var data     = {profilePic: ""};
+                                                        var data     = {profilePic: null};
                                                         var criteria = {id: userId};
                                                         User.update(criteria,data).exec(function(err, datas) {
                                                             if(err){

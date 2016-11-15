@@ -154,8 +154,14 @@ module.exports = {
                                                     item.type               =   ntfnTypeFound[0].type;
                                                     var imageToResize       =   item.profile_image;
                                                     var clgImgToResize      =   item.dither_image;
-                                                    item.profile_image      =   profilePic_path + item.profile_image;
-                                                    item.dither_image       =   collageImg_path + item.dither_image;
+                                                    if(item.profile_image!='' || item.profile_image!=null)
+                                                    {
+														item.profile_image      =   profilePic_path + item.profile_image;
+													}
+													if(item.dither_image!='' || item.dither_image!=null)
+													{
+														item.dither_image       =   collageImg_path + item.dither_image;
+													}
                                                     if(item.description<=1){
                                                             notificationCommented = " commented on your Dither";
                                                             item.ntfn_body        = notificationCommented;
@@ -216,7 +222,15 @@ module.exports = {
                                                     item.type               =   ntfnTypeFound[0].type;
                                                     var imageToResize       =   item.profile_image;
                                                     var clgImgToResize      =   item.dither_image;
-                                                    item.dither_image       =   collageImg_path + item.dither_image;
+                                                    if(item.profile_image!='' || item.profile_image!=null)
+                                                    {
+														item.profile_image      =   profilePic_path + item.profile_image;
+													}
+													if(item.dither_image!='' || item.dither_image!=null)
+													{
+														item.dither_image       =   collageImg_path + item.dither_image;
+													}
+                                                    //item.dither_image       =   collageImg_path + item.dither_image;
                                                     if(item.description<=1){
                                                         notificationVoted   =   " voted on your Dither";
                                                         item.ntfn_body      =   notificationVoted;
@@ -279,7 +293,15 @@ module.exports = {
                                                         item.type           =   ntfnTypeFound[0].type;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
-                                                        item.dither_image   =   collageImg_path + item.dither_image;
+                                                        if(item.profile_image!='' || item.profile_image!=null)
+														{
+															item.profile_image      =   profilePic_path + item.profile_image;
+														}
+														if(item.dither_image!='' || item.dither_image!=null)
+														{
+															item.dither_image       =   collageImg_path + item.dither_image;
+														}
+                                                        //item.dither_image   =   collageImg_path + item.dither_image;
                                                         notificationSignup  =   ntfn_body;
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
                                                         if(imageToResize)
@@ -325,7 +347,15 @@ module.exports = {
                                                         item.ntfn_body      =   ntfn_body;
                                                         var imageToResize   =   item.profile_image;
                                                         var clgImgToResize  =   item.dither_image;
-                                                        item.dither_image   =   collageImg_path + item.dither_image;
+                                                        if(item.profile_image!='' || item.profile_image!=null)
+														{
+															item.profile_image      =   profilePic_path + item.profile_image;
+														}
+														if(item.dither_image!='' || item.dither_image!=null)
+														{
+															item.dither_image       =   collageImg_path + item.dither_image;
+														}
+                                                       // item.dither_image   =   collageImg_path + item.dither_image;
                                                         notificationTagged  =  ntfn_body;
 
                                                         // ------------------------------Generate ThumbnailImage-----------------------------------------------
@@ -373,7 +403,15 @@ module.exports = {
                                                     item.ntfn_body      =   ntfn_body;
                                                     var imageToResize   =   item.profile_image;
                                                     var clgImgToResize  =   item.dither_image;
-                                                    item.dither_image   =   collageImg_path + item.dither_image;
+                                                    if(item.profile_image!='' || item.profile_image!=null)
+													{
+														item.profile_image      =   profilePic_path + item.profile_image;
+													}
+													if(item.dither_image!='' || item.dither_image!=null)
+													{
+														item.dither_image       =   collageImg_path + item.dither_image;
+													}
+                                                    //item.dither_image   =   collageImg_path + item.dither_image;
                                                     notificationTagged  =  ntfn_body;
 
                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------

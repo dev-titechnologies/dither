@@ -51,6 +51,7 @@ module.exports = {
                 var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var received_userId             =     req.param("user_id");
+                var today                       =     new Date().toISOString();
                 var received_userName, received_userProfilePic;
                 var query;
                 console.log("received_userId ------------------------------");
@@ -101,20 +102,8 @@ module.exports = {
                                 }else{
                                             like_position = 0;
                                 }
-                                console.log("profilePic  --------------------");
-                                console.log(dataResults[i]["profilePic"]);
-                                console.log("profilePic  --------------------");
-                                var received_userProfilePic    = "";
-                                if(dataResults[i]["profilePic"] != "" || dataResults[i]["profilePic"] != null){
-                                        received_userProfilePic   = profilePic_path + dataResults[i]["profilePic"];
-                                }
-                                if(dataResults[i]["profilePic"] != " "){
-                                    console.log("profilePic SPACE SPACE SPACE --------------------");
-                                }
 
                                 imgDetailsArrayOrder                    =       imgDetailsArray.sort(predicatBy("position"));
-                                received_userName                       =       dataResults[i]["name"];
-                                received_userProfilePic                 =       received_userProfilePic;
                                 dataResultsObj.created_date_time        =       dataResults[i]["createdAt"];
                                 dataResultsObj.updated_date_time        =       dataResults[i]["updatedAt"];
                                 dataResultsObj.dither_like_position     =       like_position;
@@ -197,7 +186,7 @@ module.exports = {
                                             " WHERE tg.userId =  '"+userId+"'"+
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
-                                            " WHERE clg.userId = "+received_userId+
+                                            " WHERE clg.userId = "+received_userId+" AND clg.expiryDate > '"+today+"'"+
                                             " ORDER BY clg.createdAt DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp_union"+
@@ -224,7 +213,7 @@ module.exports = {
                                             " ) AS temp"+
                                             " INNER JOIN collage clg ON temp.id = clg.id"+
                                             " WHERE clg.totalVote != 0"+
-                                            " AND clg.userId = "+received_userId+
+                                            " AND clg.userId = "+received_userId+" AND clg.expiryDate > '"+today+"'"+
                                             " ORDER BY clg.totalVote DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp_union"+
@@ -291,8 +280,10 @@ module.exports = {
                                                                         }else{
                                                                                 var recent_DitherResults    =   commonKeyFunction(recentResults);
                                                                                 var popular_DitherResults   =   commonKeyFunction(popularResults);
-                                                                                var user_profile_image = "";
-                                                                                if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
+                                                                                var user_profile_image;
+                                                                                if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){
+                                                                                            user_profile_image = "";
+                                                                                }else{
                                                                                             user_profile_image  = profilePic_path + foundUserDetails.profilePic;
                                                                                 }
                                                                                 recent_dithers          =  recent_DitherResults.common_dithers.reverse();
@@ -765,7 +756,9 @@ module.exports = {
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
                                             }else{
                                                     //Unlinking collage image
-                                                    if(foundCollage.image != null || foundCollage.image != ""){
+                                                    if(foundCollage.image == null || foundCollage.image == ""){
+
+                                                    }else{
                                                             console.log("Unlinking collage image======");
                                                             var resize_collage_image  = foundCollage.image;
                                                             var ext                   = resize_collage_image.split('.');
@@ -780,7 +773,8 @@ module.exports = {
                                                             }else{
                                                                     //Unlinking collageDetail image
                                                                     foundCollageDetails.forEach(function(factor, index){
-                                                                            if(factor.image != null || factor.image != ""){
+                                                                            if(factor.image == null || factor.image == ""){
+                                                                            }else{
                                                                                 console.log("Unlinking collageDetail image======");
                                                                                 //fs.unlink(collage_unlink_path + factor.image);
                                                                             }

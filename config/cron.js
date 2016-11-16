@@ -1,9 +1,9 @@
 
  //schedule: '*/5 * * * *'
 module.exports.cron = {
-  closeDither: {
+  myFirstJob: {
      schedule: '*/1 * * * *',
-    notifyClosing: function () {
+    onTick: function () {
       console.log('You will see this every minute');
       var today = new Date().toISOString();
       console.log(today)
@@ -11,7 +11,7 @@ module.exports.cron = {
 		   if(err)
 		   {
 			   console.log(err)
-			   return err;
+			   //return err;
 			   //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Finding dither'});
 		   }
 		   else
@@ -32,7 +32,7 @@ module.exports.cron = {
 					  NotificationLog.create(values).exec(function(err, createdNotificationTags) {
 							   if(err){
 								   console.log(err)
-								   return err;
+								   //return err;
 								   //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error in NotificationLog Insertion'});
 							   }else{
 								        console.log("Log inserted")
@@ -41,7 +41,7 @@ module.exports.cron = {
 										//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
 											if(err){
 												  console.log(err);
-												  return err;
+												  //return err;
 												  //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error in token Finding'});
 												 // callback();
 											}else{
@@ -67,13 +67,13 @@ module.exports.cron = {
 																if(err){
 																	console.log("Error in Push Notification Sending")
 																	console.log(err)
-																	return err;
+																	//return err;
 																	//callback();
 																	//return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error in Push'});
 																}else{
 																	//callback();
 																	console.log("Notification sended")
-																	return ntfnSend;
+																	return {"msg":"haii"};
 																	//return res.json(200, {status: 1, status_type: 'Success' ,message: 'Psh Success'});
 																}
 														});

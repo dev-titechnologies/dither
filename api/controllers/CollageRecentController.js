@@ -34,6 +34,7 @@ module.exports = {
                     var data_view_limit             =     req.options.global.data_view_limit;
                     var received_userId             =     req.param("user_id");
                     var received_focus_limit_number =     req.param("focus_limit_number");
+                    var today                       =     new Date().toISOString();
                     var received_userName,
                         received_userProfilePic,
                         query;
@@ -78,6 +79,7 @@ module.exports = {
                                         " SELECT clg.id FROM collage clg INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " WHERE"+
                                         " tg.userId =  '"+userId+"' AND clg.userId =  '"+received_userId+"'"+
+                                        " AND clg.expiryDate > '"+today+"'"+
                                         " ORDER BY clg.createdAt  DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+

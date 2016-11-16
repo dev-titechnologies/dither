@@ -94,354 +94,346 @@ module.exports = {
                 notifyCmntArray            =     [];
                 var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
                 var data_view_limit        =     req.options.global.data_view_limit;
-                var today = new Date().toISOString();
-                if(!focus_Ntfn_id)
-                {
-					return res.json(200, {status: 2,status_type:"Failure", msg: 'Please Pass focus_Ntfn_id'});
-				}
-				else{
-						if(focus_Ntfn_id == 0){
+                var today                  =     new Date().toISOString();
+                if(!focus_Ntfn_id){
+                            return res.json(200, {status: 2,status_type:"Failure", msg: 'Please Pass focus_Ntfn_id'});
+                }else{
+                        if(focus_Ntfn_id == 0){
+                            var query   =   " SELECT"+
+                                                " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+                                                " U.name,U.profilePic as profile_image,"+
+                                                " C.image as dither_image,C.expiryDate"+
+                                                " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                                " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                                " WHERE"+
+                                                " N.ditherUserId="+user_id+
+                                                " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
+                                                " OR "+
+                                                " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit+"";
 
-							var query   =   " SELECT"+
-												" N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
-												" U.name,U.profilePic as profile_image,"+
-												" C.image as dither_image,C.expiryDate"+
-												" FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-												" LEFT JOIN collage as C ON C.id = N.collage_id"+
-												" WHERE"+
-												" N.ditherUserId="+user_id+
-												" AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
-												" OR "+
-												" FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit+"";
-
-						}else{
-							var query  =   " SELECT"+
-											" * FROM"+
-											" ("+
-											" SELECT"+
-											" N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
-											" U.name,U.profilePic as profile_image,C.image as dither_image,C.expiryDate"+
-											" FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
-											" LEFT JOIN collage as C ON C.id = N.collage_id"+
-											" WHERE"+
-											" N.ditherUserId="+user_id+
-											" OR"+
-											" FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
-											") as temp"+
-											" where temp.id <"+focus_Ntfn_id+
-											" LIMIT "+data_view_limit+"";
-
-							//--------------------------------------------------------------------
-						}
-
-
-                var query1   =   " SELECT"+
-								" N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
-								" U.name,U.profilePic as profile_image,"+
-								" C.image as dither_image,C.expiryDate"+
-								" FROM  notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
-								" INNER JOIN collage as C ON C.id = N.collage_id AND C.expiryDate='"+today+"'"+
-								" WHERE"+
-								" N.ditherUserId="+user_id+
-								" AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
-								" OR "+
-								" FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit+"";
-			    console.log("------testing----------")					
-				console.log(query1)				
-                console.log("=====================")
-                console.log(query)
-                NotificationLog.query(query, function(err,results){
-                    if(err){
-                        console.log(err)
-                    }else{
-                        console.log(results.length)
-                        if(!results.length){
-                              return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
                         }else{
-                            async.forEach(results, function (item, callback){
-                                if(item.notificationTypeId==1 || item.notificationTypeId==2 || item.notificationTypeId==3 || item.notificationTypeId==4 || item.notificationTypeId==7){
-                                  //----------Comment Notification---------------------------
-                                    if(item.notificationTypeId==3){
-										console.log("comment?????????")
-                                        NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
-                                            if(err){
-                                                console.log(err)
-                                                callback(true,ntfnTypeFound );
+                            var query  =   " SELECT"+
+                                            " * FROM"+
+                                            " ("+
+                                            " SELECT"+
+                                            " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
+                                            " U.name,U.profilePic as profile_image,C.image as dither_image,C.expiryDate"+
+                                            " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                            " LEFT JOIN collage as C ON C.id = N.collage_id"+
+                                            " WHERE"+
+                                            " N.ditherUserId="+user_id+
+                                            " OR"+
+                                            " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
+                                            ") as temp"+
+                                            " where temp.id <"+focus_Ntfn_id+
+                                            " LIMIT "+data_view_limit+"";
+
+                            //--------------------------------------------------------------------
+                        }
+                        console.log(query)
+                        NotificationLog.query(query, function(err,results){
+                            if(err){
+                                console.log(err)
+                            }else{
+                                console.log(results.length)
+                                if(!results.length){
+                                      return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
+                                }else{
+                                    async.forEach(results, function (item, callback){
+
+                                        if(item.notificationTypeId == 1 || item.notificationTypeId == 2 || item.notificationTypeId == 3 || item.notificationTypeId == 4 || item.notificationTypeId == 7){
+
+                                            /*if(item.expiryDate == null || item.expiryDate == ""){
                                             }else{
-                                                    notificationCommented   =   "No notification Found for comments";
-                                                    var notification        =   ntfnTypeFound[0].body;
-                                                    item.type               =   ntfnTypeFound[0].type;
-                                                    var imageToResize       =   item.profile_image;
-                                                    var clgImgToResize      =   item.dither_image;
-                                                    item.profile_image      =   profilePic_path + item.profile_image;
-                                                    item.dither_image       =   collageImg_path + item.dither_image;
-                                                    if(item.description<=1){
-                                                            notificationCommented = " commented on your Dither";
-                                                            item.ntfn_body        = notificationCommented;
-                                                    }else if(item.description==2)
-                                                    {
-															notificationCommented =  " and 1 other commented on your Dither";
-															item.ntfn_body        = notificationCommented;
-													}
-                                                    else
-                                                    {
-														
-                                                            item.description        =   item.description - 1;
-                                                            ntfn_body               =   util.format(notification,item.description);
-                                                            notificationCommented   =  ntfn_body;
-                                                            item.ntfn_body          =   ntfn_body;
-                                                            notifyCmntArray         = [];
-                                                            notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+                                                    console.log("item.expiryDate -----------+++++++++");
+                                                    console.log(item.expiryDate);
+                                                    var rr = item.expiryDate;
+                                                    console.log(rr.toISOString());
+                                                    console.log("today -----------+++++++++");
+                                                    console.log(today);
+                                                    if(rr.toISOString() > today){
+                                                          console.log("Not expired ====>>  ");
                                                     }
-                                                     // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    if(imageToResize)
-                                                    {
-														var imageSrc                    =     imageToResize;
-														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
-													}
-                                                     
-                                                    var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                       
-														fs.exists(clgImgSrc, function(exists){
-																if(exists){
-																	var ext                         =     clgImgSrc.split('/');
-																	ext                             =     ext[ext.length-1].split('.');
-																	var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																	ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-																		if(err){
-																			console.log(err)
-																			callback();
-																		}else{
-																			item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-																			callback();
-																		}
-																	});
-																}else{
-																	callback();
-																}
-														});
-                                                               
-                                            }
-                                        });
-                                    }else if(item.notificationTypeId==2){
-                                          console.log("vote?????????")
-                                          NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
-                                                if(err){
-                                                    console.log(err)
-                                                    callback(true,ntfnTypeFound );
-                                                }else{
-                                                    var notification        =   ntfnTypeFound[0].body;
-                                                    item.type               =   ntfnTypeFound[0].type;
-                                                    var imageToResize       =   item.profile_image;
-                                                    var clgImgToResize      =   item.dither_image;
-                                                    item.dither_image       =   collageImg_path + item.dither_image;
-                                                    if(item.description<=1){
-                                                        notificationVoted   =   " voted on your Dither";
-                                                        item.ntfn_body      =   notificationVoted;
-                                                    }else if(item.description==2)
-                                                    {
-															notificationCommented =  " and 1 other voted on your Dither";
-															item.ntfn_body        = notificationCommented;
-													}
-                                                    else{
-                                                        item.description    =   item.description - 1;
-                                                        ntfn_body           =   util.format(notification,item.description);
-                                                        notificationVoted   =   ntfn_body;
-                                                        item.ntfn_body      =   ntfn_body;
-                                                        notifyVoteArray     =   [];
-                                                        notifyVoteArray.push({
-                                                                            ditherId    :   item.collage_id,
-                                                                            userId      :   item.ditherUserId,
-                                                                            msg         :   notificationVoted
-                                                                            });
-                                                    }
-                                                    // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    if(imageToResize)
-                                                    {
-														var imageSrc                    =     imageToResize;
-														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1]; 
-													}
-                                                        var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                            
-															fs.exists(clgImgSrc, function(exists) {
-																if (exists) {
-																		var ext                         =     clgImgSrc.split('/');
-																		ext                             =     ext[ext.length-1].split('.');
-																		var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																		ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-																			if(err){
-																				console.log(err)
-																				callback();
-																			}else{
-																				item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-																				callback();
-																			}
-																		});
-																}else{
-																		callback();
-																}
-															});
-                                                }
-                                            });
-                                    }else if(item.notificationTypeId==4){
-                                            console.log("signuppp ")
-                                            NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
-                                                if(err){
-                                                        console.log(err)
-                                                        callback(true,ntfnTypeFound );
-                                                }else{
-                                                        var notification    =   ntfnTypeFound[0].body;
-                                                        ntfn_body           =   util.format(notification);
-                                                        item.ntfn_body      =   ntfn_body;
-                                                        item.type           =   ntfnTypeFound[0].type;
-                                                        var imageToResize   =   item.profile_image;
-                                                        var clgImgToResize  =   item.dither_image;
-                                                        item.dither_image   =   collageImg_path + item.dither_image;
-                                                        notificationSignup  =   ntfn_body;
-                                                        // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                        if(imageToResize)
-                                                        {
-                                                        var imageSrc                    =     imageToResize;
-														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
-														}
-                                                        var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-
-                                                            fs.exists(clgImgSrc, function(exists){
-                                                                if(exists){
-                                                                        var ext                         =     clgImgSrc.split('/');
-                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                        var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                        ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
-
-                                                                            if(err)
-                                                                            {
-                                                                                console.log(err)
-                                                                                callback();
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                callback();
-                                                                            }
-                                                                        });
-                                                                }else{
-                                                                    callback();
-                                                                }
-                                                            });
-                                                }
-                                            });
-                                    }else if(item.notificationTypeId==1){
-                                        NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
+                                            }*/
+                                            //----------Comment Notification---------------------------
+                                            if(item.notificationTypeId == 3){
+                                                console.log("comment?????????")
+                                                NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
                                                     if(err){
                                                         console.log(err)
+                                                        callback(true,ntfnTypeFound );
                                                     }else{
-                                                        var notification    = ntfnTypeFound[0].body;
-                                                        var ntfn_body       = util.format(notification);
-                                                        item.type           =   ntfnTypeFound[0].type;
-                                                        item.ntfn_body      =   ntfn_body;
-                                                        var imageToResize   =   item.profile_image;
-                                                        var clgImgToResize  =   item.dither_image;
-                                                        item.dither_image   =   collageImg_path + item.dither_image;
-                                                        notificationTagged  =  ntfn_body;
+                                                            notificationCommented   =   "No notification Found for comments";
+                                                            var notification        =   ntfnTypeFound[0].body;
+                                                            item.type               =   ntfnTypeFound[0].type;
+                                                            var imageToResize       =   item.profile_image;
+                                                            var clgImgToResize      =   item.dither_image;
+                                                            item.profile_image      =   profilePic_path + item.profile_image;
+                                                            item.dither_image       =   collageImg_path + item.dither_image;
+                                                            if(item.description<=1){
+                                                                    notificationCommented = " commented on your Dither";
+                                                                    item.ntfn_body        = notificationCommented;
+                                                            }else if(item.description==2)
+                                                            {
+                                                                    notificationCommented =  " and 1 other commented on your Dither";
+                                                                    item.ntfn_body        = notificationCommented;
+                                                            }
+                                                            else
+                                                            {
 
-                                                        // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                        if(imageToResize)
-                                                        {
-															var imageSrc                    =     imageToResize;
-															var ext                         =     imageSrc.split('.');
-															item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];  
-														}
-														
-															var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                        
-                                                                fs.exists(clgImgSrc, function(exists) {
-                                                                    if(exists){
-                                                                        var ext                         =     clgImgSrc.split('/');
-                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                        var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                        ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
-                                                                            if(err){
-                                                                                console.log(err) 
-                                                                                callback();
-                                                                            }else{
-                                                                                item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                callback();
-                                                                            }
-                                                                        });
-                                                                    }else{
-                                                                        callback();
-                                                                    }
-                                                                });
-                                                                
-                                                    }
-                                        });
-                                    }else if(item.notificationTypeId==7){
-                                        console.log("Notification Mention")
-                                        NotificationType.find({id:7 }).exec(function(err, ntfnTypeFound){
-                                                if(err){
-                                                    console.log("+++++++++++++++++++++++++NOTIFICATION ERR+++++++++++++++++++++++")
-                                                    console.log(err)
-                                                }else{
-                                                    console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
-                                                    var notification    = ntfnTypeFound[0].body;
-                                                    var ntfn_body       = util.format(notification);
-                                                    item.type           =   ntfnTypeFound[0].type;
-                                                    item.ntfn_body      =   ntfn_body;
-                                                    var imageToResize   =   item.profile_image;
-                                                    var clgImgToResize  =   item.dither_image;
-                                                    item.dither_image   =   collageImg_path + item.dither_image;
-                                                    notificationTagged  =  ntfn_body;
+                                                                    item.description        =   item.description - 1;
+                                                                    ntfn_body               =   util.format(notification,item.description);
+                                                                    notificationCommented   =  ntfn_body;
+                                                                    item.ntfn_body          =   ntfn_body;
+                                                                    notifyCmntArray         = [];
+                                                                    notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
+                                                            }
+                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                            if(imageToResize)
+                                                            {
+                                                                var imageSrc                    =     imageToResize;
+                                                                var ext                         =     imageSrc.split('.');
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                            }
 
-                                                    // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                    if(imageToResize)
-                                                    {
-														var imageSrc                    =     imageToResize;
-														var ext                         =     imageSrc.split('.');
-														item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-													}	
-														var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
-                                                        
-                                                            fs.exists(clgImgSrc, function(exists) {
-                                                                if(exists){
-                                                                    var ext                         =     clgImgSrc.split('/');
-                                                                    ext                             =     ext[ext.length-1].split('.');
-                                                                    var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                    ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
-                                                                        if(err){
-                                                                            console.log(err)
-                                                                            callback();
+                                                            var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+
+                                                                fs.exists(clgImgSrc, function(exists){
+                                                                        if(exists){
+                                                                            var ext                         =     clgImgSrc.split('/');
+                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                            var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                            ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+                                                                                if(err){
+                                                                                    console.log(err)
+                                                                                    callback();
+                                                                                }else{
+                                                                                    item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                    callback();
+                                                                                }
+                                                                            });
                                                                         }else{
-                                                                            item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                            callback();
+                                                                        }
+                                                                });
+
+                                                    }
+                                                });
+                                            }else if(item.notificationTypeId==2){
+                                                  console.log("vote?????????")
+                                                  NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
+                                                        if(err){
+                                                            console.log(err)
+                                                            callback(true,ntfnTypeFound );
+                                                        }else{
+                                                            var notification        =   ntfnTypeFound[0].body;
+                                                            item.type               =   ntfnTypeFound[0].type;
+                                                            var imageToResize       =   item.profile_image;
+                                                            var clgImgToResize      =   item.dither_image;
+                                                            item.dither_image       =   collageImg_path + item.dither_image;
+                                                            if(item.description<=1){
+                                                                notificationVoted   =   " voted on your Dither";
+                                                                item.ntfn_body      =   notificationVoted;
+                                                            }else if(item.description==2)
+                                                            {
+                                                                    notificationCommented =  " and 1 other voted on your Dither";
+                                                                    item.ntfn_body        = notificationCommented;
+                                                            }
+                                                            else{
+                                                                item.description    =   item.description - 1;
+                                                                ntfn_body           =   util.format(notification,item.description);
+                                                                notificationVoted   =   ntfn_body;
+                                                                item.ntfn_body      =   ntfn_body;
+                                                                notifyVoteArray     =   [];
+                                                                notifyVoteArray.push({
+                                                                                    ditherId    :   item.collage_id,
+                                                                                    userId      :   item.ditherUserId,
+                                                                                    msg         :   notificationVoted
+                                                                                    });
+                                                            }
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                            if(imageToResize)
+                                                            {
+                                                                var imageSrc                    =     imageToResize;
+                                                                var ext                         =     imageSrc.split('.');
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                            }
+                                                                var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+
+                                                                    fs.exists(clgImgSrc, function(exists) {
+                                                                        if (exists) {
+                                                                                var ext                         =     clgImgSrc.split('/');
+                                                                                ext                             =     ext[ext.length-1].split('.');
+                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                                ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+                                                                                    if(err){
+                                                                                        console.log(err)
+                                                                                        callback();
+                                                                                    }else{
+                                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                        callback();
+                                                                                    }
+                                                                                });
+                                                                        }else{
+                                                                                callback();
+                                                                        }
+                                                                    });
+                                                        }
+                                                    });
+                                            }else if(item.notificationTypeId==4){
+                                                    console.log("signuppp ")
+                                                    NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
+                                                        if(err){
+                                                                console.log(err)
+                                                                callback(true,ntfnTypeFound );
+                                                        }else{
+                                                                var notification    =   ntfnTypeFound[0].body;
+                                                                ntfn_body           =   util.format(notification);
+                                                                item.ntfn_body      =   ntfn_body;
+                                                                item.type           =   ntfnTypeFound[0].type;
+                                                                var imageToResize   =   item.profile_image;
+                                                                var clgImgToResize  =   item.dither_image;
+                                                                item.dither_image   =   collageImg_path + item.dither_image;
+                                                                notificationSignup  =   ntfn_body;
+                                                                // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                                if(imageToResize)
+                                                                {
+                                                                var imageSrc                    =     imageToResize;
+                                                                var ext                         =     imageSrc.split('.');
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                }
+                                                                var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+
+                                                                    fs.exists(clgImgSrc, function(exists){
+                                                                        if(exists){
+                                                                                var ext                         =     clgImgSrc.split('/');
+                                                                                ext                             =     ext[ext.length-1].split('.');
+                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                                ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+
+                                                                                    if(err)
+                                                                                    {
+                                                                                        console.log(err)
+                                                                                        callback();
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                        callback();
+                                                                                    }
+                                                                                });
+                                                                        }else{
                                                                             callback();
                                                                         }
                                                                     });
-                                                                }else{
-                                                                    callback();
-                                                                }
-                                                            });
-                                                }
-                                        });
-                                    }
-                                }else{
-                                    callback();
+                                                        }
+                                                    });
+                                            }else if(item.notificationTypeId == 1){
+                                                NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
+                                                    if(err){
+                                                        console.log(err)
+                                                    }else{
+                                                        var notification        =   ntfnTypeFound[0].body;
+                                                        var ntfn_body           =   util.format(notification);
+                                                        item.type               =   ntfnTypeFound[0].type;
+                                                        item.ntfn_body          =   ntfn_body;
+                                                        var imageToResize       =   item.profile_image;
+                                                        var clgImgToResize      =   item.dither_image;
+                                                        item.dither_image       =   collageImg_path + item.dither_image;
+                                                        notificationTagged      =   ntfn_body;
+
+                                                        // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                        if(imageToResize){
+                                                            var imageSrc                    =     imageToResize;
+                                                            var ext                         =     imageSrc.split('.');
+                                                            item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                        }
+                                                        var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                        fs.exists(clgImgSrc, function(exists) {
+                                                            if(exists){
+                                                                var ext                         =     clgImgSrc.split('/');
+                                                                ext                             =     ext[ext.length-1].split('.');
+                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
+                                                                    if(err){
+                                                                        console.log(err)
+                                                                        callback();
+                                                                    }else{
+                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                        callback();
+                                                                    }
+                                                                });
+                                                            }else{
+                                                                callback();
+                                                            }
+                                                        });
+
+                                                    }
+                                                });
+                                            }else if(item.notificationTypeId==7){
+                                                console.log("Notification Mention")
+                                                NotificationType.find({id:7 }).exec(function(err, ntfnTypeFound){
+                                                        if(err){
+                                                            console.log("+++++++++++++++++++++++++NOTIFICATION ERR+++++++++++++++++++++++")
+                                                            console.log(err)
+                                                        }else{
+                                                            console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
+                                                            var notification    = ntfnTypeFound[0].body;
+                                                            var ntfn_body       = util.format(notification);
+                                                            item.type           =   ntfnTypeFound[0].type;
+                                                            item.ntfn_body      =   ntfn_body;
+                                                            var imageToResize   =   item.profile_image;
+                                                            var clgImgToResize  =   item.dither_image;
+                                                            item.dither_image   =   collageImg_path + item.dither_image;
+                                                            notificationTagged  =  ntfn_body;
+
+                                                            // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                            if(imageToResize)
+                                                            {
+                                                                var imageSrc                    =     imageToResize;
+                                                                var ext                         =     imageSrc.split('.');
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                            }
+                                                                var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+
+                                                                    fs.exists(clgImgSrc, function(exists) {
+                                                                        if(exists){
+                                                                            var ext                         =     clgImgSrc.split('/');
+                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                            var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                            ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
+                                                                                if(err){
+                                                                                    console.log(err)
+                                                                                    callback();
+                                                                                }else{
+                                                                                    item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                    callback();
+                                                                                }
+                                                                            });
+                                                                        }else{
+                                                                            callback();
+                                                                        }
+                                                                    });
+                                                        }
+                                                });
+                                            }
+                                        }else{
+                                            callback();
+                                        }
+                                    }, function(err) {
+                                          if(err)
+                                          {
+                                            return res.json(200, {status: 2,status_type:"Failure", msg: 'Error occured in Notification Fetching'});
+                                          }
+                                          else
+                                          {
+                                            return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
+                                          }
+                                    });
                                 }
-                            }, function(err) {
-								  if(err)
-								  {
-									return res.json(200, {status: 2,status_type:"Failure", msg: 'Error occured in Notification Fetching'});
-								  }
-								  else
-								  {
-                                    return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
-								  }
-                            });
-                        }
-                    }
-                });
-               } 
+                            }
+                        });
+                }
                 //}
         },
 

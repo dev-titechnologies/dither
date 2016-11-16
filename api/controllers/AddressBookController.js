@@ -27,6 +27,12 @@ module.exports = {
                 var fbUser                      =     req.param('fb_array');
                 var data_check1                 =     "";
 
+                console.log("contact_array ---------------------->>>>>>>>>>>>>>>>>>>");
+                console.log(req.param('contact_array'));
+
+                console.log("fb_array ---------------------->>>>>>>>>>>>>>>>>>>");
+                console.log(req.param('fb_array'));
+
                 async.series([
                             function(callback) {
                                             console.log("----------------SERIES MAIN - I ----------------------");
@@ -298,10 +304,14 @@ module.exports = {
                                         });
                             },
                     ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                        if (err) {
+                                        if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                         }else{
+                                            console.log("=====================ditherUserInAddressBook===============");
+                                            console.log(ditherUserInAddressBook);
+                                            console.log("=====================ditherUserInFbFriends===============");
+                                            console.log(ditherUserInFbFriends);
                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully selected phone contact list from addressBook and fbcontacts from fbFriends',
                                                                   ditherPhoneContact: ditherUserInAddressBook,
                                                                   ditherFBuser: ditherUserInFbFriends

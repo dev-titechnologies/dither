@@ -109,11 +109,12 @@ module.exports = {
                                                                                             var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
-                                                                                            callback();
+                                                                                            
                                                                                             ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
                                                                                                             console.log("Error in image resize !!!!");
+                                                                                                            callback();
                                                                                                     }else{
                                                                                                              callback();
                                                                                                     }

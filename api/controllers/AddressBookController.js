@@ -129,14 +129,16 @@ module.exports = {
                             },
                             function(callback) {
                                             console.log("----------------SERIES MAIN - II ----------------------");
-                                            if(fbUser.length){
+                                            //if(fbUser.length){
                                                     fbUser.forEach(function(factor, index){
-                                                            var contact_name = factor.fb_name;
-                                                            //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
-                                                            var formatted_name = contact_name.replace(/'/g, "\\'");
-                                                            // fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
-                                                            //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
-                                                            fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.fb_userid+"', now(), now())");
+                                                            if(index){
+                                                                    var contact_name = factor.fb_name;
+                                                                    //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
+                                                                    var formatted_name = contact_name.replace(/'/g, "\\'");
+                                                                    // fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
+                                                                    //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
+                                                                    fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.fb_userid+"', now(), now())");
+                                                            }
                                                     });
 
                                                     console.log("-------------------------- SERIES-4 --------------------------");
@@ -150,59 +152,63 @@ module.exports = {
                                                             }else{
                                                                 console.log("----------------SERIES 4 Success ----------------------");
                                                                 //callback();
-                                                                console.log("-------------------------- SERIES-5 --------------------------");
-                                                                var query = "INSERT INTO fbFriends"+
-                                                                            " (userId,ditherUserName, fbId, createdAt, updatedAt)"+
-                                                                            " VALUES"+fbUserArray;
-                                                                FbFriends.query(query,function(err, createdFbFriends){
-                                                                //FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
-                                                                //FbFriends.create(query, function(err, createdFbFriends) {
-                                                                        if(err){
-                                                                            console.log("insertion fbfriends error"+err);
-                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                            callback();
-                                                                            //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
-                                                                        }else{
-                                                                                //console.log(createdFbFriends);
-                                                                                console.log("----------------SERIES 5 Success ----------------------");
-                                                                                //callback();
-                                                                                console.log("-------------------------- SERIES-6 --------------------------");
-                                                                                async.forEach(fbUser, function (factor, callback){
-                                                                                //fbUser.forEach(function(factor, index){
-                                                                                    User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
-                                                                                        //console.log()
-                                                                                        if(err){
-                                                                                            console.log("insertion fbfriends error"+err);
-                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                                            callback();
-                                                                                            //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
-                                                                                        }else{
-                                                                                                if(selectFBContacts.length){
-                                                                                                    var data     = {ditherUserId:selectFBContacts[0].id};
-                                                                                                    var criteria = {fbId:factor.fb_userid};
-                                                                                                    //console.log("fbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-                                                                                                    //console.log(data)
-                                                                                                    FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
-                                                                                                        if(err){
-                                                                                                            console.log(err);
-                                                                                                            callback();
-                                                                                                        }else{
-                                                                                                            //console.log("update recordsssss in fbbbbb");
-                                                                                                            //console.log("----------------SERIES 6 Success ----------------------");
-                                                                                                        }
-                                                                                                    });
-                                                                                                }
-                                                                                        }
-                                                                                    });
-                                                                                },callback());
-                                                                                //callback();
-                                                                        }
-                                                                });
+                                                                if(fbUserArray.length){
+                                                                    console.log("-------------------------- SERIES-5 --------------------------");
+                                                                    var query = "INSERT INTO fbFriends"+
+                                                                                " (userId,ditherUserName, fbId, createdAt, updatedAt)"+
+                                                                                " VALUES"+fbUserArray;
+                                                                    FbFriends.query(query,function(err, createdFbFriends){
+                                                                    //FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
+                                                                    //FbFriends.create(query, function(err, createdFbFriends) {
+                                                                            if(err){
+                                                                                console.log("insertion fbfriends error"+err);
+                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                callback();
+                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
+                                                                            }else{
+                                                                                    //console.log(createdFbFriends);
+                                                                                    console.log("----------------SERIES 5 Success ----------------------");
+                                                                                    //callback();
+                                                                                    console.log("-------------------------- SERIES-6 --------------------------");
+                                                                                    async.forEach(fbUser, function (factor, callback){
+                                                                                    //fbUser.forEach(function(factor, index){
+                                                                                        User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
+                                                                                            //console.log()
+                                                                                            if(err){
+                                                                                                console.log("insertion fbfriends error"+err);
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                callback();
+                                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
+                                                                                            }else{
+                                                                                                    if(selectFBContacts.length){
+                                                                                                        var data     = {ditherUserId:selectFBContacts[0].id};
+                                                                                                        var criteria = {fbId:factor.fb_userid};
+                                                                                                        //console.log("fbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+                                                                                                        //console.log(data)
+                                                                                                        FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
+                                                                                                            if(err){
+                                                                                                                console.log(err);
+                                                                                                                callback();
+                                                                                                            }else{
+                                                                                                                //console.log("update recordsssss in fbbbbb");
+                                                                                                                //console.log("----------------SERIES 6 Success ----------------------");
+                                                                                                            }
+                                                                                                        });
+                                                                                                    }
+                                                                                            }
+                                                                                        });
+                                                                                    },callback());
+                                                                                    //callback();
+                                                                            }
+                                                                    });
+                                                                }else{
+                                                                        callback();
+                                                                }
                                                             }
                                                     });
-                                            }else{
-                                                callback();
-                                            }
+                                            //}else{
+                                                //callback();
+                                            //}
                             },
                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                         if (err) {

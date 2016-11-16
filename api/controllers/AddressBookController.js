@@ -36,8 +36,9 @@ module.exports = {
                 async.series([
                             function(callback) {
                                             console.log("----------------SERIES MAIN - I ----------------------");
-                                            if(phonecontacts.length){
+                                            //if(phonecontacts.length){
                                                     phonecontacts.forEach(function(factor, index){
+                                                        if(index){
                                                             var contact_name = factor.name;
                                                             //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
                                                             var formatted_name = contact_name.replace(/'/g, "\\'");
@@ -48,6 +49,7 @@ module.exports = {
                                                             phoneContactsArray.push("("+userId+",'"+formatted_name+"', '"+factor.number+"', now(), now())");
                                                             //phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
                                                             //console.log("("+userId+",'"+formatted_name+"', "+factor.number+", now(), now())");
+                                                        }
                                                     });
                                                     console.log("----------------SERIES 1 ----------------------")
                                                     AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
@@ -60,72 +62,76 @@ module.exports = {
                                                             }else{
                                                                 console.log("----------------SERIES 1 Succes----------------------")
                                                                 //callback();
-                                                                console.log("------------------- SERIES 2 ----------------------------------");
-                                                                var query = "INSERT INTO addressBook"+
-                                                                            " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
-                                                                            " VALUES"+phoneContactsArray;
-                                                                //console.log(query)
-                                                                //var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
-                                                                AddressBook.query(query,function(err, createdAddressBook){
-                                                                //AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
-                                                                        if(err){
-                                                                            console.log(err);
-                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                            callback();
-                                                                            //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
-                                                                        }else{
-                                                                            data_check1 = createdAddressBook;
-                                                                            console.log("----------------SERIES 2 Success ----------------------");
-                                                                            //callback();
-                                                                            console.log("-------------------------------- SERIES-3 -----------------------------")
-                                                                            // console.log(phoneContactsArray1)
-                                                                            console.log("Address book updation")
-                                                                            //console.log(phonecontacts.length)
-                                                                            async.forEach(phonecontacts, function (factor, callback){
-                                                                                //phonecontacts.forEach(function(factor, index){
-                                                                                //var query   = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
-                                                                                //User.query(query, function(err, selectDContacts) {
-                                                                                //console.log(factor.number)
-                                                                                if(factor.number){
-                                                                                    var query = "SELECT *"+
-                                                                                                " FROM user"+
-                                                                                                " WHERE phoneNumber =  '"+factor.number+"'"+
-                                                                                                " AND phoneNumber !=  '"+userPhoneNumber+"'";
-                                                                                    //User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
-                                                                                    User.query(query, function(err, selectDContacts) {
-                                                                                            if(err){
-                                                                                                    console.log(err)
-                                                                                                    callback();
-                                                                                            }else{
-                                                                                                    if(selectDContacts.length){
-                                                                                                            //updation
-                                                                                                            var data     = {ditherUserId:selectDContacts[0].id};
-                                                                                                            var criteria = {ditherUserPhoneNumber: factor.number};
-                                                                                                            AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
-                                                                                                                    if(err){
-                                                                                                                            console.log("phone")
-                                                                                                                            console.log(err)
-                                                                                                                    }else{
-                                                                                                                            console.log("update recordsssss in contacts")
-                                                                                                                            //console.log(updatedRecords)
-                                                                                                                            //callback();
-                                                                                                                            //console.log("----------------SERIES 3 Success ----------------------");
-                                                                                                                    }
-                                                                                                            });
-                                                                                                            //invitation table Insertion
-                                                                                                    }
-                                                                                            }
-                                                                                    });
-                                                                                }
-                                                                            }, callback());
-                                                                            //callback();
-                                                                        }
-                                                                });
+                                                                if(phoneContactsArray.length){
+                                                                    console.log("------------------- SERIES 2 ----------------------------------");
+                                                                    var query = "INSERT INTO addressBook"+
+                                                                                " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
+                                                                                " VALUES"+phoneContactsArray;
+                                                                    //console.log(query)
+                                                                    //var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
+                                                                    AddressBook.query(query,function(err, createdAddressBook){
+                                                                    //AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
+                                                                            if(err){
+                                                                                console.log(err);
+                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                callback();
+                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
+                                                                            }else{
+                                                                                data_check1 = createdAddressBook;
+                                                                                console.log("----------------SERIES 2 Success ----------------------");
+                                                                                //callback();
+                                                                                console.log("-------------------------------- SERIES-3 -----------------------------")
+                                                                                // console.log(phoneContactsArray1)
+                                                                                console.log("Address book updation")
+                                                                                //console.log(phonecontacts.length)
+                                                                                async.forEach(phonecontacts, function (factor, callback){
+                                                                                    //phonecontacts.forEach(function(factor, index){
+                                                                                    //var query   = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
+                                                                                    //User.query(query, function(err, selectDContacts) {
+                                                                                    //console.log(factor.number)
+                                                                                    if(factor.number){
+                                                                                        var query = "SELECT *"+
+                                                                                                    " FROM user"+
+                                                                                                    " WHERE phoneNumber =  '"+factor.number+"'"+
+                                                                                                    " AND phoneNumber !=  '"+userPhoneNumber+"'";
+                                                                                        //User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+                                                                                        User.query(query, function(err, selectDContacts) {
+                                                                                                if(err){
+                                                                                                        console.log(err)
+                                                                                                        callback();
+                                                                                                }else{
+                                                                                                        if(selectDContacts.length){
+                                                                                                                //updation
+                                                                                                                var data     = {ditherUserId:selectDContacts[0].id};
+                                                                                                                var criteria = {ditherUserPhoneNumber: factor.number};
+                                                                                                                AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+                                                                                                                        if(err){
+                                                                                                                                console.log("phone")
+                                                                                                                                console.log(err)
+                                                                                                                        }else{
+                                                                                                                                console.log("update recordsssss in contacts")
+                                                                                                                                //console.log(updatedRecords)
+                                                                                                                                //callback();
+                                                                                                                                //console.log("----------------SERIES 3 Success ----------------------");
+                                                                                                                        }
+                                                                                                                });
+                                                                                                                //invitation table Insertion
+                                                                                                        }
+                                                                                                }
+                                                                                        });
+                                                                                    }
+                                                                                }, callback());
+                                                                                //callback();
+                                                                            }
+                                                                    });
+                                                                }else{
+                                                                    callback();
+                                                                }
                                                             }
                                                     });
-                                            }else{
-                                                callback();
-                                            }
+                                            //}else{
+                                                //callback();
+                                            //}
                             },
                             function(callback) {
                                             console.log("----------------SERIES MAIN - II ----------------------");

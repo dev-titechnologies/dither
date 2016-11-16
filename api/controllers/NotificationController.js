@@ -416,7 +416,46 @@ module.exports = {
                                                                     });
                                                         }
                                                 });
-                                            }
+                                            }else if(item.notificationTypeId==8){
+												console.log("Notification for Dither Closing")
+												NotificationType.find({id:8 }).exec(function(err, ntfnTypeFound){
+													if(err)
+													{
+														console.log(err)
+													} 
+													else
+													{
+														console.log(ntfnTypeFound)
+														console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
+														var notification    =   ntfnTypeFound[0].body;
+														var ntfn_body       =   util.format(notification);
+														item.type           =   ntfnTypeFound[0].type;
+														item.ntfn_body      =   ntfn_body;
+														var clgImgToResize  =   item.dither_image;
+														item.dither_image   =   collageImg_path + item.dither_image;
+														notificationTagged  =   ntfn_body;
+														var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
+														fs.exists(clgImgSrc, function(exists) {
+															if(exists){
+																var ext                         =     clgImgSrc.split('/');
+																ext                             =     ext[ext.length-1].split('.');
+																var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+																ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
+																	if(err){
+																		console.log(err)
+																		callback();
+																	}else{
+																		item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+																		callback();
+																	}
+																});
+															}else{
+																callback();
+															}
+														});
+													}
+												});
+											}	
                                         }else{
                                             callback();
                                         }

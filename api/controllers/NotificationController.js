@@ -94,13 +94,17 @@ module.exports = {
                 notifyCmntArray            =     [];
                 var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
                 var data_view_limit        =     req.options.global.data_view_limit;
-
-                if(focus_Ntfn_id == 0 || !focus_Ntfn_id){
+                
+                if(!focus_Ntfn_id)
+                {
+					return res.json(200, {status: 2,status_type:"Failure", msg: 'Please Pass focus_Ntfn_id',notification_data:results});
+				}
+                else if(focus_Ntfn_id == 0){
 
                     var query   =   " SELECT"+
                                         " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                         " U.name,U.profilePic as profile_image,"+
-                                        " C.image as dither_image"+
+                                        " C.image as dither_image,C.expiryDate"+
                                         " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
                                         " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                         " WHERE"+
@@ -115,7 +119,7 @@ module.exports = {
                                     " ("+
                                     " SELECT"+
                                     " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
-                                    " U.name,U.profilePic as profile_image,C.image as dither_image"+
+                                    " U.name,U.profilePic as profile_image,C.image as dither_image,C.expiryDate"+
                                     " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
                                     " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                     " WHERE"+
@@ -409,7 +413,14 @@ module.exports = {
                                     callback();
                                 }
                             }, function(err) {
+								  if(err)
+								  {
+									return res.json(200, {status: 2,status_type:"Failure", msg: 'Error occured in Notification Fetching'});
+								  }
+								  else
+								  {
                                     return res.json(200, {status: 1,status_type:"Success", msg: 'success',notification_data:results});
+								  }
                             });
                         }
                     }

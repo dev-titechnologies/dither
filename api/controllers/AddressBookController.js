@@ -249,11 +249,12 @@ module.exports = {
                     async.parallel([
                             function(callback) {
                                         //console.log("-------------------------- SERIES-7 --------------------------");
-                                        query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
+                                        query = "SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
                                                 " FROM addressBook adb"+
                                                 " INNER JOIN user usr ON usr.id = adb.ditherUserId"+
                                                 " WHERE adb.userId = "+userId+
                                                 " AND adb.ditherUserId IS NOT NULL"+
+                                                " GROUP BY usr.id"+
                                                 " ORDER BY usr.name";
                                         console.log(query);
                                         AddressBook.query(query, function(err, selectedDitherAdb) {
@@ -282,11 +283,12 @@ module.exports = {
                             function(callback) {
 
                                         console.log("-------------------------- SERIES -><- 8 --------------------------");
-                                        query = " SELECT DISTINCT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
+                                        query = " SELECT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
                                                     " FROM fbFriends fbf"+
                                                     " INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
                                                     " WHERE fbf.userId = "+userId+
                                                     " AND fbf.ditherUserId IS NOT NULL"+
+                                                    " GROUP BY usr.id"+
                                                     " ORDER BY usr.name";
                                         console.log(query);
                                         FbFriends.query(query, function(err, selectedDitherFbf) {

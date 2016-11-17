@@ -27,11 +27,18 @@ module.exports = {
                 var fbUser                      =     req.param('fb_array');
                 var data_check1                 =     "";
 
+                console.log("contact_array ---------------------->>>>>>>>>>>>>>>>>>>");
+                console.log(req.param('contact_array'));
+
+                console.log("fb_array ---------------------->>>>>>>>>>>>>>>>>>>");
+                console.log(req.param('fb_array'));
+
                 async.series([
                             function(callback) {
                                             console.log("----------------SERIES MAIN - I ----------------------");
-                                            if(phonecontacts.length){
+                                            //if(phonecontacts.length){
                                                     phonecontacts.forEach(function(factor, index){
+                                                        if(index){
                                                             var contact_name = factor.name;
                                                             //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
                                                             var formatted_name = contact_name.replace(/'/g, "\\'");
@@ -42,6 +49,7 @@ module.exports = {
                                                             phoneContactsArray.push("("+userId+",'"+formatted_name+"', '"+factor.number+"', now(), now())");
                                                             //phoneContactsArray1.push("INSERT INTO addressBook (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt) VALUES ("+userId+",'"+factor.name+"', "+factor.number+", now(), now())");
                                                             //console.log("("+userId+",'"+formatted_name+"', "+factor.number+", now(), now())");
+                                                        }
                                                     });
                                                     console.log("----------------SERIES 1 ----------------------")
                                                     AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
@@ -54,83 +62,89 @@ module.exports = {
                                                             }else{
                                                                 console.log("----------------SERIES 1 Succes----------------------")
                                                                 //callback();
-                                                                console.log("------------------- SERIES 2 ----------------------------------");
-                                                                var query = "INSERT INTO addressBook"+
-                                                                            " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
-                                                                            " VALUES"+phoneContactsArray;
-                                                                //console.log(query)
-                                                                //var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
-                                                                AddressBook.query(query,function(err, createdAddressBook){
-                                                                //AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
-                                                                        if(err){
-                                                                            console.log(err);
-                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                            callback();
-                                                                            //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
-                                                                        }else{
-                                                                            data_check1 = createdAddressBook;
-                                                                            console.log("----------------SERIES 2 Success ----------------------");
-                                                                            //callback();
-                                                                            console.log("-------------------------------- SERIES-3 -----------------------------")
-                                                                            // console.log(phoneContactsArray1)
-                                                                            console.log("Address book updation")
-                                                                            //console.log(phonecontacts.length)
-                                                                            async.forEach(phonecontacts, function (factor, callback){
-                                                                                //phonecontacts.forEach(function(factor, index){
-                                                                                //var query   = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
-                                                                                //User.query(query, function(err, selectDContacts) {
-                                                                                //console.log(factor.number)
-                                                                                if(factor.number){
-                                                                                    var query = "SELECT *"+
-                                                                                                " FROM user"+
-                                                                                                " WHERE phoneNumber =  '"+factor.number+"'"+
-                                                                                                " AND phoneNumber !=  '"+userPhoneNumber+"'";
-                                                                                    //User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
-                                                                                    User.query(query, function(err, selectDContacts) {
-                                                                                            if(err){
-                                                                                                    console.log(err)
-                                                                                                    callback();
-                                                                                            }else{
-                                                                                                    if(selectDContacts.length){
-                                                                                                            //updation
-                                                                                                            var data     = {ditherUserId:selectDContacts[0].id};
-                                                                                                            var criteria = {ditherUserPhoneNumber: factor.number};
-                                                                                                            AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
-                                                                                                                    if(err){
-                                                                                                                            console.log("phone")
-                                                                                                                            console.log(err)
-                                                                                                                    }else{
-                                                                                                                            console.log("update recordsssss in contacts")
-                                                                                                                            //console.log(updatedRecords)
-                                                                                                                            //callback();
-                                                                                                                            //console.log("----------------SERIES 3 Success ----------------------");
-                                                                                                                    }
-                                                                                                            });
-                                                                                                            //invitation table Insertion
-                                                                                                    }
-                                                                                            }
-                                                                                    });
-                                                                                }
-                                                                            }, callback());
-                                                                            //callback();
-                                                                        }
-                                                                });
+                                                                if(phoneContactsArray.length){
+                                                                    console.log("------------------- SERIES 2 ----------------------------------");
+                                                                    var query = "INSERT INTO addressBook"+
+                                                                                " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
+                                                                                " VALUES"+phoneContactsArray;
+                                                                    //console.log(query)
+                                                                    //var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
+                                                                    AddressBook.query(query,function(err, createdAddressBook){
+                                                                    //AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
+                                                                            if(err){
+                                                                                console.log(err);
+                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                callback();
+                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in contact address creation', error_details: err});
+                                                                            }else{
+                                                                                data_check1 = createdAddressBook;
+                                                                                console.log("----------------SERIES 2 Success ----------------------");
+                                                                                //callback();
+                                                                                console.log("-------------------------------- SERIES-3 -----------------------------")
+                                                                                // console.log(phoneContactsArray1)
+                                                                                console.log("Address book updation")
+                                                                                //console.log(phonecontacts.length)
+                                                                                async.forEach(phonecontacts, function (factor, callback){
+                                                                                    //phonecontacts.forEach(function(factor, index){
+                                                                                    //var query   = "SELECT id,phoneNumber FROM user where RIGHT(phoneNumber,10) = '"+factor.number+"'";
+                                                                                    //User.query(query, function(err, selectDContacts) {
+                                                                                    //console.log(factor.number)
+                                                                                    if(factor.number){
+                                                                                        var query = "SELECT *"+
+                                                                                                    " FROM user"+
+                                                                                                    " WHERE phoneNumber =  '"+factor.number+"'"+
+                                                                                                    " AND phoneNumber !=  '"+userPhoneNumber+"'";
+                                                                                        //User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
+                                                                                        User.query(query, function(err, selectDContacts) {
+                                                                                                if(err){
+                                                                                                        console.log(err)
+                                                                                                        callback();
+                                                                                                }else{
+                                                                                                        if(selectDContacts.length){
+                                                                                                                //updation
+                                                                                                                var data     = {ditherUserId:selectDContacts[0].id};
+                                                                                                                var criteria = {ditherUserPhoneNumber: factor.number};
+                                                                                                                AddressBook.update(criteria,data).exec(function(err, updatedRecords) {
+                                                                                                                        if(err){
+                                                                                                                                console.log("phone")
+                                                                                                                                console.log(err)
+                                                                                                                        }else{
+                                                                                                                                console.log("update recordsssss in contacts")
+                                                                                                                                //console.log(updatedRecords)
+                                                                                                                                //callback();
+                                                                                                                                //console.log("----------------SERIES 3 Success ----------------------");
+                                                                                                                        }
+                                                                                                                });
+                                                                                                                //invitation table Insertion
+                                                                                                        }
+                                                                                                }
+                                                                                        });
+                                                                                    }
+                                                                                }, callback());
+                                                                                //callback();
+                                                                            }
+                                                                    });
+                                                                }else{
+                                                                    callback();
+                                                                }
                                                             }
                                                     });
-                                            }else{
-                                                callback();
-                                            }
+                                            //}else{
+                                                //callback();
+                                            //}
                             },
                             function(callback) {
                                             console.log("----------------SERIES MAIN - II ----------------------");
-                                            if(fbUser.length){
+                                            //if(fbUser.length){
                                                     fbUser.forEach(function(factor, index){
-                                                            var contact_name = factor.fb_name;
-                                                            //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
-                                                            var formatted_name = contact_name.replace(/'/g, "\\'");
-                                                            // fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
-                                                            //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
-                                                            fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.fb_userid+"', now(), now())");
+                                                            if(index){
+                                                                    var contact_name = factor.fb_name;
+                                                                    //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
+                                                                    var formatted_name = contact_name.replace(/'/g, "\\'");
+                                                                    // fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
+                                                                    //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
+                                                                    fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.fb_userid+"', now(), now())");
+                                                            }
                                                     });
 
                                                     console.log("-------------------------- SERIES-4 --------------------------");
@@ -144,59 +158,63 @@ module.exports = {
                                                             }else{
                                                                 console.log("----------------SERIES 4 Success ----------------------");
                                                                 //callback();
-                                                                console.log("-------------------------- SERIES-5 --------------------------");
-                                                                var query = "INSERT INTO fbFriends"+
-                                                                            " (userId,ditherUserName, fbId, createdAt, updatedAt)"+
-                                                                            " VALUES"+fbUserArray;
-                                                                FbFriends.query(query,function(err, createdFbFriends){
-                                                                //FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
-                                                                //FbFriends.create(query, function(err, createdFbFriends) {
-                                                                        if(err){
-                                                                            console.log("insertion fbfriends error"+err);
-                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                            callback();
-                                                                            //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
-                                                                        }else{
-                                                                                //console.log(createdFbFriends);
-                                                                                console.log("----------------SERIES 5 Success ----------------------");
-                                                                                //callback();
-                                                                                console.log("-------------------------- SERIES-6 --------------------------");
-                                                                                async.forEach(fbUser, function (factor, callback){
-                                                                                //fbUser.forEach(function(factor, index){
-                                                                                    User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
-                                                                                        //console.log()
-                                                                                        if(err){
-                                                                                            console.log("insertion fbfriends error"+err);
-                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                                            callback();
-                                                                                            //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
-                                                                                        }else{
-                                                                                                if(selectFBContacts.length){
-                                                                                                    var data     = {ditherUserId:selectFBContacts[0].id};
-                                                                                                    var criteria = {fbId:factor.fb_userid};
-                                                                                                    //console.log("fbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-                                                                                                    //console.log(data)
-                                                                                                    FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
-                                                                                                        if(err){
-                                                                                                            console.log(err);
-                                                                                                            callback();
-                                                                                                        }else{
-                                                                                                            //console.log("update recordsssss in fbbbbb");
-                                                                                                            //console.log("----------------SERIES 6 Success ----------------------");
-                                                                                                        }
-                                                                                                    });
-                                                                                                }
-                                                                                        }
-                                                                                    });
-                                                                                },callback());
-                                                                                //callback();
-                                                                        }
-                                                                });
+                                                                if(fbUserArray.length){
+                                                                    console.log("-------------------------- SERIES-5 --------------------------");
+                                                                    var query = "INSERT INTO fbFriends"+
+                                                                                " (userId,ditherUserName, fbId, createdAt, updatedAt)"+
+                                                                                " VALUES"+fbUserArray;
+                                                                    FbFriends.query(query,function(err, createdFbFriends){
+                                                                    //FbFriends.create(fbUserArray).exec(function(err, createdFbFriends){
+                                                                    //FbFriends.create(query, function(err, createdFbFriends) {
+                                                                            if(err){
+                                                                                console.log("insertion fbfriends error"+err);
+                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                callback();
+                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
+                                                                            }else{
+                                                                                    //console.log(createdFbFriends);
+                                                                                    console.log("----------------SERIES 5 Success ----------------------");
+                                                                                    //callback();
+                                                                                    console.log("-------------------------- SERIES-6 --------------------------");
+                                                                                    async.forEach(fbUser, function (factor, callback){
+                                                                                    //fbUser.forEach(function(factor, index){
+                                                                                        User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
+                                                                                            //console.log()
+                                                                                            if(err){
+                                                                                                console.log("insertion fbfriends error"+err);
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                callback();
+                                                                                                //callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in fbFriend creation', error_details: err});
+                                                                                            }else{
+                                                                                                    if(selectFBContacts.length){
+                                                                                                        var data     = {ditherUserId:selectFBContacts[0].id};
+                                                                                                        var criteria = {fbId:factor.fb_userid};
+                                                                                                        //console.log("fbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+                                                                                                        //console.log(data)
+                                                                                                        FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
+                                                                                                            if(err){
+                                                                                                                console.log(err);
+                                                                                                                callback();
+                                                                                                            }else{
+                                                                                                                //console.log("update recordsssss in fbbbbb");
+                                                                                                                //console.log("----------------SERIES 6 Success ----------------------");
+                                                                                                            }
+                                                                                                        });
+                                                                                                    }
+                                                                                            }
+                                                                                        });
+                                                                                    },callback());
+                                                                                    //callback();
+                                                                            }
+                                                                    });
+                                                                }else{
+                                                                        callback();
+                                                                }
                                                             }
                                                     });
-                                            }else{
-                                                callback();
-                                            }
+                                            //}else{
+                                                //callback();
+                                            //}
                             },
                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                         if (err) {
@@ -231,11 +249,12 @@ module.exports = {
                     async.parallel([
                             function(callback) {
                                         //console.log("-------------------------- SERIES-7 --------------------------");
-                                        query = "SELECT DISTINCT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
+                                        query = "SELECT adb.id, usr.id, usr.name, usr.profilePic, usr.phoneNumber"+
                                                 " FROM addressBook adb"+
                                                 " INNER JOIN user usr ON usr.id = adb.ditherUserId"+
                                                 " WHERE adb.userId = "+userId+
                                                 " AND adb.ditherUserId IS NOT NULL"+
+                                                " GROUP BY usr.id"+
                                                 " ORDER BY usr.name";
                                         console.log(query);
                                         AddressBook.query(query, function(err, selectedDitherAdb) {
@@ -264,11 +283,12 @@ module.exports = {
                             function(callback) {
 
                                         console.log("-------------------------- SERIES -><- 8 --------------------------");
-                                        query = " SELECT DISTINCT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
+                                        query = " SELECT fbf.id, usr.id, usr.name, usr.fbId,usr.profilePic, usr.phoneNumber"+
                                                     " FROM fbFriends fbf"+
                                                     " INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
                                                     " WHERE fbf.userId = "+userId+
                                                     " AND fbf.ditherUserId IS NOT NULL"+
+                                                    " GROUP BY usr.id"+
                                                     " ORDER BY usr.name";
                                         console.log(query);
                                         FbFriends.query(query, function(err, selectedDitherFbf) {
@@ -298,10 +318,14 @@ module.exports = {
                                         });
                             },
                     ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
-                                        if (err) {
+                                        if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                         }else{
+                                            console.log("=====================ditherUserInAddressBook===============");
+                                            console.log(ditherUserInAddressBook);
+                                            console.log("=====================ditherUserInFbFriends===============");
+                                            console.log(ditherUserInFbFriends);
                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully selected phone contact list from addressBook and fbcontacts from fbFriends',
                                                                   ditherPhoneContact: ditherUserInAddressBook,
                                                                   ditherFBuser: ditherUserInFbFriends

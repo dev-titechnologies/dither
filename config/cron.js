@@ -5,10 +5,11 @@ module.exports.cron = {
      schedule: '* * * * * *',
     onTick: function () {
       console.log('You will see this every minute');
-      var today = new Date().toISOString();
+      //var today = new Date().toISOString();
+      var today = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
       console.log(today)
-     // var query = "SELECT * FROM collage where expiryDate = '"+today+"'";
-      //console.log(query)
+      
 	   Collage.find({expiryDate:today }).exec(function(err, collageDetails){
 		   if(err)
 		   {
@@ -40,7 +41,6 @@ module.exports.cron = {
 								        console.log("Log inserted")
 										console.log(createdNotificationTags)
 										User_token.find({userId: factor.userId}).exec(function (err, getDeviceId) {
-										//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
 											if(err){
 												  console.log(err);
 												  //return err;

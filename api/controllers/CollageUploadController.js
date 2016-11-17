@@ -60,16 +60,20 @@ module.exports = {
                                 var collage_imageName           =   "";
                                 var collageDetailImgArray       =   [];
                                 files.forEach(function(factor, index){
+                                        console.log(factor);
                                         var filename                        =   factor.fd.split('/');
                                         filename                            =   filename[filename.length-1];
                                         var filename_without_extension      =   factor.filename.split('.');
                                         filename_without_extension          =   filename_without_extension[0];
                                         var image_name;
+                                        console.log("filename_without_extension ==============");
+                                        console.log(filename_without_extension);
                                         collageDetailImgArray.push({
                                                     image_name      :   filename_without_extension,
                                                     image_url       :   collageImg_path + filename
                                                     });
                                 });
+                                console.log("collageDetailImgArray ==============");
                                 console.log(collageDetailImgArray);
                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
                                                     dither_images : collageDetailImgArray,

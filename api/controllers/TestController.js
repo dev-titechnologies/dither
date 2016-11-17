@@ -978,6 +978,54 @@ module.exports = {
                 }
             });*/
     },
+    /*  =================================================================================================================================
+            SELECT user for date check
+    ================================================================================================================================== */
+    usersList: function (req, res){
+            console.log(req.param("user_id"));
+            var user_id     =   req.param("user_id");
+            if(!user_id){
+                    return res.json(200, {status        : 2,
+                                        status_type     : 'FAILURE' ,
+                                        message         : 'please pass user_id',
+                                });
+            }else{
+                var query       =   "SELECT * FROM user where id = "+user_id;
+                User.query(query, function(err, results){
+                //User.find({id: 2}).exec(function (err, results) {
+                //User.find({}, function(err, results){
+                    if(err){
+                        console.log(err);
+                        return res.json(200, {status        : 2,
+                                            status_type     : 'FAILURE' ,
+                                            message         : 'Some error occured',
+                                            err_details     : err,
+                        });
+                    }else{
+                        console.log("results query =============");
+                        console.log(results);
+                        User.find({id: user_id}).exec(function (err, results1) {
+                            if(err){
+                                console.log(err);
+                                return res.json(200, {status        : 2,
+                                                    status_type     : 'FAILURE' ,
+                                                    message         : 'Some error occured',
+                                                    err_details     : err,
+                                });
+                            }else{
+                                console.log("results find ++++++++++++++++++++++++");
+                                console.log(results1);
+                                return res.json(200, {status        : 1,
+                                                status_type         : 'SUCCESS' ,
+                                                message             : 'Successfully got',
+                                                results             : results,
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+    },
 
 
 

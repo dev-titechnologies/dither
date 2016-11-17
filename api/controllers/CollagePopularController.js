@@ -36,6 +36,7 @@ module.exports = {
                     var data_view_limit             =     req.options.global.data_view_limit;
                     var received_userId             =     req.param("user_id");
                     var received_focus_limit_number =     req.param("focus_limit_number");
+                    var today                       =     new Date().toISOString();
                     var received_userName,
                         received_userProfilePic,
                         query,
@@ -81,6 +82,7 @@ module.exports = {
                                         " SELECT clg.id FROM collage clg INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " WHERE"+
                                         " tg.userId =  '"+userId+"' AND clg.userId =  '"+received_userId+"' AND clg.totalVote != 0"+
+                                        " AND clg.expiryDate > '"+today+"'"+
                                         " ORDER BY clg.totalVote  DESC, clg.createdAt  DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+
@@ -187,9 +189,11 @@ module.exports = {
                                                                     popular_dithers         : popular_dithers });
 
                                             }else{
-                                                    var user_profile_image = "";
-                                                    if(foundUserDetails.profilePic != "" || foundUserDetails.profilePic != null){
-                                                                user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                    var user_profile_image;
+                                                    if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){
+                                                            user_profile_image = ""
+                                                    }else{
+                                                            user_profile_image  = profilePic_path + foundUserDetails.profilePic;
                                                     }
                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the popular Dithers',
                                                                     username                : foundUserDetails.name,

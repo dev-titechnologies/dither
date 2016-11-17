@@ -40,6 +40,7 @@ module.exports = {
                     var page_type                   =   req.param("page_type");
                     var focus_dither_id             =   req.param("focus_dither_id");
                     var dither_image                =   '';
+                    var today                       =   new Date().toISOString();
                     if(!page_type || !focus_dither_id){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass both page_type and focus_dither_id'});
                     }else{
@@ -68,12 +69,12 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT clg.id, clg.createdAt"+
                                             " FROM collage clg"+
-                                            " WHERE clg.userId = "+userId+
+                                            " WHERE clg.userId = "+userId+" AND clg.expiryDate > '"+today+"'"+
                                             " UNION ("+
                                             " SELECT tg.collageId AS id, clg.createdAt"+
                                             " FROM tags tg"+
                                             " INNER JOIN collage clg ON clg.id = tg.collageId"+
-                                            " WHERE tg.userId = "+userId+
+                                            " WHERE tg.userId = "+userId+" AND clg.expiryDate > '"+today+"'"+
                                             " )"+
                                             " ) AS temp1"+
                                             query_offset_data_view_limit+

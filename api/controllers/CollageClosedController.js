@@ -1,7 +1,7 @@
 /**
- * CollageRecentController
+ * CollageClosedController
  *
- * @description :: Server-side logic for managing collagerecents
+ * @description :: Server-side logic for managing collagecloseds
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
@@ -21,10 +21,10 @@ function predicatBy(prop){
 }
 module.exports = {
         /* ==================================================================================================================================
-               To get popular dithers
+               To get closed dithers
      ==================================================================================================================================== */
-        getRecentDithers:  function (req, res) {
-                    console.log("======================= ------------ Get Recent Dithers  -------------------- ================================================");
+        getClosedDithers:  function (req, res) {
+                    console.log("======================= ------------ Get Closed Dithers  -------------------- ================================================");
                     var tokenCheck                  =     req.options.tokenCheck;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -41,8 +41,8 @@ module.exports = {
                     if(!received_userId || !received_focus_limit_number){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass user_id and focus_limit_number'});
                     }else{
-                            if(received_userId == userId){
-                                console.log("Same Id ----------------------------------------------------");
+                            //if(received_userId == userId){
+                                //console.log("Same Id ----------------------------------------------------");
                                 query = "SELECT"+
                                         " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                         " temp_clg.userId, temp_clg.image AS collage_image, temp_clg.totalVote, temp_clg.createdAt, temp_clg.updatedAt,"+
@@ -54,7 +54,7 @@ module.exports = {
                                         " FROM ("+
                                         " SELECT *"+
                                         " FROM collage clg"+
-                                        " WHERE clg.userId =  '"+userId+"'"+
+                                        " WHERE clg.userId =  '"+userId+"'"+" AND clg.expiryDate <= '"+today+"'"+
                                         " ORDER BY clg.createdAt DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+
@@ -64,9 +64,7 @@ module.exports = {
                                         " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                         " GROUP BY clgdt.id"+
                                         " ORDER BY temp_clg.createdAt";
-
-
-                            }else{
+                            /*}else{
                                 console.log("Not a logged User ----------------------------------------------------");
                                 //Show tagged logged user and created by received_user
                                 query = " SELECT clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
@@ -79,7 +77,7 @@ module.exports = {
                                         " SELECT clg.id FROM collage clg INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " WHERE"+
                                         " tg.userId =  '"+userId+"' AND clg.userId =  '"+received_userId+"'"+
-                                        " AND clg.expiryDate > '"+today+"'"+
+                                        " AND clg.expiryDate <= '"+today+"'"+
                                         " ORDER BY clg.createdAt  DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+
@@ -91,7 +89,7 @@ module.exports = {
                                         " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                         " GROUP BY clgdt.id"+
                                         " ORDER BY clg.createdAt";
-                            }
+                            }*/
                             console.log(query);
                             Collage.query(query, function(err, results) {
                                     if(err){
@@ -109,13 +107,13 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage and no user found',
                                                                                             username                : "",
                                                                                             user_profile_image      : "",
-                                                                                            recent_dithers          : [],
+                                                                                            closed_dithers          : [],
                                                                         });
                                                                     }else{
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                             username                : foundUserDetails.name,
                                                                                             user_profile_image      : profilePic_path + foundUserDetails.profilePic,
-                                                                                            recent_dithers          : [],
+                                                                                            closed_dithers          : [],
                                                                         });
                                                                     }
                                                         }
@@ -127,8 +125,7 @@ module.exports = {
                                                 var dataResultsKeys     =   [];
                                                 //var like_position,
                                                    // likeStatus;
-                                                var recent_dithers,
-                                                    popular_dithers,
+                                                var closed_dithers,
                                                     imgDetailsArrayOrder;
                                                 for (var i = dataResults.length - 1; i >= 0; i--){
                                                     var like_position_Array = [];
@@ -175,7 +172,7 @@ module.exports = {
                                                         dataResultsObj.mainOrder                    =       i;
                                                         key.push(dataResultsObj);
                                                         dataResultsKeys.push(collageId_val);
-                                                        recent_dithers                              =       key.sort( predicatBy("mainOrder") ).reverse();
+                                                        closed_dithers                              =       key.sort( predicatBy("mainOrder") ).reverse();
                                                     }
                                                 }
 
@@ -189,7 +186,7 @@ module.exports = {
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                     username                : "",
                                                                                     user_profile_image      : "",
-                                                                                    recent_dithers          : recent_dithers,
+                                                                                    closed_dithers          : closed_dithers,
                                                                                     });
                                                             }else{
                                                                     var user_profile_image;
@@ -198,10 +195,10 @@ module.exports = {
                                                                     }else{
                                                                             user_profile_image  = profilePic_path + foundUserDetails.profilePic;
                                                                     }
-                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the recent Dithers',
+                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the closed Dithers',
                                                                                     username                : foundUserDetails.name,
                                                                                     user_profile_image      : user_profile_image,
-                                                                                    recent_dithers          : recent_dithers,
+                                                                                    closed_dithers          : closed_dithers,
                                                                                     });
                                                             }
                                                         }
@@ -213,4 +210,6 @@ module.exports = {
         },
 
 };
+
+
 

@@ -52,9 +52,10 @@ module.exports = {
                         console.log("files ========================= >>>>>>>>>>>>>>  ");
                         console.log(files);
                         if(!files.length){
-                                //console.log("File length zero ------------->>>>>>>>>>>>>  ");
+                                console.log("File length zero ------------->>>>>>>>>>>>>  ");
                                 return res.json(200, {status: 2, status_type: 'Failure', message: 'Please pass an image'});
                         }else{
+                                console.log("File length zero Else ------------->>>>>>>>>>>>>  ");
                                 var collage_imageName           =   "";
                                 var collageDetailImgArray       =   [];
                                 files.forEach(function(factor, index){
@@ -68,6 +69,7 @@ module.exports = {
                                                     image_url       :   collageImg_path + filename
                                                     });
                                 });
+                                console.log(collageDetailImgArray);
                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
                                                     dither_images : collageDetailImgArray,
                                                     });

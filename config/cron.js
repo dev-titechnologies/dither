@@ -7,8 +7,8 @@ module.exports.cron = {
       console.log('You will see this every minute');
       var today = new Date().toISOString();
       console.log(today)
-      var query = "SELECT * FROM collage where expiryDate = '"+today+"'";
-      console.log(query)
+     // var query = "SELECT * FROM collage where expiryDate = '"+today+"'";
+      //console.log(query)
 	   Collage.find({expiryDate:today }).exec(function(err, collageDetails){
 		   if(err)
 		   {

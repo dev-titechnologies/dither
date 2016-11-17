@@ -418,7 +418,7 @@ module.exports = {
                                 console.log(" collage_image-------------------"+collageImg_path + collage_results.image);
                                 console.log( "taggedUsers -------------------" +taggedUserArrayFinal);
                                 console.log(" dither_count ----------------------"+sortedVote.length);
-                                console.log("invite_friends_NUM--------------------------"+invite_friends_NUM);
+                                //console.log("invite_friends_NUM--------------------------"+invite_friends_NUM);
                                 console.log(sortedVote);
                                 console.log(collage_results.imgTitle);
                                 console.log(collage_results.location);

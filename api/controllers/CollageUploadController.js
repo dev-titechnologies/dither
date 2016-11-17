@@ -407,6 +407,20 @@ module.exports = {
                                                                         socket          :   sails.sockets.rooms()
                                                                         });
                                 });
+                                console.log( "profile_image -----------" +profilePic_path + tokenCheck.tokenDetails.profilePic);
+                                console.log(" created_date_time-------------" +collage_results.createdAt);
+                                console.log("updated_date_time ------------" +collage_results.updatedAt);
+
+                                console.log(" collage_id-----------------"+collage_results.collage_results.id);
+                                console.log(" collage_image-------------------"+collageImg_path + collage_results.image);
+                                console.log( "taggedUsers -------------------" +taggedUserArrayFinal);
+                                console.log(" dither_count ----------------------"+sortedVote.length);
+                                console.log("invite_friends_NUM--------------------------"+invite_friends_NUM);
+                                console.log(sortedVote);
+                                console.log(collage_results.imgTitle);
+                                console.log(collage_results.location);
+
+
                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
                                                           profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
                                                           user_name          :     tokenCheck.tokenDetails.name,

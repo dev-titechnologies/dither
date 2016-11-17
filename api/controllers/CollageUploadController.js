@@ -51,6 +51,7 @@ module.exports = {
 
                         console.log("files ========================= >>>>>>>>>>>>>>  ");
                         console.log(files);
+                        console.log(files.length);
                         if(!files.length){
                                 console.log("File length zero ------------->>>>>>>>>>>>>  ");
                                 return res.json(200, {status: 2, status_type: 'Failure', message: 'Please pass an image'});

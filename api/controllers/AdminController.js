@@ -188,7 +188,7 @@ console.log(values);
         /**  get all dither **/
     getAllDithers: function(req,res){
         console.log("inside getAllDithers function");
-        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c LEFT JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC ";
+        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC ";
         console.log(query);
                     Collage.query(query, function (err, result) {
                         if (err) {
@@ -337,13 +337,13 @@ console.log(values);
          var user_id = req.body.userId;
         // console.log(user_id);
         // var user_id = 87;
-        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c LEFT JOIN user as u ON u.id=c.userId WHERE c.userId = "+user_id+" ORDER BY c.createdAt DESC ";
+        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId WHERE c.userId = "+user_id+" ORDER BY c.createdAt DESC ";
         Collage.query(query,function(err,result){
             if(err){
                 console.log("some error check query");
                   return res.json(200, {status: 2, error_details: err});
             }else{
-                console.log(result);
+                 // console.log(result);
                  return res.json(200,{status:1,message:'success',result:result});
             }
         });
@@ -359,7 +359,7 @@ console.log(values);
         if(err){
             console.log("errrRRRRRRRRR");
         }else{
-            console.log(result);
+            // console.log(result);
             return res.json(200,{status:1,message:'success',result:result});
         }
 
@@ -433,8 +433,8 @@ getMapData:function(req,res){
       });  
     }
      
-}, 
-getBarChartData:function(req,res){
+},
+getBrowserDetails:function(req,res){
       var jwtClient = new googleapis.auth.JWT(
     key.client_email, null, key.private_key,
     ['https://www.googleapis.com/auth/analytics.readonly'], null);
@@ -464,6 +464,7 @@ getBarChartData:function(req,res){
       });  
     }
 },
+
 getPieChartData:function(req,res){
       var jwtClient = new googleapis.auth.JWT(
     key.client_email, null, key.private_key,
@@ -536,7 +537,7 @@ getSettingsData:function(req,res){
     if(err){
       console.log("errrr",err);
     }else{
-      console.log("success in settings");
+    console.log("success in settings", result);
       return res.json(200,{status:1,message:'success',result:result});
     }
   });

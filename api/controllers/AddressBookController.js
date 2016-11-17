@@ -135,16 +135,16 @@ module.exports = {
                             },
                             function(callback) {
                                             console.log("----------------SERIES MAIN - II ----------------------");
-                                            //if(fbUser.length){
+                                            if(fbUser.length){
                                                     fbUser.forEach(function(factor, index){
-                                                            if(index){
+                                                            //if(index){
                                                                     var contact_name = factor.fb_name;
                                                                     //var contact_name = zzzzz ajay"s / \ \ /ajay's ''
                                                                     var formatted_name = contact_name.replace(/'/g, "\\'");
                                                                     // fbUserArray.push({userId:userId,ditherUserName:factor.fb_name,fbId:factor.fb_userid});
                                                                     //fbUserArray.push("("+userId+",'"+factor.fb_name+"', "+factor.fb_userid+", now(), now())");
                                                                     fbUserArray.push("("+userId+",'"+formatted_name+"', '"+factor.fb_userid+"', now(), now())");
-                                                            }
+                                                            //}
                                                     });
 
                                                     console.log("-------------------------- SERIES-4 --------------------------");
@@ -158,7 +158,7 @@ module.exports = {
                                                             }else{
                                                                 console.log("----------------SERIES 4 Success ----------------------");
                                                                 //callback();
-                                                                if(fbUserArray.length){
+                                                                //if(fbUserArray.length){
                                                                     console.log("-------------------------- SERIES-5 --------------------------");
                                                                     var query = "INSERT INTO fbFriends"+
                                                                                 " (userId,ditherUserName, fbId, createdAt, updatedAt)"+
@@ -207,14 +207,14 @@ module.exports = {
                                                                                     //callback();
                                                                             }
                                                                     });
-                                                                }else{
-                                                                        callback();
-                                                                }
+                                                                //}else{
+                                                                        //callback();
+                                                                //}
                                                             }
                                                     });
-                                            //}else{
-                                                //callback();
-                                            //}
+                                            }else{
+                                                callback();
+                                            }
                             },
                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                         if (err) {

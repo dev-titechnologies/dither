@@ -4,7 +4,7 @@ module.exports.cron = {
   myFirstJob: {
      schedule: '* * * * * *',
     onTick: function () {
-      console.log('You will see this every minute');
+      console.log('You will see this every second');
       //var today = new Date().toISOString();
       var today = new Date().toISOString().slice(0, 19).replace('T', ' ');
 

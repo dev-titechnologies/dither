@@ -107,7 +107,7 @@ module.exports = {
                                                 " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                                 " WHERE"+
                                                 " N.ditherUserId="+user_id+
-                                                " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7)"+
+                                                " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7 OR N.notificationTypeId=8)"+
                                                 " OR "+
                                                 " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit+"";
 

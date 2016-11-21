@@ -21,6 +21,7 @@ module.exports = {
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var dither_expiry_hour          =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
+                var today                       =     new Date().toISOString();
                 console.log(req.param("dither_id"));
                 var get_collage_id              =     req.param("dither_id");
                 var query;

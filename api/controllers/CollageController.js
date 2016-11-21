@@ -52,8 +52,9 @@ module.exports = {
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var received_userId             =     req.param("user_id");
                 var today                       =     new Date().toISOString();
-                var received_userName, received_userProfilePic;
-                var query;
+                var received_userName,
+                    received_userProfilePic,
+                    query;
                 console.log("received_userId ------------------------------");
                 console.log(received_userId);
                 console.log("userId ------------------------------");
@@ -67,9 +68,7 @@ module.exports = {
                         var dataResultsKeys     = [];
                         var opinionArray        = [];
                         //var like_position;
-                        var recent_dithers,
-                            popular_dithers,
-                            imgDetailsArrayOrder,
+                        var imgDetailsArrayOrder,
                             total_opinion;
                         for (var i = dataResults.length - 1; i >= 0; i--){
                             var like_position_Array = [];
@@ -284,27 +283,27 @@ module.exports = {
                                                                                                     popular_dithers         : []
                                                                                 });
                                                                         }else{
-                                                                                var recent_DitherResults;
-                                                                                var popular_DitherResults;
+                                                                                var recent_dithers;
+                                                                                var popular_dithers;
                                                                                 if(recentResults.length){
-                                                                                    recent_DitherResults     =   commonKeyFunction(recentResults);
-                                                                                    recent_dithers           =  recent_DitherResults.common_dithers.reverse();
+                                                                                    var recent_DitherResults     =   commonKeyFunction(recentResults);
+                                                                                    recent_dithers               =  recent_DitherResults.common_dithers.reverse();
                                                                                 }else{
-                                                                                    recent_DitherResults     =   [];
+                                                                                    recent_dithers               =   [];
                                                                                 }
 
                                                                                 if(popularResults.length){
-                                                                                    popular_DitherResults    =   commonKeyFunction(popularResults);
-                                                                                    popular_dithers          =  popular_DitherResults.common_dithers;
-                                                                                    popular_dithers          =  popular_dithers.sort( predicatBy("totalVote") ).reverse();
+                                                                                    var popular_DitherResults    =   commonKeyFunction(popularResults);
+                                                                                    popular_dithers              =  popular_DitherResults.common_dithers;
+                                                                                    popular_dithers              =  popular_dithers.sort( predicatBy("totalVote") ).reverse();
                                                                                 }else{
-                                                                                    popular_DitherResults    =   [];
+                                                                                    popular_dithers              =   [];
                                                                                 }
                                                                                 var user_profile_image;
                                                                                 if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){
-                                                                                            user_profile_image = "";
+                                                                                            user_profile_image   = "";
                                                                                 }else{
-                                                                                            user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                            user_profile_image   = profilePic_path + foundUserDetails.profilePic;
                                                                                 }
                                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                         username                : foundUserDetails.name,

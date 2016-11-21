@@ -39,7 +39,7 @@ module.exports = {
                                 //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                 " WHERE clg.id = "+get_collage_id+
-                                " AND clg.expiryDate > '"+today+"'"+
+                                //" AND clg.expiryDate > '"+today+"'"+
                                 " GROUP BY clgdt.id";
                         console.log(query);
                         Collage.query(query, function(err, results){

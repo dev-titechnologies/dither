@@ -35,6 +35,7 @@ module.exports = {
                     var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                     var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                     var data_view_limit             =     req.options.global.data_view_limit;
+                    var dither_expiry_hour          =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
                     var query,
                         offset_data_view_limit;
                     var page_type                   =   req.param("page_type");
@@ -146,6 +147,7 @@ module.exports = {
                                                         }
 
                                                         imgDetailsArrayOrder                        =       imgDetailsArray.sort(predicatBy("position"));
+                                                        dataResultsObj.dither_expiry_hour           =       dither_expiry_hour;
                                                         dataResultsObj.user_name                    =       dataResults[i]["name"];
                                                         dataResultsObj.user_id                      =       dataResults[i]["userId"];
                                                         dataResultsObj.profile_image                =       profile_image;

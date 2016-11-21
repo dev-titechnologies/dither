@@ -284,16 +284,21 @@ module.exports = {
                                                                                                     popular_dithers         : []
                                                                                 });
                                                                         }else{
-                                                                                var recent_DitherResults     =   [];
-                                                                                var popular_DitherResults    =   [];
+                                                                                var recent_DitherResults;
+                                                                                var popular_DitherResults;
                                                                                 if(recentResults.length){
                                                                                     recent_DitherResults     =   commonKeyFunction(recentResults);
                                                                                     recent_dithers           =  recent_DitherResults.common_dithers.reverse();
+                                                                                }else{
+                                                                                    recent_DitherResults     =   [];
                                                                                 }
+
                                                                                 if(popularResults.length){
                                                                                     popular_DitherResults    =   commonKeyFunction(popularResults);
                                                                                     popular_dithers          =  popular_DitherResults.common_dithers;
                                                                                     popular_dithers          =  popular_dithers.sort( predicatBy("totalVote") ).reverse();
+                                                                                }else{
+                                                                                    popular_DitherResults    =   [];
                                                                                 }
                                                                                 var user_profile_image;
                                                                                 if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){

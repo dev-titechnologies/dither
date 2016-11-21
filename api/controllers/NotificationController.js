@@ -94,7 +94,6 @@ module.exports = {
                 notifyCmntArray            =     [];
                 var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
                 var data_view_limit        =     req.options.global.data_view_limit;
-                var today                  =     new Date().toISOString();
                 if(!focus_Ntfn_id){
                             return res.json(200, {status: 2,status_type:"Failure", msg: 'Please Pass focus_Ntfn_id'});
                 }else{
@@ -140,28 +139,14 @@ module.exports = {
                                       return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
                                 }else{
                                     async.forEach(results, function (item, callback){
-
                                         if(item.notificationTypeId == 1 || item.notificationTypeId == 2 || item.notificationTypeId == 3 || item.notificationTypeId == 4 || item.notificationTypeId == 7 || item.notificationTypeId == 8){
-
-                                            /*if(item.expiryDate == null || item.expiryDate == ""){
-                                            }else{
-                                                    console.log("item.expiryDate -----------+++++++++");
-                                                    console.log(item.expiryDate);
-                                                    var rr = item.expiryDate;
-                                                    console.log(rr.toISOString());
-                                                    console.log("today -----------+++++++++");
-                                                    console.log(today);
-                                                    if(rr.toISOString() > today){
-                                                          console.log("Not expired ====>>  ");
-                                                    }
-                                            }*/
                                             //----------Comment Notification---------------------------
                                             if(item.notificationTypeId == 3){
-                                                console.log("comment?????????")
+                                                console.log("Notification Comment")
                                                 NotificationType.find({id:3 }).exec(function(err, ntfnTypeFound){
                                                     if(err){
                                                         console.log(err)
-                                                        callback(true,ntfnTypeFound );
+                                                        callback();
                                                     }else{
                                                             notificationCommented   =   "No notification Found for comments";
                                                             var notification        =   ntfnTypeFound[0].body;
@@ -176,16 +161,16 @@ module.exports = {
                                                             }else if(item.description==2)
                                                             {
                                                                     notificationCommented =  " and 1 other commented on your Dither";
-                                                                    item.ntfn_body        = notificationCommented;
+                                                                    item.ntfn_body        =  notificationCommented;
                                                             }
                                                             else
                                                             {
 
                                                                     item.description        =   item.description - 1;
                                                                     ntfn_body               =   util.format(notification,item.description);
-                                                                    notificationCommented   =  ntfn_body;
+                                                                    notificationCommented   =   ntfn_body;
                                                                     item.ntfn_body          =   ntfn_body;
-                                                                    notifyCmntArray         = [];
+                                                                    notifyCmntArray         =   [];
                                                                     notifyCmntArray.push({ditherId: item.collage_id, userId: item.ditherUserId,msg:notificationCommented});
                                                             }
                                                              // ------------------------------Generate ThumbnailImage-----------------------------------------------
@@ -196,7 +181,7 @@ module.exports = {
                                                                 item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                             }
 
-                                                            var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                            var clgImgSrc                       =     collageImg_path_assets + clgImgToResize;
 
                                                                 fs.exists(clgImgSrc, function(exists){
                                                                         if(exists){
@@ -220,11 +205,11 @@ module.exports = {
                                                     }
                                                 });
                                             }else if(item.notificationTypeId==2){
-                                                  console.log("vote?????????")
+                                                  console.log("Notification Vote")
                                                   NotificationType.find({id:2 }).exec(function(err, ntfnTypeFound){
                                                         if(err){
                                                             console.log(err)
-                                                            callback(true,ntfnTypeFound );
+                                                            callback();
                                                         }else{
                                                             var notification        =   ntfnTypeFound[0].body;
                                                             item.type               =   ntfnTypeFound[0].type;
@@ -285,7 +270,7 @@ module.exports = {
                                                     NotificationType.find({id:4 }).exec(function(err, ntfnTypeFound){
                                                         if(err){
                                                                 console.log(err)
-                                                                callback(true,ntfnTypeFound );
+                                                                callback();
                                                         }else{
                                                                 var notification    =   ntfnTypeFound[0].body;
                                                                 ntfn_body           =   util.format(notification);
@@ -332,6 +317,7 @@ module.exports = {
                                                 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
                                                     if(err){
                                                         console.log(err)
+                                                        callback();
                                                     }else{
                                                         var notification        =   ntfnTypeFound[0].body;
                                                         var ntfn_body           =   util.format(notification);
@@ -374,10 +360,9 @@ module.exports = {
                                                 console.log("Notification Mention")
                                                 NotificationType.find({id:7 }).exec(function(err, ntfnTypeFound){
                                                         if(err){
-                                                            console.log("+++++++++++++++++++++++++NOTIFICATION ERR+++++++++++++++++++++++")
                                                             console.log(err)
+                                                            callback();
                                                         }else{
-                                                            console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
                                                             var notification    = ntfnTypeFound[0].body;
                                                             var ntfn_body       = util.format(notification);
                                                             item.type           =   ntfnTypeFound[0].type;
@@ -417,16 +402,14 @@ module.exports = {
                                                         }
                                                 });
                                             }else if(item.notificationTypeId==8){
-												console.log("Notification for Dither Closing")
 												NotificationType.find({id:8 }).exec(function(err, ntfnTypeFound){
 													if(err)
 													{
 														console.log(err)
+														callback();
 													} 
 													else
 													{
-														console.log(ntfnTypeFound)
-														console.log("+++++++++++++++++++++++++NOTIFICATION+++++++++++++++++++++++")
 														var notification    =   ntfnTypeFound[0].body;
 														var ntfn_body       =   util.format(notification);
 														item.type           =   ntfnTypeFound[0].type;

@@ -4,22 +4,21 @@ module.exports.cron = {
   myFirstJob: {
      schedule: '* * * * * *',
     onTick: function () {
-      console.log('You will see this every second');
+      //console.log('You will see this every second');
       //var today = new Date().toISOString();
       var today = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-      console.log(today)
+      //console.log(today)
       
 	   Collage.find({expiryDate:today }).exec(function(err, collageDetails){
 		   if(err)
 		   {
 			   console.log(err)
-			   //return err;
-			   //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Finding dither'});
+			   
 		   }
 		   else
 		   {
-			  console.log(collageDetails) 
+			 // console.log(collageDetails) 
 			  if(collageDetails.length){
 			   var userArr = [];
 			   var device_Arr = [];
@@ -35,17 +34,14 @@ module.exports.cron = {
 					  NotificationLog.create(values).exec(function(err, createdNotificationTags) {
 							   if(err){
 								   console.log(err)
-								   //return err;
-								   //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error in NotificationLog Insertion'});
+								   
 							   }else{
 								        console.log("Log inserted")
 										console.log(createdNotificationTags)
 										User_token.find({userId: factor.userId}).exec(function (err, getDeviceId) {
 											if(err){
 												  console.log(err);
-												  //return err;
-												  //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error in token Finding'});
-												 // callback();
+												  
 											}else{
 												var message     =  'Dither Closing Notification';
 												var ntfn_body   =  "Your Dither has been Expired";
@@ -75,7 +71,7 @@ module.exports.cron = {
 																}else{
 																	//callback();
 																	console.log("Notification sended")
-																	return {"msg":"haii"};
+																	//return {"msg":"haii"};
 																	//return res.json(200, {status: 1, status_type: 'Success' ,message: 'Psh Success'});
 																}
 														});

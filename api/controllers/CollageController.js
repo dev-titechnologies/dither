@@ -241,7 +241,7 @@ module.exports = {
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting popular collages of the user', error_details: err});
                                                 }else{
                                                     //console.log(recentResults);
-                                                    if(recentResults.length == 0 && popularResults.length == 0){
+                                                    if(!recentResults.length && !popularResults.length){
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                                     if(err){
                                                                         console.log(err);
@@ -255,9 +255,15 @@ module.exports = {
                                                                                                     popular_dithers         : []
                                                                                 });
                                                                         }else{
+                                                                                var user_profile_image;
+                                                                                if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){
+                                                                                        user_profile_image = "";
+                                                                                }else{
+                                                                                        user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                }
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                                     username                : foundUserDetails.name,
-                                                                                                    user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                    user_profile_image      : user_profile_image,
                                                                                                     recent_dithers          : [],
                                                                                                     popular_dithers         : []
                                                                                 });
@@ -278,17 +284,23 @@ module.exports = {
                                                                                                     popular_dithers         : []
                                                                                 });
                                                                         }else{
-                                                                                var recent_DitherResults    =   commonKeyFunction(recentResults);
-                                                                                var popular_DitherResults   =   commonKeyFunction(popularResults);
+                                                                                var recent_DitherResults     =   [];
+                                                                                var popular_DitherResults    =   [];
+                                                                                if(recentResults.length){
+                                                                                    recent_DitherResults     =   commonKeyFunction(recentResults);
+                                                                                    recent_dithers           =  recent_DitherResults.common_dithers.reverse();
+                                                                                }
+                                                                                if(popularResults.length){
+                                                                                    popular_DitherResults    =   commonKeyFunction(popularResults);
+                                                                                    popular_dithers          =  popular_DitherResults.common_dithers;
+                                                                                    popular_dithers          =  popular_dithers.sort( predicatBy("totalVote") ).reverse();
+                                                                                }
                                                                                 var user_profile_image;
                                                                                 if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){
                                                                                             user_profile_image = "";
                                                                                 }else{
                                                                                             user_profile_image  = profilePic_path + foundUserDetails.profilePic;
                                                                                 }
-                                                                                recent_dithers          =  recent_DitherResults.common_dithers.reverse();
-                                                                                popular_dithers         =  popular_DitherResults.common_dithers;
-                                                                                popular_dithers         =  popular_dithers.sort( predicatBy("totalVote") ).reverse();
                                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                         username                : foundUserDetails.name,
                                                                                                         user_profile_image      : user_profile_image,

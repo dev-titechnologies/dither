@@ -136,7 +136,7 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                             " FROM collage clg"+
-                                            " WHERE clg.userId =  '"+userId+"'"+
+                                            " WHERE clg.userId =  '"+userId+"'"+" AND clg.expiryDate > '"+today+"'"+
                                             " ORDER BY clg.createdAt DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp"+
@@ -157,7 +157,7 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                             " FROM collage clg"+
-                                            " WHERE clg.userId =  '"+userId+"' AND clg.totalVote != 0"+
+                                            " WHERE clg.userId =  '"+userId+"' AND clg.totalVote != 0"+" AND clg.expiryDate > '"+today+"'"+
                                             " ORDER BY clg.totalVote DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp"+

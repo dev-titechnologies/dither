@@ -60,6 +60,7 @@ module.exports = {
                                         " FROM collage clg"+
                                         " WHERE clg.userId =  '"+userId+"'"+
                                         " AND clg.totalVote !=0"+
+                                        " AND clg.expiryDate > '"+today+"'"+
                                         " ORDER BY clg.totalVote DESC , clg.createdAt DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+

@@ -20,6 +20,7 @@ module.exports = {
                 var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
+                var dither_expiry_hour          =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
                 console.log(req.param("dither_id"));
                 var get_collage_id              =     req.param("dither_id");
                 var query;
@@ -209,6 +210,7 @@ module.exports = {
                                                                                                                              taggedUsers                : taggedUserArrayFinal,
                                                                                                                              comments                   : commentArray,
                                                                                                                              invite_friends_NUM         : inviteeArray,
+                                                                                                                             dither_expiry_hour         : dither_expiry_hour,
                                                                                                                 });
                                                                                     }
                                                                             });

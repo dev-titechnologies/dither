@@ -67,7 +67,7 @@ module.exports = {
                                                                     var query = "INSERT INTO addressBook"+
                                                                                 " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
                                                                                 " VALUES"+phoneContactsArray;
-                                                                    //console.log(query)
+                                                                    console.log(query)
                                                                     //var query = "INSERT INTO `addressBook`(`userId`, `ditherUserName`, `ditherUserPhoneNumber`, `createdAt`, `updatedAt`) VALUES"
                                                                     AddressBook.query(query,function(err, createdAddressBook){
                                                                     //AddressBook.create(phoneContactsArray).exec(function(err, createdAddressBook) {
@@ -94,6 +94,7 @@ module.exports = {
                                                                                                     " FROM user"+
                                                                                                     " WHERE phoneNumber =  '"+factor.number+"'"+
                                                                                                     " AND phoneNumber !=  '"+userPhoneNumber+"'";
+                                                                                         console.log(query)
                                                                                         //User.find({phoneNumber:factor.number}).exec(function (err, selectDContacts){
                                                                                         User.query(query, function(err, selectDContacts) {
                                                                                                 if(err){

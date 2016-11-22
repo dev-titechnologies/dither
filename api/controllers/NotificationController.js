@@ -23,7 +23,6 @@ module.exports = {
                     var notifyContact   =   req.param('contact');
                     var notifyMention   =   req.param('mention');
                     var token           =   req.get('token');
-                    console.log(token)
                     console.log(req.param('opinion'))
                     console.log(req.param('vote'))
                     console.log(req.param('comment'))
@@ -37,9 +36,6 @@ module.exports = {
                                         return res.json(200, {status: 2, status_type: 'Failure' ,msg: 'Some error occured in finding userId', error_details: err});
                                     }
                                     else{
-
-                                            sails.log(results.userId)
-
                                             var data     = {notifyOpinion:notifyOpinion, notifyVote:notifyVote,notifyComment:notifyComment,notifyContact:notifyContact,notifyMention:notifyMention};
                                             var criteria = {id: results.userId};
 
@@ -51,7 +47,6 @@ module.exports = {
                                                 }
                                                 else
                                                 {
-                                                    console.log(updatedUser[0])
                                                     return res.json(200, {status: 1, status_type: 'Success' ,msg: 'Settings updated Successfully',opinion:updatedUser[0].notifyOpinion,vote:updatedUser[0].notifyVote,comment:updatedUser[0].notifyComment,contact:updatedUser[0].notifyContact,mention:updatedUser[0].notifyMention});
 
                                                 }
@@ -139,6 +134,7 @@ module.exports = {
                                       return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
                                 }else{
                                     async.forEach(results, function (item, callback){
+										console.log(results)
                                         if(item.notificationTypeId == 1 || item.notificationTypeId == 2 || item.notificationTypeId == 3 || item.notificationTypeId == 4 || item.notificationTypeId == 7 || item.notificationTypeId == 8){
                                             //----------Comment Notification---------------------------
                                             if(item.notificationTypeId == 3){

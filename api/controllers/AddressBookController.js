@@ -50,7 +50,7 @@ module.exports = {
                                                                 callback();
                                                             }else{
                                                                 console.log("----------------SERIES 1 Succes----------------------")
-                                                                console.log(phoneContactsArray)
+                                                                //console.log(phoneContactsArray)
                                                                 if(phoneContactsArray.length){
                                                                     console.log("------------------- SERIES 2 ----------------------------------");
                                                                     var query = "INSERT INTO addressBook"+

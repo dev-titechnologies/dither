@@ -52,8 +52,9 @@ module.exports = {
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var received_userId             =     req.param("user_id");
                 var today                       =     new Date().toISOString();
-                var received_userName, received_userProfilePic;
-                var query;
+                var received_userName,
+                    received_userProfilePic,
+                    query;
                 console.log("received_userId ------------------------------");
                 console.log(received_userId);
                 console.log("userId ------------------------------");
@@ -67,9 +68,7 @@ module.exports = {
                         var dataResultsKeys     = [];
                         var opinionArray        = [];
                         //var like_position;
-                        var recent_dithers,
-                            popular_dithers,
-                            imgDetailsArrayOrder,
+                        var imgDetailsArrayOrder,
                             total_opinion;
                         for (var i = dataResults.length - 1; i >= 0; i--){
                             var like_position_Array = [];
@@ -136,7 +135,7 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                             " FROM collage clg"+
-                                            " WHERE clg.userId =  '"+userId+"'"+
+                                            " WHERE clg.userId =  '"+userId+"'"+" AND clg.expiryDate > '"+today+"'"+
                                             " ORDER BY clg.createdAt DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp"+
@@ -157,7 +156,7 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                             " FROM collage clg"+
-                                            " WHERE clg.userId =  '"+userId+"' AND clg.totalVote != 0"+
+                                            " WHERE clg.userId =  '"+userId+"' AND clg.totalVote != 0"+" AND clg.expiryDate > '"+today+"'"+
                                             " ORDER BY clg.totalVote DESC"+
                                             " LIMIT 4"+
                                             " ) AS temp"+
@@ -241,7 +240,7 @@ module.exports = {
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting popular collages of the user', error_details: err});
                                                 }else{
                                                     //console.log(recentResults);
-                                                    if(recentResults.length == 0 && popularResults.length == 0){
+                                                    if(!recentResults.length && !popularResults.length){
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                                     if(err){
                                                                         console.log(err);
@@ -255,9 +254,15 @@ module.exports = {
                                                                                                     popular_dithers         : []
                                                                                 });
                                                                         }else{
+                                                                                var user_profile_image;
+                                                                                if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){
+                                                                                        user_profile_image = "";
+                                                                                }else{
+                                                                                        user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                }
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                                     username                : foundUserDetails.name,
-                                                                                                    user_profile_image      : profilePic_path + foundUserDetails.profilePic,
+                                                                                                    user_profile_image      : user_profile_image,
                                                                                                     recent_dithers          : [],
                                                                                                     popular_dithers         : []
                                                                                 });
@@ -278,17 +283,28 @@ module.exports = {
                                                                                                     popular_dithers         : []
                                                                                 });
                                                                         }else{
-                                                                                var recent_DitherResults    =   commonKeyFunction(recentResults);
-                                                                                var popular_DitherResults   =   commonKeyFunction(popularResults);
+                                                                                var recent_dithers;
+                                                                                var popular_dithers;
+                                                                                if(recentResults.length){
+                                                                                    var recent_DitherResults     =   commonKeyFunction(recentResults);
+                                                                                    recent_dithers               =  recent_DitherResults.common_dithers.reverse();
+                                                                                }else{
+                                                                                    recent_dithers               =   [];
+                                                                                }
+
+                                                                                if(popularResults.length){
+                                                                                    var popular_DitherResults    =   commonKeyFunction(popularResults);
+                                                                                    popular_dithers              =  popular_DitherResults.common_dithers;
+                                                                                    popular_dithers              =  popular_dithers.sort( predicatBy("totalVote") ).reverse();
+                                                                                }else{
+                                                                                    popular_dithers              =   [];
+                                                                                }
                                                                                 var user_profile_image;
                                                                                 if(foundUserDetails.profilePic == "" || foundUserDetails.profilePic == null){
-                                                                                            user_profile_image = "";
+                                                                                            user_profile_image   = "";
                                                                                 }else{
-                                                                                            user_profile_image  = profilePic_path + foundUserDetails.profilePic;
+                                                                                            user_profile_image   = profilePic_path + foundUserDetails.profilePic;
                                                                                 }
-                                                                                recent_dithers          =  recent_DitherResults.common_dithers.reverse();
-                                                                                popular_dithers         =  popular_DitherResults.common_dithers;
-                                                                                popular_dithers         =  popular_dithers.sort( predicatBy("totalVote") ).reverse();
                                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                         username                : foundUserDetails.name,
                                                                                                         user_profile_image      : user_profile_image,

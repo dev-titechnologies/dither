@@ -21,6 +21,7 @@ module.exports = {
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var dither_expiry_hour          =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
+                var today                       =     new Date().toISOString();
                 console.log(req.param("dither_id"));
                 var get_collage_id              =     req.param("dither_id");
                 var query;
@@ -38,6 +39,7 @@ module.exports = {
                                 //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                 " WHERE clg.id = "+get_collage_id+
+                                //" AND clg.expiryDate > '"+today+"'"+
                                 " GROUP BY clgdt.id";
                         console.log(query);
                         Collage.query(query, function(err, results){

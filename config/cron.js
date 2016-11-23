@@ -5,12 +5,12 @@ module.exports.cron = {
         onTick:  function (req, res, next)  {
 			
             var today = new Date().toISOString().slice(0, 19).replace('T', ' ');
-            console.log(today)
+            //console.log(today)
             Collage.find({expiryDate:today }).exec(function(err, collageDetails){
                 if(err){
                    console.log(err)
                 }else{
-					console.log(collageDetails)
+					//console.log(collageDetails)
                     if(collageDetails.length){
                         var userArr = [];
                         var device_Arr = [];

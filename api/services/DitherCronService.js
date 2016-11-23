@@ -42,14 +42,11 @@ module.exports = {
                                         {
 											console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeee")
 											console.log(keyValue)
-											console.log(keyValue.CDN_IMG_URL)
-											console.log(keyValue.TOKEN_EXPIRY_HOUR)
-
-											var collageImg_path = "http://cdn.dither.titechdev.com/images/collage/";
-											var img_url 		= collageImg_path;
+											console.log(keyValue.CDN_IMAGE_URL)
+											var collageImg_path = "images/collage/";
+											var img_url 		= keyValue.CDN_IMAGE_URL + collageImg_path;
 											console.log(img_url)
 											var collageImage	= img_url + data.ditherImage;   
-											console.log(collageImage)
 											var email_to        = data.email;
 											var email_subject   = 'Dither Expired!';
 											var email_template  = 'expired';

@@ -888,7 +888,7 @@ module.exports = {
                             console.log(email_template);
                             console.log(email_context);
                             console.log("async parallel in Mailpart Success");
-                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the Dither email Test'});
                     }
 
 

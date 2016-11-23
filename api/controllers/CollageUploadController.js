@@ -98,34 +98,38 @@ module.exports = {
                     console.log("|||||||||||||||||| Not found");
                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass the REQUEST'});
             }else{
-                            var server_baseUrl              =     req.options.server_baseUrl;
-                            var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                            var dither_expiry_hour          =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
-                            var expiry_date                 =     new Date(new Date().getTime() + (dither_expiry_hour*1000*60*60));
-                            var tokenCheck                  =     req.options.tokenCheck;
-                            var userId                      =     tokenCheck.tokenDetails.userId;
-                            var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                            var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
-                            var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
-                            var request                     =     JSON.parse(req.param("REQUEST"));
-                            var device_type                 =     req.get('device_type');
-                            var vote                        =     [];
-                            var sortedVote                  =     [];
-                            var tagged_fbUser               =     request.tagged_fb_user;
-                            var tagged_contactUser          =     request.tagged_user;
-                            var get_dither_images           =     request.dither_images;
-                            var taggedUserArray             =     union_arrays(tagged_fbUser, tagged_contactUser);
-                            var taggedUserArrayFinal        =     [];
-                            var inviteFriends               =     request.invite_friends_NUM;
-                            inviteFriends                   =     JSON.parse(inviteFriends);
-                            var inviteFriendsArray          =     [];
-                            var inviteFinalArray            =     [];
-                            var tagNotifyArray              =     [];
-                            var tagNtfyPush                 =     [];
-                            var collage_results             =     "";
-                            var reportUserResults_Array     =     [];
-                            var reportUserResults_JSON_Array=     [];
-
+                            var server_baseUrl                      =     req.options.server_baseUrl;
+                            var server_image_baseUrl                =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                            var dither_expiry_hour                  =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
+                            var expiry_date                         =     new Date(new Date().getTime() + (dither_expiry_hour*1000*60*60));
+                            var tokenCheck                          =     req.options.tokenCheck;
+                            var userId                              =     tokenCheck.tokenDetails.userId;
+                            var profilePic_path                     =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                            var collageImg_path                     =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                            var collageImg_path_assets              =     req.options.file_path.collageImg_path_assets;
+                            var request                             =     JSON.parse(req.param("REQUEST"));
+                            var device_type                         =     req.get('device_type');
+                            var vote                                =     [];
+                            var sortedVote                          =     [];
+                            var tagged_fbUser                       =     request.tagged_fb_user;
+                            var tagged_contactUser                  =     request.tagged_user;
+                            var get_dither_images                   =     request.dither_images;
+                            var taggedUserArray                     =     union_arrays(tagged_fbUser, tagged_contactUser);
+                            var taggedUserArrayFinal                =     [];
+                            var inviteFriends                       =     request.invite_friends_NUM;
+                            inviteFriends                           =     JSON.parse(inviteFriends);
+                            var inviteFriendsArray                  =     [];
+                            var inviteFinalArray                    =     [];
+                            var tagNotifyArray                      =     [];
+                            var tagNtfyPush                         =     [];
+                            var collage_results                     =     "";
+                            var reportUserResults_Array             =     [];
+                            var reportUserResults_JSON_Array        =     [];
+                            var loggedUser_JSON_Array               =     [{
+                                                                            name        :    tokenCheck.tokenDetails.name,
+                                                                            userId      :    tokenCheck.tokenDetails.userId
+                                                                           }];
+                            var total_taggedUser_Array              =     [];
 
                             inviteFriends.forEach(function(factor, index){
                                         inviteFriendsArray.push(factor.phone_number);
@@ -313,6 +317,7 @@ module.exports = {
                                                                                                                                         userId      : factor.ditherUserId
                                                                                                                                         });
                                                                                                             });
+                                                                                                            total_taggedUser_Array  =  taggedUserArrayFinal.concat(loggedUser_JSON_Array);
                                                                                                         }
                                                                                                         final_tagged_users_Array.forEach(function(factor, index){
                                                                                                                 //tagNotifyArray.push({id:factor.user_id});
@@ -474,7 +479,7 @@ module.exports = {
                                                                                           caption            :     collage_results.imgTitle,
                                                                                           vote               :     sortedVote,
                                                                                           dither_count       :     sortedVote.length,
-                                                                                          taggedUsers        :     taggedUserArrayFinal,
+                                                                                          taggedUsers        :     total_taggedUser_Array,
                                                                                           invite_friends_NUM :     request.invite_friends_NUM,
                                                                                           reportedUsers      :     reportUserResults_JSON_Array,
                                                                 });

@@ -929,7 +929,7 @@ module.exports = {
               Write
   ==================================================================================================================================== */
     write_file : function (req, res) {
-		console.log("testinggggg cron")
+        console.log("testinggggg cron")
             /*fs.writeFile("test.txt", "Hey there!", function(err) {
                 if(err){
                     return console.log(err);
@@ -1027,10 +1027,69 @@ module.exports = {
                 });
             }
     },
-	getExpireDither: function (req, res){
-		console.log("cronnnn")
-	},
+    getExpireDither: function (req, res){
+        console.log("cronnnn")
+    },
 
+    array_test: function (req, res){
+
+                function remove_duplicate_array(arg1, arg2){
+                    //var arr = [1, 2, 3, 4, 5, 6, 7];
+                    //var ar = [2, 4, 6, 8, 10];
+                    //var newID = [];
+
+                    for(var i = 0; i < arg1.length; i++){
+                        for(var j = 0; j < arg2.length; j++){
+                            if(arg1[i] == arg2[j]){
+                                //newID.push(arr[i]);
+                                arg1.splice(i, 1);
+                                arg2.splice(j, 1);
+                                break;
+                            }
+                        }
+                    }
+                    return arg1.concat(arg2);
+                }
+                var arr = [1, 2, 3, 4, 5, 6, 7];
+                var ar = [2, 4, 6, 8, 10];
+
+                var tt = remove_duplicate_array(arr, ar);
+                console.log("tt -------------------");
+                console.log(tt);
+            /*var arr = [1, 2, 3, 4, 5, 6, 7];
+            var ar = [2, 4, 6, 8, 10];
+
+            var x = [1, 2, 3, 4, 5, 6, 7];
+            var y = [2, 4, 6, 8, 10];
+            var newID = [];
+            console.log(arr);
+            console.log(ar);
+
+            for(var i = 0; i < arr.length; i++){
+                for(var j = 0; j < ar.length; j++){
+                    if(arr[i] == ar[j]){
+                        newID.push(arr[i]);
+                        arr.splice(i, 1);
+                        ar.splice(j, 1);
+                        break;
+                    }
+                }
+            }
+            console.log(arr);
+            console.log(ar);
+            console.log(arr.concat(ar));*/
+              /*var obj = {};
+              for (var i = x.length-1; i >= 0; -- i)
+                 obj[x[i]] = x[i];
+              for (var i = y.length-1; i >= 0; -- i)
+                 obj[y[i]] = y[i];
+              var res = []
+              for (var k in obj) {
+                if (obj.hasOwnProperty(k))  // <-- optional
+                  res.push(obj[k]);
+              }
+              console.log(res);*/
+    },
 
 };
 

@@ -6,7 +6,7 @@
  */
 
 //Function to get ordered, by value, in json array key value pair
-function predicatBy(prop){
+/*function predicatBy(prop){
    return function(a,b){
       if( a[prop] > b[prop]){
           return 1;
@@ -15,9 +15,9 @@ function predicatBy(prop){
       }
       return 0;
    }
-}
+}*/
 
-//Function to avoid duplicate values for a normal array
+//Function to convert duplicate values to a single occurence for a normal array
 function union_arrays (x, y) {
   var obj = {};
   for (var i = x.length-1; i >= 0; -- i)
@@ -33,7 +33,7 @@ function union_arrays (x, y) {
 }
 
 //Function to get Duplicate
-function find_duplicate_in_array(param) {
+/*function find_duplicate_in_array(param) {
   var i,
   len=param.length,
   result = [],
@@ -46,8 +46,25 @@ function find_duplicate_in_array(param) {
   result.push(i);
   }
   return result;
-}
+}*/
 
+//Function to remove duplicate values completely from a normal array
+function remove_duplicate_array(arg1, arg2){
+        //var arr = [1, 2, 3, 4, 5, 6, 7];
+        //var ar = [2, 4, 6, 8, 10];
+        //var newID = [];
+        for(var i = 0; i < arg1.length; i++){
+            for(var j = 0; j < arg2.length; j++){
+                if(arg1[i] == arg2[j]){
+                    //newID.push(arr[i]);
+                    arg1.splice(i, 1);
+                    arg2.splice(j, 1);
+                    break;
+                }
+            }
+        }
+        return arg1.concat(arg2);
+}
 
 module.exports = {
 
@@ -171,19 +188,19 @@ module.exports = {
                                                                     });
                                                 }
                                         });
-                                        var combine_tagged_report_array         =   taggedUserArray.concat(reportUserResults_Array);
-                                        var duplicate_tagged_report_array       =   find_duplicate_in_array(combine_tagged_report_array);
-                                        var final_tagged_users_Array            =   union_arrays(taggedUserArray, duplicate_tagged_report_array);
+                                        //var combine_tagged_report_array         =   taggedUserArray.concat(reportUserResults_Array);
+                                        //var duplicate_tagged_report_array       =   find_duplicate_in_array(combine_tagged_report_array);
+                                        var final_tagged_users_Array            =   remove_duplicate_array(taggedUserArray, reportUserResults_Array);
 
                                         console.log("###################################################################################");
                                         console.log("taggedUserArray --------------------------------");
                                         console.log(taggedUserArray);
-                                        console.log("reportUserResults --------------------------------");
-                                        console.log(reportUserResults);
+                                        console.log("reportUserResults_Array --------------------------------");
+                                        console.log(reportUserResults_Array);
                                         console.log("combine_tagged_report_array --------------------------------");
-                                        console.log(combine_tagged_report_array);
+                                        //console.log(combine_tagged_report_array);
                                         console.log("duplicate_tagged_report_array +++++++++++++++++++++++++++++++++");
-                                        console.log(duplicate_tagged_report_array);
+                                        //console.log(duplicate_tagged_report_array);
                                         console.log("final_tagged_users_Array =====================================");
                                         console.log(final_tagged_users_Array);
                                         console.log("###################################################################################");

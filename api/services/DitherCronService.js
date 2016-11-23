@@ -47,6 +47,7 @@ module.exports = {
 											var img_url 		= collageImg_path;
 											console.log(img_url)
 											var collageImage	= img_url + data.ditherImage;   
+											console.log(collageImage)
 											var email_to        = data.email;
 											var email_subject   = 'Dither Expired!';
 											var email_template  = 'expired';

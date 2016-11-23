@@ -56,9 +56,9 @@ module.exports = {
         //console.log(ios)
         ios
           .send([device_id], {
-          })
-          .then(console.log.bind(console))
-          .catch(console.error.bind(console));
+          });
+          //.then(console.log.bind(console))
+          //.catch(console.error.bind(console));
           callback();
 
 
@@ -102,9 +102,9 @@ module.exports = {
         android
             .send([device_id], {
                     body: details
-                })
-            .then(console.log.bind(console))
-            .catch(console.error.bind(console));
+                });
+           // .then(console.log.bind(console))
+           // .catch(console.error.bind(console));
              callback();
     },
 
@@ -149,7 +149,7 @@ module.exports = {
                                                             //callback();
                                                         }else{
                                                             console.log("Push notification result i nIOS")
-                                                            console.log(ntfnSend)
+                                                            //console.log(ntfnSend)
                                                             console.log("push notification sended")
                                                             //callback();
 
@@ -165,7 +165,7 @@ module.exports = {
                                                             //callback();
                                                         }else{
                                                             console.log("Push notification result IN Android")
-                                                            console.log(ntfnSend)
+                                                            //console.log(ntfnSend)
                                                             console.log("Push Notification sended")
                                                             //callback();
                                                         }

@@ -872,8 +872,8 @@ module.exports = {
                 var global_settingsKeyValue     =   req.options.settingsKeyValue;
                 var email_to                    =   "tittoxp@gmail.com";
                 var email_subject               =   'Welcome to Dither';
-                var email_template              =   'signup';
-                var email_context               =   {receiverName: "Titto xavier"};
+                var email_template              =   'email-test';
+                var email_context               =   {receiverName: "Titto xavier", pic: global_settingsKeyValue.CDN_IMAGE_URL + "images/profilePics/31db73cf-8305-4351-b075-ffe287dd7dab.jpg"};
                 EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
                     if(err)
                     {
@@ -888,7 +888,7 @@ module.exports = {
                             console.log(email_template);
                             console.log(email_context);
                             console.log("async parallel in Mailpart Success");
-                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the Dither email Test'});
                     }
 
 

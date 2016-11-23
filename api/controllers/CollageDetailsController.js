@@ -31,7 +31,7 @@ module.exports = {
                 }else{
                         query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                 " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
-                                " usr.name AS collageCreator, usr.profilePic,"+
+                                " usr.name AS collageCreator, usr.profilePic, usr.mentionId,"+
                                 " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
@@ -203,6 +203,7 @@ module.exports = {
                                                                                                                             dither_updated_date_time   : results[0].updatedAt,
                                                                                                                             dither_id                  : results[0].collageId,
                                                                                                                             dither_created_username    : results[0].collageCreator,
+                                                                                                                            dither_created_mentionId   : results[0].mentionId,
                                                                                                                             dither_created_userID      : results[0].collageCreatorId,
                                                                                                                             dither_created_profile_pic : user_profile_image,
                                                                                                                             dither_location            : results[0].location,

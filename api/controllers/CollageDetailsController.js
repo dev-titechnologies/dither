@@ -31,7 +31,7 @@ module.exports = {
                 }else{
                         query = " SELECT clg.image AS collageImage, clg.imgTitle, clg.location, clg.userId AS collageCreatorId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                 " clgdt.id AS imageId, clgdt.collageId, clgdt.image, clgdt.position, clgdt.vote,"+
-                                " usr.name AS collageCreator, usr.profilePic, usr.mentionId"+
+                                " usr.name AS collageCreator, usr.profilePic, usr.mentionId,"+
                                 " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+

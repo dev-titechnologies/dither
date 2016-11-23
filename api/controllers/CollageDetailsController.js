@@ -88,7 +88,8 @@ module.exports = {
                                                             console.log(err);
                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding collageCreator Details', error_details: err});
                                                     }else{
-
+                                                        console.log("collageCreator_details ======================");
+                                                        console.log(collageCreator_details);
                                                         var collageCreator_profilePic;
                                                         if(collageCreator_details.profilePic == "" || collageCreator_details.profilePic == null){
                                                                     collageCreator_profilePic  =  "";
@@ -97,10 +98,12 @@ module.exports = {
                                                         }
                                                         var collageCreator_JSON_Array       =     [{
                                                                                                 name                :    collageCreator_details.name,
-                                                                                                userId              :    collageCreator_details.userId,
+                                                                                                userId              :    collageCreator_details.id,
                                                                                                 profile_image       :    collageCreator_profilePic,
                                                                                                 mention_id          :    collageCreator_details.mentionId
                                                                                                }];
+                                                        console.log("collageCreator_JSON_Array ======================");
+                                                        console.log(collageCreator_JSON_Array);
                                                         query = " SELECT clgcmt.id, clgcmt.comment, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
                                                                 " FROM collageComments clgcmt"+
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
@@ -188,7 +191,9 @@ module.exports = {
                                                                                                                 mention_id      :   factor.mentionId
                                                                                                     });
                                                                                             });
+
                                                                                             total_taggedUser_Array = taggedUserArrayFinal.concat(collageCreator_JSON_Array);
+                                                                                            console.log(total_taggedUser_Array);
                                                                                         }
                                                                                         query = " SELECT invt.phoneNumber, invt.invitee"+
                                                                                                 " FROM invitation invt"+

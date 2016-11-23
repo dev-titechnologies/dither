@@ -14,19 +14,16 @@ module.exports = {
         reportUser:  function (req, res) {
 
                     console.log("report  User ===== api");
-                    console.log(req.get('token'))
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var reportType                  =     req.param('report_type');
                     var report                      =     req.param('description');
                     var received_userId             =     req.param('user_id');
-                    var device_type                 =     req.get('device_type');
                     console.log(reportType);
                     console.log(report);
 
                     if(!reportType || !received_userId){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the report_type and description and user_id'});
-
                     }else{
                         ReportUser.findOne({reporterId: userId, userId: received_userId}).exec(function (err, foundReport){
                             if(err){
@@ -48,45 +45,7 @@ module.exports = {
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in report user insertion', error_details: err});
                                         }else{
                                             console.log(results);
-                                            //-----------------------PUSH NOTIFICATION-------------------------------------------------------------
-                                            User_token.find({userId: received_userId }).exec(function (err, getTokenDetails){
-                                                if(err){
-                                                      console.log(err);
-                                                      return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
-                                                }else{
-                                                    console.log(getTokenDetails)
-                                                    var message     =  'Report User Notification';
-                                                    var ntfn_body   =  " Reported againt You";
-                                                    //var device_id   =  getTokenDetails.deviceId;
-                                                    var deviceId_arr = [];
-                                                    getTokenDetails.forEach(function(factor, index){
-                                                            deviceId_arr.push(factor.deviceId);
-                                                    });
-                                                    if(!deviceId_arr.length){
-                                                             return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
-                                                    }else{
-                                                        var data    =   {
-                                                                    message         :       message,
-                                                                    device_id       :       deviceId_arr,
-                                                                    NtfnBody        :       ntfn_body,
-                                                                    id              :       userId,
-                                                                    NtfnType        :       6
-                                                                    };
-                                                        console.log(data)
-                                                        NotificationService.NotificationPush(data, function(err, ntfnSend){
-                                                            if(err){
-                                                                    console.log("Error in Push Notification Sending")
-                                                                    console.log(err)
-                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
-
-                                                            }else{
-                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            });
-                                            //------------------------------
+                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
                                         }
                                     });
                                 }

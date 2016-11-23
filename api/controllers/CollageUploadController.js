@@ -31,6 +31,24 @@ function union_arrays (x, y) {
   }
   return res;
 }
+
+//Function to get Duplicate
+function find_duplicate_in_array(param) {
+  var i,
+  len=param.length,
+  result = [],
+  obj = {};
+  for (i=0; i<len; i++)
+  {
+  obj[param[i]]=0;
+  }
+  for (i in obj) {
+  result.push(i);
+  }
+  return result;
+}
+
+
 module.exports = {
 
 /* ==================================================================================================================================
@@ -153,7 +171,24 @@ module.exports = {
                                                                     });
                                                 }
                                         });
-                                        var final_tagged_users_Array = union_arrays(taggedUserArray, reportUserResults_Array);
+                                        var combine_tagged_report_array         =   taggedUserArray.concat(reportUserResults_Array);
+                                        var duplicate_tagged_report_array       =   find_duplicate_in_array(combine_tagged_report_array);
+                                        var final_tagged_users_Array            =   union_arrays(taggedUserArray, duplicate_tagged_report_array);
+
+                                        console.log("###################################################################################");
+                                        console.log("taggedUserArray --------------------------------");
+                                        console.log(taggedUserArray);
+                                        console.log("reportUserResults --------------------------------");
+                                        console.log(reportUserResults);
+                                        console.log("combine_tagged_report_array --------------------------------");
+                                        console.log(combine_tagged_report_array);
+                                        console.log("duplicate_tagged_report_array +++++++++++++++++++++++++++++++++");
+                                        console.log(duplicate_tagged_report_array);
+                                        console.log("final_tagged_users_Array =====================================");
+                                        console.log(final_tagged_users_Array);
+                                        console.log("###################################################################################");
+
+
                                         if(!final_tagged_users_Array.length){
                                                 return res.json(200, {status: 2, status_type: 'Failure', message: 'Tagged users reported you. So Dither not created'});
                                         }else{

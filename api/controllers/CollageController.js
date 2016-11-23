@@ -244,7 +244,7 @@ module.exports = {
                                                             User.findOne({id: received_userId}).exec(function (err, foundUserDetails){
                                                                     if(err){
                                                                         console.log(err);
-                                                                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
+                                                                           return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding User Details', error_details: err});
                                                                     }else{
                                                                         if(!foundUserDetails){
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',

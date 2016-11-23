@@ -20,7 +20,7 @@ module.exports = {
                     var reportType                  =     req.param('report_type');
                     var report                      =     req.param('description');
                     var received_userId             =     req.param('user_id');
-                    var device_type					=	  req.get('device_type');
+                    var device_type                 =     req.get('device_type');
                     console.log(reportType);
                     console.log(report);
 
@@ -51,7 +51,7 @@ module.exports = {
                                                             else{
                                                                     console.log(results);
                                                                     //-----------------------PUSH NOTIFICATION-------------------------------------------------------------
-                                                                    
+
                                                                     User_token.find({userId: received_userId }).exec(function (err, getTokenDetails){
                                                                                             if(err)
                                                                                             {
@@ -60,44 +60,44 @@ module.exports = {
                                                                                             }
                                                                                             else
                                                                                             {
-																								console.log(getTokenDetails)
+                                                                                                console.log(getTokenDetails)
                                                                                                 var message     =  'Report User Notification';
                                                                                                 var ntfn_body   =  " Reported againt You";
                                                                                                 //var device_id   =  getTokenDetails.deviceId;
                                                                                                 var deviceId_arr = [];
-																								getTokenDetails.forEach(function(factor, index){
+                                                                                                getTokenDetails.forEach(function(factor, index){
 
                                                                                                                 deviceId_arr.push(factor.deviceId);
 
 
                                                                                                     });
-																								
+
                                                                                                 if(!deviceId_arr.length){
                                                                                                          return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
                                                                                                 }else{
-																										var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,id:userId,NtfnType:6};
-																										console.log(data)
-																										
-																										 NotificationService.NotificationPush(data, function(err, ntfnSend){
-																											if(err){
-																													console.log("Error in Push Notification Sending")
-																													console.log(err)
-																													return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+                                                                                                        var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,id:userId,NtfnType:6};
+                                                                                                        console.log(data)
 
-																											}else{
-																													return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
-																											}
-																										});
-																										
-																										
-																										
+                                                                                                         NotificationService.NotificationPush(data, function(err, ntfnSend){
+                                                                                                            if(err){
+                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                    console.log(err)
+                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+
+                                                                                                            }else{
+                                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully reported against the user'});
+                                                                                                            }
+                                                                                                        });
+
+
+
                                                                                                 }
 
                                                                                             //------------------------------
                                                                                             }
                                                                     });
-                                                                
-                                                                   
+
+
                                                             }
                                                     });
                                             }
@@ -171,35 +171,44 @@ module.exports = {
 
         },
         /* ==================================================================================================================================
-						To Get ReportedUser List
-		==================================================================================================================================== */
+                        To Get ReportedUser List
+        ==================================================================================================================================== */
         reportedUserList:  function (req, res) {
-			
-					console.log("Reported Users List========api")
-					var tokenCheck                  =     req.options.tokenCheck;
+
+                    console.log("Reported Users List========api")
+                    var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
-					var reportUserArray				=	  [];
-                    var query	= "SELECT R.reporterId,U.name FROM reportUser as R LEFT JOIN user as U ON R.reporterId = U.id where R.userId = '"+userId+"'";
-				    console.log(query);
-				    ReportUser.query(query, function(err, ReportedUsers) {
-						if(err)
-						{
-							console.log(err)
-							return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in get Reported User List', error_details: err});
-						}
-						else
-						{
-							console.log(ReportedUsers[0])
-							ReportedUsers.forEach(function(factor, index){
-									reportUserArray.push({userId:factor.reporterId,name:factor.name});
-							});
-							console.log(reportUserArray)
-							return res.json(200, {status: 1 ,status_type: 'Success', message: 'Successfully get Reporters',reportedUsers:reportUserArray});
-						}
-						
-					});
-			
-		},
+                    var reportUserArray             =     [];
+                    var query   =  " SELECT R.reporterId,U.name"+
+                                   " FROM reportUser as R INNER JOIN user as U ON R.reporterId = U.id"+
+                                   " where R.userId = '"+userId+"'";
+                    console.log(query);
+                    ReportUser.query(query, function(err, results) {
+                        if(err){
+                            console.log(err)
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in get Reported User List', error_details: err});
+                        }else{
+                            if(!results.length){
+                                    return res.json(200, {status: 2 ,status_type: 'Failure', message: 'No reportees found',
+                                                        reportedUsers:reportUserArray
+                                                        });
+                            }else{
+                                    results.forEach(function(factor, index){
+                                            reportUserArray.push({
+                                                                    userId      :   factor.reporterId,
+                                                                    name        :   factor.name
+                                                                });
+                                    });
+                                    console.log(reportUserArray)
+                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Successfully get Reportees',
+                                                        reportedUsers:reportUserArray
+                                                        });
+                            }
+                        }
+
+                    });
+
+        },
 
 
 };

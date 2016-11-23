@@ -50,7 +50,7 @@ module.exports = {
 											var email_to        = data.email;
 											var email_subject   = 'Dither Expired!';
 											var email_template  = 'expired';
-											var email_context   = {receiverName: data.name,ditherImage:collageImage,Vote:data.vote};
+											var email_context   = {receiverName: data.name,ditherImage:collageImage,Vote:data.Vote};
 											EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
 												if(err){
 														console.log(err);

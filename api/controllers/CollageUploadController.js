@@ -174,6 +174,21 @@ module.exports = {
                                         var combine_tagged_report_array         =   taggedUserArray.concat(reportUserResults_Array);
                                         var duplicate_tagged_report_array       =   find_duplicate_in_array(combine_tagged_report_array);
                                         var final_tagged_users_Array            =   union_arrays(taggedUserArray, duplicate_tagged_report_array);
+
+                                        console.log("###################################################################################");
+                                        console.log("taggedUserArray --------------------------------");
+                                        console.log(taggedUserArray);
+                                        console.log("reportUserResults --------------------------------");
+                                        console.log(reportUserResults);
+                                        console.log("combine_tagged_report_array --------------------------------");
+                                        console.log(combine_tagged_report_array);
+                                        console.log("duplicate_tagged_report_array +++++++++++++++++++++++++++++++++");
+                                        console.log(duplicate_tagged_report_array);
+                                        console.log("final_tagged_users_Array =====================================");
+                                        console.log(final_tagged_users_Array);
+                                        console.log("###################################################################################");
+
+
                                         if(!final_tagged_users_Array.length){
                                                 return res.json(200, {status: 2, status_type: 'Failure', message: 'Tagged users reported you. So Dither not created'});
                                         }else{

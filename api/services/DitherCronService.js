@@ -41,6 +41,7 @@ module.exports = {
                                         if(global_settingsKeyValue)
                                         {
 											console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeee")
+											console.log(keyValue)
 											console.log(keyValue.CDN_IMG_URL)
 											var collageImg_path = "images/collage/";
 											var img_url 		= keyValue.CDN_IMG_URL + collageImg_path;

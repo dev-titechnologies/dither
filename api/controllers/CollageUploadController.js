@@ -180,13 +180,16 @@ module.exports = {
                                 }else{
 
                                         reportUserResults.forEach(function(factor, index){
-                                                if(index){
+                                                if(factor.reporterId){
                                                     reportUserResults_Array.push(factor.reporterId);
                                                     reportUserResults_JSON_Array.push({
                                                                     userId      :   factor.reporterId,
                                                                     name        :   factor.name
                                                                     });
                                                 }
+                                                console.log(index);
+                                                console.log("reportUserResults_Array --------------------------------");
+                                                console.log(reportUserResults_Array);
                                         });
                                         //var combine_tagged_report_array         =   taggedUserArray.concat(reportUserResults_Array);
                                         //var duplicate_tagged_report_array       =   find_duplicate_in_array(combine_tagged_report_array);

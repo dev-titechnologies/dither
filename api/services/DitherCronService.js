@@ -43,6 +43,8 @@ module.exports = {
 											console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeee")
 											console.log(keyValue)
 											console.log(keyValue.CDN_IMG_URL)
+											console.log(keyValue.TOKEN_EXPIRY_HOUR)
+
 											var collageImg_path = "http://cdn.dither.titechdev.com/images/collage/";
 											var img_url 		= collageImg_path;
 											console.log(img_url)

@@ -25,6 +25,19 @@ module.exports = {
                 console.log(req.param("dither_id"));
                 var get_collage_id              =     req.param("dither_id");
                 var query;
+                var loggedUser_profilePic;
+                var total_taggedUser_Array      =     [];
+                if(tokenCheck.tokenDetails.profilePic == "" || tokenCheck.tokenDetails.profilePic == null){
+                            loggedUser_profilePic  =  "";
+                }else{
+                            loggedUser_profilePic  =  profilePic_path + tokenCheck.tokenDetails.profilePic;
+                }
+                var loggedUser_JSON_Array       =     [{
+                                                        name                :    tokenCheck.tokenDetails.name,
+                                                        userId              :    tokenCheck.tokenDetails.userId,
+                                                        profile_image       :    loggedUser_profilePic,
+                                                        mention_id          :    tokenCheck.tokenDetails.mentionId
+                                                       }];
 
                 if(!get_collage_id){
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id'});
@@ -169,6 +182,7 @@ module.exports = {
                                                                                                     mention_id      :   factor.mentionId
                                                                                         });
                                                                                 });
+                                                                                total_taggedUser_Array = taggedUserArrayFinal.concat(loggedUser_JSON_Array);
                                                                             }
                                                                             query = " SELECT invt.phoneNumber, invt.invitee"+
                                                                                     " FROM invitation invt"+
@@ -211,7 +225,7 @@ module.exports = {
                                                                                                                             dither_like_position       : like_position,
                                                                                                                             dithers                    : imageArray,
                                                                                                                             ditherCount                : imageArray.length,
-                                                                                                                            taggedUsers                : taggedUserArrayFinal,
+                                                                                                                            taggedUsers                : total_taggedUser_Array,
                                                                                                                             comments                   : commentArray,
                                                                                                                             invite_friends_NUM         : inviteeArray,
                                                                                                                 });

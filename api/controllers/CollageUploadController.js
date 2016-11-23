@@ -63,7 +63,8 @@ function remove_duplicate_array(arg1, arg2){
                 }
             }
         }
-        return arg1.concat(arg2);
+        //return arg1.concat(arg2);
+        return arg1;
 }
 
 module.exports = {

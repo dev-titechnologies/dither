@@ -193,6 +193,8 @@ module.exports = {
                                         var final_tagged_users_Array            =   remove_duplicate_array(taggedUserArray, reportUserResults_Array);
 
                                         console.log("###################################################################################");
+                                        console.log("reportUserResults --------------------------------");
+                                        console.log(reportUserResults);
                                         console.log("taggedUserArray --------------------------------");
                                         console.log(taggedUserArray);
                                         console.log("reportUserResults_Array --------------------------------");

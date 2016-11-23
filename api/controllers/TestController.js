@@ -929,12 +929,13 @@ module.exports = {
               Write
   ==================================================================================================================================== */
     write_file : function (req, res) {
-            fs.writeFile("test.txt", "Hey there!", function(err) {
+		console.log("testinggggg cron")
+            /*fs.writeFile("test.txt", "Hey there!", function(err) {
                 if(err){
                     return console.log(err);
                 }
                 console.log("The file was saved!");
-            });
+            });*/
     },
 
 /*  =================================================================================================================================
@@ -1026,7 +1027,9 @@ module.exports = {
                 });
             }
     },
-
+	getExpireDither: function (req, res){
+		console.log("cronnnn")
+	},
 
 
 };

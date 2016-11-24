@@ -22,6 +22,7 @@ module.exports = {
                                                 deviceId: deviceId,
                                                 device_IMEI:device_IMEI,
                                                 device_Type:device_Type,
+                                                badgeCount:0,
                                                 expiryDate: expiry_date
                                             };
             console.log("tokenValues------------------------------------------" );

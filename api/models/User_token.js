@@ -40,6 +40,10 @@ module.exports = {
                 type: 'string'
                 
         },
+        badgeCount: {
+                type: 'integer',
+                defaultsTo: 0
+        },
         expiryDate: {
                 type: 'datetime',
         },

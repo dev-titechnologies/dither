@@ -32,24 +32,23 @@ function union_arrays (x, y) {
   return res;
 }
 
-//Function to get Duplicate
-/*function find_duplicate_in_array(param) {
-  var i,
-  len=param.length,
-  result = [],
-  obj = {};
-  for (i=0; i<len; i++)
-  {
-  obj[param[i]]=0;
-  }
-  for (i in obj) {
-  result.push(i);
-  }
-  return result;
-}*/
+//Function to get only duplicate values from a normal array
+function find_duplicate_from_array(arg1,arg2){
+        var arg_push = [];
+        console.log(arg1);
+        console.log(arg2);
+        for(var i = 0; i < arg1.length; i++){
+            for(var j = 0; j < arg2.length; j++){
+                if(arg1[i] == arg2[j]){
+                    arg_push.push(arg1[i]);
+                }
+            }
+        }
+        return arg_push;
+}
 
 //Function to remove duplicate values completely from a normal array
-function remove_duplicate_array(arg1, arg2){
+function remove_duplicate_from_array(arg1, arg2){
         //var arr = [1, 2, 3, 4, 5, 6, 7];
         //var ar = [2, 4, 6, 8, 10];
         //var newID = [];
@@ -63,7 +62,6 @@ function remove_duplicate_array(arg1, arg2){
                 }
             }
         }
-        //return arg1.concat(arg2);
         return arg1;
 }
 
@@ -183,18 +181,35 @@ module.exports = {
                                         reportUserResults.forEach(function(factor, index){
                                                 if(factor.reporterId){
                                                     reportUserResults_Array.push(factor.reporterId);
-                                                    reportUserResults_JSON_Array.push({
+                                                    /*reportUserResults_JSON_Array.push({
                                                                     userId      :   factor.reporterId,
                                                                     name        :   factor.name
-                                                                    });
+                                                                    });*/
                                                 }
                                                 console.log(index);
                                                 console.log("reportUserResults_Array --------------------------------");
                                                 console.log(reportUserResults_Array);
                                         });
                                         //var combine_tagged_report_array         =   taggedUserArray.concat(reportUserResults_Array);
-                                        //var duplicate_tagged_report_array       =   find_duplicate_in_array(combine_tagged_report_array);
-                                        var final_tagged_users_Array            =   remove_duplicate_array(taggedUserArray, reportUserResults_Array);
+                                        var duplicate_tagged_report_array       =   find_duplicate_from_array(taggedUserArray, reportUserResults_Array);
+                                        var final_tagged_users_Array            =   remove_duplicate_from_array(taggedUserArray, reportUserResults_Array);
+
+                                        reportUserResults.forEach(function(factor, index){
+                                                if(factor.reporterId){
+                                                    if(duplicate_tagged_report_array.length){
+                                                        for(var i=0; i <= duplicate_tagged_report_array.length; i++){
+                                                                if(factor.reporterId == i){
+                                                                      reportUserResults_JSON_Array.push({
+                                                                                    userId      :   factor.reporterId,
+                                                                                    name        :   factor.name
+                                                                                    });
+                                                                }
+                                                        }
+                                                    }
+
+                                                }
+
+                                        });
 
                                         console.log("###################################################################################");
                                         console.log("reportUserResults --------------------------------");

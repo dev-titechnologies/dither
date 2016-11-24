@@ -90,7 +90,7 @@ module.exports = {
                                     title   : 'Android Test Push', // Indicates notification title
                                     body    : data.NtfnBody, // Indicates notification body text
                                     icon    : '', // Indicates notification icon
-                                    sound   : 'Tada.wav', // Indicates sound to be played
+                                    sound   : 'ringing.wav', // Indicates sound to be played
                                     badge   : '', // Indicates the badge on client app home icon
                                     payload : {}// Custom data to send within Push Notification
                                 },

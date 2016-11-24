@@ -47,8 +47,8 @@ module.exports = {
                                 title       : 'Dither', // Indicates notification title
                                 body        : data.NtfnBody, // Indicates notification body text
                                 icon        : '', // Indicates notification icon
-                                sound       : '', // Indicates sound to be played
-                                badge       : '', // Indicates the badge on client app home icon
+                                sound       : 'aurora.aiff', // Indicates sound to be played
+                                badge       : 40, // Indicates the badge on client app home icon
                                 payload     : details,// Custom data to send within Push Notification*/
             }
         });

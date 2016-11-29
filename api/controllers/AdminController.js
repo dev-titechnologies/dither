@@ -463,7 +463,7 @@ console.log(values);
                     'ids': VIEW_ID,        
                     'start-date': 'today',
                     'end-date': 'today',
-                    'dimensions': 'ga:city,ga:latitude,ga:longitude',        
+                      'dimensions': 'ga:city,ga:latitude,ga:longitude',        
                     'metrics': 'ga:sessions,ga:users',
                   }, function (err, response) {
                     if (err) 

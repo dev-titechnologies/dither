@@ -156,8 +156,8 @@ module.exports = {
 																			console.log(err)
 																			callback();
 																		}else{
-                                                                             console.log(selCommentNtfn[0].id)
-                                                                             old_id	 =	selCommentNtfn[0].id;
+                                                                             //console.log(selCommentNtfn[0].id)
+                                                                             //old_id	 =	selCommentNtfn[0].id;
                                                                             var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
                                                                             NotificationLog.query(query, function(err, deleteCommentNtfn){
                                                                                 if(err){

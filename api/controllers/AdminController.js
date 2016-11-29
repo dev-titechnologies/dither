@@ -454,16 +454,16 @@ console.log(values);
                         return;
                       }
                       var analytics = googleapis.analytics('v3');
-                      queryData1(analytics);
-                    });                    
+                      queryData(analytics);
+                    });
 
-                  function queryData1(analytics) {
+                  function queryData(analytics) {
                   analytics.data.ga.get({
                     'auth': jwtClient,
                     'ids': VIEW_ID,        
                     'start-date': 'today',
                     'end-date': 'today',
-                      'dimensions': 'ga:city,ga:latitude,ga:longitude',        
+                     'dimensions': 'ga:city,ga:latitude,ga:longitude',        
                     'metrics': 'ga:sessions,ga:users',
                   }, function (err, response) {
                     if (err) 
@@ -490,10 +490,10 @@ getBrowserDetails:  function(req,res){
                         return;
                       }
                       var analytics = googleapis.analytics('v3');
-                      queryData1(analytics);
+                      queryData(analytics);
                     });
 
-                  function queryData1(analytics) {
+                  function queryData(analytics) {
                   analytics.data.ga.get({
                     'auth': jwtClient,
                     'ids': VIEW_ID,        
@@ -526,10 +526,10 @@ getPieChartData:function(req,res){
                     return;
                   }
                   var analytics = googleapis.analytics('v3');
-                  queryData1(analytics);
+                  queryData(analytics);
                 });
 
-              function queryData1(analytics) {
+              function queryData(analytics) {
               analytics.data.ga.get({
                 'auth': jwtClient,
                 'ids': VIEW_ID,        
@@ -561,10 +561,10 @@ getBarChartData:function(req,res){
                     return;
                   }
                   var analytics = googleapis.analytics('v3');
-                  queryData1(analytics);
+                  queryData(analytics);
                 });
 
-              function queryData1(analytics) {
+              function queryData(analytics) {
 
                 var startDate = req.body.fromDate;
                 var endDate = req.body.toDate;

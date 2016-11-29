@@ -156,7 +156,7 @@ module.exports = {
 																			console.log(err)
 																			callback();
 																		}else{
-																			if(selCommentNtfn){
+																			if(selCommentNtfn.length!=0){
 																				 console.log(selCommentNtfn[0].id)
 																				 old_id	 =	selCommentNtfn[0].id;
 																			 }

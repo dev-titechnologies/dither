@@ -1033,7 +1033,7 @@ module.exports = {
 
     array_test: function (req, res){
 
-                function remove_duplicate_array(arg1, arg2){
+                /*function remove_duplicate_array(arg1, arg2){
                     //var arr = [1, 2, 3, 4, 5, 6, 7];
                     //var ar = [2, 4, 6, 8, 10];
                     //var newID = [];
@@ -1049,13 +1049,47 @@ module.exports = {
                         }
                     }
                     return arg1.concat(arg2);
+                }*/
+                function find_duplicate_in_array(arg1,arg2) {
+                      var arg_push = [];
+                      console.log(arg1);
+                      console.log(arg2);
+                    for(var i = 0; i < arg1.length; i++){
+                        for(var j = 0; j < arg2.length; j++){
+                            console.log("arg1[i] ------");
+                            console.log(arg1[i]);
+                            //console.log("arg2[i] ------");
+                            //console.log(arg2[i]);
+                            console.log("============================================== ------");
+                            if(arg1[i] == arg2[j]){
+                                    arg_push.push(arg1[i]);
+                            }
+                        }
+                    }
+                    console.log(arg_push);
+                    //return arg_push;
                 }
                 var arr = [1, 2, 3, 4, 5, 6, 7];
                 var ar = [2, 4, 6, 8, 10];
 
-                var tt = remove_duplicate_array(arr, ar);
-                console.log("tt -------------------");
-                console.log(tt);
+                //var array3 = ar.filter(function(obj) { return arr.indexOf(obj) == -1; });
+                //console.log("ccccccccccccccccccccccc")
+                //console.log(array3)
+
+
+                //var combine_tagged_report_array         =   arr.concat(ar);
+                //var duplicate_tagged_report_array       =   find_duplicate_in_array(combine_tagged_report_array);
+
+                console.log(arr);
+                console.log(ar);
+                //var tt = remove_duplicate_array(arr, ar);
+                //console.log("tt -------------------");
+                //console.log(tt);
+
+                console.log("duplicate_tagged_report_array  ====");
+                //console.log(combine_tagged_report_array);
+                var tt1 = find_duplicate_in_array(arr, ar);
+                console.log(tt1);
             /*var arr = [1, 2, 3, 4, 5, 6, 7];
             var ar = [2, 4, 6, 8, 10];
 

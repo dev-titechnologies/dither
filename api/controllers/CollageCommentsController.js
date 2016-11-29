@@ -154,6 +154,8 @@ module.exports = {
                                                                                     console.log(err)
                                                                                     callback();
                                                                                 }else{
+																					console.log("delete comment NotificationId")
+																					console.log(deleteCommentNtfn)
                                                                                     callback();
                                                                                 }
                                                                             });

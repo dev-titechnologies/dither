@@ -19,8 +19,7 @@ module.exports = {
                         "message"             :   data.NtfnBody,
                         "type"                :   data.NtfnType,
                         "id"                  :   data.id,
-                        "notification_id"     :   data.notification_id,
-                        "old_id"			  :	  data.old_id
+                        "notification_id"     :   data.notification_id
                     };
         //console.log(details);
         ios = PusherService('ios', {

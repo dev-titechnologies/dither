@@ -27,6 +27,7 @@ module.exports = {
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                     //var   mention_arr                 =    ['test_user','anu_r'];
+                    var old_id						= 	  '';
                     var profile_image               =     '';
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
@@ -124,7 +125,8 @@ module.exports = {
                                                                                                                                         NtfnBody            :   ntfn_body,
                                                                                                                                         NtfnType            :   7,
                                                                                                                                         id                  :   collageId,
-                                                                                                                                        notification_id     :   createdNotificationTags.id
+                                                                                                                                        notification_id     :   createdNotificationTags.id,
+                                                                                                                                        old_id				:	old_id
                                                                                                                                         };
                                                                                                                         NotificationService.NotificationPush(data, function(err, ntfnSend){
                                                                                                                                 if(err){
@@ -148,6 +150,14 @@ module.exports = {
                                                                         }
                                                                 },
                                                                 function(callback) {
+																	var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
+																	NotificationLog.query(query, function(err, selCommentNtfn){
+																		if(err){
+																			console.log(err)
+																			callback();
+																		}else{
+                                                                             console.log(selCommentNtfn[0].id)
+                                                                             old_id	 =	selCommentNtfn[0].id;
                                                                             var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
                                                                             NotificationLog.query(query, function(err, deleteCommentNtfn){
                                                                                 if(err){
@@ -159,6 +169,8 @@ module.exports = {
                                                                                     callback();
                                                                                 }
                                                                             });
+                                                                           }
+                                                                     });  
 
                                                                 },
                                                                 function(callback) {
@@ -229,7 +241,8 @@ module.exports = {
                                                                                                                                             NtfnBody        :   ntfn_body,
                                                                                                                                             NtfnType        :   3,
                                                                                                                                             id              :   collageId,
-                                                                                                                                            notification_id :   createdNotificationTags.id
+                                                                                                                                            notification_id :   createdNotificationTags.id,
+                                                                                                                                            old_id			:	old_id
                                                                                                                                             };
                                                                                                                                 NotificationService.NotificationPush(data, function(err, ntfnSend){
                                                                                                                                     if(err){

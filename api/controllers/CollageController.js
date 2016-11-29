@@ -588,7 +588,7 @@ module.exports = {
                                                                 }
                                                             });
                                                             if(deviceId_arr.length){
-                                                                var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id};
+                                                                var data        = {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:1,id:collage_results.id,notification_id:createdNotificationTags.id,old_id:''};
                                                                 NotificationService.NotificationPush(data, function(err, ntfnSend){
                                                                         if(err){
                                                                             console.log(err)

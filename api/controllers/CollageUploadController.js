@@ -447,7 +447,8 @@ module.exports = {
                                                                                                                                                     NtfnBody            :   ntfn_body,
                                                                                                                                                     NtfnType            :   1,
                                                                                                                                                     id                  :   collage_results.id,
-                                                                                                                                                    notification_id     :   createdNotificationTags.id
+                                                                                                                                                    notification_id     :   createdNotificationTags.id,
+                                                                                                                                                    old_id				:	''
                                                                                                                                                 };
                                                                                                                                 NotificationService.NotificationPush(data, function(err, ntfnSend) {
                                                                                                                                         if(err){

@@ -14,14 +14,14 @@ module.exports = {
 
     pushNtfnApn: function(data,device_id, callback){
         console.log("Push Notification Apn")
-        console.log(device_id)
+        //console.log(device_id)
         var details  =  {
                         "message"             :   data.NtfnBody,
                         "type"                :   data.NtfnType,
                         "id"                  :   data.id,
                         "notification_id"     :   data.notification_id
                     };
-        console.log(details);
+        //console.log(details);
         ios = PusherService('ios', {
             device          :   [], // Array of string with device tokens
             provider        :   {
@@ -47,7 +47,7 @@ module.exports = {
                                 title       : 'Dither', // Indicates notification title
                                 body        : data.NtfnBody, // Indicates notification body text
                                 icon        : '', // Indicates notification icon
-                                sound       : '', // Indicates sound to be played
+                                sound       : 'aurora.aiff', // Indicates sound to be played
                                 badge       : '', // Indicates the badge on client app home icon
                                 payload     : details,// Custom data to send within Push Notification*/
             }
@@ -56,9 +56,9 @@ module.exports = {
         //console.log(ios)
         ios
           .send([device_id], {
-          })
-          .then(console.log.bind(console))
-          .catch(console.error.bind(console));
+          });
+          //.then(console.log.bind(console))
+          //.catch(console.error.bind(console));
           callback();
 
 
@@ -68,9 +68,9 @@ module.exports = {
 
     pushNtfnGcm: function(data,device_id, callback){
         console.log("Push Notification GCM")
-        console.log(data)
-        console.log(device_id)
-        console.log("counttttttttttttttttttt"+data.device_id.length)
+        //console.log(data)
+        //console.log(device_id)
+        //console.log("counttttttttttttttttttt"+data.device_id.length)
         var ntfnArr         =   [];
         ntfnArr             =   data.device_id;
         var details         =   {
@@ -90,21 +90,21 @@ module.exports = {
                                     title   : 'Android Test Push', // Indicates notification title
                                     body    : data.NtfnBody, // Indicates notification body text
                                     icon    : '', // Indicates notification icon
-                                    sound   : '', // Indicates sound to be played
+                                    sound   : 'pulses.wav', // Indicates sound to be played
                                     badge   : '', // Indicates the badge on client app home icon
                                     payload : {}// Custom data to send within Push Notification
                                 },
         });
         //console.log(android)
-        console.log("device arrayyyyyyyyyyyyyyyyy")
+        //console.log("device arrayyyyyyyyyyyyyyyyy")
         //console.log(ntfnArr)
-        console.log(device_id)
+        //console.log(device_id)
         android
             .send([device_id], {
                     body: details
-                })
-            .then(console.log.bind(console))
-            .catch(console.error.bind(console));
+                });
+           // .then(console.log.bind(console))
+           // .catch(console.error.bind(console));
              callback();
     },
 
@@ -115,31 +115,31 @@ module.exports = {
 //===============================================END OF PUSH==========================================================================================
 
   /*=============================================================================================================================================
-                                        SERVICE FOR IN APP NOTIFICATION
+                                        SERVICE FOR PUSH NOTIFICATION
     ==============================================================================================================================================*/
 
 
     NotificationPush: function(data,callback){
-        console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
-        console.log(data)
+        //console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
+        //console.log(data)
         var arr = data.device_id;
-        console.log("/////////----Device array----//////////")
-        console.log(arr)
+        //console.log("/////////----Device array----//////////")
+        //console.log(arr)
         if(arr){
             arr.forEach(function(factor, index){
                 User_token.findOne({deviceId:factor }).exec(function (err, getDeviceType){
                     if(err){
                         console.log("error")
                     }else{
-                        console.log("device token---------------------")
-                        console.log(factor)
-                        console.log(getDeviceType)
+                        //console.log("device token---------------------")
+                        //console.log(factor)
+                        //console.log(getDeviceType)
                         if(factor!=0){
                                 var deviceId    =  factor;
                                 var switchKey   =  getDeviceType.device_Type;
-                                console.log(switchKey)
-                                console.log("factorrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-                                console.log(deviceId)
+                                //console.log(switchKey)
+                                //console.log("factorrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+                                //console.log(deviceId)
                                 switch(switchKey){
                                         case 'ios' :
                                                     NotificationService.pushNtfnApn(data,deviceId, function(err, ntfnSend) {
@@ -148,9 +148,9 @@ module.exports = {
                                                             console.log(err)
                                                             //callback();
                                                         }else{
-                                                            console.log("Push notification result i nIOS")
-                                                            console.log(ntfnSend)
-                                                            console.log("push notification sended")
+                                                            //console.log("Push notification result i nIOS")
+                                                            //console.log(ntfnSend)
+                                                            //console.log("push notification sended")
                                                             //callback();
 
                                                         }
@@ -164,9 +164,9 @@ module.exports = {
                                                             console.log(err)
                                                             //callback();
                                                         }else{
-                                                            console.log("Push notification result IN Android")
-                                                            console.log(ntfnSend)
-                                                            console.log("Push Notification sended")
+                                                            //console.log("Push notification result IN Android")
+                                                            //console.log(ntfnSend)
+                                                            //console.log("Push Notification sended")
                                                             //callback();
                                                         }
                                                     });

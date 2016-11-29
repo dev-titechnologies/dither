@@ -22,6 +22,7 @@ module.exports = {
                                                 deviceId: deviceId,
                                                 device_IMEI:device_IMEI,
                                                 device_Type:device_Type,
+                                                badgeCount:0,
                                                 expiryDate: expiry_date
                                             };
             console.log("tokenValues------------------------------------------" );
@@ -58,7 +59,7 @@ module.exports = {
     ================================================================================================================================== */
     checkToken: function (token, callback) {
             var today = new Date().toISOString();
-            var query = " SELECT usr.id, usr.name, usr.notifyOpinion, usr.profilePic, usr.email, usr.fbId, usr.phoneNumber,"+
+            var query = " SELECT usr.id, usr.name, usr.notifyOpinion, usr.profilePic, usr.email, usr.fbId, usr.phoneNumber, usr.mentionId,"+
                         " usrtkn.userId, usrtkn.token, usrtkn.deviceId, usrtkn.expiryDate"+
                         " FROM"+
                         " userToken usrtkn"+

@@ -872,8 +872,8 @@ module.exports = {
                 var global_settingsKeyValue     =   req.options.settingsKeyValue;
                 var email_to                    =   "tittoxp@gmail.com";
                 var email_subject               =   'Welcome to Dither';
-                var email_template              =   'signup';
-                var email_context               =   {receiverName: "Titto xavier"};
+                var email_template              =   'email-test';
+                var email_context               =   {receiverName: "Titto xavier", pic: global_settingsKeyValue.CDN_IMAGE_URL + "images/profilePics/31db73cf-8305-4351-b075-ffe287dd7dab.jpg"};
                 EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
                     if(err)
                     {
@@ -888,7 +888,7 @@ module.exports = {
                             console.log(email_template);
                             console.log(email_context);
                             console.log("async parallel in Mailpart Success");
-                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the Dither email Test'});
                     }
 
 
@@ -929,12 +929,13 @@ module.exports = {
               Write
   ==================================================================================================================================== */
     write_file : function (req, res) {
-            fs.writeFile("test.txt", "Hey there!", function(err) {
+        console.log("testinggggg cron")
+            /*fs.writeFile("test.txt", "Hey there!", function(err) {
                 if(err){
                     return console.log(err);
                 }
                 console.log("The file was saved!");
-            });
+            });*/
     },
 
 /*  =================================================================================================================================
@@ -978,8 +979,151 @@ module.exports = {
                 }
             });*/
     },
+    /*  =================================================================================================================================
+            SELECT user for date check
+    ================================================================================================================================== */
+    usersList: function (req, res){
+            console.log(req.param("user_id"));
+            var user_id     =   req.param("user_id");
+            if(!user_id){
+                    return res.json(200, {status        : 2,
+                                        status_type     : 'FAILURE' ,
+                                        message         : 'please pass user_id',
+                                });
+            }else{
+                var query       =   "SELECT * FROM user where id = "+user_id;
+                User.query(query, function(err, results){
+                //User.find({id: 2}).exec(function (err, results) {
+                //User.find({}, function(err, results){
+                    if(err){
+                        console.log(err);
+                        return res.json(200, {status        : 2,
+                                            status_type     : 'FAILURE' ,
+                                            message         : 'Some error occured',
+                                            err_details     : err,
+                        });
+                    }else{
+                        console.log("results query =============");
+                        console.log(results);
+                        User.find({id: user_id}).exec(function (err, results1) {
+                            if(err){
+                                console.log(err);
+                                return res.json(200, {status        : 2,
+                                                    status_type     : 'FAILURE' ,
+                                                    message         : 'Some error occured',
+                                                    err_details     : err,
+                                });
+                            }else{
+                                console.log("results find ++++++++++++++++++++++++");
+                                console.log(results1);
+                                return res.json(200, {status        : 1,
+                                                status_type         : 'SUCCESS' ,
+                                                message             : 'Successfully got',
+                                                results             : results,
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+    },
+    getExpireDither: function (req, res){
+        console.log("cronnnn")
+    },
+
+    array_test: function (req, res){
+
+                /*function remove_duplicate_array(arg1, arg2){
+                    //var arr = [1, 2, 3, 4, 5, 6, 7];
+                    //var ar = [2, 4, 6, 8, 10];
+                    //var newID = [];
+
+                    for(var i = 0; i < arg1.length; i++){
+                        for(var j = 0; j < arg2.length; j++){
+                            if(arg1[i] == arg2[j]){
+                                //newID.push(arr[i]);
+                                arg1.splice(i, 1);
+                                arg2.splice(j, 1);
+                                break;
+                            }
+                        }
+                    }
+                    return arg1.concat(arg2);
+                }*/
+                function find_duplicate_in_array(arg1,arg2) {
+                      var arg_push = [];
+                      console.log(arg1);
+                      console.log(arg2);
+                    for(var i = 0; i < arg1.length; i++){
+                        for(var j = 0; j < arg2.length; j++){
+                            console.log("arg1[i] ------");
+                            console.log(arg1[i]);
+                            //console.log("arg2[i] ------");
+                            //console.log(arg2[i]);
+                            console.log("============================================== ------");
+                            if(arg1[i] == arg2[j]){
+                                    arg_push.push(arg1[i]);
+                            }
+                        }
+                    }
+                    console.log(arg_push);
+                    //return arg_push;
+                }
+                var arr = [1, 2, 3, 4, 5, 6, 7];
+                var ar = [2, 4, 6, 8, 10];
+
+                //var array3 = ar.filter(function(obj) { return arr.indexOf(obj) == -1; });
+                //console.log("ccccccccccccccccccccccc")
+                //console.log(array3)
 
 
+                //var combine_tagged_report_array         =   arr.concat(ar);
+                //var duplicate_tagged_report_array       =   find_duplicate_in_array(combine_tagged_report_array);
+
+                console.log(arr);
+                console.log(ar);
+                //var tt = remove_duplicate_array(arr, ar);
+                //console.log("tt -------------------");
+                //console.log(tt);
+
+                console.log("duplicate_tagged_report_array  ====");
+                //console.log(combine_tagged_report_array);
+                var tt1 = find_duplicate_in_array(arr, ar);
+                console.log(tt1);
+            /*var arr = [1, 2, 3, 4, 5, 6, 7];
+            var ar = [2, 4, 6, 8, 10];
+
+            var x = [1, 2, 3, 4, 5, 6, 7];
+            var y = [2, 4, 6, 8, 10];
+            var newID = [];
+            console.log(arr);
+            console.log(ar);
+
+            for(var i = 0; i < arr.length; i++){
+                for(var j = 0; j < ar.length; j++){
+                    if(arr[i] == ar[j]){
+                        newID.push(arr[i]);
+                        arr.splice(i, 1);
+                        ar.splice(j, 1);
+                        break;
+                    }
+                }
+            }
+            console.log(arr);
+            console.log(ar);
+            console.log(arr.concat(ar));*/
+              /*var obj = {};
+              for (var i = x.length-1; i >= 0; -- i)
+                 obj[x[i]] = x[i];
+              for (var i = y.length-1; i >= 0; -- i)
+                 obj[y[i]] = y[i];
+              var res = []
+              for (var k in obj) {
+                if (obj.hasOwnProperty(k))  // <-- optional
+                  res.push(obj[k]);
+              }
+              console.log(res);*/
+    },
 
 };
 

@@ -59,6 +59,7 @@ module.exports.routes = {
   '/collagePopular/*'                     :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageRecent/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageClosed/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
+  '/ditherConfig/*'                       :           ['auth.authenticate', 'helper.global'],
 
 
  /* 'GET /user/join': {

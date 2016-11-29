@@ -102,7 +102,11 @@ module.exports = {
 																						console.log(err)
 																						callback();
 																					}else{
-                                                                                    old_id	  =	selCommentNtfn[0].id;
+                                                                                   // old_id	  =	selCommentNtfn[0].id;
+                                                                                   if(selCommentNtfn.length!=0){
+																							console.log(selCommentNtfn[0].id)
+																							old_id	 =	selCommentNtfn[0].id;
+																					}
                                                                                     var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 2";
                                                                                     NotificationLog.query(query, function(err, deleteLikeNtfn){
                                                                                             if(err){

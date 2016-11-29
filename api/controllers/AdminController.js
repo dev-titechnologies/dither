@@ -455,10 +455,9 @@ console.log(values);
                       }
                       var analytics = googleapis.analytics('v3');
                       queryData1(analytics);
-                    });
-                    
+                    });                    
 
-                 function queryData1(analytics) {
+                  function queryData1(analytics) {
                   analytics.data.ga.get({
                     'auth': jwtClient,
                     'ids': VIEW_ID,        

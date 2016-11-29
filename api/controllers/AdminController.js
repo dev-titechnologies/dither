@@ -57,12 +57,14 @@ console.log(values);
 
 
     },
-        //   List all users
+        //   List all users based on limit(12 rows per call)
      getCompleteUser: function(req, res){
 
+                   console.log(req.params.all());
+                   var start = req.body.start;     
+                   var count = req.body.count;
 
-
-                    query = "SELECT * FROM  `user` ORDER BY createdAt DESC ";
+                    query = "SELECT *,(SELECT COUNT(user.id) from user) as length FROM  `user` ORDER BY createdAt DESC LIMIT "+start+","+count+"";
 
                 User.query(query, function(err, result) {
                     if(err)
@@ -184,18 +186,37 @@ console.log(values);
 
     },
 
-    /************************************************************* SULTHAN AREA ******************************************************/
+    
         /**  get all dither **/
     getAllDithers: function(req,res){
+        console.log(req.params.all());
+        var start = req.body.start;     
+        var count = req.body.count;
+        // var itemsPerPage = req.body.itemsPerPage;       
+        //  console.log("pagenumber");
+        // console.log(pagenumber);
+        //  console.log("itemsPerPage");
+        //  console.log(itemsPerPage);
         console.log("inside getAllDithers function");
-        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC ";
+        // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
+        var query =" SELECT c. * , c.id AS cid, u. * , ("+
+                   " SELECT COUNT( c.id )"+ 
+                   " FROM collage AS c"+
+                   " INNER JOIN user AS u ON u.id = c.userId"+
+                   " ) AS length"+
+                   " FROM collage AS c"+
+                   " INNER JOIN user AS u ON u.id = c.userId"+
+                   " ORDER BY c.createdAt DESC"+
+                   " LIMIT "+start+" , "+count+"";
         console.log(query);
                     Collage.query(query, function (err, result) {
                         if (err) {
                             return res.json(200, {status: 2, error_details: err});
-                        } else {
+                        } else {                           
 
-                            return res.json(200, {status: 1, message: "success", result: result});
+                            return res.json(200, {status: 1, message: "success", 
+                                            result: result
+                            });
                         }
                     });
     },
@@ -325,6 +346,7 @@ console.log(values);
         Collage.query(query,function(err,result){
             if(err){
                 console.log("small error..");
+                 return res.json(200, {status: 2, error_details: err});
             }
             else{
                 console.log("Success in notification",result);
@@ -333,253 +355,378 @@ console.log(values);
         });
     },
     getAllDithersOfUser:function(req,res){
-        console.log("inside getUserAllDithers functin");
-         var user_id = req.body.userId;
-        // console.log(user_id);
-        // var user_id = 87;
-        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId WHERE c.userId = "+user_id+" ORDER BY c.createdAt DESC ";
-        Collage.query(query,function(err,result){
-            if(err){
-                console.log("some error check query");
-                  return res.json(200, {status: 2, error_details: err});
-            }else{
-                 // console.log(result);
-                 return res.json(200,{status:1,message:'success',result:result});
-            }
-        });
+
+                        console.log("inside getUserAllDithers functin");
+                        var user_id = req.body.userId;
+                        // console.log(user_id);
+                        // var user_id = 87;
+
+                        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId WHERE c.userId = "+user_id+" ORDER BY c.createdAt DESC ";
+
+                        Collage.query(query,function(err,result){
+                            if(err)
+                            {
+                                  console.log("some error check query");
+                                  return res.json(200, {status: 2, error_details: err});
+                            }else
+                            {
+                                 // console.log(result);
+                                 return res.json(200,{status:1,message:'success',result:result});
+                            }
+                        });
 
     },
-    getComments:function(req,res){
-     console.log("inside getcomment fnsssss");
-     var collageId = req.body.id;
-     // var collageId = 300;
-     var query = "SELECT u.name as commentedPerson,u.id as commentedPersonId,u.profilePic,cc.comment,cc.createdAt as commentedDate FROM collageComments as cc JOIN user as u ON cc.userId = u.id WHERE cc.collageId = "+collageId+" ORDER BY cc.createdAt DESC ";
-                  // "WHERE cc.collageId = "+collageId+" ORDER BY cc.createdAt DESC";
-      CollageComments.query(query,function(err,result){
-        if(err){
-            console.log("errrRRRRRRRRR");
-        }else{
-            // console.log(result);
-            return res.json(200,{status:1,message:'success',result:result});
-        }
+    getComments:     function(req,res){
 
-      });           
+                     console.log("inside getcomment fnsssss");
+                     var collageId = req.body.id;
+                     // var collageId = 300;
+
+                     var query = "SELECT u.name as commentedPerson,u.id as commentedPersonId,u.profilePic,cc.comment,cc.createdAt as commentedDate FROM collageComments as cc JOIN user as u ON cc.userId = u.id WHERE cc.collageId = "+collageId+" ORDER BY cc.createdAt DESC ";
+                     // "WHERE cc.collageId = "+collageId+" ORDER BY cc.createdAt DESC";
+
+                  CollageComments.query(query,function(err,result){
+                    if(err)
+                    {
+                        console.log("errrRRRRRRRRR");
+                        return res.json(200, {status: 2, error_details: err});
+                    }else
+                    {
+                        // console.log(result);
+                        return res.json(200,{status:1,message:'success',result:result});
+                    }
+
+                  });           
     },  
-    getDoughnutData:function(req,res){
-           var jwtClient = new googleapis.auth.JWT(
-      key.client_email, null, key.private_key,
-      ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData(analytics);
-    });
-     function queryData(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,
-        // 'metrics': 'ga:uniquePageviews',
-        // 'dimensions': 'ga:pagePath',
-        // 'start-date': '30daysAgo',
-        // 'end-date': 'yesterday',
-        // 'sort': '-ga:uniquePageviews',
-        // 'max-results': 10,
-        // 'filters': 'ga:pagePath=~/ch_[-a-z0-9]+[.]html$',
-        'start-date': 'today',
-        'end-date': 'today',
-        'dimensions':'ga:mobileDeviceInfo',
-        'metrics':'ga:sessions',
-        //'segment': 'mobile',
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        // console.log(JSON.stringify(response.rows, null, 4));
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });  
-    }
+    getDoughnutData:  function(req,res){
+
+                      var jwtClient = new googleapis.auth.JWT(
+                      key.client_email, null, key.private_key,
+                      ['https://www.googleapis.com/auth/analytics.readonly'], null);
+
+                    jwtClient.authorize(function (err, tokens) {
+                      if (err)
+                       {
+                        console.log(err);
+                        return;
+                      }
+                      var analytics = googleapis.analytics('v3');
+                      queryData(analytics);
+                    });
+
+                 function queryData(analytics) {
+                  analytics.data.ga.get({
+                    'auth': jwtClient,
+                    'ids': VIEW_ID,
+                    // 'metrics': 'ga:uniquePageviews',
+                    // 'dimensions': 'ga:pagePath',
+                    // 'start-date': '30daysAgo',
+                    // 'end-date': 'yesterday',
+                    // 'sort': '-ga:uniquePageviews',
+                    // 'max-results': 10,
+                    // 'filters': 'ga:pagePath=~/ch_[-a-z0-9]+[.]html$',
+                    'start-date': 'today',
+                    'end-date': 'today',
+                    'dimensions':'ga:mobileDeviceInfo',
+                    'metrics':'ga:sessions',
+                    //'segment': 'mobile',
+                  }, function (err, response) {
+                    if (err)
+                     {
+                      console.log(err);
+                      return res.json(200, {status: 2, error_details: err});
+                    }
+                    // console.log(JSON.stringify(response.rows, null, 4));
+                    return res.json(200,{status:1,message:'success',result:response.rows});
+                  });  
+                }
 },
-getMapData:function(req,res){
-    var jwtClient = new googleapis.auth.JWT(
-    key.client_email, null, key.private_key,
-    ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData1(analytics);
-    });
-     function queryData1(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,        
-        'start-date': 'today',
-        'end-date': 'today',
-        'dimensions':'ga:countryIsoCode,ga:country',        
-        'metrics':'ga:sessions,ga:users',
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });  
-    }
+    getMapData:     function(req,res){
+
+                    var jwtClient = new googleapis.auth.JWT(
+                    key.client_email, null, key.private_key,
+                    ['https://www.googleapis.com/auth/analytics.readonly'], null);
+
+                    jwtClient.authorize(function (err, tokens) {
+                      if (err) 
+                      {
+                        console.log(err);
+                        return;
+                      }
+                      var analytics = googleapis.analytics('v3');
+                      queryData1(analytics);
+                    });
+
+                 function queryData1(analytics) {
+                  analytics.data.ga.get({
+                    'auth': jwtClient,
+                    'ids': VIEW_ID,        
+                    'start-date': 'today',
+                    'end-date': 'today',
+                    'dimensions':'ga:city,ga:latitude,ga:longitude',        
+                    'metrics':'ga:sessions,ga:users',
+                  }, function (err, response) {
+                    if (err) 
+                    {
+                      console.log(err);
+                      return res.json(200, {status: 2, error_details: err});
+                    }
+                    console.log(response.rows);
+                    return res.json(200,{status:1,message:'success',result:response.rows});
+                  });  
+                }
      
 },
-getBrowserDetails:function(req,res){
-      var jwtClient = new googleapis.auth.JWT(
-    key.client_email, null, key.private_key,
-    ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData1(analytics);
-    });
-      function queryData1(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,        
-        'start-date': 'today',
-        'end-date': 'today',
-        'dimensions':'ga:browser',        
-        'metrics':'ga:sessions',        
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        // console.log(JSON.stringify(response.rows, null, 4));
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });  
-    }
+getBrowserDetails:  function(req,res){
+
+                    var jwtClient = new googleapis.auth.JWT(
+                    key.client_email, null, key.private_key,
+                    ['https://www.googleapis.com/auth/analytics.readonly'], null);
+
+                    jwtClient.authorize(function (err, tokens) {
+                      if (err) 
+                      {
+                        console.log(err);
+                        return;
+                      }
+                      var analytics = googleapis.analytics('v3');
+                      queryData1(analytics);
+                    });
+
+                  function queryData1(analytics) {
+                  analytics.data.ga.get({
+                    'auth': jwtClient,
+                    'ids': VIEW_ID,        
+                    'start-date': 'today',
+                    'end-date': 'today',
+                    'dimensions':'ga:browser',        
+                    'metrics':'ga:sessions',        
+                  }, function (err, response) {
+                    if (err)
+                     {
+                          console.log(err);
+                          return res.json(200, {status: 2, error_details: err});
+                    }
+                    // console.log(JSON.stringify(response.rows, null, 4));
+                    return res.json(200,{status:1,message:'success',result:response.rows});
+                  });  
+                }
 },
 
 getPieChartData:function(req,res){
-      var jwtClient = new googleapis.auth.JWT(
-    key.client_email, null, key.private_key,
-    ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData1(analytics);
-    });
-      function queryData1(analytics) {
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,        
-        'start-date': 'today',
-        'end-date': 'today',
-        // 'dimensions':'ga:userType,ga:country',   
-        'metrics':'ga:users,ga:screenviews,ga:screenviewsPerSession,ga:avgSessionDuration',        
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-       
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });  
-    }
+
+                var jwtClient = new googleapis.auth.JWT(
+                key.client_email, null, key.private_key,
+                ['https://www.googleapis.com/auth/analytics.readonly'], null);
+
+                jwtClient.authorize(function (err, tokens) {
+                  if (err) 
+                  {
+                    console.log(err);
+                    return;
+                  }
+                  var analytics = googleapis.analytics('v3');
+                  queryData1(analytics);
+                });
+
+              function queryData1(analytics) {
+              analytics.data.ga.get({
+                'auth': jwtClient,
+                'ids': VIEW_ID,        
+                'start-date': 'today',
+                'end-date': 'today',
+                // 'dimensions':'ga:userType,ga:country',   
+                'metrics':'ga:users,ga:screenviews,ga:screenviewsPerSession,ga:avgSessionDuration',        
+              }, function (err, response) {
+                if (err) 
+                {
+                   console.log(err);
+                   return res.json(200, {status: 2, error_details: err});
+                }
+               
+                return res.json(200,{status:1,message:'success',result:response.rows});
+              });  
+            }
 }, 
 getBarChartData:function(req,res){
-      var jwtClient = new googleapis.auth.JWT(
-    key.client_email, null, key.private_key,
-    ['https://www.googleapis.com/auth/analytics.readonly'], null);
-    jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      var analytics = googleapis.analytics('v3');
-      queryData1(analytics);
-    });
-      function queryData1(analytics) {
-        var startDate = req.body.fromDate;
-        var endDate = req.body.toDate;
-      analytics.data.ga.get({
-        'auth': jwtClient,
-        'ids': VIEW_ID,        
-        'start-date': '30daysAgo',
-        'end-date': 'today',
-        'dimensions':'ga:date,ga:day,ga:yearMonth,ga:userType',   
-        'metrics':'ga:users',
-        
-      }, function (err, response) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        // console.log(JSON.stringify(response.rows, null, 4));
-        
 
-        return res.json(200,{status:1,message:'success',result:response.rows});
-      });  
-    }
+                var jwtClient = new googleapis.auth.JWT(
+                key.client_email, null, key.private_key,
+                ['https://www.googleapis.com/auth/analytics.readonly'], null);
+
+                jwtClient.authorize(function (err, tokens) {
+                  if (err) 
+                  {
+                    console.log(err);
+                    return;
+                  }
+                  var analytics = googleapis.analytics('v3');
+                  queryData1(analytics);
+                });
+
+              function queryData1(analytics) {
+
+                var startDate = req.body.fromDate;
+                var endDate = req.body.toDate;
+
+              analytics.data.ga.get({
+                'auth': jwtClient,
+                'ids': VIEW_ID,        
+                'start-date': startDate,
+                'end-date': endDate,
+                'dimensions':'ga:date,ga:day,ga:yearMonth,ga:userType',   
+                'metrics':'ga:users',
+                
+              }, function (err, response) {
+                if (err) 
+                {
+                   console.log(err);
+                   return res.json(200, {status: 2, error_details: err});
+                }
+                 console.log(JSON.stringify(response.rows, null, 4));
+                
+
+                return res.json(200,{status:1,message:'success',result:response.rows});
+              });  
+            }
 },
 getSettingsData:function(req,res){
-  var query = "SELECT * FROM settings";
 
-  Settings.query(query,function(err,result){
-    if(err){
-      console.log("errrr",err);
-    }else{
-    console.log("success in settings", result);
-      return res.json(200,{status:1,message:'success',result:result});
-    }
-  });
+                      var query = "SELECT * FROM settings";
+
+                      Settings.query(query,function(err,result){
+                        if(err)
+                        {
+                              console.log("errrr",err);
+                              return res.json(200, {status: 2, error_details: err});
+                        }
+                        else
+                        {
+                              console.log("success in settings", result);
+                              return res.json(200,{status:1,message:'success',result:result});
+                        }
+                      });
 },
 
 updateDitherCloseTime:function(req,res){
-     data =    {
-                 value:req.body.value
-               };
-     criteria = {
-                    id:req.body.id
-                };
+
+                      data =    {
+                                   value:req.body.value
+                                 };
+
+                      criteria = {
+                                    id:req.body.id
+                                  };
  
  
- Settings.update(criteria,data).exec(function(err,updatedData){
-    if(err){
-         console.log("update dither close time fail");
-       }else{ 
-        console.log("dither closing time updated");
-        return res.json(200,{status:1,message:'success',result:updatedData});
-      } 
-});
+                     Settings.update(criteria,data).exec(function(err,updatedData){
+                        if(err)
+                        {
+                             console.log("update dither close time fail");
+                             return res.json(200, {status: 2, error_details: err});
+                        }
+                        else
+                        { 
+                            console.log("dither closing time updated");
+                            return res.json(200,{status:1,message:'success',result:updatedData});
+                        } 
+                    });
 },
 
 updateTokenExpiryTime:function(req,res){
-     data =    {
-                 value:req.body.value
-               };
-     criteria = {
-                    id:req.body.id
-                };
- 
- 
- Settings.update(criteria,data).exec(function(err,updatedData){
-    if(err){
-         console.log("update token expiry time fail");
-       }else{ 
-        console.log("token expiry time updated");
-        return res.json(200,{status:1,message:'success',result:updatedData});
-      } 
-});
-},
 
+                    data =    {
+                                 value:req.body.value
+                               };
+                    criteria = {
+                                    id:req.body.id
+                                };
+ 
+ 
+                 Settings.update(criteria,data).exec(function(err,updatedData){
+                    if(err)
+                    {
+                         console.log("update token expiry time fail");
+                         return res.json(200, {status: 2, error_details: err});
+                    }
+                    else
+                    { 
+                        console.log("token expiry time updated");
+                        return res.json(200,{status:1,message:'success',result:updatedData});
+                    } 
+                });
+},
+ getDitherUsers: function(req, res){
+
+
+                    query = "SELECT * FROM  `user` ORDER BY createdAt DESC";
+
+                User.query(query, function(err, result) {
+                    if(err)
+                    {
+                        // console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }
+                    else
+                    {
+
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result});
+                    }
+                });
+
+    },
+ getUsersBySearchName: function(req,res){        
+                    
+                    var name = req.body.name;
+                    var query ="SELECT * FROM user WHERE name LIKE '"+name+"%'";
+
+                    User.query(query,function(err,result){
+                        if(err)
+                        {
+                             return res.json(200, {status: 2, error_details: err});
+                        }
+                        else
+                        {
+                           // console.log(result);
+                             return res.json(200, {status: 1, message: "success", data: result});
+                         }
+                    });
+
+        },
+ getUsersBySearchEmail: function(req,res){
+                    
+                     var email = req.body.email;
+                     var query = "SELECT * FROM user WHERE email LIKE '"+email+"%'";
+
+                     User.query(query,function(err,result){
+                        if(err)
+                        {
+                            return res.json(200, {status: 2, error_details: err});
+                        }
+                        else
+                        {
+                            // console.log(result);
+                            return res.json(200, {status: 1,message:"success", data:result});
+                        }
+                     });
+        },
+ getUsersBySearchMobile: function(req,res){
+                      
+                      var mobile = req.body.mobile;
+                      var query = "SELECT * FROM user WHERE phoneNumber LIKE '%"+mobile+"%'";
+
+                      User.query(query,function(err,result){
+                        if(err)
+                        {
+                            return res.json(200, {status: 2, error_details: err});
+                        }
+                        else
+                        {
+                            console.log(result);
+                            return res.json(200, {status: 1, message:"success", data:result});
+                        }
+                      });
+        },
 };
 

@@ -456,6 +456,7 @@ console.log(values);
                       var analytics = googleapis.analytics('v3');
                       queryData1(analytics);
                     });
+                    
 
                  function queryData1(analytics) {
                   analytics.data.ga.get({
@@ -463,8 +464,8 @@ console.log(values);
                     'ids': VIEW_ID,        
                     'start-date': 'today',
                     'end-date': 'today',
-                    'dimensions':'ga:city,ga:latitude,ga:longitude',        
-                    'metrics':'ga:sessions,ga:users',
+                    'dimensions': 'ga:city,ga:latitude,ga:longitude',        
+                    'metrics': 'ga:sessions,ga:users',
                   }, function (err, response) {
                     if (err) 
                     {

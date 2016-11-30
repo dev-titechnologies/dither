@@ -27,8 +27,14 @@ module.exports = {
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                     //var   mention_arr                 =    ['test_user','anu_r'];
+                    var commentImage_path			=	  server_baseUrl + req.options.file_path.commentImage_path;
+                    var comment_images				=	  req.param("comment_image");
                     var old_id						= 	  '';
                     var profile_image               =     '';
+                   	var comment_img_arr 			= 	  [];
+                    												
+                    console.log("comment Image-------------------")
+                    console.log(comment_images)
                     if(!collageId || !comment){
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
                     }else{
@@ -36,7 +42,7 @@ module.exports = {
                             var values = {
                                 collageId       :       collageId,
                                 userId          :       userId,
-                                comment         :       comment,
+                                comment         :       comment
                             };
                             Collage.findOne({id:collageId}).exec(function(err, collageDetails){
                                     if(err){
@@ -47,10 +53,36 @@ module.exports = {
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage found'});
                                         }else{
                                             CollageComments.create(values).exec(function(err, results){
-                                                    if(err){
-                                                            console.log(err);
-                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Comment Insertion', error_details: err});
-                                                    }else{
+												if(err){
+														console.log(err);
+														return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Comment Insertion', error_details: err});
+												}else{
+													  if(comment_images){
+														  console.log(comment_images)
+															comment_images.forEach(function(factor, index){
+															   if(factor.cmnt_img_url){
+																   comment_imageName       =   factor.cmnt_img_url.split('/');
+																   comment_imageName       =   comment_imageName[comment_imageName.length-1];
+																   comment_img_arr.push("("+results.id+",'"+comment_imageName+"', now(), now())");
+															   }
+															 });
+															
+															 if(comment_img_arr.length!=0){
+																  var query = "INSERT INTO commentImages"+
+																						" (commentId,image, createdAt, updatedAt)"+
+																						" VALUES"+comment_img_arr;
+																			//console.log(query)
+																 CommentImages.query(query,function(err, createdImages){
+																	if(err){
+																			console.log(err);
+																			return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Comment Image Insertion', error_details: err});
+																	}else{
+																		console.log(createdImages)
+																	}
+																 });
+																 
+																}
+														}
                                                         var roomName  = "socket_dither_"+collageId;
                                                         sails.sockets.broadcast(roomName,{
                                                                                         type            : "update",
@@ -319,6 +351,52 @@ module.exports = {
                             });
                     //}
                     }
-        }
+        },
+        uploadCommentImage:  function (req, res) {
+			console.log("+++++++++++++ Upload CommentImage api ++++++++++++++++++++");
+			
+			var server_baseUrl              =     req.options.server_baseUrl;
+            var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+            var commentImage_path           =     server_image_baseUrl + req.options.file_path.commentImage_path;
+            var commentUploadDirectoryPath  =     '../../assets/images/comment';
+            console.log(req.options.file_path.commentImage_path)
+            console.log(commentImage_path)
+             req.file('comment_image').upload({dirname: commentUploadDirectoryPath, maxBytes: 100 * 1000 * 1000, adapter: require('skipper-disk')},function (err, files) {
+                    if(err){
+                        console.log(err);
+                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in uploading CommentImage', error_details: err});
+                    }else{
+						    
+						    if(!files.length){
+                                console.log("----------No files found-------  ");
+                                return res.json(200, {status: 2, status_type: 'Failure', message: 'Please pass an image'});
+							}else{
+							    console.log(files) 
+							    var comment_img_arr = [];
+							    files.forEach(function(factor, index){
+                                        console.log(factor);
+                                        var filename                        =   factor.fd.split('/');
+                                        filename                            =   filename[filename.length-1];
+                                        var image_name;
+                                       
+                                        comment_img_arr.push({
+														cmnt_img_url       :   commentImage_path + filename
+                                                    });
+                                });
+							    console.log("------------comment Images----------------")
+							    console.log(comment_img_arr)
+								return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully uploaded Collage images',
+													  comment_img_arr: comment_img_arr
+												});
+							}
+					}
+			});		
+            
+            
+            
+            
+		}
+		
+		
 };
 

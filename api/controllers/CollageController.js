@@ -316,13 +316,15 @@ module.exports = {
                                                                                 console.log(err);
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting closedDitherCount', error_details: err});
                                                                             }else{
+                                                                                    console.log(query);
+                                                                                    console.log(results);
                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                             username                : foundUserDetails.name,
                                                                                                             user_profile_image      : user_profile_image,
                                                                                                             total_opinion           : recent_DitherResults.total_opinion,
                                                                                                             recent_dithers          : recent_dithers,
                                                                                                             popular_dithers         : popular_dithers,
-                                                                                                            closed_dither_count     : results.closedDitherCount,
+                                                                                                            closed_dither_count     : results[0].closedDitherCount,
                                                                                                         });
                                                                              }
                                                                         });

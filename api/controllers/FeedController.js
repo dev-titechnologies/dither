@@ -79,7 +79,7 @@ module.exports = {
                                             " )"+
                                             " ) AS temp1"+
                                             query_offset_data_view_limit+
-                                            " ORDER BY temp1.createdAt DESC"+
+                                            " ORDER BY temp1.createdAt DESC, temp1.id DESC"+
                                             " LIMIT "+data_view_limit+
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+

@@ -269,7 +269,7 @@ module.exports = {
                                                                                                                           callback();
                                                                                                                     }else{
                                                                                                                         var message     =  'signup Notification';
-                                                                                                                        var ntfn_body   =   "Your contact"+results.name +" is now on Dither";
+                                                                                                                        var ntfn_body   =   "Your contact "+results.name +" is now on Dither";
                                                                                                                         getDeviceId.forEach(function(factor, index){
                                                                                                                             deviceId_arr.push(factor.deviceId);
                                                                                                                         });

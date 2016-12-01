@@ -350,7 +350,6 @@ module.exports = {
                                                                                                     }else{
                                                                                                         var values;
                                                                                                         switch(index){
-                                                                                                            var image;
                                                                                                             case 0 :
                                                                                                                     values = [
                                                                                                                         {image       : "default_collageDetail_1_1.jpg",position    : 1,collageId   : createCollage.id},

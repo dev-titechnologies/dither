@@ -137,7 +137,7 @@ module.exports = {
                                     " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                     " FROM collage clg"+
                                     " WHERE clg.userId =  '"+userId+"'"+" AND clg.expiryDate > '"+today+"'"+
-                                    " ORDER BY clg.createdAt DESC"+
+                                    " ORDER BY clg.createdAt DESC, clg.id DESC"+
                                     " LIMIT 4"+
                                     " ) AS temp"+
                                     " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp.id"+
@@ -146,7 +146,7 @@ module.exports = {
                                     " WHERE"+
                                     " temp.userId = '"+userId+"'"+
                                     " GROUP BY clgdt.id"+
-                                    " ORDER BY temp.createdAt DESC";
+                                    " ORDER BY temp.createdAt DESC, temp.id DESC";
 
                             query_popular = "SELECT"+
                                     " temp.*,"+
@@ -158,7 +158,7 @@ module.exports = {
                                     " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                     " FROM collage clg"+
                                     " WHERE clg.userId =  '"+userId+"' AND clg.totalVote != 0"+" AND clg.expiryDate > '"+today+"'"+
-                                    " ORDER BY clg.totalVote DESC"+
+                                    " ORDER BY clg.totalVote DESC, clg.id DESC"+
                                     " LIMIT 4"+
                                     " ) AS temp"+
                                     " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp.id"+
@@ -167,7 +167,7 @@ module.exports = {
                                     " WHERE"+
                                     " temp.userId = '"+userId+"'"+
                                     " GROUP BY clgdt.id"+
-                                    " ORDER BY temp.totalVote DESC, temp.createdAt DESC";
+                                    " ORDER BY temp.totalVote DESC, temp.createdAt DESC, temp.id DESC";
 
                     }else{
                             console.log("Not a logged User ----------------------------------------------------");
@@ -187,7 +187,7 @@ module.exports = {
                                     " ) AS temp"+
                                     " INNER JOIN collage clg ON temp.id = clg.id"+
                                     " WHERE clg.userId = "+received_userId+" AND clg.expiryDate > '"+today+"'"+
-                                    " ORDER BY clg.createdAt DESC"+
+                                    " ORDER BY clg.createdAt DESC, clg.id DESC"+
                                     " LIMIT 4"+
                                     " ) AS temp_union"+
                                     " INNER JOIN collage clg ON clg.id = temp_union.id"+
@@ -196,7 +196,7 @@ module.exports = {
                                     " INNER JOIN user usr ON usr.id = tg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                     " GROUP BY clgdt.id"+
-                                    " ORDER BY clg.createdAt DESC";
+                                    " ORDER BY clg.createdAt DESC, clg.id DESC";
 
                             query_popular = "SELECT"+
                                     " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
@@ -223,7 +223,7 @@ module.exports = {
                                     " INNER JOIN user usr ON usr.id = tg.userId"+
                                     " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                     " GROUP BY clgdt.id"+
-                                    " ORDER BY clg.totalVote DESC, clg.createdAt DESC";
+                                    " ORDER BY clg.totalVote DESC, clg.createdAt DESC, clg.id DESC";
 
                     }
 
@@ -251,9 +251,9 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                             username                : "",
                                                                                             user_profile_image      : "",
+                                                                                            closed_dither_count     : 0,
                                                                                             recent_dithers          : [],
                                                                                             popular_dithers         : [],
-                                                                                            closed_dither_count     : 0,
                                                                         });
                                                                 }else{
                                                                         var user_profile_image;
@@ -265,9 +265,9 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                             username                : foundUserDetails.name,
                                                                                             user_profile_image      : user_profile_image,
+                                                                                            closed_dither_count     : 0,
                                                                                             recent_dithers          : [],
                                                                                             popular_dithers         : [],
-                                                                                            closed_dither_count     : 0,
                                                                         });
                                                                 }
                                                             }
@@ -282,9 +282,9 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                             username                : "",
                                                                                             user_profile_image      : "",
+                                                                                            closed_dither_count     : 0,
                                                                                             recent_dithers          : [],
                                                                                             popular_dithers         : [],
-                                                                                            closed_dither_count     : 0,
                                                                         });
                                                                 }else{
                                                                         var recent_dithers;
@@ -322,9 +322,9 @@ module.exports = {
                                                                                                             username                : foundUserDetails.name,
                                                                                                             user_profile_image      : user_profile_image,
                                                                                                             total_opinion           : recent_DitherResults.total_opinion,
+                                                                                                            closed_dither_count     : results[0].closedDitherCount,
                                                                                                             recent_dithers          : recent_dithers,
                                                                                                             popular_dithers         : popular_dithers,
-                                                                                                            closed_dither_count     : results[0].closedDitherCount,
                                                                                                         });
                                                                              }
                                                                         });
@@ -778,100 +778,96 @@ module.exports = {
                     if(!collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id'});
                     }else{
-                            //Finding the collage
-                            Collage.findOne({id: collageId}).exec(function (err, foundCollage){
+                        //Finding the collage
+                        Collage.findOne({id: collageId}).exec(function (err, foundCollage){
+                            if(err){
+                                        console.log(err);
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                            }else{
+                                if(!foundCollage){
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
+                                }else{
+                                    //Unlinking collage image
+                                    if(foundCollage.image == null || foundCollage.image == ""){
+
+                                    }else{
+                                            console.log("Unlinking collage image======");
+                                            var resize_collage_image  = foundCollage.image;
+                                            var ext                   = resize_collage_image.split('.');
+                                            //fs.unlink(collage_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
+                                            //fs.unlink(collage_unlink_path + foundCollage.image);
+                                    }
+                                    //Finding the collageDetails
+                                    CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
                                         if(err){
                                                     console.log(err);
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither Details', error_details: err});
                                         }else{
-
-                                            if(!foundCollage){
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
-                                            }else{
-                                                    //Unlinking collage image
-                                                    if(foundCollage.image == null || foundCollage.image == ""){
-
+                                            //Unlinking collageDetail image
+                                            foundCollageDetails.forEach(function(factor, index){
+                                                    if(factor.image == null || factor.image == ""){
                                                     }else{
-                                                            console.log("Unlinking collage image======");
-                                                            var resize_collage_image  = foundCollage.image;
-                                                            var ext                   = resize_collage_image.split('.');
-                                                            //fs.unlink(collage_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
-                                                            //fs.unlink(collage_unlink_path + foundCollage.image);
+                                                        console.log("Unlinking collageDetail image======");
+                                                        //fs.unlink(collage_unlink_path + factor.image);
                                                     }
-                                                    //Finding the collageDetails
-                                                    CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
-                                                            if(err){
-                                                                        console.log(err);
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither Details', error_details: err});
-                                                            }else{
-                                                                    //Unlinking collageDetail image
-                                                                    foundCollageDetails.forEach(function(factor, index){
-                                                                            if(factor.image == null || factor.image == ""){
-                                                                            }else{
-                                                                                console.log("Unlinking collageDetail image======");
-                                                                                //fs.unlink(collage_unlink_path + factor.image);
-                                                                            }
-                                                                    });
+                                            });
 
-                                                                    //Deleting from collage Table
-                                                                    Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
-                                                                            if (err){
-                                                                                    console.log(err);
-                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
-                                                                            }else {
-                                                                                    //Deleting from collage Details Table
-                                                                                    CollageDetails.destroy({collageId: collageId}).exec(function (err, deleteCollageDetails) {
+                                            //Deleting from collage Table
+                                            Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
+                                                if (err){
+                                                        console.log(err);
+                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                }else {
+                                                    //Deleting from collage Details Table
+                                                    CollageDetails.destroy({collageId: collageId}).exec(function (err, deleteCollageDetails) {
+                                                        if (err){
+                                                                console.log(err);
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Single Dithers', error_details: err});
+                                                        }else{
+                                                            //Deleting from collage Likes Table
+                                                            CollageLikes.destroy({collageId: collageId}).exec(function (err, deleteCollageLikes) {
+                                                                if (err){
+                                                                        console.log(err);
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Votes', error_details: err});
+                                                                }else {
+                                                                    //Deleting from collage Comments Table
+                                                                    CollageComments.destroy({collageId: collageId}).exec(function (err, deleteCollageComments) {
+                                                                        if (err){
+                                                                                console.log(err);
+                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Comments', error_details: err});
+                                                                        }else {
+                                                                            //Deleting from invitation Table
+                                                                            Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
+                                                                                if (err){
+                                                                                        console.log(err);
+                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
+                                                                                }else {
+                                                                                    //Deleting from notificationLog Table
+                                                                                    NotificationLog.destroy({collage_id: collageId}).exec(function (err, deleteNotificationLog) {
                                                                                         if (err){
                                                                                                 console.log(err);
-                                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Single Dithers', error_details: err});
-                                                                                        }else{
-                                                                                                //Deleting from collage Likes Table
-                                                                                                CollageLikes.destroy({collageId: collageId}).exec(function (err, deleteCollageLikes) {
-                                                                                                    if (err){
-                                                                                                            console.log(err);
-                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Votes', error_details: err});
-                                                                                                    }else {
-                                                                                                            //Deleting from collage Comments Table
-                                                                                                            CollageComments.destroy({collageId: collageId}).exec(function (err, deleteCollageComments) {
-                                                                                                                if (err){
-                                                                                                                        console.log(err);
-                                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Comments', error_details: err});
-                                                                                                                }else {
-                                                                                                                        //Deleting from invitation Table
-                                                                                                                        Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
-                                                                                                                            if (err){
-                                                                                                                                    console.log(err);
-                                                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
-                                                                                                                            }else {
-                                                                                                                                //Deleting from notificationLog Table
-                                                                                                                                NotificationLog.destroy({collage_id: collageId}).exec(function (err, deleteNotificationLog) {
-                                                                                                                                    if (err){
-                                                                                                                                            console.log(err);
-                                                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither NotificationLog', error_details: err});
-                                                                                                                                    }else {
-                                                                                                                                            return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
+                                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither NotificationLog', error_details: err});
+                                                                                        }else {
+                                                                                                return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
 
-                                                                                                                                    }
-                                                                                                                                });
-                                                                                                                            }
-                                                                                                                        });
-
-                                                                                                                }
-                                                                                                            });
-                                                                                                    }
-                                                                                                });
                                                                                         }
                                                                                     });
-                                                                            }
-                                                                    });//Collage Details
-                                                            }
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
                                                     });
-                                            }
+                                                }
+                                            });//Collage Details
                                         }
-                            });//Collage
-
+                                    });
+                                }
+                            }
+                        });//Collage
                     }//Passed details check else
-
         },
 
 };

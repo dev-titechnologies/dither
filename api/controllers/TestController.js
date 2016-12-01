@@ -1124,6 +1124,49 @@ module.exports = {
               }
               console.log(res);*/
     },
+    collage: function (req, res){
+                console.log("collage");
+                var expiryDate      =       new Date(new Date().setFullYear(2020));
+                var values = {
+                    imgTitle        : 'default title',
+                    image           : 'default.png',
+                    location        : '',
+                    //latitude        : '',
+                    //longitude       : '',
+                    userId          : 2222,
+                    expiryDate      : expiryDate,
+                };
+                console.log(values);
+                Collage.create(values).exec(function(err, createCollage){
+                    if(err){
+                            console.log(err);
+                            //callback();
+                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
+                    }else{
+                        console.log(createCollage);
+                        if(!createCollage){
+                                //callback();
+                        }else{
+                            var values = {
+                                image       : 'default.png',
+                                position    : 1,
+                                collageId   : createCollage.id,
+                            }
+                            console.log(values);
+                            CollageDetails.create(values).exec(function(err, createdCollageDetails) {
+                                if(err){
+                                    console.log(err);
+                                    //callback();
+                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                }else{
+                                        console.log(createdCollageDetails);
+                                        //callback();
+                                }
+                            });
+                        }
+                    }
+                });
+    },
 
 };
 

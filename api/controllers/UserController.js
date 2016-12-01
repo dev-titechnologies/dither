@@ -109,7 +109,7 @@ module.exports = {
                                                                                             var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
-                                                                                            
+
                                                                                             ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
@@ -304,6 +304,64 @@ module.exports = {
                                                                                       }
                                                                                  });
 
+                                                                            },
+                                                                            function (callback){
+                                                                                console.log("parallel 6 == Default dither creation");
+                                                                                User.findOne({type: 1}).exec(function (err, getSuperUser){
+                                                                                    if(err){
+                                                                                            console.log(err);
+                                                                                            callback();
+                                                                                    }else{
+                                                                                        var expiryDate      =       new Date(new Date().setFullYear(2020));
+                                                                                        var values = {
+                                                                                            imgTitle        : 'default title',
+                                                                                            image           : 'default.png',
+                                                                                            location        : '',
+                                                                                            //latitude        : '',
+                                                                                            //longitude       : '',
+                                                                                            userId          : getSuperUser.id,
+                                                                                            expiryDate      : expiryDate,
+                                                                                        };
+                                                                                        Collage.create(values).exec(function(err, createCollage){
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    callback();
+                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
+                                                                                            }else{
+                                                                                                if(!createCollage){
+                                                                                                        callback();
+                                                                                                }else{
+                                                                                                    var values = {
+                                                                                                        image       : 'default.png',
+                                                                                                        position    : 1,
+                                                                                                        collageId   : createCollage.id,
+                                                                                                    }
+                                                                                                    CollageDetails.create(values).exec(function(err, createdCollageDetails){
+                                                                                                        if(err){
+                                                                                                            console.log(err);
+                                                                                                            callback();
+                                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                        }else{
+                                                                                                                //callback();
+                                                                                                            var values = {
+                                                                                                                collageId   : createCollage.id,
+                                                                                                                userId      : results.id,
+                                                                                                            }
+                                                                                                            Tags.create(values).exec(function(err, createdCollageTags){
+                                                                                                                    if(err){
+                                                                                                                        console.log(err);
+                                                                                                                        callback();
+                                                                                                                    }else{
+                                                                                                                            callback();
+                                                                                                                    }
+                                                                                                            });
+                                                                                                        }
+                                                                                                    });
+                                                                                                }
+                                                                                            }
+                                                                                        });
+                                                                                    }
+                                                                                });
                                                                             },
                                                                         ], function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if(err){

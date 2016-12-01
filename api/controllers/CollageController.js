@@ -774,6 +774,8 @@ module.exports = {
 
                     console.log("Delete Dithers ===== api");
                     console.log(req.param("dither_id"));
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
                     var collageId                   =      req.param("dither_id");
                     if(!collageId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id'});
@@ -787,83 +789,86 @@ module.exports = {
                                 if(!foundCollage){
                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No dither found by this id'});
                                 }else{
-                                    //Unlinking collage image
-                                    if(foundCollage.image == null || foundCollage.image == ""){
-
+                                    if(foundCollage.userId != userId){
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Only creator can delete the collage'});
                                     }else{
-                                            console.log("Unlinking collage image======");
-                                            var resize_collage_image  = foundCollage.image;
-                                            var ext                   = resize_collage_image.split('.');
-                                            //fs.unlink(collage_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
-                                            //fs.unlink(collage_unlink_path + foundCollage.image);
-                                    }
-                                    //Finding the collageDetails
-                                    CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
-                                        if(err){
-                                                    console.log(err);
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither Details', error_details: err});
+                                        //Unlinking collage image
+                                        if(foundCollage.image == null || foundCollage.image == ""){
                                         }else{
-                                            //Unlinking collageDetail image
-                                            foundCollageDetails.forEach(function(factor, index){
-                                                    if(factor.image == null || factor.image == ""){
-                                                    }else{
-                                                        console.log("Unlinking collageDetail image======");
-                                                        //fs.unlink(collage_unlink_path + factor.image);
-                                                    }
-                                            });
-
-                                            //Deleting from collage Table
-                                            Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
-                                                if (err){
-                                                        console.log(err);
-                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
-                                                }else {
-                                                    //Deleting from collage Details Table
-                                                    CollageDetails.destroy({collageId: collageId}).exec(function (err, deleteCollageDetails) {
-                                                        if (err){
-                                                                console.log(err);
-                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Single Dithers', error_details: err});
-                                                        }else{
-                                                            //Deleting from collage Likes Table
-                                                            CollageLikes.destroy({collageId: collageId}).exec(function (err, deleteCollageLikes) {
-                                                                if (err){
-                                                                        console.log(err);
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Votes', error_details: err});
-                                                                }else {
-                                                                    //Deleting from collage Comments Table
-                                                                    CollageComments.destroy({collageId: collageId}).exec(function (err, deleteCollageComments) {
-                                                                        if (err){
-                                                                                console.log(err);
-                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Comments', error_details: err});
-                                                                        }else {
-                                                                            //Deleting from invitation Table
-                                                                            Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
-                                                                                if (err){
-                                                                                        console.log(err);
-                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
-                                                                                }else {
-                                                                                    //Deleting from notificationLog Table
-                                                                                    NotificationLog.destroy({collage_id: collageId}).exec(function (err, deleteNotificationLog) {
-                                                                                        if (err){
-                                                                                                console.log(err);
-                                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither NotificationLog', error_details: err});
-                                                                                        }else {
-                                                                                                return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
-
-                                                                                        }
-                                                                                    });
-                                                                                }
-                                                                            });
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                }
-                                            });//Collage Details
+                                                console.log("Unlinking collage image======");
+                                                var resize_collage_image  = foundCollage.image;
+                                                var ext                   = resize_collage_image.split('.');
+                                                //fs.unlink(collage_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
+                                                //fs.unlink(collage_unlink_path + foundCollage.image);
                                         }
-                                    });
+                                        //Finding the collageDetails
+                                        CollageDetails.find({collageId: collageId}).exec(function (err, foundCollageDetails){
+                                            if(err){
+                                                        console.log(err);
+                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither Details', error_details: err});
+                                            }else{
+                                                //Unlinking collageDetail image
+                                                foundCollageDetails.forEach(function(factor, index){
+                                                        if(factor.image == null || factor.image == ""){
+                                                        }else{
+                                                            console.log("Unlinking collageDetail image======");
+                                                            //fs.unlink(collage_unlink_path + factor.image);
+                                                        }
+                                                });
+
+                                                //Deleting from collage Table
+                                                Collage.destroy({id: collageId}).exec(function (err, deleteCollage) {
+                                                    if (err){
+                                                            console.log(err);
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                    }else {
+                                                        //Deleting from collage Details Table
+                                                        CollageDetails.destroy({collageId: collageId}).exec(function (err, deleteCollageDetails) {
+                                                            if (err){
+                                                                    console.log(err);
+                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Single Dithers', error_details: err});
+                                                            }else{
+                                                                //Deleting from collage Likes Table
+                                                                CollageLikes.destroy({collageId: collageId}).exec(function (err, deleteCollageLikes) {
+                                                                    if (err){
+                                                                            console.log(err);
+                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Votes', error_details: err});
+                                                                    }else {
+                                                                        //Deleting from collage Comments Table
+                                                                        CollageComments.destroy({collageId: collageId}).exec(function (err, deleteCollageComments) {
+                                                                            if (err){
+                                                                                    console.log(err);
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Comments', error_details: err});
+                                                                            }else {
+                                                                                //Deleting from invitation Table
+                                                                                Invitation.destroy({collageId: collageId}).exec(function (err, deleteCollageInvitation) {
+                                                                                    if (err){
+                                                                                            console.log(err);
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither Invitation', error_details: err});
+                                                                                    }else {
+                                                                                        //Deleting from notificationLog Table
+                                                                                        NotificationLog.destroy({collage_id: collageId}).exec(function (err, deleteNotificationLog) {
+                                                                                            if (err){
+                                                                                                    console.log(err);
+                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither NotificationLog', error_details: err});
+                                                                                            }else {
+                                                                                                    return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully Deleted the dither'});
+
+                                                                                            }
+                                                                                        });
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                });//Collage Details
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         });//Collage

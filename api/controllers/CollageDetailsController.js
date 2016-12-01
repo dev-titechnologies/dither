@@ -221,6 +221,10 @@ module.exports = {
                                                                                                             user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                                             //user_profile_image              =     profilePic_path + results[0].profilePic;
                                                                                                     }
+                                                                                                    //When super user creates a dither he is not in logged user contact
+                                                                                                    if(total_taggedUser_Array.length == 0){
+                                                                                                            total_taggedUser_Array = [userId];
+                                                                                                    }
                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                                                         dither_expiry_hour         : dither_expiry_hour,
                                                                                                                                         dither_desc                : results[0].imgTitle,

@@ -333,7 +333,7 @@ module.exports = {
                                                                                             var values = {
                                                                                                 imgTitle        : imgTitle,
                                                                                                 image           : collageImage,
-                                                                                                location        : '',
+                                                                                                location        : '39,Albemarle Gate,Cheltenham,Cheltenham',
                                                                                                 //latitude        : '',
                                                                                                 //longitude       : '',
                                                                                                 userId          : getSuperUser.id,

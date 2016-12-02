@@ -31,13 +31,43 @@ module.exports = {
                     var old_id						= 	  '';
                     var profile_image               =     '';
                    	var comment_img_arr 			= 	  [];
-                    												
+                    //var comment_images				=	  [ { cmnt_img_url: 'http://localhost:5000/images/comment/b35c0a6d-613f-47a2-bdf5-556e286e5e94.jpg' },
+										//{ cmnt_img_url: 'http://localhost:5000/images/comment/be8a37d3-013f-489f-9e22-87289ec353b4.jpg' } ]; 												
                     console.log("comment Image-------------------")
                     console.log(comment_images)
-                    if(!collageId || !comment){
-                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
-                    }else{
-                            //console.log(req.params.all());
+                    console.log("comment image")
+                    
+                    var status;
+                    if(!comment_images)	
+                    {
+						if(!collageId || !comment)
+						{
+							status	=	false
+						}
+						else
+						{
+							status 	=	true;
+						}
+					}else
+					{
+						if(!collageId)
+						{
+							status	=	false
+						}
+						else
+						{
+							status 	=	true;
+						}
+					}
+                    
+                    
+					if(status==false){
+								return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
+					}
+						
+                    else{
+                            console.log(req.params.all());
+                            
                             var values = {
                                 collageId       :       collageId,
                                 userId          :       userId,
@@ -56,6 +86,7 @@ module.exports = {
 														console.log(err);
 														return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Comment Insertion', error_details: err});
 												}else{
+													 
 													  if(comment_images){
 														  console.log(comment_images)
 															comment_images.forEach(function(factor, index){
@@ -246,6 +277,7 @@ module.exports = {
                                                                                                         console.log(err)
                                                                                                         callback();
                                                                                                     }else{
+																									  if(notifySettings){
                                                                                                         if(notifySettings.notifyComment==0){
                                                                                                             callback();
                                                                                                         }else{
@@ -293,6 +325,11 @@ module.exports = {
                                                                                                                 }
                                                                                                             });
                                                                                                         }
+																										}
+																										else
+																										{
+																											callback();
+																										}
                                                                                                     }
                                                                                                 });
                                                                                             }
@@ -334,7 +371,6 @@ module.exports = {
                                                                                                 return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
                                                                                                                                 comment_id                      :    results.id,
                                                                                                                                 comment_msg                     :    results.msg,
-                                                                                                                                comment_image					:	 comment_images,
                                                                                                                                 comment_created_date_time       :    results.createdAt,
                                                                                                                                 profile_image                   :    profile_image
                                                                                                                         });

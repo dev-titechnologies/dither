@@ -503,6 +503,8 @@ module.exports = {
                                                         console.log("userTokenDetails --------");
                                                         console.log(userTokenDetails);
                                                         req.session.userToken       =  userTokenDetails.token.token;
+                                                        console.log("req.session.userToken ++++++++++++++++++++");
+                                                        console.log(req.session.userToken);
                                                         return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
                                                                               email             :   results.email,
                                                                               full_name         :   results.name,

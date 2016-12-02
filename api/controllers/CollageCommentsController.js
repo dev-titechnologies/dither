@@ -21,12 +21,11 @@ module.exports = {
                     var comment                     =     req.param("comment_msg");
                     var mention_user_id             =     [];
                     var mention_arr                 =     req.param("mentions");
-
                     var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
-                    //var   mention_arr                 =    ['test_user','anu_r'];
+                    //var   mention_arr             =    ['test_user','anu_r'];
                     var commentImage_path			=	  server_baseUrl + req.options.file_path.commentImage_path;
                     var comment_images				=	  req.param("comment_image");
                     var old_id						= 	  '';
@@ -335,6 +334,7 @@ module.exports = {
                                                                                                 return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
                                                                                                                                 comment_id                      :    results.id,
                                                                                                                                 comment_msg                     :    results.msg,
+                                                                                                                                comment_image					:	 comment_images,
                                                                                                                                 comment_created_date_time       :    results.createdAt,
                                                                                                                                 profile_image                   :    profile_image
                                                                                                                         });

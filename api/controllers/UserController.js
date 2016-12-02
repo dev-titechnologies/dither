@@ -91,7 +91,6 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
                                                             }else{
                                                                     console.log("Before async parallel in Sign up ===============================================");
-
                                                                         async.parallel([
                                                                             function(callback){
                                                                                     console.log("parallel 1")
@@ -496,6 +495,7 @@ module.exports = {
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                     }
                                                     else{
+
                                                         var notifyArray = [];
                                                         notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion,mention:results.notifyMention});
                                                         var profile_image       =   profilePic_path + results.profilePic;
@@ -552,6 +552,7 @@ module.exports = {
                         console.log(err)
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
+                        req.session.userToken   =   "";
                         return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });

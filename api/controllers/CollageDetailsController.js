@@ -107,11 +107,19 @@ module.exports = {
                                                                                                }];
                                                         console.log("collageCreator_JSON_Array ======================");
                                                         console.log(collageCreator_JSON_Array);
-                                                        query = " SELECT clgcmt.id, clgcmt.comment, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
+                                                        /*query = " SELECT clgcmt.id, clgcmt.comment, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
                                                                 " FROM collageComments clgcmt"+
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
-                                                                " ORDER BY clgcmt.createdAt";
+                                                                " ORDER BY clgcmt.createdAt";*/
+                                                                
+                                                                
+                                                         query = " SELECT clgcmt.id, clgcmt.comment,cmntImg.image, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
+                                                                " FROM collageComments clgcmt"+
+                                                                " INNER JOIN commentImages as cmntImg ON cmntImg.commentId = clgcmt.id"+
+                                                                " INNER JOIN user usr ON usr.id = clgcmt.userId"+
+                                                                " WHERE clgcmt.collageId = "+get_collage_id+
+                                                                " ORDER BY clgcmt.createdAt";       
 
                                                         CollageComments.query(query, function(err, collageCommentResults) {
                                                                 if(err){
@@ -121,6 +129,39 @@ module.exports = {
                                                                         //console.log(collageCommentResults);
                                                                         var commentArray = [];
                                                                         if(collageCommentResults.length){
+																			var comment_img_arr = [];
+																			
+																			//-----------comment Images-----------------------------------------
+																			
+																			var dataResults         =   collageCommentResults;
+																			var key                 =   [];
+																			var dataResultsKeys     =   [];
+																			//var popular_dithers,
+																				//imgDetailsArrayOrder;
+																			for (var i = dataResults.length - 1; i >= 0; i--){
+																				
+																				var dataResultsObj      =  new Object();
+																				var commentId_val       =  dataResults[i]["id"];
+																				if ( dataResultsKeys.indexOf( commentId_val ) == -1 ){
+																					//var imgDetailsArray = [];
+																					for (var j = dataResults.length - 1; j >= 0; j--){
+																						if(dataResults[j]["id"]==commentId_val){
+																									
+																									comment_img_arr.push(dataResults[j].image);
+																						}
+																					}
+																					
+																				}
+																			}
+																			
+																			console.log(comment_img_arr)
+																			
+																			
+																			//--------------------------------------------------------------------
+
+																			
+																			
+																			
                                                                             collageCommentResults.forEach(function(factor, index){
                                                                                     //console.log("factor");
                                                                                     //console.log(factor);
@@ -258,6 +299,7 @@ module.exports = {
                                                                                                                                         ditherCount                : imageArray.length,
                                                                                                                                         taggedUsers                : total_taggedUser_Array,
                                                                                                                                         comments                   : commentArray,
+                                                                                                                                        comment_img_arr            : comment_img_arr,
                                                                                                                                         invite_friends_NUM         : inviteeArray,
                                                                                                                             });
                                                                                                 }

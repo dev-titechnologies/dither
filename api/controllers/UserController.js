@@ -496,10 +496,13 @@ module.exports = {
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                     }
                                                     else{
-                                                        req.session.userToken       =  userTokenDetails.token.token;
+
                                                         var notifyArray = [];
                                                         notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion,mention:results.notifyMention});
                                                         var profile_image       =   profilePic_path + results.profilePic;
+                                                        console.log("userTokenDetails --------");
+                                                        console.log(userTokenDetails);
+                                                        req.session.userToken       =  userTokenDetails.token.token;
                                                         return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
                                                                               email             :   results.email,
                                                                               full_name         :   results.name,

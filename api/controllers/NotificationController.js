@@ -103,7 +103,7 @@ module.exports = {
                                                 " N.ditherUserId="+user_id+
                                                 " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7 OR N.notificationTypeId=8)"+
                                                 " OR "+
-                                                " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt,N.id DESC LIMIT "+data_view_limit+"";
+                                                " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit+"";
 
                         }else{
                             var query  =   " SELECT"+
@@ -117,7 +117,7 @@ module.exports = {
                                             " WHERE"+
                                             " N.ditherUserId="+user_id+
                                             " OR"+
-                                            " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC,N.id"+
+                                            " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
                                             ") as temp"+
                                             " where temp.id <"+focus_Ntfn_id+
                                             " LIMIT "+data_view_limit+"";

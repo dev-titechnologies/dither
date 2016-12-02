@@ -312,54 +312,96 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             callback();
                                                                                     }else{
-                                                                                        var expiryDate      =       new Date(new Date().setFullYear(2020));
-                                                                                        var values = {
-                                                                                            imgTitle        : 'default title',
-                                                                                            image           : 'default.png',
-                                                                                            location        : '',
-                                                                                            //latitude        : '',
-                                                                                            //longitude       : '',
-                                                                                            userId          : getSuperUser.id,
-                                                                                            expiryDate      : expiryDate,
-                                                                                        };
-                                                                                        Collage.create(values).exec(function(err, createCollage){
-                                                                                            if(err){
-                                                                                                    console.log(err);
-                                                                                                    callback();
-                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
-                                                                                            }else{
-                                                                                                if(!createCollage){
-                                                                                                        callback();
-                                                                                                }else{
-                                                                                                    var values = {
-                                                                                                        image       : 'default.png',
-                                                                                                        position    : 1,
-                                                                                                        collageId   : createCollage.id,
-                                                                                                    }
-                                                                                                    CollageDetails.create(values).exec(function(err, createdCollageDetails){
-                                                                                                        if(err){
-                                                                                                            console.log(err);
-                                                                                                            callback();
-                                                                                                            //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
-                                                                                                        }else{
-                                                                                                                //callback();
-                                                                                                            var values = {
-                                                                                                                collageId   : createCollage.id,
-                                                                                                                userId      : results.id,
-                                                                                                            }
-                                                                                                            Tags.create(values).exec(function(err, createdCollageTags){
-                                                                                                                    if(err){
-                                                                                                                        console.log(err);
-                                                                                                                        callback();
-                                                                                                                    }else{
-                                                                                                                            callback();
-                                                                                                                    }
-                                                                                                            });
-                                                                                                        }
-                                                                                                    });
-                                                                                                }
+                                                                                        [1,2,3].forEach(function(factor, index){
+                                                                                            var expiryDate      =       new Date(new Date().setFullYear(2020));
+                                                                                            var imgTitle,
+                                                                                                collageImage;
+                                                                                            switch(index){
+                                                                                                case 0 :
+                                                                                                        imgTitle         = "default 1";
+                                                                                                        collageImage     = "default_collage_1.jpg";
+                                                                                                break;
+                                                                                                case 1 :
+                                                                                                        imgTitle         = "default 2";
+                                                                                                        collageImage     = "default_collage_2.jpg";
+                                                                                                break;
+                                                                                                case 2 :
+                                                                                                        imgTitle         = "default 3";
+                                                                                                        collageImage     = "default_collage_3.jpg";
+                                                                                                break;
                                                                                             }
-                                                                                        });
+                                                                                            var values = {
+                                                                                                imgTitle        : imgTitle,
+                                                                                                image           : collageImage,
+                                                                                                location        : '39,Albemarle Gate,Cheltenham,Cheltenham',
+                                                                                                //latitude        : '',
+                                                                                                //longitude       : '',
+                                                                                                userId          : getSuperUser.id,
+                                                                                                expiryDate      : expiryDate,
+                                                                                            };
+                                                                                            Collage.create(values).exec(function(err, createCollage){
+                                                                                                if(err){
+                                                                                                        console.log(err);
+                                                                                                        callback();
+                                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
+                                                                                                }else{
+                                                                                                    if(!createCollage){
+                                                                                                            callback();
+                                                                                                    }else{
+                                                                                                        var values;
+                                                                                                        switch(index){
+                                                                                                            case 0 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_1_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_2.jpg",position    : 2,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_3.jpg",position    : 3,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_4.jpg",position    : 4,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 1 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_2_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_2_2.jpg",position    : 2,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_2_3.jpg",position    : 3,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 2 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_3_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_3_2.jpg",position    : 2,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                        }
+                                                                                                        /*var values = {
+                                                                                                            image       : image,
+                                                                                                            position    : 1,
+                                                                                                            collageId   : createCollage.id,
+                                                                                                        }*/
+                                                                                                        CollageDetails.create(values).exec(function(err, createdCollageDetails){
+                                                                                                            if(err){
+                                                                                                                console.log(err);
+                                                                                                                callback();
+                                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                            }else{
+                                                                                                                    //callback();
+                                                                                                                var values = {
+                                                                                                                    collageId   : createCollage.id,
+                                                                                                                    userId      : results.id,
+                                                                                                                }
+                                                                                                                Tags.create(values).exec(function(err, createdCollageTags){
+                                                                                                                        if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            callback();
+                                                                                                                        }else{
+                                                                                                                                //callback();
+                                                                                                                        }
+                                                                                                                });
+                                                                                                            }
+                                                                                                        });
+                                                                                                    }
+                                                                                                }
+                                                                                            });
+                                                                                        },callback());
                                                                                     }
                                                                                 });
                                                                             },

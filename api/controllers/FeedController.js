@@ -79,7 +79,7 @@ module.exports = {
                                             " )"+
                                             " ) AS temp1"+
                                             query_offset_data_view_limit+
-                                            " ORDER BY temp1.createdAt DESC"+
+                                            " ORDER BY temp1.createdAt DESC, temp1.id DESC"+
                                             " LIMIT "+data_view_limit+
                                             " ) AS temp_union"+
                                             " INNER JOIN collage clg ON clg.id = temp_union.id"+
@@ -87,7 +87,7 @@ module.exports = {
                                             " INNER JOIN user usr ON usr.id = clg.userId"+
                                             " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                             " GROUP BY clgdt.id"+
-                                            " ORDER BY clg.createdAt DESC";
+                                            " ORDER BY clg.createdAt DESC, clgdt.collageId DESC";
 
                             console.log(query);
                             Collage.query(query, function(err, results){

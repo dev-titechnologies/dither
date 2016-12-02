@@ -20,6 +20,9 @@ module.exports = {
                 var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
+                var userName                    =     tokenCheck.tokenDetails.name;
+                var userMentionId               =     tokenCheck.tokenDetails.mentionId;
+                var userProfilePic              =     tokenCheck.tokenDetails.profilePic;
                 var dither_expiry_hour          =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
                 var today                       =     new Date().toISOString();
                 console.log(req.param("dither_id"));
@@ -178,8 +181,9 @@ module.exports = {
                                                                                             taggedUsersFinalResults.forEach(function(factor, index){
                                                                                                     //console.log("factor");
                                                                                                     //console.log(factor);
-                                                                                                    profile_image                   =   "";
-                                                                                                    if(factor.profilePic){
+                                                                                                    if(factor.profilePic == "" || factor.profilePic == null){
+                                                                                                        profile_image                   =     "";
+                                                                                                    }else{
                                                                                                         var imageSrc                    =     factor.profilePic;
                                                                                                         var ext                         =     imageSrc.split('.');
                                                                                                         profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
@@ -220,6 +224,22 @@ module.exports = {
                                                                                                             var ext                         =     imageSrc.split('.');
                                                                                                             user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                                             //user_profile_image              =     profilePic_path + results[0].profilePic;
+                                                                                                    }
+                                                                                                    //When super user creates a dither he is not in logged user contact
+                                                                                                    if(total_taggedUser_Array.length == 0){
+                                                                                                            if(userProfilePic == "" || userProfilePic == null){
+                                                                                                                profile_image                   =     "";
+                                                                                                            }else{
+                                                                                                                var imageSrc                    =     userProfilePic;
+                                                                                                                var ext                         =     imageSrc.split('.');
+                                                                                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                            }
+                                                                                                            total_taggedUser_Array = [{
+                                                                                                                        name            :   userName,
+                                                                                                                        userId          :   userId,
+                                                                                                                        profile_image   :   profile_image,
+                                                                                                                        mention_id      :   userMentionId
+                                                                                                            }];
                                                                                                     }
                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                                                         dither_expiry_hour         : dither_expiry_hour,

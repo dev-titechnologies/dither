@@ -27,12 +27,11 @@ module.exports = {
                     var profilePic_path             =     server_baseUrl + req.options.file_path.profilePic_path;
                     //var   mention_arr             =    ['test_user','anu_r'];
                     var commentImage_path			=	  server_baseUrl + req.options.file_path.commentImage_path;
-                    var comment_images				=	  req.param("comment_image");
+                   var comment_images				=	  req.param("comment_image");
                     var old_id						= 	  '';
                     var profile_image               =     '';
                    	var comment_img_arr 			= 	  [];
-                    //var comment_images				=	  [ { cmnt_img_url: 'http://localhost:5000/images/comment/b35c0a6d-613f-47a2-bdf5-556e286e5e94.jpg' },
-										//{ cmnt_img_url: 'http://localhost:5000/images/comment/be8a37d3-013f-489f-9e22-87289ec353b4.jpg' } ]; 												
+                    //var comment_images				=	  [ 'http://localhost:5000/images/comment/b35c0a6d-613f-47a2-bdf5-556e286e5e94.jpg' ,'http://localhost:5000/images/comment/be8a37d3-013f-489f-9e22-87289ec353b4.jpg' ]; 												
                     console.log("comment Image-------------------")
                     console.log(comment_images)
                     console.log("comment image")
@@ -90,8 +89,8 @@ module.exports = {
 													  if(comment_images){
 														  console.log(comment_images)
 															comment_images.forEach(function(factor, index){
-															   if(factor.cmnt_img_url){
-																   comment_imageName       =   factor.cmnt_img_url.split('/');
+															   if(factor){
+																   comment_imageName       =   factor.split('/');
 																   comment_imageName       =   comment_imageName[comment_imageName.length-1];
 																   comment_img_arr.push("("+results.id+",'"+comment_imageName+"', now(), now())");
 															   }

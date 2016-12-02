@@ -21,8 +21,9 @@ module.exports = {
                     userToken = req.socket.handshake.query.token;
             }else{
                     //console.log("is Socket false");
-                    //userToken = req.get('token');
-                    userToken    =    req.session.userToken;
+                    userToken = req.get('token');
+                    //userToken    =    req.session.userToken;
+                    console.log(req.session.userToken);
             }
             //console.log(userToken);
             if(userToken){

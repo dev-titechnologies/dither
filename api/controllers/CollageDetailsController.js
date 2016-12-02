@@ -16,6 +16,7 @@ module.exports = {
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                var commentImage_path			=	  server_baseUrl + req.options.file_path.commentImage_path;
                 var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                 var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                 var tokenCheck                  =     req.options.tokenCheck;
@@ -130,6 +131,7 @@ module.exports = {
                                                                         var commentArray = [];
                                                                         if(collageCommentResults.length){
 																			var comment_img_arr = [];
+																			var comment_arr = [];
 																			
 																			//-----------comment Images-----------------------------------------
 																			
@@ -144,17 +146,25 @@ module.exports = {
 																				var commentId_val       =  dataResults[i]["id"];
 																				if ( dataResultsKeys.indexOf( commentId_val ) == -1 ){
 																					//var imgDetailsArray = [];
+																					
 																					for (var j = dataResults.length - 1; j >= 0; j--){
 																						if(dataResults[j]["id"]==commentId_val){
+																									var image	= commentImage_path + dataResults[j]["image"];
+																									comment_img_arr.push(image);
 																									
-																									comment_img_arr.push(dataResults[j].image);
+																									
+																									
+																									
 																						}
 																					}
-																					
+																					dataResultsObj.comment_id	=	dataResults[i]["id"];
+																					dataResultsObj.image	=	comment_img_arr;
+																					comment_arr.push(dataResultsObj);
 																				}
 																			}
 																			
 																			console.log(comment_img_arr)
+																			console.log(comment_arr)
 																			
 																			
 																			//--------------------------------------------------------------------
@@ -180,7 +190,9 @@ module.exports = {
                                                                                                         user_profile_pic_url        : profile_image,
                                                                                                         mention_id                  : factor.mentionId,
                                                                                                         message                     : factor.comment,
-                                                                                                        comment_created_date_time   : factor.createdAt
+                                                                                                        comment_created_date_time   : factor.createdAt,
+                                                                                                        comment_img_arr				: comment_img_arr
+                                                                                                        
                                                                                     });
 
 
@@ -299,7 +311,6 @@ module.exports = {
                                                                                                                                         ditherCount                : imageArray.length,
                                                                                                                                         taggedUsers                : total_taggedUser_Array,
                                                                                                                                         comments                   : commentArray,
-                                                                                                                                        comment_img_arr            : comment_img_arr,
                                                                                                                                         invite_friends_NUM         : inviteeArray,
                                                                                                                             });
                                                                                                 }

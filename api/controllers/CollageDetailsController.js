@@ -108,26 +108,26 @@ module.exports = {
                                                                                                }];
                                                         console.log("collageCreator_JSON_Array ======================");
                                                         console.log(collageCreator_JSON_Array);
-                                                        /*query = " SELECT clgcmt.id, clgcmt.comment, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
+                                                      /*  query = " SELECT clgcmt.id, clgcmt.comment,clgcmt.commentImage, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
                                                                 " FROM collageComments clgcmt"+
-                                                                " INNER JOIN user usr ON usr.id = clgcmt.userId"+
+                                                                " LEFT JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
                                                                 " ORDER BY clgcmt.createdAt";*/
                                                                 
                                                                 
                                                          query = " SELECT clgcmt.id, clgcmt.comment,cmntImg.image, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
                                                                 " FROM collageComments clgcmt"+
-                                                                " INNER JOIN commentImages as cmntImg ON cmntImg.commentId = clgcmt.id"+
+                                                                " LEFT JOIN commentImages as cmntImg ON cmntImg.commentId = clgcmt.id"+
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
-                                                                " ORDER BY clgcmt.createdAt";       
+                                                                " ORDER BY clgcmt.createdAt";  
 
                                                         CollageComments.query(query, function(err, collageCommentResults) {
                                                                 if(err){
                                                                     console.log(err);
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Comments'});
                                                                 }else{
-                                                                        //console.log(collageCommentResults);
+                                                                        console.log(collageCommentResults);
                                                                         var commentArray = [];
                                                                         if(collageCommentResults.length){
 																			var comment_img_arr = [];
@@ -135,7 +135,7 @@ module.exports = {
 																			
 																			//-----------comment Images-----------------------------------------
 																			
-																			var dataResults         =   collageCommentResults;
+																			/*var dataResults         =   collageCommentResults;
 																			var key                 =   [];
 																			var dataResultsKeys     =   [];
 																			//var popular_dithers,
@@ -150,21 +150,25 @@ module.exports = {
 																					for (var j = dataResults.length - 1; j >= 0; j--){
 																						if(dataResults[j]["id"]==commentId_val){
 																									var image	= commentImage_path + dataResults[j]["image"];
+																									console.log("imageeeeeeeeeeeeeeeee")
+																									console.log(image)
 																									comment_img_arr.push(image);
-																									
-																									
+																									dataResultsObj.comment_id	=	dataResults[i]["id"];
+																									dataResultsObj.image	=	comment_img_arr;
+																									comment_arr.push(dataResultsObj);
+																									console.log(comment_arr)
 																									
 																									
 																						}
 																					}
-																					dataResultsObj.comment_id	=	dataResults[i]["id"];
-																					dataResultsObj.image	=	comment_img_arr;
-																					comment_arr.push(dataResultsObj);
+																					//dataResultsObj.comment_id	=	dataResults[i]["id"];
+																					//dataResultsObj.image	=	comment_img_arr;
+																					//comment_arr.push(dataResultsObj);
 																				}
-																			}
+																			}*/
 																			
-																			console.log(comment_img_arr)
-																			console.log(comment_arr)
+																			//console.log(comment_arr)
+																			//console.log(comment_arr)
 																			
 																			
 																			//--------------------------------------------------------------------
@@ -174,7 +178,13 @@ module.exports = {
 																			
                                                                             collageCommentResults.forEach(function(factor, index){
                                                                                     //console.log("factor");
-                                                                                    //console.log(factor);
+                                                                                    console.log(factor.image);
+                                                                                    if(factor.image!=null){
+                                                                                     var image	= commentImage_path + factor.image;
+																				    }else{
+																						var image = '';
+																					}
+                                                                                    
                                                                                     var profile_image;
                                                                                     if(factor.profilePic == null || factor.profilePic == ""){
                                                                                          profile_image  = "";
@@ -191,7 +201,7 @@ module.exports = {
                                                                                                         mention_id                  : factor.mentionId,
                                                                                                         message                     : factor.comment,
                                                                                                         comment_created_date_time   : factor.createdAt,
-                                                                                                        comment_img_arr				: comment_img_arr
+                                                                                                        comment_img					: image
                                                                                                         
                                                                                     });
 

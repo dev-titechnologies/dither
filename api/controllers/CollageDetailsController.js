@@ -215,7 +215,7 @@ module.exports = {
 
                                                                                 comment_arr.push(dataResultsObj);
                                                                             }
-                                                                            var comment_arr_Final   =  removeDuplicate(comment_arr, 'comment_id');
+                                                                            comment_arr_Final   =  removeDuplicate(comment_arr, 'comment_id');
                                                                             console.log(comment_arr_Final);
 
 

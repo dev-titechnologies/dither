@@ -184,7 +184,7 @@ module.exports = {
 																				    }else{
 																						var image = '';
 																					}
-                                                                                    
+                                                                                    comment_img_arr.push(image);
                                                                                     var profile_image;
                                                                                     if(factor.profilePic == null || factor.profilePic == ""){
                                                                                          profile_image  = "";
@@ -201,7 +201,7 @@ module.exports = {
                                                                                                         mention_id                  : factor.mentionId,
                                                                                                         message                     : factor.comment,
                                                                                                         comment_created_date_time   : factor.createdAt,
-                                                                                                        comment_img					: image
+                                                                                                        comment_img					: comment_img_arr
                                                                                                         
                                                                                     });
 

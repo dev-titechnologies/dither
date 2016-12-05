@@ -60,14 +60,7 @@ module.exports = {
                 var get_collage_id              =     req.param("dither_id");
                 var query;
                 var total_taggedUser_Array      =     [];
-
-
-                var key                 =   [];
-                var dataResultsKeys     =   [];
-                var comment_arr         =   [];
-                var commentArray        =   [];
-                var commentArray1        =   {};
-                var comment_arr_Final   =   [];
+                var comment_arr_Final           =     [];
 
                 if(!get_collage_id){
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id'});
@@ -79,10 +72,8 @@ module.exports = {
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                 " WHERE clg.id = "+get_collage_id+
-                                //" AND clg.expiryDate > '"+today+"'"+
                                 " GROUP BY clgdt.id";
                         console.log(query);
                         Collage.query(query, function(err, results){
@@ -146,20 +137,6 @@ module.exports = {
                                                                                                }];
                                                         console.log("collageCreator_JSON_Array ======================");
                                                         console.log(collageCreator_JSON_Array);
-                                                      /*  query = " SELECT clgcmt.id, clgcmt.comment,clgcmt.commentImage, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
-                                                                " FROM collageComments clgcmt"+
-                                                                " LEFT JOIN user usr ON usr.id = clgcmt.userId"+
-                                                                " WHERE clgcmt.collageId = "+get_collage_id+
-                                                                " ORDER BY clgcmt.createdAt";*/
-
-
-                                                         /*query = " SELECT clgcmt.id, clgcmt.comment,cmntImg.image, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
-                                                                " FROM collageComments clgcmt"+
-                                                                " LEFT JOIN commentImages as cmntImg ON cmntImg.commentId = clgcmt.id"+
-                                                                " INNER JOIN user usr ON usr.id = clgcmt.userId"+
-                                                                " WHERE clgcmt.collageId = "+get_collage_id+
-                                                                " ORDER BY clgcmt.createdAt";*/
-
                                                         query = "SELECT clgcmt.id, clgcmt.comment,clgcmt.createdAt,"+
                                                                 " cmntImg.image, cmntImg.commentId AS commentId,"+
                                                                 " usr.name, usr.mentionId, usr.profilePic, usr.id userId"+
@@ -169,18 +146,13 @@ module.exports = {
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
                                                                 " ORDER BY clgcmt.createdAt";
                                                         console.log(query);
-                                                        console.log("comment - query +++++++++++++++++");
                                                         CollageComments.query(query, function(err, collageCommentResults) {
                                                                 if(err){
                                                                     console.log(err);
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Comments'});
                                                                 }else{
-                                                                        console.log(" -------------------collageCommentResults +++++++++++++++");
-                                                                        //console.log(collageCommentResults);
-
                                                                         if(collageCommentResults.length){
                                                                             var dataResults         =   collageCommentResults;
-                                                                            //-----------comment Images-----------------------------------------
                                                                             var comment_arr = [];
                                                                             for (var i = dataResults.length - 1; i >= 0; i--){
                                                                                 var dataResultsObj      =  new Object();
@@ -216,42 +188,6 @@ module.exports = {
                                                                                 comment_arr.push(dataResultsObj);
                                                                             }
                                                                             comment_arr_Final   =  removeDuplicate(comment_arr, 'comment_id');
-                                                                            console.log(comment_arr_Final);
-
-
-                                                                            /*collageCommentResults.forEach(function(factor, index){
-                                                                                    //console.log("factor");
-                                                                                    //console.log(factor.image);
-                                                                                    if(factor.image!=null){
-                                                                                     var image  = commentImage_path + factor.image;
-                                                                                    }else{
-                                                                                        var image = '';
-                                                                                    }
-                                                                                    console.log("before push")
-                                                                                    //comment_img_arr.push(image);
-                                                                                    console.log(comment_img_arr)
-                                                                                    var profile_image;
-                                                                                    if(factor.profilePic == null || factor.profilePic == ""){
-                                                                                         profile_image  = "";
-                                                                                    }else{
-                                                                                        var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                                        var ext                         =     imageSrc.split('/');
-                                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                                                                    }
-                                                                                    console.log("after push")
-                                                                                    commentArray.push({comment_id                   : factor.id,
-                                                                                                        user_id                     : factor.userId,
-                                                                                                        user_name                   : factor.name,
-                                                                                                        user_profile_pic_url        : profile_image,
-                                                                                                        mention_id                  : factor.mentionId,
-                                                                                                        message                     : factor.comment,
-                                                                                                        comment_created_date_time   : factor.createdAt,                                                                                               comment_img_arr             : comment_img_arr
-
-                                                                                    });
-
-
-                                                                            });*/
                                                                         }
                                                                         //Query to get tagged users from both addressBook and fbFriends
                                                                             query  = "SELECT *"+

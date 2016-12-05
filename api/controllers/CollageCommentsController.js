@@ -74,7 +74,7 @@ module.exports = {
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Comment Insertion', error_details: err});
                                         }else{
-                                                if(comment_images){
+                                                if(comment_images.length){
                                                     //console.log(comment_images)
                                                     comment_images.forEach(function(factor, index){
                                                         if(factor){
@@ -119,6 +119,7 @@ module.exports = {
                                                         async.series([
 
                                                         function(callback) {
+                                                                console.log("COMMENT SERIES ------------------ 1");
                                                                 if(mention_arr){
                                                                         //var query = "SELECT id FROM user where mention_id=";
                                                                         User.find({mentionId: mention_arr}).exec(function (err, getUserId){
@@ -198,6 +199,7 @@ module.exports = {
                                                                 }
                                                         },
                                                         function(callback) {
+                                                            console.log("COMMENT SERIES ------------------ 2");
                                                             var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
                                                             NotificationLog.query(query, function(err, selCommentNtfn){
                                                                 if(err){
@@ -225,6 +227,7 @@ module.exports = {
 
                                                         },
                                                         function(callback) {
+                                                            console.log("COMMENT SERIES ------------------ 3");
                                                             var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"'";
                                                             CollageComments.query(query, function(err, CountComments){
                                                                 if(err){
@@ -327,6 +330,7 @@ module.exports = {
                                                             });
                                                         },
                                                         function(callback) {
+                                                            console.log("COMMENT SERIES ------------------ 4");
                                                             User.findOne({id:userId}).exec(function (err, getUseDetails){
                                                                 if(err){
                                                                     console.log(err)
@@ -349,6 +353,7 @@ module.exports = {
                                                             });
                                                         },
                                                         function(callback) {
+                                                            console.log("COMMENT SERIES ------------------ 5");
                                                             CommentImages.find({commentId:results.id}).exec(function (err, commentImgResults){
                                                                 if(err){
                                                                     console.log(err)
@@ -362,7 +367,7 @@ module.exports = {
                                                                                 if(factor.image = "" || factor.image == null){
 
                                                                                 }else{
-                                                                                    commentImage_Array.push({comment_img : commentImage_path + factor.image});
+                                                                                    commentImage_Array.push(commentImage_path + factor.image);
                                                                                 }
                                                                         });
                                                                     }
@@ -375,6 +380,7 @@ module.exports = {
                                                                                     console.log(err);
                                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured Comment Updation', error_details: err});
                                                                                 }else{
+                                                                                    console.log("Lasttttttttttttttttttttt");
                                                                                         return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully commented against the dither',
                                                                                                                         comment_id                      :    results.id,
                                                                                                                         comment_msg                     :    results.comment,

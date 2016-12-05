@@ -380,7 +380,7 @@ module.exports = {
                                                                                                                         comment_msg                     :    results.comment,
                                                                                                                         comment_created_date_time       :    results.createdAt,
                                                                                                                         profile_image                   :    profile_image,
-                                                                                                                        comment_image                   :    commentImage_Array
+                                                                                                                        comment_img                     :    commentImage_Array
                                                                                                                 });
                                                                                 }
                                                         });

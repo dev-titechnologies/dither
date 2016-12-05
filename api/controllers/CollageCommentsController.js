@@ -371,10 +371,12 @@ module.exports = {
 
                                                                                 }else{
                                                                                     commentImage_Array.push(commentImage_path + factor.image);
+
                                                                                 }
                                                                         });
+                                                                        callback();
                                                                     }
-                                                                    callback();
+                                                                   // callback();
                                                                 }
                                                             });
                                                         },

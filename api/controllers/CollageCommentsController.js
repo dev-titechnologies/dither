@@ -354,6 +354,7 @@ module.exports = {
                                                         },
                                                         function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 5");
+                                                           if(comment_images){
                                                             CommentImages.find({commentId:results.id}).exec(function (err, commentImgResults){
                                                                 if(err){
                                                                     console.log("commentImgResults   error");
@@ -379,6 +380,9 @@ module.exports = {
                                                                    // callback();
                                                                 }
                                                             });
+                                                         }else{
+                                                             callback();
+                                                         }
                                                         },
                                                         //=========================================
                                                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"

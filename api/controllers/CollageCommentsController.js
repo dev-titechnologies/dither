@@ -356,12 +356,15 @@ module.exports = {
                                                             console.log("COMMENT SERIES ------------------ 5");
                                                             CommentImages.find({commentId:results.id}).exec(function (err, commentImgResults){
                                                                 if(err){
+                                                                    console.log("commentImgResults   error");
                                                                     console.log(err)
                                                                     callback();
                                                                 }else{
                                                                     if(!commentImgResults.length){
+                                                                            console.log("commentImgResults   No length");
                                                                             callback();
                                                                     }else{
+                                                                        console.log("commentImgResults   YES length");
                                                                         commentImgResults.forEach(function(factor, index){
                                                                                 console.log(factor);
                                                                                 if(factor.image = "" || factor.image == null){
@@ -371,12 +374,14 @@ module.exports = {
                                                                                 }
                                                                         });
                                                                     }
+                                                                    callback();
                                                                 }
                                                             });
                                                         },
                                                         //=========================================
                                                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                                                                 if(err){
+                                                                                    console.log("Lasttttttttttttttttttttt   ERROR");
                                                                                     console.log(err);
                                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured Comment Updation', error_details: err});
                                                                                 }else{

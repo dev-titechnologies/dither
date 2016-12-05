@@ -211,7 +211,7 @@ module.exports = {
                                                                                 dataResultsObj.mention_id                       =   dataResults[i]["mentionId"];
                                                                                 dataResultsObj.message                          =   dataResults[i]["comment"];
                                                                                 dataResultsObj.comment_created_date_time        =   dataResults[i]["createdAt"];
-                                                                                dataResultsObj.comment_img_arr                  =   comment_img_arr;
+                                                                                dataResultsObj.comment_img                      =   comment_img_arr;
 
                                                                                 comment_arr.push(dataResultsObj);
                                                                             }

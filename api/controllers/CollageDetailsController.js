@@ -16,7 +16,7 @@ module.exports = {
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                var commentImage_path			=	  server_baseUrl + req.options.file_path.commentImage_path;
+                var commentImage_path			=	  server_image_baseUrl + req.options.file_path.commentImage_path;
                 var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                 var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                 var tokenCheck                  =     req.options.tokenCheck;
@@ -186,7 +186,8 @@ module.exports = {
 																				    }else{
 																						var image = '';
 																					}
-                                                                                    comment_img_arr.push(image);
+																					console.log("before push")
+                                                                                    //comment_img_arr.push(image);
                                                                                     console.log(comment_img_arr)
                                                                                     var profile_image;
                                                                                     if(factor.profilePic == null || factor.profilePic == ""){
@@ -197,6 +198,7 @@ module.exports = {
                                                                                         ext                             =     ext[ext.length-1].split('.');
                                                                                         profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                     }
+                                                                                    console.log("after push")
                                                                                     commentArray.push({comment_id                   : factor.id,
                                                                                                         user_id                     : factor.userId,
                                                                                                         user_name                   : factor.name,

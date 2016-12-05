@@ -191,7 +191,7 @@ module.exports = {
                                                                                         console.log(dataResults[i]["image"]);
                                                                                         if(dataResults[i]["image"] == null || dataResults[i]["image"] == ""){
                                                                                         }else{
-                                                                                             comment_img_arr.push(dataResults[j]["image"]);
+                                                                                             comment_img_arr.push(commentImage_path + dataResults[j]["image"]);
                                                                                         }
                                                                                     }
                                                                                 }

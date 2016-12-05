@@ -121,7 +121,8 @@ module.exports = {
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
                                                                 " ORDER BY clgcmt.createdAt";  
-
+														console.log("comment query-------------------")
+														console.log(query)
                                                         CollageComments.query(query, function(err, collageCommentResults) {
                                                                 if(err){
                                                                     console.log(err);
@@ -185,6 +186,7 @@ module.exports = {
 																						var image = '';
 																					}
                                                                                     comment_img_arr.push(image);
+                                                                                    console.log(comment_img_arr)
                                                                                     var profile_image;
                                                                                     if(factor.profilePic == null || factor.profilePic == ""){
                                                                                          profile_image  = "";

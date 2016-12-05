@@ -127,7 +127,7 @@ module.exports = {
                                                                     console.log(err);
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Comments'});
                                                                 }else{
-                                                                        console.log(collageCommentResults);
+                                                                        //console.log(collageCommentResults);
                                                                         var commentArray = [];
                                                                         if(collageCommentResults.length){
 																			var comment_img_arr = [];
@@ -178,7 +178,7 @@ module.exports = {
 																			
                                                                             collageCommentResults.forEach(function(factor, index){
                                                                                     //console.log("factor");
-                                                                                    console.log(factor.image);
+                                                                                    //console.log(factor.image);
                                                                                     if(factor.image!=null){
                                                                                      var image	= commentImage_path + factor.image;
 																				    }else{
@@ -207,6 +207,7 @@ module.exports = {
 
 
                                                                             });
+                                                                            console.log(commentArray)
                                                                         }
                                                                         //Query to get tagged users from both addressBook and fbFriends
                                                                             query  = "SELECT *"+

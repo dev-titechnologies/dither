@@ -74,7 +74,7 @@ module.exports = {
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Comment Insertion', error_details: err});
                                         }else{
-                                                if(comment_images.length){
+                                                if(comment_images){
                                                     //console.log(comment_images)
                                                     comment_images.forEach(function(factor, index){
                                                         if(factor){

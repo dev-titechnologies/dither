@@ -75,7 +75,7 @@ console.log(values);
                     else
                     {
 
-                        //console.log(result);
+                        // console.log(result);
                         return res.json(200, {status: 1, message: "success", data: result});
                     }
                 });
@@ -392,7 +392,7 @@ console.log(values);
                         return res.json(200, {status: 2, error_details: err});
                     }else
                     {
-                        // console.log(result);
+                         console.log(result);
                         return res.json(200,{status:1,message:'success',result:result});
                     }
 
@@ -679,7 +679,20 @@ updateTokenExpiryTime:function(req,res){
  getUsersBySearchName: function(req,res){        
                     
                     var name = req.body.name;
-                    var query ="SELECT * FROM user WHERE name LIKE '"+name+"%'";
+                    var start = req.body.start;
+                    var count = req.body.count;
+                    var query;
+                    if((name == null) || (name == ""))
+                    {
+                     
+                      query =  "SELECT *,(SELECT COUNT(*) FROM user) as length FROM `user` ORDER BY createdAt DESC LIMIT "+start+","+count+"";
+                    
+                    }
+                    else
+                    {
+                     query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%') as length FROM user WHERE name  LIKE '"+name+"%' ORDER BY createdAt DESC LIMIT "+start+","+count+"";
+                    }
+                    // console.log(query);
 
                     User.query(query,function(err,result){
                         if(err)
@@ -697,8 +710,23 @@ updateTokenExpiryTime:function(req,res){
  getUsersBySearchEmail: function(req,res){
                     
                      var email = req.body.email;
-                     var query = "SELECT * FROM user WHERE email LIKE '"+email+"%'";
+                     var start = req.body.start;
+                     var count = req.body.count;
+                     var query;
+                     if((email == null)||(email ==""))
+                     {
 
+                        query = "SELECT *,(SELECT COUNT(*) FROM user) as length FROM `user` ORDER BY createdAt DESC LIMIT "+start+","+count+"";
+
+                     }
+                     else
+                     {
+
+                        query = "SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE'"+email+"%') as length FROM user WHERE email LIKE '"+email+"%' ORDER BY createdAt DESC LIMIT "+start+","+count+"";
+
+                     }
+                      
+                     // console.log(query);
                      User.query(query,function(err,result){
                         if(err)
                         {
@@ -714,8 +742,20 @@ updateTokenExpiryTime:function(req,res){
  getUsersBySearchMobile: function(req,res){
                       
                       var mobile = req.body.mobile;
-                      var query = "SELECT * FROM user WHERE phoneNumber LIKE '%"+mobile+"%'";
+                      var start = req.body.start;
+                      var count = req.body.count;
+                      var query;
+                      if((mobile ==null)||(mobile==""))
+                      {
 
+                        query = "SELECT *,(SELECT COUNT(*) FROM user) as length FROM `user` ORDER BY createdAt DESC LIMIT "+start+","+count+"";
+                      }
+                      else
+                      {
+                        query = "SELECT *,(SELECT COUNT(user.id) FROM user WHERE (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt DESC LIMIT "+start+","+count+"";
+                      }
+                       
+                        // console.log(query);
                       User.query(query,function(err,result){
                         if(err)
                         {
@@ -723,10 +763,119 @@ updateTokenExpiryTime:function(req,res){
                         }
                         else
                         {
-                            console.log(result);
+                            // console.log(result);
                             return res.json(200, {status: 1, message:"success", data:result});
                         }
                       });
         },
+ checkMentionName:  function(req,res){
+                    console.log(req.params.all());
+                    var mentionId = req.body.mentionId;
+                    console.log(mentionId);
+                    var query = "SELECT u.id,u.name FROM user as u WHERE mentionId = '"+mentionId+"'";
+
+                    User.query(query,function(err,result){
+                        if(err)
+                        {
+                            return res.json(200,{status:2,error_details:err});
+                        }
+                        else
+                        {
+                            // console.log(result);
+                            return res.json(200,{status:1,message:"success",data:result});
+                        }
+                    });
+
+        }, 
+
+getUsersByNameAndEmail :function(req,res){
+                        console.log(req.params.all());
+                        var name = req.body.name;
+                        var email = req.body.email;
+                        var start = req.body.start;
+                        var count = req.body.count;console.log("inside name---->email");
+
+                        var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%') as length FROM user WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%' ORDER BY createdAt LIMIT "+start+","+count+" ";
+                        // console.log(query);
+                        User.query(query,function(err,result){
+                            if(err)
+                            {
+                                return res.json(200,{status:2,error_details:err});
+                            }
+                            else
+                            {
+                                 // console.log(result);
+                                return res.json(200,{status:1,message:"success",data:result});
+                            }
+                        });
+
+        },
+getUsersByNameAndMob :function(req,res){
+                        console.log(req.params.all());
+                        var name = req.body.name;
+                        var mobile = req.body.mobile;
+                        var start = req.body.start;
+                        var count = req.body.count;console.log("inside name---->mob");
+
+                        var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '46%' OR phoneNumber LIKE '%46%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+                        // console.log(query);
+                        User.query(query,function(err,result){
+                            if(err)
+                            {
+                                return res.json(200,{status:2,error_details:err});
+                            }
+                            else
+                            {
+                                 // console.log(result);
+                                return res.json(200,{status:1,message:"success",data:result});
+                            }
+                        });
+
+        },
+getUsersEmailAndMob :function(req,res){
+                            console.log(req.params.all());
+                            var email = req.body.email;
+                            var mobile = req.body.mobile;
+                            var start = req.body.start;
+                            var count = req.body.count;console.log("inside email---->mob");
+
+                            var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+                            // console.log(query);
+                            User.query(query,function(err,result){
+                                if(err)
+                                {
+                                    return res.json(200,{status:2,error_details:err});
+                                }
+                                else
+                                {
+                                     // console.log(result);
+                                    return res.json(200,{status:1,message:"success",data:result});
+                                }
+                            });
+        }, 
+
+getUsersByNameEmailAndMob :function(req,res){
+                            console.log(req.params.all());
+                            var name = req.body.name;
+                            var email = req.body.email;
+                            var mobile = req.body.mobile;
+                            var start = req.body.start;
+                            var count = req.body.count;console.log("inside name-email-mob");
+
+                            var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+                            
+                            User.query(query,function(err,result){
+                                if(err)
+                                {
+                                    return res.json(200,{status:2,error_details:err});
+                                }
+                                else
+                                {
+                                     // console.log(result);
+                                    return res.json(200,{status:1,message:"success",data:result});
+                                }
+                            });
+
+        },                           
 };
 

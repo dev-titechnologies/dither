@@ -354,35 +354,35 @@ module.exports = {
                                                         },
                                                         function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 5");
-                                                           if(comment_images){
-                                                            CommentImages.find({commentId:results.id}).exec(function (err, commentImgResults){
-                                                                if(err){
-                                                                    console.log("commentImgResults   error");
-                                                                    console.log(err)
-                                                                    callback();
-                                                                }else{
-                                                                    if(!commentImgResults.length){
-                                                                            console.log("commentImgResults   No length");
+                                                            if(comment_images){
+                                                                    CommentImages.find({commentId:results.id}).exec(function (err, commentImgResults){
+                                                                        if(err){
+                                                                            console.log("commentImgResults   error");
+                                                                            console.log(err)
                                                                             callback();
-                                                                    }else{
-                                                                        console.log("commentImgResults   YES length");
-                                                                        commentImgResults.forEach(function(factor, index){
-                                                                                console.log(factor);
-                                                                                if(factor.image = "" || factor.image == null){
+                                                                        }else{
+                                                                            if(!commentImgResults.length){
+                                                                                    console.log("commentImgResults   No length");
+                                                                                    callback();
+                                                                            }else{
+                                                                                console.log("commentImgResults   YES length");
+                                                                                commentImgResults.forEach(function(factor, index){
+                                                                                        console.log(factor);
+                                                                                        if(factor.image == "" || factor.image == null){
 
-                                                                                }else{
-                                                                                    commentImage_Array.push(commentImage_path + factor.image);
-
-                                                                                }
-                                                                        });
-                                                                        callback();
-                                                                    }
-                                                                   // callback();
-                                                                }
-                                                            });
-                                                         }else{
-                                                             callback();
-                                                         }
+                                                                                        }else{
+                                                                                            commentImage_Array.push(commentImage_path + factor.image);
+                                                                                        }
+                                                                                });
+                                                                                callback();
+                                                                            }
+                                                                           // callback();
+                                                                        }
+                                                                    });
+                                                                    console.log(commentImage_Array);
+                                                            }else{
+                                                                    callback();
+                                                            }
                                                         },
                                                         //=========================================
                                                         ], function(err) { //This function gets called after the two tasks have called their "task callbacks"

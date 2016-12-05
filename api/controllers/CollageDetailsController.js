@@ -201,7 +201,7 @@ module.exports = {
                                                                                                         mention_id                  : factor.mentionId,
                                                                                                         message                     : factor.comment,
                                                                                                         comment_created_date_time   : factor.createdAt,
-                                                                                                        comment_img					: comment_img_arr
+                                                                                                        comment_img					: image
                                                                                                         
                                                                                     });
 

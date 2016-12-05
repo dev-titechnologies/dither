@@ -77,7 +77,8 @@ module.exports = {
                                 "message"             :       data.NtfnBody,
                                 "type"                :       data.NtfnType,
                                 "id"                  :       data.id,
-                                "notification_id"     :       data.notification_id
+                                "notification_id"     :       data.notification_id,
+                                "old_id"			  :		  data.old_id
                             };
         android = PusherService('android', {
                 device          :   [], // Array of string with device tokens
@@ -120,8 +121,8 @@ module.exports = {
 
 
     NotificationPush: function(data,callback){
-        //console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
-        //console.log(data)
+        console.log("**************device_Dataaaaaaaaaaaaaaaaaa******************")
+        console.log(data)
         var arr = data.device_id;
         //console.log("/////////----Device array----//////////")
         //console.log(arr)

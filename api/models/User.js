@@ -4,7 +4,8 @@
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
-console.log(new Date());
+//console.log(new Date());
+
 module.exports = {
 
   tableName : 'user',
@@ -48,6 +49,10 @@ module.exports = {
                 type: 'string',
                 enum: ['active', 'inactive', 'delete'],
                 defaultsTo: 'active'
+            },
+        type: {
+                type: 'boolean',
+                defaultsTo: false
             },
         notifyOpinion: {
                 type: 'boolean',

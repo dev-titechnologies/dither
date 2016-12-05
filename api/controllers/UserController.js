@@ -91,7 +91,6 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
                                                             }else{
                                                                     console.log("Before async parallel in Sign up ===============================================");
-
                                                                         async.parallel([
                                                                             function(callback){
                                                                                     console.log("parallel 1")
@@ -109,7 +108,7 @@ module.exports = {
                                                                                             var imageDst                    =     profilePic_path_assets + ext[0] + "_50x50" + "." +ext[1];
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
-                                                                                            
+
                                                                                             ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
@@ -269,14 +268,14 @@ module.exports = {
                                                                                                                           callback();
                                                                                                                     }else{
                                                                                                                         var message     =  'signup Notification';
-                                                                                                                        var ntfn_body   =   "Your contact"+results.name +" is now on Dither";
+                                                                                                                        var ntfn_body   =   "Your contact "+results.name +" is now on Dither";
                                                                                                                         getDeviceId.forEach(function(factor, index){
                                                                                                                             deviceId_arr.push(factor.deviceId);
                                                                                                                         });
                                                                                                                         if(!deviceId_arr.length){
                                                                                                                                 callback();
                                                                                                                         }else{
-                                                                                                                            var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id};
+                                                                                                                            var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id,old_id:''};
                                                                                                                             NotificationService.NotificationPush(data, function(err, ntfnSend){
                                                                                                                                 if(err){
                                                                                                                                     console.log("Error in Push Notification Sending")
@@ -304,6 +303,106 @@ module.exports = {
                                                                                       }
                                                                                  });
 
+                                                                            },
+                                                                            function (callback){
+                                                                                console.log("parallel 6 == Default dither creation");
+                                                                                User.findOne({type: 1}).exec(function (err, getSuperUser){
+                                                                                    if(err){
+                                                                                            console.log(err);
+                                                                                            callback();
+                                                                                    }else{
+                                                                                        [1,2,3].forEach(function(factor, index){
+                                                                                            var expiryDate      =       new Date(new Date().setFullYear(2020));
+                                                                                            var imgTitle,
+                                                                                                collageImage;
+                                                                                            switch(index){
+                                                                                                case 0 :
+                                                                                                        imgTitle         = "default 1";
+                                                                                                        collageImage     = "default_collage_1.jpg";
+                                                                                                break;
+                                                                                                case 1 :
+                                                                                                        imgTitle         = "default 2";
+                                                                                                        collageImage     = "default_collage_2.jpg";
+                                                                                                break;
+                                                                                                case 2 :
+                                                                                                        imgTitle         = "default 3";
+                                                                                                        collageImage     = "default_collage_3.jpg";
+                                                                                                break;
+                                                                                            }
+                                                                                            var values = {
+                                                                                                imgTitle        : imgTitle,
+                                                                                                image           : collageImage,
+                                                                                                location        : '39,Albemarle Gate,Cheltenham,Cheltenham',
+                                                                                                //latitude        : '',
+                                                                                                //longitude       : '',
+                                                                                                userId          : getSuperUser.id,
+                                                                                                expiryDate      : expiryDate,
+                                                                                            };
+                                                                                            Collage.create(values).exec(function(err, createCollage){
+                                                                                                if(err){
+                                                                                                        console.log(err);
+                                                                                                        callback();
+                                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
+                                                                                                }else{
+                                                                                                    if(!createCollage){
+                                                                                                            callback();
+                                                                                                    }else{
+                                                                                                        var values;
+                                                                                                        switch(index){
+                                                                                                            case 0 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_1_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_2.jpg",position    : 2,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_3.jpg",position    : 3,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_4.jpg",position    : 4,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 1 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_2_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_2_2.jpg",position    : 2,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_2_3.jpg",position    : 3,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 2 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_3_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_3_2.jpg",position    : 2,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                        }
+                                                                                                        /*var values = {
+                                                                                                            image       : image,
+                                                                                                            position    : 1,
+                                                                                                            collageId   : createCollage.id,
+                                                                                                        }*/
+                                                                                                        CollageDetails.create(values).exec(function(err, createdCollageDetails){
+                                                                                                            if(err){
+                                                                                                                console.log(err);
+                                                                                                                callback();
+                                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
+                                                                                                            }else{
+                                                                                                                    //callback();
+                                                                                                                var values = {
+                                                                                                                    collageId   : createCollage.id,
+                                                                                                                    userId      : results.id,
+                                                                                                                }
+                                                                                                                Tags.create(values).exec(function(err, createdCollageTags){
+                                                                                                                        if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            callback();
+                                                                                                                        }else{
+                                                                                                                                //callback();
+                                                                                                                        }
+                                                                                                                });
+                                                                                                            }
+                                                                                                        });
+                                                                                                    }
+                                                                                                }
+                                                                                            });
+                                                                                        },callback());
+                                                                                    }
+                                                                                });
                                                                             },
                                                                         ], function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if(err){
@@ -396,6 +495,7 @@ module.exports = {
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                     }
                                                     else{
+
                                                         var notifyArray = [];
                                                         notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion,mention:results.notifyMention});
                                                         var profile_image       =   profilePic_path + results.profilePic;
@@ -452,6 +552,7 @@ module.exports = {
                         console.log(err)
                          return res.json(200, {status: 2,  status_type: 'Failure' , message: 'some error occured', error_details: result});
                     } else {
+                        req.session.userToken   =   "";
                         return res.json(200, {status: 1,  status_type: 'Success' , message: 'Successfully LogOut'});
                     }
                 });

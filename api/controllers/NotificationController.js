@@ -398,6 +398,7 @@ module.exports = {
                                                         }
                                                 });
                                             }else if(item.notificationTypeId==8){
+												console.log("Notification for dither Expire")
 												NotificationType.find({id:8 }).exec(function(err, ntfnTypeFound){
 													if(err)
 													{

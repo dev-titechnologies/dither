@@ -5,6 +5,36 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var fs          = require('fs');
+
+//Function to remove duplicate values from json Array
+function removeDuplicate(arr, prop) {
+        var new_arr = [];
+        var lookup = {};
+        for (var i in arr) {
+            lookup[arr[i][prop]] = arr[i];
+        }
+        for (i in lookup) {
+            new_arr.push(lookup[i]);
+        }
+        //console.log(new_arr);
+        return new_arr;
+}
+/*function remove_duplicate_from_array(arg1, arg2){
+        //var arr = [1, 2, 3, 4, 5, 6, 7];
+        //var ar = [2, 4, 6, 8, 10];
+        //var newID = [];
+        for(var i = 0; i < arg1.length; i++){
+            for(var j = 0; j < arg2.length; j++){
+                if(arg1[i] == arg2[j]){
+                    //newID.push(arr[i]);
+                    arg1.splice(i, 1);
+                    arg2.splice(j, 1);
+                    break;
+                }
+            }
+        }
+        return arg1;
+}*/
 module.exports = {
 
 /* ==================================================================================================================================
@@ -16,16 +46,21 @@ module.exports = {
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                var commentImage_path           =     server_image_baseUrl + req.options.file_path.commentImage_path;
                 var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                 var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
+                var userName                    =     tokenCheck.tokenDetails.name;
+                var userMentionId               =     tokenCheck.tokenDetails.mentionId;
+                var userProfilePic              =     tokenCheck.tokenDetails.profilePic;
                 var dither_expiry_hour          =     req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
                 var today                       =     new Date().toISOString();
                 console.log(req.param("dither_id"));
                 var get_collage_id              =     req.param("dither_id");
                 var query;
                 var total_taggedUser_Array      =     [];
+                var comment_arr_Final           =     [];
 
                 if(!get_collage_id){
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id'});
@@ -37,10 +72,8 @@ module.exports = {
                                 " FROM collage clg"+
                                 " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
                                 " INNER JOIN user usr ON usr.id = clg.userId"+
-                                //" LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.likePosition = clgdt.position AND clglk.userId = "+userId+
                                 " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
                                 " WHERE clg.id = "+get_collage_id+
-                                //" AND clg.expiryDate > '"+today+"'"+
                                 " GROUP BY clgdt.id";
                         console.log(query);
                         Collage.query(query, function(err, results){
@@ -104,43 +137,56 @@ module.exports = {
                                                                                                }];
                                                         console.log("collageCreator_JSON_Array ======================");
                                                         console.log(collageCreator_JSON_Array);
-                                                        query = " SELECT clgcmt.id, clgcmt.comment, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
+                                                        query = "SELECT clgcmt.id, clgcmt.comment,clgcmt.createdAt,"+
+                                                                " cmntImg.image, cmntImg.commentId AS commentId,"+
+                                                                " usr.name, usr.mentionId, usr.profilePic, usr.id userId"+
                                                                 " FROM collageComments clgcmt"+
+                                                                " LEFT JOIN commentImages AS cmntImg ON cmntImg.commentId = clgcmt.id"+
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
                                                                 " ORDER BY clgcmt.createdAt";
-
+                                                        console.log(query);
                                                         CollageComments.query(query, function(err, collageCommentResults) {
                                                                 if(err){
                                                                     console.log(err);
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Comments'});
                                                                 }else{
-                                                                        //console.log(collageCommentResults);
-                                                                        var commentArray = [];
                                                                         if(collageCommentResults.length){
-                                                                            collageCommentResults.forEach(function(factor, index){
-                                                                                    //console.log("factor");
-                                                                                    //console.log(factor);
-                                                                                    var profile_image;
-                                                                                    if(factor.profilePic == null || factor.profilePic == ""){
-                                                                                         profile_image  = "";
-                                                                                    }else{
-                                                                                        var imageSrc                    =     profilePic_path_assets + factor.profilePic;
-                                                                                        var ext                         =     imageSrc.split('/');
-                                                                                        ext                             =     ext[ext.length-1].split('.');
-                                                                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                            var dataResults         =   collageCommentResults;
+                                                                            var comment_arr = [];
+                                                                            for (var i = dataResults.length - 1; i >= 0; i--){
+                                                                                var dataResultsObj      =  new Object();
+                                                                                var commentId_val       =  dataResults[i]["id"];
+                                                                                var comment_img_arr = [];
+                                                                                for (var j = dataResults.length - 1; j >= 0; j--){
+                                                                                    if(dataResults[j]["id"]==commentId_val){
+                                                                                        if(dataResults[i]["image"] == null || dataResults[i]["image"] == ""){
+                                                                                        }else{
+                                                                                             comment_img_arr.push(commentImage_path + dataResults[j]["image"]);
+                                                                                        }
                                                                                     }
-                                                                                    commentArray.push({comment_id                   : factor.id,
-                                                                                                        user_id                     : factor.userId,
-                                                                                                        user_name                   : factor.name,
-                                                                                                        user_profile_pic_url        : profile_image,
-                                                                                                        mention_id                  : factor.mentionId,
-                                                                                                        message                     : factor.comment,
-                                                                                                        comment_created_date_time   : factor.createdAt
-                                                                                    });
+                                                                                }
+                                                                                var profile_image;
+                                                                                if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
+                                                                                     profile_image  = "";
+                                                                                }else{
+                                                                                    var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
+                                                                                    var ext                         =     imageSrc.split('/');
+                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                    profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                }
+                                                                                dataResultsObj.comment_id                       =   dataResults[i]["id"];
+                                                                                dataResultsObj.user_id                          =   dataResults[i]["userId"];
+                                                                                dataResultsObj.user_name                        =   dataResults[i]["name"];
+                                                                                dataResultsObj.user_profile_pic_url             =   profile_image;
+                                                                                dataResultsObj.mention_id                       =   dataResults[i]["mentionId"];
+                                                                                dataResultsObj.message                          =   dataResults[i]["comment"];
+                                                                                dataResultsObj.comment_created_date_time        =   dataResults[i]["createdAt"];
+                                                                                dataResultsObj.comment_img                      =   comment_img_arr;
 
-
-                                                                            });
+                                                                                comment_arr.push(dataResultsObj);
+                                                                            }
+                                                                            comment_arr_Final   =  removeDuplicate(comment_arr, 'comment_id');
                                                                         }
                                                                         //Query to get tagged users from both addressBook and fbFriends
                                                                             query  = "SELECT *"+
@@ -178,8 +224,9 @@ module.exports = {
                                                                                             taggedUsersFinalResults.forEach(function(factor, index){
                                                                                                     //console.log("factor");
                                                                                                     //console.log(factor);
-                                                                                                    profile_image                   =   "";
-                                                                                                    if(factor.profilePic){
+                                                                                                    if(factor.profilePic == "" || factor.profilePic == null){
+                                                                                                        profile_image                   =     "";
+                                                                                                    }else{
                                                                                                         var imageSrc                    =     factor.profilePic;
                                                                                                         var ext                         =     imageSrc.split('.');
                                                                                                         profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
@@ -193,7 +240,6 @@ module.exports = {
                                                                                             });
 
                                                                                             total_taggedUser_Array = taggedUserArrayFinal.concat(collageCreator_JSON_Array);
-                                                                                            console.log(total_taggedUser_Array);
                                                                                         }
                                                                                         query = " SELECT invt.phoneNumber, invt.invitee"+
                                                                                                 " FROM invitation invt"+
@@ -221,6 +267,22 @@ module.exports = {
                                                                                                             user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                                             //user_profile_image              =     profilePic_path + results[0].profilePic;
                                                                                                     }
+                                                                                                    //When super user creates a dither he is not in logged user contact
+                                                                                                    if(total_taggedUser_Array.length == 0){
+                                                                                                            if(userProfilePic == "" || userProfilePic == null){
+                                                                                                                profile_image                   =     "";
+                                                                                                            }else{
+                                                                                                                var imageSrc                    =     userProfilePic;
+                                                                                                                var ext                         =     imageSrc.split('.');
+                                                                                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                            }
+                                                                                                            total_taggedUser_Array = [{
+                                                                                                                        name            :   userName,
+                                                                                                                        userId          :   userId,
+                                                                                                                        profile_image   :   profile_image,
+                                                                                                                        mention_id      :   userMentionId
+                                                                                                            }];
+                                                                                                    }
                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                                                         dither_expiry_hour         : dither_expiry_hour,
                                                                                                                                         dither_desc                : results[0].imgTitle,
@@ -237,7 +299,7 @@ module.exports = {
                                                                                                                                         dithers                    : imageArray,
                                                                                                                                         ditherCount                : imageArray.length,
                                                                                                                                         taggedUsers                : total_taggedUser_Array,
-                                                                                                                                        comments                   : commentArray,
+                                                                                                                                        comments                   : comment_arr_Final,
                                                                                                                                         invite_friends_NUM         : inviteeArray,
                                                                                                                             });
                                                                                                 }

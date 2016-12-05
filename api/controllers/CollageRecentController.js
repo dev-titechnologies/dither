@@ -56,7 +56,7 @@ module.exports = {
                                         " FROM collage clg"+
                                         " WHERE clg.userId =  '"+userId+"'"+
                                         " AND clg.expiryDate > '"+today+"'"+
-                                        " ORDER BY clg.createdAt DESC"+
+                                        " ORDER BY clg.createdAt DESC, clg.id DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+
                                         ") AS temp_clg"+
@@ -81,7 +81,7 @@ module.exports = {
                                         " WHERE"+
                                         " tg.userId =  '"+userId+"' AND clg.userId =  '"+received_userId+"'"+
                                         " AND clg.expiryDate > '"+today+"'"+
-                                        " ORDER BY clg.createdAt  DESC"+
+                                        " ORDER BY clg.createdAt DESC, clg.id DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+
                                         " ) AS temp_clg"+

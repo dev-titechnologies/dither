@@ -120,6 +120,7 @@ module.exports = {
                                                                 " LEFT JOIN commentImages as cmntImg ON cmntImg.commentId = clgcmt.id"+
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
+                                                                "AND cmntImg.image IS NOT NULL"+
                                                                 " ORDER BY clgcmt.createdAt";  
 														console.log("comment query-------------------")
 														console.log(query)
@@ -207,9 +208,9 @@ module.exports = {
                                                                                                         
                                                                                     });
 
-
+																				   console.log(commentArray)
                                                                             });
-                                                                            console.log(commentArray)
+                                                                            
                                                                         }
                                                                         //Query to get tagged users from both addressBook and fbFriends
                                                                             query  = "SELECT *"+

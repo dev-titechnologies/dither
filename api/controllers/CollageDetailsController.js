@@ -160,7 +160,6 @@ module.exports = {
                                                                                 var comment_img_arr = [];
                                                                                 for (var j = dataResults.length - 1; j >= 0; j--){
                                                                                     if(dataResults[j]["id"]==commentId_val){
-                                                                                        console.log(dataResults[i]["image"]);
                                                                                         if(dataResults[i]["image"] == null || dataResults[i]["image"] == ""){
                                                                                         }else{
                                                                                              comment_img_arr.push(commentImage_path + dataResults[j]["image"]);
@@ -241,7 +240,6 @@ module.exports = {
                                                                                             });
 
                                                                                             total_taggedUser_Array = taggedUserArrayFinal.concat(collageCreator_JSON_Array);
-                                                                                            console.log(total_taggedUser_Array);
                                                                                         }
                                                                                         query = " SELECT invt.phoneNumber, invt.invitee"+
                                                                                                 " FROM invitation invt"+

@@ -137,57 +137,43 @@ module.exports = {
 																			
 																			//-----------comment Images-----------------------------------------
 																			
-																			/*var dataResults         =   collageCommentResults;
+																			var dataResults         =   collageCommentResults;
 																			var key                 =   [];
 																			var dataResultsKeys     =   [];
-																			//var popular_dithers,
-																				//imgDetailsArrayOrder;
 																			for (var i = dataResults.length - 1; i >= 0; i--){
 																				
 																				var dataResultsObj      =  new Object();
 																				var commentId_val       =  dataResults[i]["id"];
 																				if ( dataResultsKeys.indexOf( commentId_val ) == -1 ){
-																					//var imgDetailsArray = [];
-																					
+																					comment_img_arr	= [];
 																					for (var j = dataResults.length - 1; j >= 0; j--){
 																						if(dataResults[j]["id"]==commentId_val){
 																									var image	= commentImage_path + dataResults[j]["image"];
-																									console.log("imageeeeeeeeeeeeeeeee")
-																									console.log(image)
 																									comment_img_arr.push(image);
-																									dataResultsObj.comment_id	=	dataResults[i]["id"];
-																									dataResultsObj.image	=	comment_img_arr;
-																									comment_arr.push(dataResultsObj);
-																									console.log(comment_arr)
-																									
-																									
+																									/*dataResultsObj.comment_id	=	dataResults[i]["id"];
+																									dataResultsObj.image		=	comment_img_arr;
+																									comment_img_arr				=	[];
+																									console.log(dataResultsObj)
+																									comment_arr.push(dataResultsObj);*/
+																								
 																						}
+																						
+																						//console.log(comment_img_arr)
 																					}
-																					//dataResultsObj.comment_id	=	dataResults[i]["id"];
-																					//dataResultsObj.image	=	comment_img_arr;
-																					//comment_arr.push(dataResultsObj);
+																					
 																				}
-																			}*/
-																			
-																			//console.log(comment_arr)
-																			//console.log(comment_arr)
-																			
-																			
-																			//--------------------------------------------------------------------
-
-																			
+																			}
 																			
 																			
                                                                             collageCommentResults.forEach(function(factor, index){
-                                                                                    //console.log("factor");
-                                                                                    //console.log(factor.image);
-                                                                                    if(factor.image!=null){
+
+                                                                                    /*if(factor.image!=null){
                                                                                      var image	= commentImage_path + factor.image;
 																				    }else{
 																						var image = '';
-																					}
+																					}*/
 																					console.log("before push")
-                                                                                    //comment_img_arr.push(image);
+                                                                                    comment_img_arr.push(factor.image);
                                                                                     console.log(comment_img_arr)
                                                                                     var profile_image;
                                                                                     if(factor.profilePic == null || factor.profilePic == ""){
@@ -199,6 +185,7 @@ module.exports = {
                                                                                         profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                     }
                                                                                     console.log("after push")
+                                                                                    console.log()
                                                                                     commentArray.push({comment_id                   : factor.id,
                                                                                                         user_id                     : factor.userId,
                                                                                                         user_name                   : factor.name,
@@ -206,11 +193,11 @@ module.exports = {
                                                                                                         mention_id                  : factor.mentionId,
                                                                                                         message                     : factor.comment,
                                                                                                         comment_created_date_time   : factor.createdAt,
-                                                                                                        comment_img					: image
+                                                                                                        //comment_img					: comment_img_arr
                                                                                                         
                                                                                     });
-
-																				   console.log(commentArray)
+																					comment_img_arr = [];
+																				  //console.log(commentArray)
                                                                             });
                                                                             
                                                                         }

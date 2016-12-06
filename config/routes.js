@@ -61,7 +61,7 @@ module.exports.routes = {
   '/collageClosed/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/ditherConfig/*'                       :           ['auth.authenticate', 'helper.global'],
 
-
+   '/admin/*'                             :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
  /* 'GET /user/join': {
                     controller: "UserController",
                     action:"join"

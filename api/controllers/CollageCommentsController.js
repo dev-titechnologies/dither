@@ -37,7 +37,7 @@ module.exports = {
                     console.log(comment_images)
                     console.log("comment image")
 
-                    var status;
+                    /*var status;
                     if(!comment_images){
                         if(!collageId || !comment){
                             status  =   false
@@ -50,10 +50,10 @@ module.exports = {
                         }else{
                             status  =   true;
                         }
-                    }
+                    }*/
 
-                    if(status == false){
-                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and comment_msg'});
+                    if(!collageId || !comment || !comment_images){
+                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id , comment_msg and comment_images'});
                     }else{
                         console.log(req.params.all());
                         var values = {
@@ -74,7 +74,7 @@ module.exports = {
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Dither Comment Insertion', error_details: err});
                                         }else{
-                                                if(comment_images){
+                                                if(comment_images.length){
                                                     //console.log(comment_images)
                                                     comment_images.forEach(function(factor, index){
                                                         if(factor){
@@ -354,7 +354,7 @@ module.exports = {
                                                         },
                                                         function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 5");
-                                                            if(comment_images){
+                                                            if(comment_images.length){
                                                                     CommentImages.find({commentId:results.id}).exec(function (err, commentImgResults){
                                                                         if(err){
                                                                             console.log("commentImgResults   error");

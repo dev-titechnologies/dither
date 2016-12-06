@@ -817,8 +817,8 @@ getUsersByNameAndMob :function(req,res){
                         var start = req.body.start;
                         var count = req.body.count;console.log("inside name---->mob");
 
-                        var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '46%' OR phoneNumber LIKE '%46%') ORDER BY createdAt LIMIT "+start+","+count+" ";
-                        // console.log(query);
+                        var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+                         console.log(query);
                         User.query(query,function(err,result){
                             if(err)
                             {
@@ -826,7 +826,7 @@ getUsersByNameAndMob :function(req,res){
                             }
                             else
                             {
-                                 // console.log(result);
+                                  console.log(result);
                                 return res.json(200,{status:1,message:"success",data:result});
                             }
                         });
@@ -876,6 +876,37 @@ getUsersByNameEmailAndMob :function(req,res){
                                 }
                             });
 
-        },                           
+        },
+
+          getDitherByName   : function(req,res){
+                            console.log(req.params.all());
+                            var start = req.body.start;     
+                            var count = req.body.count;
+                            var name =  req.body.name;
+                            
+                            console.log("inside getDitherByName by name");
+                            // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
+                            var query =" SELECT c. * , c.id AS cid, u. * , ("+
+                                       " SELECT COUNT( c.id )"+ 
+                                       " FROM collage AS c"+
+                                       " INNER JOIN user AS u ON u.id = c.userId"+
+                                       " WHERE u.name LIKE '"+name+"%') AS length"+
+                                       " FROM collage AS c"+
+                                       " INNER JOIN user AS u ON u.id = c.userId"+
+                                       " WHERE u.name LIKE '"+name+"%'"+
+                                       " ORDER BY c.createdAt DESC"+
+                                       " LIMIT "+start+" , "+count+"";
+                            console.log(query);
+                            Collage.query(query, function (err, result) {
+                                if (err) {
+                                    return res.json(200, {status: 2, error_details: err});
+                                } else {                           
+                                     console.log(result);
+                                    return res.json(200, {status: 1, message: "success", 
+                                                    result: result
+                                    });
+                                }
+                            });
+    },                                  
 };
 

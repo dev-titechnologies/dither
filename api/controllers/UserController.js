@@ -228,9 +228,11 @@ module.exports = {
 
                                                                                                     tagNotifyArray.push(factor.userId);
                                                                                                      User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+																										 if(notifySettings){
                                                                                                                 if(notifySettings.notifyContact==1){
                                                                                                                     contact_arr.push(factor.userId);
                                                                                                                 }
+                                                                                                               } 
                                                                                                             });
                                                                                                });
                                                                                                var values ={

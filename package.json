@@ -27,6 +27,7 @@
     "nodemailer-express-handlebars": "^2.0.0",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemailer-smtp-transport": "^2.6.0",
+    "plivo": "^0.4.0",
     "rc": "~0.5.0",
     "request": "^2.74.0",
     "sails": "~0.12.3",

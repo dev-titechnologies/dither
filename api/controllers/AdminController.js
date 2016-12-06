@@ -13,7 +13,6 @@ var crypto = require('crypto');
  var  googleapis = require('googleapis');
  var  key        = require('service-account-credentials.json');
  const VIEW_ID   = 'ga:130989248';
-  
 
 module.exports = {
 
@@ -59,27 +58,26 @@ console.log(values);
     },
         //   List all users based on limit(12 rows per call)
      getCompleteUser: function(req, res){
-
-                   console.log(req.params.all());
-                   var start = req.body.start;     
-                   var count = req.body.count;
-
-                    query = "SELECT *,(SELECT COUNT(user.id) from user) as length FROM  `user` ORDER BY createdAt DESC LIMIT "+start+","+count+"";
-
-                User.query(query, function(err, result) {
-                    if(err)
-                    {
+                console.log(req.params.all());
+                var start = req.body.start;
+                var count = req.body.count;
+                var query = " SELECT *,"+
+                            "(SELECT COUNT(user.id) from user) as length,"+
+                            "(SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+
+                            " FROM user ORDER BY createdAt DESC LIMIT "+start+","+count;
+                console.log(query);
+                User.query(query, function(err, result){
+                    if(err){
                         // console.log(err);
                         return res.json(200, { status: 2, error_details: 'db error' });
+
                     }
                     else
                     {
 
-                        // console.log(result);
                         return res.json(200, {status: 1, message: "success", data: result});
                     }
                 });
-
     },
     // View Details of every single User
     getUserDetails: function(req, res){
@@ -144,19 +142,27 @@ console.log(values);
 
     // Get Reported User List
     getReportedUser: function(req, res){
-
-
-                    query = "SELECT u.id,u.profilePic,u.status, u.name, COUNT( ru.userId ) AS RepUserCount FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.userId GROUP BY ru.userId ORDER BY u.createdAt DESC ";
-
+                console.log("getReportedUser  ====> ADMIN");
+                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                var profile_image;
+                var query = "SELECT u.id,u.profilePic as profileImage,u.status, u.name, COUNT( ru.userId ) AS RepUserCount FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.userId GROUP BY ru.userId ORDER BY u.createdAt DESC ";
                 User.query(query, function(err, result) {
-                    if(err)
-                    {
+                    if(err){
                         // console.log(err);
                         return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
-
+                    }else{
+                        //console.log(result);
+                        result.forEach(function(factor, index){
+                                if(factor.profileImage == null || factor.profileImage == ""){
+                                        profile_image                   =     "";
+                                }else{
+                                        var imageSrc                    =     factor.profileImage;
+                                        var ext                         =     imageSrc.split('.');
+                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                }
+                                factor.profilePic       =    profile_image;
+                        });
                         //console.log(result);
                         return res.json(200, {status: 1, message: "success", data: result});
                     }
@@ -166,18 +172,35 @@ console.log(values);
 
     // Get One User Reported List
     getReportList: function(req, res){
-
-            console.log(req.body.userId);
-                    query = "SELECT u.profilePic, u.name, rt.description, ru.report, ru.createdAt FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.reporterId LEFT JOIN reportType AS rt ON rt.id = ru.reportType WHERE ru.userId ="+req.body.userId+" LIMIT 0 , 30";
-                User.query(query, function(err, result) {
-                    if(err)
-                    {
+                console.log("getReportList  ====> ADMIN");
+                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                var profile_image;
+                var query = " SELECT"+
+                            " u.profilePic as profileImage, u.name,"+
+                            " rt.description,"+
+                            " ru.report, ru.createdAt"+
+                            " FROM reportUser AS ru"+
+                            " LEFT JOIN user AS u ON u.id = ru.reporterId"+
+                            " LEFT JOIN reportType AS rt ON rt.id = ru.reportType"+
+                            " WHERE"+
+                            " ru.userId ="+req.body.userId;
+                console.log(query);
+                User.query(query, function(err, result){
+                    if(err){
                         // console.log(err);
                         return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
-
+                    }else{
+                        result.forEach(function(factor, index){
+                                if(factor.profileImage == null || factor.profileImage == ""){
+                                        profile_image                   =     "";
+                                }else{
+                                        var imageSrc                    =     factor.profileImage;
+                                        var ext                         =     imageSrc.split('.');
+                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                }
+                                factor.profilePic       =    profile_image;
+                        });
                         //console.log(result);
                         return res.json(200, {status: 1, message: "success", data: result});
                     }
@@ -186,19 +209,20 @@ console.log(values);
 
     },
 
-    
+
         /**  get all dither **/
     getAllDithers: function(req,res){
         console.log(req.params.all());
-        var start = req.body.start;     
+        var start = req.body.start;
         var count = req.body.count;
-        // var itemsPerPage = req.body.itemsPerPage;       
+        // var itemsPerPage = req.body.itemsPerPage;
         //  console.log("pagenumber");
         // console.log(pagenumber);
         //  console.log("itemsPerPage");
         //  console.log(itemsPerPage);
         console.log("inside getAllDithers function");
         // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
+
         var query =" SELECT c. * , c.id AS cid, u. * ,c.status,c.totalVote, ("+
                    " SELECT COUNT( c.id )"+ 
                    " FROM collage AS c"+
@@ -212,9 +236,11 @@ console.log(values);
                     Collage.query(query, function (err, result) {
                         if (err) {
                             return res.json(200, {status: 2, error_details: err});
+
                         } else {                           
  
                             return res.json(200, {status: 1, message: "success", 
+
                                             result: result
                             });
                         }
@@ -396,8 +422,8 @@ console.log(values);
                         return res.json(200,{status:1,message:'success',result:result});
                     }
 
-                  });           
-    },  
+                  });
+    },
     getDoughnutData:  function(req,res){
 
                       var jwtClient = new googleapis.auth.JWT(
@@ -438,7 +464,7 @@ console.log(values);
                     }
                     // console.log(JSON.stringify(response.rows, null, 4));
                     return res.json(200,{status:1,message:'success',result:response.rows});
-                  });  
+                  });
                 }
 },
     getMapData:     function(req,res){
@@ -448,7 +474,7 @@ console.log(values);
                     ['https://www.googleapis.com/auth/analytics.readonly'], null);
 
                     jwtClient.authorize(function (err, tokens) {
-                      if (err) 
+                      if (err)
                       {
                         console.log(err);
                         return;
@@ -460,22 +486,22 @@ console.log(values);
                   function queryData(analytics) {
                   analytics.data.ga.get({
                     'auth': jwtClient,
-                    'ids': VIEW_ID,        
+                    'ids': VIEW_ID,
                     'start-date': 'today',
                     'end-date': 'today',
-                     'dimensions': 'ga:city,ga:latitude,ga:longitude',        
+                     'dimensions': 'ga:city,ga:latitude,ga:longitude',
                     'metrics': 'ga:sessions,ga:users',
                   }, function (err, response) {
-                    if (err) 
+                    if (err)
                     {
                       console.log(err);
                       return res.json(200, {status: 2, error_details: err});
                     }
                     console.log(response.rows);
                     return res.json(200,{status:1,message:'success',result:response.rows});
-                  });  
+                  });
                 }
-     
+
 },
 getBrowserDetails:  function(req,res){
 
@@ -484,7 +510,7 @@ getBrowserDetails:  function(req,res){
                     ['https://www.googleapis.com/auth/analytics.readonly'], null);
 
                     jwtClient.authorize(function (err, tokens) {
-                      if (err) 
+                      if (err)
                       {
                         console.log(err);
                         return;
@@ -496,11 +522,11 @@ getBrowserDetails:  function(req,res){
                   function queryData(analytics) {
                   analytics.data.ga.get({
                     'auth': jwtClient,
-                    'ids': VIEW_ID,        
+                    'ids': VIEW_ID,
                     'start-date': 'today',
                     'end-date': 'today',
-                    'dimensions':'ga:browser',        
-                    'metrics':'ga:sessions',        
+                    'dimensions':'ga:browser',
+                    'metrics':'ga:sessions',
                   }, function (err, response) {
                     if (err)
                      {
@@ -509,7 +535,7 @@ getBrowserDetails:  function(req,res){
                     }
                     // console.log(JSON.stringify(response.rows, null, 4));
                     return res.json(200,{status:1,message:'success',result:response.rows});
-                  });  
+                  });
                 }
 },
 
@@ -520,7 +546,7 @@ getPieChartData:function(req,res){
                 ['https://www.googleapis.com/auth/analytics.readonly'], null);
 
                 jwtClient.authorize(function (err, tokens) {
-                  if (err) 
+                  if (err)
                   {
                     console.log(err);
                     return;
@@ -532,22 +558,22 @@ getPieChartData:function(req,res){
               function queryData(analytics) {
               analytics.data.ga.get({
                 'auth': jwtClient,
-                'ids': VIEW_ID,        
+                'ids': VIEW_ID,
                 'start-date': 'today',
                 'end-date': 'today',
-                // 'dimensions':'ga:userType,ga:country',   
-                'metrics':'ga:users,ga:screenviews,ga:screenviewsPerSession,ga:avgSessionDuration',        
+                // 'dimensions':'ga:userType,ga:country',
+                'metrics':'ga:users,ga:screenviews,ga:screenviewsPerSession,ga:avgSessionDuration',
               }, function (err, response) {
-                if (err) 
+                if (err)
                 {
                    console.log(err);
                    return res.json(200, {status: 2, error_details: err});
                 }
-               
+
                 return res.json(200,{status:1,message:'success',result:response.rows});
-              });  
+              });
             }
-}, 
+},
 getBarChartData:function(req,res){
 
                 var jwtClient = new googleapis.auth.JWT(
@@ -555,7 +581,7 @@ getBarChartData:function(req,res){
                 ['https://www.googleapis.com/auth/analytics.readonly'], null);
 
                 jwtClient.authorize(function (err, tokens) {
-                  if (err) 
+                  if (err)
                   {
                     console.log(err);
                     return;
@@ -571,23 +597,23 @@ getBarChartData:function(req,res){
 
               analytics.data.ga.get({
                 'auth': jwtClient,
-                'ids': VIEW_ID,        
+                'ids': VIEW_ID,
                 'start-date': startDate,
                 'end-date': endDate,
-                'dimensions':'ga:date,ga:day,ga:yearMonth,ga:userType',   
+                'dimensions':'ga:date,ga:day,ga:yearMonth,ga:userType',
                 'metrics':'ga:users',
-                
+
               }, function (err, response) {
-                if (err) 
+                if (err)
                 {
                    console.log(err);
                    return res.json(200, {status: 2, error_details: err});
                 }
                  console.log(JSON.stringify(response.rows, null, 4));
-                
+
 
                 return res.json(200,{status:1,message:'success',result:response.rows});
-              });  
+              });
             }
 },
 getSettingsData:function(req,res){
@@ -617,8 +643,8 @@ updateDitherCloseTime:function(req,res){
                       criteria = {
                                     id:req.body.id
                                   };
- 
- 
+
+
                      Settings.update(criteria,data).exec(function(err,updatedData){
                         if(err)
                         {
@@ -626,10 +652,10 @@ updateDitherCloseTime:function(req,res){
                              return res.json(200, {status: 2, error_details: err});
                         }
                         else
-                        { 
+                        {
                             console.log("dither closing time updated");
                             return res.json(200,{status:1,message:'success',result:updatedData});
-                        } 
+                        }
                     });
 },
 
@@ -641,8 +667,8 @@ updateTokenExpiryTime:function(req,res){
                     criteria = {
                                     id:req.body.id
                                 };
- 
- 
+
+
                  Settings.update(criteria,data).exec(function(err,updatedData){
                     if(err)
                     {
@@ -650,10 +676,10 @@ updateTokenExpiryTime:function(req,res){
                          return res.json(200, {status: 2, error_details: err});
                     }
                     else
-                    { 
+                    {
                         console.log("token expiry time updated");
                         return res.json(200,{status:1,message:'success',result:updatedData});
-                    } 
+                    }
                 });
 },
  getDitherUsers: function(req, res){
@@ -676,8 +702,8 @@ updateTokenExpiryTime:function(req,res){
                 });
 
     },
- getUsersBySearchName: function(req,res){        
-                    
+ getUsersBySearchName: function(req,res){
+
                     var name = req.body.name;
                     var start = req.body.start;
                     var count = req.body.count;
@@ -708,7 +734,7 @@ updateTokenExpiryTime:function(req,res){
 
         },
  getUsersBySearchEmail: function(req,res){
-                    
+
                      var email = req.body.email;
                      var start = req.body.start;
                      var count = req.body.count;
@@ -740,7 +766,7 @@ updateTokenExpiryTime:function(req,res){
                      });
         },
  getUsersBySearchMobile: function(req,res){
-                      
+
                       var mobile = req.body.mobile;
                       var start = req.body.start;
                       var count = req.body.count;

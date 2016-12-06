@@ -5,78 +5,92 @@ module.exports = {
 						sails.log("In sms Service");
 						sails.log(smsAccountSid);
 						sails.log(smsAuthToken);
+						
+						var plivo 	= require('plivo');
+						var p 		= plivo.RestAPI({
+														authId		: smsAccountSid,
+														authToken	: smsAuthToken
+													});
+													
+						var num_arr	=	['+91-8281442870','+919947632638']
+						var dest	=	'123';
+						for(i=0;i<num_arr.length;i++)
+						{
+							if(dest=='')
+							{
+								dest = num_arr[i];
+							}
+							else
+							{
+								dest = dest+'<'+num_arr[i];
+							}
+						}
+						console.log(dest)
 
-                        var twilio = require('twilio');
+						var params  = {
+							'src': '+44 1629 304021', // Sender's phone number with country code
+							'dst' : dest, // Receiver's phone Number with country code
+							'text' : "Invitation for Dither", // Your SMS Text Message - English
+							'url' : "http://example.com/report/", // The URL to which with the status of the message is sent
+							'method' : "GET" // The method used to call the url
+						};
 
+						// Prints the complete response
+						p.send_message(params, function (status, response) {
+							console.log('Status: ', status);
+							console.log('API Response:\n', response);
+							console.log('Message UUID:\n', response['message_uuid']);
+							console.log('Api ID:\n', response['api_id']);
+							if(status==202)
+							{
+								callback(true, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+							}
+							else
+							{
+								callback(false, {status: 2, status_type: 'failure' , message: 'OTP sending failed!'});
+							}
+						});
+						
 
-                        //Twilio Test Account Credentials
-                        var accountSid = smsAccountSid;
-                        var authToken  = smsAuthToken;
-                        //var smsFrom    = '+15005550006';
-                        var smsFrom    = smsFrom;
-                        //var smsFrom    = '+12403564607';
-                        var smsTo      = '+919746354170'; //Airtel
-                        //var smsTo      = '+918281442870'; //Anumol
-                        //var smsTo      = '+919746354170'; Bsnl
-                        //var smsTo      = '+919809502603'; Vodafone
-                        //var smsTo      = '+919526132793'; Idea
-
-                        var client = twilio(accountSid, authToken);
-                        //var client = require('twilio')('AC834e9d9c31bd1e8a5965f7f25f2b1250', '29f2e106b68b5aa5b7f2c2e9dcf935e5'); //API_KEY and TOCKEN from TWILIO
-                        client.sendMessage({
-                            to          :   mobile,
-                            from        :   smsFrom,
-                            body        :   'Hi Just Testing The Sms From Dither'
-                        }, function(err, message) {
-                                if (err) {
-                                    console.log(err);
-                                    console.error('Text failed because: '+err.message);
-                                    callback(false, {status: 2, status_type: 'Failure' , message: 'email not reachable'});
-                                } else {
-                                    console.log('Text sent! Message SID: '+message.sid);
-                                    console.log("smsFrom ====================== +++++++++++++++++++++++");
-                                    console.log(smsFrom);
-                                    console.log("smsTo ======================== +++++++++++++++++++++++");
-                                    console.log(smsTo);
-                                    callback(false, {status: 1, status_type: 'Success' , message: 'success'});
-                                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully send the sms'});
-                                }
-                        });
+                      
             },
 
 
 
             sendSmsOTP: function (smsAccountSid, smsAuthToken, smsFrom,mobile,verification_code, callback) {
 
-						sails.log(smsAccountSid);
-						sails.log(smsAuthToken);
-                        console.log("service")
-                        var twilio = require('twilio');
-                        var client = twilio(smsAccountSid, smsAuthToken);
+						
+                        
+                        var plivo 	= require('plivo');
+						var p 		= plivo.RestAPI({
+														authId		: smsAccountSid,
+														authToken	: smsAuthToken
+													});
 
-                        //Twilio Test Account Credentials
-					  
-                      
+						var params  = {
+							'src': '+44 1629 304021', // Sender's phone number with country code
+							'dst' : '+918281442870', // Receiver's phone Number with country code
+							'text' : "Your Dither Verification Code is "+verification_code, // Your SMS Text Message - English
+							'url' : "http://example.com/report/", // The URL to which with the status of the message is sent
+							'method' : "GET" // The method used to call the url
+						};
 
-                        /*client.sendMessage({
-
-                                //to:mobile, // Any number Twilio can deliver to
-                                to: mobile,
-                                from: smsFrom, // A number you bought from Twilio and can use for outbound communications
-                                body: 'Your Verification Code is'+ verification_code// body of the SMS message
-
-                             }, function(err, message) {
-                                if (err) {
-                                    console.log(err);
-                                    console.error('Text failed because: '+err.message);
-                                    callback(false, {status: 2, status_type: 'Failure' , message: 'sms not reachable'});
-                                } else {
-											//console.log(responseData.body
-											sails.log("sucessssssssssssssss")
-											callback(true, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
-											
-                                       }
-                        });*/
-                        callback(true, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+						// Prints the complete response
+						/*p.send_message(params, function (status, response) {
+							console.log('Status: ', status);
+							console.log('API Response:\n', response);
+							console.log('Message UUID:\n', response['message_uuid']);
+							console.log('Api ID:\n', response['api_id']);
+							if(status==202)
+							{
+								callback(true, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+							}
+							else
+							{
+								callback(false, {status: 2, status_type: 'failure' , message: 'OTP sending failed!'});
+							}
+						});*/
+                       callback(true, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+                        
             },
 };

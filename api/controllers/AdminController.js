@@ -199,7 +199,7 @@ console.log(values);
         //  console.log(itemsPerPage);
         console.log("inside getAllDithers function");
         // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
-        var query =" SELECT c. * , c.id AS cid, u. * , ("+
+        var query =" SELECT c. * , c.id AS cid, u. * ,c.status,c.totalVote, ("+
                    " SELECT COUNT( c.id )"+ 
                    " FROM collage AS c"+
                    " INNER JOIN user AS u ON u.id = c.userId"+
@@ -213,7 +213,7 @@ console.log(values);
                         if (err) {
                             return res.json(200, {status: 2, error_details: err});
                         } else {                           
-
+ 
                             return res.json(200, {status: 1, message: "success", 
                                             result: result
                             });
@@ -692,7 +692,7 @@ updateTokenExpiryTime:function(req,res){
                     {
                      query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%') as length FROM user WHERE name  LIKE '"+name+"%' ORDER BY createdAt DESC LIMIT "+start+","+count+"";
                     }
-                    // console.log(query);
+                     console.log(query);
 
                     User.query(query,function(err,result){
                         if(err)
@@ -701,7 +701,7 @@ updateTokenExpiryTime:function(req,res){
                         }
                         else
                         {
-                           // console.log(result);
+                            console.log(result);
                              return res.json(200, {status: 1, message: "success", data: result});
                          }
                     });
@@ -878,7 +878,7 @@ getUsersByNameEmailAndMob :function(req,res){
 
         },
 
-          getDitherByName   : function(req,res){
+         getDitherByName   : function(req,res){
                             console.log(req.params.all());
                             var start = req.body.start;     
                             var count = req.body.count;

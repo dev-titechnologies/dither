@@ -53,7 +53,7 @@ module.exports = {
                         }
                     }*/
 
-                    if(!collageId || !comment || !comment_images){
+                    if(!collageId || typeof(comment) == 'undefined' || !comment_images){
                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id , comment_msg and comment_images'});
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'commenting failed !'});
                     }else{

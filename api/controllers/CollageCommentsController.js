@@ -36,6 +36,7 @@ module.exports = {
                     console.log("comment Image-------------------")
                     console.log(comment_images)
                     console.log("comment image")
+                    console.log(req.params.all());
 
                     /*var status;
                     if(!comment_images){
@@ -53,9 +54,10 @@ module.exports = {
                     }*/
 
                     if(!collageId || !comment || !comment_images){
-                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id , comment_msg and comment_images'});
+                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id , comment_msg and comment_images'});
+                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'commenting failed !'});
                     }else{
-                        console.log(req.params.all());
+
                         var values = {
                             collageId       :       collageId,
                             userId          :       userId,

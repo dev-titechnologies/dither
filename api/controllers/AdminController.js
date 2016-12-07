@@ -277,7 +277,7 @@ console.log(values);
          var ditherId=req.body.id;
          var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
          var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
-         
+
             // var ditherId = 507;
          console.log("inside getSingleDitherDetails function"+ditherId);
          var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId  where c.id="+ditherId+" ORDER BY c.id DESC";
@@ -290,21 +290,21 @@ console.log(values);
                             console.log(result);
                             if(result)
                             {
-								result.forEach(function(factor, index){
-								if(factor.singImage == null || factor.singImage == "" ){
+                                result.forEach(function(factor, index){
+                                if(factor.singImage == null || factor.singImage == "" ){
                                         singImage                   =     "";
-                                        dither_image				=	  "";
+                                        dither_image                =     "";
                                 }else{
-                                        dither_image					=	  collageImg_path + factor.image
-                                        singImage                   	=     collageImg_path + factor.singImage ;
+                                        dither_image                    =     collageImg_path + factor.image
+                                        singImage                       =     collageImg_path + factor.singImage ;
                                 }
                                  factor.singImage       =    singImage;
-                                 factor.image			=	dither_image;
-								 console.log(factor.singImage)
-								 console.log(factor.image)
-									
-								});
-							}
+                                 factor.image           =   dither_image;
+                                 console.log(factor.singImage)
+                                 console.log(factor.image)
+
+                                });
+                            }
                             return res.json(200, {status: 1, message: "success", result: result});
                         }
                     });
@@ -452,26 +452,37 @@ console.log(values);
 
     },
     getComments:     function(req,res){
+                        console.log("getComments   =================== ADMIN");
+                        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                        var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                        var profile_image;
+                        var collageId                   =     req.body.id;
+                        var query   = " SELECT"+
+                                      " u.name as commentedPerson,u.id as commentedPersonId,u.profilePic as profileImage,"+
+                                      " cc.comment,cc.createdAt as commentedDate"+
+                                      " FROM collageComments as cc"+
+                                      " INNER JOIN user as u ON cc.userId = u.id"+
+                                      " WHERE cc.collageId = "+collageId+
+                                      " ORDER BY cc.createdAt DESC";
+                        CollageComments.query(query,function(err,result){
+                            if(err){
+                                console.log("errrRRRRRRRRR");
+                                return res.json(200, {status: 2, error_details: err});
+                            }else{
+                                result.forEach(function(factor, index){
+                                    if(factor.profileImage == null || factor.profileImage == ""){
+                                            profile_image                   =     "";
+                                    }else{
+                                            var imageSrc                    =     factor.profileImage;
+                                            var ext                         =     imageSrc.split('.');
+                                            profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                    }
+                                    factor.profilePic       =    profile_image;
+                                });
+                                return res.json(200,{status:1,message:'success',result:result});
+                            }
 
-                     console.log("inside getcomment fnsssss");
-                     var collageId = req.body.id;
-                     // var collageId = 300;
-
-                     var query = "SELECT u.name as commentedPerson,u.id as commentedPersonId,u.profilePic,cc.comment,cc.createdAt as commentedDate FROM collageComments as cc JOIN user as u ON cc.userId = u.id WHERE cc.collageId = "+collageId+" ORDER BY cc.createdAt DESC ";
-                     // "WHERE cc.collageId = "+collageId+" ORDER BY cc.createdAt DESC";
-
-                  CollageComments.query(query,function(err,result){
-                    if(err)
-                    {
-                        console.log("errrRRRRRRRRR");
-                        return res.json(200, {status: 2, error_details: err});
-                    }else
-                    {
-                         console.log(result);
-                        return res.json(200,{status:1,message:'success',result:result});
-                    }
-
-                  });
+                        });
     },
     getDoughnutData:  function(req,res){
 
@@ -964,7 +975,7 @@ getUsersByNameEmailAndMob :function(req,res){
 
         },
 
-         getDitherByName   : function(req,res){
+        getDitherByName   : function(req,res){
                             console.log(req.params.all());
                             var start           =   req.body.start;
                             var count           =   req.body.count;

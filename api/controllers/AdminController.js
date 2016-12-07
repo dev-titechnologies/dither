@@ -745,8 +745,10 @@ updateTokenExpiryTime:function(req,res){
                                 "(SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+
                                 " FROM user WHERE name LIKE '"+name+"%' LIMIT "+start+","+count;
                     }
+                    console.log(query);
                     User.query(query,function(err,result){
                         if(err){
+                             console.log(err);
                              return res.json(200, {status: 2, error_details: err});
                         }else{
                            // console.log(result);

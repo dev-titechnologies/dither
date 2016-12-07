@@ -248,7 +248,7 @@ console.log(values);
         // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
 
         var query =" SELECT c. * , c.id AS cid, u. * ,c.status,c.totalVote,c.status as ditherStatus,("+
-                   " SELECT COUNT( c.id )"+ 
+                   " SELECT COUNT( c.id )"+
                    " FROM collage AS c"+
                    " INNER JOIN user AS u ON u.id = c.userId"+
                    " ) AS length"+
@@ -435,8 +435,8 @@ console.log(values);
                         // console.log(user_id);
                         // var user_id = 87;
 
-                        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId WHERE c.userId = "+user_id+" ORDER BY c.createdAt DESC ";
-
+                        var query = "SELECT c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId WHERE c.userId = "+user_id+" AND u.type != 1 ORDER BY c.createdAt DESC ";
+                        console.log(query);
                         Collage.query(query,function(err,result){
                             if(err)
                             {
@@ -965,70 +965,70 @@ getUsersByNameEmailAndMob :function(req,res){
 
          getDitherByName   : function(req,res){
                             console.log(req.params.all());
-                            var start 			= 	req.body.start;     
-                            var count 			= 	req.body.count;
-                            var name 			=   req.body.name;
-                            var ditherStatus 	=	req.body.ditherStatus;
+                            var start           =   req.body.start;
+                            var count           =   req.body.count;
+                            var name            =   req.body.name;
+                            var ditherStatus    =   req.body.ditherStatus;
                             var query;
                             if(!ditherStatus && name){ //search by name
-							  console.log("inside getDitherByName by name");
+                              console.log("inside getDitherByName by name");
                               // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
-								   query =    " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%') AS length"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%'"+
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-								
-								}else if(ditherStatus && name){ // search by status and name
-								 console.log("status  and name ");
-									query 	=  " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.status = '"+ditherStatus+"' AND u.name LIKE '"+name+"%') AS length"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.status = '"+ditherStatus+"'"+
-											   " AND u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
+                                   query =    " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%') AS length"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
 
-									
-								}else if(ditherStatus && name ==""){ // search by status name cleared
-							         console.log("status  and name cleared");
+                                }else if(ditherStatus && name){ // search by status and name
+                                 console.log("status  and name ");
+                                    query   =  " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.status = '"+ditherStatus+"' AND u.name LIKE '"+name+"%') AS length"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.status = '"+ditherStatus+"'"+
+                                               " AND u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+
+                                }else if(ditherStatus && name ==""){ // search by status name cleared
+                                     console.log("status  and name cleared");
                                     // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
-								   query =    " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%' AND c.status ='"+ditherStatus+"') AS length"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%' AND c.status ='"+ditherStatus+"'"+
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-								
-								}else if(!ditherStatus && name ==""){ // search by null status name cleared
-							         console.log("status null and name cleared");
+                                   query =    " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%' AND c.status ='"+ditherStatus+"') AS length"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%' AND c.status ='"+ditherStatus+"'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+                                }else if(!ditherStatus && name ==""){ // search by null status name cleared
+                                     console.log("status null and name cleared");
                                     // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
-								   query =    " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%') AS length"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%'"+
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-								
-								}
-								                          
+                                   query =    " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%') AS length"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+                                }
+
                             console.log(query);
                             Collage.query(query, function (err, result) {
                                 if (err) {
@@ -1042,81 +1042,81 @@ getUsersByNameEmailAndMob :function(req,res){
                             });
     },
     getDitherByStatus    : function(req,res){
-							console.log(req.params.all());
-							var name         	= 	req.body.name;
-							var ditherStatus 	= 	req.body.status;
-							var start 			= 	req.body.start;
-							var count			= 	req.body.count;
-							var query;
+                            console.log(req.params.all());
+                            var name            =   req.body.name;
+                            var ditherStatus    =   req.body.status;
+                            var start           =   req.body.start;
+                            var count           =   req.body.count;
+                            var query;
 
 
-							if(name && ditherStatus){ //search by name ,status
-								query 	=  " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.status = '"+ditherStatus+"' AND u.name LIKE '"+name+"%') AS length"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.status = '"+ditherStatus+"'"+
-											   " AND u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-            
+                            if(name && ditherStatus){ //search by name ,status
+                                query   =  " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.status = '"+ditherStatus+"' AND u.name LIKE '"+name+"%') AS length"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.status = '"+ditherStatus+"'"+
+                                               " AND u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
                             console.log("name && ditherStatus");
-							}else if(!name && ditherStatus){ //search null name and dither status
-									query 	=  " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.status = '"+ditherStatus+"') AS length"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.status = '"+ditherStatus+"'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-							console.log("!name && ditherStatus")
-							}else if(name && !ditherStatus){ //search with name and null dither status
-									query = " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%') AS length"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-							console.log("!name && ditherStatus")				   
-						}else if(!name && !ditherStatus){ //search with name null and null dither status
-									query = " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%') AS length"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-							console.log("!name && !ditherStatus")				   
-						}
-						 console.log(query);
+                            }else if(!name && ditherStatus){ //search null name and dither status
+                                    query   =  " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.status = '"+ditherStatus+"') AS length"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.status = '"+ditherStatus+"'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+                            console.log("!name && ditherStatus")
+                            }else if(name && !ditherStatus){ //search with name and null dither status
+                                    query = " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%') AS length"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+                            console.log("!name && ditherStatus")
+                        }else if(!name && !ditherStatus){ //search with name null and null dither status
+                                    query = " SELECT c. * , c.id AS cid, u. * ,c.status as ditherStatus, ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%') AS length"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+                            console.log("!name && !ditherStatus")
+                        }
+                         console.log(query);
                          Collage.query(query, function (err, result) {
                                 if (err)
                                 {
                                     return res.json(200, {status: 2, error_details: err});
                                 }
                                 else
-                                {                           
+                                {
                                      console.log(result);
                                     return res.json(200, {status: 1, message: "success",result: result});
                                 }
                             });
-						
-						
-							
-	},                                  
+
+
+
+    },
 
 };
 

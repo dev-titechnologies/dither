@@ -734,7 +734,7 @@ updateTokenExpiryTime:function(req,res){
 
                     /*var query   =   " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt"+
                                     " FROM user WHERE name LIKE '"+name+"%'";*/
-                    if(!name){
+                    if((name == null)||(name =="")){
                         query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, "+
                                 "(SELECT COUNT(user.id) from user) as length,"+
                                 "(SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+

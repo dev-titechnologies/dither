@@ -58,10 +58,14 @@ console.log(values);
     },
         //   List all users based on limit(12 rows per call)
      getCompleteUser: function(req, res){
+                console.log("getCompleteUser ============== ADMIN");
                 console.log(req.params.all());
-                var start = req.body.start;
-                var count = req.body.count;
-                var query = " SELECT *,"+
+                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                var profile_image;
+                var start                       =     req.body.start;
+                var count                       =     req.body.count;
+                var query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, "+
                             "(SELECT COUNT(user.id) from user) as length,"+
                             "(SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+
                             " FROM user ORDER BY createdAt DESC LIMIT "+start+","+count;
@@ -70,33 +74,52 @@ console.log(values);
                     if(err){
                         // console.log(err);
                         return res.json(200, { status: 2, error_details: 'db error' });
-
-                    }
-                    else
-                    {
-
+                    }else{
+                        //console.log(result);
+                        result.forEach(function(factor, index){
+                                if(factor.profileImage == null || factor.profileImage == ""){
+                                        profile_image                   =     "";
+                                }else{
+                                        var imageSrc                    =     factor.profileImage;
+                                        var ext                         =     imageSrc.split('.');
+                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                }
+                                factor.profilePic       =    profile_image;
+                        });
                         return res.json(200, {status: 1, message: "success", data: result});
                     }
                 });
+
     },
     // View Details of every single User
     getUserDetails: function(req, res){
-                    userId=req.body.userId;
-                    query = "SELECT * FROM  `user` WHERE id="+userId;
+                    console.log("getUserDetails ============== ADMIN");
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                    var profile_image;
+                    var userId                      =       req.body.userId;
 
-                User.query(query, function(err, result) {
-                    if(err)
-                    {
-                        // console.log(err);
-                        return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
+                    var query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt"+
+                                " FROM  user WHERE id="+userId;
 
-                        //console.log(result);
-                        return res.json(200, {status: 1, message: "success", data: result});
-                    }
-                });
+                    User.query(query, function(err, result){
+                        if(err){
+                            // console.log(err);
+                            return res.json(200, { status: 2, error_details: 'db error' });
+                        }else{
+                            //console.log(result);
+                            result.forEach(function(factor, index){
+                                    if(factor.profileImage == null || factor.profileImage == ""){
+                                            profile_image                   =     "";
+                                    }else{
+                                            profile_image                   =     profilePic_path + factor.profileImage;
+                                    }
+                                    factor.profilePic       =    profile_image;
+                            });
+                            console.log(result);
+                            return res.json(200, {status: 1, message: "success", data: result});
+                        }
+                    });
 
     },
     //Delete a particular User
@@ -237,9 +260,9 @@ console.log(values);
                         if (err) {
                             return res.json(200, {status: 2, error_details: err});
 
-                        } else {                           
- 
-                            return res.json(200, {status: 1, message: "success", 
+                        } else {
+
+                            return res.json(200, {status: 1, message: "success",
 
                                             result: result
                             });
@@ -619,19 +642,16 @@ getBarChartData:function(req,res){
 getSettingsData:function(req,res){
 
                       var query = "SELECT * FROM settings";
-
                       Settings.query(query,function(err,result){
-                        if(err)
-                        {
+                        if(err){
                               console.log("errrr",err);
                               return res.json(200, {status: 2, error_details: err});
-                        }
-                        else
-                        {
+                        }else{
                               console.log("success in settings", result);
                               return res.json(200,{status:1,message:'success',result:result});
                         }
                       });
+
 },
 
 updateDitherCloseTime:function(req,res){
@@ -703,33 +723,47 @@ updateTokenExpiryTime:function(req,res){
 
     },
  getUsersBySearchName: function(req,res){
-
-                    var name = req.body.name;
-                    var start = req.body.start;
-                    var count = req.body.count;
+                    console.log("getUsersBySearchName ============== ADMIN");
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                    var profile_image;
+                    var name                        =     req.body.name;
+                    var start                       =     req.body.start;
+                    var count                       =     req.body.count;
                     var query;
-                    if((name == null) || (name == ""))
-                    {
-                     
-                      query =  "SELECT *,(SELECT COUNT(*) FROM user) as length FROM `user` ORDER BY createdAt DESC LIMIT "+start+","+count+"";
-                    
-                    }
-                    else
-                    {
-                     query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%') as length FROM user WHERE name  LIKE '"+name+"%' ORDER BY createdAt DESC LIMIT "+start+","+count+"";
-                    }
-                     console.log(query);
 
+                    /*var query   =   " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt"+
+                                    " FROM user WHERE name LIKE '"+name+"%'";*/
+                    if((name == null)||(name =="")){
+                        query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, "+
+                                "(SELECT COUNT(user.id) from user) as length,"+
+                                "(SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+
+                                " FROM user WHERE ORDER BY createdAt DESC LIMIT "+start+","+count;
+                    }else{
+                        query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, "+
+                                "(SELECT COUNT(user.id) from user) as length,"+
+                                "(SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+
+                                " FROM user WHERE name LIKE '"+name+"%' LIMIT "+start+","+count;
+                    }
+                    console.log(query);
                     User.query(query,function(err,result){
-                        if(err)
-                        {
+                        if(err){
+                             console.log(err);
                              return res.json(200, {status: 2, error_details: err});
+                        }else{
+                           // console.log(result);
+                            result.forEach(function(factor, index){
+                                    if(factor.profileImage == null || factor.profileImage == ""){
+                                            profile_image                   =     "";
+                                    }else{
+                                        var imageSrc                    =     factor.profileImage;
+                                        var ext                         =     imageSrc.split('.');
+                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                    }
+                                    factor.profilePic       =    profile_image;
+                            });
+                            return res.json(200, {status: 1, message: "success", data: result});
                         }
-                        else
-                        {
-                            console.log(result);
-                             return res.json(200, {status: 1, message: "success", data: result});
-                         }
                     });
 
         },
@@ -751,7 +785,7 @@ updateTokenExpiryTime:function(req,res){
                         query = "SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE'"+email+"%') as length FROM user WHERE email LIKE '"+email+"%' ORDER BY createdAt DESC LIMIT "+start+","+count+"";
 
                      }
-                      
+
                      // console.log(query);
                      User.query(query,function(err,result){
                         if(err)
@@ -780,7 +814,7 @@ updateTokenExpiryTime:function(req,res){
                       {
                         query = "SELECT *,(SELECT COUNT(user.id) FROM user WHERE (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt DESC LIMIT "+start+","+count+"";
                       }
-                       
+
                         // console.log(query);
                       User.query(query,function(err,result){
                         if(err)
@@ -812,7 +846,7 @@ updateTokenExpiryTime:function(req,res){
                         }
                     });
 
-        }, 
+        },
 
 getUsersByNameAndEmail :function(req,res){
                         console.log(req.params.all());
@@ -878,7 +912,7 @@ getUsersEmailAndMob :function(req,res){
                                     return res.json(200,{status:1,message:"success",data:result});
                                 }
                             });
-        }, 
+        },
 
 getUsersByNameEmailAndMob :function(req,res){
                             console.log(req.params.all());
@@ -889,7 +923,7 @@ getUsersByNameEmailAndMob :function(req,res){
                             var count = req.body.count;console.log("inside name-email-mob");
 
                             var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
-                            
+
                             User.query(query,function(err,result){
                                 if(err)
                                 {
@@ -969,21 +1003,19 @@ getUsersByNameEmailAndMob :function(req,res){
 											   " LIMIT "+start+" , "+count+"";
 								
 								}
-								
-                           
+								                          
                             console.log(query);
                             Collage.query(query, function (err, result) {
                                 if (err) {
                                     return res.json(200, {status: 2, error_details: err});
-                                } else {                           
+                                } else {
                                      console.log(result);
-                                    return res.json(200, {status: 1, message: "success", 
+                                    return res.json(200, {status: 1, message: "success",
                                                     result: result
                                     });
                                 }
                             });
     },
-
     getDitherByStatus    : function(req,res){
 							console.log(req.params.all());
 							var name         	= 	req.body.name;
@@ -1060,5 +1092,6 @@ getUsersByNameEmailAndMob :function(req,res){
 						
 							
 	},                                  
+
 };
 

@@ -55,6 +55,7 @@ module.exports = {
         //true means 0 = active, false means 1 = inactive
         status: {
             type: 'string',
+            enum: ['active', 'inactive'],
             defaultsTo: 'active'
         },
 

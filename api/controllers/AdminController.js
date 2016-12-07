@@ -86,6 +86,7 @@ console.log(values);
                                 }
                                 factor.profilePic       =    profile_image;
                         });
+                        console.log(result);
                         return res.json(200, {status: 1, message: "success", data: result});
                     }
                 });
@@ -306,21 +307,25 @@ console.log(values);
 
     //** get reported dither details **/
     getReportDither: function(req,res){
-
-
-       // var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
-       var query = "SELECT DISTINCT rd.collageId,u.name AS postedBy,c.imgTitle,c.status, COUNT( rd.collageId ) AS RepDitherCount FROM reportDither AS rd INNER JOIN collage AS c ON c.id=rd.collageId INNER JOIN user AS u ON c.userId=u.id GROUP BY rd.collageId ORDER BY rd.createdAt";
-
-        console.log(query);
-                    ReportDither.query(query, function (err, result) {
-                        if (err) {
-                            return res.json(200, {status: 2, error_details: err});
-                        } else {
-                            console.log("hello");
-                            console.log(result);
-                            return res.json(200, {status: 1, message: "success", result: result});
-                        }
-                    });
+                // var query = "SELECT rd . *,u.name AS username,c.imgTitle,c.status FROM reportDither AS rd LEFT JOIN user AS u ON rd.reporterId = u.id LEFT JOIN collage AS c ON c.id = rd.collageId";
+                var query = " SELECT DISTINCT rd.collageId,"+
+                            " u.name AS postedBy,"+
+                            " c.imgTitle,c.status,"+
+                            " COUNT( rd.collageId ) AS RepDitherCount,"+
+                            " IF( (c.expiryDate < NOW()) ,  'close',  'open') AS ditherStatus"+
+                            " FROM reportDither AS rd"+
+                            " INNER JOIN collage AS c ON c.id = rd.collageId"+
+                            " INNER JOIN user AS u ON rd.reporterId = u.id"+
+                            " GROUP BY rd.collageId";
+                console.log(query);
+                ReportDither.query(query, function (err, result){
+                    if(err){
+                        return res.json(200, {status: 2, error_details: err});
+                    }else{
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: "success", result: result});
+                    }
+                });
     },
 
     //** suspend a dither
@@ -738,7 +743,7 @@ updateTokenExpiryTime:function(req,res){
                         query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, "+
                                 "(SELECT COUNT(user.id) from user) as length,"+
                                 "(SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+
-                                " FROM user WHERE ORDER BY createdAt DESC LIMIT "+start+","+count;
+                                " FROM user ORDER BY createdAt DESC LIMIT "+start+","+count;
                     }else{
                         query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, "+
                                 "(SELECT COUNT(user.id) from user) as length,"+

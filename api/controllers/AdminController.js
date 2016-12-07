@@ -254,6 +254,7 @@ console.log(values);
                    " ) AS length"+
                    " FROM collage AS c"+
                    " INNER JOIN user AS u ON u.id = c.userId"+
+                   " WHERE u.type != 1"+
                    " ORDER BY c.createdAt DESC"+
                    " LIMIT "+start+" , "+count+"";
         console.log(query);

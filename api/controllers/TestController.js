@@ -1168,124 +1168,177 @@ module.exports = {
                 });
     },
     testCommentImg: function (req, res){
-		var key = [];
-		var dataResultsKeys = [];
-		var comment_arr = [];
-		var comment_img_arr = [];
-		console.log("testing comment Image upload")
-		var query = " SELECT clgcmt.id, clgcmt.comment,cmntImg.image, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
-					" FROM collageComments clgcmt"+
-					" LEFT JOIN commentImages as cmntImg ON cmntImg.commentId = clgcmt.id"+
-					" INNER JOIN user usr ON usr.id = clgcmt.userId"+
-					" WHERE clgcmt.collageId = 98"+
-					" AND cmntImg.image IS NOT NULL"+
-					" ORDER BY clgcmt.createdAt";  
-		CollageComments.query(query, function(err, rows) {
-			if(err){
-				console.log(err);
-				return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Comments'});
-			}else{
-				
-				var dataResults = rows;
-				
-				//var popular_dithers,
-				//imgDetailsArrayOrder;
-				for (var i = dataResults.length - 1; i >= 0; i--){
-					var dataResultsObj = new Object();
-					var commentId_val = dataResults[i]["id"];
-					if (dataResultsKeys.indexOf( commentId_val ) == -1){
-						//var imgDetailsArray = [];
-						
-						for (var j = dataResults.length - 1; j >= 0; j--){
-							if(dataResults[j]["id"]==commentId_val){
-								console.log("1111111111111111111111111111111111111111");
-								console.log(dataResults[i]["id"]);
-								console.log(dataResults[j]["id"]);
-								var comment_arr = [];
-								//var image = commentImage_path + dataResults[j]["image"];
-								//comment_img_arr.push(image);
-								//console.log("inside all looooppp SRATRS ++++++");
-								console.log("888888888888888888888888888888888888");
-								console.log(dataResults[i]["image"]);
-								if(dataResults[i]["image"] == null || dataResults[i]["image"] == ""){
-								}else{
-								//console.log(dataResults[j]["image"]);
-								comment_img_arr.push(dataResults[j]["image"]);
-								}
-								//console.log(comment_img_arr);
-								//console.log("inside all comment_img_arr ENDS ++++++");
-							}
-						}
-						console.log("2222222222222222222222222222222222222");
-						dataResultsObj.comment_id = dataResults[i]["id"];
-						dataResultsObj.image = comment_img_arr;
-						comment_arr.push(dataResultsObj);
-						comment_img_arr = [];
-					}
-					console.log("comment_arr ))))))))))))))))))))")
-					console.log(comment_arr);
-					//comment_img_arr.push(comment_arr)
-					
-					//console.log(comment_img_arr);
-				/*function hash(o){
-				return o.id;
-				}
+        var key = [];
+        var dataResultsKeys = [];
+        var comment_arr = [];
+        var comment_img_arr = [];
+        console.log("testing comment Image upload")
+        var query = " SELECT clgcmt.id, clgcmt.comment,cmntImg.image, usr.name,usr.mentionId, clgcmt.createdAt,usr.profilePic, usr.id userId"+
+                    " FROM collageComments clgcmt"+
+                    " LEFT JOIN commentImages as cmntImg ON cmntImg.commentId = clgcmt.id"+
+                    " INNER JOIN user usr ON usr.id = clgcmt.userId"+
+                    " WHERE clgcmt.collageId = 98"+
+                    " AND cmntImg.image IS NOT NULL"+
+                    " ORDER BY clgcmt.createdAt";
+        CollageComments.query(query, function(err, rows) {
+            if(err){
+                console.log(err);
+                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Comments'});
+            }else{
 
-				var hashesFound = {};
+                var dataResults = rows;
 
-				comment_arr.forEach(function(o){
-				hashesFound[hash(o)] = o;
-				});
+                //var popular_dithers,
+                //imgDetailsArrayOrder;
+                for (var i = dataResults.length - 1; i >= 0; i--){
+                    var dataResultsObj = new Object();
+                    var commentId_val = dataResults[i]["id"];
+                    if (dataResultsKeys.indexOf( commentId_val ) == -1){
+                        //var imgDetailsArray = [];
 
-				var results1 = Object.keys(hashesFound).map(function(k){
-				return hashesFound[k];
-				});
-				console.log("results1 ===========");
-				console.log(results1);*/
-				}
-			}
-			
-		});
-	},
-	sendSmsOTP: function (req, res){
-		
-			var plivo 	= require('plivo');
-			var p 		= plivo.RestAPI({
-											authId		: 'MAN2FINWE2NGRHMDIWNM',
-											authToken	: 'NjM1NzkyOTE3ODdjMDI0YzI3N2Q3MWI2YWFhMjAy'
-										});
-			var num_arr	=	['+91-8281442870','+919947632638']
-			var dest	=	'123';
-			for(i=0;i<num_arr.length;i++)
-			{
-				if(dest=='')
-				{
-					dest = num_arr[i];
-				}
-				else
-				{
-					dest = dest+'<'+num_arr[i];
-				}
-			}
+                        for (var j = dataResults.length - 1; j >= 0; j--){
+                            if(dataResults[j]["id"]==commentId_val){
+                                console.log("1111111111111111111111111111111111111111");
+                                console.log(dataResults[i]["id"]);
+                                console.log(dataResults[j]["id"]);
+                                var comment_arr = [];
+                                //var image = commentImage_path + dataResults[j]["image"];
+                                //comment_img_arr.push(image);
+                                //console.log("inside all looooppp SRATRS ++++++");
+                                console.log("888888888888888888888888888888888888");
+                                console.log(dataResults[i]["image"]);
+                                if(dataResults[i]["image"] == null || dataResults[i]["image"] == ""){
+                                }else{
+                                //console.log(dataResults[j]["image"]);
+                                comment_img_arr.push(dataResults[j]["image"]);
+                                }
+                                //console.log(comment_img_arr);
+                                //console.log("inside all comment_img_arr ENDS ++++++");
+                            }
+                        }
+                        console.log("2222222222222222222222222222222222222");
+                        dataResultsObj.comment_id = dataResults[i]["id"];
+                        dataResultsObj.image = comment_img_arr;
+                        comment_arr.push(dataResultsObj);
+                        comment_img_arr = [];
+                    }
+                    console.log("comment_arr ))))))))))))))))))))")
+                    console.log(comment_arr);
+                    //comment_img_arr.push(comment_arr)
+
+                    //console.log(comment_img_arr);
+                /*function hash(o){
+                return o.id;
+                }
+
+                var hashesFound = {};
+
+                comment_arr.forEach(function(o){
+                hashesFound[hash(o)] = o;
+                });
+
+                var results1 = Object.keys(hashesFound).map(function(k){
+                return hashesFound[k];
+                });
+                console.log("results1 ===========");
+                console.log(results1);*/
+                }
+            }
+
+        });
+    },
+    sendSmsOTP: function (req, res){
+
+            var plivo   = require('plivo');
+            var p       = plivo.RestAPI({
+                                            authId      : 'MAN2FINWE2NGRHMDIWNM',
+                                            authToken   : 'NjM1NzkyOTE3ODdjMDI0YzI3N2Q3MWI2YWFhMjAy'
+                                        });
+            var num_arr =   ['+91-8281442870','+919947632638']
+            var dest    =   '123';
+            for(i=0;i<num_arr.length;i++)
+            {
+                if(dest=='')
+                {
+                    dest = num_arr[i];
+                }
+                else
+                {
+                    dest = dest+'<'+num_arr[i];
+                }
+            }
             console.log(dest)
-			var params  = {
-				'src': '+44 1629 304021', // Sender's phone number with country code
-				'dst' : '+447441910872', // Receiver's phone Number with country code
-				'text' : "Hi, text from Plivo", // Your SMS Text Message - English
-				'url' : "http://example.com/report/", // The URL to which with the status of the message is sent
-				'method' : "GET" // The method used to call the url
-			};
+            var params  = {
+                'src': '+44 1629 304021', // Sender's phone number with country code
+                'dst' : '+447441910872', // Receiver's phone Number with country code
+                'text' : "Hi, text from Plivo", // Your SMS Text Message - English
+                'url' : "http://example.com/report/", // The URL to which with the status of the message is sent
+                'method' : "GET" // The method used to call the url
+            };
 
-			// Prints the complete response
-			p.send_message(params, function (status, response) {
-				console.log('Status: ', status);
-				console.log('API Response:\n', response);
-				console.log('Message UUID:\n', response['message_uuid']);
-				console.log('Api ID:\n', response['api_id']);
-				return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
-			});
-		
-	},
+            // Prints the complete response
+            p.send_message(params, function (status, response) {
+                console.log('Status: ', status);
+                console.log('API Response:\n', response);
+                console.log('Message UUID:\n', response['message_uuid']);
+                console.log('Api ID:\n', response['api_id']);
+                return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+            });
+    },
+    /*  =================================================================================================================================
+            Proportionate height and width
+    ================================================================================================================================== */
+    imageHeightWidth: function (req, res){
+                var imageHeight         =  parseFloat(req.param("height"));
+                var imageWidth          =  parseFloat(req.param("width"));
+                /*var ratio               = image.Height / image.Width;
+                var width               = image.Height / ratio;
+                var height              = image.Width * ratio;*/
+                /*var ratio               = imageHeight / imageWidth;
+                var width               = imageWidth / ratio;
+                var height              = imageHeight * ratio;*/
+                console.log("imageHeight  ======="+imageHeight);
+                console.log("imageWidth  ======="+imageWidth);
+                var ratio, width, height;
+                if(imageHeight < imageWidth){
+                    console.log("small height");
+                    //imageHeight         = 180;
+                    ratio               = parseFloat(imageHeight / 180);
+                    width               = parseFloat(imageWidth / ratio);
+                    height              = parseFloat(imageHeight / ratio);
+                    /*if(height > 180){
+                        height    =   parseFloat(imageHeight / ratio);
+                    }
+                    if(width > 180){
+                        width = 180;
+                    }*/
+                }else{
+                    console.log("small width");
+                    //imageWidth          = 180;
+                    ratio               =  parseFloat(imageWidth / 180);
+                    width               =  parseFloat(imageWidth / ratio);
+                    height              =  parseFloat(imageHeight / ratio);
+                    /*if(width > 180){
+                        width = parseFloat(imageWidth / ratio);
+                    }
+                    if(height > 180){
+                        height = 180;
+                    }*/
+                }
+
+
+
+
+                console.log(ratio);
+                //ratio                   = imageWidth / imageHeight;
+
+                return res.json(200, {status: 1, status_type: 'Success' , message: 'proportionate image size',
+                                        result : {width : width, height : height}
+                                        });
+
+
+
+    },
 };
 
 

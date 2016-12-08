@@ -310,7 +310,9 @@ module.exports = {
                                                                                     user_profile_image   = profilePic_path + foundUserDetails.profilePic;
                                                                         }
                                                                         var query = " SELECT COUNT(clg.id) as closedDitherCount FROM collage clg"+
-                                                                                    " WHERE clg.userId = "+received_userId+" AND clg.createdAt < '"+today+"'";
+                                                                                    " WHERE clg.userId = "+received_userId+" AND clg.expiryDate < '"+today+"'";
+                                                                        console.log("closed Dither query ======>>>>");
+                                                                        console.log(query);
                                                                         Collage.query(query, function(err, results){
                                                                             if(err){
                                                                                 console.log(err);

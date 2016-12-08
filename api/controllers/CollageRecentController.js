@@ -55,7 +55,7 @@ module.exports = {
                                         " SELECT *"+
                                         " FROM collage clg"+
                                         " WHERE clg.userId =  '"+userId+"'"+
-                                        " AND clg.expiryDate > '"+today+"'"+
+                                        " AND clg.status = 'active' AND clg.expiryDate > '"+today+"'"+
                                         " ORDER BY clg.createdAt DESC, clg.id DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+
@@ -80,7 +80,7 @@ module.exports = {
                                         " SELECT clg.id FROM collage clg INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " WHERE"+
                                         " tg.userId =  '"+userId+"' AND clg.userId =  '"+received_userId+"'"+
-                                        " AND clg.expiryDate > '"+today+"'"+
+                                        " AND clg.status = 'active' AND clg.expiryDate > '"+today+"'"+
                                         " ORDER BY clg.createdAt DESC, clg.id DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+

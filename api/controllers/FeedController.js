@@ -70,12 +70,12 @@ module.exports = {
                                             " FROM ("+
                                             " SELECT clg.id, clg.createdAt"+
                                             " FROM collage clg"+
-                                            " WHERE clg.userId = "+userId+" AND clg.expiryDate > '"+today+"'"+
+                                            " WHERE clg.userId = "+userId+" AND clg.expiryDate > '"+today+"' AND clg.status = 'active'"+
                                             " UNION ("+
                                             " SELECT tg.collageId AS id, clg.createdAt"+
                                             " FROM tags tg"+
                                             " INNER JOIN collage clg ON clg.id = tg.collageId"+
-                                            " WHERE tg.userId = "+userId+" AND clg.expiryDate > '"+today+"'"+
+                                            " WHERE tg.userId = "+userId+" AND clg.expiryDate > '"+today+"' AND clg.status = 'active'"+
                                             " )"+
                                             " ) AS temp1"+
                                             query_offset_data_view_limit+

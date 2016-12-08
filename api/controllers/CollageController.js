@@ -131,12 +131,12 @@ module.exports = {
                                     " temp.*,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
-                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
+                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"' AND status = 'active')as opinionCount,"+
                                     " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                     " FROM ("+
                                     " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                     " FROM collage clg"+
-                                    " WHERE clg.userId =  '"+userId+"'"+" AND clg.expiryDate > '"+today+"'"+
+                                    " WHERE clg.userId =  '"+userId+"' AND clg.status = 'active' AND clg.expiryDate > '"+today+"'"+
                                     " ORDER BY clg.createdAt DESC, clg.id DESC"+
                                     " LIMIT 4"+
                                     " ) AS temp"+
@@ -152,12 +152,12 @@ module.exports = {
                                     " temp.*,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
-                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"')as opinionCount,"+
+                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"' AND status = 'active')as opinionCount,"+
                                     " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                     " FROM ("+
                                     " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
                                     " FROM collage clg"+
-                                    " WHERE clg.userId =  '"+userId+"' AND clg.totalVote != 0"+" AND clg.expiryDate > '"+today+"'"+
+                                    " WHERE clg.userId =  '"+userId+"' AND clg.totalVote != 0 AND clg.status = 'active' AND clg.expiryDate > '"+today+"'"+
                                     " ORDER BY clg.totalVote DESC, clg.id DESC"+
                                     " LIMIT 4"+
                                     " ) AS temp"+
@@ -176,7 +176,7 @@ module.exports = {
                                     " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
-                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"' AND status = 'active')as opinionCount,"+
                                     " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                     " FROM ("+
                                     " SELECT temp.id"+
@@ -186,7 +186,7 @@ module.exports = {
                                     " WHERE tg.userId =  '"+userId+"'"+
                                     " ) AS temp"+
                                     " INNER JOIN collage clg ON temp.id = clg.id"+
-                                    " WHERE clg.userId = "+received_userId+" AND clg.expiryDate > '"+today+"'"+
+                                    " WHERE clg.userId = "+received_userId+" AND clg.status = 'active' AND clg.expiryDate > '"+today+"'"+
                                     " ORDER BY clg.createdAt DESC, clg.id DESC"+
                                     " LIMIT 4"+
                                     " ) AS temp_union"+
@@ -202,7 +202,7 @@ module.exports = {
                                     " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
-                                     " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"')as opinionCount,"+
+                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"' AND status = 'active')as opinionCount,"+
                                     " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                     " FROM ("+
                                     " SELECT temp.id"+
@@ -213,7 +213,7 @@ module.exports = {
                                     " ) AS temp"+
                                     " INNER JOIN collage clg ON temp.id = clg.id"+
                                     " WHERE clg.totalVote != 0"+
-                                    " AND clg.userId = "+received_userId+" AND clg.expiryDate > '"+today+"'"+
+                                    " AND clg.userId = "+received_userId+" AND clg.status = 'active' AND clg.expiryDate > '"+today+"'"+
                                     " ORDER BY clg.totalVote DESC"+
                                     " LIMIT 4"+
                                     " ) AS temp_union"+

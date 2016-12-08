@@ -41,55 +41,27 @@ module.exports = {
                     if(!received_userId || !received_focus_limit_number){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass user_id and focus_limit_number'});
                     }else{
-                            //if(received_userId == userId){
-                                //console.log("Same Id ----------------------------------------------------");
-                                query = "SELECT"+
-                                        " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                        " temp_clg.userId, temp_clg.image AS collage_image, temp_clg.totalVote, temp_clg.createdAt, temp_clg.updatedAt,"+
-                                        " usr.profilePic, usr.name,"+
-                                        " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
-                                        " FROM"+
-                                        " ("+
-                                        " SELECT temp.*"+
-                                        " FROM ("+
-                                        " SELECT *"+
-                                        " FROM collage clg"+
-                                        " WHERE clg.userId =  '"+userId+"'"+" AND clg.expiryDate <= '"+today+"'"+
-                                        " ORDER BY clg.createdAt DESC, clg.id DESC"+
-                                        " ) AS temp"+
-                                        " LIMIT "+received_focus_limit_number+", "+data_view_limit+
-                                        ") AS temp_clg"+
-                                        " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
-                                        " INNER JOIN user usr ON usr.id = temp_clg.userId"+
-                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
-                                        " GROUP BY clgdt.id"+
-                                        " ORDER BY temp_clg.createdAt";
-                            /*}else{
-                                console.log("Not a logged User ----------------------------------------------------");
-                                //Show tagged logged user and created by received_user
-                                query = " SELECT clg.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
-                                        " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
-                                        " usr.profilePic, usr.name,"+
-                                        " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
-                                        " FROM("+
-                                        " SELECT temp.*"+
-                                        " FROM ("+
-                                        " SELECT clg.id FROM collage clg INNER JOIN tags tg ON tg.collageId = clg.id"+
-                                        " WHERE"+
-                                        " tg.userId =  '"+userId+"' AND clg.userId =  '"+received_userId+"'"+
-                                        " AND clg.expiryDate <= '"+today+"'"+
-                                        " ORDER BY clg.createdAt  DESC"+
-                                        " ) AS temp"+
-                                        " LIMIT "+received_focus_limit_number+", "+data_view_limit+
-                                        " ) AS temp_clg"+
-                                        " INNER JOIN collage clg ON clg.id = temp_clg.id"+
-                                        " INNER JOIN collageDetails clgdt ON clgdt.collageId = clg.id"+
-                                        " INNER JOIN tags tg ON tg.collageId = clg.id"+
-                                        " INNER JOIN user usr ON usr.id = tg.userId"+
-                                        " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
-                                        " GROUP BY clgdt.id"+
-                                        " ORDER BY clg.createdAt";
-                            }*/
+                            query = "SELECT"+
+                                    " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
+                                    " temp_clg.userId, temp_clg.image AS collage_image, temp_clg.totalVote, temp_clg.createdAt, temp_clg.updatedAt,"+
+                                    " usr.profilePic, usr.name,"+
+                                    " clglk.likeStatus, clglk.likePosition , clglk.userId likeUserId"+
+                                    " FROM"+
+                                    " ("+
+                                    " SELECT temp.*"+
+                                    " FROM ("+
+                                    " SELECT *"+
+                                    " FROM collage clg"+
+                                    " WHERE clg.userId =  '"+userId+"'"+" AND clg.status = 'active' AND clg.expiryDate <= '"+today+"'"+
+                                    " ORDER BY clg.createdAt DESC, clg.id DESC"+
+                                    " ) AS temp"+
+                                    " LIMIT "+received_focus_limit_number+", "+data_view_limit+
+                                    ") AS temp_clg"+
+                                    " INNER JOIN collageDetails clgdt ON clgdt.collageId = temp_clg.id"+
+                                    " INNER JOIN user usr ON usr.id = temp_clg.userId"+
+                                    " LEFT JOIN collageLikes clglk ON clglk.imageId = clgdt.id AND clglk.userId = "+userId+
+                                    " GROUP BY clgdt.id"+
+                                    " ORDER BY temp_clg.createdAt";
                             console.log(query);
                             Collage.query(query, function(err, results) {
                                     if(err){

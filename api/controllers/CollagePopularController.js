@@ -60,7 +60,7 @@ module.exports = {
                                         " FROM collage clg"+
                                         " WHERE clg.userId =  '"+userId+"'"+
                                         " AND clg.totalVote !=0"+
-                                        " AND clg.expiryDate > '"+today+"'"+
+                                        " AND clg.status = 'active' AND clg.expiryDate > '"+today+"'"+
                                         " ORDER BY clg.totalVote DESC , clg.createdAt DESC, clg.id DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+
@@ -83,7 +83,7 @@ module.exports = {
                                         " SELECT clg.id FROM collage clg INNER JOIN tags tg ON tg.collageId = clg.id"+
                                         " WHERE"+
                                         " tg.userId =  '"+userId+"' AND clg.userId =  '"+received_userId+"' AND clg.totalVote != 0"+
-                                        " AND clg.expiryDate > '"+today+"'"+
+                                        " AND clg.status = 'active' AND clg.expiryDate > '"+today+"'"+
                                         " ORDER BY clg.totalVote DESC, clg.createdAt DESC, clg.id DESC"+
                                         " ) AS temp"+
                                         " LIMIT "+received_focus_limit_number+", "+data_view_limit+

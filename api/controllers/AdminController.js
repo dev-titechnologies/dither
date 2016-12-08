@@ -13,7 +13,7 @@ var crypto = require('crypto');
  var  googleapis = require('googleapis');
  var  key        = require('service-account-credentials.json');
  const VIEW_ID   = 'ga:130989248';
- var todayISO 			=	new Date().toISOString();
+ var todayISO           =   new Date().toISOString();
 
 module.exports = {
 
@@ -101,9 +101,17 @@ console.log(values);
                     var profile_image;
                     var userId                      =       req.body.userId;
 
-                    var query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt"+
-                                " FROM  user WHERE id="+userId;
-
+                    var query = " SELECT"+
+                                " usr.id, usr.name, usr.email, usr.profilePic as profileImage, usr.phoneNumber, usr.status, usr.createdAt, "+
+                                " clg.id as collageId,"+
+                                " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+" AND expiryDate < '"+todayISO+"') as cdCount,"+
+                                " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+" AND expiryDate > '"+todayISO+"') as odCount,"+
+                                " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+") as tdCount,"+
+                                " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+" AND status = 'inactive') as bdCount"+
+                                " FROM  user usr"+
+                                " LEFT JOIN collage clg ON clg.userId = usr.id"+
+                                " WHERE usr.id="+userId;
+                    console.log(query);
                     User.query(query, function(err, result){
                         if(err){
                             // console.log(err);
@@ -249,7 +257,7 @@ console.log(values);
         // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
 
         var query =" SELECT c. * , c.id AS cid, u. * ,c.status,c.totalVote,("+
-                   " SELECT COUNT( c.id )"+ 
+                   " SELECT COUNT( c.id )"+
                    " FROM collage AS c"+
                    " INNER JOIN user AS u ON u.id = c.userId"+
                    " ) AS length,"+
@@ -918,12 +926,12 @@ getUsersByNameAndMob :function(req,res){
                         var query;
                         if(!mobile){
 
-							query = "SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' ) as length FROM user WHERE name LIKE '"+name+"%'  ORDER BY createdAt LIMIT "+start+","+count+" ";
-							
-						}else{
+                            query = "SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' ) as length FROM user WHERE name LIKE '"+name+"%'  ORDER BY createdAt LIMIT "+start+","+count+" ";
 
-							query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
-						}                        
+                        }else{
+
+                            query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+                        }
                          console.log(query);
                         User.query(query,function(err,result){
                             if(err)
@@ -948,13 +956,13 @@ getUsersEmailAndMob :function(req,res){
 
                             if(!mobile){
 
-								query = "SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE '"+email+"%') as length FROM user WHERE email LIKE '"+email+"%' ORDER BY createdAt LIMIT "+start+","+count+" ";
+                                query = "SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE '"+email+"%') as length FROM user WHERE email LIKE '"+email+"%' ORDER BY createdAt LIMIT "+start+","+count+" ";
 
-							}else{
-								query ="SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
-							}
+                            }else{
+                                query ="SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+                            }
 
-                            
+
                             // console.log(query);
                             User.query(query,function(err,result){
                                 if(err)
@@ -995,100 +1003,100 @@ getUsersByNameEmailAndMob :function(req,res){
 
 
          getDitherByName   : function(req,res){
-								console.log(req.params.all());
-								var start 			= 	req.body.start;     
-								var count 			= 	req.body.count;
-								var name 			=   req.body.name;
-								var ditherStatus 	=	req.body.ditherStatus;
-								var query;
-								if(!ditherStatus && !name){ // search by null status name cleared
-									console.log("status null and name cleared");
+                                console.log(req.params.all());
+                                var start           =   req.body.start;
+                                var count           =   req.body.count;
+                                var name            =   req.body.name;
+                                var ditherStatus    =   req.body.ditherStatus;
+                                var query;
+                                if(!ditherStatus && !name){ // search by null status name cleared
+                                    console.log("status null and name cleared");
                                     // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
-									query =    " SELECT c. * , c.id AS cid, u. * ,("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%'"+
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-								
-								}else if(!ditherStatus && name){ //search by name
-									console.log("inside getDitherByName by name");
-									// var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
-									query =    " SELECT c. * , c.id AS cid, u. * ,("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%'"+
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-								
-								}else if(ditherStatus =="active" && name){ // search by status == active  and name
-									console.log("status  active and name ");
-									query 	=  " SELECT c. * , c.id AS cid, u. * ,("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate > '"+todayISO+"' AND u.name LIKE '"+name+"%') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate > '"+todayISO+"'"+
-											   " AND u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
+                                    query =    " SELECT c. * , c.id AS cid, u. * ,("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
 
-									
-								}else if(ditherStatus =="inactive" && name){ // search by status == inactive  and name
-								    console.log("status inactive and name ");
-									query 	=  " SELECT c. * , c.id AS cid, u. * ,("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate < '"+todayISO+"' AND u.name LIKE '"+name+"%') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate < '"+todayISO+"'"+
-											   " AND u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
+                                }else if(!ditherStatus && name){ //search by name
+                                    console.log("inside getDitherByName by name");
+                                    // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
+                                    query =    " SELECT c. * , c.id AS cid, u. * ,("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
 
-									
-								}else if(ditherStatus =="active" && !name){ // search by status active name cleared
-							        console.log("status active and name cleared");
+                                }else if(ditherStatus =="active" && name){ // search by status == active  and name
+                                    console.log("status  active and name ");
+                                    query   =  " SELECT c. * , c.id AS cid, u. * ,("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate > '"+todayISO+"' AND u.name LIKE '"+name+"%') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate > '"+todayISO+"'"+
+                                               " AND u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+
+                                }else if(ditherStatus =="inactive" && name){ // search by status == inactive  and name
+                                    console.log("status inactive and name ");
+                                    query   =  " SELECT c. * , c.id AS cid, u. * ,("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate < '"+todayISO+"' AND u.name LIKE '"+name+"%') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate < '"+todayISO+"'"+
+                                               " AND u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+
+                                }else if(ditherStatus =="active" && !name){ // search by status active name cleared
+                                    console.log("status active and name cleared");
                                     // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
-								    query =    " SELECT c. * , c.id AS cid, u. * ,"+
-											   " (SELECT COUNT( c.id ) FROM collage AS c INNER JOIN user AS u ON u.id = c.userId WHERE u.name LIKE '"+name+"%' AND c.expiryDate <'"+todayISO+"') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%' AND c.expiryDate > '"+todayISO+"'"+
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-								
-								}else if(ditherStatus =="inactive" && !name){ // search by status inactive name cleared
-							        console.log("status inactive and name cleared");
+                                    query =    " SELECT c. * , c.id AS cid, u. * ,"+
+                                               " (SELECT COUNT( c.id ) FROM collage AS c INNER JOIN user AS u ON u.id = c.userId WHERE u.name LIKE '"+name+"%' AND c.expiryDate <'"+todayISO+"') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%' AND c.expiryDate > '"+todayISO+"'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+                                }else if(ditherStatus =="inactive" && !name){ // search by status inactive name cleared
+                                    console.log("status inactive and name cleared");
                                     // var query = "SELECT COUNT(*) as length,c.*,c.id as cid,u.*  FROM collage as c INNER JOIN user as u ON u.id=c.userId ORDER BY c.createdAt DESC LIMIT 0,10";
-									query =    " SELECT c. * , c.id AS cid, u. * ,"+
-											   " (SELECT COUNT( c.id ) FROM collage AS c INNER JOIN user AS u ON u.id = c.userId WHERE u.name LIKE '"+name+"%' AND c.expiryDate <'"+todayISO+"') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%' AND c.expiryDate <'"+todayISO+"'"+
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-								
-								}
-								                          
+                                    query =    " SELECT c. * , c.id AS cid, u. * ,"+
+                                               " (SELECT COUNT( c.id ) FROM collage AS c INNER JOIN user AS u ON u.id = c.userId WHERE u.name LIKE '"+name+"%' AND c.expiryDate <'"+todayISO+"') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%' AND c.expiryDate <'"+todayISO+"'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+                                }
+
 
                             console.log(query);
                             Collage.query(query, function (err, result) {
@@ -1104,109 +1112,109 @@ getUsersByNameEmailAndMob :function(req,res){
     },
     getDitherByStatus    : function(req,res){
 
-							console.log(req.params.all());
-							var name         	= 	req.body.name;
-							var ditherStatus 	= 	req.body.ditherStatus;
-							var start 			= 	req.body.start;
-							var count			= 	req.body.count;
-							var query;
-							if(ditherStatus){
-								console.log("ditherStatus --yes");
-							}
-							if(!ditherStatus){
-								console.log("ditherStatus --No");
-							}
-							console.log(req.body.status);
-							
+                            console.log(req.params.all());
+                            var name            =   req.body.name;
+                            var ditherStatus    =   req.body.ditherStatus;
+                            var start           =   req.body.start;
+                            var count           =   req.body.count;
+                            var query;
+                            if(ditherStatus){
+                                console.log("ditherStatus --yes");
+                            }
+                            if(!ditherStatus){
+                                console.log("ditherStatus --No");
+                            }
+                            console.log(req.body.status);
 
-							if(!name && !ditherStatus){ //search with name null and null dither status
-									query = " SELECT c. * , c.id AS cid, u. * , ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-									console.log("!name && !ditherStatus")				   
-							}else if(name && !ditherStatus){ //search with name and null dither status
-									query = " SELECT c. * , c.id AS cid, u. * ,("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%' ) AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-									console.log("name && !ditherStatus")				   
-							}else if(name && ditherStatus =="active"){ //search by name ,status == active
-									query 	=  " SELECT c. * , c.id AS cid, u. * , ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate > '"+todayISO+"' AND u.name LIKE '"+name+"%') AS length,"+
-											   " IF( (c.expiryDate > '"+todayISO+"') , 'open', 'close') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate > '"+todayISO+"'"+
-											   " AND u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-            
-									console.log("name && ditherStatus == active");
-							}else if(name && ditherStatus =="inactive"){ //search by name ,status == inactive
-									query 	=  " SELECT c. * , c.id AS cid, u. * , ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate < '"+todayISO+"' AND u.name LIKE '"+name+"%') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate < '"+todayISO+"'"+
-											   " AND u.name LIKE '"+name+"%'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-            
-									console.log("name && ditherStatus == inactive");
-							}else if(!name && ditherStatus =="active"){ //search null name and dither status == active
-									query 	=  " SELECT c. * , c.id AS cid, u. * , ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate > '"+todayISO+"') AS length,"+
-											   " IF( (c.expiryDate > '"+todayISO+"') , 'open', 'close') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate > '"+todayISO+"'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-									console.log("!name && ditherStatus == active")
-							}else if(!name && ditherStatus =="inactive"){ //search null name and dither status == inactive
-									query 	=  " SELECT c. * , c.id AS cid, u. * , ("+
-											   " SELECT COUNT( c.id )"+ 
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate < '"+todayISO+"') AS length,"+
-											   " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
-											   " FROM collage AS c"+
-											   " INNER JOIN user AS u ON u.id = c.userId"+
-											   " WHERE c.expiryDate < '"+todayISO+"'"+                                      
-											   " ORDER BY c.createdAt DESC"+
-											   " LIMIT "+start+" , "+count+"";
-									console.log("!name && ditherStatus == inactive")
-							}
-							console.log(query);
-							Collage.query(query, function (err, result) {
+
+                            if(!name && !ditherStatus){ //search with name null and null dither status
+                                    query = " SELECT c. * , c.id AS cid, u. * , ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+                                    console.log("!name && !ditherStatus")
+                            }else if(name && !ditherStatus){ //search with name and null dither status
+                                    query = " SELECT c. * , c.id AS cid, u. * ,("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%' ) AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+                                    console.log("name && !ditherStatus")
+                            }else if(name && ditherStatus =="active"){ //search by name ,status == active
+                                    query   =  " SELECT c. * , c.id AS cid, u. * , ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate > '"+todayISO+"' AND u.name LIKE '"+name+"%') AS length,"+
+                                               " IF( (c.expiryDate > '"+todayISO+"') , 'open', 'close') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate > '"+todayISO+"'"+
+                                               " AND u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+                                    console.log("name && ditherStatus == active");
+                            }else if(name && ditherStatus =="inactive"){ //search by name ,status == inactive
+                                    query   =  " SELECT c. * , c.id AS cid, u. * , ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate < '"+todayISO+"' AND u.name LIKE '"+name+"%') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate < '"+todayISO+"'"+
+                                               " AND u.name LIKE '"+name+"%'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+
+                                    console.log("name && ditherStatus == inactive");
+                            }else if(!name && ditherStatus =="active"){ //search null name and dither status == active
+                                    query   =  " SELECT c. * , c.id AS cid, u. * , ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate > '"+todayISO+"') AS length,"+
+                                               " IF( (c.expiryDate > '"+todayISO+"') , 'open', 'close') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate > '"+todayISO+"'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+                                    console.log("!name && ditherStatus == active")
+                            }else if(!name && ditherStatus =="inactive"){ //search null name and dither status == inactive
+                                    query   =  " SELECT c. * , c.id AS cid, u. * , ("+
+                                               " SELECT COUNT( c.id )"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate < '"+todayISO+"') AS length,"+
+                                               " IF( (c.expiryDate < '"+todayISO+"') , 'close', 'open') AS ditherStatus"+
+                                               " FROM collage AS c"+
+                                               " INNER JOIN user AS u ON u.id = c.userId"+
+                                               " WHERE c.expiryDate < '"+todayISO+"'"+
+                                               " ORDER BY c.createdAt DESC"+
+                                               " LIMIT "+start+" , "+count+"";
+                                    console.log("!name && ditherStatus == inactive")
+                            }
+                            console.log(query);
+                            Collage.query(query, function (err, result) {
                                 if (err){
                                     return res.json(200, {status: 2, error_details: err});
-                                }else{                           
+                                }else{
                                     //console.log(result);
                                     return res.json(200, {status: 1, message: "success",result: result});
                                 }

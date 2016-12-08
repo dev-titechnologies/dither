@@ -106,7 +106,8 @@ console.log(values);
                                 " clg.id as collageId,"+
                                 " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+" AND expiryDate < '"+todayISO+"') as cdCount,"+
                                 " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+" AND expiryDate > '"+todayISO+"') as odCount,"+
-                                " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+") as tdCount"+
+                                " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+") as tdCount,"+
+                                " (SELECT COUNT(id) FROM collage WHERE userId = "+userId+" AND status = 'inactive') as bdCount"+
                                 " FROM  user usr"+
                                 " LEFT JOIN collage clg ON clg.userId = usr.id"+
                                 " WHERE usr.id="+userId;

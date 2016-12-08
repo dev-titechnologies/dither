@@ -780,7 +780,7 @@ updateTokenExpiryTime:function(req,res){
                                 " FROM user ORDER BY createdAt DESC LIMIT "+start+","+count;
                     }else{
                         query = " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, "+
-                                "(SELECT COUNT(user.id) from user) as length,"+
+                                "(SELECT COUNT(user.id) from user WHERE name LIKE '"+name+"%') as length,"+
                                 "(SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+
                                 " FROM user WHERE name LIKE '"+name+"%' LIMIT "+start+","+count;
                     }
@@ -915,8 +915,15 @@ getUsersByNameAndMob :function(req,res){
                         var mobile = req.body.mobile;
                         var start = req.body.start;
                         var count = req.body.count;console.log("inside name---->mob");
+                        var query;
+                        if(!mobile){
 
-                        var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+							query = "SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' ) as length FROM user WHERE name LIKE '"+name+"%'  ORDER BY createdAt LIMIT "+start+","+count+" ";
+							
+						}else{
+
+							query ="SELECT *,(SELECT COUNT(*) FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+						}                        
                          console.log(query);
                         User.query(query,function(err,result){
                             if(err)
@@ -937,8 +944,17 @@ getUsersEmailAndMob :function(req,res){
                             var mobile = req.body.mobile;
                             var start = req.body.start;
                             var count = req.body.count;console.log("inside email---->mob");
+                            var query;
 
-                            var query ="SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+                            if(!mobile){
+
+								query = "SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE '"+email+"%') as length FROM user WHERE email LIKE '"+email+"%' ORDER BY createdAt LIMIT "+start+","+count+" ";
+
+							}else{
+								query ="SELECT *,(SELECT COUNT(*) FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') ORDER BY createdAt LIMIT "+start+","+count+" ";
+							}
+
+                            
                             // console.log(query);
                             User.query(query,function(err,result){
                                 if(err)

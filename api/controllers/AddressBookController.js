@@ -15,14 +15,13 @@ module.exports = {
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var userPhoneNumber             =     tokenCheck.tokenDetails.phoneNumber;
-                var server_baseUrl              =     req.options.server_baseUrl;
                 var phoneContactsArray          =     [];
                 var fbUserArray                 =     [];
                 var query,
                     ditherUserInAddressBook,
                     ditherUserInFbFriends;
                 var phonecontacts               =     req.param('contact_array');
-                
+
                 var fbUser                      =     req.param('fb_array');
                 var data_check1                 =     "";
 
@@ -67,7 +66,7 @@ module.exports = {
                                                                                 console.log("-------------------------------- SERIES-3 -----------------------------")
                                                                                 console.log("Address book updation")
                                                                                 async.forEach(phonecontacts, function (factor, callback){
-                                                                                    
+
                                                                                     if(factor.number){
                                                                                         var query = "SELECT *"+
                                                                                                     " FROM user"+
@@ -89,11 +88,11 @@ module.exports = {
                                                                                                                                 console.log(err)
                                                                                                                         }else{
                                                                                                                                 console.log("update recordsssss in contacts")
-                                                                                                                                
+
                                                                                                                                 console.log("----------------SERIES 3 Success ----------------------");
                                                                                                                         }
                                                                                                                 });
-                                                                                                                
+
                                                                                                         }
                                                                                                 }
                                                                                         });
@@ -106,7 +105,7 @@ module.exports = {
                                                                 }
                                                             }
                                                     });
-                                           
+
                             },
                             function(callback) {
                                             console.log("----------------SERIES MAIN - II ----------------------");
@@ -125,13 +124,13 @@ module.exports = {
                                                                 callback();
                                                             }else{
                                                                 console.log("----------------SERIES 4 Success ----------------------");
-                                                                
+
                                                                     console.log("-------------------------- SERIES-5 --------------------------");
                                                                     var query = "INSERT INTO fbFriends"+
                                                                                 " (userId,ditherUserName, fbId, createdAt, updatedAt)"+
                                                                                 " VALUES"+fbUserArray;
                                                                     FbFriends.query(query,function(err, createdFbFriends){
-                                                                   
+
                                                                             if(err){
                                                                                 console.log("insertion fbfriends error"+err);
                                                                                 callback();
@@ -162,7 +161,7 @@ module.exports = {
                                                                                     },callback());
                                                                             }
                                                                     });
-                                                             
+
                                                             }
                                                     });
                                             }else{
@@ -191,10 +190,12 @@ module.exports = {
         selectUserContacts: function (req, res) {
 
                     console.log("==========================  selectUserContacts  Api =-=============");
-                    
+
                     var tokenCheck                  =     req.options.tokenCheck;
                     var userId                      =     tokenCheck.tokenDetails.userId;
                     var server_baseUrl              =     req.options.server_baseUrl;
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                     var query,
                     ditherUserInAddressBook,
                     ditherUserInFbFriends;
@@ -220,7 +221,7 @@ module.exports = {
                                                             if(factor.profilePic==''){
                                                                     factor.profilePic='';
                                                             }else{
-                                                                    factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
+                                                                    factor.profilePic = profilePic_path + factor.profilePic;
                                                             }
                                                         }, callback());
 
@@ -248,7 +249,7 @@ module.exports = {
                                                                 if(factor.profilePic==''){
                                                                     factor.profilePic='';
                                                                 }else{
-                                                                    factor.profilePic = server_baseUrl + "images/ProfilePics/"+factor.profilePic;
+                                                                    factor.profilePic = profilePic_path + factor.profilePic;
                                                                 }
                                                         }, callback());
 

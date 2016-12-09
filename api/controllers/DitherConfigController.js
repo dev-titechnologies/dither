@@ -40,12 +40,12 @@ module.exports = {
                                         //console.log(keyValue);
                                         var dither_expiry_hour          =     parseInt(keyValue.DITHER_EXPIRY_HOUR);
                                         var data_view_limit             =     req.options.global.data_view_limit;
-                                        var image_baseUrl               =     keyValue.CDN_IMAGE_URL;
+                                        var app_invite_image            =     keyValue.APP_INVITE_IMAGE;
 
                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'Successfully get the config values',
                                                                 dither_expiry_hour          :     dither_expiry_hour,
                                                                 data_view_limit             :     data_view_limit,
-                                                                image_baseUrl               :     image_baseUrl,
+                                                                app_invite_image            :     app_invite_image,
                                                             });
 
                                 }

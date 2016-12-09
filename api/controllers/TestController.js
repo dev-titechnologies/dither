@@ -1291,73 +1291,11 @@ module.exports = {
     imageHeightWidth: function (req, res){
                 var imageHeight         =  parseFloat(req.param("height"));
                 var imageWidth          =  parseFloat(req.param("width"));
-                /*var ratio               = image.Height / image.Width;
-                var width               = image.Height / ratio;
-                var height              = image.Width * ratio;*/
-                /*var ratio               = imageHeight / imageWidth;
-                var width               = imageWidth / ratio;
-                var height              = imageHeight * ratio;*/
-                console.log("imageHeight  ======="+imageHeight);
-                console.log("imageWidth  ======="+imageWidth);
-                var ratio, width, height;
-                if(imageHeight < imageWidth){
-                    //console.log("small height");
-                    //imageHeight         = 180;
-                    /*if(imageHeight > 180){
-                        height = 180;
-                    }else{
-                        height = imageHeight;
-                    }*/
-                    //ratio               = parseFloat(imageWidth / 180);
-                    widthRatio               = parseFloat(imageWidth / 180);
-                    heightRatio              = parseFloat(imageHeight / 180);
 
-                    width                    = imageWidth * widthRatio;
-                    height                   = imageHeight * heightRatio;
-                    /*if(height > 180){
-                        height    =   parseFloat(imageHeight / ratio);
-                    }
-                    if(width > 180){
-                        width = 180;
-                    }
-                    if(width > 180){
-                        width = 180;
-                    }else{
-                        width = width;
-                    }*/
-                }else{
-                    console.log("small width");
-                    //imageWidth          = 180;
-                    /*if(imageWidth > 180){
-                        width = 180;
-                    }else{
-                        width = imageWidth;
-                    }
-                    ratio               =  parseFloat(imageHeight / 180);
-                    //width               =  parseFloat(imageHeight / ratio);
-                    height              =  parseFloat(imageHeight / ratio);
-                    if(height > 180){
-                        height = 180;
-                    }else{
-                        height = height;
-                    }*/
-                    /*if(width > 180){
-                        width = parseFloat(imageWidth / ratio);
-                    }
-                    if(height > 180){
-                        height = 180;
-                    }*/
-                    widthRatio               = parseFloat(imageWidth / 180);
-                    heightRatio              = parseFloat(imageHeight / 180);
+                var height         =   180/180;
+                var width          =   parseFloat(imageWidth/180);
+                height             =   parseFloat(width * 180);
 
-                    width                    = imageWidth * widthRatio;
-                    height                   = imageHeight * heightRatio;
-                }
-
-
-
-
-                console.log(ratio);
                 //ratio                   = imageWidth / imageHeight;
 
                 return res.json(200, {status: 1, status_type: 'Success' , message: 'proportionate image size',

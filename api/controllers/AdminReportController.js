@@ -52,10 +52,14 @@ module.exports = {
 ==================================================================================================================================== */
     getSingleDitherReport: function(req,res){
                         console.log("getSingleDitherReport ===================== ADMIN");
-                        var ditherId            =           req.body.collageId;
+                        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                        var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                        var profile_image;
+                        var ditherId                    =     req.body.collageId;
+
                         var query   =   " SELECT"+
                                         " rd.report, rd.createdAt,"+
-                                        " u.name, rt.description"+
+                                        " u.name, u.profilePic, rt.description"+
                                         " FROM reportDither as rd"+
                                         " INNER JOIN user as u ON rd.reporterId = u.id"+
                                         " INNER JOIN reportType as rt ON rd.reportType = rt.reportId"+
@@ -66,6 +70,16 @@ module.exports = {
                             if(err){
                                 return res.json(200, {status: 2, error_details: err});
                             }else{
+                                result.forEach(function(factor, index){
+                                        if(factor.profilePic == null || factor.profilePic == ""){
+                                                profile_image                   =     "";
+                                        }else{
+                                                var imageSrc                    =     factor.profilePic;
+                                                var ext                         =     imageSrc.split('.');
+                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                        }
+                                        factor.profilePic       =    profile_image;
+                                });
                                 return res.json(200, {status: 1, message: "success", result: result});
                             }
                         });

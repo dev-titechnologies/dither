@@ -1301,29 +1301,57 @@ module.exports = {
                 console.log("imageWidth  ======="+imageWidth);
                 var ratio, width, height;
                 if(imageHeight < imageWidth){
-                    console.log("small height");
+                    //console.log("small height");
                     //imageHeight         = 180;
-                    ratio               = parseFloat(imageHeight / 180);
-                    width               = parseFloat(imageWidth / ratio);
-                    height              = parseFloat(imageHeight / ratio);
+                    /*if(imageHeight > 180){
+                        height = 180;
+                    }else{
+                        height = imageHeight;
+                    }*/
+                    //ratio               = parseFloat(imageWidth / 180);
+                    widthRatio               = parseFloat(imageWidth / 180);
+                    heightRatio              = parseFloat(imageHeight / 180);
+
+                    width                    = imageWidth * widthRatio;
+                    height                   = imageHeight * heightRatio;
                     /*if(height > 180){
                         height    =   parseFloat(imageHeight / ratio);
                     }
                     if(width > 180){
                         width = 180;
+                    }
+                    if(width > 180){
+                        width = 180;
+                    }else{
+                        width = width;
                     }*/
                 }else{
                     console.log("small width");
                     //imageWidth          = 180;
-                    ratio               =  parseFloat(imageWidth / 180);
-                    width               =  parseFloat(imageWidth / ratio);
+                    /*if(imageWidth > 180){
+                        width = 180;
+                    }else{
+                        width = imageWidth;
+                    }
+                    ratio               =  parseFloat(imageHeight / 180);
+                    //width               =  parseFloat(imageHeight / ratio);
                     height              =  parseFloat(imageHeight / ratio);
+                    if(height > 180){
+                        height = 180;
+                    }else{
+                        height = height;
+                    }*/
                     /*if(width > 180){
                         width = parseFloat(imageWidth / ratio);
                     }
                     if(height > 180){
                         height = 180;
                     }*/
+                    widthRatio               = parseFloat(imageWidth / 180);
+                    heightRatio              = parseFloat(imageHeight / 180);
+
+                    width                    = imageWidth * widthRatio;
+                    height                   = imageHeight * heightRatio;
                 }
 
 

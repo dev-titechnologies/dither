@@ -313,6 +313,7 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             callback();
                                                                                     }else{
+                                                                                        var today;
                                                                                         [1,2,3,4].forEach(function(factor, index){
                                                                                             var expiryDate      =       new Date(new Date().setFullYear(2020));
                                                                                             var imgTitle,
@@ -321,18 +322,22 @@ module.exports = {
                                                                                                 case 0 :
                                                                                                         imgTitle         = "Share your opinion";
                                                                                                         collageImage     = "default_collage_4.jpg";
+                                                                                                        today            = new Date(new Date().setSeconds(11)).toISOString();
                                                                                                 break;
                                                                                                 case 1 :
                                                                                                         imgTitle         = "Share your opinion";
                                                                                                         collageImage     = "default_collage_3.jpg";
+                                                                                                        today            = new Date(new Date().setSeconds(12)).toISOString();
                                                                                                 break;
                                                                                                 case 2 :
                                                                                                         imgTitle         = "Share your opinion";
                                                                                                         collageImage     = "default_collage_2.jpg";
+                                                                                                        today            = new Date(new Date().setSeconds(13)).toISOString();
                                                                                                 break;
                                                                                                 case 3 :
                                                                                                         imgTitle         = "Share your opinion";
                                                                                                         collageImage     = "default_collage_1.jpg";
+                                                                                                        today            = new Date(new Date().setSeconds(14)).toISOString();
                                                                                                 break;
                                                                                             }
                                                                                             var values = {
@@ -343,6 +348,7 @@ module.exports = {
                                                                                                 //longitude       : '',
                                                                                                 userId          : getSuperUser.id,
                                                                                                 expiryDate      : expiryDate,
+                                                                                                createdAt       : today,
                                                                                             };
                                                                                             Collage.create(values).exec(function(err, createCollage){
                                                                                                 if(err){

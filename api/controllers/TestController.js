@@ -20,6 +20,7 @@ function removeItem(obj, prop, val) {
         delete obj[c];
     }
 }
+var today                       =   new Date().toISOString();
 module.exports = {
 
      /* ==================================================================================================================================
@@ -1301,6 +1302,69 @@ module.exports = {
                 return res.json(200, {status: 1, status_type: 'Success' , message: 'proportionate image size',
                                         result : {width : width, height : height}
                                         });
+
+
+
+    },
+    /*  =================================================================================================================================
+             Proportionate height and width
+    ================================================================================================================================== */
+    insertTest: function (req, res){
+
+                [1,2,3,4].forEach(function(factor, index){
+                        var expiryDate      =       new Date(new Date().setFullYear(2020));
+                        var imgTitle,
+                            collageImage;
+                        switch(index){
+                            case 0 :
+                                    imgTitle         = "Share your opinion";
+                                    collageImage     = "default_collage_4.jpg";
+                                    today            = new Date(new Date().setSeconds(11)).toISOString();
+                            break;
+                            case 1 :
+                                    imgTitle         = "Share your opinion";
+                                    collageImage     = "default_collage_3.jpg";
+                                    today            = new Date(new Date().setSeconds(12)).toISOString();
+                            break;
+                            case 2 :
+                                    imgTitle         = "Share your opinion";
+                                    collageImage     = "default_collage_2.jpg";
+                                    today            = new Date(new Date().setSeconds(13)).toISOString();
+                            break;
+                            case 3 :
+                                    imgTitle         = "Share your opinion";
+                                    collageImage     = "default_collage_1.jpg";
+                                    today            = new Date(new Date().setSeconds(14)).toISOString();
+                            break;
+                        }
+                        var values = {
+                            imgTitle        : imgTitle,
+                            image           : collageImage,
+                            location        : '39,Albemarle Gate,Cheltenham,Cheltenham',
+                            //latitude        : '',
+                            //longitude       : '',
+                            userId          : 1,
+                            expiryDate      : expiryDate,
+                            createdAt       : today
+                        };
+
+                        Collage.create(values).exec(function(err, createCollage){
+                            if(err){
+                                    console.log(err);
+                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
+                            }else{
+                                /*if(!createCollage){
+                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Empty result',
+
+                                                            });
+                                }else{
+                                    //return res.json(200, {status: 1, status_type: 'Success' , message: 'proportionate image size',
+                                                            //result : createCollage
+                                                           // });
+                                }*/
+                            }
+                        });
+                });
 
 
 

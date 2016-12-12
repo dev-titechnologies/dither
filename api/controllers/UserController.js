@@ -228,11 +228,11 @@ module.exports = {
 
                                                                                                     tagNotifyArray.push(factor.userId);
                                                                                                      User.findOne({id:factor.userId}).exec(function (err, notifySettings){
-																										 if(notifySettings){
+                                                                                                         if(notifySettings){
                                                                                                                 if(notifySettings.notifyContact==1){
                                                                                                                     contact_arr.push(factor.userId);
                                                                                                                 }
-                                                                                                               } 
+                                                                                                               }
                                                                                                             });
                                                                                                });
                                                                                                var values ={
@@ -482,7 +482,7 @@ module.exports = {
 
                                       if(results.status=='inactive')
                                       {
-                                          return res.json(200, {status: 2, status_type: 'Success' ,  message: 'Your account seems to be suspended! If you believe this is in error, please contact admin@dither.com', isNewUser: false});
+                                          return res.json(200, {status: 2, status_type: 'Success' ,  message: 'Your account seems to be suspended! If you believe this is in error, please contact jake@dither.com', isNewUser: false});
                                       }
                                       else
                                       {

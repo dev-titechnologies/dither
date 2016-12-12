@@ -319,19 +319,19 @@ module.exports = {
                                                                                                 collageImage;
                                                                                             switch(index){
                                                                                                 case 0 :
-                                                                                                        imgTitle         = "default 4";
+                                                                                                        imgTitle         = "Share your opinion";
                                                                                                         collageImage     = "default_collage_4.jpg";
                                                                                                 break;
                                                                                                 case 1 :
-                                                                                                        imgTitle         = "default 3";
+                                                                                                        imgTitle         = "Share your opinion";
                                                                                                         collageImage     = "default_collage_3.jpg";
                                                                                                 break;
                                                                                                 case 2 :
-                                                                                                        imgTitle         = "default 2";
+                                                                                                        imgTitle         = "Share your opinion";
                                                                                                         collageImage     = "default_collage_2.jpg";
                                                                                                 break;
                                                                                                 case 3 :
-                                                                                                        imgTitle         = "default 1";
+                                                                                                        imgTitle         = "Share your opinion";
                                                                                                         collageImage     = "default_collage_1.jpg";
                                                                                                 break;
                                                                                             }

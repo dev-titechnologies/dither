@@ -319,20 +319,20 @@ module.exports = {
                                                                                                 collageImage;
                                                                                             switch(index){
                                                                                                 case 0 :
-                                                                                                        imgTitle         = "default 1";
-                                                                                                        collageImage     = "default_collage_1.jpg";
+                                                                                                        imgTitle         = "default 4";
+                                                                                                        collageImage     = "default_collage_4.jpg";
                                                                                                 break;
                                                                                                 case 1 :
-                                                                                                        imgTitle         = "default 2";
-                                                                                                        collageImage     = "default_collage_2.jpg";
-                                                                                                break;
-                                                                                                case 2 :
                                                                                                         imgTitle         = "default 3";
                                                                                                         collageImage     = "default_collage_3.jpg";
                                                                                                 break;
+                                                                                                case 2 :
+                                                                                                        imgTitle         = "default 2";
+                                                                                                        collageImage     = "default_collage_2.jpg";
+                                                                                                break;
                                                                                                 case 3 :
-                                                                                                        imgTitle         = "default 4";
-                                                                                                        collageImage     = "default_collage_4.jpg";
+                                                                                                        imgTitle         = "default 1";
+                                                                                                        collageImage     = "default_collage_1.jpg";
                                                                                                 break;
                                                                                             }
                                                                                             var values = {
@@ -357,28 +357,28 @@ module.exports = {
                                                                                                         switch(index){
                                                                                                             case 0 :
                                                                                                                     values = [
-                                                                                                                        {image       : "default_collageDetail_1_1.jpg",position    : 1,collageId   : createCollage.id},
-                                                                                                                        {image       : "default_collageDetail_1_2.jpg",position    : 2,collageId   : createCollage.id},
-                                                                                                                        {image       : "default_collageDetail_1_3.jpg",position    : 3,collageId   : createCollage.id},
-                                                                                                                        {image       : "default_collageDetail_1_4.jpg",position    : 4,collageId   : createCollage.id}
+                                                                                                                        {image       : "default_collageDetail_4_1.jpg",position    : 1,collageId   : createCollage.id}
                                                                                                                         ];
                                                                                                             break;
                                                                                                             case 1 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_3_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_3_2.jpg",position    : 2,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 2 :
                                                                                                                     values = [
                                                                                                                         {image       : "default_collageDetail_2_1.jpg",position    : 1,collageId   : createCollage.id},
                                                                                                                         {image       : "default_collageDetail_2_2.jpg",position    : 2,collageId   : createCollage.id},
                                                                                                                         {image       : "default_collageDetail_2_3.jpg",position    : 3,collageId   : createCollage.id}
                                                                                                                         ];
                                                                                                             break;
-                                                                                                            case 2 :
-                                                                                                                    values = [
-                                                                                                                        {image       : "default_collageDetail_3_1.jpg",position    : 1,collageId   : createCollage.id},
-                                                                                                                        {image       : "default_collageDetail_3_2.jpg",position    : 2,collageId   : createCollage.id}
-                                                                                                                        ];
-                                                                                                            break;
                                                                                                             case 3 :
                                                                                                                     values = [
-                                                                                                                        {image       : "default_collageDetail_4_1.jpg",position    : 1,collageId   : createCollage.id}
+                                                                                                                        {image       : "default_collageDetail_1_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_2.jpg",position    : 2,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_3.jpg",position    : 3,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_4.jpg",position    : 4,collageId   : createCollage.id}
                                                                                                                         ];
                                                                                                             break;
                                                                                                         }

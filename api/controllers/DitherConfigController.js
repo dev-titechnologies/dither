@@ -38,7 +38,7 @@ module.exports = {
                                         }
                                         //console.log("Key Value");
                                         //console.log(keyValue);
-                                        //var dither_expiry_hour          =     parseInt(keyValue.DITHER_EXPIRY_HOUR);
+                                        var dither_expiry_hour          =     keyValue.DITHER_EXPIRY_HOUR;
                                         var data_view_limit             =     req.options.global.data_view_limit;
                                         var app_invite_image            =     keyValue.APP_INVITE_IMAGE;
 

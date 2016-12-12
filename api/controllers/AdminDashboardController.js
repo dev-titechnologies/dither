@@ -51,6 +51,7 @@ module.exports = {
                                           return res.json(200, {status: 2, error_details: err});
                                         }
                                         // console.log(JSON.stringify(response.rows, null, 4));
+                                        console.log(response.rows);
                                         return res.json(200,{status:1,message:'success',result:response.rows});
                                       });
                             }

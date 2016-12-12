@@ -56,8 +56,8 @@ console.log(values);
 
 
 
-    },        
- 
+    },
+
     // View Details of every single User
     getUserDetails: function(req, res){
                     console.log("getUserDetails ============== ADMIN");
@@ -135,75 +135,6 @@ console.log(values);
                         return res.json(200, {status: 1, message: "success", data: result});
                     }
                 });
-
-    },
-
-    // Get Reported User List
-    getReportedUser: function(req, res){
-                console.log("getReportedUser  ====> ADMIN");
-                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                var profile_image;
-                var query = "SELECT u.id,u.profilePic as profileImage,u.status, u.name, COUNT( ru.userId ) AS RepUserCount FROM reportUser AS ru LEFT JOIN user AS u ON u.id = ru.userId GROUP BY ru.userId ORDER BY u.createdAt DESC ";
-                User.query(query, function(err, result) {
-                    if(err){
-                        // console.log(err);
-                        return res.json(200, { status: 2, error_details: 'db error' });
-                    }else{
-                        //console.log(result);
-                        result.forEach(function(factor, index){
-                                if(factor.profileImage == null || factor.profileImage == ""){
-                                        profile_image                   =     "";
-                                }else{
-                                        var imageSrc                    =     factor.profileImage;
-                                        var ext                         =     imageSrc.split('.');
-                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                }
-                                factor.profilePic       =    profile_image;
-                        });
-                        //console.log(result);
-                        return res.json(200, {status: 1, message: "success", data: result});
-                    }
-                });
-
-    },
-
-    // Get One User Reported List
-    getReportList: function(req, res){
-                console.log("getReportList  ====> ADMIN");
-                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-                var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                var profile_image;
-                var query = " SELECT"+
-                            " u.profilePic as profileImage, u.name,"+
-                            " rt.description,"+
-                            " ru.report, ru.createdAt"+
-                            " FROM reportUser AS ru"+
-                            " LEFT JOIN user AS u ON u.id = ru.reporterId"+
-                            " LEFT JOIN reportType AS rt ON rt.id = ru.reportType"+
-                            " WHERE"+
-                            " ru.userId ="+req.body.userId;
-                console.log(query);
-                User.query(query, function(err, result){
-                    if(err){
-                        // console.log(err);
-                        return res.json(200, { status: 2, error_details: 'db error' });
-                    }else{
-                        result.forEach(function(factor, index){
-                                if(factor.profileImage == null || factor.profileImage == ""){
-                                        profile_image                   =     "";
-                                }else{
-                                        var imageSrc                    =     factor.profileImage;
-                                        var ext                         =     imageSrc.split('.');
-                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
-                                }
-                                factor.profilePic       =    profile_image;
-                        });
-                        //console.log(result);
-                        return res.json(200, {status: 1, message: "success", data: result});
-                    }
-                });
-
 
     },
 
@@ -364,7 +295,7 @@ console.log(values);
             }
         });
     },
-   
+
     getComments:     function(req,res){
                         console.log("getComments   =================== ADMIN");
                         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -398,7 +329,7 @@ console.log(values);
 
                         });
     },
-  
+
 getSettingsData:function(req,res){
 
                       var query = "SELECT * FROM settings";
@@ -462,7 +393,7 @@ updateTokenExpiryTime:function(req,res){
                     }
                 });
 },
- 
+
  checkMentionName:  function(req,res){
                     console.log(req.params.all());
                     var mentionId = req.body.mentionId;

@@ -313,7 +313,7 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             callback();
                                                                                     }else{
-                                                                                        [1,2,3].forEach(function(factor, index){
+                                                                                        [1,2,3,4].forEach(function(factor, index){
                                                                                             var expiryDate      =       new Date(new Date().setFullYear(2020));
                                                                                             var imgTitle,
                                                                                                 collageImage;
@@ -329,6 +329,10 @@ module.exports = {
                                                                                                 case 2 :
                                                                                                         imgTitle         = "default 3";
                                                                                                         collageImage     = "default_collage_3.jpg";
+                                                                                                break;
+                                                                                                case 3 :
+                                                                                                        imgTitle         = "default 4";
+                                                                                                        collageImage     = "default_collage_4.jpg";
                                                                                                 break;
                                                                                             }
                                                                                             var values = {
@@ -370,6 +374,11 @@ module.exports = {
                                                                                                                     values = [
                                                                                                                         {image       : "default_collageDetail_3_1.jpg",position    : 1,collageId   : createCollage.id},
                                                                                                                         {image       : "default_collageDetail_3_2.jpg",position    : 2,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 3 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_4_1.jpg",position    : 1,collageId   : createCollage.id}
                                                                                                                         ];
                                                                                                             break;
                                                                                                         }

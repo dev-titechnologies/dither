@@ -43,7 +43,7 @@ module.exports = {
                                         var app_invite_image            =     keyValue.APP_INVITE_IMAGE;
 
                                         return res.json(200, {status: 1, status_type: 'Success' ,message: 'Successfully get the config values',
-                                                                //dither_expiry_hour          :     dither_expiry_hour,
+                                                                dither_expiry_hour          :     dither_expiry_hour,
                                                                 data_view_limit             :     data_view_limit,
                                                                 app_invite_image            :     app_invite_image,
                                                             });

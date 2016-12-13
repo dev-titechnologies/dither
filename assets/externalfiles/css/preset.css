@@ -1,0 +1,393 @@
+/*
+  Theme Name: Faded | App Landing Page
+  Theme URL: http://themes.droitlab.com/html/faded
+  Author: droitthemes
+  Author URI: https://themeforest.net/user/droitthemes
+  Description: App Landing Page
+  Version: 1.0
+*/
+
+/*--------------------------------
+setup messurements
+----------------------------------*/
+.zero-padding{
+    padding: 0px;
+}
+.lr-padding{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.left-padding{
+    padding-left: 0px;
+}
+.right-padding{
+    padding-right: 0px;
+}
+.zero-margin{
+    margin: 0px;
+}
+@media (max-width: 1199px) {
+    .lr-padding{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+:focus {
+    outline: 0;
+}
+/*--------------------------------
+conatct from
+----------------------------------*/
+section#contact #contact_form #uName:focus {
+    border: 1px solid #ff5a00;
+}
+
+section#contact p#fftext{
+    margin: 0;
+    padding-top: 15px!important;
+    position: relative;
+}
+section#contact span#ffsuccess{
+    bottom: 12%;
+    display: inline;
+    height: auto;
+    left: 60%;
+    position: absolute!important;
+    width: 7%;
+}
+.input-expand {
+    border:none!important;
+}
+.mchimp-sucmessage{}
+/*--------------------------------
+scrollup
+----------------------------------*/
+.scrollup {
+  bottom: 10px;
+  display: none;
+  height: 50px;
+  position: fixed;
+  right: 10px;
+  width: 50px;
+  padding: 12px;
+  border-radius: 100%;
+  background:#00c6ff;
+}
+@media (min-width: 992px) {
+  .scrollup {
+    bottom: 50px;
+    right: 100px;
+  }
+}
+.scrollup i{
+    font-size: 17px;
+    left: 35%;
+    position: absolute;
+    top: 30%;
+    color: #fff;
+}
+a.scrollup i:focus, a.scrollup i:hover,a.scrollup i:active{
+    color: #fff!important;
+}
+/*--------------------------------
+loader
+----------------------------------*/
+.loading{
+    background-color: #2f315a;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 999999;
+    margin-top: 0px;
+    top: 0px;
+}
+.loading-center{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.loading-center-absolute {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 150px;
+    width: 150px;
+    margin-top: -75px;
+    margin-left: -75px;
+}
+.object{
+    width: 20px;
+    height: 20px;
+    background-color: #FFF;
+    float: left;
+    margin-right: 20px;
+    margin-top: 65px;
+    -moz-border-radius: 50% 50% 50% 50%;
+    -webkit-border-radius: 50% 50% 50% 50%;
+    border-radius: 50% 50% 50% 50%;
+}
+
+.object_one {
+    -webkit-animation: object_one 1.5s infinite;
+    animation: object_one 1.5s infinite;
+}
+.object_two {
+    -webkit-animation: object_two 1.5s infinite;
+    animation: object_two 1.5s infinite;
+    -webkit-animation-delay: 0.25s;
+    animation-delay: 0.25s;
+}
+.object_three {
+    -webkit-animation: object_three 1.5s infinite;
+    animation: object_three 1.5s infinite;
+    -webkit-animation-delay: 0.5s;
+    animation-delay: 0.5s;
+
+}
+
+@-webkit-keyframes object_one {
+    75% { -webkit-transform: scale(0); }
+}
+
+@keyframes object_one {
+
+    75% {
+        transform: scale(0);
+        -webkit-transform: scale(0);
+    }
+
+}
+@-webkit-keyframes object_two {
+
+
+    75% { -webkit-transform: scale(0); }
+
+
+}
+@keyframes object_two {
+    75% {
+        transform: scale(0);
+        -webkit-transform:  scale(0);
+    }
+
+}
+
+@-webkit-keyframes object_three {
+
+    75% { -webkit-transform: scale(0); }
+
+}
+
+@keyframes object_three {
+
+    75% {
+        transform: scale(0);
+        -webkit-transform: scale(0);
+    }
+
+}
+/*--------------------------------
+switter
+----------------------------------*/
+.faded_switcher_zone {
+    position: fixed;
+    top: 200px;
+    left: -290px;
+    width: 290px;
+    background: #282828;
+    z-index: 1000;
+}
+.switZone_title {
+    background: #fff none repeat scroll 0 0;
+    border-bottom: 1px solid #e6e6e6;
+/*    box-shadow: 0 0 0 rgba(0, 0, 0, 0.28);*/
+    box-shadow: 2px -2.5px 6px rgba(0, 0, 0, 0.28);
+    padding: 0 0 0 50px;
+    position: relative;
+    width: 290px;
+}
+.faded_switcher_zone p{
+    color: #000;
+    font-size: 16px;
+    font-weight: 300;
+    margin-top:10px;  
+}
+a.settingBtn i:hover{
+    color: #8c55e9;
+}
+a.settingBtn i{
+    -webkit-animation: rotation 2s infinite linear;
+    height: auto;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 27%;
+    width: 50px;
+    color: #4776e6;
+}
+@-webkit-keyframes rotation {
+    from {-moz-transform: rotate(0deg);
+          -webkit-transform: rotate(0deg);
+          -ms-transform: rotate(0deg);
+    }
+    to   {-moz-transform: rotate(359deg);
+          -webkit-transform: rotate(359deg);
+          -ms-transform: rotate(359deg);
+    }
+}
+a.settingBtn{
+    background: #fff none repeat scroll 0 0;
+    box-shadow: 2px -2px 6px rgba(0, 0, 0, 0.28);
+    color: #fff;
+    font-size: 24px;
+    height: 45px;
+    left: 100%;
+    position: absolute;
+    text-align: center;
+    width: 50px;
+}
+a.settingBtn:hover,
+a.settingBtn.active{
+    color: #fff;
+}
+.faded_switcher_inner{
+    background: #fff;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+}
+.faded_switcher_single{
+    padding-left: 50px;
+}
+.faded_switcher_single.light{
+    background: #fff;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+}
+.faded_switcher_single {
+    padding-top: 30px;
+}
+.faded_switcher_single ul.nav {
+  border: medium none;
+}
+.faded_switcher_single ul.nav li{
+    color: #555;
+    border: 1px solid #ccc;
+    padding: 0px 8px 0px 8px;
+    margin-left: -1px;
+    text-transform: uppercase;
+}
+.faded_switcher_single ul.nav li.active a{
+    border-color: #fff!important;
+    color: #4776e6;
+    font-weight: 500;
+    font-size: 14px;
+}
+.faded_switcher_single .solid-color {
+  color: #555;
+  
+}
+.faded_switcher_single .nav-tabs > li > a:hover {
+  border-color: #fff;
+}
+.faded_switcher_single .nav > li > a:focus, .nav > li > a:hover {
+  background-color: #fff;
+  text-decoration: none;
+}
+.faded_switch {
+    padding-bottom: 27px;
+    padding-top: 27px;
+}
+.faded_switch.grad_color {
+  padding-top: 27px;
+  padding-bottom: 27px;
+}
+.faded_switch a {
+    float: left;
+}
+.grad_color a.color1 {
+  background-color: #4776e6;
+  background-image: -moz-linear-gradient(0deg, #4776e6 0%, #8e54e9 100%);
+  background-image: -webkit-linear-gradient(0deg, #4776e6 0%, #8e54e9 100%);
+  background-image: -ms-linear-gradient(0deg, #4776e6 0%, #8e54e9 100%);
+  border-radius: 50%;
+  height: 40px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  width: 40px;
+}
+.grad_color a.color2 {
+  background-color: #ff4b41;
+  background-image: -moz-linear-gradient(0deg, #ff4b41 0%, #c5281d 100%);
+  background-image: -webkit-linear-gradient(0deg, #ff4b41 0%, #c5281d 100%);
+  background-image: -ms-linear-gradient(0deg, #ff4b41 0%, #c5281d 100%);
+  border-radius: 50%;
+  height: 40px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  width: 40px;
+}
+.grad_color a.color3 {
+  background-color: #36dc49;
+  background-image: -moz-linear-gradient(0deg, #36dc49 0%, #3e9d38 100%);
+  background-image: -webkit-linear-gradient(0deg, #36dc49 0%, #3e9d38 100%);
+  background-image: -ms-linear-gradient(0deg, #36dc49 0%, #3e9d38 100%);
+  border-radius: 50%;
+  height: 40px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  width: 40px;
+}
+.grad_color a.color4 {
+  background-color: #ff8f2d;
+  background-image: -moz-linear-gradient(0deg, #ff8f2d 0%, #d2641a 100%);
+  background-image: -webkit-linear-gradient(0deg, #ff8f2d 0%, #d2641a 100%);
+  background-image: -ms-linear-gradient(0deg, #ff8f2d 0%, #d2641a 100%);
+  border-radius: 50%;
+  height: 40px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  width: 40px;
+}
+
+a.color1{
+    width: 40px;
+    height: 40px;
+    background: #4776e6;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+a.color2{
+    width: 40px;
+    height: 40px;
+    background: #ff4136;    
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+a.color3{
+    width: 40px;
+    height: 40px;
+    background: #2ecc40;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+a.color4{
+    width: 40px;
+    height: 40px;
+    background: #ff851b;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.faded_switcher_single.light {
+    background: #fff none repeat scroll 0 0;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+}
+
+.faded_switch a.active span{
+    border: 3px solid #fff;
+    background: #03A678;
+}
+

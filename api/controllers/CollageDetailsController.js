@@ -118,8 +118,10 @@ module.exports = {
                                                         }else{
                                                                 if(factor.likePosition == "" || factor.likePosition == null){
                                                                 }else{
-                                                                    if(factor.likeUserId == userId && factor.collageCreatorId != userId){
-                                                                        like_position_Array.push(factor.likePosition);
+                                                                    if(factor.likeStatus == 1){
+                                                                        if(factor.likeUserId == userId && factor.collageCreatorId != userId){
+                                                                            like_position_Array.push(factor.likePosition);
+                                                                        }
                                                                     }
                                                                 }
                                                         }

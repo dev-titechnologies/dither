@@ -297,7 +297,8 @@ module.exports = {
                                                                                                                         mention_id      :   userMentionId
                                                                                                             }];
                                                                                                     }
-                                                                                                    var testImgArray =  imageArray.sort(predicatBy("position"));
+                                                                                                    //imageArray =  imageArray.sort(predicatBy("position"));
+                                                                                                    var testImgArray    =   imageArray;
                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                                                         dither_expiry_hour         : dither_expiry_hour,
                                                                                                                                         dither_desc                : results[0].imgTitle,
@@ -316,7 +317,7 @@ module.exports = {
                                                                                                                                         taggedUsers                : total_taggedUser_Array,
                                                                                                                                         comments                   : comment_arr_Final,
                                                                                                                                         invite_friends_NUM         : inviteeArray,
-                                                                                                                                        testImgArray               : testImgArray,
+                                                                                                                                        testImgArray               : testImgArray.sort(predicatBy("position")),
                                                                                                                             });
                                                                                                 }
                                                                                         });

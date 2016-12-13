@@ -210,13 +210,17 @@ module.exports = {
                                                                                 console.log("parallel 5")
                                                                                 var number            = req.param('mobile_number');
                                                                                 var phoneContactsArray    = [];
-                                                                                AddressBook.find({ditherUserPhoneNumber : number}).exec(function (err, UserContacts){
+                                                                                var query	=	"SELECT userId FROM addressBook where ditherUserPhoneNumber='"+number+"' group by userId";
+                                                                                AddressBook.query(query, function(err,UserContacts){
+                                                                                //AddressBook.find({ditherUserPhoneNumber : number}).exec(function (err, UserContacts){
                                                                                       if(err)
                                                                                       {
                                                                                           callback();
                                                                                       }
                                                                                       else
                                                                                       {
+																						  //console.log(UserContacts.userId)
+																						  //console.log(UserContacts[0].userId)
                                                                                           if(!UserContacts.length)
                                                                                           {
                                                                                                 callback();
@@ -225,7 +229,8 @@ module.exports = {
                                                                                           {
                                                                                               var tagNotifyArray = [];
                                                                                               UserContacts.forEach(function(factor, index){
-
+																								  console.log("shhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+																									console.log(factor.userId)
                                                                                                     tagNotifyArray.push(factor.userId);
                                                                                                      User.findOne({id:factor.userId}).exec(function (err, notifySettings){
                                                                                                          if(notifySettings){

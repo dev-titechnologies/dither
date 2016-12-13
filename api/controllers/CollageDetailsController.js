@@ -6,6 +6,18 @@
  */
 var fs          = require('fs');
 
+//Function to get ordered, by value, in json array key value pair
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return 1;
+      }else if( a[prop] < b[prop] ){
+          return -1;
+      }
+      return 0;
+   }
+}
+
 //Function to remove duplicate values from json Array
 function removeDuplicate(arr, prop) {
         var new_arr = [];
@@ -99,7 +111,8 @@ module.exports = {
                                                                     imageUrl        : collageImg_path + factor.image,
                                                                     like_count      : factor.vote,
                                                                     like_status     : like_status,
-                                                                    id              : factor.imageId
+                                                                    id              : factor.imageId,
+                                                                    position        : factor.position
                                                                     });
                                                         if(factor.likeUserId == null || factor.likeUserId == "" ){
                                                         }else{
@@ -111,6 +124,7 @@ module.exports = {
                                                                 }
                                                         }
                                             });
+                                            imageArray          =       imageArray.sort(predicatBy("position"));
                                             if(like_position_Array.length != 0){
                                                         like_position = like_position_Array[0];
                                             }else{

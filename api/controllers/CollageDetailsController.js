@@ -124,7 +124,7 @@ module.exports = {
                                                                 }
                                                         }
                                             });
-                                            imageArray          =       imageArray.sort(predicatBy("position"));
+                                            //imageArray          =       imageArray.sort(predicatBy("position"));
                                             if(like_position_Array.length != 0){
                                                         like_position = like_position_Array[0];
                                             }else{

@@ -96,9 +96,10 @@ module.exports = {
                                     if(!results.length){
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by this Id'});
                                     }else{
-                                            var imageArray = [];
-                                            var like_position_Array = [];
-                                            var like_position;
+                                            var imageArray              =   [];
+                                            var imageArray_2            =   [];
+                                            var like_position_Array     =   [];
+                                            //var like_position;
                                             var like_status, like_count;
                                             results.forEach(function(factor, index){
                                                     var like_status;
@@ -114,7 +115,17 @@ module.exports = {
                                                                     id              : factor.imageId,
                                                                     position        : factor.position
                                                                     });
-                                                        if(factor.likeUserId == null || factor.likeUserId == "" ){
+
+                                                    imageArray_2.push({
+                                                                    imageUrl            : collageImg_path + factor.image,
+                                                                    like_count          : factor.vote,
+                                                                    like_status         : like_status,
+                                                                    id                  : factor.imageId,
+                                                                    position            : factor.position,
+                                                                    like_userId         : factor.likeUserId,
+                                                                    collageCreatorId    : factor.collageCreatorId,
+                                                                    });
+                                                        /*if(factor.likeUserId == null || factor.likeUserId == "" ){
                                                         }else{
                                                                 if(factor.likePosition == "" || factor.likePosition == null){
                                                                 }else{
@@ -124,14 +135,14 @@ module.exports = {
                                                                         }
                                                                     }
                                                                 }
-                                                        }
+                                                        }*/
                                             });
-                                            //imageArray          =       imageArray.sort(predicatBy("position"));
-                                            if(like_position_Array.length != 0){
+                                            imageArray          =       imageArray.sort(predicatBy("position"));
+                                            /*if(like_position_Array.length != 0){
                                                         like_position = like_position_Array[0];
                                             }else{
                                                         like_position = 0;
-                                            }
+                                            }*/
                                             User.findOne({id: results[0].collageCreatorId}).exec(function (err, collageCreator_details){
                                                     if(err){
                                                             console.log(err);
@@ -300,7 +311,20 @@ module.exports = {
                                                                                                             }];
                                                                                                     }
                                                                                                     //imageArray =  imageArray.sort(predicatBy("position"));
-                                                                                                    var testImgArray    =   imageArray;
+                                                                                                    //var testImgArray    =   imageArray;
+                                                                                                    var like_position;
+                                                                                                    imageArray_2.forEach(function(factor, index){
+                                                                                                            if(factor.like_status == 1){
+                                                                                                                if(factor.like_userId == userId && factor.collageCreatorId != userId){
+                                                                                                                    like_position_Array.push(factor.position);
+                                                                                                                }
+                                                                                                            }
+                                                                                                    });
+                                                                                                    if(like_position_Array.length){
+                                                                                                                    like_position = like_position_Array[0];
+                                                                                                    }else{
+                                                                                                                    like_position = 0;
+                                                                                                    }
                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                                                         dither_expiry_hour         : dither_expiry_hour,
                                                                                                                                         dither_desc                : results[0].imgTitle,
@@ -319,7 +343,7 @@ module.exports = {
                                                                                                                                         taggedUsers                : total_taggedUser_Array,
                                                                                                                                         comments                   : comment_arr_Final,
                                                                                                                                         invite_friends_NUM         : inviteeArray,
-                                                                                                                                        testImgArray               : testImgArray.sort(predicatBy("position")),
+                                                                                                                                        //testImgArray               : testImgArray.sort(predicatBy("position")),
                                                                                                                             });
                                                                                                 }
                                                                                         });

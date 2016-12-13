@@ -876,6 +876,55 @@ module.exports = {
                         });//Collage
                     }//Passed details check else
         },
+        
+        /* ==================================================================================================================================
+               To Untag Users
+     ==================================================================================================================================== */
+        untagUser:  function (req, res) {
+                    console.log("untag user==== api");
+                     var tokenCheck                  =     req.options.tokenCheck;
+                     var userId                      =     tokenCheck.tokenDetails.userId;
+                     var untagId					 =	   req.param("user_id");
+                     var ditherId					 =	   req.param("dither_id");
+                     
+                     console.log("request params")
+                     console.log(req.params.all());
+                     
+                     if(!untagId || !ditherId){
+						 console.log("params missing")
+						 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and user_id'});
+					 }
+					 else{
+						 
+						 User.find({id: untagId}).exec(function (err, getUserId){
+							 if(err){
+								 console.log(err)
+								 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'error in find user!'});
+							 }
+							 else{
+								 if(!getUserId){
+									return res.json(200, {status: 3, status_type: 'Failure' ,message: 'Not a valid user!'}); 
+								 }
+								 else{
+									 var query	=	"DELETE FROM tags where collageId='"+ditherId+"' and userId='"+untagId+"'";
+									 Tags.query(query, function(err, deleteTags) {
+										 
+										 if(err){
+											 console.log(err)
+											 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Deletion Failed!'});
+										 }
+										 else{
+											 console.log(deleteTags)
+											 return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
+										 }
+										 
+									 });
+								}
+							}
+						});
+						 
+					 }
+		}
 
 };
 

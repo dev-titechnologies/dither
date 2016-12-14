@@ -879,7 +879,11 @@ module.exports = {
                 }else{
                         var email_subject               =   'Welcome to Dither';
                         var email_template              =   'email-test';
-                        var email_context               =   {receiverName: "Titto xavier", pic: global_settingsKeyValue.CDN_IMAGE_URL + "images/profilePics/31db73cf-8305-4351-b075-ffe287dd7dab.jpg", email_img_url: global_settingsKeyValue.CDN_IMAGE_URL + 'images/email/'};
+                        var email_context               =   {
+                                                                receiverName    :   "Titto xavier",
+                                                                pic             :   global_settingsKeyValue.CDN_IMAGE_URL + "images/profilePics/31db73cf-8305-4351-b075-ffe287dd7dab.jpg",
+                                                                email_img_url   :   global_settingsKeyValue.CDN_IMAGE_URL + 'images/email/'
+                                                            };
                         EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
                             if(err)
                             {

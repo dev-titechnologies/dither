@@ -56,7 +56,7 @@
 								}
 								else if(getResult[0].phoneNumber==mobile)
 								{
-									message = "Phonenumber Already Exist";
+									message = "Phone number already exits";
 								}
 								
 								//console.log("llllllllllllllllllllllllllllllllllllllllllllllllll")	

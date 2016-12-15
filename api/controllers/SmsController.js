@@ -99,7 +99,7 @@
                                                             }
                                                         else
                                                             {
-                                                                console.log("SMS success ========="+otp);
+                                                                console.log("SMS success ========="+verification_code);
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'OTP send Successfully',otp:verification_code});
 
                                                             }

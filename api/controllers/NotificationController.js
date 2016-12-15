@@ -100,7 +100,8 @@ module.exports = {
                                                 " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
                                                 " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                                 " WHERE"+
-                                                " N.ditherUserId="+user_id+
+                                                " U.status = 'active'"+
+                                                " AND N.ditherUserId="+user_id+
                                                 " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7 OR N.notificationTypeId=8)"+
                                                 " OR "+
                                                 " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit+"";
@@ -115,7 +116,8 @@ module.exports = {
                                             " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
                                             " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                             " WHERE"+
-                                            " N.ditherUserId="+user_id+
+                                            " U.status = 'active'"+
+                                            " AND N.ditherUserId="+user_id+
                                             " OR"+
                                             " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
                                             ") as temp"+
@@ -134,7 +136,7 @@ module.exports = {
                                       return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
                                 }else{
                                     async.forEach(results, function (item, callback){
-										//console.log(results)
+                                        //console.log(results)
                                         if(item.notificationTypeId == 1 || item.notificationTypeId == 2 || item.notificationTypeId == 3 || item.notificationTypeId == 4 || item.notificationTypeId == 7 || item.notificationTypeId == 8){
                                             //----------Comment Notification---------------------------
                                             if(item.notificationTypeId == 3){
@@ -269,7 +271,7 @@ module.exports = {
                                                                 callback();
                                                         }else{
                                                                 var notification    =   ntfnTypeFound[0].body;
-                                                                ntfn_body           =   util.format(notification);
+                                                                ntfn_body           =   util.format(notification, item.name);
                                                                 item.ntfn_body      =   ntfn_body;
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 var imageToResize   =   item.profile_image;
@@ -398,44 +400,44 @@ module.exports = {
                                                         }
                                                 });
                                             }else if(item.notificationTypeId==8){
-												console.log("Notification for dither Expire")
-												NotificationType.find({id:8 }).exec(function(err, ntfnTypeFound){
-													if(err)
-													{
-														console.log(err)
-														callback();
-													} 
-													else
-													{
-														var notification    =   ntfnTypeFound[0].body;
-														var ntfn_body       =   util.format(notification);
-														item.type           =   ntfnTypeFound[0].type;
-														item.ntfn_body      =   ntfn_body;
-														var clgImgToResize  =   item.dither_image;
-														item.dither_image   =   collageImg_path + item.dither_image;
-														notificationTagged  =   ntfn_body;
-														var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
-														fs.exists(clgImgSrc, function(exists) {
-															if(exists){
-																var ext                         =     clgImgSrc.split('/');
-																ext                             =     ext[ext.length-1].split('.');
-																var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
-																	if(err){
-																		console.log(err)
-																		callback();
-																	}else{
-																		item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-																		callback();
-																	}
-																});
-															}else{
-																callback();
-															}
-														});
-													}
-												});
-											}	
+                                                console.log("Notification for dither Expire")
+                                                NotificationType.find({id:8 }).exec(function(err, ntfnTypeFound){
+                                                    if(err)
+                                                    {
+                                                        console.log(err)
+                                                        callback();
+                                                    }
+                                                    else
+                                                    {
+                                                        var notification    =   ntfnTypeFound[0].body;
+                                                        var ntfn_body       =   util.format(notification);
+                                                        item.type           =   ntfnTypeFound[0].type;
+                                                        item.ntfn_body      =   ntfn_body;
+                                                        var clgImgToResize  =   item.dither_image;
+                                                        item.dither_image   =   collageImg_path + item.dither_image;
+                                                        notificationTagged  =   ntfn_body;
+                                                        var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
+                                                        fs.exists(clgImgSrc, function(exists) {
+                                                            if(exists){
+                                                                var ext                         =     clgImgSrc.split('/');
+                                                                ext                             =     ext[ext.length-1].split('.');
+                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
+                                                                    if(err){
+                                                                        console.log(err)
+                                                                        callback();
+                                                                    }else{
+                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                        callback();
+                                                                    }
+                                                                });
+                                                            }else{
+                                                                callback();
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
                                         }else{
                                             callback();
                                         }

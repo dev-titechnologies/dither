@@ -269,7 +269,7 @@ module.exports = {
                                                                 callback();
                                                         }else{
                                                                 var notification    =   ntfnTypeFound[0].body;
-                                                                ntfn_body           =   util.format(notification);
+                                                                ntfn_body           =   util.format(notification,item.name);
                                                                 item.ntfn_body      =   ntfn_body;
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 var imageToResize   =   item.profile_image;

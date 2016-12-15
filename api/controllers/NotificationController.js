@@ -97,14 +97,14 @@ module.exports = {
                                                 " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                                 " U.name,U.profilePic as profile_image,"+
                                                 " C.image as dither_image,C.expiryDate"+
-                                                " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                                " FROM  notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
                                                 " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                                 " WHERE"+
-                                                " U.status = 'active'"+
-                                                " AND N.ditherUserId="+user_id+
+                                                //" U.status = 'active'"+
+                                                " N.ditherUserId="+user_id+
                                                 " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7 OR N.notificationTypeId=8)"+
                                                 " OR "+
-                                                " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit+"";
+                                                " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit;
 
                         }else{
                             var query  =   " SELECT"+
@@ -113,16 +113,16 @@ module.exports = {
                                             " SELECT"+
                                             " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                             " U.name,U.profilePic as profile_image,C.image as dither_image,C.expiryDate"+
-                                            " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                            " FROM notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
                                             " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                             " WHERE"+
-                                            " U.status = 'active'"+
-                                            " AND N.ditherUserId="+user_id+
+                                            //" U.status = 'active'"+
+                                            " N.ditherUserId="+user_id+
                                             " OR"+
                                             " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
                                             ") as temp"+
                                             " where temp.id <"+focus_Ntfn_id+
-                                            " LIMIT "+data_view_limit+"";
+                                            " LIMIT "+data_view_limit;
 
                             //--------------------------------------------------------------------
                         }

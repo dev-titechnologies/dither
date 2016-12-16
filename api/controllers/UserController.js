@@ -132,7 +132,7 @@ module.exports = {
                                                                                     });
                                                                             },
                                                                             function(callback){
-																				
+																				if(fbUser.length){
 																				var data	=	{
 																									userId		:	results.id,
 																									fbId		:   results.fbId,
@@ -154,6 +154,11 @@ module.exports = {
                                                                                                 callback();
                                                                                         }
                                                                                  });
+																			 }
+																			 else
+																			 {
+																				 callback();
+																			 }
 																				
 																			},
                                                                             function(callback){

@@ -262,12 +262,23 @@ module.exports = {
                                                                         }else{
                                                                                 user_profile_image  = profilePic_path + foundUserDetails.profilePic;
                                                                         }
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
-                                                                                            username                : foundUserDetails.name,
-                                                                                            user_profile_image      : user_profile_image,
-                                                                                            closed_dither_count     : 0,
-                                                                                            recent_dithers          : [],
-                                                                                            popular_dithers         : [],
+                                                                        var query = " SELECT COUNT(clg.id) as closedDitherCount FROM collage clg"+
+                                                                                    " WHERE clg.userId = "+received_userId+" AND clg.expiryDate < '"+today+"'";
+                                                                        console.log("closed Dither query ======>>>>");
+                                                                        console.log(query);
+                                                                        Collage.query(query, function(err, results){
+                                                                            if(err){
+                                                                                console.log(err);
+                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting closedDitherCount', error_details: err});
+                                                                            }else{
+                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
+                                                                                                            username                : foundUserDetails.name,
+                                                                                                            user_profile_image      : user_profile_image,
+                                                                                                            closed_dither_count     : results[0].closedDitherCount,
+                                                                                                            recent_dithers          : [],
+                                                                                                            popular_dithers         : [],
+                                                                                        });
+                                                                            }
                                                                         });
                                                                 }
                                                             }
@@ -876,7 +887,7 @@ module.exports = {
                         });//Collage
                     }//Passed details check else
         },
-        
+
         /* ==================================================================================================================================
                To Untag Users
      ==================================================================================================================================== */
@@ -884,47 +895,47 @@ module.exports = {
                     console.log("untag user==== api");
                      var tokenCheck                  =     req.options.tokenCheck;
                      var userId                      =     tokenCheck.tokenDetails.userId;
-                     var untagId					 =	   req.param("user_id");
-                     var ditherId					 =	   req.param("dither_id");
-                     
+                     var untagId                     =     req.param("user_id");
+                     var ditherId                    =     req.param("dither_id");
+
                      console.log("request params")
                      console.log(req.params.all());
-                     
+
                      if(!untagId || !ditherId){
-						 console.log("params missing")
-						 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and user_id'});
-					 }
-					 else{
-						 
-						 User.find({id: untagId}).exec(function (err, getUserId){
-							 if(err){
-								 console.log(err)
-								 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'error in find user!'});
-							 }
-							 else{
-								 if(!getUserId){
-									return res.json(200, {status: 3, status_type: 'Failure' ,message: 'Not a valid user!'}); 
-								 }
-								 else{
-									 var query	=	"DELETE FROM tags where collageId='"+ditherId+"' and userId='"+untagId+"'";
-									 Tags.query(query, function(err, deleteTags) {
-										 
-										 if(err){
-											 console.log(err)
-											 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Deletion Failed!'});
-										 }
-										 else{
-											 console.log(deleteTags)
-											 return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
-										 }
-										 
-									 });
-								}
-							}
-						});
-						 
-					 }
-		}
+                         console.log("params missing")
+                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and user_id'});
+                     }
+                     else{
+
+                         User.find({id: untagId}).exec(function (err, getUserId){
+                             if(err){
+                                 console.log(err)
+                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'error in find user!'});
+                             }
+                             else{
+                                 if(!getUserId){
+                                    return res.json(200, {status: 3, status_type: 'Failure' ,message: 'Not a valid user!'});
+                                 }
+                                 else{
+                                     var query  =   "DELETE FROM tags where collageId='"+ditherId+"' and userId='"+untagId+"'";
+                                     Tags.query(query, function(err, deleteTags) {
+
+                                         if(err){
+                                             console.log(err)
+                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Deletion Failed!'});
+                                         }
+                                         else{
+                                             console.log(deleteTags)
+                                             return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
+                                         }
+
+                                     });
+                                }
+                            }
+                        });
+
+                     }
+        }
 
 };
 

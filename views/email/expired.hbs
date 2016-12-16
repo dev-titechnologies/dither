@@ -1,11 +1,29 @@
-<div style="width:100%;height:100%;">
-       
-        Dear   {{receiverName}},<br/><br/>
-        
-        Your Dither has been expired and you have {{ Vote }} opinion for this Dither!.<br/><br/>
-         <img src="{{ ditherImage }}" style="min-width:370px;min-height:370px;"><br/><br/>
-          
-		Cheers,<br/>
-	    Team Dither
-	
-</div>
+<tr>
+    <td>
+        <table width="560" align="center" cellpadding="10" cellspacing="0" border="0" class="devicewidthinner">
+            <tbody>
+                <!-- Title -->
+                <!-- <tr>
+                    <td style="font-family:  Arial, Helvetica, sans-serif; font-size: 25px; font-weight:500; color:#808286; text-align:left; line-height: 25px;"><br>
+                            Hello Fabio Basile,
+                    </td>
+                </tr> -->
+                <!-- End of Title -->
+                <!-- content -->
+                <tr>
+                        Dear   {{receiverName}},<br/><br/>
+                        Your Dither has been expired and you have {{ Vote }} opinion for this Dither!.<br/><br/>
+                         <img src="{{ ditherImage }}" style="width:100%;height: auto"><br/><br/>
+                        Cheers,<br/>
+                        Team Dither
+                </tr>
+                <!-- End of content -->
+                <!-- Spacing -->
+                <tr>
+                    <td width="100%" height="15" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                </tr>
+                <!-- Spacing -->
+            </tbody>
+        </table>
+    </td>
+</tr>

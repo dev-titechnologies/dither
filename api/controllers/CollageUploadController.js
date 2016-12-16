@@ -227,9 +227,9 @@ module.exports = {
                                         console.log("###################################################################################");
 
 
-                                        if(!final_tagged_users_Array.length){
-                                                return res.json(200, {status: 2, status_type: 'Failure', message: 'Tagged users reported you. So Dither not created'});
-                                        }else{
+                                        //if(!final_tagged_users_Array.length){
+                                                //return res.json(200, {status: 2, status_type: 'Failure', message: 'No tagged users found. So Dither not created'});
+                                        //}else{
                                                 async.series([
                                                         function(callback) {
                                                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
@@ -448,7 +448,7 @@ module.exports = {
                                                                                                                                                     NtfnType            :   1,
                                                                                                                                                     id                  :   collage_results.id,
                                                                                                                                                     notification_id     :   createdNotificationTags.id,
-                                                                                                                                                    old_id				:	''
+                                                                                                                                                    old_id              :   ''
                                                                                                                                                 };
                                                                                                                                 NotificationService.NotificationPush(data, function(err, ntfnSend) {
                                                                                                                                         if(err){
@@ -509,65 +509,30 @@ module.exports = {
                                                                 console.log(err);
                                                                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in dither creation', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                             }else{
-                                                                final_tagged_users_Array.forEach(function(factor, index){
-                                                                        var roomName = "socket_user_"+factor;
-                                                                        sails.sockets.broadcast(roomName,{
-                                                                                                        type            :   "new",
-                                                                                                        id              :   collage_results.id,
-                                                                                                        message         :   "========== ditherCreate Room Broadcast --------",
-                                                                                                        roomName        :   roomName,
-                                                                                                        subscribers     :   sails.sockets.subscribers(roomName),
-                                                                                                        socket          :   sails.sockets.rooms()
-                                                                                                        });
-                                                                });
-                                                                /*taggedUserArrayFinal.forEach(function(factor, index){
-                                                                        var roomName = "socket_user_"+factor.userId;
-                                                                        sails.sockets.broadcast(roomName,{
-                                                                                                        type            :   "new",
-                                                                                                        id              :   collage_results.id,
-                                                                                                        message         :   "========== ditherCreate Room Broadcast --------",
-                                                                                                        roomName        :   roomName,
-                                                                                                        subscribers     :   sails.sockets.subscribers(roomName),
-                                                                                                        socket          :   sails.sockets.rooms()
-                                                                                                        });
-                                                                });*/
-                                                                //console.log( "profile_image -----------" +profilePic_path + tokenCheck.tokenDetails.profilePic);
-                                                                //console.log(" created_date_time-------------" +collage_results.createdAt);
-                                                                //console.log("updated_date_time ------------" +collage_results.updatedAt);
-
-                                                                //console.log(" collage_id-----------------"+collage_results.id);
-                                                                //console.log(" collage_image-------------------"+collageImg_path + collage_results.image);
-                                                                //console.log( "taggedUsers -------------------" +taggedUserArrayFinal);
-                                                                //console.log(" dither_count ----------------------"+sortedVote.length);
-                                                                //console.log("invite_friends_NUM--------------------------"+invite_friends_NUM);
-                                                                //console.log(sortedVote);
-                                                                //console.log(collage_results.imgTitle);
-                                                                //console.log(collage_results.location);
-
+                                                                if(final_tagged_users_Array.length){
+                                                                        final_tagged_users_Array.forEach(function(factor, index){
+                                                                                var roomName = "socket_user_"+factor;
+                                                                                sails.sockets.broadcast(roomName,{
+                                                                                                                type            :   "new",
+                                                                                                                id              :   collage_results.id,
+                                                                                                                message         :   "========== ditherCreate Room Broadcast --------",
+                                                                                                                roomName        :   roomName,
+                                                                                                                subscribers     :   sails.sockets.subscribers(roomName),
+                                                                                                                socket          :   sails.sockets.rooms()
+                                                                                                                });
+                                                                        });
+                                                                }
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
-                                                                                          //profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
-                                                                                          //user_name          :     tokenCheck.tokenDetails.name,
-                                                                                          //user_id            :     tokenCheck.tokenDetails.userId,
-                                                                                          //created_date_time  :     collage_results.createdAt,
-                                                                                          //updated_date_time  :     collage_results.updatedAt,
                                                                                           collage_id         :     collage_results.id,
-                                                                                          //collage_image      :     collageImg_path + collage_results.image,
-                                                                                          //location           :     collage_results.location,
-                                                                                          //caption            :     collage_results.imgTitle,
-                                                                                          //vote               :     sortedVote,
-                                                                                          //dither_count       :     sortedVote.length,
-                                                                                          //taggedUsers        :     total_taggedUser_Array,
-                                                                                          //invite_friends_NUM :     request.invite_friends_NUM,
                                                                                           reportedUsers      :     reportUserResults_JSON_Array,
                                                                 });
                                                             }
                                                 });
 
-                                        }
+                                        //}
 
                                 }
                             });
-
             }
         },
 

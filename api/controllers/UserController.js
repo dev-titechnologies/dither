@@ -159,11 +159,14 @@ module.exports = {
                                                                             function(callback){
                                                                                     console.log("parallel 2")
                                                                                     console.log("async parallel in Mailpart ===============================================");
-                                                                                    var global_settingsKeyValue = req.options.settingsKeyValue;
-                                                                                    var email_to        = results.email;
-                                                                                    var email_subject   = 'Welcome to Dither';
-                                                                                    var email_template  = 'signup';
-                                                                                    var email_context   = {receiverName: results.name};
+                                                                                    var global_settingsKeyValue     =   req.options.settingsKeyValue;
+                                                                                    var email_to                    =   results.email;
+                                                                                    var email_subject               =   'Welcome to Dither';
+                                                                                    var email_template              =   'signup';
+                                                                                    var email_context               = {
+                                                                                                                        receiverName    :   results.name,
+                                                                                                                        email_img_url   :   global_settingsKeyValue.CDN_IMAGE_URL + 'images/email/'
+                                                                                                                    };
                                                                                     EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
                                                                                         if(err){
                                                                                                 console.log(err);
@@ -250,7 +253,7 @@ module.exports = {
                                                                                 console.log("parallel 5")
                                                                                 var number            = req.param('mobile_number');
                                                                                 var phoneContactsArray    = [];
-                                                                                var query	=	"SELECT userId FROM addressBook where ditherUserPhoneNumber='"+number+"' group by userId";
+                                                                                var query   =   "SELECT userId FROM addressBook where ditherUserPhoneNumber='"+number+"' group by userId";
                                                                                 AddressBook.query(query, function(err,UserContacts){
                                                                                 //AddressBook.find({ditherUserPhoneNumber : number}).exec(function (err, UserContacts){
                                                                                       if(err)
@@ -259,8 +262,8 @@ module.exports = {
                                                                                       }
                                                                                       else
                                                                                       {
-																						  //console.log(UserContacts.userId)
-																						  //console.log(UserContacts[0].userId)
+                                                                                          //console.log(UserContacts.userId)
+                                                                                          //console.log(UserContacts[0].userId)
                                                                                           if(!UserContacts.length)
                                                                                           {
                                                                                                 callback();
@@ -269,8 +272,8 @@ module.exports = {
                                                                                           {
                                                                                               var tagNotifyArray = [];
                                                                                               UserContacts.forEach(function(factor, index){
-																								  console.log("shhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
-																									console.log(factor.userId)
+                                                                                                  console.log("shhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+                                                                                                    console.log(factor.userId)
                                                                                                     tagNotifyArray.push(factor.userId);
                                                                                                      User.findOne({id:factor.userId}).exec(function (err, notifySettings){
                                                                                                          if(notifySettings){

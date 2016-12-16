@@ -131,7 +131,7 @@ module.exports = {
                                                                                             callback();
                                                                                     });
                                                                             },
-                                                                            function(callback){
+                                                                            /*function(callback){
 																				if(fbUser.length){
 																				var data	=	{
 																									userId		:	results.id,
@@ -160,7 +160,7 @@ module.exports = {
 																				 callback();
 																			 }
 																				
-																			},
+																			},*/
                                                                             function(callback){
                                                                                     console.log("parallel 2")
                                                                                     console.log("async parallel in Mailpart ===============================================");

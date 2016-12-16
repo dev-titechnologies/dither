@@ -2,7 +2,8 @@ module.exports = {
 	
 	
 	getFbContacts: function(fbUser,data,callback){
-		
+			console.log("fetchingggggggggggg Fbbbbbbbbbbbbbbbbbbbbbbb")
+		    console.log(fbUser)
 		    var details={
 							userId		:	data.userId,
 							fbId		:   data.fbId,
@@ -11,7 +12,7 @@ module.exports = {
 						}
 		    
 			console.log("-------------------------Service -----GET FB FRIENDS----------------")
-			console.log("fetchingggggggggggg Fbbbbbbbbbbbbbbbbbbbbbbb")
+			
 			console.log(data)
 			 var notifyArr 		= 	 [];
 			 var deviceId_arr   =    [];

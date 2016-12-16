@@ -27,7 +27,16 @@ module.exports = {
         var deviceId                    =     req.get('device_id');
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
-
+		var fbUser                      =     [ { fbId: '13199966634793819',
+													fb_name: 'Ajay Venugopal',
+													userId: '16' },
+												{ fbId: '132229966634793819',
+													fb_name: 'fgdfgf',
+													userId: '4' }
+											  ];
+		
+		
+		
         if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
         }else{
@@ -43,6 +52,7 @@ module.exports = {
                                              };
                 var deviceId_arr        =    [];
                 var contact_arr         =    [];
+                var newFrnds			=	 [];
                 //--------OTP CHECKING----------------------
                /* if(OTPCode)
                 {
@@ -109,7 +119,7 @@ module.exports = {
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
 
-                                                                                            ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
+                                                                                            /*ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
                                                                                                             console.log("Error in image resize !!!!");
@@ -117,9 +127,35 @@ module.exports = {
                                                                                                     }else{
                                                                                                              callback();
                                                                                                     }
-                                                                                            });
+                                                                                            });*/
+                                                                                            callback();
                                                                                     });
                                                                             },
+                                                                            function(callback){
+																				
+																				var data	=	{
+																									userId		:	results.id,
+																									fbId		:   results.fbId,
+																									userName	:	results.name,
+																									
+																								};
+																				console.log( "User Service data")				
+																				console.log(data)
+																				userService.getFbContacts(fbUser,data, function(err, getContatResults) {
+                                                                                        if(err)
+                                                                                        {
+                                                                                                console.log(err);
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+                                                                                                callback();
+                                                                                        }else{
+																								console.log("----return from contacts---------")
+                                                                                                console.log(getContatResults)
+                                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                callback();
+                                                                                        }
+                                                                                 });
+																				
+																			},
                                                                             function(callback){
                                                                                     console.log("parallel 2")
                                                                                     console.log("async parallel in Mailpart ===============================================");
@@ -159,7 +195,7 @@ module.exports = {
                                                                             },
 
                                                                             function(callback){
-                                                                                    //Notification Log insertion
+                                                                                    //-----------------INvitation table ---Tag editing----------------------
                                                                                     console.log("parallel 4")
                                                                                     console.log(req.param('mobile_number'))
                                                                                     var mobile_number  = req.param('mobile_number');
@@ -205,8 +241,12 @@ module.exports = {
                                                                                                 }
                                                                                     });
                                                                             },
+                                                                           
                                                                             function (callback)
                                                                             {
+																				
+																				
+																				
                                                                                 console.log("parallel 5")
                                                                                 var number            = req.param('mobile_number');
                                                                                 var phoneContactsArray    = [];
@@ -311,8 +351,10 @@ module.exports = {
                                                                                  });
 
                                                                             },
+                                                                            
+																			
                                                                             function (callback){
-                                                                                console.log("parallel 6 == Default dither creation");
+                                                                                console.log("parallel 7 == Default dither creation");
                                                                                 User.findOne({type: 1}).exec(function (err, getSuperUser){
                                                                                     if(err){
                                                                                             console.log(err);
@@ -426,6 +468,7 @@ module.exports = {
                                                                                     }
                                                                                 });
                                                                             },
+                                                                            
                                                                         ], function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if(err){
                                                                                             console.log("async parallel in Sms Part Failure --------------------");

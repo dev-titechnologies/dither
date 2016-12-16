@@ -27,14 +27,14 @@ module.exports = {
         var deviceId                    =     req.get('device_id');
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
-		var fbUser                      =     [ { fbId: '13199966634793819',
+		/*var fbUser                      =     [ { fbId: '13199966634793819',
 													fb_name: 'Ajay Venugopal',
 													userId: '16' },
 												{ fbId: '132229966634793819',
 													fb_name: 'fgdfgf',
 													userId: '4' }
-											  ];
-		
+											  ];*/
+		var fbUser                      =     req.param('fb_array');
 		
 		
         if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){

@@ -11,7 +11,7 @@
 
         sendOTP:  function (req, res) {
                     console.log("sendOTP      =======================");
-                    console.log(req.options)
+                    console.log(req.params.all());
                     var smsAccountSid       = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
                     var smsAuthToken        = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
                     var smsFrom             = req.options.settingsKeyValue.SMS_FROM;
@@ -29,15 +29,15 @@
                             console.log(err);
                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'error occured while checking!'});
                         }else{
-                            if(getResult.length!==0){
-                                if(getResult[0].email==email){
-                                    message = "Email Already Exist";
-                                }else if(getResult[0].mentionId==mention_id){
-                                    message = "Username Already Exist.";
-                                }else if(getResult[0].phoneNumber==mobile){
+                            if(getResult.length){
+                                if(getResult[0].email == email){
+                                    message = "Email already exists";
+                                }else if(getResult[0].mentionId == mention_id){
+                                    message = "Username already exists";
+                                }else if(getResult[0].phoneNumber == mobile){
                                     message = "Phone number already exits";
                                 }
-                                console.log(getResult)
+                                console.log(getResult);
                                 return res.json(200, {status: 2, status_type: 'Failure' , message: message});
                             }else{
                                 //---------SMS SENDING-------------

@@ -493,53 +493,51 @@ module.exports = {
                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No comment found'});
                                                             }else{
 
-                                                                if(userId != foundComment.userId){
-                                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Only commentor can delete'});
+                                                                if(userId == foundComment.userId || userId == foundCollage.userId){
+                                                                        CollageComments.destroy({id: commentId}).exec(function (err, deleteComment){
+                                                                            if(err){
+                                                                                    console.log(err);
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                            }else{
+
+                                                                                CommentImages.find({commentId: commentId}).exec(function (err, foundCommentImages){
+                                                                                    if(err){
+                                                                                            console.log(err);
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                                                                    }else{
+                                                                                        console.log(foundCommentImages);
+                                                                                            if(!foundCommentImages.length){
+                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',});
+                                                                                            }else{
+                                                                                                //Unlinking comment image
+                                                                                                foundCommentImages.forEach(function(factor, index){
+                                                                                                    if(factor.image == null || factor.image == ""){
+                                                                                                    }else{
+                                                                                                            console.log("Unlinking comment image======");
+                                                                                                            //var resize_comment_image  = factor.image;
+                                                                                                            //var ext                   = resize_comment_image.split('.');
+                                                                                                            //fs.unlink(comment_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
+                                                                                                            fs.unlink(comment_unlink_path + factor.image);
+                                                                                                    }
+                                                                                                });
+
+                                                                                                CommentImages.destroy({commentId: commentId}).exec(function (err, deleteCommentImages){
+                                                                                                    if(err){
+                                                                                                            console.log(err);
+                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                                                    }else{
+
+                                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',});
+                                                                                                    }
+                                                                                                });
+                                                                                            }
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
                                                                 }else{
-                                                                    CollageComments.destroy({id: commentId}).exec(function (err, deleteComment){
-                                                                        if(err){
-                                                                                console.log(err);
-                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
-                                                                        }else{
-
-                                                                            CommentImages.find({commentId: commentId}).exec(function (err, foundCommentImages){
-                                                                                if(err){
-                                                                                        console.log(err);
-                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
-                                                                                }else{
-                                                                                    console.log(foundCommentImages);
-                                                                                        if(!foundCommentImages.length){
-                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',});
-                                                                                        }else{
-                                                                                            //Unlinking comment image
-                                                                                            foundCommentImages.forEach(function(factor, index){
-                                                                                                if(factor.image == null || factor.image == ""){
-                                                                                                }else{
-                                                                                                        console.log("Unlinking comment image======");
-                                                                                                        //var resize_comment_image  = factor.image;
-                                                                                                        //var ext                   = resize_comment_image.split('.');
-                                                                                                        //fs.unlink(comment_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
-                                                                                                        fs.unlink(comment_unlink_path + factor.image);
-                                                                                                }
-                                                                                            });
-
-                                                                                            CommentImages.destroy({commentId: commentId}).exec(function (err, deleteCommentImages){
-                                                                                                if(err){
-                                                                                                        console.log(err);
-                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
-                                                                                                }else{
-
-                                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',});
-                                                                                                }
-                                                                                            });
-                                                                                        }
-                                                                                }
-                                                                            });
-                                                                        }
-                                                                    });
-
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Only commentor or dither creator can delete'});
                                                                 }
-
                                                             }
                                                     }
                                                 });

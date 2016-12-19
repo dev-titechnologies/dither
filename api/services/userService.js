@@ -71,64 +71,65 @@ module.exports = {
 					  
 								console.log("-----------------5----------------------")
 								console.log(userContacts)
-								var values ={
-									notificationTypeId  :   5,
-									userId              :   data.userId,
-									ditherUserId        :   userContacts.id
-								}
-							   console.log("valuessssssssssss")
-							   console.log(values)
-							   NotificationLog.create(values).exec(function(err, createdNotification){
-								if(err){
-									console.log(err);
-									//callback();
-								}else{
-								
-									User_token.find({userId: userContacts.id}).exec(function (err, getDeviceId){
-											if(err){
-												  console.log(err);
-												  callback();
-											}else{
-												console.log("-----------------6----------------------")
-												var message     =  'FBsignup Notification';
-												var ntfn_body   =   "Your FB contact "+details.userName+" is now on Dither";
-												getDeviceId.forEach(function(factor, index){
-													deviceId_arr.push(factor.deviceId);
-												});
-												if(!deviceId_arr.length){
-													console.log("deviceeee")
-														//callback();
-												}else{
-													console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
-													var data        =  {
-																			message			:	message,
-																			device_id		:	deviceId_arr,
-																			NtfnBody		:	ntfn_body,
-																			NtfnType:5,id	:	details.userId,
-																			notification_id	:	createdNotification.id,
-																			old_id			:	'',
-																			name			:	details.userName
-																		};
-													NotificationService.NotificationPush(data, function(err, ntfnSend){
-														if(err){
-															console.log("Error in Push Notification Sending")
-															console.log(err)
-															//callback(); 
-														}else{
-															console.log("Push notification result")
-															console.log(ntfnSend)
-															console.log("Push Notification sended")
-															//callback();
-														}
-													});
-												}
-											//------------------------------
-											}
-										});//getDeviceId
-									
+								if(userContacts){
+									var values ={
+										notificationTypeId  :   5,
+										userId              :   data.userId,
+										ditherUserId        :   userContacts.id
 									}
-								});
-								//}
+								   console.log("valuessssssssssss")
+								   console.log(values)
+								   NotificationLog.create(values).exec(function(err, createdNotification){
+									if(err){
+										console.log(err);
+										//callback();
+									}else{
+									
+										User_token.find({userId: userContacts.id}).exec(function (err, getDeviceId){
+												if(err){
+													  console.log(err);
+													  callback();
+												}else{
+													console.log("-----------------6----------------------")
+													var message     =  'FBsignup Notification';
+													var ntfn_body   =   "Your FB contact "+details.userName+" is now on Dither";
+													getDeviceId.forEach(function(factor, index){
+														deviceId_arr.push(factor.deviceId);
+													});
+													if(!deviceId_arr.length){
+														console.log("deviceeee")
+															//callback();
+													}else{
+														console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+														var data        =  {
+																				message			:	message,
+																				device_id		:	deviceId_arr,
+																				NtfnBody		:	ntfn_body,
+																				NtfnType:5,id	:	details.userId,
+																				notification_id	:	createdNotification.id,
+																				old_id			:	'',
+																				name			:	details.userName
+																			};
+														NotificationService.NotificationPush(data, function(err, ntfnSend){
+															if(err){
+																console.log("Error in Push Notification Sending")
+																console.log(err)
+																//callback(); 
+															}else{
+																console.log("Push notification result")
+																console.log(ntfnSend)
+																console.log("Push Notification sended")
+																//callback();
+															}
+														});
+													}
+												//------------------------------
+												}
+											});//getDeviceId
+										
+										}
+									});
+								}
 							  }
 								
 							 });	

@@ -418,6 +418,14 @@ module.exports = {
                                                         var clgImgToResize  =   item.dither_image;
                                                         item.dither_image   =   collageImg_path + item.dither_image;
                                                         notificationTagged  =   ntfn_body;
+
+                                                        var imageToResize   =   item.profile_image;
+                                                        // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                        if(imageToResize){
+                                                            var imageSrc                    =     imageToResize;
+                                                            var ext                         =     imageSrc.split('.');
+                                                            item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                        }
                                                         var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
                                                         fs.exists(clgImgSrc, function(exists) {
                                                             if(exists){

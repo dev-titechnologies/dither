@@ -28,6 +28,7 @@ module.exports = {
             },
         likeCount: {
                 type: 'integer',
+                defaultsTo: 0
             },
         createdAt: {
                 type: 'datetime',

@@ -78,7 +78,9 @@ module.exports = {
                                 "type"                :       data.NtfnType,
                                 "id"                  :       data.id,
                                 "notification_id"     :       data.notification_id,
-                                "old_id"			  :		  data.old_id
+                                "old_id"			  :		  data.old_id,
+                                "name"				  :		  data.name,
+                                "number"			  :		  data.number
                             };
         android = PusherService('android', {
                 device          :   [], // Array of string with device tokens

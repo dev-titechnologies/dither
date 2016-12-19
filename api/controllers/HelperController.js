@@ -22,16 +22,19 @@ module.exports = {
 
                         var profilePic_path                =     "images/profilePics/";
                         var collageImg_path                =     "images/collage/";
+                        var commentImage_path              =     "images/comment/";
 
                         var profilePic_path_assets         =     "assets/images/profilePics/";
                         var collageImg_path_assets         =     "assets/images/collage/";
-                        var commentImage_path              =     "images/comment/";
+                        var commentImg_path_assets         =     "assets/images/comment/";
+
                         req.options.file_path = {
                                                     profilePic_path         :   profilePic_path,
                                                     collageImg_path         :   collageImg_path,
+                                                    commentImage_path       :   commentImage_path,
                                                     profilePic_path_assets  :   profilePic_path_assets,
                                                     collageImg_path_assets  :   collageImg_path_assets,
-                                                    commentImage_path       :   commentImage_path
+                                                    commentImg_path_assets  :   commentImg_path_assets,
                                                 };
                         next();
         },

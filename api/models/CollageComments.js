@@ -26,6 +26,10 @@ module.exports = {
         comment: {
                 type: 'string',
             },
+        likeCount: {
+                type: 'integer',
+                defaultsTo: 0
+            },
         createdAt: {
                 type: 'datetime',
             },

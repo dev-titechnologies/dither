@@ -457,9 +457,97 @@ module.exports = {
                             }
                     });
 
+        },
+/* ==================================================================================================================================
+               To delete a comment
+   ==================================================================================================================================== */
+        commentDelete  :  function (req, res) {
+                    console.log("++++++++++++++++ Delete a comment +++++++++++++++");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    //var server_baseUrl              =     req.options.server_baseUrl;
+                    //var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    //var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                    var comment_unlink_path         =     req.options.file_path.commentImg_path_assets;
+                    var collageId                   =     req.param("dither_id");
+                    var commentId                   =     req.param("comment_id");
+                    console.log(req.params.all());
+                    if(!collageId || !commentId){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass dither_id and comment_id'});
+                    }else{
+                            Collage.findOne({id: collageId}).exec(function (err, foundCollage){
+                                    if(err){
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                    }else{
 
+                                            if(!foundCollage){
+                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage found'});
+                                            }else{
+                                                CollageComments.findOne({id: commentId}).exec(function (err, foundComment){
+                                                    if(err){
+                                                            console.log(err);
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                                    }else{
+                                                            if(!foundComment){
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No comment found'});
+                                                            }else{
 
+                                                                if(userId != foundComment.userId){
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Only commentor can delete'});
+                                                                }else{
+                                                                    CollageComments.destroy({id: commentId}).exec(function (err, deleteComment){
+                                                                        if(err){
+                                                                                console.log(err);
+                                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                        }else{
 
+                                                                            CommentImages.find({commentId: commentId}).exec(function (err, foundCommentImages){
+                                                                                if(err){
+                                                                                        console.log(err);
+                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                                                                }else{
+                                                                                    console.log(foundCommentImages);
+                                                                                        if(!foundCommentImages.length){
+                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',});
+                                                                                        }else{
+                                                                                            //Unlinking comment image
+                                                                                            foundCommentImages.forEach(function(factor, index){
+                                                                                                if(factor.image == null || factor.image == ""){
+                                                                                                }else{
+                                                                                                        console.log("Unlinking comment image======");
+                                                                                                        //var resize_comment_image  = factor.image;
+                                                                                                        //var ext                   = resize_comment_image.split('.');
+                                                                                                        //fs.unlink(comment_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
+                                                                                                        fs.unlink(comment_unlink_path + factor.image);
+                                                                                                }
+                                                                                            });
+
+                                                                                            CommentImages.destroy({commentId: commentId}).exec(function (err, deleteCommentImages){
+                                                                                                if(err){
+                                                                                                        console.log(err);
+                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                                                }else{
+
+                                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',});
+                                                                                                }
+                                                                                            });
+                                                                                        }
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    });
+
+                                                                }
+
+                                                            }
+                                                    }
+                                                });
+                                            }
+
+                                    }
+                            });
+                    }
         }
 
 

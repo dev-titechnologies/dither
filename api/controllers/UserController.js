@@ -119,7 +119,7 @@ module.exports = {
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
 
-                                                                                            /*ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
+                                                                                            ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
                                                                                                             console.log("Error in image resize !!!!");
@@ -127,7 +127,7 @@ module.exports = {
                                                                                                     }else{
                                                                                                              callback();
                                                                                                     }
-                                                                                            });*/
+                                                                                            });
                                                                                             callback();
                                                                                     });
                                                                             },
@@ -259,6 +259,7 @@ module.exports = {
 																								notifyArr.push(factor.id);
 																								
 																								fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
+																								
 																							
 																							});
 																							

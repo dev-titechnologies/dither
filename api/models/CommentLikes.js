@@ -21,6 +21,11 @@ module.exports = {
             defaultsTo      : 0,
         },
 
+        userId: {
+            type            : 'integer',
+            defaultsTo      : 0,
+        },
+
         likeStatus: {
             type            : 'boolean',
             defaultsTo      : false,

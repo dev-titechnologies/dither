@@ -31,7 +31,7 @@ module.exports = {
                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No comment found'});
                                 }else{
 
-                                    CommentLikes.findOne({commentId: commentId, likeStatus: 1}).exec(function (err, foundCommentLike){
+                                    CommentLikes.findOne({commentId: commentId, userId : userId, likeStatus: 1}).exec(function (err, foundCommentLike){
                                         if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the commentLike', error_details: err});
@@ -41,6 +41,7 @@ module.exports = {
                                             }else{
                                                 var values = {
                                                             commentId   : commentId,
+                                                            userId      : userId,
                                                             likeStatus  : 1
                                                             };
                                                 CommentLikes.create(values).exec(function(err, results){

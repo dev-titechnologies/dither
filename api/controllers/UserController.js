@@ -29,7 +29,7 @@ module.exports = {
         var device_Type                 =     req.get('device_type');
 		/*var fbUser                      =     [ { fb_userid: '931111050344772',
 													fb_name: 'Ajay Venugopal',
-													userId: '16' }
+													userId: '16' },
 												{ fb_userid: '132229966634793819',
 													fb_name: 'fgdfgf',
 													userId: '4' }
@@ -131,35 +131,7 @@ module.exports = {
                                                                                             callback();
                                                                                     });
                                                                             },
-                                                                            function(callback){
-																				if(!fbUser){
-																					callback();
-																					
-																				}else{
-																				var data	=	{
-																									userId		:	results.id,
-																									fbId		:   results.fbId,
-																									userName	:	results.name,
-																									
-																								};
-																				console.log( "User Service data")				
-																				console.log(data)
-																				userService.getFbContacts(fbUser,data, function(err, getContatResults) {
-                                                                                        if(err)
-                                                                                        {
-                                                                                                console.log(err);
-                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                                                                                callback();
-                                                                                        }else{
-																								console.log("----return from contacts---------")
-                                                                                                console.log(getContatResults)
-                                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                                                                                callback();
-                                                                                        }
-                                                                                 });
-																			 }
-																			 
-																			},
+                                                                            
                                                                             function(callback){
                                                                                     console.log("parallel 2")
                                                                                     console.log("async parallel in Mailpart ===============================================");
@@ -248,7 +220,36 @@ module.exports = {
                                                                                                 }
                                                                                     });
                                                                             },
-                                                                           
+																			function(callback){
+																				if(!fbUser){
+																					console.log("nofb user")
+																					callback();
+																					
+																				}else{
+																				var data	=	{
+																									userId		:	results.id,
+																									fbId		:   results.fbId,
+																									userName	:	results.name,
+																									
+																								};
+																				console.log( "User Service data")				
+																				console.log(data)
+																				userService.getFbContacts(fbUser,data, function(err, getContatResults) {
+                                                                                        if(err)
+                                                                                        {
+                                                                                                console.log(err);
+                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+                                                                                                callback();
+                                                                                        }else{
+																								console.log("----return from contacts---------")
+                                                                                                console.log(getContatResults)
+                                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+                                                                                                callback();
+                                                                                        }
+                                                                                 });
+																			 }
+																			 
+																			},
                                                                             function (callback)
                                                                             {
 																				

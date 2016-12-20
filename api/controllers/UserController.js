@@ -226,28 +226,117 @@ module.exports = {
 																					callback();
 																					
 																				}else{
-																				var data	=	{
-																									userId		:	results.id,
-																									fbId		:   results.fbId,
-																									userName	:	results.name,
+																					var contactArr 		= 	 [];
+																					
+																					fbUser.forEach(function(factor, index){
+																						
+																						 contactArr.push(factor.fb_userid)
+																					});
+																					
+																					var data	=	{
+																										userId		:	results.id,
+																										fbId		:   results.fbId,
+																										userName	:	results.name,
+																										
+																									};
+																					
+																					console.log( "User Service data")				
+																					console.log(data)
+																					
+																					
+																					User.find({fbId: contactArr}).exec(function (err, getUserId){
+																						
+																						if(err)
+																						{
+																							console.log(err)
+																							callback();
+																						}
+																						else{
+																							var notifyArr 		= 	 [];
+																							
+																							getUserId.forEach(function(factor, index){
+																								notifyArr.push(factor.id);
+																							});
+																							
+																							if(notifyArr){
+																									var values ={
+																										notificationTypeId  :   5,
+																										userId              :   data.userId,
+																										tagged_users        :   notifyArr
+																									}
+																								   console.log("valuessssssssssss")
+																								   console.log(values)
+																								   NotificationLog.create(values).exec(function(err, createdNotification){
+																									if(err){
+																										console.log(err);
+																										//callback();
+																									}else{
 																									
-																								};
-																				console.log( "User Service data")				
-																				console.log(data)
-																				userService.getFbContacts(fbUser,data, function(err, getContatResults) {
-                                                                                        if(err)
-                                                                                        {
-                                                                                                console.log(err);
-                                                                                                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                                                                                callback();
-                                                                                        }else{
-																								console.log("----return from contacts---------")
-                                                                                                console.log(getContatResults)
-                                                                                                //return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                                                                                callback();
-                                                                                        }
-                                                                                 });
-																			 }
+																										User_token.find({userId: notifyArr}).exec(function (err, getDeviceId){
+																												if(err){
+																													  console.log(err);
+																													  callback();
+																												}else{
+																													console.log("-----------------6----------------------")
+																													var message     =  'FBsignup Notification';
+																													var ntfn_body   =   "Your facebook friend "+results.name+" is now on Dither";
+																													getDeviceId.forEach(function(factor, index){
+																														deviceId_arr.push(factor.deviceId);
+																													});
+																													if(!deviceId_arr.length){
+																														console.log("deviceeee")
+																															callback();
+																													}else{
+																														console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+																														var data        =  {
+																																				message			:	message,
+																																				device_id		:	deviceId_arr,
+																																				NtfnBody		:	ntfn_body,
+																																				NtfnType:5,id	:	results.id,
+																																				notification_id	:	createdNotification.id,
+																																				old_id			:	'',
+																																				name			:	results.name
+																																			};
+																														NotificationService.NotificationPush(data, function(err, ntfnSend){
+																															if(err){
+																																console.log("Error in Push Notification Sending")
+																																console.log(err)
+																																callback(); 
+																															}else{
+																																console.log("Push notification result")
+																																console.log(ntfnSend)
+																																console.log("Push Notification sended")
+																																callback();
+																															}
+																														});
+																													}
+																												//------------------------------
+																												}
+																											});//getDeviceId
+																										
+																										}
+																									});
+																								}
+																							
+																						}
+																						
+																						
+																					});
+																					
+																					/*userService.getFbContacts(fbUser,data, function(err, getContatResults) {
+																							if(err)
+																							{
+																									console.log(err);
+																									//return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+																									callback();
+																							}else{
+																									console.log("----return from contacts---------")
+																									console.log(getContatResults)
+																									//return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
+																									callback();
+																							}
+																					 });*/
+																			    }
 																			 
 																			},
                                                                             function (callback)

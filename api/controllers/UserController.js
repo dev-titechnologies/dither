@@ -27,14 +27,14 @@ module.exports = {
         var deviceId                    =     req.get('device_id');
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
-		/*var fbUser                      =     [ { fb_userid: '931111050344772',
+		var fbUser                      =     [ { fb_userid: '931111050344772',
 													fb_name: 'Ajay Venugopal',
 													userId: '16' },
 												{ fb_userid: '132229966634793819',
 													fb_name: 'fgdfgf',
 													userId: '4' }
-											  ];*/
-		var fbUser                      =     req.param('fb_array');
+											  ];
+		//var fbUser                      =     req.param('fb_array');
 		
 		console.log(fbUser)
         if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
@@ -231,6 +231,7 @@ module.exports = {
 																					fbUser.forEach(function(factor, index){
 																						
 																						 contactArr.push(factor.fb_userid)
+																						 
 																					});
 																					
 																					var data	=	{
@@ -253,9 +254,12 @@ module.exports = {
 																						}
 																						else{
 																							var notifyArr 		= 	 [];
-																							
+																							var fbUserArray		=	[];
 																							getUserId.forEach(function(factor, index){
 																								notifyArr.push(factor.id);
+																								
+																								fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
+																							
 																							});
 																							
 																							if(notifyArr){
@@ -306,7 +310,22 @@ module.exports = {
 																																console.log("Push notification result")
 																																console.log(ntfnSend)
 																																console.log("Push Notification sended")
-																																callback();
+																																var query = "INSERT INTO fbFriends"+
+																																			" (userId,ditherUserId,ditherUserName, fbId, createdAt, updatedAt)"+
+																																			" VALUES"+fbUserArray;
+																																FbFriends.query(query,function(err, createdFbFriends){
+																																	if(err)
+																																	{
+																																		console.log(err)
+																																		callback();
+																																	}
+																																	else{
+																																		console.log(createdFbFriends)
+																																		callback();
+																																	}
+																																});
+
+																																//callback();
 																															}
 																														});
 																													}

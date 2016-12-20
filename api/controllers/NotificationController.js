@@ -526,7 +526,7 @@ module.exports = {
 
 
         typeNotification: function(req, res) {
-
+					console.log("------------New Type Notification---------------")
                     var notificationTypeId          =   req.param("notification_type");
                     var notificationId              =   req.param("notification_id");
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -542,25 +542,28 @@ module.exports = {
                                     " clg.image as collageImage"+
                                     " FROM notificationLog ntlg"+
                                     " INNER JOIN user usr ON usr.id = ntlg.userId"+
-                                    " INNER JOIN collage clg ON clg.id = ntlg.collage_id"+
+                                    " LEFT JOIN collage clg ON clg.id = ntlg.collage_id"+
                                     " WHERE"+
                                     " ntlg.id = "+notificationId;
-
+							console.log(query)
                             NotificationLog.query(query, function(err,results) {
                                     if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification'});
                                     }
                                     else{
+											console.log(results)
                                             if(results.length == 0){
                                                     return res.json(200, {status: 2, status_type:"Failure", msg: 'No notification Found'});
                                             }else{
+													console.log(notificationTypeId)
                                                     NotificationType.findOne({id: notificationTypeId}).exec(function(err, ntfnFoundResults){
                                                             if(err){
                                                                     console.log(err);
                                                                     return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification body/msg'});
 
                                                             }else{
+																console.log(ntfnFoundResults)
                                                                 user_id                 =   results[0].ditherUserId;
                                                                 var tagged_users            =   [];
                                                                 var switchKey = results[0].notificationTypeId;
@@ -581,7 +584,17 @@ module.exports = {
                                                                             notification            =   " commented on your Dither";
 
                                                                     break;
+                                                                    
+																	case 5:
+                                                                            notification            =   " Your facebook friend "+results[0].name+" is now on Dither";
 
+                                                                    break;
+                                                                    
+                                                                    case 8:
+                                                                            notification            =   " Your Dither has been expired";
+
+                                                                    break;
+                                                                    
                                                                     default:
                                                                             notification            =   ntfnFoundResults.body;
 

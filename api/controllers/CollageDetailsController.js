@@ -164,11 +164,15 @@ module.exports = {
                                                                                                }];
                                                         console.log("collageCreator_JSON_Array ======================");
                                                         console.log(collageCreator_JSON_Array);
-                                                        query = "SELECT clgcmt.id, clgcmt.comment,clgcmt.createdAt,"+
+                                                        query = " SELECT"+
+                                                                " clgcmt.id, clgcmt.comment,clgcmt.createdAt,"+
                                                                 " cmntImg.image, cmntImg.commentId AS commentId,"+
-                                                                " usr.name, usr.mentionId, usr.profilePic, usr.id userId"+
+                                                                " usr.name, usr.mentionId, usr.profilePic, usr.id userId,"+
+                                                                " cmtlk.likeStatus,"+
+                                                                " (SELECT COUNT(id) FROM commentLikes WHERE commentId = clgcmt.id) AS totalLikeCount"+
                                                                 " FROM collageComments clgcmt"+
                                                                 " LEFT JOIN commentImages AS cmntImg ON cmntImg.commentId = clgcmt.id"+
+                                                                " LEFT JOIN commentLikes cmtlk ON cmtlk.commentId = clgcmt.id"+
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
                                                                 " ORDER BY clgcmt.createdAt";
@@ -195,12 +199,18 @@ module.exports = {
                                                                                 }
                                                                                 var profile_image;
                                                                                 if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
-                                                                                     profile_image  = "";
+                                                                                        profile_image  = "";
                                                                                 }else{
                                                                                     var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
                                                                                     var ext                         =     imageSrc.split('/');
                                                                                     ext                             =     ext[ext.length-1].split('.');
                                                                                     profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                }
+                                                                                var likeStatus;
+                                                                                if(dataResults[i]["likeStatus"] == null || dataResults[i]["likeStatus"] == ""){
+                                                                                        likeStatus                 =      0;
+                                                                                }else{
+                                                                                        likeStatus                 =      dataResults[i]["likeStatus"];
                                                                                 }
                                                                                 dataResultsObj.comment_id                       =   dataResults[i]["id"];
                                                                                 dataResultsObj.user_id                          =   dataResults[i]["userId"];
@@ -210,6 +220,8 @@ module.exports = {
                                                                                 dataResultsObj.message                          =   dataResults[i]["comment"];
                                                                                 dataResultsObj.comment_created_date_time        =   dataResults[i]["createdAt"];
                                                                                 dataResultsObj.comment_img                      =   comment_img_arr;
+                                                                                dataResultsObj.comment_like_status              =   likeStatus;
+                                                                                dataResultsObj.comment_total_like               =   dataResults[i]["totalLikeCount"];
 
                                                                                 comment_arr.push(dataResultsObj);
                                                                             }

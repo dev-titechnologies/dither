@@ -31,6 +31,7 @@ module.exports = {
                                 if(!foundCollage){
                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage found'});
                                 }else{
+                                    console.log("Find collage --- success");
                                     CollageComments.findOne({id: commentId}).exec(function (err, foundComment){
                                         if(err){
                                             console.log(err);
@@ -39,7 +40,7 @@ module.exports = {
                                             if(!foundComment){
                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No comment found'});
                                             }else{
-
+                                                console.log("FInd collageComments --- success");
                                                 CommentLikes.findOne({commentId: commentId, userId : userId, likeStatus: 1}).exec(function (err, foundCommentLike){
                                                     if(err){
                                                         console.log(err);
@@ -48,6 +49,7 @@ module.exports = {
                                                         if(foundCommentLike){
                                                              return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Already liked this comment'});
                                                         }else{
+                                                            console.log("FInd commentLike --- success");
                                                             var values = {
                                                                         commentId   : commentId,
                                                                         userId      : userId,
@@ -58,6 +60,7 @@ module.exports = {
                                                                     console.log(err);
                                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Comment Like Insertion', error_details: err});
                                                                 }else{
+                                                                    console.log("Create commentLike --- success");
                                                                     var criteria = {id: foundComment.id};
                                                                     var values   = {likeCount: parseInt(foundComment.likeCount) + 1};
                                                                     CollageComments.update(criteria, values).exec(function(err, updatedLikeCount) {
@@ -65,6 +68,7 @@ module.exports = {
                                                                             console.log(err);
                                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Comment Like Insertion', error_details: err});
                                                                         }else{
+                                                                                 console.log("Update likeCount --- success");
                                                                                 var roomName  = "socket_dither_"+collageId;
                                                                                 sails.sockets.broadcast(roomName,{
                                                                                                                 type            :   "update",

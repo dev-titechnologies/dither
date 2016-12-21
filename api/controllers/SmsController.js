@@ -23,12 +23,14 @@
                     console.log(smsAuthToken)
                     //var client            = require('twilio')(smsAccountSid, smsAuthToken); //API_KEY and TOCKEN from TWILIO
                     var query = "SELECT phoneNumber,email,mentionId FROM user where phoneNumber = '"+mobile+"' OR email = '"+email+"' OR mentionId= '"+mention_id+"'";
+                    console.log(query);
                     User.query(query,function(err, getResult){
                     //User.find({phoneNumber: req.param('mobile'),email:email,mentionId:mention_id}).exec(function (err, getResult)
                         if(err){
                             console.log(err);
                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'error occured while checking!'});
                         }else{
+                            console.log(getResult);
                             if(getResult.length){
                                 if(getResult[0].email == email){
                                     message = "Email already exists";

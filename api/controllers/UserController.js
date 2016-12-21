@@ -128,7 +128,7 @@ module.exports = {
                                                                                                              callback();
                                                                                                     }
                                                                                             });
-                                                                                            callback();
+                                                                                           // callback();
                                                                                     });
                                                                             },
                                                                             
@@ -395,7 +395,7 @@ module.exports = {
                                                                                                                     contact_arr.push(factor.userId);
                                                                                                                 }
                                                                                                                }
-                                                                                                            });
+                                                                                                      });
                                                                                                });
                                                                                                var values ={
                                                                                                         notificationTypeId  :   4,

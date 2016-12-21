@@ -63,12 +63,15 @@ module.exports = {
                                                                     console.log("Create commentLike --- success");
                                                                     var criteria = {id: foundComment.id};
                                                                     var values   = {likeCount: parseInt(foundComment.likeCount) + 1};
+                                                                    console.log(criteria);
+                                                                    console.log(values);
                                                                     CollageComments.update(criteria, values).exec(function(err, updatedLikeCount) {
                                                                         if(err){
+                                                                            console.log("Update likeCount --- Error");
                                                                             console.log(err);
                                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Comment Like Insertion', error_details: err});
                                                                         }else{
-                                                                                 console.log("Update likeCount --- success");
+                                                                                console.log("Update likeCount --- success");
                                                                                 var roomName  = "socket_dither_"+collageId;
                                                                                 sails.sockets.broadcast(roomName,{
                                                                                                                 type            :   "update",

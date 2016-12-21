@@ -527,6 +527,17 @@ module.exports = {
                                                                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
                                                                                                     }else{
 
+                                                                                                            var roomName  = "socket_dither_"+collageId;
+                                                                                                            sails.sockets.broadcast(roomName,{
+                                                                                                                                            type            :   "update",
+                                                                                                                                            id              :   collageId,
+                                                                                                                                            user_id         :   userId,
+                                                                                                                                            message         :   "Delete Comment - Room Broadcast",
+                                                                                                                                            //roomName        :   roomName,
+                                                                                                                                            //subscribers     :   sails.sockets.subscribers(roomName),
+                                                                                                                                            //socket          :   sails.sockets.rooms()
+                                                                                                                                            });
+
                                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',});
                                                                                                     }
                                                                                                 });

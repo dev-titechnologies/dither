@@ -21,8 +21,8 @@ module.exports = {
             },
         email: {
                 type: 'email',
-                //required: true,
-                //unique: true
+                required: true,
+                unique: true
             },
         mobileVerificationStatus: {
                 type: 'boolean',

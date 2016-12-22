@@ -76,6 +76,10 @@ module.exports = {
                 type: 'boolean',
                 defaultsTo: true
             },
+        notifyCommentLike: {
+                type: 'boolean',
+                defaultsTo: true
+            },
         createdAt: {
                 type: 'datetime',
             },

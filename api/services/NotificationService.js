@@ -78,9 +78,9 @@ module.exports = {
                                 "type"                :       data.NtfnType,
                                 "id"                  :       data.id,
                                 "notification_id"     :       data.notification_id,
-                                "old_id"			  :		  data.old_id,
-                                "name"				  :		  data.name,
-                                "number"			  :		  data.number
+                                "old_id"              :       data.old_id,
+                                "name"                :       data.name,
+                                "number"              :       data.number
                             };
         android = PusherService('android', {
                 device          :   [], // Array of string with device tokens
@@ -188,6 +188,191 @@ module.exports = {
         }else{
             callback();
         }
+    },
+
+
+ /*=============================================================================================================================================
+     collage Notification Log Insertion
+    ==============================================================================================================================================*/
+
+    collageNotificationLogCreation: function(params,callback){
+
+            var query = "SELECT id FROM notificationLog where collage_id = '"+params.collageId+"' and notificationTypeId = " + params.notificationTypeId;
+            NotificationLog.query(query, function(err, notificationFound){
+                if(err){
+                    console.log(err)
+                    //callback();
+                    callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in select notification log', error_details: err});
+                }else{
+                    // old_id      = selCommentNtfn[0].id;
+                    if(notificationFound.length){
+                            console.log(notificationFound[0].id)
+                            params.old_id   =  notificationFound[0].id;
+                    }
+                    var query = "DELETE FROM notificationLog where collage_id = '"+params.collageId+"' and notificationTypeId = " + params.notificationTypeId;
+                    NotificationLog.query(query, function(err, deleteNotification){
+                        if(err){
+                           console.log(err)
+                           //callback();
+                           callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in delete notification log', error_details: err});
+                        }else{
+                            var likedImageId    =  0;
+                            var description     =  0;
+                            switch(params.notificationTypeId){
+
+                                case 2 :
+                                        description   =  parseInt(params.totalVote) + 1;
+                                        likedImageId  =  likedImageId;
+                                break;
+
+                                case 9 :
+                                        description   =  parseInt(params.totalLikeCount) + 1;
+                                break;
+                            }
+                            var values ={
+                                    notificationTypeId  :   params.notificationTypeId,
+                                    userId              :   params.userId,
+                                    ditherUserId        :   params.collageCreatorId,
+                                    collage_id          :   params.collageId,
+                                    image_id            :   likedImageId,
+                                    description         :   description,
+                            }
+                            NotificationLog.create(values).exec(function(err, createdNotificationTags){
+                                if(err){
+                                    console.log(err);
+                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
+                                    callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in create notification log', error_details: err});
+                                }else{
+
+                                        switch(params.notificationTypeId){
+                                            case 2 :
+                                                    var creator_roomName  = "socket_user_"+params.collageCreatorId;
+                                                    sails.sockets.broadcast(creator_roomName,{
+                                                                    type                       :       "notification",
+                                                                    id                         :       params.collageId,
+                                                                    user_id                    :       params.userId,
+                                                                    message                    :       "Like Dither - Room Broadcast - to Creator",
+                                                                    //roomName                   :       creator_roomName,
+                                                                    //subscribers                :       sails.sockets.subscribers(creator_roomName),
+                                                                    //socket                     :       sails.sockets.rooms(),
+                                                                    notification_type          :       params.notificationTypeId,
+                                                                    notification_id            :       createdNotificationTags.id
+                                                                    });
+                                            break;
+
+                                            case 9 :
+                                                    var creator_roomName  = "socket_user_"+params.collageCreatorId;
+                                                    sails.sockets.broadcast(creator_roomName,{
+                                                                    type                       :       "notification",
+                                                                    id                         :       params.collageId,
+                                                                    user_id                    :       params.userId,
+                                                                    message                    :       "Like comment - Room Broadcast - to Creator",
+                                                                    //roomName                   :       creator_roomName,
+                                                                    //subscribers                :       sails.sockets.subscribers(creator_roomName),
+                                                                    //socket                     :       sails.sockets.rooms(),
+                                                                    notification_type          :       params.notificationTypeId,
+                                                                    notification_id            :       createdNotificationTags.id
+                                                                    });
+                                            break;
+                                        }
+
+                                        params.notification_id     =   createdNotificationTags.id;
+                                        User.findOne({id : params.collageCreatorId}).exec(function (err, notifySettings){
+                                            if(err){
+                                                console.log(err);
+                                                //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
+                                                callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in finding users notification settings', error_details: err});
+                                            }else{
+                                                console.log("notifySettings ++++++++++++++===");
+                                                console.log(notifySettings);
+                                                if(!notifySettings){
+                                                        /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Comment',
+                                                                            total_like_count       :  updatedVoteCount[0].vote,
+                                                                          });*/
+                                                        callback(false, {status: 1, status_type: "Success", message: 'Some error occured in finding users notification settings', notifySettings : ""});
+                                                }else{
+                                                    console.log("params.notificationSettingsType =======================");
+                                                    console.log(params.notificationSettingsType);
+                                                    switch(params.notificationSettingsType){
+                                                        case "notifyCommentLike":
+                                                                    console.log("Inside <<<=======>>> notifyCommentLike");
+                                                                    if(notifySettings.notifyCommentLike == 1){
+                                                                            pushNotificationFunction(params);
+                                                                    }else{
+                                                                            callback(false, {status: 1, status_type: "Success", message: 'notifyCommentLike is 0'});
+                                                                    }
+                                                        break;
+                                                        case "notifyVote":
+                                                                    console.log("Inside <<<=======>>> notifyVote");
+                                                                    if(notifySettings.notifyVote == 1){
+                                                                            pushNotificationFunction(params);
+                                                                    }else{
+                                                                            callback(false, {status: 1, status_type: "Success", message: 'notifyCommentLike is 0'});
+                                                                    }
+                                                        break;
+                                                    }
+                                             // +++++++++++++++++++++++++
+                                                        function pushNotificationFunction(params){
+                                                                console.log("pushNotificationFunction ======>>>>>>>>>>>>>>>");
+                                                                User_token.find({userId: params.collageCreatorId }).exec(function (err, getDeviceId){
+                                                                    if(err){
+                                                                          console.log(err);
+                                                                          //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
+                                                                          callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in getting loggedusers device id'});
+                                                                    }else{
+                                                                        //console.log("Get-------------Device--------------ID")
+                                                                        //console.log(getDeviceId)
+                                                                        //var message     =  'Vote Notification';
+                                                                        //var ntfn_body   =  tokenCheck.tokenDetails.name +" Voted on Your Dither";
+                                                                       // var device_id   =  getDeviceId.deviceId;
+                                                                        var deviceId_arr    = [];
+                                                                        getDeviceId.forEach(function(factor, index){
+                                                                                    deviceId_arr.push(factor.deviceId);
+                                                                        });
+                                                                        console.log("++++++++++++++++++++ deviceId_arr ++++++++++++++++");
+                                                                        console.log(deviceId_arr);
+                                                                        if(!deviceId_arr.length){
+                                                                                /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
+                                                                                                                total_like_count       :  updatedVoteCount[0].vote,
+                                                                                                    });*/
+                                                                                callback(false, {status: 1, status_type: "Success", message: 'No deviceId found found to push', notifySettings : 1});
+                                                                        }else{
+                                                                                var data        =  {
+                                                                                                    message             :   params.message,
+                                                                                                    device_id           :   deviceId_arr,
+                                                                                                    NtfnBody            :   params.ntfn_body,
+                                                                                                    NtfnType            :   params.notificationTypeId,
+                                                                                                    id                  :   params.collageId,
+                                                                                                    notification_id     :   params.notification_id,
+                                                                                                    old_id              :   params.old_id
+                                                                                                };
+                                                                                console.log("Before push");
+                                                                                console.log(data);
+                                                                                NotificationService.NotificationPush(data, function(err, ntfnSend){
+                                                                                    if(err){
+                                                                                        console.log(err)
+                                                                                        //callback();
+                                                                                        callback(true, {status: 2, status_type: "Failure", message: 'Error in push notification'});
+                                                                                    }else{
+                                                                                        //callback();
+                                                                                        callback(false, {status: 1, status_type: "Success", message: 'Success in push notification'});
+                                                                                    }
+                                                                                });
+                                                                        }
+                                                                    }
+                                                                });
+                                                        }
+                                                // ++++++++++++++++++++++
+                                                 //callback(false, {status: 1, status_type: "Success", message: 'Successfully created notification log', error_details: err});
+                                                }
+                                            }
+                                        });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
     }
 };
 

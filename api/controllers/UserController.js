@@ -35,7 +35,7 @@ module.exports = {
 													userId: '4' }
 											  ];*/
 		var fbUser                      =     req.param('fb_array');
-		
+		var sendStatus					=	  false;
 		console.log(fbUser)
         if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
@@ -221,11 +221,14 @@ module.exports = {
                                                                                     });
                                                                             },
 																			function(callback){
+																				console.log("---------------fbb-----------------------------")
+																				console.log(sendStatus)
 																				if(!fbUser){
 																					console.log("nofb user")
 																					callback();
 																					
 																				}else{
+																					sendStatus	=	true;
 																					var contactArr 		= 	 [];
 																					
 																					fbUser.forEach(function(factor, index){
@@ -271,12 +274,13 @@ module.exports = {
 																									}
 																								   console.log("valuessssssssssss")
 																								   console.log(values)
+																								  
 																								   NotificationLog.create(values).exec(function(err, createdNotification){
 																									if(err){
 																										console.log(err);
 																										//callback();
 																									}else{
-																									
+																											
 																										User_token.find({userId: notifyArr}).exec(function (err, getDeviceId){
 																												if(err){
 																													  console.log(err);
@@ -323,6 +327,7 @@ module.exports = {
 																																	else{
 																																		console.log(createdFbFriends)
 																																		callback();
+																																		sendStatus	=	true;
 																																	}
 																																});
 
@@ -365,6 +370,7 @@ module.exports = {
 																				
 																				
                                                                                 console.log("parallel 5")
+                                                                                console.log(sendStatus)
                                                                                 var number            = req.param('mobile_number');
                                                                                 var phoneContactsArray    = [];
                                                                                 var query   =   "SELECT userId FROM addressBook where ditherUserPhoneNumber='"+number+"' group by userId";
@@ -397,6 +403,7 @@ module.exports = {
                                                                                                                }
                                                                                                       });
                                                                                                });
+                                                                                           if(sendStatus==false){    
                                                                                                var values ={
                                                                                                         notificationTypeId  :   4,
                                                                                                         userId              :   results.id,
@@ -461,7 +468,9 @@ module.exports = {
 
                                                                                                      }
                                                                                                 });
-
+																							}else{
+																								callback();
+																							}
 
                                                                                           }
                                                                                       }

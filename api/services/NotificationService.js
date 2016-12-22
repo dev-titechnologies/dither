@@ -335,7 +335,7 @@ module.exports = {
                                                                                 /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
                                                                                                                 total_like_count       :  updatedVoteCount[0].vote,
                                                                                                     });*/
-                                                                                callback(false, {status: 1, status_type: "Success", message: 'No deviceId found found to push', notifySettings : 1});
+                                                                                callback(false, {status: 1, status_type: "Success", message: 'No deviceId found found to push'});
                                                                         }else{
                                                                                 var data        =  {
                                                                                                     message             :   params.message,

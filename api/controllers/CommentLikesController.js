@@ -12,6 +12,7 @@ module.exports = {
                     var tokenCheck                  =     req.options.tokenCheck;
                     console.log(req.options.tokenCheck);
                     var userId                      =     tokenCheck.tokenDetails.userId;
+                    var userName                    =     tokenCheck.tokenDetails.name;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
@@ -77,8 +78,30 @@ module.exports = {
                                                                                                                 //subscribers     :   sails.sockets.subscribers(roomName),
                                                                                                                 //socket          :   sails.sockets.rooms()
                                                                                                                 });
-                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
-                                                                                    });
+
+                                                                                var data        =   {
+                                                                                                    collageId                   :    collageId,
+                                                                                                    notificationTypeId          :    9,
+                                                                                                    userId                      :    userId,
+                                                                                                    collageCreatorId            :    foundCollage.userId,
+                                                                                                    notificationSettingsType    :    "notifyCommentLike",
+                                                                                                    message                     :    "comment like notification",
+                                                                                                    ntfn_body                   :    userName + " liked on your comment",
+                                                                                                    totalLikeCount              :    foundComment.likeCount,
+                                                                                                    };
+                                                                                NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
+                                                                                    if(err){
+                                                                                        return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in notificationLogCreation' , error_details: err});
+                                                                                    }else{
+                                                                                            /*if(createdNotification.notifySettings == 0 || createdNotification.notifySettings == ""){
+                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment'});
+                                                                                            }else{
+
+                                                                                            }*/
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment'});
+                                                                                    }
+                                                                                });
+
                                                                         }
                                                                     });
                                                                 }

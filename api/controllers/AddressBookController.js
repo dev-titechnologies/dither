@@ -272,7 +272,26 @@ module.exports = {
                                                                   });
                                         }
                     });
-        }
+        },
+        
+        
+       /* ==================================================================================================================================
+               To Select Contacts
+       ==================================================================================================================================== */
+        getFbFriends: function (req, res) {
+			console.log("==========================  Fetching FbFriends Api =-=============");
+			
+			userService.getFbContacts(data,fbUser, function(err,dataResults) {
+				if(err)
+				{
+						console.log(err);
+						return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+				}else{
+						return res.json(200, {status: 1, status_type: 'Success' , message: 'Fetching FB contacts completed'});
+				}
+			});
+			
+		} 
 
 };
 

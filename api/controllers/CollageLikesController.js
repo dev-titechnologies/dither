@@ -96,7 +96,7 @@ module.exports = {
                                                                                                                     //subscribers     :   sails.sockets.subscribers(roomName),
                                                                                                                     //socket          :   sails.sockets.rooms()
                                                                                                                     });
-                                                                                    var data        =   {
+                                                                                    /*var data        =   {
                                                                                                     collageId                   :    collageId,
                                                                                                     notificationTypeId          :    2,
                                                                                                     userId                      :    userId,
@@ -111,16 +111,12 @@ module.exports = {
                                                                                         if(err){
                                                                                             return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in notificationLogCreation' , error_details: err});
                                                                                         }else{
-                                                                                                /*if(createdNotification.notifySettings == 0 || createdNotification.notifySettings == ""){
-                                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment'});
-                                                                                                }else{
 
-                                                                                                }*/
                                                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully voted the image'});
                                                                                         }
-                                                                                    });
+                                                                                    });*/
                                                                                     //-----------Notification log Insertion----------------
-                                                                                   /* var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 2";
+                                                                                    var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 2";
                                                                                     NotificationLog.query(query, function(err, selCommentNtfn){
                                                                                     if(err){
                                                                                         console.log(err)
@@ -183,7 +179,7 @@ module.exports = {
                                                                                                                         }else{
                                                                                                                             /*-------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
                                                                                                                                                         PUSH NOTIFICATION
-                                                                                                                             -------------------------------------------------------------------------------------
+                                                                                                                             ------------------------------------------------------------------------------------- */
                                                                                                                             //var query   =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+foundCollageResults.userId+"'";
                                                                                                                             //User_token.query(query, function(err, getDeviceId) {
 
@@ -258,7 +254,7 @@ module.exports = {
                                                                                             }
                                                                                     });   //-----------------------------End OF NotificationLog---------------------------------
                                                                                   }
-                                                                               });*/
+                                                                               });
 
                                                                                 }//Collage totalVote count Update
                                                                             });

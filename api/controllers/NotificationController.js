@@ -621,12 +621,30 @@ module.exports = {
 
                                                                     case 2:
 
-                                                                            notification            =   " voted on your Dither";
+
+                                                                            if(results[0].description == 2){
+                                                                                notification                =       " and 1 other liked on your dither";
+                                                                            }else if(results[0].description > 2 ){
+                                                                                notification                =       ntfnFoundResults.body;
+                                                                                results[0].description      =       results[0].description - 1;
+                                                                                notification                =       util.format(notification, results[0].description);
+                                                                            }else{
+                                                                                notification            =   " voted on your Dither";
+                                                                            }
 
                                                                     break;
 
                                                                     case 3:
-                                                                            notification            =   " commented on your Dither";
+
+                                                                            if(results[0].description == 2){
+                                                                                notification                =       " and 1 other commented on your dither";
+                                                                            }else if(results[0].description > 2 ){
+                                                                                notification                =       ntfnFoundResults.body;
+                                                                                results[0].description      =       results[0].description - 1;
+                                                                                notification                =       util.format(notification, results[0].description);
+                                                                            }else{
+                                                                                notification                =   " commented on your Dither";
+                                                                            }
 
                                                                     break;
 
@@ -641,7 +659,15 @@ module.exports = {
                                                                     break;
 
                                                                     case 9:
-                                                                            notification            =   " liked on your comment";
+                                                                            if(results[0].description == 2){
+                                                                                notification                =       " and 1 other liked on your comment";
+                                                                            }else if(results[0].description > 2 ){
+                                                                                notification                =       ntfnFoundResults.body;
+                                                                                results[0].description      =       results[0].description - 1;
+                                                                                notification                =       util.format(notification, results[0].description);
+                                                                            }else{
+                                                                                notification                =       " liked on your comment";
+                                                                            }
 
                                                                     break;
 
@@ -652,11 +678,7 @@ module.exports = {
                                                                 }
 
                                                                 ntfn_body               =   notification;
-                                                                if(results[0].description > 1 ){
-                                                                    notification                =       ntfnFoundResults.body;
-                                                                    results[0].description      =       results[0].description - 1;
-                                                                    ntfn_body                   =       util.format(notification, results[0].description);
-                                                                }
+
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
                                                                                       id                    :   notificationId,
                                                                                       userId                :   results[0].userId,

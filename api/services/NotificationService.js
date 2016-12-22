@@ -216,13 +216,17 @@ module.exports = {
                            //callback();
                            callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in delete notification log', error_details: err});
                         }else{
-                            var likedImageId,
-                                description;
+                            var likedImageId    =  0;
+                            var description     =  0;
                             switch(params.notificationTypeId){
 
-                                default:
-                                        likedImageId  =  0;
-                                        description   =  0;
+                                case 2 :
+                                        description   =  parseInt(params.totalVote) + 1;
+                                        likedImageId  =  likedImageId;
+                                break;
+
+                                case 9 :
+                                        description   =  parseInt(params.totalLikeCount) + 1;
                                 break;
                             }
                             var values ={
@@ -231,7 +235,7 @@ module.exports = {
                                     ditherUserId        :   params.collageCreatorId,
                                     collage_id          :   params.collageId,
                                     image_id            :   likedImageId,
-                                    description         :   parseInt(params.totalLikeCount) + 1,
+                                    description         :   description,
                             }
                             NotificationLog.create(values).exec(function(err, createdNotificationTags){
                                 if(err){
@@ -239,6 +243,39 @@ module.exports = {
                                     //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage tagged users', error_details: err});
                                     callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in create notification log', error_details: err});
                                 }else{
+
+                                        switch(params.notificationTypeId){
+                                            case 2 :
+                                                    var creator_roomName  = "socket_user_"+params.collageCreatorId;
+                                                    sails.sockets.broadcast(creator_roomName,{
+                                                                    type                       :       "notification",
+                                                                    id                         :       params.collageId,
+                                                                    user_id                    :       params.userId,
+                                                                    message                    :       "Like Dither - Room Broadcast - to Creator",
+                                                                    //roomName                   :       creator_roomName,
+                                                                    //subscribers                :       sails.sockets.subscribers(creator_roomName),
+                                                                    //socket                     :       sails.sockets.rooms(),
+                                                                    notification_type          :       params.notificationTypeId,
+                                                                    notification_id            :       createdNotificationTags.id
+                                                                    });
+                                            break;
+
+                                            case 9 :
+                                                    var creator_roomName  = "socket_user_"+params.collageCreatorId;
+                                                    sails.sockets.broadcast(creator_roomName,{
+                                                                    type                       :       "notification",
+                                                                    id                         :       params.collageId,
+                                                                    user_id                    :       params.userId,
+                                                                    message                    :       "Like comment - Room Broadcast - to Creator",
+                                                                    //roomName                   :       creator_roomName,
+                                                                    //subscribers                :       sails.sockets.subscribers(creator_roomName),
+                                                                    //socket                     :       sails.sockets.rooms(),
+                                                                    notification_type          :       params.notificationTypeId,
+                                                                    notification_id            :       createdNotificationTags.id
+                                                                    });
+                                            break;
+                                        }
+
                                         params.notification_id     =   createdNotificationTags.id;
                                         User.findOne({id : params.collageCreatorId}).exec(function (err, notifySettings){
                                             if(err){
@@ -260,12 +297,15 @@ module.exports = {
                                                         case "notifyCommentLike":
                                                                     console.log("Inside <<<=======>>> notifyCommentLike");
                                                                     if(notifySettings.notifyCommentLike == 1){
-                                                                             /*return res.json(200, {status: 1 ,status_type: 'Success', message: 'Succesfully voted the Image',
-                                                                                                    total_like_count       :  updatedVoteCount[0].vote,
-                                                                                                  });*/
-
                                                                             pushNotificationFunction(params);
-                                                                            //callback(false, {status: 1, status_type: "Success", message: 'notifyCommentLike is 1'});
+                                                                    }else{
+                                                                            callback(false, {status: 1, status_type: "Success", message: 'notifyCommentLike is 0'});
+                                                                    }
+                                                        break;
+                                                        case "notifyVote":
+                                                                    console.log("Inside <<<=======>>> notifyVote");
+                                                                    if(notifySettings.notifyVote == 1){
+                                                                            pushNotificationFunction(params);
                                                                     }else{
                                                                             callback(false, {status: 1, status_type: "Success", message: 'notifyCommentLike is 0'});
                                                                     }

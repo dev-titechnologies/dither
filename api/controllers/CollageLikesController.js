@@ -96,7 +96,7 @@ module.exports = {
                                                                                                                     //subscribers     :   sails.sockets.subscribers(roomName),
                                                                                                                     //socket          :   sails.sockets.rooms()
                                                                                                                     });
-                                                                                    /*var data        =   {
+                                                                                    var data        =   {
                                                                                                     collageId                   :    collageId,
                                                                                                     notificationTypeId          :    2,
                                                                                                     userId                      :    userId,
@@ -109,13 +109,14 @@ module.exports = {
                                                                                                     };
                                                                                     NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
                                                                                         if(err){
+                                                                                            console.log(err);
                                                                                             return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in notificationLogCreation' , error_details: err});
                                                                                         }else{
 
-                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully voted the image'});
+                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully voted the image', total_like_count : updatedVoteCount[0].vote});
                                                                                         }
-                                                                                    });*/
-                                                                                    //-----------Notification log Insertion----------------
+                                                                                    });
+                                                                                   /* //-----------Notification log Insertion----------------
                                                                                     var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 2";
                                                                                     NotificationLog.query(query, function(err, selCommentNtfn){
                                                                                     if(err){
@@ -177,9 +178,7 @@ module.exports = {
                                                                                                                                                         total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                                                       });
                                                                                                                         }else{
-                                                                                                                            /*-------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
-                                                                                                                                                        PUSH NOTIFICATION
-                                                                                                                             ------------------------------------------------------------------------------------- */
+
                                                                                                                             //var query   =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+foundCollageResults.userId+"'";
                                                                                                                             //User_token.query(query, function(err, getDeviceId) {
 
@@ -253,8 +252,8 @@ module.exports = {
 
                                                                                             }
                                                                                     });   //-----------------------------End OF NotificationLog---------------------------------
-                                                                                  }
-                                                                               });
+                                                                                    }
+                                                                                    });*/
 
                                                                                 }//Collage totalVote count Update
                                                                             });
@@ -271,8 +270,8 @@ module.exports = {
                                             }//Voted by creator or not
                                         }//Collage existing check
 
-                                    }
-                                });
+                                }
+                            });
                         }// already Liked by user check,  Else stop
                     }
                 });

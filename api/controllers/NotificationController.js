@@ -616,6 +616,7 @@ module.exports = {
 
                                                                     case 1:
                                                                             tagged_users            =   results[0].tagged_users;
+                                                                            notification			=	" is asking for your opinion";
 
                                                                     break;
 
@@ -649,7 +650,8 @@ module.exports = {
                                                                     break;
 
                                                                     case 5:
-                                                                            notification            =   " Your facebook friend "+results[0].name+" is now on Dither";
+                                                                           // notification            =   " Your facebook friend "+results[0].name+" is now on Dither";
+                                                                            notification                =       util.format(ntfnFoundResults.body, results[0].name);
 
                                                                     break;
 

@@ -279,15 +279,28 @@ module.exports = {
                To Select Contacts
        ==================================================================================================================================== */
         getFbFriends: function (req, res) {
-			console.log("==========================  Fetching FbFriends Api =-=============");
 			
-			userService.getFbContacts(data,fbUser, function(err,dataResults) {
+			console.log("==========================  Fetching FbFriends Api =-=============");
+			var tokenCheck                  =     req.options.tokenCheck;
+            var userId                      =     tokenCheck.tokenDetails.userId;    
+            var query	= "SELECT userId FROM fbFriends where ditherUserId = '"+userId+"' group by userId ";
+			console.log(query)
+			var frnd_arr = [];
+			
+			FbFriends.query(query, function(err,FBContacts){
+
+			//userService.getFbContacts(data,fbUser, function(err,dataResults) {
 				if(err)
 				{
 						console.log(err);
-						return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
+						return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends', error_details: FBContacts});
 				}else{
-						return res.json(200, {status: 1, status_type: 'Success' , message: 'Fetching FB contacts completed'});
+						console.log(FBContacts)
+						FBContacts.forEach(function(factor,index){
+							frnd_arr.push(factor.userId);
+						});
+						console.log(frnd_arr)
+						return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
 				}
 			});
 			

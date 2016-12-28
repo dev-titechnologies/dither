@@ -138,7 +138,7 @@ module.exports = {
                                 }else{
                                     async.forEach(results, function (item, callback){
                                         //console.log(results)
-                                        if(item.notificationTypeId == 1 || item.notificationTypeId == 2 || item.notificationTypeId == 3 || item.notificationTypeId == 4 || item.notificationTypeId == 5 || item.notificationTypeId == 7 || item.notificationTypeId == 8){
+                                        if(item.notificationTypeId == 1 || item.notificationTypeId == 2 || item.notificationTypeId == 3 || item.notificationTypeId == 4 || item.notificationTypeId == 5 || item.notificationTypeId == 7 || item.notificationTypeId == 8 || item.notificationTypeId == 9){
                                             //----------Comment Notification---------------------------
                                             if(item.notificationTypeId == 3){
                                                 console.log("Notification Comment")

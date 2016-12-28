@@ -67,6 +67,7 @@ module.exports = {
                                                                             console.log(err);
                                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Comment Like Insertion', error_details: err});
                                                                         }else{
+                                                                                var total_like_count  =  parseInt(foundComment.likeCount) + 1;
                                                                                 console.log("Update likeCount --- success");
                                                                                 var roomName  = "socket_dither_"+collageId;
                                                                                 sails.sockets.broadcast(roomName,{
@@ -78,32 +79,37 @@ module.exports = {
                                                                                                                 //subscribers     :   sails.sockets.subscribers(roomName),
                                                                                                                 //socket          :   sails.sockets.rooms()
                                                                                                                 });
-
-                                                                                var data        =   {
-                                                                                                    collageId                   :    collageId,
-                                                                                                    notificationTypeId          :    9,
-                                                                                                    userId                      :    userId,
-                                                                                                    collageCreatorId            :    foundCollage.userId,
-                                                                                                    notificationSettingsType    :    "notifyCommentLike",
-                                                                                                    message                     :    "comment like notification",
-                                                                                                    ntfn_body                   :    userName + " liked on your comment",
-                                                                                                    totalLikeCount              :    foundComment.likeCount,
-                                                                                                    };
-                                                                                NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
-                                                                                    if(err){
-                                                                                        return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in notificationLogCreation' , error_details: err});
-                                                                                    }else{
-                                                                                            /*if(createdNotification.notifySettings == 0 || createdNotification.notifySettings == ""){
-                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment'});
+                                                                                if(foundCollage.userId == userId){
+                                                                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
+                                                                                                            total_like_count  :    total_like_count,
+                                                                                                    });
+                                                                                }else{
+                                                                                        var data        =   {
+                                                                                                            collageId                   :    collageId,
+                                                                                                            notificationTypeId          :    9,
+                                                                                                            userId                      :    userId,
+                                                                                                            collageCreatorId            :    foundCollage.userId,
+                                                                                                            notificationSettingsType    :    "notifyCommentLike",
+                                                                                                            message                     :    "comment like notification",
+                                                                                                            ntfn_body                   :    userName + " liked on your comment",
+                                                                                                            totalLikeCount              :    foundComment.likeCount,
+                                                                                                            };
+                                                                                        NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
+                                                                                            if(err){
+                                                                                                return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in notificationLogCreation' , error_details: err});
                                                                                             }else{
+                                                                                                    /*if(createdNotification.notifySettings == 0 || createdNotification.notifySettings == ""){
+                                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment'});
+                                                                                                    }else{
 
-                                                                                            }*/
-                                                                                            var total_like_count  =  parseInt(foundComment.likeCount) + 1;
-                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
-                                                                                                    total_like_count  :    total_like_count,
-                                                                                            });
-                                                                                    }
-                                                                                });
+                                                                                                    }*/
+
+                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
+                                                                                                            total_like_count  :    total_like_count,
+                                                                                                    });
+                                                                                            }
+                                                                                        });
+                                                                                }
 
                                                                         }
                                                                     });

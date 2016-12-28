@@ -149,11 +149,13 @@ module.exports = {
                             var tagged_contactUser                  =     request.tagged_user;
                             var get_dither_images                   =     request.dither_images;
                             //wwwww
-                            var must_taggedUserArray                =     [8,90,7];
+                            //var must_taggedUserArray                =     [8,90,7];
                             //var must_taggedUserArray                =     [2];
-                            var taggedUserArray_1                   =     union_arrays(tagged_fbUser, tagged_contactUser);
-                            var taggedUserArray                     =     union_arrays(taggedUserArray_1, must_taggedUserArray);
+                            //var taggedUserArray_1                   =     union_arrays(tagged_fbUser, tagged_contactUser);
+                            //var taggedUserArray                     =     union_arrays(taggedUserArray_1, must_taggedUserArray);
                             //wwwww
+
+                            var taggedUserArray                     =     union_arrays(tagged_fbUser, tagged_contactUser);
                             var taggedUserArrayFinal                =     [];
                             var inviteFriends                       =     request.invite_friends_NUM;
                             inviteFriends                           =     JSON.parse(inviteFriends);

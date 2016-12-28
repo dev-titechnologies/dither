@@ -205,9 +205,10 @@ module.exports = {
                     callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in select notification log', error_details: err});
                 }else{
                     // old_id      = selCommentNtfn[0].id;
+                    var old_id     = "";
                     if(notificationFound.length){
                             console.log(notificationFound[0].id)
-                            params.old_id   =  notificationFound[0].id;
+                            old_id   =  notificationFound[0].id;
                     }
                     var query = "DELETE FROM notificationLog where collage_id = '"+params.collageId+"' and notificationTypeId = " + params.notificationTypeId;
                     NotificationLog.query(query, function(err, deleteNotification){
@@ -373,7 +374,7 @@ module.exports = {
                                                                                                     NtfnType            :   params.notificationTypeId,
                                                                                                     id                  :   params.collageId,
                                                                                                     notification_id     :   params.notification_id,
-                                                                                                    old_id              :   params.old_id
+                                                                                                    old_id              :   old_id
                                                                                                 };
                                                                                 console.log("Before push");
                                                                                 console.log(data);

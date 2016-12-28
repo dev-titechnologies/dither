@@ -375,12 +375,12 @@ module.exports = {
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_location  and dither_desc and dither_id'});
                     }else{
 
-                            //var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
+                            var taggedUserArray             =      union_arrays(tagged_fbUser, tagged_contactUser);
                             //wwwww
-                            var must_taggedUserArray                =     [8,90,7];
+                            //var must_taggedUserArray                =     [8,90,7];
                             //var must_taggedUserArray                =     [2];
-                            var taggedUserArray_1                   =     union_arrays(tagged_fbUser, tagged_contactUser);
-                            var taggedUserArray                     =     union_arrays(taggedUserArray_1, must_taggedUserArray);
+                            //var taggedUserArray_1                   =     union_arrays(tagged_fbUser, tagged_contactUser);
+                            //var taggedUserArray                     =     union_arrays(taggedUserArray_1, must_taggedUserArray);
                             //wwwww
                             var taggedUserArrayFinal        =      [];
                             //var inviteFriends               =      JSON.parse(invite_friends_NUM);

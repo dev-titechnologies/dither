@@ -124,6 +124,7 @@ module.exports = {
                                                                 console.log("COMMENT SERIES ------------------ 1");
                                                                 if(mention_arr){
                                                                         //var query = "SELECT id FROM user where mention_id=";
+                                                                        
                                                                         User.find({mentionId: mention_arr}).exec(function (err, getUserId){
                                                                             if(err){
                                                                                 console.log("mention")
@@ -144,7 +145,32 @@ module.exports = {
                                                                                         }
                                                                                     });
                                                                                 });
-                                                                                var values ={
+                                                                                
+                                                                                
+																				var	data = {
+																								notificationTypeId	: 	7,
+																								userId				: 	userId,
+																								collage_id          :   collageId,
+																								tagged_users		:	mention_user_id,
+																								name				:	tokenCheck.tokenDetails.name,
+																								mentionPushArr		:	mentionPushArr
+																								
+																							}
+                                                                                NotificationService.commentMentionNotification(data, function(err, ntfnMention){
+																					if(err){
+																							console.log("Error in Push Notification Sending")
+																							console.log(err)
+																							callback();
+
+																					}else{
+																							console.log(ntfnMention)
+																							callback();
+																					}
+																				});
+                                                                                
+                                                                                
+                                                                                
+                                                                              /*  var values ={
                                                                                         notificationTypeId  :   7,
                                                                                         userId              :   userId,
                                                                                         collage_id          :   collageId,
@@ -193,14 +219,14 @@ module.exports = {
                                                                                                 });
 
                                                                                         }
-                                                                                   });
+                                                                                   }); */
                                                                             }
                                                                         });
                                                                 }else{
                                                                     callback();
                                                                 }
                                                         },
-                                                        function(callback) {
+                                                        /*function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 2");
                                                             var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
                                                             NotificationLog.query(query, function(err, selCommentNtfn){
@@ -227,7 +253,7 @@ module.exports = {
                                                                    }
                                                              });
 
-                                                        },
+                                                        },*/
                                                         function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 3");
                                                             var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"'";
@@ -236,8 +262,30 @@ module.exports = {
                                                                     console.log("err in count comments ")
                                                                     callback();
                                                                 }else{
+																	
                                                                     if(userId   !=  collageDetails.userId){
-                                                                            var values ={
+																		
+																			var data        =   {
+                                                                                                    collageId                   :    collageId,
+                                                                                                    notificationTypeId          :    3,
+                                                                                                    userId                      :    userId,
+                                                                                                    collageCreatorId            :    collageDetails.userId,
+                                                                                                    notificationSettingsType    :    "notifyComment",
+                                                                                                    message                     :    "dither Comment notification",
+                                                                                                    ntfn_body                   :    tokenCheck.tokenDetails.name + " Commented on Your Dither",
+                                                                                                    description         		:    CountComments.length
+                                                                                                };
+																			NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
+																				if(err){
+																					console.log(err);
+																					callback();
+																				}else{
+
+																						callback(); 
+																				}
+																			});
+																			
+                                                                           /* var values ={
                                                                                             notificationTypeId  :   3,
                                                                                             userId              :   userId,
                                                                                             ditherUserId        :   collageDetails.userId,
@@ -324,7 +372,7 @@ module.exports = {
                                                                                             }
                                                                                         });
                                                                                     }
-                                                                            });
+                                                                            }); */
                                                                     }else{
                                                                                 callback();
                                                                     }
@@ -362,7 +410,7 @@ module.exports = {
                                                                             console.log("commentImgResults   error");
                                                                             console.log(err)
                                                                             callback();
-                                                                        }else{
+                                                                        }else{ 
                                                                             if(!commentImgResults.length){
                                                                                     console.log("commentImgResults   No length");
                                                                                     callback();

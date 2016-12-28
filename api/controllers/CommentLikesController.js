@@ -98,7 +98,10 @@ module.exports = {
                                                                                             }else{
 
                                                                                             }*/
-                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment'});
+                                                                                            var total_like_count  =  parseInt(foundComment.likeCount) + 1;
+                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
+                                                                                                    total_like_count  :    total_like_count,
+                                                                                            });
                                                                                     }
                                                                                 });
 

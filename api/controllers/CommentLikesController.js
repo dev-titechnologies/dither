@@ -118,7 +118,69 @@ module.exports = {
                             }
                         });
                     }
-    }
+    },
+    likedUsersList  :  function (req, res) {
+                    console.log("++++++++++++++++ Liked users list +++++++++++++++");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                    var commentId                   =     req.param("comment_id");
+                    //var collageId                   =     req.param("dither_id");
+
+                    if(!commentId){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass comment_id'});
+                    }else{
+                            CollageComments.findOne({id: commentId}).exec(function (err, foundComment){
+                                if(err){
+                                    console.log(err);
+                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                }else{
+                                    if(!foundComment){
+                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No comment found'});
+                                    }else{
+                                        var query    =   " SELECT usr.id, usr.name, usr.profilePic"+
+                                                         " FROM commentLikes cmtlk"+
+                                                         " INNER JOIN user usr ON cmtlk.userId = usr.id"+
+                                                         " WHERE cmtlk.commentId = "+commentId;
+                                        CommentLikes.query(query, function(err, results) {
+                                                if(err){
+                                                    console.log(err);
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting list of liked users on the comment', error_details: err});
+                                                }else{
+                                                    if(!results.length){
+                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the liked users list on the comment',
+                                                                                likedUsers : []
+                                                            });
+                                                    }else{
+                                                            var likedUsers                  =     [];
+                                                            var profilePic;
+                                                            results.forEach(function(factor, index){
+                                                                    if(factor.profilePic == "" || factor.profilePic == null){
+                                                                            profilePic                  =     ""
+                                                                    }else{
+                                                                            profilePic                  =     profilePic_path + factor.profilePic;
+                                                                    }
+                                                                    likedUsers.push({
+                                                                                user_id         :  factor.id,
+                                                                                user_name       :  factor.name,
+                                                                                user_pic        :  profilePic,
+                                                                        });
+                                                            });
+                                                            //console.log("likedUsers >>>>>>>>>>>>>>>>>>>>>");
+                                                            //console.log(likedUsers);
+                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the liked users list on the comment',
+                                                                                    likedUsers : likedUsers
+                                                            });
+                                                    }
+                                                }
+                                        });
+                                    }
+                                }
+                            });
+                    }
+
+    },
 
 };
 

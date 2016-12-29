@@ -206,12 +206,13 @@ module.exports = {
                                                                                     ext                             =     ext[ext.length-1].split('.');
                                                                                     profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
                                                                                 }
-                                                                                var likeStatus;
+                                                                                /*var likeStatus;
                                                                                 if(dataResults[i]["likeStatus"] == null || dataResults[i]["likeStatus"] == ""){
                                                                                         likeStatus                 =      0;
                                                                                 }else{
                                                                                         likeStatus                 =      dataResults[i]["likeStatus"];
-                                                                                }
+                                                                                }*/
+                                                                                dataResultsObj.like_status                      =   dataResults[i]["likeStatus"];
                                                                                 dataResultsObj.comment_id                       =   dataResults[i]["id"];
                                                                                 dataResultsObj.user_id                          =   dataResults[i]["userId"];
                                                                                 dataResultsObj.user_name                        =   dataResults[i]["name"];
@@ -227,6 +228,19 @@ module.exports = {
                                                                             }
                                                                             comment_arr_Final   =  removeDuplicate(comment_arr, 'comment_id');
                                                                         }
+                                                                        /*var likeStatus;
+                                                                                if(dataResults[i]["likeStatus"] == null || dataResults[i]["likeStatus"] == ""){
+                                                                                        likeStatus                 =      0;
+                                                                                }else{
+                                                                                        likeStatus                 =      dataResults[i]["likeStatus"];
+                                                                                }*/
+                                                                        comment_arr_Final.forEach(function(factor, index){
+                                                                            if(!factor.like_status){
+                                                                                factor.like_status = 0;
+                                                                            }else{
+                                                                                factor.like_status = 1;
+                                                                            }
+                                                                        });
                                                                         //Query to get tagged users from both addressBook and fbFriends
                                                                             query  = "SELECT *"+
                                                                                     " FROM ("+

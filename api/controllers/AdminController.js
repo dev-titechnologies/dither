@@ -148,7 +148,7 @@ console.log(values);
                 // var ditherId = 507;
                 console.log("inside getSingleDitherDetails function"+ditherId);
                 var query = " SELECT"+
-                             " c.createdAt, c.imgTitle, c.location, c.totalVote,"+
+                             " c.createdAt, c.imgTitle, c.location, c.totalVote, c.image,"+
                              " cd.image as singImage, cd.vote as individualVote,"+
                              " u.name"+
                              " FROM collage as c"+

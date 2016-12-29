@@ -168,7 +168,7 @@ module.exports = {
                                                                 " clgcmt.id, clgcmt.comment,clgcmt.createdAt,"+
                                                                 " cmntImg.image, cmntImg.commentId AS commentId,"+
                                                                 " usr.name, usr.mentionId, usr.profilePic, usr.id userId,"+
-                                                                " cmtlk.likeStatus,"+
+                                                                " cmtlk.likeStatus, cmtlk.userId as likedUserId,"+
                                                                 " (SELECT COUNT(id) FROM commentLikes WHERE commentId = clgcmt.id) AS totalLikeCount"+
                                                                 " FROM collageComments clgcmt"+
                                                                 " LEFT JOIN commentImages AS cmntImg ON cmntImg.commentId = clgcmt.id"+
@@ -210,13 +210,12 @@ module.exports = {
                                                                                 if(dataResults[i]["likeStatus"] == null || dataResults[i]["likeStatus"] == ""){
                                                                                         likeStatus                 =      0;
                                                                                 }else{
-                                                                                    if(dataResults[i]["userId"] == userId){
-                                                                                        likeStatus                 =      0;
-                                                                                    }else{
+                                                                                    if(dataResults[i]["likedUserId"] == userId){
                                                                                         likeStatus                 =      1;
+                                                                                    }else{
+                                                                                        likeStatus                 =      0;
                                                                                     }
                                                                                 }
-                                                                                //dataResultsObj.like_status                      =   dataResults[i]["likeStatus"];
                                                                                 dataResultsObj.comment_id                       =   dataResults[i]["id"];
                                                                                 dataResultsObj.user_id                          =   dataResults[i]["userId"];
                                                                                 dataResultsObj.user_name                        =   dataResults[i]["name"];
@@ -232,19 +231,7 @@ module.exports = {
                                                                             }
                                                                             comment_arr_Final   =  removeDuplicate(comment_arr, 'comment_id');
                                                                         }
-                                                                        /*var likeStatus;
-                                                                                if(dataResults[i]["likeStatus"] == null || dataResults[i]["likeStatus"] == ""){
-                                                                                        likeStatus                 =      0;
-                                                                                }else{
-                                                                                        likeStatus                 =      dataResults[i]["likeStatus"];
-                                                                                }*/
-                                                                        /*comment_arr_Final.forEach(function(factor, index){
-                                                                            if(!factor.like_status){
-                                                                                factor.like_status = 0;
-                                                                            }else{
-                                                                                factor.like_status = 1;
-                                                                            }
-                                                                        });*/
+
                                                                         //Query to get tagged users from both addressBook and fbFriends
                                                                             query  = "SELECT *"+
                                                                                     " FROM ("+

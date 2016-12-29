@@ -555,7 +555,9 @@ module.exports = {
                                                                                     }else{
                                                                                         console.log(foundCommentImages);
                                                                                             if(!foundCommentImages.length){
-                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',});
+                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',
+                                                                                                                comment_id : commentId
+                                                                                                            });
                                                                                             }else{
                                                                                                 //Unlinking comment image
                                                                                                 foundCommentImages.forEach(function(factor, index){

@@ -228,14 +228,23 @@ module.exports = {
 																					callback();
 																					
 																				}else{
-																					sendStatus	=	true;
+																					sendStatus			=	true;
 																					var contactArr 		= 	 [];
+																					var fbUserArray 	= 	 [];
+																					
+																					/*var query =  "INSERT INTO tempFbfriends"+
+																								 " (userId, fbId, createdAt, updatedAt)"+
+																								 " VALUES"+fbUserArray;*/
 																					
 																					fbUser.forEach(function(factor, index){
 																						
 																						 contactArr.push(factor.fb_userid)
-																						 
+																						 //fbUserArray.push("("+factor.fb_userid+",'"+factor.fb_userid+"', now(), now())");
 																					});
+																					
+																					/*var query =  "INSERT INTO tempFbfriends"+
+																								 " (userId, fbId, createdAt, updatedAt)"+
+																								 " VALUES"+fbUserArray;*/
 																					
 																					var data	=	{
 																										userId		:	results.id,
@@ -260,6 +269,16 @@ module.exports = {
 																							var fbUserArray		=	[];
 																							getUserId.forEach(function(factor, index){
 																								notifyArr.push(factor.id);
+																								// ------------notification Setting-------------------
+																								/*User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+                                                                                                         if(notifySettings){
+                                                                                                                if(notifySettings.notifyContact==1){
+                                                                                                                    //contact_arr.push(factor.userId);
+                                                                                                                    fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
+                                                                                                                }
+                                                                                                               }
+                                                                                                });*/
+																								
 																								
 																								fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
 																								
@@ -347,20 +366,7 @@ module.exports = {
 																						
 																						
 																					});
-																					
-																					/*userService.getFbContacts(fbUser,data, function(err, getContatResults) {
-																							if(err)
-																							{
-																									console.log(err);
-																									//return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-																									callback();
-																							}else{
-																									console.log("----return from contacts---------")
-																									console.log(getContatResults)
-																									//return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-																									callback();
-																							}
-																					 });*/
+
 																			    }
 																			 
 																			},

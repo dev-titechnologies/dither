@@ -283,27 +283,46 @@ module.exports = {
 			console.log("==========================  Fetching FbFriends Api =-=============");
 			var tokenCheck                  =     req.options.tokenCheck;
             var userId                      =     tokenCheck.tokenDetails.userId;    
-            var query	= "SELECT userId FROM fbFriends where ditherUserId = '"+userId+"' group by userId ";
-			console.log(query)
-			var frnd_arr = [];
-			
-			FbFriends.query(query, function(err,FBContacts){
-
-			//userService.getFbContacts(data,fbUser, function(err,dataResults) {
-				if(err)
-				{
-						console.log(err);
-						return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends', error_details: FBContacts});
-				}else{
-						console.log(FBContacts)
-						FBContacts.forEach(function(factor,index){
-							frnd_arr.push(factor.userId);
-						});
-						console.log(frnd_arr)
-						return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
+            var fbId						=	  tokenCheck.tokenDetails.fbId;
+            var frnd_arr					= 	  [];
+            TempFbFriends.find({fbId:fbId}).exec(function (err, getNewFbfrnds){
+				if(err){
+					console.log()
+					return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends'});
+				}
+				else{
+					if(getNewFbfrnds){
+						
+							getNewFbfrnds.forEach(function(factor, index){
+								frnd_arr.push(factor.userId);
+							});
+					
+							var query	= "SELECT userId FROM fbFriends where ditherUserId = '"+userId+"' group by userId ";
+							console.log(query)
+							var frnd_arr = [];
+							
+							FbFriends.query(query, function(err,FBContacts){
+								if(err)
+								{
+										console.log(err);
+										return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends', error_details: FBContacts});
+								}else{
+										console.log(FBContacts)
+										if(FBContacts){
+											FBContacts.forEach(function(factor,index){
+												frnd_arr.push(factor.userId);
+											});
+										}	console.log(frnd_arr)
+											
+										return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
+								}
+							});
+					}
+					else{
+						return res.json(200, {status: 2, status_type: 'Failure' , message: 'No Friends Found!'});
+					}
 				}
 			});
-			
 		} 
 
 };

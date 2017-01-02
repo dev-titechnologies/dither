@@ -146,31 +146,11 @@ module.exports = {
                                                                                     });
                                                                                 });
                                                                                 
-                                                                                
-																				var	data = {
-																								notificationTypeId	: 	7,
-																								userId				: 	userId,
-																								collage_id          :   collageId,
-																								tagged_users		:	mention_user_id,
-																								name				:	tokenCheck.tokenDetails.name,
-																								mentionPushArr		:	mentionPushArr
-																								
-																							}
-                                                                                NotificationService.commentMentionNotification(data, function(err, ntfnMention){
-																					if(err){
-																							console.log("Error in Push Notification Sending")
-																							console.log(err)
-																							callback();
-
-																					}else{
-																							console.log(ntfnMention)
-																							callback();
-																					}
-																				});
+                                                                             
                                                                                 
                                                                                 
                                                                                 
-                                                                              /*  var values ={
+                                                                              var values ={
                                                                                         notificationTypeId  :   7,
                                                                                         userId              :   userId,
                                                                                         collage_id          :   collageId,
@@ -219,41 +199,14 @@ module.exports = {
                                                                                                 });
 
                                                                                         }
-                                                                                   }); */
+                                                                                   }); 
                                                                             }
                                                                         });
                                                                 }else{
                                                                     callback();
                                                                 }
                                                         },
-                                                        /*function(callback) {
-                                                            console.log("COMMENT SERIES ------------------ 2");
-                                                            var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
-                                                            NotificationLog.query(query, function(err, selCommentNtfn){
-                                                                if(err){
-                                                                    console.log(err)
-                                                                    callback();
-                                                                }else{
-                                                                    if(selCommentNtfn.length!=0){
-                                                                         //console.log(selCommentNtfn[0].id)
-                                                                         old_id  =  selCommentNtfn[0].id;
-                                                                     }
-
-                                                                    var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
-                                                                    NotificationLog.query(query, function(err, deleteCommentNtfn){
-                                                                        if(err){
-                                                                            console.log(err)
-                                                                            callback();
-                                                                        }else{
-                                                                            console.log("delete comment NotificationId")
-                                                                            //console.log(deleteCommentNtfn)
-                                                                            callback();
-                                                                        }
-                                                                    });
-                                                                   }
-                                                             });
-
-                                                        },*/
+                                                        
                                                         function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 3");
                                                             var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"'";
@@ -285,94 +238,6 @@ module.exports = {
 																				}
 																			});
 																			
-                                                                           /* var values ={
-                                                                                            notificationTypeId  :   3,
-                                                                                            userId              :   userId,
-                                                                                            ditherUserId        :   collageDetails.userId,
-                                                                                            collage_id          :   collageId,
-                                                                                            description         :   CountComments.length
-                                                                                        }
-                                                                            NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-                                                                                    if(err){
-                                                                                        console.log(err);
-                                                                                        callback();
-                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage commented users', error_details: err});
-                                                                                    }else{
-                                                                                        var creator_roomName  = "socket_user_"+collageDetails.userId;
-                                                                                        sails.sockets.broadcast(creator_roomName,{
-                                                                                                                                type                       :       "notification",
-                                                                                                                                id                         :       collageId,
-                                                                                                                                user_id                    :       userId,
-                                                                                                                                message                    :       "Comment Dither - Room Broadcast - to Creator",
-                                                                                                                                //roomName                   :       creator_roomName,
-                                                                                                                                //subscribers                :       sails.sockets.subscribers(creator_roomName),
-                                                                                                                                //socket                     :       sails.sockets.rooms(),
-                                                                                                                                notification_type          :       3,
-                                                                                                                                notification_id            :       createdNotificationTags.id
-                                                                                                                                });
-                                                                                        //-----------------------------End OF NotificationLog---------------------------------
-                                                                                        User.findOne({id:collageDetails.userId}).exec(function (err, notifySettings){
-                                                                                            if(err){
-                                                                                                console.log(err)
-                                                                                                callback();
-                                                                                            }else{
-                                                                                              if(notifySettings){
-                                                                                                if(notifySettings.notifyComment==0){
-                                                                                                    callback();
-                                                                                                }else{
-                                                                                                    //----------------------------Push Notification For Comment------------------------------------------
-                                                                                                    var message   = 'Comment Notification';
-                                                                                                    var ntfn_body =  tokenCheck.tokenDetails.name +" Commented on Your Dither";
-                                                                                                    User_token.find({userId: collageDetails.userId }).exec(function (err, getDeviceId){
-                                                                                                        if(err){
-                                                                                                              console.log(err)
-                                                                                                              callback();
-                                                                                                        }else{
-                                                                                                            if(!getDeviceId.length){
-                                                                                                               //console.log("device not found")
-                                                                                                               callback();
-                                                                                                            }else{
-                                                                                                                    var deviceId_arr  = [];
-                                                                                                                    getDeviceId.forEach(function(factor, index){
-
-                                                                                                                                deviceId_arr.push(factor.deviceId);
-
-
-                                                                                                                    });
-                                                                                                                    if(deviceId_arr.length){
-                                                                                                                        var data    = {
-                                                                                                                                    message         :   message,
-                                                                                                                                    device_id       :   deviceId_arr,
-                                                                                                                                    NtfnBody        :   ntfn_body,
-                                                                                                                                    NtfnType        :   3,
-                                                                                                                                    id              :   collageId,
-                                                                                                                                    notification_id :   createdNotificationTags.id,
-                                                                                                                                    old_id          :   old_id
-                                                                                                                                    };
-                                                                                                                        NotificationService.NotificationPush(data, function(err, ntfnSend){
-                                                                                                                            if(err){
-                                                                                                                                    console.log("Error in Push Notification Sending")
-                                                                                                                                    console.log(err)
-                                                                                                                                    callback();
-
-                                                                                                                            }else{
-                                                                                                                                    callback();
-                                                                                                                            }
-                                                                                                                        });
-                                                                                                                    }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    });
-                                                                                                }
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    callback();
-                                                                                                }
-                                                                                            }
-                                                                                        });
-                                                                                    }
-                                                                            }); */
                                                                     }else{
                                                                                 callback();
                                                                     }

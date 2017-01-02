@@ -1416,6 +1416,12 @@ module.exports = {
                 console.log(req.headers['user-agent']);
                 console.log(req.headers);
     },
+    
+    testUserContacts: function (req, res){
+		
+		console.log("-----------inside test ---fetching contacts-----------")
+	},
+    
 };
 
 

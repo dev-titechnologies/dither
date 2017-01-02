@@ -138,55 +138,66 @@ console.log(values);
 
     },
 
-    /** Get each dither details **/
+    /* ==================================================================================================================================
+               Get each dither details
+   ==================================================================================================================================== */
     getSingleDitherDetails: function(req,res){
-         var ditherId=req.body.id;
-         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
-         var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
-
-            // var ditherId = 507;
-         console.log("inside getSingleDitherDetails function"+ditherId);
-         var query = "SELECT c.*,u.*, cd.image as singImage,cd.vote as individualVote FROM collage as c LEFT JOIN user as u ON u.id=c.userId LEFT JOIN collageDetails as cd ON c.id=cd.collageId  where c.id="+ditherId+" ORDER BY c.id DESC";
-
-        console.log(query);
-                    Collage.query(query, function (err, result) {
-                        if (err) {
-                            return res.json(200, {status: 2, error_details: err});
-                        } else {
-                            console.log(result);
-                            if(result)
-                            {
-                                result.forEach(function(factor, index){
-                                if(factor.singImage == null || factor.singImage == "" ){
-                                        singImage                   =     "";
-                                        dither_image                =     "";
-                                }else{
-                                        dither_image                    =     collageImg_path + factor.image
-                                        singImage                       =     collageImg_path + factor.singImage ;
-                                }
-                                 factor.singImage       =    singImage;
-                                 factor.image           =   dither_image;
-                                 console.log(factor.singImage)
-                                 console.log(factor.image)
-
-                                });
-                            }
-                            return res.json(200, {status: 1, message: "success", result: result});
+                var ditherId                    =     req.param("id");
+                var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                // var ditherId = 507;
+                console.log("inside getSingleDitherDetails function"+ditherId);
+                var query = " SELECT"+
+                             " c.createdAt, c.imgTitle, c.location, c.totalVote, c.image,"+
+                             " cd.image as singImage, cd.vote as individualVote,"+
+                             " u.name"+
+                             " FROM collage as c"+
+                             " INNER JOIN collageDetails as cd ON c.id = cd.collageId"+
+                             " INNER JOIN  user as u ON u.id = c.userId"+
+                             " where c.id = "+ditherId+
+                             " ORDER BY cd.createdAt DESC";
+                console.log(query);
+                Collage.query(query, function(err, result){
+                    if(err){
+                        return res.json(200, {status: 2, error_details: err});
+                    }else{
+                        console.log(result);
+                        if(result){
+                            result.forEach(function(factor, index){
+                                    if(factor.singImage == null || factor.singImage == "" ){
+                                            singImage                   =     "";
+                                            dither_image                =     "";
+                                    }else{
+                                            dither_image                    =     collageImg_path + factor.image
+                                            singImage                       =     collageImg_path + factor.singImage ;
+                                    }
+                                     factor.singImage       =    singImage;
+                                     factor.image           =   dither_image;
+                                     console.log(factor.singImage)
+                                     console.log(factor.image)
+                            });
                         }
-                    });
+                        return res.json(200, {status: 1, message: "success", result: result});
+                    }
+                });
     },
 
-    /** get the tagged users for each dither **/
+ /* ==================================================================================================================================
+               Get the tagged users for each dither
+   ==================================================================================================================================== */
     getSingleDitherTaggedUsers: function(req,res){
-       var ditherId=req.body.id;
-        var query = "SELECT u.*, t.* from user as u LEFT JOIN tags as t ON t.userId=u.id where t.collageId="+ditherId+" ORDER BY u.id ASC";
-        console.log(query);
+                    var ditherId                =       req.param("id");
+                    var query = " SELECT"+
+                                " u.name, u.id AS userId"+
+                                " FROM tags as t"+
+                                " INNER JOIN user as u ON t.userId = u.id"+
+                                " WHERE t.collageId = "+ditherId+
+                                " ORDER BY u.name";
+                    console.log(query);
                     Collage.query(query, function (err, result) {
-                        if (err) {
+                        if(err){
                             return res.json(200, {status: 2, error_details: err});
-                        } else {
-                            console.log("hello");
-                            console.log(result);
+                        }else{
                             return res.json(200, {status: 1, message: "success", result: result});
                         }
                     });

@@ -205,6 +205,7 @@ module.exports = {
                     callback(true, {status: 2, status_type: "Failure", message: 'Some error occured in select notification log', error_details: err});
                 }else{
                     // old_id      = selCommentNtfn[0].id;
+                    var creatorId;
                     var old_id     = "";
                     if(notificationFound.length){
                             console.log(notificationFound[0].id)
@@ -224,20 +225,25 @@ module.exports = {
                                 case 2 :
                                         description   =  parseInt(params.totalVote) + 1;
                                         likedImageId  =  likedImageId;
+                                        creatorId     =  params.collageCreatorId;
                                 break;
-                                
+
                                 case 3 :
-                                        description	  =  params.description;
+                                        description   =  params.description;
+                                        creatorId     =  params.collageCreatorId;
                                 break;
 
                                 case 9 :
+                                        creatorId     =  params.commentCreatorId;
                                         description   =  parseInt(params.totalLikeCount) + 1;
                                 break;
                             }
+                            console.log("creatorId ++++++++++");
+                            console.log(creatorId);
                             var values ={
                                     notificationTypeId  :   params.notificationTypeId,
                                     userId              :   params.userId,
-                                    ditherUserId        :   params.collageCreatorId,
+                                    ditherUserId        :   creatorId,
                                     collage_id          :   params.collageId,
                                     image_id            :   likedImageId,
                                     description         :   description,
@@ -251,7 +257,7 @@ module.exports = {
 
                                         switch(params.notificationTypeId){
                                             case 2 :
-                                                    var creator_roomName  = "socket_user_"+params.collageCreatorId;
+                                                    var creator_roomName  = "socket_user_"+params.creatorId;
                                                     sails.sockets.broadcast(creator_roomName,{
                                                                     type                       :       "notification",
                                                                     id                         :       params.collageId,
@@ -265,24 +271,24 @@ module.exports = {
                                                                     });
                                             break;
                                             case 3 :
-                                            
-													var creator_roomName  = "socket_user_"+params.collageCreatorId;
-													sails.sockets.broadcast(creator_roomName,{
-																	type                       :       "notification",
-																	id                         :       params.collageId,
-																	user_id                    :       params.userId,
-																	message                    :       "Comment Dither - Room Broadcast - to Creator",
-																	//roomName                   :       creator_roomName,
-																	//subscribers                :       sails.sockets.subscribers(creator_roomName),
-																	//socket                     :       sails.sockets.rooms(),
-																	notification_type          :       params.notificationTypeId,
-																	notification_id            :       createdNotificationTags.id
-																});
-													
+
+                                                    var creator_roomName  = "socket_user_"+params.creatorId;
+                                                    sails.sockets.broadcast(creator_roomName,{
+                                                                    type                       :       "notification",
+                                                                    id                         :       params.collageId,
+                                                                    user_id                    :       params.userId,
+                                                                    message                    :       "Comment Dither - Room Broadcast - to Creator",
+                                                                    //roomName                   :       creator_roomName,
+                                                                    //subscribers                :       sails.sockets.subscribers(creator_roomName),
+                                                                    //socket                     :       sails.sockets.rooms(),
+                                                                    notification_type          :       params.notificationTypeId,
+                                                                    notification_id            :       createdNotificationTags.id
+                                                                });
+
                                             break
 
                                             case 9 :
-                                                    var creator_roomName  = "socket_user_"+params.collageCreatorId;
+                                                    var creator_roomName  = "socket_user_"+params.creatorId;
                                                     sails.sockets.broadcast(creator_roomName,{
                                                                     type                       :       "notification",
                                                                     id                         :       params.collageId,
@@ -298,7 +304,7 @@ module.exports = {
                                         }
 
                                         params.notification_id     =   createdNotificationTags.id;
-                                        User.findOne({id : params.collageCreatorId}).exec(function (err, notifySettings){
+                                        User.findOne({id : params.creatorId}).exec(function (err, notifySettings){
                                             if(err){
                                                 console.log(err);
                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
@@ -324,7 +330,7 @@ module.exports = {
                                                                     }
                                                         break;
                                                         case "notifyComment":
-																	console.log("Inside <<<=======>>> notifyCommentLike");
+                                                                    console.log("Inside <<<=======>>> notifyCommentLike");
                                                                     if(notifySettings.notifyComment == 1){
                                                                             pushNotificationFunction(params);
                                                                     }else{
@@ -344,7 +350,7 @@ module.exports = {
                                              // +++++++++++++++++++++++++
                                                         function pushNotificationFunction(params){
                                                                 console.log("pushNotificationFunction ======>>>>>>>>>>>>>>>");
-                                                                User_token.find({userId: params.collageCreatorId }).exec(function (err, getDeviceId){
+                                                                User_token.find({userId: params.creatorId }).exec(function (err, getDeviceId){
                                                                     if(err){
                                                                           console.log(err);
                                                                           //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});
@@ -404,75 +410,180 @@ module.exports = {
                 }
             });
     },
-    
-	/*=============================================================================================================================================
+
+    /*=============================================================================================================================================
+     comment Notification Log Insertion
+    ==============================================================================================================================================*/
+
+    /*commentNotification: function(data,callback){
+        //var data  =   params;
+        console.log("-------inside Notification-----------")
+        console.log(data)
+         var values ={
+                    notificationTypeId  :   data.notificationTypeId,
+                    userId              :   data.userId,
+                    ditherUserId        :   data.ditherUserId,
+                    collage_id          :   data.collage_id,
+                    description         :   data.description
+                }
+                //console.log(values)
+        NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+                if(err){
+                    console.log(err);
+                    callback();
+                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in inserting collage commented users', error_details: err});
+                }else{
+                    var creator_roomName  = "socket_user_"+data.ditherUserId;
+                    sails.sockets.broadcast(creator_roomName,{
+                                                            type                       :       "notification",
+                                                            id                         :        data.collage_id,
+                                                            user_id                    :        data.userId,
+                                                            message                    :       "Comment Dither - Room Broadcast - to Creator",
+                                                            //roomName                   :       creator_roomName,
+                                                            //subscribers                :       sails.sockets.subscribers(creator_roomName),
+                                                            //socket                     :       sails.sockets.rooms(),
+                                                            notification_type          :       3,
+                                                            notification_id            :       createdNotificationTags.id
+                                                            });
+                    //-----------------------------End OF NotificationLog---------------------------------
+                    User.findOne({id:data.ditherUserId}).exec(function (err, notifySettings){
+                        if(err){
+                            console.log(err)
+                            callback();
+                        }else{
+                          if(notifySettings){
+                            if(notifySettings.notifyComment==0){
+                                callback();
+                            }else{
+                                //----------------------------Push Notification For Comment------------------------------------------
+                                //console.log(data)
+                                var message   = 'Comment Notification';
+                                var ntfn_body =  data.name +" Commented on Your Dither";
+                                User_token.find({userId: data.ditherUserId }).exec(function (err, getDeviceId){
+                                    if(err){
+                                          console.log(err)
+                                          callback();
+                                    }else{
+                                        if(!getDeviceId.length){
+                                           //console.log("device not found")
+                                           callback();
+                                        }else{
+                                                var deviceId_arr  = [];
+                                                getDeviceId.forEach(function(factor, index){
+
+                                                            deviceId_arr.push(factor.deviceId);
+
+
+                                                });
+                                                console.log(data)
+                                                if(deviceId_arr.length){
+                                                    var params    = {
+                                                                message         :   message,
+                                                                device_id       :   deviceId_arr,
+                                                                NtfnBody        :   ntfn_body,
+                                                                NtfnType        :   3,
+                                                                id              :   data.collage_id,
+                                                                notification_id :   createdNotificationTags.id,
+                                                                old_id          :   data.old_id
+                                                                };
+                                                    NotificationService.NotificationPush(params, function(err, ntfnSend){
+                                                        if(err){
+                                                                console.log("Error in Push Notification Sending")
+                                                                console.log(err)
+                                                                callback();
+
+                                                        }else{
+                                                            console.log(ntfnSend)
+                                                                callback();
+                                                        }
+                                                    });
+                                                }
+                                        }
+                                    }
+                                });
+                             }
+                            }
+                            else
+                            {
+                                callback();
+                            }
+                        }
+                    });
+                }
+        });
+
+
+    },*/
+
+
+    /*=============================================================================================================================================
      Mention comment Notification Log Insertion
     ==============================================================================================================================================*/
 
     commentMentionNotification: function(data,callback){
-		
-		
-		
-		
-		console.log("-----------------Mention---------Notification--------------------")
-		var values ={
-				notificationTypeId  :   7,
-				userId              :  data.userId,
-				collage_id          :  data.collage_id,
-				tagged_users        :  data.tagged_users
-			}
-		NotificationLog.create(values).exec(function(err, createdNotificationTags) {
-			   if(err){
-				   console.log(err)
-				   callback();
-			   }else{
-						User_token.find({userId: data.mentionPushArr}).exec(function (err, getDeviceId) {
-						//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
-							if(err){
-								  console.log(err);
-								  callback();
-							}else{
-								var message     =  'Mention Notification';
-								var ntfn_body   =   data.name +" has Mentioned You In a Dither";
-								var mention_deviceId_arr = [];
-								getDeviceId.forEach(function(factor, index){
-									mention_deviceId_arr.push(factor.deviceId);
-								});
-								if(!mention_deviceId_arr.length){
-										callback();
-								}else{
-										var params        =  {
-														message             :   message,
-														device_id           :   mention_deviceId_arr,
-														NtfnBody            :   ntfn_body,
-														NtfnType            :   7,
-														id                  :   data.collage_id,
-														notification_id     :   createdNotificationTags.id,
-														//old_id              :   old_id
-														};
-										console.log("paramsssssssssssssssss")				
-										console.log(params)
-										NotificationService.NotificationPush(params, function(err, ntfnSend){
-												if(err){
-													console.log("Error in Push Notification Sending")
-													console.log(err)
-													callback();
-												}else{
-													console.log("notification senddddddddddd")
-													console.log(ntfnSend)
-													callback();
-												}
-										});
-								}
-							}
-						});
 
-				}
-		   });
-		
-	},
-	
-    
+
+
+
+        console.log("-----------------Mention---------Notification--------------------")
+        var values ={
+                notificationTypeId  :   7,
+                userId              :  data.userId,
+                collage_id          :  data.collage_id,
+                tagged_users        :  data.tagged_users
+            }
+        NotificationLog.create(values).exec(function(err, createdNotificationTags) {
+               if(err){
+                   console.log(err)
+                   callback();
+               }else{
+                        User_token.find({userId: data.mentionPushArr}).exec(function (err, getDeviceId) {
+                        //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+                            if(err){
+                                  console.log(err);
+                                  callback();
+                            }else{
+                                var message     =  'Mention Notification';
+                                var ntfn_body   =   data.name +" has Mentioned You In a Dither";
+                                var mention_deviceId_arr = [];
+                                getDeviceId.forEach(function(factor, index){
+                                    mention_deviceId_arr.push(factor.deviceId);
+                                });
+                                if(!mention_deviceId_arr.length){
+                                        callback();
+                                }else{
+                                        var params        =  {
+                                                        message             :   message,
+                                                        device_id           :   mention_deviceId_arr,
+                                                        NtfnBody            :   ntfn_body,
+                                                        NtfnType            :   7,
+                                                        id                  :   data.collage_id,
+                                                        notification_id     :   createdNotificationTags.id,
+                                                        //old_id              :   old_id
+                                                        };
+                                        console.log("paramsssssssssssssssss")
+                                        console.log(params)
+                                        NotificationService.NotificationPush(params, function(err, ntfnSend){
+                                                if(err){
+                                                    console.log("Error in Push Notification Sending")
+                                                    console.log(err)
+                                                    callback();
+                                                }else{
+                                                    console.log("notification senddddddddddd")
+                                                    console.log(ntfnSend)
+                                                    callback();
+                                                }
+                                        });
+                                }
+                            }
+                        });
+
+                }
+           });
+
+    },
+
+
 };
 
 

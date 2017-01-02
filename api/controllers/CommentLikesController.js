@@ -45,6 +45,7 @@ module.exports = {
                                                         console.log(err);
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the commentLike', error_details: err});
                                                     }else{
+                                                        console.log(foundCommentLike);
                                                         if(foundCommentLike){
                                                              return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Already liked this comment'});
                                                         }else{
@@ -79,7 +80,7 @@ module.exports = {
                                                                                                                 //subscribers     :   sails.sockets.subscribers(roomName),
                                                                                                                 //socket          :   sails.sockets.rooms()
                                                                                                                 });
-                                                                                if(foundCollage.userId == userId){
+                                                                                if(foundComment.userId == userId){
                                                                                         return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
                                                                                                             total_like_count  :    total_like_count,
                                                                                                     });
@@ -88,7 +89,8 @@ module.exports = {
                                                                                                             collageId                   :    collageId,
                                                                                                             notificationTypeId          :    9,
                                                                                                             userId                      :    userId,
-                                                                                                            collageCreatorId            :    foundCollage.userId,
+                                                                                                            //collageCreatorId            :    foundCollage.userId,
+                                                                                                            commentCreatorId            :    foundComment.userId,
                                                                                                             notificationSettingsType    :    "notifyCommentLike",
                                                                                                             message                     :    "comment like notification",
                                                                                                             ntfn_body                   :    userName + " liked on your comment",

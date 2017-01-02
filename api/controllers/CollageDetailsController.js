@@ -210,11 +210,12 @@ module.exports = {
                                                                                 if(dataResults[i]["likeStatus"] == null || dataResults[i]["likeStatus"] == ""){
                                                                                         likeStatus                 =      0;
                                                                                 }else{
-                                                                                    if(dataResults[i]["likedUserId"] == userId){
+                                                                                    /*if(dataResults[i]["likedUserId"] == userId){
                                                                                         likeStatus                 =      1;
                                                                                     }else{
                                                                                         likeStatus                 =      0;
-                                                                                    }
+                                                                                    }*/
+                                                                                    likeStatus                 =      1;
                                                                                 }
                                                                                 dataResultsObj.comment_id                       =   dataResults[i]["id"];
                                                                                 dataResultsObj.user_id                          =   dataResults[i]["userId"];

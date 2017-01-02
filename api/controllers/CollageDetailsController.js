@@ -172,7 +172,7 @@ module.exports = {
                                                                 " (SELECT COUNT(id) FROM commentLikes WHERE commentId = clgcmt.id) AS totalLikeCount"+
                                                                 " FROM collageComments clgcmt"+
                                                                 " LEFT JOIN commentImages AS cmntImg ON cmntImg.commentId = clgcmt.id"+
-                                                                " LEFT JOIN commentLikes cmtlk ON cmtlk.commentId = clgcmt.id"+
+                                                                " LEFT JOIN commentLikes cmtlk ON cmtlk.commentId = clgcmt.id AND cmtlk.userId = "+userId+
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
                                                                 " ORDER BY clgcmt.createdAt";

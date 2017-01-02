@@ -231,12 +231,8 @@ module.exports = {
 																					sendStatus			=	true;
 																					var contactArr 		= 	 [];
 																					var fbUserArray 	= 	 [];
-																					
-																					/*var query =  "INSERT INTO tempFbfriends"+
-																								 " (userId, fbId, createdAt, updatedAt)"+
-																								 " VALUES"+fbUserArray;*/
-																					
-																					fbUser.forEach(function(factor, index){
+
+																					fbUser.forEach(function(factor, index){s
 																						
 																						 contactArr.push(factor.fb_userid)
 																						 //fbUserArray.push("("+factor.fb_userid+",'"+factor.fb_userid+"', now(), now())");
@@ -274,93 +270,96 @@ module.exports = {
                                                                                                          if(notifySettings){
                                                                                                                 if(notifySettings.notifyContact==1){
                                                                                                                     //contact_arr.push(factor.userId);
-                                                                                                                    fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
+                                                                                                                    fbUserArray.push("("+factor.id+","+results.id+",'"+factor.fbId+"', now(), now())");
                                                                                                                 }
                                                                                                                }
                                                                                                 });*/
-																								
 																								
 																								fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
 																								
 																							
 																							});
 																							
-																							if(notifyArr){
-																									var values ={
-																										notificationTypeId  :   5,
-																										userId              :   data.userId,
-																										tagged_users        :   notifyArr
-																									}
-																								   console.log("valuessssssssssss")
-																								   console.log(values)
-																								  
-																								   NotificationLog.create(values).exec(function(err, createdNotification){
-																									if(err){
-																										console.log(err);
-																										//callback();
-																									}else{
-																											
-																										User_token.find({userId: notifyArr}).exec(function (err, getDeviceId){
-																												if(err){
-																													  console.log(err);
-																													  callback();
-																												}else{
-																													console.log("-----------------6----------------------")
-																													var message     =  'FBsignup Notification';
-																													var ntfn_body   =   "Your facebook friend "+results.name+" is now on Dither";
-																													getDeviceId.forEach(function(factor, index){
-																														deviceId_arr.push(factor.deviceId);
-																													});
-																													if(!deviceId_arr.length){
-																														console.log("deviceeee")
-																															callback();
-																													}else{
-																														console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
-																														var data        =  {
-																																				message			:	message,
-																																				device_id		:	deviceId_arr,
-																																				NtfnBody		:	ntfn_body,
-																																				NtfnType:5,id	:	results.id,
-																																				notification_id	:	createdNotification.id,
-																																				old_id			:	'',
-																																				name			:	results.name
-																																			};
-																														NotificationService.NotificationPush(data, function(err, ntfnSend){
-																															if(err){
-																																console.log("Error in Push Notification Sending")
-																																console.log(err)
-																																callback(); 
-																															}else{
-																																console.log("Push notification result")
-																																console.log(ntfnSend)
-																																console.log("Push Notification sended")
-																																var query = "INSERT INTO fbFriends"+
-																																			" (userId,ditherUserId,ditherUserName, fbId, createdAt, updatedAt)"+
-																																			" VALUES"+fbUserArray;
-																																FbFriends.query(query,function(err, createdFbFriends){
-																																	if(err)
-																																	{
-																																		console.log(err)
-																																		callback();
-																																	}
-																																	else{
-																																		console.log(createdFbFriends)
-																																		callback();
-																																		sendStatus	=	true;
-																																	}
-																																});
-
-																																//callback();
-																															}
-																														});
-																													}
-																												//------------------------------
-																												}
-																											});//getDeviceId
-																										
+																							/*var query =  "INSERT INTO tempFbfriends"+
+																								 " (userId, fbId, createdAt, updatedAt)"+
+																								 " VALUES"+fbUserArray;*/
+																							
+																							
+																								if(notifyArr){
+																										var values ={
+																											notificationTypeId  :   5,
+																											userId              :   data.userId,
+																											tagged_users        :   notifyArr
 																										}
-																									});
-																								}
+																									   console.log("valuessssssssssss")
+																									   console.log(values)
+																									  
+																									   NotificationLog.create(values).exec(function(err, createdNotification){
+																										if(err){
+																											console.log(err);
+																											//callback();
+																										}else{
+																											User_token.find({userId: notifyArr}).exec(function (err, getDeviceId){
+																													if(err){
+																														  console.log(err);
+																														  callback();
+																													}else{
+																														console.log("-----------------6----------------------")
+																														var message     =  'FBsignup Notification';
+																														var ntfn_body   =   "Your facebook friend "+results.name+" is now on Dither";
+																														getDeviceId.forEach(function(factor, index){
+																															deviceId_arr.push(factor.deviceId);
+																														});
+																														if(!deviceId_arr.length){
+																															console.log("deviceeee")
+																																callback();
+																														}else{
+																															console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+																															var data        =  {
+																																					message			:	message,
+																																					device_id		:	deviceId_arr,
+																																					NtfnBody		:	ntfn_body,
+																																					NtfnType:5,id	:	results.id,
+																																					notification_id	:	createdNotification.id,
+																																					old_id			:	'',
+																																					name			:	results.name
+																																				};
+																															NotificationService.NotificationPush(data, function(err, ntfnSend){
+																																if(err){
+																																	console.log("Error in Push Notification Sending")
+																																	console.log(err)
+																																	callback(); 
+																																}else{
+																																	console.log("Push notification result")
+																																	console.log(ntfnSend)
+																																	console.log("Push Notification sended")
+																																	var query = "INSERT INTO fbFriends"+
+																																				" (userId,ditherUserId,ditherUserName, fbId, createdAt, updatedAt)"+
+																																				" VALUES"+fbUserArray;
+																																	FbFriends.query(query,function(err, createdFbFriends){
+																																		if(err)
+																																		{
+																																			console.log(err)
+																																			callback();
+																																		}
+																																		else{
+																																			console.log(createdFbFriends)
+																																			callback();
+																																			sendStatus	=	true;
+																																		}
+																																	});
+
+																																	//callback();
+																																}
+																															});
+																														}
+																													//------------------------------
+																													}
+																												});//getDeviceId
+																											
+																											}
+																										});
+																									}
 																							
 																						}
 																						

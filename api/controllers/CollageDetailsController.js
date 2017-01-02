@@ -94,7 +94,7 @@ module.exports = {
                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Details'});
                                 }else{
                                     if(!results.length){
-                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by this Id'});
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Dither not available'});
                                     }else{
                                             var imageArray              =   [];
                                             var imageArray_2            =   [];

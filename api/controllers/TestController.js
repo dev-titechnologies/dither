@@ -1417,9 +1417,52 @@ module.exports = {
                 console.log(req.headers);
     },
     
-    testUserContacts: function (req, res){
+    /* ===================================================================================================================================
+             PUSH FOR VERSION UPDATE
+    ================================================================================================================================== */
+    
+    
+    pushNtfnUpdate: function (req, res){
 		
-		console.log("-----------inside test ---fetching contacts-----------")
+		console.log("-----------Push Notification For Version Update-----------")
+		var query	=	"SELECT `deviceId` FROM `userToken`";
+		User_token.query(query, function(err, getDeviceId) {
+		
+			if(err){
+				  console.log(err);
+				  return res.json(200, {status: 2, status_type: 'Failure', message: 'Error in fetching users'});
+			}else{
+				var message     	=  	'Update Notification';
+				var ntfn_body   	=   "Dither New version available";
+				var deviceId_arr 	= 	[];
+				getDeviceId.forEach(function(factor, index){
+					deviceId_arr.push(factor.deviceId);
+				});
+				if(!deviceId_arr.length){
+						return res.json(200, {status: 2, status_type: 'Failure', message: 'There is no active users'});
+				}else{
+						var data        =   {
+												message             :   message,
+												device_id           :   deviceId_arr,
+												NtfnBody            :   ntfn_body,
+												NtfnType            :   10,
+												id                  :   '',
+												notification_id     :   '',
+												old_id              :   ''
+											};
+						NotificationService.NotificationPush(data, function(err, ntfnSend){
+								if(err){
+									console.log("Error in Push Notification Sending")
+									console.log(err)
+									return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured in Push Notification'});
+								}else{
+									return res.json(200, {status: 1, status_type: 'Success', message: 'Push Notification sended'});
+								}
+						});
+				}
+			}
+		});
+
 	},
     
 };

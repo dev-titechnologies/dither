@@ -232,7 +232,7 @@ module.exports = {
 																					var contactArr 		= 	 [];
 																					var fbUserArray 	= 	 [];
 
-																					fbUser.forEach(function(factor, index){s
+																					fbUser.forEach(function(factor, index){
 																						
 																						 contactArr.push(factor.fb_userid)
 																						 //fbUserArray.push("("+factor.fb_userid+",'"+factor.fb_userid+"', now(), now())");
@@ -282,7 +282,16 @@ module.exports = {
 																							
 																							/*var query =  "INSERT INTO tempFbfriends"+
 																								 " (userId, fbId, createdAt, updatedAt)"+
-																								 " VALUES"+fbUserArray;*/
+																								 " VALUES"+fbUserArray;
+																							
+																								TempFbFriends.query(query,function(err, createdFbFriends){
+																									if(err){
+																										callback();
+																									 }
+																									 else{
+																											console.log(createdFbFriends);
+																									  }
+																								});*/
 																							
 																							
 																								if(notifyArr){

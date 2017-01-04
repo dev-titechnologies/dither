@@ -304,11 +304,16 @@ module.exports = {
 										console.log(err)
 									}
 									else{
-										frnd_arr	=	{
-															userId : factor.userId,
-															name   : details[0].name,
-															fbId   : details[0].fbId 	
-														}
+										console.log("ddddddddddddddddd")
+										console.log(details)
+										if(details.length)
+										{
+											frnd_arr	=	{
+																userId : factor.userId,
+																name   : details[0].name,
+																fbId   : details[0].fbId 	
+															}
+										}					
 									}
 								});
 							});

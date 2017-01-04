@@ -119,7 +119,7 @@ module.exports = {
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
 
-                                                                                            ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
+                                                                                           ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
                                                                                                             console.log("Error in image resize !!!!");
@@ -128,7 +128,7 @@ module.exports = {
                                                                                                              callback();
                                                                                                     }
                                                                                             });
-                                                                                           // callback();
+                                                                                           //callback();
                                                                                     });
                                                                             },
                                                                             
@@ -265,19 +265,9 @@ module.exports = {
 																							var fbUserArray		=	[];
 																							getUserId.forEach(function(factor, index){
 																								notifyArr.push(factor.id);
-																								// ------------notification Setting-------------------
-																								/*User.findOne({id:factor.userId}).exec(function (err, notifySettings){
-                                                                                                         if(notifySettings){
-                                                                                                                if(notifySettings.notifyContact==1){
-                                                                                                                    //contact_arr.push(factor.userId);
-                                                                                                                    fbUserArray.push("("+factor.id+","+results.id+",'"+factor.fbId+"', now(), now())");
-                                                                                                                }
-                                                                                                               }
-                                                                                                });*/
+																								fbUserArray.push("("+results.id+",'"+factor.name+"','"+factor.fbId+"', now(), now())");
+																								//fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
 																								
-																								fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
-																								
-																							
 																							});
 																							
 																							/*var query =  "INSERT INTO tempFbfriends"+
@@ -342,10 +332,14 @@ module.exports = {
 																																	console.log("Push notification result")
 																																	console.log(ntfnSend)
 																																	console.log("Push Notification sended")
-																																	var query = "INSERT INTO fbFriends"+
+																																	/*var query = "INSERT INTO fbFriends"+
 																																				" (userId,ditherUserId,ditherUserName, fbId, createdAt, updatedAt)"+
-																																				" VALUES"+fbUserArray;
-																																	FbFriends.query(query,function(err, createdFbFriends){
+																																				" VALUES"+fbUserArray;*/
+																																		
+																																	var query =  "INSERT INTO TempFbFriends"+
+																																				 " (userId,fbName,fbId, createdAt, updatedAt)"+
+																																				 " VALUES"+fbUserArray;
+																																	TempFbFriends.query(query,function(err, createdFbFriends){
 																																		if(err)
 																																		{
 																																			console.log(err)

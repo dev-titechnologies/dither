@@ -287,40 +287,48 @@ module.exports = {
             var frnd_arr					= 	  [];
             TempFbFriends.find({fbId:fbId}).exec(function (err, getNewFbfrnds){
 				if(err){
-					console.log()
+					console.log(err)
 					return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends'});
 				}
 				else{
-					if(getNewFbfrnds){
-						
-							getNewFbfrnds.forEach(function(factor, index){
-								frnd_arr.push(factor.userId);
-							});
-					
-							var query	= "SELECT userId FROM fbFriends where ditherUserId = '"+userId+"' group by userId ";
-							console.log(query)
-							var frnd_arr = [];
-							
-							FbFriends.query(query, function(err,FBContacts){
-								if(err)
-								{
-										console.log(err);
-										return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends', error_details: FBContacts});
-								}else{
-										console.log(FBContacts)
-										if(FBContacts){
-											FBContacts.forEach(function(factor,index){
-												frnd_arr.push(factor.userId);
-											});
-										}	console.log(frnd_arr)
-											
-										return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
-								}
-							});
-					}
-					else{
+					if(!getNewFbfrnds){
 						return res.json(200, {status: 2, status_type: 'Failure' , message: 'No Friends Found!'});
 					}
+					else{
+						    console.log(getNewFbfrnds)
+							getNewFbfrnds.forEach(function(factor, index){
+								//frnd_arr.push(factor.userId)
+								User.find({id:factor.userId}).exec(function (err, details){
+									if(err){
+										console.log(err)
+									}
+									else{
+										frnd_arr	=	{
+															userId : factor.userId,
+															name   : details[0].name,
+															fbId   : details[0].fbId 	
+														}
+									}
+								});
+							});
+							console.log(frnd_arr)
+							var query	= "DELETE FROM TempFbFriends where fbId = '"+fbId+"'";
+							TempFbFriends.query(query, function(err,deleteNewFrnds){
+								
+								if(err){
+									console.log(err)
+									return res.json(200, {status: 2, status_type: 'Failure' , message: 'error!'});
+									
+								}else{
+									
+									console.log(deleteNewFrnds)
+									return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
+								}
+								
+							});	
+							
+					}
+					
 				}
 			});
 		} 

@@ -291,7 +291,8 @@ module.exports = {
 					return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends'});
 				}
 				else{
-					if(!getNewFbfrnds){
+					console.log(getNewFbfrnds)
+					if(!getNewFbfrnds.length){
 						return res.json(200, {status: 2, status_type: 'Failure' , message: 'No Friends Found!'});
 					}
 					else{

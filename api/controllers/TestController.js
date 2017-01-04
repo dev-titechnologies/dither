@@ -1464,7 +1464,42 @@ module.exports = {
 		});
 
 	},
+	
+	
+	/* ===================================================================================================================================
+             FB CALLBACK
+    ================================================================================================================================== */
+
+	fbcallback: function (req, res){
+		
+		console.log("--------------GET FBCALLBACK---------------")
+		console.log(req.body)
+		var data = JSON.stringify(req.body)
+		console.log(data)
+		values = { 
+			
+					data:data
+			}
+		
+		TempFbData.create(values).exec(function(err, results){
+				if(err){
+					console.log(err)
+					return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured '});
+				}
+				else{
+					console.log(results)
+					return res.json(200, {status: 1, status_type: 'success', message: 'data inserted successfully'});
+					
+				}
+		});	
+		
+		
+	}
+
     
 };
+
+
+
 
 

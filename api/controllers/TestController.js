@@ -1333,18 +1333,48 @@ module.exports = {
             Proportionate height and width
     ================================================================================================================================== */
     imageHeightWidth: function (req, res){
-                var imageHeight         =  parseFloat(req.param("height"));
+                /*var imageHeight         =  parseFloat(req.param("height"));
                 var imageWidth          =  parseFloat(req.param("width"));
 
                 var height         =   180/180;
                 var width          =   parseFloat(imageWidth/180);
                 height             =   parseFloat(width * 180);
 
-                //ratio                   = imageWidth / imageHeight;
+                //ratio                   = imageWidth / imageHeight;*/
+                console.log(req.params.all());
 
-                return res.json(200, {status: 1, status_type: 'Success' , message: 'proportionate image size',
-                                        result : {width : width, height : height}
+                var image_width         =  req.param("width");
+                var image_height        =  req.param("height");
+
+                if(!image_width || !image_height){
+                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass both width and height',
                                         });
+                }else{
+                        image_width         =  parseFloat(image_width);
+                        image_height        =  parseFloat(image_height);
+                        var resultHeight,
+                            resultWidth,
+                            ratio;
+                        if(image_width > image_height){
+                                ratio           =   image_height/ image_width;
+                                ratio           =   parseFloat(ratio);
+                                resultWidth     =   180;
+                                resultHeight    =   ratio  * 180;
+                        }else if(image_height > image_width){
+                                ratio = image_width/ image_height;
+                                ratio           =   parseFloat(ratio);
+                                resultHeight    =   180;
+                                resultWidth     =   ratio  * 180;
+                        }else{
+                               // both are same
+                               resultHeight     =   180;
+                               resultWidth      =   180;
+
+                        }
+                        return res.json(200, {status: 1, status_type: 'Success' , message: 'proportionate image size',
+                                                result : {width : resultWidth, height : resultHeight}
+                                                });
+                }
 
 
 
@@ -1413,16 +1443,21 @@ module.exports = {
              Proportionate height and width
     ================================================================================================================================== */
     userAgent: function (req, res){
+
                 console.log(req.headers['user-agent']);
                 console.log(req.headers);
+                console.log(req.params.all());
+                return res.json(200, {status: 1, status_type: 'Success', message: 'userAgent success',results : ["One", "Two", "Three", "Four"]});
+
     },
-    
+
     /* ===================================================================================================================================
              PUSH FOR VERSION UPDATE
     ================================================================================================================================== */
-    
-    
+
+
     pushNtfnUpdate: function (req, res){
+
 		
 		console.log("-----------Push Notification For Version Update-----------")
 		var query	=	"SELECT `deviceId` FROM `userToken`";
@@ -1466,10 +1501,12 @@ module.exports = {
 	},
 	
 	
-	/* ===================================================================================================================================
+
+        
+    
+    /* ===================================================================================================================================
              FB CALLBACK
     ================================================================================================================================== */
-
 	fbcallback: function (req, res){
 		
 		console.log("--------------GET FBCALLBACK---------------")
@@ -1496,7 +1533,6 @@ module.exports = {
 		
 	}
 
-    
 };
 
 

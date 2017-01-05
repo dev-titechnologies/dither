@@ -132,19 +132,22 @@ module.exports = {
 
                                                         async.series([
                                                                 function(callback) {
-                                                                            imgWidth                    =    242;
+                                                                            /*imgWidth                    =    242;
                                                                             imgHeight                   =    242;
                                                                             imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
                                                                             ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
                                                                                     if(err){
                                                                                             console.log(err);
                                                                                             console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                            callback();
+                                                                                            //callback();
                                                                                     }else{
-                                                                                            callback();
+                                                                                           // callback();
+                                                                                            console.log("Loop success");
+                                                                                            //collage-Details images
+
                                                                                     }
-                                                                            });
-                                                                            //callback();
+                                                                            });*/
+                                                                            callback();
 
                                                                 },
                                                         ],function(err){
@@ -152,26 +155,27 @@ module.exports = {
                                                                         console.log(err);
                                                                         //callback();
                                                                     }else{
-                                                                        console.log("Loop success");
-                                                                        //collage-Details images
-                                                                        if(factor.image == null || factor.image == ""){
-                                                                                collage_image           =     "";
-                                                                                collage_image_242x242   =     "";
-                                                                        }else{
-                                                                                var imageSrc                    =     collageImg_path_assets + factor.image;
-                                                                                var ext                         =     imageSrc.split('/');
-                                                                                ext                             =     ext[ext.length-1].split('.');
-                                                                                collage_image                   =     collageImg_path + factor.image;
-                                                                                collage_image_242x242           =     collageImg_path + ext[0] + "_242x242." +ext[1];
-                                                                        }
-                                                                        factor.image            =     collage_image;
-                                                                        factor.image_242x242    =     collage_image_242x242;
-                                                                        console.log(factor.image_242x242);
-                                                                        if(count == results.length){
-                                                                                callback();
-                                                                        }
+                                                                            if(factor.image == null || factor.image == ""){
+                                                                                    collage_image           =     "";
+                                                                                    collage_image_242x242   =     "";
+                                                                            }else{
+                                                                                    var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                                                    var ext                         =     imageSrc.split('/');
+                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                    collage_image                   =     collageImg_path + factor.image;
+                                                                                    collage_image_242x242           =     collageImg_path + ext[0] + "_242x242." +ext[1];
+                                                                            }
+                                                                            factor.image            =     collage_image;
+                                                                            factor.image_242x242    =     collage_image_242x242;
+                                                                            console.log(factor.image_242x242);
+
+
+                                                                            if(count == results.length){
+                                                                                    callback();
+                                                                            }
                                                                     }
                                                         });
+
 
                                                 });
 

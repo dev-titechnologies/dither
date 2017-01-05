@@ -1379,6 +1379,27 @@ module.exports = {
 
 
     },
+    //--------------------Testingggggggggggggg-------------------------------------
+    testResize: function (req, res){
+		
+		var im = require('imagemagick');
+		im.identify('imageNw.jpeg', function(err, features){
+		  if (err) {
+					//throw err
+					return res.json(200, {status: 2, status_type: 'Failure', message: 'error'});
+			 }else{
+				  console.log(features)
+				  return res.json(200, {status: 1, status_type: 'Success', message: 'resized',features:features});
+			}  // { format: 'JPEG', width: 3904, height: 2622, depth: 8 }
+			
+		});
+		
+		
+	},
+    
+    
+    
+    
     /*  =================================================================================================================================
              Proportionate height and width
     ================================================================================================================================== */

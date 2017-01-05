@@ -144,7 +144,7 @@ module.exports = {
                                                                                             callback();
                                                                                     }
                                                                             });
-                                                                            callback();
+                                                                            //callback();
 
                                                                 },
                                                         ],function(err){
@@ -182,8 +182,8 @@ module.exports = {
                                         return res.json(200, {status: 2, message: "Failure"
                                                         });
                                     }else{
-                                            console.log("Results ---------- >>>>>>>>>");
-                                            console.log(results);
+                                            //console.log("Results ---------- >>>>>>>>>");
+                                            //console.log(results);
                                              return res.json(200, {status: 1, message: "success",
                                                                     result: results
                                                         });

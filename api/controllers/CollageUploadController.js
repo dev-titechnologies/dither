@@ -431,10 +431,11 @@ module.exports = {
                                                                                         ],function(err){
                                                                                                     if(err){
                                                                                                         console.log(err);
-                                                                                                        //callback();
+                                                                                                        callback();
                                                                                                     }else{
                                                                                                         console.log("Loop success");
                                                                                                         //collage-Details images
+                                                                                                        callback();
 
                                                                                                     }
                                                                                         });

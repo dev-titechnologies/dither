@@ -17,7 +17,8 @@ module.exports = {
                         console.log(req.params.all());
                         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                         var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
-                        var collage_image;
+                        var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
+                        var collage_image, collage_image_242x242;
                         var start                       =   req.body.start;
                         var count                       =   req.body.count;
                         var name                        =   req.body.name;
@@ -104,23 +105,89 @@ module.exports = {
 
                         }
                         console.log(query);
-                        Collage.query(query, function (err, result){
-                            if(err){
-                                return res.json(200, {status: 2, error_details: err});
-                            }else{
-                                    result.forEach(function(factor, index){
-                                            if(factor.image == null || factor.image == ""){
-                                                    collage_image   =     "";
-                                            }else{
-                                                    collage_image   =     collageImg_path + factor.image;
-                                            }
-                                            factor.image            =     collage_image;
-                                    });
+                        var results             =       [];
+                        async.series([
+                                    function(callback) {
+                                                Collage.query(query, function (err, result){
+                                                    if(err){
+                                                        //return res.json(200, {status: 2, error_details: err});
+                                                        callback();
+                                                    }else{
+                                                            results  = result;
+                                                            callback();
+                                                    }
+                                                });
+                                    },
+                                    function(callback){
+                                                console.log("INSIDE foreach callback........");
+                                                var count = 0;
+                                                results.forEach(function(factor, index){
+                                                        count++;
+                                                        var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                        var ext                         =     imageSrc.split('/');
+                                                        ext                             =     ext[ext.length-1].split('.');
+                                                        var imgWidth,
+                                                            imgHeight,
+                                                            imageDst;
 
-                                    return res.json(200, {status: 1, message: "success",
-                                                result: result
-                                    });
-                            }
+                                                        async.series([
+                                                                function(callback) {
+                                                                            imgWidth                    =    242;
+                                                                            imgHeight                   =    242;
+                                                                            imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                    if(err){
+                                                                                            console.log(err);
+                                                                                            console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                            callback();
+                                                                                    }else{
+                                                                                            callback();
+                                                                                    }
+                                                                            });
+                                                                            callback();
+
+                                                                },
+                                                        ],function(err){
+                                                                    if(err){
+                                                                        console.log(err);
+                                                                        //callback();
+                                                                    }else{
+                                                                        console.log("Loop success");
+                                                                        //collage-Details images
+                                                                        if(factor.image == null || factor.image == ""){
+                                                                                collage_image           =     "";
+                                                                                collage_image_242x242   =     "";
+                                                                        }else{
+                                                                                var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                                                var ext                         =     imageSrc.split('/');
+                                                                                ext                             =     ext[ext.length-1].split('.');
+                                                                                collage_image                   =     collageImg_path + factor.image;
+                                                                                collage_image_242x242           =     collageImg_path + ext[0] + "_242x242." +ext[1];
+                                                                        }
+                                                                        factor.image            =     collage_image;
+                                                                        factor.image_242x242    =     collage_image_242x242;
+                                                                        console.log(factor.image_242x242);
+                                                                    }
+                                                        });
+                                                        if(count == results.length){
+                                                                callback();
+                                                        }
+                                                });
+
+                                    },
+                        ],function(err){
+                                    if(err){
+                                        console.log(err);
+                                        //callback();
+                                        return res.json(200, {status: 2, message: "Failure"
+                                                        });
+                                    }else{
+                                            console.log("Results ---------- >>>>>>>>>");
+                                            console.log(results);
+                                             return res.json(200, {status: 1, message: "success",
+                                                                    result: results
+                                                        });
+                                    }
                         });
 
     },

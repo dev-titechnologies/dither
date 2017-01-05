@@ -1,6 +1,5 @@
-
-
-var fs          = require('fs');
+var fs          =   require('fs');
+var im          =   require('imagemagick');
 
 module.exports = {
 
@@ -48,6 +47,31 @@ module.exports = {
             }
 
         });
+    },
+/*  =================================================================================================================================
+            Function to Resize Image with both Height and Width
+    ================================================================================================================================== */
+    imageResizeWH: function (imgWidth, imgHeight, imageSrc,imageDst,callback) {
+
+                    console.log("imageResizeWH Service >>>>>>>");
+                    im.resize({
+                      //srcData: fs.readFileSync('assets/images/abc.jpg', 'binary'),
+                      srcData: fs.readFileSync(imageSrc, 'binary'),
+                      width:   imgWidth,
+                      width:   imgHeight
+                    }, function(err, stdout, stderr){
+                              if (err)
+                              {
+                                    //throw err;
+                                      console.log(err);
+                                      callback(true, {status: 2, status_type: "Failure", message: 'Some error occured resizing image', error_details: err});
+
+                              }else{
+                                      fs.writeFileSync(imageDst, stdout, 'binary');
+
+                                      callback(false, {status: 1, status_type: "Success", message: 'Successfully resized the image'});
+                              }
+                    });
     },
 
 

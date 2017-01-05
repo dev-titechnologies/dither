@@ -316,6 +316,7 @@ module.exports = {
                                                                                                             });
                                                                                                             sortedVote                  = vote.sort( predicatBy("position") );*/
                                                                                                             collage_results             = results;
+                                                                                                            collageDetails_results      = createdCollageDetails;
                                                                                                             callback();
                                                                                                         }
                                                                                                 });
@@ -330,17 +331,117 @@ module.exports = {
                                                                 var imageSrc                    =     collageImg_path_assets + collage_results.image;
                                                                 var ext                         =     imageSrc.split('/');
                                                                 ext                             =     ext[ext.length-1].split('.');
-                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                console.log(imageSrc);
-                                                                console.log(imageDst);
-                                                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                        if(err){
+                                                                var imgWidth,
+                                                                    imgHeight,
+                                                                    imageDst;
+
+                                                                async.series([
+                                                                        function(callback) {
+                                                                                    imgWidth                    =    70;
+                                                                                    imgHeight                   =    70;
+                                                                                    imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    console.log("Error in image resize !!!!");
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
+
+                                                                        },
+                                                                        function(callback) {
+                                                                                    imgWidth                    =    242;
+                                                                                    imgHeight                   =    242;
+                                                                                    imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    console.log("Error in image resize !!!!");
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
+
+                                                                        },
+                                                                        function(callback) {
+                                                                                    imgWidth                    =    350;
+                                                                                    imgHeight                   =    350;
+                                                                                    imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    console.log("Error in image resize !!!!");
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
+
+                                                                        },
+                                                                ],function(err){
+                                                                            if(err){
                                                                                 console.log(err);
-                                                                                console.log("Error in image resize !!!!");
                                                                                 callback();
-                                                                        }else{
-                                                                                callback();
-                                                                        }
+                                                                            }else{
+                                                                                //callback();
+                                                                                //collage-Details images -- STARTS
+                                                                                collageDetails_results.forEach(function(factor, index){
+
+                                                                                        var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                                                        var ext                         =     imageSrc.split('/');
+                                                                                        ext                             =     ext[ext.length-1].split('.');
+                                                                                        var imgWidth,
+                                                                                            imgHeight,
+                                                                                            imageDst;
+
+                                                                                        async.series([
+                                                                                                function(callback) {
+                                                                                                            imgWidth                    =    160;
+                                                                                                            imgHeight                   =    160;
+                                                                                                            imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                                    if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                                            callback();
+                                                                                                                    }else{
+                                                                                                                            callback();
+                                                                                                                    }
+                                                                                                            });
+
+                                                                                                },
+                                                                                        function(callback) {
+                                                                                                            imgWidth                    =    70;
+                                                                                                            imgHeight                   =    70;
+                                                                                                            imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                                    if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            console.log("Error in image resize 70 collageDetails !!!!");
+                                                                                                                            callback();
+                                                                                                                    }else{
+                                                                                                                            callback();
+                                                                                                                    }
+                                                                                                            });
+
+                                                                                                },
+                                                                                        ],function(err){
+                                                                                                    if(err){
+                                                                                                        console.log(err);
+                                                                                                        //callback();
+                                                                                                    }else{
+                                                                                                        console.log("Loop success");
+                                                                                                        //collage-Details images
+
+                                                                                                    }
+                                                                                        });
+                                                                                //collage-Details images -- ENDS
+
+                                                                                }, callback());
+                                                                            }
                                                                 });
                                                         },
                                                         function(callback) {

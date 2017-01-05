@@ -4,7 +4,8 @@
  * @description :: Server-side logic for managing tests
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-var fs          = require('fs');
+var fs                  =   require('fs');
+var im                  =   require('imagemagick');
 //var fs                          =     require('file-system');
 // solution:
 //function to remove a value from the json array
@@ -1381,26 +1382,26 @@ module.exports = {
     },
     //--------------------Testingggggggggggggg-------------------------------------
     testResize: function (req, res){
-		
-		var im = require('imagemagick');
-		im.identify('http://git.titechnologies.in:5000/images/profilepics/ff3a4bf0-3a61-4313-8d62-d36f3f9d8db4.png', function(err, features){
-		  if (err) {
-					//throw err
-					console.log(err)
-					return res.json(200, {status: 2, status_type: 'Failure', message: 'error'});
-			 }else{
-				  console.log(features)
-				  return res.json(200, {status: 1, status_type: 'Success', message: 'resized',features:features});
-			}  // { format: 'JPEG', width: 3904, height: 2622, depth: 8 }
-			
-		});
-		
-		
-	},
-    
-    
-    
-    
+
+        var im = require('imagemagick');
+        im.identify('http://git.titechnologies.in:5000/images/profilepics/ff3a4bf0-3a61-4313-8d62-d36f3f9d8db4.png', function(err, features){
+          if (err) {
+                    //throw err
+                    console.log(err)
+                    return res.json(200, {status: 2, status_type: 'Failure', message: 'error'});
+             }else{
+                  console.log(features)
+                  return res.json(200, {status: 1, status_type: 'Success', message: 'resized',features:features});
+            }  // { format: 'JPEG', width: 3904, height: 2622, depth: 8 }
+
+        });
+
+
+    },
+
+
+
+
     /*  =================================================================================================================================
              Proportionate height and width
     ================================================================================================================================== */
@@ -1480,84 +1481,134 @@ module.exports = {
 
     pushNtfnUpdate: function (req, res){
 
-		
-		console.log("-----------Push Notification For Version Update-----------")
-		var query	=	"SELECT `deviceId` FROM `userToken`";
-		User_token.query(query, function(err, getDeviceId) {
-		
-			if(err){
-				  console.log(err);
-				  return res.json(200, {status: 2, status_type: 'Failure', message: 'Error in fetching users'});
-			}else{
-				var message     	=  	'Update Notification';
-				var ntfn_body   	=   "Dither New version available";
-				var deviceId_arr 	= 	[];
-				getDeviceId.forEach(function(factor, index){
-					deviceId_arr.push(factor.deviceId);
-				});
-				if(!deviceId_arr.length){
-						return res.json(200, {status: 2, status_type: 'Failure', message: 'There is no active users'});
-				}else{
-						var data        =   {
-												message             :   message,
-												device_id           :   deviceId_arr,
-												NtfnBody            :   ntfn_body,
-												NtfnType            :   10,
-												id                  :   '',
-												notification_id     :   '',
-												old_id              :   ''
-											};
-						NotificationService.NotificationPush(data, function(err, ntfnSend){
-								if(err){
-									console.log("Error in Push Notification Sending")
-									console.log(err)
-									return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured in Push Notification'});
-								}else{
-									return res.json(200, {status: 1, status_type: 'Success', message: 'Push Notification sended'});
-								}
-						});
-				}
-			}
-		});
 
-	},
-	
-	
+        console.log("-----------Push Notification For Version Update-----------")
+        var query   =   "SELECT `deviceId` FROM `userToken`";
+        User_token.query(query, function(err, getDeviceId) {
 
-        
-    
+            if(err){
+                  console.log(err);
+                  return res.json(200, {status: 2, status_type: 'Failure', message: 'Error in fetching users'});
+            }else{
+                var message         =   'Update Notification';
+                var ntfn_body       =   "Dither New version available";
+                var deviceId_arr    =   [];
+                getDeviceId.forEach(function(factor, index){
+                    deviceId_arr.push(factor.deviceId);
+                });
+                if(!deviceId_arr.length){
+                        return res.json(200, {status: 2, status_type: 'Failure', message: 'There is no active users'});
+                }else{
+                        var data        =   {
+                                                message             :   message,
+                                                device_id           :   deviceId_arr,
+                                                NtfnBody            :   ntfn_body,
+                                                NtfnType            :   10,
+                                                id                  :   '',
+                                                notification_id     :   '',
+                                                old_id              :   ''
+                                            };
+                        NotificationService.NotificationPush(data, function(err, ntfnSend){
+                                if(err){
+                                    console.log("Error in Push Notification Sending")
+                                    console.log(err)
+                                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured in Push Notification'});
+                                }else{
+                                    return res.json(200, {status: 1, status_type: 'Success', message: 'Push Notification sended'});
+                                }
+                        });
+                }
+            }
+        });
+
+    },
+
+
+
+
+
     /* ===================================================================================================================================
              FB CALLBACK
     ================================================================================================================================== */
-	fbcallback: function (req, res){
-		
-		console.log("--------------GET FBCALLBACK---------------")
-		console.log(req.body)
-		var data = JSON.stringify(req.body)
-		console.log(data)
-		values = { 
-			
-					data:data
-			}
-		
-		TempFbData.create(values).exec(function(err, results){
-				if(err){
-					console.log(err)
-					return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured '});
-				}
-				else{
-					console.log(results)
-					return res.json(200, {status: 1, status_type: 'success', message: 'data inserted successfully'});
-					
-				}
-		});	
-		
-		
-	}
+    fbcallback: function (req, res){
+
+        console.log("--------------GET FBCALLBACK---------------")
+        console.log(req.body)
+        var data = JSON.stringify(req.body)
+        console.log(data)
+        values = {
+
+                    data:data
+            }
+
+        TempFbData.create(values).exec(function(err, results){
+                if(err){
+                    console.log(err)
+                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured '});
+                }
+                else{
+                    console.log(results)
+                    return res.json(200, {status: 1, status_type: 'success', message: 'data inserted successfully'});
+
+                }
+        });
+
+
+    }
 
 };
 
 
+    /* ===================================================================================================================================
+             CROP IMAGE
+    ================================================================================================================================== */
+    cropImage: function (req, res){
+            console.log("cropImage  -----------");
+            im.crop({
+                srcPath: 'assets/images/collage_test/00dad2f4-52ed-4590-a4bb-d0e9fea89017.jpg',
+                dstPath: 'assets/images/collage_test/00dad2f4-52ed-4590-a4bb-d0e9fea89017_70x70.jpg',
+                width: 70,
+                height: 70,
+                quality: 1,
+                gravity: 'Center'
+            }, function(err, stdout, stderr){
+                if (err) throw err;
+                //console.log('resized ' + process.argv[2].split('/').pop() + ' to fit within 200x200px');
+                console.log("stdout ----");
+                console.log(stdout);
+            });
+
+    },
+    /* ===================================================================================================================================
+             RESIZE IMAGE
+    ================================================================================================================================== */
+    imageResize: function (callback) {
+
+                    var im = require('imagemagick');
+                    var imageSrc = 'assets/images/collage_test/00dad2f4-52ed-4590-a4bb-d0e9fea89017.jpg';
+                    var imageDst = 'assets/images/collage_test/00dad2f4-52ed-4590-a4bb-d0e9fea89017_70x70_resize_1.jpg';
+                    console.log("Image service Api  ====== image magick");
+                    im.resize({
+                      //srcData: fs.readFileSync('assets/images/abc.jpg', 'binary'),
+                      srcData: fs.readFileSync(imageSrc, 'binary'),
+                      //width:   70,
+                      height:   70
+                    }, function(err, stdout, stderr){
+                              if (err)
+                              {
+                                    //throw err;
+                                      console.log(err);
+                                      //callback(true, {status: 2, status_type: "Failure", message: 'Some error occured resizing image', error_details: err});
+
+                              }else{
+                                      fs.writeFileSync(imageDst, stdout, 'binary');
+
+                                      //callback(false, {status: 1, status_type: "Success", message: 'Successfully resized the image'});
+                              }
+                    });
+    },
+
+};
 
 
 

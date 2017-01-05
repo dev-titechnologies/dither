@@ -1386,6 +1386,7 @@ module.exports = {
 		im.identify('http://git.titechnologies.in:5000/images/profilepics/ff3a4bf0-3a61-4313-8d62-d36f3f9d8db4.png', function(err, features){
 		  if (err) {
 					//throw err
+					console.log(err)
 					return res.json(200, {status: 2, status_type: 'Failure', message: 'error'});
 			 }else{
 				  console.log(features)

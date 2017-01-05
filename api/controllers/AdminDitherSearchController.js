@@ -167,11 +167,12 @@ module.exports = {
                                                                         factor.image            =     collage_image;
                                                                         factor.image_242x242    =     collage_image_242x242;
                                                                         console.log(factor.image_242x242);
+                                                                        if(count == results.length){
+                                                                                callback();
+                                                                        }
                                                                     }
                                                         });
-                                                        if(count == results.length){
-                                                                callback();
-                                                        }
+
                                                 });
 
                                     },

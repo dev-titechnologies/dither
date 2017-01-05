@@ -64,12 +64,13 @@ module.exports = {
                               {
                                     //throw err;
                                       console.log(err);
-                                      callback(true, {status: 2, status_type: "Failure", message: 'Some error occured resizing image', error_details: err});
+                                      //callback(true, {status: 2, status_type: "Failure", message: 'Some error occured resizing image', error_details: err});
+                                      callback();
 
                               }else{
                                       fs.writeFileSync(imageDst, stdout, 'binary');
-
-                                      callback(false, {status: 1, status_type: "Success", message: 'Successfully resized the image'});
+                                      //callback(false, {status: 1, status_type: "Success", message: 'Successfully resized the image'});
+                                      callback();
                               }
                     });
     },

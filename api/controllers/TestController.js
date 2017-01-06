@@ -1824,7 +1824,7 @@ module.exports = {
 
                                                                             if(count == results.length){
                                                                                     console.log("Last Loooooooopp");
-                                                                                    callback();
+                                                                                    //callback();
 
                                                                             }
                                                                     }
@@ -2010,7 +2010,7 @@ module.exports = {
                                                                             console.log(factor.profilePic_70x70);*/
                                                                             if(count == results.length){
                                                                                     console.log("Last Loooooooopp");
-                                                                                    callback();
+                                                                                    //callback();
 
                                                                             }
                                                                     }
@@ -2175,7 +2175,7 @@ module.exports = {
                                                                             console.log(factor.profilePic_70x70);*/
                                                                             if(count == results.length){
                                                                                     console.log("Last Loooooooopp");
-                                                                                    callback();
+                                                                                    //callback();
 
                                                                             }
                                                                     }

@@ -388,8 +388,9 @@ module.exports = {
                                                                             }else{
                                                                                 //callback();
                                                                                 //collage-Details images -- STARTS
+                                                                                var count = 0;
                                                                                 collageDetails_results.forEach(function(factor, index){
-
+                                                                                        count++;
                                                                                         var imageSrc                    =     collageImg_path_assets + factor.image;
                                                                                         var ext                         =     imageSrc.split('/');
                                                                                         ext                             =     ext[ext.length-1].split('.');
@@ -435,13 +436,16 @@ module.exports = {
                                                                                                     }else{
                                                                                                         console.log("Loop success");
                                                                                                         //collage-Details images
-                                                                                                        callback();
+                                                                                                        //callback();
+                                                                                                        if(count == results.length){
+                                                                                                                callback();
+                                                                                                        }
 
                                                                                                     }
                                                                                         });
                                                                                 //collage-Details images -- ENDS
 
-                                                                                }, callback());
+                                                                                });
                                                                             }
                                                                 });
                                                         },

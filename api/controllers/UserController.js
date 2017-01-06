@@ -667,7 +667,7 @@ module.exports = {
                         }else{
 							    console.log("--------------resultssssssssssssssssssssss------------------")
 								console.log(results)
-                                if(!results){
+                                if(!results.length){
 
                                       return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                                 }else{

@@ -1788,6 +1788,11 @@ module.exports = {
 
                                                                                                             console.log("Loop success");
                                                                                                             //collage-Details images
+                                                                                                            console.log("imageResizeResults =====================================")
+                                                                                                            console.log(imageResizeResults)
+                                                                                                            if(imageResizeResults.status = 1){
+                                                                                                                console.log("11111111111111");
+                                                                                                            }
                                                                                                             callback();
                                                                                                     }
                                                                                             });

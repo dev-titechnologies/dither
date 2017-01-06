@@ -397,6 +397,7 @@ module.exports = {
                                                                                         var imgWidth,
                                                                                             imgHeight,
                                                                                             imageDst;
+                                                                                        var cdResize_1, cdResize_2;
 
                                                                                         async.series([
                                                                                                 function(callback) {
@@ -409,12 +410,13 @@ module.exports = {
                                                                                                                             console.log("Error in image resize 160 in collagedetails!!!!");
                                                                                                                             callback();
                                                                                                                     }else{
+                                                                                                                            cdResize_1 = imageResizeResults;
                                                                                                                             callback();
                                                                                                                     }
                                                                                                             });
 
                                                                                                 },
-                                                                                        function(callback) {
+                                                                                                function(callback) {
                                                                                                             imgWidth                    =    70;
                                                                                                             imgHeight                   =    70;
                                                                                                             imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
@@ -424,10 +426,10 @@ module.exports = {
                                                                                                                             console.log("Error in image resize 70 collageDetails !!!!");
                                                                                                                             callback();
                                                                                                                     }else{
+                                                                                                                            cdResize_2 = imageResizeResults;
                                                                                                                             callback();
                                                                                                                     }
                                                                                                             });
-
                                                                                                 },
                                                                                         ],function(err){
                                                                                                     if(err){
@@ -438,7 +440,9 @@ module.exports = {
                                                                                                         //collage-Details images
                                                                                                         //callback();
                                                                                                         if(count == collageDetails_results.length){
-                                                                                                                callback();
+                                                                                                                if(cdResize_1.status == 1 && cdResize_2.status == 1){
+                                                                                                                        callback();
+                                                                                                                }
                                                                                                         }
 
                                                                                                     }

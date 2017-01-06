@@ -147,7 +147,7 @@ console.log(values);
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
                 var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
-                var single_image, single_image_160x160, collage_image, collage_image_350x350;
+                var single_image, single_image_160x160, single_image_70x70, collage_image, collage_image_350x350;
                 // var ditherId = 507;
                 console.log("inside getSingleDitherDetails function"+ditherId);
                 var query = " SELECT"+
@@ -237,12 +237,14 @@ console.log(values);
                                                                     if(factor.single_image == null || factor.single_image == ""){
                                                                             single_image           =     "";
                                                                             single_image_160x160   =     "";
+                                                                            single_image_70x70     =     "";
                                                                     }else{
                                                                             var imageSrc                    =     collageImg_path_assets + factor.single_image;
                                                                             var ext                         =     imageSrc.split('/');
                                                                             ext                             =     ext[ext.length-1].split('.');
                                                                             single_image                    =     collageImg_path + factor.single_image;
                                                                             single_image_160x160            =     collageImg_path + ext[0] + "_160x160." +ext[1];
+                                                                            single_image_70x70              =     collageImg_path + ext[0] + "_70x70." +ext[1];
                                                                     }
 
                                                                     if(factor.image == null || factor.image == ""){
@@ -260,7 +262,9 @@ console.log(values);
                                                                     factor.collage_image_350x350            =     collage_image_350x350;
                                                                     factor.single_image                     =     single_image;
                                                                     factor.single_image_160x160             =     single_image_160x160;
+                                                                    factor.single_image_70x70               =     single_image_70x70;
                                                                     console.log(factor.single_image_160x160);
+                                                                    console.log(factor.single_image_70x70);
                                                                     console.log(factor.collage_image_350x350);
 
 

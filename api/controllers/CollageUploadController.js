@@ -441,7 +441,7 @@ module.exports = {
                                                                                                         //callback();
                                                                                                         if(count == collageDetails_results.length){
                                                                                                                 if(cdResize_1.status == 1 && cdResize_2.status == 1){
-                                                                                                                        callback();
+                                                                                                                        //callback();
                                                                                                                 }
                                                                                                         }
 

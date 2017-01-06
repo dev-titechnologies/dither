@@ -1608,6 +1608,645 @@ module.exports = {
                     });
     },
 
+  /* ==================================================================================================================================
+               Resize all user image
+     ==================================================================================================================================== */
+
+
+        //   List all users based on limit(12 rows per call)
+        resizeUser: function(req, res){
+
+                        console.log("resizeUser ============== Test");
+                        console.log(req.params.all());
+                        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                        var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                        var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+                        var results             =       [];
+                        async.series([
+                                    function(callback) {
+
+                                                User.find({}).exec(function (err, result){
+                                                    if(err){
+                                                        callback();
+                                                    }else{
+
+                                                            results  = result;
+                                                            callback();
+                                                    }
+                                                });
+                                    },
+                                    function(callback){
+                                                console.log("INSIDE user foreach callback........");
+                                                var count = 0;
+                                                console.log(results);
+                                                results.forEach(function(factor, index){
+                                                        count++;
+                                                        var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                                                        var ext                         =     imageSrc.split('/');
+                                                        ext                             =     ext[ext.length-1].split('.');
+                                                        var imgWidth,
+                                                            imgHeight,
+                                                            imageDst;
+
+                                                        async.series([
+                                                                function(callback) {
+                                                                            imgWidth                    =    70;
+                                                                            imgHeight                   =    70;
+                                                                            imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+
+                                                                            console.log(imageSrc);
+                                                                            console.log(imageDst);
+                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                    if(err){
+                                                                                            console.log(err);
+                                                                                            console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                            callback();
+                                                                                    }else{
+
+                                                                                            console.log("Loop success");
+                                                                                            //collage-Details images
+                                                                                            callback();
+                                                                                    }
+                                                                            });
+                                                                            //callback();
+
+                                                                },
+                                                                function(callback) {
+                                                                            imgWidth                    =    200;
+                                                                            imgHeight                   =    200;
+                                                                            imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                    if(err){
+                                                                                            console.log(err);
+                                                                                            console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                            callback();
+                                                                                    }else{
+
+                                                                                            console.log("Loop success");
+                                                                                            //collage-Details images
+                                                                                            callback();
+                                                                                    }
+                                                                            });
+                                                                            //callback();
+
+                                                                },
+                                                        ],function(err){
+                                                                    if(err){
+                                                                        console.log(err);
+                                                                        //callback();
+                                                                    }else{
+
+                                                                            if(count == results.length){
+                                                                                    console.log("Last Loooooooopp");
+                                                                                    callback();
+
+                                                                            }
+                                                                    }
+                                                        });
+
+
+                                                });
+
+                                    },
+                        ],function(err){
+                                    if(err){
+                                        console.log(err);
+                                        //callback();
+                                        return res.json(200, {status: 2, message: "Failure"
+                                                        });
+                                    }else{
+                                            //console.log("Results ---------- >>>>>>>>>");
+                                            //console.log(results);
+                                            /*return res.json(200, {status: 1, message: "success",
+                                                        });*/
+                                    }
+
+                        });
+
+
+    },
+
+ /* ==================================================================================================================================
+               Resize all user image
+     ==================================================================================================================================== */
+
+
+        //   List all users based on limit(12 rows per call)
+        resizeUser: function(req, res){
+
+                        console.log("resizeUser ============== Test");
+                        console.log(req.params.all());
+                        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                        var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                        var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+                        var results             =       [];
+                        async.series([
+                                    function(callback) {
+
+                                                User.find({}).exec(function (err, result){
+                                                    if(err){
+                                                        callback();
+                                                    }else{
+
+                                                            results  = result;
+                                                            callback();
+                                                    }
+                                                });
+                                    },
+                                    function(callback){
+                                                console.log("INSIDE user foreach callback........");
+                                                var count = 0;
+                                                console.log(results);
+                                                results.forEach(function(factor, index){
+                                                        count++;
+                                                        var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                                                        var ext                         =     imageSrc.split('/');
+                                                        ext                             =     ext[ext.length-1].split('.');
+                                                        var imgWidth,
+                                                            imgHeight,
+                                                            imageDst;
+
+                                                        async.series([
+                                                                function(callback) {
+                                                                            if(factor.profilePic == "" || factor.profilePic == null){
+                                                                                callback();
+                                                                            }else{
+                                                                                imgWidth                    =    70;
+                                                                                imgHeight                   =    70;
+                                                                                imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+
+                                                                                console.log(imageSrc);
+                                                                                console.log(imageDst);
+                                                                                fs.exists(imageSrc, function(exists) {
+                                                                                        if (exists) {
+                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                    if(err){
+                                                                                                            console.log(err);
+                                                                                                            console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                            callback();
+                                                                                                    }else{
+
+                                                                                                            console.log("Loop success");
+                                                                                                            //collage-Details images
+                                                                                                            callback();
+                                                                                                    }
+                                                                                            });
+                                                                                        }else{
+                                                                                            callback();
+                                                                                        }
+                                                                                });
+                                                                            }
+                                                                            //callback();
+
+                                                                },
+                                                                function(callback) {
+                                                                            if(factor.profilePic == "" || factor.profilePic == null){
+                                                                                callback();
+                                                                            }else{
+                                                                                imgWidth                    =    200;
+                                                                                imgHeight                   =    200;
+                                                                                imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                fs.exists(imageSrc, function(exists) {
+                                                                                        if (exists) {
+                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                    if(err){
+                                                                                                            console.log(err);
+                                                                                                            console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                            callback();
+                                                                                                    }else{
+
+                                                                                                            console.log("Loop success");
+                                                                                                            //collage-Details images
+                                                                                                            callback();
+                                                                                                    }
+                                                                                            });
+                                                                                            //callback();
+                                                                                        }else{
+                                                                                            callback();
+                                                                                        }
+                                                                                });
+                                                                            }
+
+                                                                },
+                                                        ],function(err){
+                                                                    if(err){
+                                                                        console.log(err);
+                                                                        //callback();
+                                                                    }else{
+
+                                                                            if(count == results.length){
+                                                                                    console.log("Last Loooooooopp");
+                                                                                    //callback();
+
+                                                                            }
+                                                                    }
+                                                        });
+
+
+                                                });
+
+                                    },
+                        ],function(err){
+                                    if(err){
+                                        console.log(err);
+                                        //callback();
+                                        return res.json(200, {status: 2, message: "Failure"
+                                                        });
+                                    }else{
+                                            //console.log("Results ---------- >>>>>>>>>");
+                                            //console.log(results);
+                                            /*return res.json(200, {status: 1, message: "success",
+                                                        });*/
+                                    }
+
+                        });
+
+
+    },
+
+ /* ==================================================================================================================================
+               Resize all collage image
+     ==================================================================================================================================== */
+
+
+        //   List all users based on limit(12 rows per call)
+        resizeCollage: function(req, res){
+
+                        console.log("resizeCollage ============== Test");
+                        console.log(req.params.all());
+                        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                        var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                        var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
+                        var profile_image, profile_image_70x70;
+
+                        /*User.query(query, function(err, result){
+                            if(err){
+                                 console.log(err);
+                                return res.json(200, { status: 2, error_details: 'db error' });
+                            }else{
+                                //console.log(result);
+                                result.forEach(function(factor, index){
+                                        if(factor.profileImage == null || factor.profileImage == ""){
+                                                profile_image                   =     "";
+                                        }else{
+                                                var imageSrc                    =     factor.profileImage;
+                                                var ext                         =     imageSrc.split('.');
+                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                        }
+                                        factor.profilePic       =    profile_image;
+                                });
+                                //console.log(result);
+                                return res.json(200, {status: 1, message: "success", data: result});
+                            }
+                        });*/
+
+                        /* ############################################################### */
+
+                        var results             =       [];
+                        async.series([
+                                    function(callback) {
+
+                                                Collage.find({}).exec(function (err, result){
+                                                    if(err){
+                                                        callback();
+                                                    }else{
+
+                                                            results  = result;
+                                                            callback();
+                                                    }
+                                                });
+                                    },
+                                    function(callback){
+                                                console.log("INSIDE user foreach callback........");
+                                                var count = 0;
+                                                console.log(results);
+                                                results.forEach(function(factor, index){
+                                                        count++;
+                                                        var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                        var ext                         =     imageSrc.split('/');
+                                                        ext                             =     ext[ext.length-1].split('.');
+                                                        var imgWidth,
+                                                            imgHeight,
+                                                            imageDst;
+
+                                                        async.series([
+                                                                function(callback) {
+                                                                            if(factor.image == "" || factor.image == null){
+                                                                                callback();
+                                                                            }else{
+                                                                                imgWidth                    =    70;
+                                                                                imgHeight                   =    70;
+                                                                                imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+
+                                                                                console.log(imageSrc);
+                                                                                console.log(imageDst);
+                                                                                fs.exists(imageSrc, function(exists) {
+                                                                                    if (exists) {
+                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                    if(err){
+                                                                                                            console.log(err);
+                                                                                                            //console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                            callback();
+                                                                                                    }else{
+
+                                                                                                            console.log("Loop success");
+                                                                                                            //collage-Details images
+                                                                                                            callback();
+                                                                                                    }
+                                                                                            });
+                                                                                            //callback();
+                                                                                    }else{
+                                                                                        callback();
+
+                                                                                    }
+                                                                                });
+                                                                            }
+
+                                                                },
+                                                                function(callback) {
+                                                                            if(factor.image == "" || factor.image == null){
+                                                                                callback();
+                                                                            }else{
+                                                                                    imgWidth                    =    242;
+                                                                                    imgHeight                   =    242;
+                                                                                    imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    fs.exists(imageSrc, function(exists) {
+                                                                                        if (exists) {
+                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                    if(err){
+                                                                                                            console.log(err);
+                                                                                                            //console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                            callback();
+                                                                                                    }else{
+
+                                                                                                            console.log("Loop success");
+                                                                                                            //collage-Details images
+                                                                                                            callback();
+                                                                                                    }
+                                                                                            });
+                                                                                            //callback();
+                                                                                        }else{
+                                                                                            callback();
+                                                                                        }
+                                                                                    });
+                                                                            }
+
+                                                                },
+                                                                function(callback) {
+                                                                            if(factor.image == "" || factor.image == null){
+                                                                                callback();
+                                                                            }else{
+                                                                                imgWidth                    =    350;
+                                                                                imgHeight                   =    350;
+                                                                                imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                fs.exists(imageSrc, function(exists) {
+                                                                                    if (exists) {
+                                                                                        ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                if(err){
+                                                                                                        console.log(err);
+                                                                                                        //console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                        callback();
+                                                                                                }else{
+
+                                                                                                        console.log("Loop success");
+                                                                                                        //collage-Details images
+                                                                                                        callback();
+                                                                                                }
+                                                                                        });
+                                                                                        //callback();
+                                                                                    }else{
+                                                                                        callback();
+                                                                                    }
+                                                                                });
+                                                                            }
+
+                                                                },
+                                                        ],function(err){
+                                                                    if(err){
+                                                                        console.log(err);
+                                                                        //callback();
+                                                                    }else{
+                                                                            /*if(factor.profileImage == null || factor.profileImage == ""){
+                                                                                    profile_image                   =     "";
+                                                                                    profile_image_70x70             =     "";
+                                                                            }else{
+                                                                                    var imageSrc                    =     profilePic_path_assets + factor.profileImage;
+                                                                                    var ext                         =     imageSrc.split('/');
+                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                    profile_image                   =     profilePic_path + factor.profileImage;
+                                                                                    profile_image_70x70             =     profilePic_path + ext[0] + "_70x70." +ext[1];
+                                                                            }
+                                                                            factor.profilePic                       =     profile_image;
+                                                                            factor.profilePic_70x70                 =     profile_image_70x70;
+                                                                            console.log(factor.profilePic_70x70);*/
+                                                                            if(count == results.length){
+                                                                                    console.log("Last Loooooooopp");
+                                                                                    //callback();
+
+                                                                            }
+                                                                    }
+                                                        });
+
+
+                                                });
+
+                                    },
+                        ],function(err){
+                                    if(err){
+                                        console.log(err);
+                                        //callback();
+                                        return res.json(200, {status: 2, message: "Failure"
+                                                        });
+                                    }else{
+                                            //console.log("Results ---------- >>>>>>>>>");
+                                            //console.log(results);
+                                            /*return res.json(200, {status: 1, message: "success",
+                                                        });*/
+                                    }
+
+                        });
+
+                        /* ############################################################### */
+
+        },
+
+    /* ==================================================================================================================================
+               Resize all collage details image
+     ==================================================================================================================================== */
+
+
+        //   List all users based on limit(12 rows per call)
+        resizeCollageDetails: function(req, res){
+
+                        console.log("resizeCollageDetails ============== Test");
+                        console.log(req.params.all());
+                        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                        var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                        var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
+                        var profile_image, profile_image_70x70;
+
+                        /*User.query(query, function(err, result){
+                            if(err){
+                                 console.log(err);
+                                return res.json(200, { status: 2, error_details: 'db error' });
+                            }else{
+                                //console.log(result);
+                                result.forEach(function(factor, index){
+                                        if(factor.profileImage == null || factor.profileImage == ""){
+                                                profile_image                   =     "";
+                                        }else{
+                                                var imageSrc                    =     factor.profileImage;
+                                                var ext                         =     imageSrc.split('.');
+                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                        }
+                                        factor.profilePic       =    profile_image;
+                                });
+                                //console.log(result);
+                                return res.json(200, {status: 1, message: "success", data: result});
+                            }
+                        });*/
+
+                        /* ############################################################### */
+
+                        var results             =       [];
+                        async.series([
+                                    function(callback) {
+
+                                                CollageDetails.find({}).exec(function (err, result){
+                                                    if(err){
+                                                        callback();
+                                                    }else{
+
+                                                            results  = result;
+                                                            callback();
+                                                    }
+                                                });
+                                    },
+                                    function(callback){
+                                                console.log("INSIDE user foreach callback........");
+                                                var count = 0;
+                                                console.log(results);
+                                                results.forEach(function(factor, index){
+                                                        count++;
+                                                        var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                        var ext                         =     imageSrc.split('/');
+                                                        ext                             =     ext[ext.length-1].split('.');
+                                                        var imgWidth,
+                                                            imgHeight,
+                                                            imageDst;
+
+                                                        async.series([
+                                                                function(callback) {
+                                                                            if(factor.image == "" || factor.image == null){
+                                                                                callback();
+                                                                            }else{
+                                                                                imgWidth                    =    70;
+                                                                                imgHeight                   =    70;
+                                                                                imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+
+                                                                                console.log(imageSrc);
+                                                                                console.log(imageDst);
+                                                                                fs.exists(imageSrc, function(exists) {
+                                                                                    if (exists) {
+                                                                                        ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                if(err){
+                                                                                                        console.log(err);
+                                                                                                        //console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                        callback();
+                                                                                                }else{
+
+                                                                                                        console.log("Loop success");
+                                                                                                        //collage-Details images
+                                                                                                        callback();
+                                                                                                }
+                                                                                        });
+                                                                                    }else{
+                                                                                        callback();
+                                                                                    }
+                                                                                });
+                                                                                //callback();
+                                                                            }
+
+                                                                },
+                                                                function(callback) {
+                                                                            if(factor.image == "" || factor.image == null){
+                                                                                callback();
+                                                                            }else{
+                                                                                    imgWidth                    =    160;
+                                                                                    imgHeight                   =    160;
+                                                                                    imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    fs.exists(imageSrc, function(exists) {
+                                                                                        if (exists) {
+                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                    if(err){
+                                                                                                            console.log(err);
+                                                                                                            //console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                            callback();
+                                                                                                    }else{
+
+                                                                                                            console.log("Loop success");
+                                                                                                            //collage-Details images
+                                                                                                            callback();
+                                                                                                    }
+                                                                                            });
+                                                                                            //callback();
+                                                                                        }else{
+                                                                                            callback();
+                                                                                        }
+                                                                                    });
+                                                                            }
+
+                                                                },
+
+                                                        ],function(err){
+                                                                    if(err){
+                                                                        console.log(err);
+                                                                        //callback();
+                                                                    }else{
+                                                                            /*if(factor.profileImage == null || factor.profileImage == ""){
+                                                                                    profile_image                   =     "";
+                                                                                    profile_image_70x70             =     "";
+                                                                            }else{
+                                                                                    var imageSrc                    =     profilePic_path_assets + factor.profileImage;
+                                                                                    var ext                         =     imageSrc.split('/');
+                                                                                    ext                             =     ext[ext.length-1].split('.');
+                                                                                    profile_image                   =     profilePic_path + factor.profileImage;
+                                                                                    profile_image_70x70             =     profilePic_path + ext[0] + "_70x70." +ext[1];
+                                                                            }
+                                                                            factor.profilePic                       =     profile_image;
+                                                                            factor.profilePic_70x70                 =     profile_image_70x70;
+                                                                            console.log(factor.profilePic_70x70);*/
+                                                                            if(count == results.length){
+                                                                                    console.log("Last Loooooooopp");
+                                                                                    //callback();
+
+                                                                            }
+                                                                    }
+                                                        });
+
+
+                                                });
+
+                                    },
+                        ],function(err){
+                                    if(err){
+                                        console.log(err);
+                                        //callback();
+                                        return res.json(200, {status: 2, message: "Failure"
+                                                        });
+                                    }else{
+                                            //console.log("Results ---------- >>>>>>>>>");
+                                            //console.log(results);
+                                            /*return res.json(200, {status: 1, message: "success",
+                                                        });*/
+                                    }
+
+                        });
+
+                        /* ############################################################### */
+
+        },
+
 };
 
 

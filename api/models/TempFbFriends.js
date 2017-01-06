@@ -1,5 +1,5 @@
 /**
- * CollageComments.js
+ * TempFbFriends.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
@@ -7,28 +7,24 @@
 
 module.exports = {
 
-  tableName : 'collageComments',
+  tableName : 'TempFbFriends',
   attributes: {
 
-        id: {
+
+		Id: {
                 type: 'integer',
                 primaryKey: true,
                 autoIncrement: true
-            },
-        collageId: {
-                type: 'integer',
-                defaultsTo: 0
             },
         userId: {
                 type: 'integer',
                 defaultsTo: 0
             },
-        comment: {
+        fbName: {
                 type: 'string',
-            },
-        likeCount: {
-                type: 'integer',
-                defaultsTo: 0
+            },    
+		fbId: {
+                type: 'string',
             },
         createdAt: {
                 type: 'datetime',

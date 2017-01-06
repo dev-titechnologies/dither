@@ -6,6 +6,18 @@
  */
 var fs          = require('fs');
 
+//Function to get ordered, by value, in json array key value pair
+function predicatBy(prop){
+   return function(a,b){
+      if( a[prop] > b[prop]){
+          return 1;
+      }else if( a[prop] < b[prop] ){
+          return -1;
+      }
+      return 0;
+   }
+}
+
 //Function to remove duplicate values from json Array
 function removeDuplicate(arr, prop) {
         var new_arr = [];
@@ -82,11 +94,12 @@ module.exports = {
                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting the Collage Details'});
                                 }else{
                                     if(!results.length){
-                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by this Id'});
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Dither not available'});
                                     }else{
-                                            var imageArray = [];
-                                            var like_position_Array = [];
-                                            var like_position;
+                                            var imageArray              =   [];
+                                            var imageArray_2            =   [];
+                                            var like_position_Array     =   [];
+                                            //var like_position;
                                             var like_status, like_count;
                                             results.forEach(function(factor, index){
                                                     var like_status;
@@ -99,23 +112,37 @@ module.exports = {
                                                                     imageUrl        : collageImg_path + factor.image,
                                                                     like_count      : factor.vote,
                                                                     like_status     : like_status,
-                                                                    id              : factor.imageId
+                                                                    id              : factor.imageId,
+                                                                    position        : factor.position
                                                                     });
-                                                        if(factor.likeUserId == null || factor.likeUserId == "" ){
+
+                                                    imageArray_2.push({
+                                                                    imageUrl            : collageImg_path + factor.image,
+                                                                    like_count          : factor.vote,
+                                                                    like_status         : like_status,
+                                                                    id                  : factor.imageId,
+                                                                    position            : factor.position,
+                                                                    like_userId         : factor.likeUserId,
+                                                                    collageCreatorId    : factor.collageCreatorId,
+                                                                    });
+                                                        /*if(factor.likeUserId == null || factor.likeUserId == "" ){
                                                         }else{
                                                                 if(factor.likePosition == "" || factor.likePosition == null){
                                                                 }else{
-                                                                    if(factor.likeUserId == userId && factor.collageCreatorId != userId){
-                                                                        like_position_Array.push(factor.likePosition);
+                                                                    if(factor.likeStatus == 1){
+                                                                        if(factor.likeUserId == userId && factor.collageCreatorId != userId){
+                                                                            like_position_Array.push(factor.likePosition);
+                                                                        }
                                                                     }
                                                                 }
-                                                        }
+                                                        }*/
                                             });
-                                            if(like_position_Array.length != 0){
+                                            imageArray          =       imageArray.sort(predicatBy("position"));
+                                            /*if(like_position_Array.length != 0){
                                                         like_position = like_position_Array[0];
                                             }else{
                                                         like_position = 0;
-                                            }
+                                            }*/
                                             User.findOne({id: results[0].collageCreatorId}).exec(function (err, collageCreator_details){
                                                     if(err){
                                                             console.log(err);
@@ -137,11 +164,15 @@ module.exports = {
                                                                                                }];
                                                         console.log("collageCreator_JSON_Array ======================");
                                                         console.log(collageCreator_JSON_Array);
-                                                        query = "SELECT clgcmt.id, clgcmt.comment,clgcmt.createdAt,"+
+                                                        query = " SELECT"+
+                                                                " clgcmt.id, clgcmt.comment,clgcmt.createdAt,"+
                                                                 " cmntImg.image, cmntImg.commentId AS commentId,"+
-                                                                " usr.name, usr.mentionId, usr.profilePic, usr.id userId"+
+                                                                " usr.name, usr.mentionId, usr.profilePic, usr.id userId,"+
+                                                                " cmtlk.likeStatus, cmtlk.userId as likedUserId,"+
+                                                                " (SELECT COUNT(id) FROM commentLikes WHERE commentId = clgcmt.id) AS totalLikeCount"+
                                                                 " FROM collageComments clgcmt"+
                                                                 " LEFT JOIN commentImages AS cmntImg ON cmntImg.commentId = clgcmt.id"+
+                                                                " LEFT JOIN commentLikes cmtlk ON cmtlk.commentId = clgcmt.id AND cmtlk.userId = "+userId+
                                                                 " INNER JOIN user usr ON usr.id = clgcmt.userId"+
                                                                 " WHERE clgcmt.collageId = "+get_collage_id+
                                                                 " ORDER BY clgcmt.createdAt";
@@ -168,12 +199,23 @@ module.exports = {
                                                                                 }
                                                                                 var profile_image;
                                                                                 if(dataResults[i]["profilePic"] == null || dataResults[i]["profilePic"] == ""){
-                                                                                     profile_image  = "";
+                                                                                        profile_image  = "";
                                                                                 }else{
                                                                                     var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
                                                                                     var ext                         =     imageSrc.split('/');
                                                                                     ext                             =     ext[ext.length-1].split('.');
                                                                                     profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                }
+                                                                                var likeStatus;
+                                                                                if(dataResults[i]["likeStatus"] == null || dataResults[i]["likeStatus"] == ""){
+                                                                                        likeStatus                 =      0;
+                                                                                }else{
+                                                                                    /*if(dataResults[i]["likedUserId"] == userId){
+                                                                                        likeStatus                 =      1;
+                                                                                    }else{
+                                                                                        likeStatus                 =      0;
+                                                                                    }*/
+                                                                                    likeStatus                 =      1;
                                                                                 }
                                                                                 dataResultsObj.comment_id                       =   dataResults[i]["id"];
                                                                                 dataResultsObj.user_id                          =   dataResults[i]["userId"];
@@ -183,11 +225,14 @@ module.exports = {
                                                                                 dataResultsObj.message                          =   dataResults[i]["comment"];
                                                                                 dataResultsObj.comment_created_date_time        =   dataResults[i]["createdAt"];
                                                                                 dataResultsObj.comment_img                      =   comment_img_arr;
+                                                                                dataResultsObj.comment_like_status              =   likeStatus;
+                                                                                dataResultsObj.comment_total_like               =   dataResults[i]["totalLikeCount"];
 
                                                                                 comment_arr.push(dataResultsObj);
                                                                             }
                                                                             comment_arr_Final   =  removeDuplicate(comment_arr, 'comment_id');
                                                                         }
+
                                                                         //Query to get tagged users from both addressBook and fbFriends
                                                                             query  = "SELECT *"+
                                                                                     " FROM ("+
@@ -283,6 +328,21 @@ module.exports = {
                                                                                                                         mention_id      :   userMentionId
                                                                                                             }];
                                                                                                     }
+                                                                                                    //imageArray =  imageArray.sort(predicatBy("position"));
+                                                                                                    //var testImgArray    =   imageArray;
+                                                                                                    var like_position;
+                                                                                                    imageArray_2.forEach(function(factor, index){
+                                                                                                            if(factor.like_status == 1){
+                                                                                                                if(factor.like_userId == userId && factor.collageCreatorId != userId){
+                                                                                                                    like_position_Array.push(factor.position);
+                                                                                                                }
+                                                                                                            }
+                                                                                                    });
+                                                                                                    if(like_position_Array.length){
+                                                                                                                    like_position = like_position_Array[0];
+                                                                                                    }else{
+                                                                                                                    like_position = 0;
+                                                                                                    }
                                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Dither Details',
                                                                                                                                         dither_expiry_hour         : dither_expiry_hour,
                                                                                                                                         dither_desc                : results[0].imgTitle,
@@ -301,6 +361,7 @@ module.exports = {
                                                                                                                                         taggedUsers                : total_taggedUser_Array,
                                                                                                                                         comments                   : comment_arr_Final,
                                                                                                                                         invite_friends_NUM         : inviteeArray,
+                                                                                                                                        //testImgArray               : testImgArray.sort(predicatBy("position")),
                                                                                                                             });
                                                                                                 }
                                                                                         });

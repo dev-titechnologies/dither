@@ -272,7 +272,72 @@ module.exports = {
                                                                   });
                                         }
                     });
-        }
+        },
+        
+        
+       /* ==================================================================================================================================
+               To Select Contacts
+       ==================================================================================================================================== */
+        getFbFriends: function (req, res) {
+			
+			console.log("==========================  Fetching FbFriends Api =-=============");
+			var tokenCheck                  =     req.options.tokenCheck;
+            var userId                      =     tokenCheck.tokenDetails.userId;    
+            var fbId						=	  tokenCheck.tokenDetails.fbId;
+            var frnd_arr					= 	  [];
+            TempFbFriends.find({fbId:fbId}).exec(function (err, getNewFbfrnds){
+				if(err){
+					console.log(err)
+					return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends'});
+				}
+				else{
+					console.log(getNewFbfrnds)
+					if(!getNewFbfrnds.length){
+						return res.json(200, {status: 2, status_type: 'Failure' , message: 'No Friends Found!'});
+					}
+					else{
+						    console.log(getNewFbfrnds)
+							getNewFbfrnds.forEach(function(factor, index){
+								//frnd_arr.push(factor.userId)
+								User.find({id:factor.userId}).exec(function (err, details){
+									if(err){
+										console.log(err)
+									}
+									else{
+										console.log("ddddddddddddddddd")
+										console.log(details)
+										if(details.length)
+										{
+											frnd_arr	=	{
+																userId : factor.userId,
+																name   : details[0].name,
+																fbId   : details[0].fbId 	
+															}
+										}					
+									}
+								});
+							});
+							console.log(frnd_arr)
+							var query	= "DELETE FROM TempFbFriends where fbId = '"+fbId+"'";
+							TempFbFriends.query(query, function(err,deleteNewFrnds){
+								
+								if(err){
+									console.log(err)
+									return res.json(200, {status: 2, status_type: 'Failure' , message: 'error!'});
+									
+								}else{
+									
+									console.log(deleteNewFrnds)
+									return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
+								}
+								
+							});	
+							
+					}
+					
+				}
+			});
+		} 
 
 };
 

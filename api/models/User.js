@@ -21,8 +21,8 @@ module.exports = {
             },
         email: {
                 type: 'email',
-                //required: true,
-                //unique: true
+                required: true,
+                unique: true
             },
         mobileVerificationStatus: {
                 type: 'boolean',
@@ -73,6 +73,10 @@ module.exports = {
                 defaultsTo: true
             },
         notifyMention: {
+                type: 'boolean',
+                defaultsTo: true
+            },
+        notifyCommentLike: {
                 type: 'boolean',
                 defaultsTo: true
             },

@@ -148,6 +148,13 @@ module.exports = {
                             var tagged_fbUser                       =     request.tagged_fb_user;
                             var tagged_contactUser                  =     request.tagged_user;
                             var get_dither_images                   =     request.dither_images;
+                            //wwwww
+                            //var must_taggedUserArray                =     [8,90,7];
+                            //var must_taggedUserArray                =     [2];
+                            //var taggedUserArray_1                   =     union_arrays(tagged_fbUser, tagged_contactUser);
+                            //var taggedUserArray                     =     union_arrays(taggedUserArray_1, must_taggedUserArray);
+                            //wwwww
+
                             var taggedUserArray                     =     union_arrays(tagged_fbUser, tagged_contactUser);
                             var taggedUserArrayFinal                =     [];
                             var inviteFriends                       =     request.invite_friends_NUM;
@@ -227,9 +234,9 @@ module.exports = {
                                         console.log("###################################################################################");
 
 
-                                        if(!final_tagged_users_Array.length){
-                                                return res.json(200, {status: 2, status_type: 'Failure', message: 'Tagged users reported you. So Dither not created'});
-                                        }else{
+                                        //if(!final_tagged_users_Array.length){
+                                                //return res.json(200, {status: 2, status_type: 'Failure', message: 'No tagged users found. So Dither not created'});
+                                        //}else{
                                                 async.series([
                                                         function(callback) {
                                                                 console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----1 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
@@ -309,6 +316,7 @@ module.exports = {
                                                                                                             });
                                                                                                             sortedVote                  = vote.sort( predicatBy("position") );*/
                                                                                                             collage_results             = results;
+                                                                                                            collageDetails_results      = createdCollageDetails;
                                                                                                             callback();
                                                                                                         }
                                                                                                 });
@@ -323,17 +331,118 @@ module.exports = {
                                                                 var imageSrc                    =     collageImg_path_assets + collage_results.image;
                                                                 var ext                         =     imageSrc.split('/');
                                                                 ext                             =     ext[ext.length-1].split('.');
-                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-                                                                console.log(imageSrc);
-                                                                console.log(imageDst);
-                                                                ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults) {
-                                                                        if(err){
+                                                                var imgWidth,
+                                                                    imgHeight,
+                                                                    imageDst;
+
+                                                                async.series([
+                                                                        function(callback) {
+                                                                                    imgWidth                    =    70;
+                                                                                    imgHeight                   =    70;
+                                                                                    imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    console.log("Error in image resize !!!!");
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
+
+                                                                        },
+                                                                        function(callback) {
+                                                                                    imgWidth                    =    242;
+                                                                                    imgHeight                   =    242;
+                                                                                    imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    console.log("Error in image resize !!!!");
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
+
+                                                                        },
+                                                                        function(callback) {
+                                                                                    imgWidth                    =    350;
+                                                                                    imgHeight                   =    350;
+                                                                                    imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    console.log("Error in image resize !!!!");
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
+
+                                                                        },
+                                                                ],function(err){
+                                                                            if(err){
                                                                                 console.log(err);
-                                                                                console.log("Error in image resize !!!!");
                                                                                 callback();
-                                                                        }else{
-                                                                                callback();
-                                                                        }
+                                                                            }else{
+                                                                                //callback();
+                                                                                //collage-Details images -- STARTS
+                                                                                collageDetails_results.forEach(function(factor, index){
+
+                                                                                        var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                                                        var ext                         =     imageSrc.split('/');
+                                                                                        ext                             =     ext[ext.length-1].split('.');
+                                                                                        var imgWidth,
+                                                                                            imgHeight,
+                                                                                            imageDst;
+
+                                                                                        async.series([
+                                                                                                function(callback) {
+                                                                                                            imgWidth                    =    160;
+                                                                                                            imgHeight                   =    160;
+                                                                                                            imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                                    if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                                            callback();
+                                                                                                                    }else{
+                                                                                                                            callback();
+                                                                                                                    }
+                                                                                                            });
+
+                                                                                                },
+                                                                                        function(callback) {
+                                                                                                            imgWidth                    =    70;
+                                                                                                            imgHeight                   =    70;
+                                                                                                            imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                                            ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                                    if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            console.log("Error in image resize 70 collageDetails !!!!");
+                                                                                                                            callback();
+                                                                                                                    }else{
+                                                                                                                            callback();
+                                                                                                                    }
+                                                                                                            });
+
+                                                                                                },
+                                                                                        ],function(err){
+                                                                                                    if(err){
+                                                                                                        console.log(err);
+                                                                                                        callback();
+                                                                                                    }else{
+                                                                                                        console.log("Loop success");
+                                                                                                        //collage-Details images
+                                                                                                        callback();
+
+                                                                                                    }
+                                                                                        });
+                                                                                //collage-Details images -- ENDS
+
+                                                                                }, callback());
+                                                                            }
                                                                 });
                                                         },
                                                         function(callback) {
@@ -448,7 +557,7 @@ module.exports = {
                                                                                                                                                     NtfnType            :   1,
                                                                                                                                                     id                  :   collage_results.id,
                                                                                                                                                     notification_id     :   createdNotificationTags.id,
-                                                                                                                                                    old_id				:	''
+                                                                                                                                                    old_id              :   ''
                                                                                                                                                 };
                                                                                                                                 NotificationService.NotificationPush(data, function(err, ntfnSend) {
                                                                                                                                         if(err){
@@ -509,65 +618,30 @@ module.exports = {
                                                                 console.log(err);
                                                                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in dither creation', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                                             }else{
-                                                                final_tagged_users_Array.forEach(function(factor, index){
-                                                                        var roomName = "socket_user_"+factor;
-                                                                        sails.sockets.broadcast(roomName,{
-                                                                                                        type            :   "new",
-                                                                                                        id              :   collage_results.id,
-                                                                                                        message         :   "========== ditherCreate Room Broadcast --------",
-                                                                                                        roomName        :   roomName,
-                                                                                                        subscribers     :   sails.sockets.subscribers(roomName),
-                                                                                                        socket          :   sails.sockets.rooms()
-                                                                                                        });
-                                                                });
-                                                                /*taggedUserArrayFinal.forEach(function(factor, index){
-                                                                        var roomName = "socket_user_"+factor.userId;
-                                                                        sails.sockets.broadcast(roomName,{
-                                                                                                        type            :   "new",
-                                                                                                        id              :   collage_results.id,
-                                                                                                        message         :   "========== ditherCreate Room Broadcast --------",
-                                                                                                        roomName        :   roomName,
-                                                                                                        subscribers     :   sails.sockets.subscribers(roomName),
-                                                                                                        socket          :   sails.sockets.rooms()
-                                                                                                        });
-                                                                });*/
-                                                                //console.log( "profile_image -----------" +profilePic_path + tokenCheck.tokenDetails.profilePic);
-                                                                //console.log(" created_date_time-------------" +collage_results.createdAt);
-                                                                //console.log("updated_date_time ------------" +collage_results.updatedAt);
-
-                                                                //console.log(" collage_id-----------------"+collage_results.id);
-                                                                //console.log(" collage_image-------------------"+collageImg_path + collage_results.image);
-                                                                //console.log( "taggedUsers -------------------" +taggedUserArrayFinal);
-                                                                //console.log(" dither_count ----------------------"+sortedVote.length);
-                                                                //console.log("invite_friends_NUM--------------------------"+invite_friends_NUM);
-                                                                //console.log(sortedVote);
-                                                                //console.log(collage_results.imgTitle);
-                                                                //console.log(collage_results.location);
-
+                                                                if(final_tagged_users_Array.length){
+                                                                        final_tagged_users_Array.forEach(function(factor, index){
+                                                                                var roomName = "socket_user_"+factor;
+                                                                                sails.sockets.broadcast(roomName,{
+                                                                                                                type            :   "new",
+                                                                                                                id              :   collage_results.id,
+                                                                                                                message         :   "========== ditherCreate Room Broadcast --------",
+                                                                                                                roomName        :   roomName,
+                                                                                                                subscribers     :   sails.sockets.subscribers(roomName),
+                                                                                                                socket          :   sails.sockets.rooms()
+                                                                                                                });
+                                                                        });
+                                                                }
                                                                 return res.json(200, {status: 1, status_type: 'Success', message: 'Successfully created Collage',
-                                                                                          //profile_image      :     profilePic_path + tokenCheck.tokenDetails.profilePic,
-                                                                                          //user_name          :     tokenCheck.tokenDetails.name,
-                                                                                          //user_id            :     tokenCheck.tokenDetails.userId,
-                                                                                          //created_date_time  :     collage_results.createdAt,
-                                                                                          //updated_date_time  :     collage_results.updatedAt,
                                                                                           collage_id         :     collage_results.id,
-                                                                                          //collage_image      :     collageImg_path + collage_results.image,
-                                                                                          //location           :     collage_results.location,
-                                                                                          //caption            :     collage_results.imgTitle,
-                                                                                          //vote               :     sortedVote,
-                                                                                          //dither_count       :     sortedVote.length,
-                                                                                          //taggedUsers        :     total_taggedUser_Array,
-                                                                                          //invite_friends_NUM :     request.invite_friends_NUM,
                                                                                           reportedUsers      :     reportUserResults_JSON_Array,
                                                                 });
                                                             }
                                                 });
 
-                                        }
+                                        //}
 
                                 }
                             });
-
             }
         },
 

@@ -14,10 +14,11 @@ module.exports = {
             console.log("Like  Dithers ===== api");
             var tokenCheck                  =     req.options.tokenCheck;
             var userId                      =     tokenCheck.tokenDetails.userId;
+            var userName                    =     tokenCheck.tokenDetails.name;
             var collageId                   =     req.param("dither_id");
             var likedImageId                =     req.param("dither_like_image_id");
             var imgPosition                 =     req.param("image_position");
-			var old_id						= 	  '';
+            var old_id                      =     '';
             if(!collageId || !likedImageId || !imgPosition){
                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id and dither_like_image_id and image_position'});
             }else{
@@ -95,18 +96,38 @@ module.exports = {
                                                                                                                     //subscribers     :   sails.sockets.subscribers(roomName),
                                                                                                                     //socket          :   sails.sockets.rooms()
                                                                                                                     });
-                                                                                    //-----------Notification log Insertion----------------
+                                                                                    var data        =   {
+                                                                                                    collageId                   :    collageId,
+                                                                                                    notificationTypeId          :    2,
+                                                                                                    userId                      :    userId,
+                                                                                                    collageCreatorId            :    foundCollageResults.userId,
+                                                                                                    notificationSettingsType    :    "notifyVote",
+                                                                                                    message                     :    "dither vote notification",
+                                                                                                    ntfn_body                   :    userName + " voted on your Dither",
+                                                                                                    totalVote                   :    foundCollageResults.totalVote,
+                                                                                                    likedImageId                :    likedImageId,
+                                                                                                    };
+                                                                                    NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
+                                                                                        if(err){
+                                                                                            console.log(err);
+                                                                                            return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in notificationLogCreation' , error_details: err});
+                                                                                        }else{
+
+                                                                                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully voted the image', total_like_count : updatedVoteCount[0].vote});
+                                                                                        }
+                                                                                    });
+                                                                                   /* //-----------Notification log Insertion----------------
                                                                                     var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 2";
-																					NotificationLog.query(query, function(err, selCommentNtfn){
-																					if(err){
-																						console.log(err)
-																						callback();
-																					}else{
-                                                                                   // old_id	  =	selCommentNtfn[0].id;
+                                                                                    NotificationLog.query(query, function(err, selCommentNtfn){
+                                                                                    if(err){
+                                                                                        console.log(err)
+                                                                                        callback();
+                                                                                    }else{
+                                                                                   // old_id      = selCommentNtfn[0].id;
                                                                                    if(selCommentNtfn.length!=0){
-																							console.log(selCommentNtfn[0].id)
-																							old_id	 =	selCommentNtfn[0].id;
-																					}
+                                                                                            console.log(selCommentNtfn[0].id)
+                                                                                            old_id   =  selCommentNtfn[0].id;
+                                                                                    }
                                                                                     var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 2";
                                                                                     NotificationLog.query(query, function(err, deleteLikeNtfn){
                                                                                             if(err){
@@ -157,9 +178,7 @@ module.exports = {
                                                                                                                                                         total_like_count       :  updatedVoteCount[0].vote,
                                                                                                                                                       });
                                                                                                                         }else{
-                                                                                                                            /*-------------------------------------------------------------------------------------                                                                                          /*------------------------------------------------------------------------------------
-                                                                                                                                                        PUSH NOTIFICATION
-                                                                                                                             -------------------------------------------------------------------------------------*/
+
                                                                                                                             //var query   =  "SELECT DISTINCT(deviceId) FROM userToken where userId ='"+foundCollageResults.userId+"'";
                                                                                                                             //User_token.query(query, function(err, getDeviceId) {
 
@@ -190,7 +209,7 @@ module.exports = {
                                                                                                                                                             NtfnType            :   2,
                                                                                                                                                             id                  :   collageId,
                                                                                                                                                             notification_id     :   createdNotificationTags.id,
-                                                                                                                                                            old_id				:	old_id
+                                                                                                                                                            old_id              :   old_id
                                                                                                                                                             };
                                                                                                                                         async.series([
                                                                                                                                         function(callback) {
@@ -233,8 +252,8 @@ module.exports = {
 
                                                                                             }
                                                                                     });   //-----------------------------End OF NotificationLog---------------------------------
-																				  }
-																			   });
+                                                                                    }
+                                                                                    });*/
 
                                                                                 }//Collage totalVote count Update
                                                                             });
@@ -251,8 +270,8 @@ module.exports = {
                                             }//Voted by creator or not
                                         }//Collage existing check
 
-                                    }
-                                });
+                                }
+                            });
                         }// already Liked by user check,  Else stop
                     }
                 });

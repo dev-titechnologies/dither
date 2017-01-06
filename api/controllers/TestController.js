@@ -4,7 +4,8 @@
  * @description :: Server-side logic for managing tests
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-var fs          = require('fs');
+var fs                  =   require('fs');
+var im                  =   require('imagemagick');
 //var fs                          =     require('file-system');
 // solution:
 //function to remove a value from the json array
@@ -870,30 +871,73 @@ module.exports = {
                E-mail
         ==================================================================================================================================== */
         email: function (req, res) {
+
                 var global_settingsKeyValue     =   req.options.settingsKeyValue;
-                var email_to                    =   "tittoxp@gmail.com";
-                var email_subject               =   'Welcome to Dither';
-                var email_template              =   'email-test';
-                var email_context               =   {receiverName: "Titto xavier", pic: global_settingsKeyValue.CDN_IMAGE_URL + "images/profilePics/31db73cf-8305-4351-b075-ffe287dd7dab.jpg"};
-                EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
-                    if(err)
-                    {
-                            console.log(err);
-                            console.log("async parallel in Mailpart Error");
-                            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
+                //var email_to                    =   "titto.xavier@titechnologies.org";
+                var email_to                    =   req.param("email_to");
+                if(!email_to){
+                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'please pass email_to'});
+                }else{
+                        var email_subject               =   'Welcome to Dither';
+                        var email_template              =   'email-test';
+                        var email_context               =   {
+                                                                receiverName    :   "Titto xavier",
+                                                                pic             :   global_settingsKeyValue.CDN_IMAGE_URL + "images/profilePics/31db73cf-8305-4351-b075-ffe287dd7dab.jpg",
+                                                                email_img_url   :   global_settingsKeyValue.CDN_IMAGE_URL + 'images/email/'
+                                                            };
+                        EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
+                            if(err)
+                            {
+                                    console.log(err);
+                                    console.log("async parallel in Mailpart Error");
+                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
 
-                    }else{
-                            //console.log(results);
-                            console.log(email_to);
-                            console.log(email_subject);
-                            console.log(email_template);
-                            console.log(email_context);
-                            console.log("async parallel in Mailpart Success");
-                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the Dither email Test'});
-                    }
+                            }else{
+                                    //console.log(results);
+                                    console.log(email_to);
+                                    console.log(email_subject);
+                                    console.log(email_template);
+                                    console.log(email_context);
+                                    console.log("async parallel in Mailpart Success");
+                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the Dither email Test'});
+                            }
 
 
-                });
+                        });
+                }
+        },
+
+        email_2: function (req, res) {
+
+                var global_settingsKeyValue     =   req.options.settingsKeyValue;
+                //var email_to                    =   "titto.xavier@titechnologies.org";
+                var email_to                    =   req.param("email_to");
+                if(!email_to){
+                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'please pass email_to'});
+                }else{
+                        var email_subject               =   'Welcome to Dither';
+                        var email_template              =   'signup';
+                        var email_context               =   {receiverName: "Titto xavier", pic: global_settingsKeyValue.CDN_IMAGE_URL + "images/profilePics/31db73cf-8305-4351-b075-ffe287dd7dab.jpg"};
+                        EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
+                            if(err)
+                            {
+                                    console.log(err);
+                                    console.log("async parallel in Mailpart Error");
+                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Email Send on signup', error_details: sendEmailResults});
+
+                            }else{
+                                    //console.log(results);
+                                    console.log(email_to);
+                                    console.log(email_subject);
+                                    console.log(email_template);
+                                    console.log(email_context);
+                                    console.log("async parallel in Mailpart Success");
+                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the Dither email Test'});
+                            }
+
+
+                        });
+                }
         },
 
  /* ==================================================================================================================================
@@ -1290,22 +1334,74 @@ module.exports = {
             Proportionate height and width
     ================================================================================================================================== */
     imageHeightWidth: function (req, res){
-                var imageHeight         =  parseFloat(req.param("height"));
+                /*var imageHeight         =  parseFloat(req.param("height"));
                 var imageWidth          =  parseFloat(req.param("width"));
 
                 var height         =   180/180;
                 var width          =   parseFloat(imageWidth/180);
                 height             =   parseFloat(width * 180);
 
-                //ratio                   = imageWidth / imageHeight;
+                //ratio                   = imageWidth / imageHeight;*/
+                console.log(req.params.all());
 
-                return res.json(200, {status: 1, status_type: 'Success' , message: 'proportionate image size',
-                                        result : {width : width, height : height}
+                var image_width         =  req.param("width");
+                var image_height        =  req.param("height");
+
+                if(!image_width || !image_height){
+                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass both width and height',
                                         });
+                }else{
+                        image_width         =  parseFloat(image_width);
+                        image_height        =  parseFloat(image_height);
+                        var resultHeight,
+                            resultWidth,
+                            ratio;
+                        if(image_width > image_height){
+                                ratio           =   image_height/ image_width;
+                                ratio           =   parseFloat(ratio);
+                                resultWidth     =   180;
+                                resultHeight    =   ratio  * 180;
+                        }else if(image_height > image_width){
+                                ratio = image_width/ image_height;
+                                ratio           =   parseFloat(ratio);
+                                resultHeight    =   180;
+                                resultWidth     =   ratio  * 180;
+                        }else{
+                               // both are same
+                               resultHeight     =   180;
+                               resultWidth      =   180;
+
+                        }
+                        return res.json(200, {status: 1, status_type: 'Success' , message: 'proportionate image size',
+                                                result : {width : resultWidth, height : resultHeight}
+                                                });
+                }
 
 
 
     },
+    //--------------------Testingggggggggggggg-------------------------------------
+    testResize: function (req, res){
+
+        var im = require('imagemagick');
+        im.identify('http://git.titechnologies.in:5000/images/profilepics/ff3a4bf0-3a61-4313-8d62-d36f3f9d8db4.png', function(err, features){
+          if (err) {
+                    //throw err
+                    console.log(err)
+                    return res.json(200, {status: 2, status_type: 'Failure', message: 'error'});
+             }else{
+                  console.log(features)
+                  return res.json(200, {status: 1, status_type: 'Success', message: 'resized',features:features});
+            }  // { format: 'JPEG', width: 3904, height: 2622, depth: 8 }
+
+        });
+
+
+    },
+
+
+
+
     /*  =================================================================================================================================
              Proportionate height and width
     ================================================================================================================================== */
@@ -1365,10 +1461,154 @@ module.exports = {
                             }
                         });
                 });
+    },
+     /*  =================================================================================================================================
+             Proportionate height and width
+    ================================================================================================================================== */
+    userAgent: function (req, res){
 
+                console.log(req.headers['user-agent']);
+                console.log(req.headers);
+                console.log(req.params.all());
+                return res.json(200, {status: 1, status_type: 'Success', message: 'userAgent success',results : ["One", "Two", "Three", "Four"]});
+
+    },
+
+    /* ===================================================================================================================================
+             PUSH FOR VERSION UPDATE
+    ================================================================================================================================== */
+
+
+    pushNtfnUpdate: function (req, res){
+
+
+        console.log("-----------Push Notification For Version Update-----------")
+        var query   =   "SELECT `deviceId` FROM `userToken`";
+        User_token.query(query, function(err, getDeviceId) {
+
+            if(err){
+                  console.log(err);
+                  return res.json(200, {status: 2, status_type: 'Failure', message: 'Error in fetching users'});
+            }else{
+                var message         =   'Update Notification';
+                var ntfn_body       =   "Dither New version available";
+                var deviceId_arr    =   [];
+                getDeviceId.forEach(function(factor, index){
+                    deviceId_arr.push(factor.deviceId);
+                });
+                if(!deviceId_arr.length){
+                        return res.json(200, {status: 2, status_type: 'Failure', message: 'There is no active users'});
+                }else{
+                        var data        =   {
+                                                message             :   message,
+                                                device_id           :   deviceId_arr,
+                                                NtfnBody            :   ntfn_body,
+                                                NtfnType            :   10,
+                                                id                  :   '',
+                                                notification_id     :   '',
+                                                old_id              :   ''
+                                            };
+                        NotificationService.NotificationPush(data, function(err, ntfnSend){
+                                if(err){
+                                    console.log("Error in Push Notification Sending")
+                                    console.log(err)
+                                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured in Push Notification'});
+                                }else{
+                                    return res.json(200, {status: 1, status_type: 'Success', message: 'Push Notification sended'});
+                                }
+                        });
+                }
+            }
+        });
+
+    },
+
+
+
+
+
+    /* ===================================================================================================================================
+             FB CALLBACK
+    ================================================================================================================================== */
+    fbcallback: function (req, res){
+
+        console.log("--------------GET FBCALLBACK---------------")
+        console.log(req.body)
+        var data = JSON.stringify(req.body)
+        console.log(data)
+        values = {
+
+                    data:data
+            }
+
+        TempFbData.create(values).exec(function(err, results){
+                if(err){
+                    console.log(err)
+                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured '});
+                }
+                else{
+                    console.log(results)
+                    return res.json(200, {status: 1, status_type: 'success', message: 'data inserted successfully'});
+
+                }
+        });
 
 
     },
+
+
+
+
+    /* ===================================================================================================================================
+             CROP IMAGE
+    ================================================================================================================================== */
+    cropImage: function (req, res){
+            console.log("cropImage  -----------");
+            im.crop({
+                srcPath: 'assets/images/collage_test/00dad2f4-52ed-4590-a4bb-d0e9fea89017.jpg',
+                dstPath: 'assets/images/collage_test/00dad2f4-52ed-4590-a4bb-d0e9fea89017_70x70.jpg',
+                width: 70,
+                height: 70,
+                quality: 1,
+                gravity: 'Center'
+            }, function(err, stdout, stderr){
+                if (err) throw err;
+                //console.log('resized ' + process.argv[2].split('/').pop() + ' to fit within 200x200px');
+                console.log("stdout ----");
+                console.log(stdout);
+            });
+
+    },
+    /* ===================================================================================================================================
+             RESIZE IMAGE
+    ================================================================================================================================== */
+    imageResize: function (callback) {
+
+                    var im = require('imagemagick');
+                    var imageSrc = 'assets/images/collage_test/00dad2f4-52ed-4590-a4bb-d0e9fea89017.jpg';
+                    var imageDst = 'assets/images/collage_test/00dad2f4-52ed-4590-a4bb-d0e9fea89017_70x70_resize_1.jpg';
+                    console.log("Image service Api  ====== image magick");
+                    im.resize({
+                      //srcData: fs.readFileSync('assets/images/abc.jpg', 'binary'),
+                      srcData: fs.readFileSync(imageSrc, 'binary'),
+                      //width:   70,
+                      height:   70
+                    }, function(err, stdout, stderr){
+                              if (err)
+                              {
+                                    //throw err;
+                                      console.log(err);
+                                      //callback(true, {status: 2, status_type: "Failure", message: 'Some error occured resizing image', error_details: err});
+
+                              }else{
+                                      fs.writeFileSync(imageDst, stdout, 'binary');
+
+                                      //callback(false, {status: 1, status_type: "Success", message: 'Successfully resized the image'});
+                              }
+                    });
+    },
+
 };
+
 
 

@@ -85,6 +85,7 @@ module.exports = {
                 notificationVoted          =     "";
                 notificationCommented      =     "";
                 notificationSignup         =     "";
+                externalNotificationBody   =     "";
                 notifyVoteArray            =     [];
                 notifyCmntArray            =     [];
                 var focus_Ntfn_id          =     req.param("focus_Ntfn_id");
@@ -97,13 +98,14 @@ module.exports = {
                                                 " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                                 " U.name,U.profilePic as profile_image,"+
                                                 " C.image as dither_image,C.expiryDate"+
-                                                " FROM  notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                                " FROM  notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
                                                 " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                                 " WHERE"+
+                                                //" U.status = 'active'"+
                                                 " N.ditherUserId="+user_id+
-                                                " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=7 OR N.notificationTypeId=8)"+
+                                                " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=5 OR N.notificationTypeId=7 OR N.notificationTypeId=8 OR N.notificationTypeId=9)"+
                                                 " OR "+
-                                                " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit+"";
+                                                " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit;
 
                         }else{
                             var query  =   " SELECT"+
@@ -112,15 +114,16 @@ module.exports = {
                                             " SELECT"+
                                             " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                                             " U.name,U.profilePic as profile_image,C.image as dither_image,C.expiryDate"+
-                                            " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                                            " FROM notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
                                             " LEFT JOIN collage as C ON C.id = N.collage_id"+
                                             " WHERE"+
+                                            //" U.status = 'active'"+
                                             " N.ditherUserId="+user_id+
                                             " OR"+
                                             " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC"+
                                             ") as temp"+
                                             " where temp.id <"+focus_Ntfn_id+
-                                            " LIMIT "+data_view_limit+"";
+                                            " LIMIT "+data_view_limit;
 
                             //--------------------------------------------------------------------
                         }
@@ -134,8 +137,8 @@ module.exports = {
                                       return res.json(200, {status: 1,status_type:"Success",msg: 'No notification found',notification_data:[]});
                                 }else{
                                     async.forEach(results, function (item, callback){
-										//console.log(results)
-                                        if(item.notificationTypeId == 1 || item.notificationTypeId == 2 || item.notificationTypeId == 3 || item.notificationTypeId == 4 || item.notificationTypeId == 7 || item.notificationTypeId == 8){
+                                        //console.log(results)
+                                        if(item.notificationTypeId == 1 || item.notificationTypeId == 2 || item.notificationTypeId == 3 || item.notificationTypeId == 4 || item.notificationTypeId == 5 || item.notificationTypeId == 7 || item.notificationTypeId == 8 || item.notificationTypeId == 9){
                                             //----------Comment Notification---------------------------
                                             if(item.notificationTypeId == 3){
                                                 console.log("Notification Comment")
@@ -269,7 +272,9 @@ module.exports = {
                                                                 callback();
                                                         }else{
                                                                 var notification    =   ntfnTypeFound[0].body;
-                                                                ntfn_body           =   util.format(notification);
+
+                                                                ntfn_body           =   util.format(notification, item.name);
+
                                                                 item.ntfn_body      =   ntfn_body;
                                                                 item.type           =   ntfnTypeFound[0].type;
                                                                 var imageToResize   =   item.profile_image;
@@ -309,7 +314,59 @@ module.exports = {
                                                                     });
                                                         }
                                                     });
-                                            }else if(item.notificationTypeId == 1){
+                                            }else if(item.notificationTypeId==5){
+                                                    console.log("signuppp ")
+                                                    NotificationType.find({id:5 }).exec(function(err, ntfnTypeFound){
+                                                        if(err){
+                                                                console.log(err)
+                                                                callback();
+                                                        }else{
+                                                                var notification    =   ntfnTypeFound[0].body;
+
+                                                                ntfn_body           =   util.format(notification, item.name);
+
+                                                                item.ntfn_body      =   ntfn_body;
+                                                                item.type           =   ntfnTypeFound[0].type;
+                                                                var imageToResize   =   item.profile_image;
+                                                                var clgImgToResize  =   item.dither_image;
+                                                                item.dither_image   =   collageImg_path + item.dither_image;
+                                                                notificationSignup  =   ntfn_body;
+                                                                // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                                if(imageToResize)
+                                                                {
+                                                                var imageSrc                    =     imageToResize;
+                                                                var ext                         =     imageSrc.split('.');
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                }
+                                                                var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+
+                                                                    fs.exists(clgImgSrc, function(exists){
+                                                                        if(exists){
+                                                                                var ext                         =     clgImgSrc.split('/');
+                                                                                ext                             =     ext[ext.length-1].split('.');
+                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                                ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
+
+                                                                                    if(err)
+                                                                                    {
+                                                                                        console.log(err)
+                                                                                        callback();
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                        callback();
+                                                                                    }
+                                                                                });
+                                                                        }else{
+                                                                            callback();
+                                                                        }
+                                                                    });
+                                                        }
+                                                    });
+                                            }
+
+                                            else if(item.notificationTypeId == 1){
                                                 NotificationType.find({id:1 }).exec(function(err, ntfnTypeFound){
                                                     if(err){
                                                         console.log(err)
@@ -398,44 +455,96 @@ module.exports = {
                                                         }
                                                 });
                                             }else if(item.notificationTypeId==8){
-												console.log("Notification for dither Expire")
-												NotificationType.find({id:8 }).exec(function(err, ntfnTypeFound){
-													if(err)
-													{
-														console.log(err)
-														callback();
-													} 
-													else
-													{
-														var notification    =   ntfnTypeFound[0].body;
-														var ntfn_body       =   util.format(notification);
-														item.type           =   ntfnTypeFound[0].type;
-														item.ntfn_body      =   ntfn_body;
-														var clgImgToResize  =   item.dither_image;
-														item.dither_image   =   collageImg_path + item.dither_image;
-														notificationTagged  =   ntfn_body;
-														var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
-														fs.exists(clgImgSrc, function(exists) {
-															if(exists){
-																var ext                         =     clgImgSrc.split('/');
-																ext                             =     ext[ext.length-1].split('.');
-																var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
-																ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
-																	if(err){
-																		console.log(err)
-																		callback();
-																	}else{
-																		item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-																		callback();
-																	}
-																});
-															}else{
-																callback();
-															}
-														});
-													}
-												});
-											}	
+                                                console.log("Notification for dither Expire")
+                                                NotificationType.find({id:8 }).exec(function(err, ntfnTypeFound){
+                                                    if(err)
+                                                    {
+                                                        console.log(err)
+                                                        callback();
+                                                    }
+                                                    else
+                                                    {
+                                                        var notification    =   ntfnTypeFound[0].body;
+                                                        var ntfn_body       =   util.format(notification);
+                                                        item.type           =   ntfnTypeFound[0].type;
+                                                        item.ntfn_body      =   ntfn_body;
+                                                        var clgImgToResize  =   item.dither_image;
+                                                        item.dither_image   =   collageImg_path + item.dither_image;
+                                                        notificationTagged  =   ntfn_body;
+
+                                                        var imageToResize   =   item.profile_image;
+                                                        // ------------------------------Generate ThumbnailImage-----------------------------------------------
+                                                        if(imageToResize){
+                                                            var imageSrc                    =     imageToResize;
+                                                            var ext                         =     imageSrc.split('.');
+                                                            item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                        }
+                                                        var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
+                                                        fs.exists(clgImgSrc, function(exists) {
+                                                            if(exists){
+                                                                var ext                         =     clgImgSrc.split('/');
+                                                                ext                             =     ext[ext.length-1].split('.');
+                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
+                                                                    if(err){
+                                                                        console.log(err)
+                                                                        callback();
+                                                                    }else{
+                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                        callback();
+                                                                    }
+                                                                });
+                                                            }else{
+                                                                callback();
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }else if(item.notificationTypeId == 9){
+                                                    console.log("Notification comment like");
+                                                    NotificationType.find({id:9 }).exec(function(err, ntfnTypeFound){
+                                                        if(err){
+                                                            console.log(err)
+                                                            callback();
+                                                        }else{
+                                                            if(!ntfnTypeFound){
+                                                                    console.log("No notification found with id "+ item.notificationTypeId);
+                                                                    callback();
+                                                            }else{
+                                                                    var notification                =   ntfnTypeFound[0].body;
+                                                                    item.type                       =   ntfnTypeFound[0].type;
+                                                                    var profileImageToResize        =   item.profile_image;
+                                                                    var collageImageToResize        =   item.dither_image;
+                                                                    item.dither_image               =   collageImg_path + item.dither_image;
+                                                                    if(item.description <= 1){
+                                                                        externalNotificationBody    =   " liked on your comment";
+                                                                        item.ntfn_body              =   externalNotificationBody;
+                                                                    }else if(item.description == 2){
+                                                                        externalNotificationBody    =   " and 1 other liked on your comment";
+                                                                        item.ntfn_body              =   externalNotificationBody;
+                                                                    }else{
+                                                                        item.description            =   item.description - 1;
+                                                                        ntfn_body                   =   util.format(notification,item.description);
+                                                                        externalNotificationBody    =   ntfn_body;
+                                                                        item.ntfn_body              =   ntfn_body;
+                                                                    }
+                                                                    if(profileImageToResize){
+                                                                        var profileImageSrc          =     profileImageToResize;
+                                                                        var ext                      =     profileImageSrc.split('.');
+                                                                        item.profile_image           =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                    }else{
+                                                                        item.profile_image           =     "";
+                                                                    }
+                                                                    if(collageImageToResize){
+                                                                        var collageImageSrc          =     collageImageToResize;
+                                                                        var ext                      =     collageImageSrc.split('.');
+                                                                        item.dither_image            =     collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                    }
+                                                                    callback();
+                                                            }
+                                                        }
+                                                });
+                                            }
                                         }else{
                                             callback();
                                         }
@@ -462,7 +571,7 @@ module.exports = {
 
 
         typeNotification: function(req, res) {
-
+                    console.log("------------New Type Notification---------------")
                     var notificationTypeId          =   req.param("notification_type");
                     var notificationId              =   req.param("notification_id");
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -478,25 +587,28 @@ module.exports = {
                                     " clg.image as collageImage"+
                                     " FROM notificationLog ntlg"+
                                     " INNER JOIN user usr ON usr.id = ntlg.userId"+
-                                    " INNER JOIN collage clg ON clg.id = ntlg.collage_id"+
+                                    " LEFT JOIN collage clg ON clg.id = ntlg.collage_id"+
                                     " WHERE"+
                                     " ntlg.id = "+notificationId;
-
+                            console.log(query)
                             NotificationLog.query(query, function(err,results) {
                                     if(err){
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification'});
                                     }
                                     else{
+                                            console.log(results)
                                             if(results.length == 0){
                                                     return res.json(200, {status: 2, status_type:"Failure", msg: 'No notification Found'});
                                             }else{
+                                                    console.log(notificationTypeId)
                                                     NotificationType.findOne({id: notificationTypeId}).exec(function(err, ntfnFoundResults){
                                                             if(err){
                                                                     console.log(err);
                                                                     return res.json(200, {status: 2, status_type:"Failure", msg: 'Some error occured in getting Socket typeNotification body/msg'});
 
                                                             }else{
+                                                                console.log(ntfnFoundResults)
                                                                 user_id                 =   results[0].ditherUserId;
                                                                 var tagged_users            =   [];
                                                                 var switchKey = results[0].notificationTypeId;
@@ -504,17 +616,60 @@ module.exports = {
 
                                                                     case 1:
                                                                             tagged_users            =   results[0].tagged_users;
+                                                                            notification			=	" is asking for your opinion";
 
                                                                     break;
 
                                                                     case 2:
 
-                                                                            notification            =   " voted on your Dither";
+
+                                                                            if(results[0].description == 2){
+                                                                                notification                =       " and 1 other liked on your dither";
+                                                                            }else if(results[0].description > 2 ){
+                                                                                notification                =       ntfnFoundResults.body;
+                                                                                results[0].description      =       results[0].description - 1;
+                                                                                notification                =       util.format(notification, results[0].description);
+                                                                            }else{
+                                                                                notification            =   " voted on your Dither";
+                                                                            }
 
                                                                     break;
 
                                                                     case 3:
-                                                                            notification            =   " commented on your Dither";
+
+                                                                            if(results[0].description == 2){
+                                                                                notification                =       " and 1 other commented on your dither";
+                                                                            }else if(results[0].description > 2 ){
+                                                                                notification                =       ntfnFoundResults.body;
+                                                                                results[0].description      =       results[0].description - 1;
+                                                                                notification                =       util.format(notification, results[0].description);
+                                                                            }else{
+                                                                                notification                =   " commented on your Dither";
+                                                                            }
+
+                                                                    break;
+
+                                                                    case 5:
+                                                                           // notification            =   " Your facebook friend "+results[0].name+" is now on Dither";
+                                                                            notification                =       util.format(ntfnFoundResults.body, results[0].name);
+
+                                                                    break;
+
+                                                                    case 8:
+                                                                            notification            =   " Your Dither has been expired";
+
+                                                                    break;
+
+                                                                    case 9:
+                                                                            if(results[0].description == 2){
+                                                                                notification                =       " and 1 other liked on your comment";
+                                                                            }else if(results[0].description > 2 ){
+                                                                                notification                =       ntfnFoundResults.body;
+                                                                                results[0].description      =       results[0].description - 1;
+                                                                                notification                =       util.format(notification, results[0].description);
+                                                                            }else{
+                                                                                notification                =       " liked on your comment";
+                                                                            }
 
                                                                     break;
 
@@ -525,11 +680,7 @@ module.exports = {
                                                                 }
 
                                                                 ntfn_body               =   notification;
-                                                                if(results[0].description > 1 ){
-                                                                    notification                =       ntfnFoundResults.body;
-                                                                    results[0].description      =       results[0].description - 1;
-                                                                    ntfn_body                   =       util.format(notification, results[0].description);
-                                                                }
+
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
                                                                                       id                    :   notificationId,
                                                                                       userId                :   results[0].userId,

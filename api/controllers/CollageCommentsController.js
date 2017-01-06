@@ -124,6 +124,7 @@ module.exports = {
                                                                 console.log("COMMENT SERIES ------------------ 1");
                                                                 if(mention_arr){
                                                                         //var query = "SELECT id FROM user where mention_id=";
+
                                                                         User.find({mentionId: mention_arr}).exec(function (err, getUserId){
                                                                             if(err){
                                                                                 console.log("mention")
@@ -144,7 +145,32 @@ module.exports = {
                                                                                         }
                                                                                     });
                                                                                 });
-                                                                                var values ={
+
+                                                                                /*var data = {
+                                                                                                notificationTypeId  :   7,
+                                                                                                userId              :   userId,
+                                                                                                collage_id          :   collageId,
+                                                                                                tagged_users        :   mention_user_id,
+                                                                                                name                :   tokenCheck.tokenDetails.name,
+                                                                                                mentionPushArr      :   mentionPushArr
+
+                                                                                            }
+                                                                                NotificationService.commentMentionNotification(data, function(err, ntfnMention){
+                                                                                    if(err){
+                                                                                            console.log("Error in Push Notification Sending")
+                                                                                            console.log(err)
+                                                                                            callback();
+
+                                                                                    }else{
+                                                                                            console.log(ntfnMention)
+                                                                                            callback();
+                                                                                    }
+                                                                                });*/
+
+
+
+                                                                              var values ={
+
                                                                                         notificationTypeId  :   7,
                                                                                         userId              :   userId,
                                                                                         collage_id          :   collageId,
@@ -193,41 +219,14 @@ module.exports = {
                                                                                                 });
 
                                                                                         }
-                                                                                   });
+                                                                                   }); 
                                                                             }
                                                                         });
                                                                 }else{
                                                                     callback();
                                                                 }
                                                         },
-                                                        function(callback) {
-                                                            console.log("COMMENT SERIES ------------------ 2");
-                                                            var query = "SELECT id FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
-                                                            NotificationLog.query(query, function(err, selCommentNtfn){
-                                                                if(err){
-                                                                    console.log(err)
-                                                                    callback();
-                                                                }else{
-                                                                    if(selCommentNtfn.length!=0){
-                                                                         //console.log(selCommentNtfn[0].id)
-                                                                         old_id  =  selCommentNtfn[0].id;
-                                                                     }
-
-                                                                    var query = "DELETE FROM notificationLog where collage_id = '"+collageId+"' and notificationTypeId = 3";
-                                                                    NotificationLog.query(query, function(err, deleteCommentNtfn){
-                                                                        if(err){
-                                                                            console.log(err)
-                                                                            callback();
-                                                                        }else{
-                                                                            console.log("delete comment NotificationId")
-                                                                            //console.log(deleteCommentNtfn)
-                                                                            callback();
-                                                                        }
-                                                                    });
-                                                                   }
-                                                             });
-
-                                                        },
+                                                        
                                                         function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 3");
                                                             var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"'";
@@ -236,8 +235,31 @@ module.exports = {
                                                                     console.log("err in count comments ")
                                                                     callback();
                                                                 }else{
+
                                                                     if(userId   !=  collageDetails.userId){
-                                                                            var values ={
+
+                                                                            var data        =   {
+                                                                                                    collageId                   :    collageId,
+                                                                                                    notificationTypeId          :    3,
+                                                                                                    userId                      :    userId,
+                                                                                                    collageCreatorId            :    collageDetails.userId,
+                                                                                                    notificationSettingsType    :    "notifyComment",
+                                                                                                    message                     :    "dither Comment notification",
+                                                                                                    ntfn_body                   :    tokenCheck.tokenDetails.name + " Commented on Your Dither",
+                                                                                                    description                 :    CountComments.length
+                                                                                                };
+
+                                                                            NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
+                                                                                if(err){
+                                                                                    console.log(err);
+                                                                                    callback();
+                                                                                }else{
+
+                                                                                        callback();
+                                                                                }
+                                                                            });
+
+                                                                           /* var values ={
                                                                                             notificationTypeId  :   3,
                                                                                             userId              :   userId,
                                                                                             ditherUserId        :   collageDetails.userId,
@@ -324,7 +346,7 @@ module.exports = {
                                                                                             }
                                                                                         });
                                                                                     }
-                                                                            });
+                                                                            }); */
                                                                     }else{
                                                                                 callback();
                                                                     }
@@ -457,9 +479,110 @@ module.exports = {
                             }
                     });
 
+        },
+/* ==================================================================================================================================
+               To delete a comment
+   ==================================================================================================================================== */
+        commentDelete  :  function (req, res) {
+                    console.log("++++++++++++++++ Delete a comment +++++++++++++++");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    //var server_baseUrl              =     req.options.server_baseUrl;
+                    //var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                    //var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                    var comment_unlink_path         =     req.options.file_path.commentImg_path_assets;
+                    var collageId                   =     req.param("dither_id");
+                    var commentId                   =     req.param("comment_id");
+                    console.log(req.params.all());
+                    if(!collageId || !commentId){
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass dither_id and comment_id'});
+                    }else{
+                            Collage.findOne({id: collageId}).exec(function (err, foundCollage){
+                                    if(err){
+                                            console.log(err);
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the Dither', error_details: err});
+                                    }else{
 
+                                            if(!foundCollage){
+                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage found'});
+                                            }else{
+                                                CollageComments.findOne({id: commentId}).exec(function (err, foundComment){
+                                                    if(err){
+                                                            console.log(err);
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                                    }else{
+                                                            if(!foundComment){
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No comment found'});
+                                                            }else{
 
+                                                                if(userId == foundComment.userId || userId == foundCollage.userId){
+                                                                        CollageComments.destroy({id: commentId}).exec(function (err, deleteComment){
+                                                                            if(err){
+                                                                                    console.log(err);
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                            }else{
 
+                                                                                CommentImages.find({commentId: commentId}).exec(function (err, foundCommentImages){
+                                                                                    if(err){
+                                                                                            console.log(err);
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                                                                    }else{
+                                                                                        console.log(foundCommentImages);
+                                                                                            if(!foundCommentImages.length){
+                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',
+                                                                                                                comment_id : commentId
+                                                                                                            });
+                                                                                            }else{
+                                                                                                //Unlinking comment image
+                                                                                                foundCommentImages.forEach(function(factor, index){
+                                                                                                    if(factor.image == null || factor.image == ""){
+                                                                                                    }else{
+                                                                                                            console.log("Unlinking comment image======");
+                                                                                                            //var resize_comment_image  = factor.image;
+                                                                                                            //var ext                   = resize_comment_image.split('.');
+                                                                                                            //fs.unlink(comment_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
+                                                                                                            fs.unlink(comment_unlink_path + factor.image);
+                                                                                                    }
+                                                                                                });
+
+                                                                                                CommentImages.destroy({commentId: commentId}).exec(function (err, deleteCommentImages){
+                                                                                                    if(err){
+                                                                                                            console.log(err);
+                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                                                    }else{
+
+                                                                                                            var roomName  = "socket_dither_"+collageId;
+                                                                                                            sails.sockets.broadcast(roomName,{
+                                                                                                                                            type            :   "update",
+                                                                                                                                            id              :   collageId,
+                                                                                                                                            user_id         :   userId,
+                                                                                                                                            message         :   "Delete Comment - Room Broadcast",
+                                                                                                                                            //roomName        :   roomName,
+                                                                                                                                            //subscribers     :   sails.sockets.subscribers(roomName),
+                                                                                                                                            //socket          :   sails.sockets.rooms()
+                                                                                                                                            });
+
+                                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',
+                                                                                                                                comment_id : commentId
+                                                                                                                });
+                                                                                                    }
+                                                                                                });
+                                                                                            }
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                }else{
+                                                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Only commentor or dither creator can delete'});
+                                                                }
+                                                            }
+                                                    }
+                                                });
+                                            }
+
+                                    }
+                            });
+                    }
         }
 
 

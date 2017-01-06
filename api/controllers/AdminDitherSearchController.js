@@ -24,15 +24,15 @@ module.exports = {
                         var name                        =   req.body.name;
                         var ditherStatus                =   req.body.ditherStatus;
                         var received_userId             =   req.body.userId;
-                        var orderby						 =	 req.body.order;
+                        var orderby                      =   req.body.order;
                         var query;
                         var userIdCheck;
                         var innerOrderBy;
                         if(orderby == 1){
-								innerOrderBy			=	" DESC ";
-						}else{
-								innerOrderBy			=	" ASC ";
-						}
+                                innerOrderBy            =   " DESC ";
+                        }else{
+                                innerOrderBy            =   " ASC ";
+                        }
                         var outerOrderBy                =    " ORDER BY c.createdAt" +innerOrderBy+ "LIMIT "+start+" , "+count;
                         if(received_userId){
                             userIdCheck = " AND u.id = "+received_userId;
@@ -175,9 +175,7 @@ module.exports = {
                                                                             }
                                                                             factor.image            =     collage_image;
                                                                             factor.image_242x242    =     collage_image_242x242;
-                                                                            console.log(factor.image_242x242);
-
-
+                                                                            //console.log(factor.image_242x242);
                                                                             if(count == results.length){
                                                                                     callback();
                                                                             }
@@ -205,52 +203,52 @@ module.exports = {
                         });
 
     },
-  insertMultipleDither:	function(req,res){
-								console.log("inside insertMultipleDither");
-								var limit 	= 	13;
-								/*var values 	= 	{
-													imgTitle	:	'testScroll',
-													image		:	'8803c3c5-844e-491b-baf6-16f8755cc2ff.jpg',
-													location	:	'Carnival Phase IV Exit Road Infopark Campus Kakka...',
-													latitude	:	0,
-													longitude	:	0,
-													userId		:	106,
-													totalVote	:	1,
-													likePosition:	0,
-													status		:	'active',
-													expiryDate	:	'2016-12-09 09:26:39',
-													createdAt	:	'2016-12-07 09:26:39',
-													updatedAt	:	'2016-12-07 09:26:53',
-									};
-									*/
-							for(var i= 0;i<limit; i++){
-								Collage.create({
-													imgTitle	:	'testScroll'+i+'',
-													image		:	'8803c3c5-844e-491b-baf6-16f8755cc2ff.jpg',
-													location	:	'Carnival Phase IV Exit Road Infopark Campus Kakka...',
-													latitude	:	0,
-													longitude	:	0,
-													userId		:	90,
-													totalVote	:	1,
-													likePosition:	0,
-													status		:	'active',
-													expiryDate	:	'2016-12-09 09:26:39',
-													createdAt	:	'2016-12-07 09:26:39',
-													updatedAt	:	'2016-12-07 09:26:53',
-									}).exec(function (err, records) {
-									if(err){
-										console.log("inside insertMultipleDither   errrr");
-										//return res.json(200,{status: 2, error_details: err});
-									}
-									else{
-										console.log("inside insertMultipleDither      success");
-										//return res.json(200,{status: 1, result: records});
-									}
-									
-								});
-							}
+  insertMultipleDither: function(req,res){
+                                console.log("inside insertMultipleDither");
+                                var limit   =   13;
+                                /*var values    =   {
+                                                    imgTitle    :   'testScroll',
+                                                    image       :   '8803c3c5-844e-491b-baf6-16f8755cc2ff.jpg',
+                                                    location    :   'Carnival Phase IV Exit Road Infopark Campus Kakka...',
+                                                    latitude    :   0,
+                                                    longitude   :   0,
+                                                    userId      :   106,
+                                                    totalVote   :   1,
+                                                    likePosition:   0,
+                                                    status      :   'active',
+                                                    expiryDate  :   '2016-12-09 09:26:39',
+                                                    createdAt   :   '2016-12-07 09:26:39',
+                                                    updatedAt   :   '2016-12-07 09:26:53',
+                                    };
+                                    */
+                            for(var i= 0;i<limit; i++){
+                                Collage.create({
+                                                    imgTitle    :   'testScroll'+i+'',
+                                                    image       :   '8803c3c5-844e-491b-baf6-16f8755cc2ff.jpg',
+                                                    location    :   'Carnival Phase IV Exit Road Infopark Campus Kakka...',
+                                                    latitude    :   0,
+                                                    longitude   :   0,
+                                                    userId      :   90,
+                                                    totalVote   :   1,
+                                                    likePosition:   0,
+                                                    status      :   'active',
+                                                    expiryDate  :   '2016-12-09 09:26:39',
+                                                    createdAt   :   '2016-12-07 09:26:39',
+                                                    updatedAt   :   '2016-12-07 09:26:53',
+                                    }).exec(function (err, records) {
+                                    if(err){
+                                        console.log("inside insertMultipleDither   errrr");
+                                        //return res.json(200,{status: 2, error_details: err});
+                                    }
+                                    else{
+                                        console.log("inside insertMultipleDither      success");
+                                        //return res.json(200,{status: 1, result: records});
+                                    }
 
-	},
-	
+                                });
+                            }
+
+    },
+
 };
 

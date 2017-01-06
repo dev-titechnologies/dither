@@ -182,7 +182,7 @@ module.exports = {
                                                                             }
                                                                             factor.profilePic                       =     profile_image;
                                                                             factor.profilePic_70x70                 =     profile_image_70x70;
-                                                                            console.log(factor.profilePic_70x70);
+                                                                            //console.log(factor.profilePic_70x70);
                                                                             if(count == results.length){
                                                                                     callback();
                                                                             }

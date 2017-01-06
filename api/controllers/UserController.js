@@ -222,6 +222,7 @@ module.exports = {
                                                                             },
 																			function(callback){
 																				console.log("---------------fbb-----------------------------")
+																				console.log(fbUser)
 																				console.log(sendStatus)
 																				if(!fbUser){
 																					console.log("nofb user")
@@ -270,18 +271,6 @@ module.exports = {
 																								
 																							});
 																							
-																							/*var query =  "INSERT INTO tempFbfriends"+
-																								 " (userId, fbId, createdAt, updatedAt)"+
-																								 " VALUES"+fbUserArray;
-																							
-																								TempFbFriends.query(query,function(err, createdFbFriends){
-																									if(err){
-																										callback();
-																									 }
-																									 else{
-																											console.log(createdFbFriends);
-																									  }
-																								});*/
 																							
 																							
 																								if(notifyArr){
@@ -663,15 +652,21 @@ module.exports = {
         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
-        if(req.param('fb_uid') || req.get('device_id'))
+        var mobile_no					=	  req.param('mobile_number');
+        var fbId						=	  req.param('fb_uid');
+        if(req.param('fb_uid') || req.get('device_id') || req.param('mobile_number'))
             {
 
                 var deviceId    = req.get('device_id');
-                User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
+                var query		= "SELECT * from user where fbId = '"+fbId+"' OR phoneNumber = '"+mobile_no+"'";  
+                User.query(query, function(err, results) {
+                //User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
                         if (err) {
                                sails.log("jguguu"+err);
                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in finding fbId', error_details: err});
                         }else{
+							    console.log("--------------resultssssssssssssssssssssss------------------")
+								console.log(results)
                                 if(!results){
 
                                       return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
@@ -689,24 +684,24 @@ module.exports = {
                                             if(err){
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                             }else{
-                                                UsertokenService.createToken(results.id,deviceId,device_IMEI,device_Type,token_expiry_hour, function (err, userTokenDetails){
+                                                UsertokenService.createToken(results[0].id,deviceId,device_IMEI,device_Type,token_expiry_hour, function (err, userTokenDetails){
                                                     if (err){
                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                     }
                                                     else{
 
                                                         var notifyArray = [];
-                                                        notifyArray.push({comment:results.notifyComment,contact:results.notifyContact,vote:results.notifyVote,opinion:results.notifyOpinion,mention:results.notifyMention});
-                                                        var profile_image       =   profilePic_path + results.profilePic;
+                                                        notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
+                                                        var profile_image       =   profilePic_path + results[0].profilePic;
                                                         return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
-                                                                              email             :   results.email,
-                                                                              full_name         :   results.name,
-                                                                              fb_uid            :   results.fbId,
+                                                                              email             :   results[0].email,
+                                                                              full_name         :   results[0].name,
+                                                                              fb_uid            :   results[0].fbId,
                                                                               isNewUser         :   false,
                                                                               profile_image     :   profile_image,
                                                                               token             :   userTokenDetails.token.token,
-                                                                              user_id           :   results.id,
-                                                                              mobile_number     :   results.phoneNumber,
+                                                                              user_id           :   results[0].id,
+                                                                              mobile_number     :   results[0].phoneNumber,
                                                                               notification      :   notifyArray
                                                                         });
                                                     }

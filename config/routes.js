@@ -55,7 +55,7 @@ module.exports.routes = {
   '/socketSettings/*'                     :           ['auth.authenticate'],
   '/collageUpload/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
   //'/test/delete_Socket'                 :           ['SocketSettings.Socket_connection'],
-  '/test/*'                               :           ['settings.settingsKeyValue','helper.file_path'],
+  '/test/*'                               :           ['settings.settingsKeyValue','helper.server_baseUrl','helper.file_path'],
   '/collagePopular/*'                     :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageRecent/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageClosed/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],

@@ -19,7 +19,7 @@ module.exports = {
                         console.log(req.params.all());
                         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                        var profilePic_path_assets      =     server_image_baseUrl + req.options.file_path.profilePic_path_assets;
+                        var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                         var profile_image, profile_image_70x70;
                         var start                       =     req.param("start");
                         var count                       =     req.param("count");

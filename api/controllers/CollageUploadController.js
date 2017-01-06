@@ -386,9 +386,9 @@ module.exports = {
                                                                                 console.log(err);
                                                                                 callback();
                                                                             }else{
-                                                                                //callback();
+                                                                                callback();
                                                                                 //collage-Details images -- STARTS
-                                                                                var count = 0;
+                                                                                /*var count = 0;
                                                                                 collageDetails_results.forEach(function(factor, index){
                                                                                         count++;
                                                                                         var imageSrc                    =     collageImg_path_assets + factor.image;
@@ -441,7 +441,7 @@ module.exports = {
                                                                                                         //callback();
                                                                                                         if(count == collageDetails_results.length){
                                                                                                                 if(cdResize_1.status == 1 && cdResize_2.status == 1){
-                                                                                                                        //callback();
+                                                                                                                        callback();
                                                                                                                 }
                                                                                                         }
 
@@ -449,7 +449,7 @@ module.exports = {
                                                                                         });
                                                                                 //collage-Details images -- ENDS
 
-                                                                                });
+                                                                                });*/
                                                                             }
                                                                 });
                                                         },

@@ -27,16 +27,16 @@ module.exports = {
         var deviceId                    =     req.get('device_id');
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
-		/*var fbUser                      =     [ { fb_userid: '931111050344772',
-													fb_name: 'Ajay Venugopal',
-													userId: '16' },
-												{ fb_userid: '132229966634793819',
-													fb_name: 'fgdfgf',
-													userId: '4' }
-											  ];*/
-		var fbUser                      =     req.param('fb_array');
-		var sendStatus					=	  false;
-		console.log(fbUser)
+        /*var fbUser                      =     [ { fb_userid: '931111050344772',
+                                                    fb_name: 'Ajay Venugopal',
+                                                    userId: '16' },
+                                                { fb_userid: '132229966634793819',
+                                                    fb_name: 'fgdfgf',
+                                                    userId: '4' }
+                                              ];*/
+        var fbUser                      =     req.param('fb_array');
+        var sendStatus                  =     false;
+        console.log(fbUser)
         if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
         }else{
@@ -52,7 +52,7 @@ module.exports = {
                                              };
                 var deviceId_arr        =    [];
                 var contact_arr         =    [];
-                var newFrnds			=	 [];
+                var newFrnds            =    [];
                 //--------OTP CHECKING----------------------
                /* if(OTPCode)
                 {
@@ -111,7 +111,7 @@ module.exports = {
                                                                                         });
                                                                                     };
                                                                                     download(imgUrl,'assets/images/profilePics/'+imagename, function(){
-                                                                                            sails.log('done');
+                                                                                            /*sails.log('done');
                                                                                             var imageSrc                    =     profilePic_path_assets + imagename;
                                                                                             var ext                         =     imageSrc.split('/');
                                                                                             ext                             =     ext[ext.length-1].split('.');
@@ -119,7 +119,7 @@ module.exports = {
                                                                                             console.log(imageSrc);
                                                                                             console.log(imageDst);
 
-                                                                                           ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
+                                                                                            ImgResizeService.imageResize(imageSrc, imageDst, function(err, imageResizeResults){
                                                                                                     if(err){
                                                                                                             console.log(err);
                                                                                                             console.log("Error in image resize !!!!");
@@ -127,11 +127,60 @@ module.exports = {
                                                                                                     }else{
                                                                                                              callback();
                                                                                                     }
-                                                                                            });
+                                                                                            });*/
                                                                                            //callback();
+                                                                                            var imageSrc                    =     profilePic_path_assets + factor.image;
+                                                                                            var ext                         =     imageSrc.split('/');
+                                                                                            ext                             =     ext[ext.length-1].split('.');
+                                                                                            var imgWidth,
+                                                                                                imgHeight,
+                                                                                                imageDst;
+
+                                                                                            async.series([
+                                                                                                    function(callback) {
+                                                                                                                imgWidth                    =    200;
+                                                                                                                imgHeight                   =    200;
+                                                                                                                imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                                                ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                                        if(err){
+                                                                                                                                console.log(err);
+                                                                                                                                console.log("Error in image resize 200 in collagedetails!!!!");
+                                                                                                                                callback();
+                                                                                                                        }else{
+                                                                                                                                callback();
+                                                                                                                        }
+                                                                                                                });
+
+                                                                                                    },
+                                                                                                    function(callback) {
+                                                                                                                imgWidth                    =    70;
+                                                                                                                imgHeight                   =    70;
+                                                                                                                imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                                                ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                                                        if(err){
+                                                                                                                                console.log(err);
+                                                                                                                                console.log("Error in image resize 70 collageDetails !!!!");
+                                                                                                                                callback();
+                                                                                                                        }else{
+                                                                                                                                callback();
+                                                                                                                        }
+                                                                                                                });
+
+                                                                                                    },
+                                                                                            ],function(err){
+                                                                                                        if(err){
+                                                                                                            console.log(err);
+                                                                                                            callback();
+                                                                                                        }else{
+                                                                                                            console.log("Loop success");
+                                                                                                            //collage-Details images
+                                                                                                            callback();
+
+                                                                                                        }
+                                                                                            });
                                                                                     });
                                                                             },
-                                                                            
+
                                                                             function(callback){
                                                                                     console.log("parallel 2")
                                                                                     console.log("async parallel in Mailpart ===============================================");
@@ -220,152 +269,165 @@ module.exports = {
                                                                                                 }
                                                                                     });
                                                                             },
-																			function(callback){
-																				console.log("---------------fbb-----------------------------")
-																				console.log(fbUser)
-																				console.log(sendStatus)
-																				if(!fbUser){
-																					console.log("nofb user")
-																					callback();
-																					
-																				}else{
-																					sendStatus			=	true;
-																					var contactArr 		= 	 [];
-																					var fbUserArray 	= 	 [];
 
-																					fbUser.forEach(function(factor, index){
-																						
-																						 contactArr.push(factor.fb_userid)
-																						 //fbUserArray.push("("+factor.fb_userid+",'"+factor.fb_userid+"', now(), now())");
-																					});
-																					
-																					/*var query =  "INSERT INTO tempFbfriends"+
-																								 " (userId, fbId, createdAt, updatedAt)"+
-																								 " VALUES"+fbUserArray;*/
-																					
-																					var data	=	{
-																										userId		:	results.id,
-																										fbId		:   results.fbId,
-																										userName	:	results.name,
-																										
-																									};
-																					
-																					console.log( "User Service data")				
-																					console.log(data)
-																					
-																					
-																					User.find({fbId: contactArr}).exec(function (err, getUserId){
-																						
-																						if(err)
-																						{
-																							console.log(err)
-																							callback();
-																						}
-																						else{
-																							var notifyArr 		= 	 [];
-																							var fbUserArray		=	[];
-																							getUserId.forEach(function(factor, index){
-																								notifyArr.push(factor.id);
-																								fbUserArray.push("("+results.id+",'"+factor.name+"','"+factor.fbId+"', now(), now())");
-																								//fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
-																								
-																							});
-																							
-																							
-																							
-																								if(notifyArr){
-																										var values ={
-																											notificationTypeId  :   5,
-																											userId              :   data.userId,
-																											tagged_users        :   notifyArr
-																										}
-																									   console.log("valuessssssssssss")
-																									   console.log(values)
-																									  
-																									   NotificationLog.create(values).exec(function(err, createdNotification){
-																										if(err){
-																											console.log(err);
-																											//callback();
-																										}else{
-																											User_token.find({userId: notifyArr}).exec(function (err, getDeviceId){
-																													if(err){
-																														  console.log(err);
-																														  callback();
-																													}else{
-																														console.log("-----------------6----------------------")
-																														var message     =  'FBsignup Notification';
-																														var ntfn_body   =   "Your facebook friend "+results.name+" is now on Dither";
-																														getDeviceId.forEach(function(factor, index){
-																															deviceId_arr.push(factor.deviceId);
-																														});
-																														if(!deviceId_arr.length){
-																															console.log("deviceeee")
-																																callback();
-																														}else{
-																															console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
-																															var data        =  {
-																																					message			:	message,
-																																					device_id		:	deviceId_arr,
-																																					NtfnBody		:	ntfn_body,
-																																					NtfnType:5,id	:	results.id,
-																																					notification_id	:	createdNotification.id,
-																																					old_id			:	'',
-																																					name			:	results.name
-																																				};
-																															NotificationService.NotificationPush(data, function(err, ntfnSend){
-																																if(err){
-																																	console.log("Error in Push Notification Sending")
-																																	console.log(err)
-																																	callback(); 
-																																}else{
-																																	console.log("Push notification result")
-																																	console.log(ntfnSend)
-																																	console.log("Push Notification sended")
-																																	/*var query = "INSERT INTO fbFriends"+
-																																				" (userId,ditherUserId,ditherUserName, fbId, createdAt, updatedAt)"+
-																																				" VALUES"+fbUserArray;*/
-																																		
-																																	var query =  "INSERT INTO TempFbFriends"+
-																																				 " (userId,fbName,fbId, createdAt, updatedAt)"+
-																																				 " VALUES"+fbUserArray;
-																																	TempFbFriends.query(query,function(err, createdFbFriends){
-																																		if(err)
-																																		{
-																																			console.log(err)
-																																			callback();
-																																		}
-																																		else{
-																																			console.log(createdFbFriends)
-																																			callback();
-																																			sendStatus	=	true;
-																																		}
-																																	});
+                                                                            function(callback){
+                                                                                console.log("---------------fbb-----------------------------")
+                                                                                console.log(sendStatus)
+                                                                                if(!fbUser){
+                                                                                    console.log("nofb user")
+                                                                                    callback();
 
-																																	//callback();
-																																}
-																															});
-																														}
-																													//------------------------------
-																													}
-																												});//getDeviceId
-																											
-																											}
-																										});
-																									}
-																							
-																						}
-																						
-																						
-																					});
+                                                                                }else{
+                                                                                    sendStatus          =   true;
+                                                                                    var contactArr      =    [];
+                                                                                    var fbUserArray     =    [];
 
-																			    }
-																			 
-																			},
+                                                                                    fbUser.forEach(function(factor, index){
+
+                                                                                         contactArr.push(factor.fb_userid)
+                                                                                         //fbUserArray.push("("+factor.fb_userid+",'"+factor.fb_userid+"', now(), now())");
+                                                                                    });
+
+                                                                                    /*var query =  "INSERT INTO tempFbfriends"+
+                                                                                                 " (userId, fbId, createdAt, updatedAt)"+
+                                                                                                 " VALUES"+fbUserArray;*/
+
+                                                                                    var data    =   {
+                                                                                                        userId      :   results.id,
+                                                                                                        fbId        :   results.fbId,
+                                                                                                        userName    :   results.name,
+
+                                                                                                    };
+
+                                                                                    console.log( "User Service data")
+                                                                                    console.log(data)
+
+
+                                                                                    User.find({fbId: contactArr}).exec(function (err, getUserId){
+
+                                                                                        if(err)
+                                                                                        {
+                                                                                            console.log(err)
+                                                                                            callback();
+                                                                                        }
+                                                                                        else{
+                                                                                            var notifyArr       =    [];
+                                                                                            var fbUserArray     =   [];
+                                                                                            getUserId.forEach(function(factor, index){
+                                                                                                notifyArr.push(factor.id);
+                                                                                                fbUserArray.push("("+results.id+",'"+factor.name+"','"+factor.fbId+"', now(), now())");
+                                                                                                //fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
+
+                                                                                            });
+
+                                                                                            /*var query =  "INSERT INTO tempFbfriends"+
+                                                                                                 " (userId, fbId, createdAt, updatedAt)"+
+                                                                                                 " VALUES"+fbUserArray;
+
+                                                                                                TempFbFriends.query(query,function(err, createdFbFriends){
+                                                                                                    if(err){
+                                                                                                        callback();
+                                                                                                     }
+                                                                                                     else{
+                                                                                                            console.log(createdFbFriends);
+                                                                                                      }
+                                                                                                });*/
+
+
+                                                                                                if(notifyArr){
+                                                                                                        var values ={
+                                                                                                            notificationTypeId  :   5,
+                                                                                                            userId              :   data.userId,
+                                                                                                            tagged_users        :   notifyArr
+                                                                                                        }
+                                                                                                       console.log("valuessssssssssss")
+                                                                                                       console.log(values)
+
+                                                                                                       NotificationLog.create(values).exec(function(err, createdNotification){
+                                                                                                        if(err){
+                                                                                                            console.log(err);
+                                                                                                            //callback();
+                                                                                                        }else{
+                                                                                                            User_token.find({userId: notifyArr}).exec(function (err, getDeviceId){
+                                                                                                                    if(err){
+                                                                                                                          console.log(err);
+                                                                                                                          callback();
+                                                                                                                    }else{
+                                                                                                                        console.log("-----------------6----------------------")
+                                                                                                                        var message     =  'FBsignup Notification';
+                                                                                                                        var ntfn_body   =   "Your facebook friend "+results.name+" is now on Dither";
+                                                                                                                        getDeviceId.forEach(function(factor, index){
+                                                                                                                            deviceId_arr.push(factor.deviceId);
+                                                                                                                        });
+                                                                                                                        if(!deviceId_arr.length){
+                                                                                                                            console.log("deviceeee")
+                                                                                                                                callback();
+                                                                                                                        }else{
+                                                                                                                            console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+                                                                                                                            var data        =  {
+                                                                                                                                                    message         :   message,
+                                                                                                                                                    device_id       :   deviceId_arr,
+                                                                                                                                                    NtfnBody        :   ntfn_body,
+                                                                                                                                                    NtfnType:5,id   :   results.id,
+                                                                                                                                                    notification_id :   createdNotification.id,
+                                                                                                                                                    old_id          :   '',
+                                                                                                                                                    name            :   results.name
+                                                                                                                                                };
+                                                                                                                            NotificationService.NotificationPush(data, function(err, ntfnSend){
+                                                                                                                                if(err){
+                                                                                                                                    console.log("Error in Push Notification Sending")
+                                                                                                                                    console.log(err)
+                                                                                                                                    callback();
+                                                                                                                                }else{
+                                                                                                                                    console.log("Push notification result")
+                                                                                                                                    console.log(ntfnSend)
+                                                                                                                                    console.log("Push Notification sended")
+                                                                                                                                    /*var query = "INSERT INTO fbFriends"+
+                                                                                                                                                " (userId,ditherUserId,ditherUserName, fbId, createdAt, updatedAt)"+
+                                                                                                                                                " VALUES"+fbUserArray;*/
+
+                                                                                                                                    var query =  "INSERT INTO TempFbFriends"+
+                                                                                                                                                 " (userId,fbName,fbId, createdAt, updatedAt)"+
+                                                                                                                                                 " VALUES"+fbUserArray;
+                                                                                                                                    TempFbFriends.query(query,function(err, createdFbFriends){
+                                                                                                                                        if(err)
+                                                                                                                                        {
+                                                                                                                                            console.log(err)
+                                                                                                                                            callback();
+                                                                                                                                        }
+                                                                                                                                        else{
+                                                                                                                                            console.log(createdFbFriends)
+                                                                                                                                            callback();
+                                                                                                                                            sendStatus  =   true;
+                                                                                                                                        }
+                                                                                                                                    });
+
+                                                                                                                                    //callback();
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                        }
+                                                                                                                    //------------------------------
+                                                                                                                    }
+                                                                                                                });//getDeviceId
+
+                                                                                                            }
+                                                                                                        });
+                                                                                                    }
+
+                                                                                        }
+
+
+                                                                                    });
+
+                                                                                }
+
+                                                                            },
+
                                                                             function (callback)
                                                                             {
-																				
-																				
-																				
+
+
+
                                                                                 console.log("parallel 5")
                                                                                 console.log(sendStatus)
                                                                                 var number            = req.param('mobile_number');
@@ -400,7 +462,7 @@ module.exports = {
                                                                                                                }
                                                                                                       });
                                                                                                });
-                                                                                           if(sendStatus==false){    
+                                                                                           if(sendStatus==false){
                                                                                                var values ={
                                                                                                         notificationTypeId  :   4,
                                                                                                         userId              :   results.id,
@@ -465,17 +527,17 @@ module.exports = {
 
                                                                                                      }
                                                                                                 });
-																							}else{
-																								callback();
-																							}
+                                                                                            }else{
+                                                                                                callback();
+                                                                                            }
 
                                                                                           }
                                                                                       }
                                                                                  });
 
                                                                             },
-                                                                            
-																			
+
+
                                                                             function (callback){
                                                                                 console.log("parallel 7 == Default dither creation");
                                                                                 User.findOne({type: 1}).exec(function (err, getSuperUser){
@@ -591,7 +653,7 @@ module.exports = {
                                                                                     }
                                                                                 });
                                                                             },
-                                                                            
+
                                                                         ], function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                                                         if(err){
                                                                                             console.log("async parallel in Sms Part Failure --------------------");
@@ -652,13 +714,13 @@ module.exports = {
         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
-        var mobile_no					=	  req.param('mobile_number');
-        var fbId						=	  req.param('fb_uid');
+        var mobile_no                   =     req.param('mobile_number');
+        var fbId                        =     req.param('fb_uid');
         if(req.param('fb_uid') || req.get('device_id') || req.param('mobile_number'))
             {
 
                 var deviceId    = req.get('device_id');
-                var query		= "SELECT * from user where fbId = '"+fbId+"' OR phoneNumber = '"+mobile_no+"'";  
+                var query       = "SELECT * from user where fbId = '"+fbId+"' OR phoneNumber = '"+mobile_no+"'";
                 User.query(query, function(err, results) {
                 //User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
                         if (err) {
@@ -668,7 +730,6 @@ module.exports = {
 							    console.log("--------------resultssssssssssssssssssssss------------------")
 								console.log(results)
                                 if(!results.length){
-
                                       return res.json(200, {status: 1, status_type: 'Success' ,  message: "This is a new user", isNewUser: true});
                                 }else{
 
@@ -782,43 +843,27 @@ module.exports = {
                                     console.log("Type 1-change Profile PIc")
                                     var imageName ;
                                     req.file('profile_image').upload({dirname: '../../assets/images/profilePics',maxBytes: 100 * 1000 * 1000},function (err, profileUploadResults) {
-                                        if (err)
-                                        {
+                                        if (err){
                                             console.log(err)
                                             return res.json(200, {status: 2,status_type: 'Failure', message: 'Updateion failure'});
-
-                                        }
-                                        else
-                                        {
-
-                                             if(profileUploadResults.length==0)
-                                             {
+                                        }else{
+                                            if(!profileUploadResults.length){
                                                  return res.json(200, {status: 2,status_type: 'Failure', message: 'Image Not Found'});
-
-                                             }
-                                             else
-                                             {
-
+                                            }else{
                                                     console.log("profileImages   ------->>> Uploaded");
                                                     imageName = profileUploadResults[0].fd.split('/');
                                                     imageName = imageName[imageName.length-1];
                                                     var data     = {profilePic:imageName};
                                                     var criteria = {id: userId};
-                                                    User.update(criteria,data).exec(function(err, data) {
-                                                        if(err)
-                                                        {
+                                                    User.update(criteria,data).exec(function(err, data){
+                                                        if(err){
                                                             sails.log(err)
                                                             return res.json(200, {status: 2, status_type: 'Failure',message: 'Profile Image updation Failure'});
-                                                        }
-                                                        else
-                                                        {
+                                                        }else{
                                                             //var profileImage = server_baseUrl + "images/profilePics/"+imageName;
-
                                                             var profileImage        =   profilePic_path + imageName;
-
-
                                                             // ------------------------------Generate ThumbnailImage-----------------------------------------------
-                                                                var imageSrc                    =     profilePic_path_assets + imageName;
+                                                                /*var imageSrc                    =     profilePic_path_assets + imageName;
 
                                                                 fs.exists(imageSrc, function(exists) {
                                                                 if (exists) {
@@ -848,18 +893,61 @@ module.exports = {
                                                                         return res.json(200, {status: 1, status_type: 'Success',message: 'Profile image not exist', });
 
                                                                     }
-                                                                  });
+                                                                  });*/
+                                                                var imageSrc                    =     profilePic_path_assets + imageName;
+                                                                var ext                         =     imageSrc.split('/');
+                                                                ext                             =     ext[ext.length-1].split('.');
+                                                                var imgWidth,
+                                                                    imgHeight,
+                                                                    imageDst;
 
+                                                                async.series([
+                                                                        function(callback) {
+                                                                                    imgWidth                    =    200;
+                                                                                    imgHeight                   =    200;
+                                                                                    imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    console.log("Error in image resize 200 in collagedetails!!!!");
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
 
+                                                                        },
+                                                                        function(callback) {
+                                                                                    imgWidth                    =    70;
+                                                                                    imgHeight                   =    70;
+                                                                                    imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                    ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    console.log("Error in image resize 70 collageDetails !!!!");
+                                                                                                    callback();
+                                                                                            }else{
+                                                                                                    callback();
+                                                                                            }
+                                                                                    });
+
+                                                                        },
+                                                                ],function(err){
+                                                                            if(err){
+                                                                                console.log(err);
+                                                                                return res.json(200, {status: 1, status_type: 'Failure',message: 'Some error occured in edit profile pic', profile_image : profileImage});
+                                                                            }else{
+                                                                                console.log("Loop success");
+                                                                                //collage-Details images
+                                                                                //callback();
+                                                                                return res.json(200, {status: 1, status_type: 'Success',message: 'Updation Success', profile_image : profileImage});
+
+                                                                            }
+                                                                });
                                                             //------------------------------------------------------------------------------------------------------
-
-
                                                         }
-
-
                                                     });
-
-                                             }
+                                            }
 
                                         }
                                     });

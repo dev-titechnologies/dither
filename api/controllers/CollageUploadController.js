@@ -437,7 +437,7 @@ module.exports = {
                                                                                                         console.log("Loop success");
                                                                                                         //collage-Details images
                                                                                                         //callback();
-                                                                                                        if(count == results.length){
+                                                                                                        if(count == collageDetails_results.length){
                                                                                                                 callback();
                                                                                                         }
 

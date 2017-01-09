@@ -37,7 +37,7 @@ module.exports = {
         var fbUser                      =     req.param('fb_array');
         var sendStatus                  =     false;
         console.log(fbUser)
-        if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
+        if(!req.param('mobile_number')  || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
         }else{
                 var filename            =    "image.png";
@@ -103,6 +103,7 @@ module.exports = {
                                                                     console.log("Before async parallel in Sign up ===============================================");
                                                                         async.parallel([
                                                                             function(callback){
+																				if(imgUrl){
                                                                                     console.log("parallel 1")
                                                                                     console.log("+++++++++++++++++++Image Downloadingggggggggggggg+++++++++++++++++++++++++++++++++")
                                                                                     var download = function(uri, filename, callback){
@@ -179,6 +180,10 @@ module.exports = {
                                                                                                         }
                                                                                             });
                                                                                     });
+																				}
+																				else{
+																					callback();
+																				}
                                                                             },
 
                                                                             function(callback){

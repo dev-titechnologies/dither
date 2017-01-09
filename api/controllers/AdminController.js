@@ -518,7 +518,7 @@ console.log(values);
                         if(req.param("count")==0){
 							var query   = " SELECT"+
 										  " u.name as commentedPerson,u.id as commentedPersonId,u.profilePic as profileImage,"+
-										  " cc.comment,cc.createdAt as commentedDate"+
+										  " cc.comment,cc.createdAt as commentedDate,cc.likeCount"+
 										  " FROM collageComments as cc"+
 										  " INNER JOIN user as u ON cc.userId = u.id"+
 										  " WHERE cc.collageId = "+collageId+
@@ -526,7 +526,7 @@ console.log(values);
 						}else{
 							var query   = " SELECT"+
 										  " u.name as commentedPerson,u.id as commentedPersonId,u.profilePic as profileImage,"+
-										  " cc.comment,cc.createdAt as commentedDate"+
+										  " cc.comment,cc.createdAt as commentedDate,cc.likeCount"+
 										  " FROM collageComments as cc"+
 										  " INNER JOIN user as u ON cc.userId = u.id"+
 										  " WHERE cc.collageId = "+collageId+

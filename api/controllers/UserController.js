@@ -129,7 +129,7 @@ module.exports = {
                                                                                                     }
                                                                                             });*/
                                                                                            //callback();
-                                                                                            var imageSrc                    =     profilePic_path_assets + factor.image;
+                                                                                            var imageSrc                    =     profilePic_path_assets + imagename;
                                                                                             var ext                         =     imageSrc.split('/');
                                                                                             ext                             =     ext[ext.length-1].split('.');
                                                                                             var imgWidth,
@@ -720,6 +720,8 @@ module.exports = {
             {
 
                 var deviceId    = req.get('device_id');
+                console.log("device-----------idddddddd")
+                console.log(req.get('device_id'))
                 var query       = "SELECT * from user where fbId = '"+fbId+"' OR phoneNumber = '"+mobile_no+"'";
                 User.query(query, function(err, results) {
                 //User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
@@ -753,7 +755,7 @@ module.exports = {
 
                                                         var notifyArray = [];
                                                         notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
-                                                        var profile_image       =   profilePic_path + results[0].profilePic;
+                                                        var profile_image       =    profilePic_path + results[0].profilePic;
                                                         return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
                                                                               email             :   results[0].email,
                                                                               full_name         :   results[0].name,

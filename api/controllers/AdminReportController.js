@@ -61,13 +61,16 @@ module.exports = {
                         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                         var profile_image;
                         var ditherId                    =     req.body.collageId;
+                        var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+                        var collage_image;
 
                         var query   =   " SELECT"+
                                         " rd.report, rd.createdAt,"+
-                                        " u.name, u.profilePic, rt.description"+
+                                        " u.name, u.profilePic, rt.description,c.image,c.imgTitle "+
                                         " FROM reportDither as rd"+
                                         " INNER JOIN user as u ON rd.reporterId = u.id"+
                                         " INNER JOIN reportType as rt ON rd.reportType = rt.reportId"+
+                                        " INNER JOIN collage as c ON c.id = "+ditherId+""+
                                         " WHERE"+
                                         " rd.collageId="+ditherId;
                         console.log(query);
@@ -85,6 +88,17 @@ module.exports = {
                                         }
                                         factor.profilePic       =    profile_image;
                                 });
+                                result.forEach(function(factor, index){
+										if(factor.image == null || factor.image == ""){
+												collage_image                   =     "";
+										}else{
+												var imageSrc                    =     factor.image;
+												var ext                         =     imageSrc.split('.');
+												collage_image                   =     collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+										}
+										factor.image       =    collage_image;
+								});
+                                 //console.log(result);
                                 return res.json(200, {status: 1, message: "success", result: result});
                             }
                         });

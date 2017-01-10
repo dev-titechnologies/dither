@@ -304,7 +304,7 @@ module.exports = {
 						    console.log(getNewFbfrnds)
 							getNewFbfrnds.forEach(function(factor, index){
 								frnd_arr.push({
-																userId : factor.userId,
+																id 	 : factor.userId,
 																name   : factor.name,
 																fbId   : factor.fbId 	
 												});

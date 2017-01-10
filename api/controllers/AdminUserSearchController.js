@@ -35,7 +35,7 @@ module.exports = {
 						}else{
 							innerOrderBy				=		" ASC";
 						}
-                        var outerOrderBy                =      " ORDER BY createdAt DESC LIMIT "+start+","+count;
+                        var outerOrderBy                =      " ORDER BY createdAt "+innerOrderBy+ " LIMIT "+start+","+count;
 
                         if(!name && !email && !mobile){
                               console.log("!name && !email && !mobile");
@@ -208,7 +208,7 @@ module.exports = {
                                                         });
                                     }else{
                                             //console.log("Results ---------- >>>>>>>>>");
-                                            //console.log(results);
+                                            console.log(results);
                                              return res.json(200, {status: 1, message: "success",
                                                                     data: results
                                                         });

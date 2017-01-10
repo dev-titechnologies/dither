@@ -515,13 +515,25 @@ console.log(values);
                         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                         var profile_image;
                         var collageId                   =     req.body.id;
-                        var query   = " SELECT"+
-                                      " u.name as commentedPerson,u.id as commentedPersonId,u.profilePic as profileImage,"+
-                                      " cc.comment,cc.createdAt as commentedDate"+
-                                      " FROM collageComments as cc"+
-                                      " INNER JOIN user as u ON cc.userId = u.id"+
-                                      " WHERE cc.collageId = "+collageId+
-                                      " ORDER BY cc.createdAt DESC";
+                        if(req.param("count")==0){
+							var query   = " SELECT"+
+										  " u.name as commentedPerson,u.id as commentedPersonId,u.profilePic as profileImage,"+
+										  " cc.comment,cc.createdAt as commentedDate,cc.likeCount"+
+										  " FROM collageComments as cc"+
+										  " INNER JOIN user as u ON cc.userId = u.id"+
+										  " WHERE cc.collageId = "+collageId+
+										  " ORDER BY cc.createdAt DESC";
+						}else{
+							var query   = " SELECT"+
+										  " u.name as commentedPerson,u.id as commentedPersonId,u.profilePic as profileImage,"+
+										  " cc.comment,cc.createdAt as commentedDate,cc.likeCount"+
+										  " FROM collageComments as cc"+
+										  " INNER JOIN user as u ON cc.userId = u.id"+
+										  " WHERE cc.collageId = "+collageId+
+										  " ORDER BY cc.createdAt DESC LIMIT 5";
+							
+							
+						}
                         CollageComments.query(query,function(err,result){
                             if(err){
                                 console.log("errrRRRRRRRRR");

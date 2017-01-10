@@ -37,7 +37,7 @@ module.exports = {
         var fbUser                      =     req.param('fb_array');
         var sendStatus                  =     false;
         console.log(fbUser)
-        if(!req.param('mobile_number') || !imgUrl || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
+        if(!req.param('mobile_number')  || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('otp') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
         }else{
                 var filename            =    "image.png";
@@ -103,6 +103,7 @@ module.exports = {
                                                                     console.log("Before async parallel in Sign up ===============================================");
                                                                         async.parallel([
                                                                             function(callback){
+																				if(imgUrl){
                                                                                     console.log("parallel 1")
                                                                                     console.log("+++++++++++++++++++Image Downloadingggggggggggggg+++++++++++++++++++++++++++++++++")
                                                                                     var download = function(uri, filename, callback){
@@ -129,7 +130,7 @@ module.exports = {
                                                                                                     }
                                                                                             });*/
                                                                                            //callback();
-                                                                                            var imageSrc                    =     profilePic_path_assets + factor.image;
+                                                                                            var imageSrc                    =     profilePic_path_assets + imagename;
                                                                                             var ext                         =     imageSrc.split('/');
                                                                                             ext                             =     ext[ext.length-1].split('.');
                                                                                             var imgWidth,
@@ -179,6 +180,10 @@ module.exports = {
                                                                                                         }
                                                                                             });
                                                                                     });
+																				}
+																				else{
+																					callback();
+																				}
                                                                             },
 
                                                                             function(callback){
@@ -720,6 +725,8 @@ module.exports = {
             {
 
                 var deviceId    = req.get('device_id');
+                console.log("device-----------idddddddd")
+                console.log(req.get('device_id'))
                 var query       = "SELECT * from user where fbId = '"+fbId+"' OR phoneNumber = '"+mobile_no+"'";
                 User.query(query, function(err, results) {
                 //User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
@@ -753,7 +760,7 @@ module.exports = {
 
                                                         var notifyArray = [];
                                                         notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
-                                                        var profile_image       =   profilePic_path + results[0].profilePic;
+                                                        var profile_image       =    profilePic_path + results[0].profilePic;
                                                         return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
                                                                               email             :   results[0].email,
                                                                               full_name         :   results[0].name,

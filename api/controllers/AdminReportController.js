@@ -495,8 +495,8 @@ module.exports = {
                             " rt.description,"+
                             " ru.report, ru.createdAt"+
                             " FROM reportUser AS ru"+
-                            " LEFT JOIN user AS u ON u.id = ru.reporterId"+
-                            " LEFT JOIN reportType AS rt ON rt.id = ru.reportType"+
+                            " INNER JOIN user AS u ON u.id = ru.reporterId"+
+                            " INNER JOIN reportType AS rt ON rt.id = ru.reportType"+
                             " WHERE"+
                             " ru.userId ="+req.body.userId;
                 console.log(query);

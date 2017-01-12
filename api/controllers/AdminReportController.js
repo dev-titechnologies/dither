@@ -15,7 +15,8 @@ module.exports = {
                 console.log("getReportDitherList ===================== ADMIN");
                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                 var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
-                var collage_image;
+                var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
+                var collage_image, collage_image_70x70;
 
                 var query = " SELECT temp.* FROM ("+
                             " SELECT"+
@@ -33,7 +34,7 @@ module.exports = {
                             " GROUP BY temp.collageId"+
                             " ORDER BY temp.ditherStatus DESC, temp.RepDitherCount DESC, temp.reportDate DESC";
                 console.log(query);
-                ReportDither.query(query, function (err, result){
+                /*ReportDither.query(query, function (err, result){
                     if(err){
                         return res.json(200, {status: 2, error_details: err});
                     }else{
@@ -50,7 +51,100 @@ module.exports = {
                         });
                         return res.json(200, {status: 1, message: "success", result: result});
                     }
-                });
+                });*/
+                var results             =       [];
+                        async.series([
+                                    function(callback) {
+                                                ReportDither.query(query, function (err, result){
+                                                    if(err){
+                                                        return res.json(200, {status: 2, error_details: err});
+                                                        callback();
+                                                    }else{
+                                                            results  = result;
+                                                            //console.log(result);
+                                                            callback();
+                                                    }
+                                                });
+                                    },
+                                    function(callback){
+                                                console.log("INSIDE foreach callback........");
+                                               if(results.length){
+                                                    var count = 0;
+                                                    results.forEach(function(factor, index){
+                                                            count++;
+                                                            var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                            var ext                         =     imageSrc.split('/');
+                                                            ext                             =     ext[ext.length-1].split('.');
+                                                            var imgWidth,
+                                                                imgHeight,
+                                                                imageDst;
+
+                                                            async.series([
+                                                                    function(callback) {
+                                                                                /*imgWidth                    =    242;
+                                                                                imgHeight                   =    242;
+                                                                                imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                        if(err){
+                                                                                                console.log(err);
+                                                                                                console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                //callback();
+                                                                                        }else{
+                                                                                               // callback();
+                                                                                                console.log("Loop success");
+                                                                                                //collage-Details images
+
+                                                                                        }
+                                                                                });*/
+                                                                                callback();
+
+                                                                    },
+                                                            ],function(err){
+                                                                        if(err){
+                                                                            console.log(err);
+                                                                            //callback();
+                                                                        }else{
+
+                                                                                if(factor.image == null || factor.image == ""){
+                                                                                        collage_image           =     "";
+                                                                                        collage_image_70x70     =     "";
+                                                                                }else{
+                                                                                        var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                                                        var ext                         =     imageSrc.split('/');
+                                                                                        ext                             =     ext[ext.length-1].split('.');
+                                                                                        collage_image                   =     collageImg_path + factor.image;
+                                                                                        collage_image_70x70             =     collageImg_path + ext[0] + "_70x70." +ext[1];
+                                                                                }
+                                                                                factor.image                            =     collage_image;
+                                                                                factor.image_70x70                      =     collage_image_70x70;
+
+                                                                                if(count == results.length){
+                                                                                        callback();
+                                                                                }
+                                                                        }
+                                                            });
+
+
+                                                    });
+                                                }else{
+                                                    callback();
+                                                }
+                                    },
+                        ],function(err){
+                                    if(err){
+                                        console.log(err);
+                                        //callback();
+                                        return res.json(200, {status: 2, message: "Failure"
+                                                        });
+                                    }else{
+                                            console.log("Results ---------- >>>>>>>>>");
+                                            //console.log(results);
+                                             return res.json(200, {status: 1, message: "success",
+                                                                    result: results
+                                                        });
+                                    }
+
+                        });
     },
 /* ==================================================================================================================================
           Get all Reports against a single dither
@@ -59,10 +153,12 @@ module.exports = {
                         console.log("getSingleDitherReport ===================== ADMIN");
                         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                        var profile_image;
+                        var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+                        var profile_image, profile_image_70x70;
                         var ditherId                    =     req.body.collageId;
                         var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
-                        var collage_image;
+                        var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
+                        var collage_image, collage_image_70x70;
 
                         var query   =   " SELECT"+
                                         " rd.report, rd.createdAt,"+
@@ -74,7 +170,7 @@ module.exports = {
                                         " WHERE"+
                                         " rd.collageId="+ditherId;
                         console.log(query);
-                        ReportDither.query(query, function (err, result){
+                        /*ReportDither.query(query, function (err, result){
                             if(err){
                                 return res.json(200, {status: 2, error_details: err});
                             }else{
@@ -89,18 +185,127 @@ module.exports = {
                                         factor.profilePic       =    profile_image;
                                 });
                                 result.forEach(function(factor, index){
-										if(factor.image == null || factor.image == ""){
-												collage_image                   =     "";
-										}else{
-												var imageSrc                    =     factor.image;
-												var ext                         =     imageSrc.split('.');
-												collage_image                   =     collageImg_path + ext[0] + "_50x50" + "." +ext[1];
-										}
-										factor.image       =    collage_image;
-								});
+                                        if(factor.image == null || factor.image == ""){
+                                                collage_image                   =     "";
+                                        }else{
+                                                var imageSrc                    =     factor.image;
+                                                var ext                         =     imageSrc.split('.');
+                                                collage_image                   =     collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                        }
+                                        factor.image       =    collage_image;
+                                });
                                  //console.log(result);
                                 return res.json(200, {status: 1, message: "success", result: result});
                             }
+                        });*/
+
+                        var results             =       [];
+                        async.series([
+                                    function(callback) {
+                                                ReportDither.query(query, function (err, result){
+                                                    if(err){
+                                                        return res.json(200, {status: 2, error_details: err});
+                                                        callback();
+                                                    }else{
+                                                            results  = result;
+                                                            //console.log(result);
+                                                            callback();
+                                                    }
+                                                });
+                                    },
+                                    function(callback){
+                                                console.log("INSIDE foreach callback........");
+                                               if(results.length){
+                                                    var count = 0;
+                                                    results.forEach(function(factor, index){
+                                                            count++;
+                                                            var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                            var ext                         =     imageSrc.split('/');
+                                                            ext                             =     ext[ext.length-1].split('.');
+                                                            var imgWidth,
+                                                                imgHeight,
+                                                                imageDst;
+
+                                                            async.series([
+                                                                    function(callback) {
+                                                                                /*imgWidth                    =    242;
+                                                                                imgHeight                   =    242;
+                                                                                imageDst                    =     collageImg_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+                                                                                ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                                        if(err){
+                                                                                                console.log(err);
+                                                                                                console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                                                //callback();
+                                                                                        }else{
+                                                                                               // callback();
+                                                                                                console.log("Loop success");
+                                                                                                //collage-Details images
+
+                                                                                        }
+                                                                                });*/
+                                                                                callback();
+
+                                                                    },
+                                                            ],function(err){
+                                                                        if(err){
+                                                                            console.log(err);
+                                                                            //callback();
+                                                                        }else{
+
+
+                                                                                if(factor.profilePic == null || factor.profilePic == ""){
+                                                                                        profile_image                   =     "";
+                                                                                        profile_image_70x70             =     "";
+                                                                                }else{
+                                                                                        var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                                                                                        var ext                         =     imageSrc.split('/');
+                                                                                        ext                             =     ext[ext.length-1].split('.');
+                                                                                        profile_image                   =     profilePic_path + factor.profilePic;
+                                                                                        profile_image_70x70             =     profilePic_path + ext[0] + "_70x70." +ext[1];
+                                                                                }
+
+                                                                                if(factor.image == null || factor.image == ""){
+                                                                                        collage_image           =     "";
+                                                                                        collage_image_70x70     =     "";
+                                                                                }else{
+                                                                                        var imageSrc                    =     collageImg_path_assets + factor.image;
+                                                                                        var ext                         =     imageSrc.split('/');
+                                                                                        ext                             =     ext[ext.length-1].split('.');
+                                                                                        collage_image                   =     collageImg_path + factor.image;
+                                                                                        collage_image_70x70             =     collageImg_path + ext[0] + "_70x70." +ext[1];
+                                                                                }
+                                                                                factor.image                            =     collage_image;
+                                                                                factor.image_70x70                      =     collage_image_70x70;
+
+                                                                                factor.profilePic                       =     profile_image;
+                                                                                factor.profilePic_70x70                 =     profile_image_70x70;
+                                                                                //console.log(factor.image_242x242);
+                                                                                if(count == results.length){
+                                                                                        callback();
+                                                                                }
+                                                                        }
+                                                            });
+
+
+                                                    });
+                                                }else{
+                                                    callback();
+                                                }
+                                    },
+                        ],function(err){
+                                    if(err){
+                                        console.log(err);
+                                        //callback();
+                                        return res.json(200, {status: 2, message: "Failure"
+                                                        });
+                                    }else{
+                                            console.log("Results ---------- >>>>>>>>>");
+                                            //console.log(results);
+                                             return res.json(200, {status: 1, message: "success",
+                                                                    result: results
+                                                        });
+                                    }
+
                         });
     },
 /* ==================================================================================================================================

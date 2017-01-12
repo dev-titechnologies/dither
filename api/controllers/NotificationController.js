@@ -177,7 +177,7 @@ module.exports = {
                                                             {
                                                                 var imageSrc                    =     imageToResize;
                                                                 var ext                         =     imageSrc.split('.');
-                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                             }
 
                                                             var clgImgSrc                       =     collageImg_path_assets + clgImgToResize;
@@ -186,13 +186,13 @@ module.exports = {
                                                                         if(exists){
                                                                             var ext                         =     clgImgSrc.split('/');
                                                                             ext                             =     ext[ext.length-1].split('.');
-                                                                            var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                            var imageDst                    =     collageImg_path_assets + ext[0] + "_70x70" + "." +ext[1];
                                                                             ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
                                                                                 if(err){
                                                                                     console.log(err)
                                                                                     callback();
                                                                                 }else{
-                                                                                    item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                    item.dither_image = collageImg_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                     callback();
                                                                                 }
                                                                             });
@@ -240,7 +240,7 @@ module.exports = {
                                                             {
                                                                 var imageSrc                    =     imageToResize;
                                                                 var ext                         =     imageSrc.split('.');
-                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                             }
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
@@ -248,13 +248,13 @@ module.exports = {
                                                                         if (exists) {
                                                                                 var ext                         =     clgImgSrc.split('/');
                                                                                 ext                             =     ext[ext.length-1].split('.');
-                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_70x70" + "." +ext[1];
                                                                                 ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
                                                                                     if(err){
                                                                                         console.log(err)
                                                                                         callback();
                                                                                     }else{
-                                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                        item.dither_image = collageImg_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                         callback();
                                                                                     }
                                                                                 });
@@ -286,7 +286,7 @@ module.exports = {
                                                                 {
                                                                 var imageSrc                    =     imageToResize;
                                                                 var ext                         =     imageSrc.split('.');
-                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                 }
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
@@ -294,7 +294,7 @@ module.exports = {
                                                                         if(exists){
                                                                                 var ext                         =     clgImgSrc.split('/');
                                                                                 ext                             =     ext[ext.length-1].split('.');
-                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_70x70" + "." +ext[1];
                                                                                 ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
 
                                                                                     if(err)
@@ -304,7 +304,7 @@ module.exports = {
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                        item.dither_image = collageImg_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                         callback();
                                                                                     }
                                                                                 });
@@ -336,7 +336,7 @@ module.exports = {
                                                                 {
                                                                 var imageSrc                    =     imageToResize;
                                                                 var ext                         =     imageSrc.split('.');
-                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                 }
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
@@ -344,7 +344,7 @@ module.exports = {
                                                                         if(exists){
                                                                                 var ext                         =     clgImgSrc.split('/');
                                                                                 ext                             =     ext[ext.length-1].split('.');
-                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_70x70" + "." +ext[1];
                                                                                 ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults) {
 
                                                                                     if(err)
@@ -354,7 +354,7 @@ module.exports = {
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                        item.dither_image = collageImg_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                         callback();
                                                                                     }
                                                                                 });
@@ -385,20 +385,20 @@ module.exports = {
                                                         if(imageToResize){
                                                             var imageSrc                    =     imageToResize;
                                                             var ext                         =     imageSrc.split('.');
-                                                            item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                            item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                         }
                                                         var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         fs.exists(clgImgSrc, function(exists) {
                                                             if(exists){
                                                                 var ext                         =     clgImgSrc.split('/');
                                                                 ext                             =     ext[ext.length-1].split('.');
-                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_70x70" + "." +ext[1];
                                                                 ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
                                                                     if(err){
                                                                         console.log(err)
                                                                         callback();
                                                                     }else{
-                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                        item.dither_image = collageImg_path + ext[0] + "_70x70" + "." +ext[1];
                                                                         callback();
                                                                     }
                                                                 });
@@ -430,7 +430,7 @@ module.exports = {
                                                             {
                                                                 var imageSrc                    =     imageToResize;
                                                                 var ext                         =     imageSrc.split('.');
-                                                                item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                             }
                                                                 var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
@@ -438,13 +438,13 @@ module.exports = {
                                                                         if(exists){
                                                                             var ext                         =     clgImgSrc.split('/');
                                                                             ext                             =     ext[ext.length-1].split('.');
-                                                                            var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                            var imageDst                    =     collageImg_path_assets + ext[0] + "_70x70" + "." +ext[1];
                                                                             ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
                                                                                 if(err){
                                                                                     console.log(err)
                                                                                     callback();
                                                                                 }else{
-                                                                                    item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                    item.dither_image = collageImg_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                     callback();
                                                                                 }
                                                                             });
@@ -477,20 +477,20 @@ module.exports = {
                                                         if(imageToResize){
                                                             var imageSrc                    =     imageToResize;
                                                             var ext                         =     imageSrc.split('.');
-                                                            item.profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                            item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                         }
                                                         var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
                                                         fs.exists(clgImgSrc, function(exists) {
                                                             if(exists){
                                                                 var ext                         =     clgImgSrc.split('/');
                                                                 ext                             =     ext[ext.length-1].split('.');
-                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_50x50" + "." +ext[1];
+                                                                var imageDst                    =     collageImg_path_assets + ext[0] + "_70x70" + "." +ext[1];
                                                                 ImgResizeService.isImageExist(clgImgSrc, imageDst, function(err, imageResizeResults){
                                                                     if(err){
                                                                         console.log(err)
                                                                         callback();
                                                                     }else{
-                                                                        item.dither_image = collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                        item.dither_image = collageImg_path + ext[0] + "_70x70" + "." +ext[1];
                                                                         callback();
                                                                     }
                                                                 });
@@ -531,14 +531,14 @@ module.exports = {
                                                                     if(profileImageToResize){
                                                                         var profileImageSrc          =     profileImageToResize;
                                                                         var ext                      =     profileImageSrc.split('.');
-                                                                        item.profile_image           =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                        item.profile_image           =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                     }else{
                                                                         item.profile_image           =     "";
                                                                     }
                                                                     if(collageImageToResize){
                                                                         var collageImageSrc          =     collageImageToResize;
                                                                         var ext                      =     collageImageSrc.split('.');
-                                                                        item.dither_image            =     collageImg_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                        item.dither_image            =     collageImg_path + ext[0] + "_70x70" + "." +ext[1];
                                                                     }
                                                                     callback();
                                                             }

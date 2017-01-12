@@ -304,7 +304,7 @@ module.exports = {
                                         }
 
                                         params.notification_id     =   createdNotificationTags.id;
-                                        User.findOne({id : params.creatorId}).exec(function (err, notifySettings){
+                                        User.findOne({id : creatorId}).exec(function (err, notifySettings){
                                             if(err){
                                                 console.log(err);
                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in retrieving user details ', error_details: err});
@@ -350,7 +350,7 @@ module.exports = {
                                              // +++++++++++++++++++++++++
                                                         function pushNotificationFunction(params){
                                                                 console.log("pushNotificationFunction ======>>>>>>>>>>>>>>>");
-                                                                User_token.find({userId: params.creatorId }).exec(function (err, getDeviceId){
+                                                                User_token.find({userId: creatorId }).exec(function (err, getDeviceId){
                                                                     if(err){
                                                                           console.log(err);
                                                                           //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in findig deviceId', error_details: err});

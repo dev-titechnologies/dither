@@ -58,7 +58,7 @@ module.exports = {
 					factor.profilePic       	=    profile_image;
 					factor.dither_image       	=    collage_image;
 				});
-                console.log(result)
+               // console.log(result)
                 return res.json(200,{status:1,message:'success',data:result});
             }
         });

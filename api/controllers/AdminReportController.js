@@ -361,6 +361,7 @@ module.exports = {
                             " ru.report, ru.id as reportId, ru.createdAt as reportDate,"+
                             " ( SELECT COUNT(cru.userId) FROM reportUser cru INNER JOIN user usr ON usr.id = cru.userId WHERE cru.userId = ru.userId) AS RepUserCount"+
                             " FROM reportUser AS ru"+
+                            " INNER JOIN reportType AS rt ON rt.id = ru.reportType"+
                             " INNER JOIN user AS u ON u.id = ru.userId"+
                             " INNER JOIN user AS usr ON usr.id = ru.reporterId"+
                             " ORDER BY ru.createdAt DESC) as temp"+

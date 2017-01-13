@@ -204,7 +204,7 @@ module.exports = {
                                                                                     var imageSrc                    =     profilePic_path_assets + dataResults[i]["profilePic"];
                                                                                     var ext                         =     imageSrc.split('/');
                                                                                     ext                             =     ext[ext.length-1].split('.');
-                                                                                    profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                    profile_image                   =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                 }
                                                                                 var likeStatus;
                                                                                 if(dataResults[i]["likeStatus"] == null || dataResults[i]["likeStatus"] == ""){
@@ -274,7 +274,7 @@ module.exports = {
                                                                                                     }else{
                                                                                                         var imageSrc                    =     factor.profilePic;
                                                                                                         var ext                         =     imageSrc.split('.');
-                                                                                                        profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                        profile_image                   =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                                     }
                                                                                                     taggedUserArrayFinal.push({
                                                                                                                 name            :   factor.name,
@@ -309,7 +309,7 @@ module.exports = {
 
                                                                                                             var imageSrc                    =     results[0].profilePic;
                                                                                                             var ext                         =     imageSrc.split('.');
-                                                                                                            user_profile_image              =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                            user_profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                                             //user_profile_image              =     profilePic_path + results[0].profilePic;
                                                                                                     }
                                                                                                     //When super user creates a dither he is not in logged user contact
@@ -319,7 +319,7 @@ module.exports = {
                                                                                                             }else{
                                                                                                                 var imageSrc                    =     userProfilePic;
                                                                                                                 var ext                         =     imageSrc.split('.');
-                                                                                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                                                profile_image                   =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                                                             }
                                                                                                             total_taggedUser_Array = [{
                                                                                                                         name            :   userName,
@@ -427,7 +427,7 @@ module.exports = {
                                                         }else{
                                                                 var imageSrc                    =     factor.profilePic;
                                                                 var ext                         =     imageSrc.split('.');
-                                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                profile_image                   =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                 //profile_image = profilePic_path + factor.profilePic;
                                                         }
                                                         votedUsersArray.push({

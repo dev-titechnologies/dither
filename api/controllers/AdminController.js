@@ -830,7 +830,7 @@ updateTokenExpiryTime:function(req,res){
                                     var profile_image, profile_image_70x70;
 
                                     var query   =   " SELECT"+
-                                                    " usr.name, usr.profilePic as profileImage"+
+                                                    " usr.id as likedUserId, usr.name, usr.profilePic as profileImage"+
                                                     " FROM commentLikes cmtlk"+
                                                     " INNER JOIN user usr ON usr.id = cmtlk.userId"+
                                                     " WHERE cmtlk.commentId = "+commentId;

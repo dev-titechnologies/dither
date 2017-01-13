@@ -257,7 +257,7 @@ module.exports = {
 
                                         switch(params.notificationTypeId){
                                             case 2 :
-                                                    var creator_roomName  = "socket_user_"+params.creatorId;
+                                                    var creator_roomName  = "socket_user_"+creatorId;
                                                     sails.sockets.broadcast(creator_roomName,{
                                                                     type                       :       "notification",
                                                                     id                         :       params.collageId,
@@ -272,7 +272,7 @@ module.exports = {
                                             break;
                                             case 3 :
 
-                                                    var creator_roomName  = "socket_user_"+params.creatorId;
+                                                    var creator_roomName  = "socket_user_"+creatorId;
                                                     sails.sockets.broadcast(creator_roomName,{
                                                                     type                       :       "notification",
                                                                     id                         :       params.collageId,
@@ -288,7 +288,7 @@ module.exports = {
                                             break
 
                                             case 9 :
-                                                    var creator_roomName  = "socket_user_"+params.creatorId;
+                                                    var creator_roomName  = "socket_user_"+creatorId;
                                                     sails.sockets.broadcast(creator_roomName,{
                                                                     type                       :       "notification",
                                                                     id                         :       params.collageId,

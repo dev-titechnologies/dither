@@ -55,6 +55,7 @@
                                         //Send an SMS text message
                                         SmsService.sendSmsOTP(smsAccountSid, smsAuthToken, smsFrom,mobile,verification_code, function(err,sendSmsResults)  {
                                             if(err){
+													console.log("mobile resulttttttttttttt")
                                                     console.log(err);
                                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'mobile number is not valid', error_details: sendSmsResults});
                                             }else{

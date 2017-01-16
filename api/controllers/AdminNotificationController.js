@@ -22,7 +22,7 @@ module.exports = {
                    " N.id,N.userId,N.ditherUserId,N.collage_id as ditherId,N.notificationTypeId,N.createdAt as createdDate,N.image_id,N.tagged_users,N.description,"+
                    " U.name,U.profilePic,"+
                    " C.image as dither_image,C.id as ditherID"+
-                   " FROM notificationLog as N LEFT JOIN user as U ON U.id = N.userId"+
+                   " FROM notificationLog as N INNER JOIN user as U ON U.id = N.userId"+
                    " LEFT JOIN collage as C ON C.id = N.collage_id"+
                    " WHERE"+
                    " N.ditherUserId="+user_id+
@@ -48,7 +48,6 @@ module.exports = {
 					
 					if(factor.dither_image == null || factor.dither_image == ""){
 							collage_image           =     "";
-							
 					}else{
 							var imageSrc                    =     factor.dither_image;
 							var ext                         =     imageSrc.split('.');
@@ -58,7 +57,8 @@ module.exports = {
 					factor.profilePic       	=    profile_image;
 					factor.dither_image       	=    collage_image;
 				});
-               // console.log(result)
+				console.log("-----------------Notification Result--------------------------")
+                console.log(result)
                 return res.json(200,{status:1,message:'success',data:result});
             }
         });

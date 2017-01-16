@@ -360,8 +360,12 @@ module.exports = {
         editDither:  function (req, res) {
                     console.log("Edit Dithers ===== api");
                     console.log(req.params.all());
-                    var tokenCheck                  =     req.options.tokenCheck;
-                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var smsAccountSid       		= 	   req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                    var smsAuthToken       		    = 	   req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                    var smsFrom             		= 	   req.options.settingsKeyValue.SMS_FROM;
+                    var tokenCheck                  =      req.options.tokenCheck;
+                    var userId                      =      tokenCheck.tokenDetails.userId;
+                    var username					=	   tokenCheck.tokenDetails.name;
                     var collageId                   =      req.param("dither_id");
                     var imgTitle                    =      req.param("dither_desc");
                     var location                    =      req.param("dither_location");
@@ -389,6 +393,7 @@ module.exports = {
                             var invitedFriends_NUM_Final;
                             var collage_results             =      "";
                             var tagNotifyArray              =      [];
+                            var sms_arr						=	   [];
 
             async.series([
                     function(callback) {
@@ -768,6 +773,32 @@ module.exports = {
                                 }
                                 //callback();
                     },
+                     function(callback){
+                                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ---SMS TO INVITED FRNDS ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                if(inviteFriends.length){
+									inviteFriends.forEach(function(factor, index){
+                                        sms_arr.push(factor.phone_number);
+                                    });
+                                    console.log(sms_arr)
+                                    //-----------------sms-send--------------------------------
+                                    SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom,sms_arr,username, function(err,sendSmsResults)  {
+                                            if(err){
+													console.log("mobile resulttttttttttttt")
+                                                    console.log(err);
+													callback();
+                                            }else{
+                                                    sails.log(req.param("mobile"))
+													callback();
+                                            }
+                                        });
+                                    
+								}
+								else{
+									callback();
+								}
+			
+                    },
+                    
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                 if(err){
                                     console.log(err);

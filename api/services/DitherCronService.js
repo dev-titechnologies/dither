@@ -40,22 +40,30 @@ module.exports = {
                                         var global_settingsKeyValue = keyValue;
                                         if(global_settingsKeyValue)
                                         {
+                                            var collage_image, collage_image_242x242;
                                             console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeee")
                                             console.log(keyValue)
                                             console.log(keyValue.CDN_IMAGE_URL)
-                                            var collageImg_path = "images/collage/";
-                                            var img_url         = keyValue.CDN_IMAGE_URL + collageImg_path;
+                                            var collageImg_path         = "images/collage/";
+                                            var img_url                 = keyValue.CDN_IMAGE_URL + collageImg_path;
                                             console.log(img_url)
-                                            var collageImage    = img_url + data.ditherImage;
-                                            var email_to        = data.email;
-                                            var email_subject   = 'Dither Expired!';
-                                            var email_template  = 'expired';
-                                            var email_context   = {
-                                                                    receiverName    :   data.name,
-                                                                    ditherImage     :   collageImage,
-                                                                    Vote            :   data.Vote,
-                                                                    email_img_url   :   global_settingsKeyValue.CDN_IMAGE_URL + 'images/email/'
-                                                                    };
+                                            var collageImage            = img_url + data.ditherImage;
+
+                                            var imageSrc                =     collageImage;
+                                            var ext                     =     imageSrc.split('/');
+                                            ext                         =     ext[ext.length-1].split('.');
+                                            collage_image               =     img_url + factor.image;
+                                            collage_image_242x242       =     img_url + ext[0] + "_242x242." +ext[1];
+
+                                            var email_to                = data.email;
+                                            var email_subject           = 'Dither Expired!';
+                                            var email_template          = 'expired';
+                                            var email_context           = {
+                                                                            receiverName    :   data.name,
+                                                                            ditherImage     :   collage_image_242x242,
+                                                                            Vote            :   data.Vote,
+                                                                            email_img_url   :   global_settingsKeyValue.CDN_IMAGE_URL + 'images/email/'
+                                                                            };
                                             EmailService.sendEmail(global_settingsKeyValue, email_to,email_subject,email_template,email_context, function(err, sendEmailResults) {
                                                 if(err){
                                                         console.log(err);

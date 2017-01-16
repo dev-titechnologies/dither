@@ -14,7 +14,7 @@ module.exports = {
 
           //   List all users based on limit(12 rows per call)
      getCompleteUser: function(req, res){
-		 
+
                         console.log("getCompleteUser ============== AdminUserSearchController");
                         console.log(req.params.all());
                         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -27,14 +27,14 @@ module.exports = {
                         var name                        =      req.param("name");
                         var email                       =      req.param("email");
                         var mobile                      =      req.param("mobile");
-                        var order						=		req.param("order");
+                        var order                       =       req.param("order");
                         var outerSelect                 =      " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, ";
                         var innerOrderBy;
-						if(order == 1){
-							innerOrderBy				=		" DESC";
-						}else{
-							innerOrderBy				=		" ASC";
-						}
+                        if(order == 1){
+                            innerOrderBy                =       " DESC";
+                        }else{
+                            innerOrderBy                =       " ASC";
+                        }
                         var outerOrderBy                =      " ORDER BY createdAt "+innerOrderBy+ " LIMIT "+start+","+count;
 
                         if(!name && !email && !mobile){
@@ -208,7 +208,7 @@ module.exports = {
                                                         });
                                     }else{
                                             //console.log("Results ---------- >>>>>>>>>");
-                                            console.log(results);
+                                            //console.log(results);
                                              return res.json(200, {status: 1, message: "success",
                                                                     data: results
                                                         });

@@ -112,7 +112,7 @@ module.exports = {
                         });*/
                         var twilio = require('twilio');
                         var client = twilio(smsAccountSid, smsAuthToken);
-                         client.sendMessage({
+                         /*client.sendMessage({
 
                                 //to:mobile, // Any number Twilio can deliver to
                                 to: mobile,
@@ -130,8 +130,8 @@ module.exports = {
 											callback(false, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
 											
                                        }
-                        });
+                        });*/
                        
-                      // callback(false, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
+                      callback(false, {status: 1, status_type: 'Success' , message: 'OTP send Successfully'});
             },
 };

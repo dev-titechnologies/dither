@@ -602,30 +602,6 @@ module.exports = {
                                                                             callback();
                                                                     }
                                                         },
-                                                        function(callback) {
-                                                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----4 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                                                                    if(inviteFriends.length){
-                                                                        inviteFriends.forEach(function(factor, index){
-                                                                                 inviteFinalArray.push({
-                                                                                                        userId          : parseInt(userId),
-                                                                                                        collageId       : collage_results.id,
-                                                                                                        phoneNumber     : factor.phone_number,
-                                                                                                        invitee         : factor.name
-                                                                                                    });
-                                                                        });
-                                                                        Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
-                                                                                if(err){
-                                                                                    console.log(err);
-                                                                                    callback();
-                                                                                }else{
-                                                                                    callback();
-                                                                                }
-                                                                        });
-
-                                                                    }else{
-                                                                        callback();
-                                                                    }
-                                                        },
                                                         function(callback){
 																	console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK --5---SMS TO INVITED FRNDS ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 																	if(inviteFriends.length){
@@ -651,6 +627,31 @@ module.exports = {
 																	}
 												
 														},
+                                                        function(callback) {
+                                                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ----4 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                                                    if(inviteFriends.length){
+                                                                        inviteFriends.forEach(function(factor, index){
+                                                                                 inviteFinalArray.push({
+                                                                                                        userId          : parseInt(userId),
+                                                                                                        collageId       : collage_results.id,
+                                                                                                        phoneNumber     : factor.phone_number,
+                                                                                                        invitee         : factor.name
+                                                                                                    });
+                                                                        });
+                                                                        Invitation.create(inviteFinalArray).exec(function(err, createdInvitation) {
+                                                                                if(err){
+                                                                                    console.log(err);
+                                                                                    callback();
+                                                                                }else{
+                                                                                    callback();
+                                                                                }
+                                                                        });
+
+                                                                    }else{
+                                                                        callback();
+                                                                    }
+                                                        },
+                                                        
                                                 ],function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                             if(err){
                                                                 console.log(err);

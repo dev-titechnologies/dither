@@ -28,6 +28,7 @@ module.exports = {
                             " (SELECT usr.name FROM collage clg INNER JOIN user usr ON usr.id = clg.userId WHERE clg.id = c.id) as createdBy,"+
                             " IF( (c.expiryDate < '"+todayISO+"') ,  'close',  'open') AS ditherStatus"+
                             " FROM reportDither AS rd"+
+                            " INNER JOIN reportType as rt ON rd.reportType = rt.reportId"+
                             " INNER JOIN collage AS c ON c.id = rd.collageId"+
                             " INNER JOIN user AS u ON rd.reporterId = u.id"+
                             " ORDER BY rd.createdAt DESC) as temp"+

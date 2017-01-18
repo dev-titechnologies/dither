@@ -138,6 +138,10 @@ module.exports = {
                             var expiry_date                         =     new Date(new Date().getTime() + (dither_expiry_hour*1000*60*60));
                             var tokenCheck                          =     req.options.tokenCheck;
                             var userId                              =     tokenCheck.tokenDetails.userId;
+                            var username							=	  tokenCheck.tokenDetails.name;
+                            var smsAccountSid       				= 	  req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+							var smsAuthToken       		    		= 	  req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+							var smsFrom             				= 	  req.options.settingsKeyValue.SMS_FROM;
                             //var profilePic_path                     =     server_image_baseUrl + req.options.file_path.profilePic_path;
                             //var collageImg_path                     =     server_image_baseUrl + req.options.file_path.collageImg_path;
                             var collageImg_path_assets              =     req.options.file_path.collageImg_path_assets;
@@ -166,6 +170,7 @@ module.exports = {
                             var collage_results                     =     "";
                             var reportUserResults_Array             =     [];
                             var reportUserResults_JSON_Array        =     [];
+                            var sms_arr								=	  [];
                             /*var loggedUser_JSON_Array               =     [{
                                                                             name        :    tokenCheck.tokenDetails.name,
                                                                             userId      :    tokenCheck.tokenDetails.userId
@@ -621,6 +626,31 @@ module.exports = {
                                                                         callback();
                                                                     }
                                                         },
+                                                        function(callback){
+																	console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK --5---SMS TO INVITED FRNDS ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+																	if(inviteFriends.length){
+																		inviteFriends.forEach(function(factor, index){
+																			sms_arr.push(factor.phone_number);
+																		});
+																		console.log(sms_arr)
+																		//-----------------sms-send--------------------------------
+																		SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom,sms_arr,username, function(err,sendSmsResults)  {
+																				if(err){
+																						console.log("mobile resulttttttttttttt")
+																						console.log(err);
+																						callback();
+																				}else{
+																						sails.log(req.param("mobile"))
+																						callback();
+																				}
+																			});
+																		
+																	}
+																	else{
+																		callback();
+																	}
+												
+														},
                                                 ],function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                             if(err){
                                                                 console.log(err);

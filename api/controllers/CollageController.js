@@ -131,7 +131,7 @@ module.exports = {
                                     " temp.*,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
-                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"' AND status = 'active')as opinionCount,"+
+                                    //" (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"' AND status = 'active')as opinionCount,"+
                                     " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                     " FROM ("+
                                     " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
@@ -152,7 +152,7 @@ module.exports = {
                                     " temp.*,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
-                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"' AND status = 'active')as opinionCount,"+
+                                    //" (SELECT SUM(totalVote) FROM collage WHERE userId = '"+userId+"' AND status = 'active')as opinionCount,"+
                                     " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                     " FROM ("+
                                     " SELECT clg.id, clg.userId, clg.image AS collage_image, clg.totalVote, clg.createdAt, clg.updatedAt"+
@@ -176,7 +176,7 @@ module.exports = {
                                     " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
-                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"' AND status = 'active')as opinionCount,"+
+                                    //" (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"' AND status = 'active')as opinionCount,"+
                                     " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                     " FROM ("+
                                     " SELECT temp.id"+
@@ -202,7 +202,7 @@ module.exports = {
                                     " temp_union.id, clg.imgTitle, clg.image AS collage_image, clg.location, clg.userId, clg.totalVote, clg.createdAt, clg.updatedAt,"+
                                     " clgdt.id AS imgId, clgdt.collageId, clgdt.position, clgdt.vote,"+
                                     " usr.profilePic, usr.name,"+
-                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"' AND status = 'active')as opinionCount,"+
+                                    //" (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"' AND status = 'active')as opinionCount,"+
                                     " clglk.likeStatus, clglk.likePosition, clglk.userId likeUserId"+
                                     " FROM ("+
                                     " SELECT temp.id"+
@@ -251,6 +251,7 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                             username                : "",
                                                                                             user_profile_image      : "",
+                                                                                            total_opinion           : 0,
                                                                                             closed_dither_count     : 0,
                                                                                             recent_dithers          : [],
                                                                                             popular_dithers         : [],
@@ -262,7 +263,10 @@ module.exports = {
                                                                         }else{
                                                                                 user_profile_image  = profilePic_path + foundUserDetails.profilePic;
                                                                         }
-                                                                        var query = " SELECT COUNT(clg.id) as closedDitherCount FROM collage clg"+
+
+                                                                        var query = " SELECT COUNT(clg.id) as closedDitherCount,"+
+                                                                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"' AND status = 'active')as opinionCount"+
+                                                                                    " FROM collage clg"+
                                                                                     " WHERE clg.userId = "+received_userId+" AND clg.expiryDate < '"+today+"'";
                                                                         console.log("closed Dither query ======>>>>");
                                                                         console.log(query);
@@ -274,6 +278,7 @@ module.exports = {
                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                                             username                : foundUserDetails.name,
                                                                                                             user_profile_image      : user_profile_image,
+                                                                                                            total_opinion           : results[0].opinionCount,
                                                                                                             closed_dither_count     : results[0].closedDitherCount,
                                                                                                             recent_dithers          : [],
                                                                                                             popular_dithers         : [],
@@ -293,6 +298,7 @@ module.exports = {
                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No user details found',
                                                                                             username                : "",
                                                                                             user_profile_image      : "",
+                                                                                            total_opinion           : 0,
                                                                                             closed_dither_count     : 0,
                                                                                             recent_dithers          : [],
                                                                                             popular_dithers         : [],
@@ -320,7 +326,9 @@ module.exports = {
                                                                         }else{
                                                                                     user_profile_image   = profilePic_path + foundUserDetails.profilePic;
                                                                         }
-                                                                        var query = " SELECT COUNT(clg.id) as closedDitherCount FROM collage clg"+
+                                                                        var query = " SELECT COUNT(clg.id) as closedDitherCount,"+
+                                                                                    " (SELECT SUM(totalVote) FROM collage WHERE userId = '"+received_userId+"' AND status = 'active')as opinionCount"+
+                                                                                    " FROM collage clg"+
                                                                                     " WHERE clg.userId = "+received_userId+" AND clg.expiryDate < '"+today+"'";
                                                                         console.log("closed Dither query ======>>>>");
                                                                         console.log(query);
@@ -334,7 +342,7 @@ module.exports = {
                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                             username                : foundUserDetails.name,
                                                                                                             user_profile_image      : user_profile_image,
-                                                                                                            total_opinion           : recent_DitherResults.total_opinion,
+                                                                                                            total_opinion           : results[0].opinionCount,
                                                                                                             closed_dither_count     : results[0].closedDitherCount,
                                                                                                             recent_dithers          : recent_dithers,
                                                                                                             popular_dithers         : popular_dithers,
@@ -360,8 +368,12 @@ module.exports = {
         editDither:  function (req, res) {
                     console.log("Edit Dithers ===== api");
                     console.log(req.params.all());
-                    var tokenCheck                  =     req.options.tokenCheck;
-                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var smsAccountSid               =      req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                    var smsAuthToken                =      req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                    var smsFrom                     =      req.options.settingsKeyValue.SMS_FROM;
+                    var tokenCheck                  =      req.options.tokenCheck;
+                    var userId                      =      tokenCheck.tokenDetails.userId;
+                    var username                    =      tokenCheck.tokenDetails.name;
                     var collageId                   =      req.param("dither_id");
                     var imgTitle                    =      req.param("dither_desc");
                     var location                    =      req.param("dither_location");
@@ -389,6 +401,7 @@ module.exports = {
                             var invitedFriends_NUM_Final;
                             var collage_results             =      "";
                             var tagNotifyArray              =      [];
+                            var sms_arr                     =      [];
 
             async.series([
                     function(callback) {
@@ -768,6 +781,32 @@ module.exports = {
                                 }
                                 //callback();
                     },
+                     function(callback){
+                                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK ---SMS TO INVITED FRNDS ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                if(inviteFriends.length){
+                                    inviteFriends.forEach(function(factor, index){
+                                        sms_arr.push(factor.phone_number);
+                                    });
+                                    console.log(sms_arr)
+                                    //-----------------sms-send--------------------------------
+                                    SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom,sms_arr,username, function(err,sendSmsResults)  {
+                                            if(err){
+                                                    console.log("mobile resulttttttttttttt")
+                                                    console.log(err);
+                                                    callback();
+                                            }else{
+                                                    sails.log(req.param("mobile"))
+                                                    callback();
+                                            }
+                                        });
+
+                                }
+                                else{
+                                    callback();
+                                }
+
+                    },
+
             ], function(err) { //This function gets called after the two tasks have called their "task callbacks"
                                 if(err){
                                     console.log(err);

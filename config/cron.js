@@ -66,6 +66,7 @@ module.exports.cron = {
 																console.log(err)
 															}else{   
 																console.log(userDetails)
+															  if(userDetails.length){
 														        var data = {ditherImage:factor.image,Vote:factor.totalVote,name:userDetails[0].name,email:userDetails[0].email};
 														        console.log("===================")
 														        console.log(data)
@@ -82,6 +83,7 @@ module.exports.cron = {
 																
 																
 																});
+															 }
 															}
 														});  
 														

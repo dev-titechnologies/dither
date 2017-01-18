@@ -52,7 +52,7 @@ module.exports = {
                                             var imageSrc                =     collageImage;
                                             var ext                     =     imageSrc.split('/');
                                             ext                         =     ext[ext.length-1].split('.');
-                                            collage_image               =     img_url + factor.image;
+                                            collage_image               =     img_url + data.ditherImage;
                                             collage_image_242x242       =     img_url + ext[0] + "_242x242." +ext[1];
 
                                             var email_to                = data.email;

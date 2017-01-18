@@ -15,6 +15,23 @@ var crypto = require('crypto');
  const VIEW_ID   = 'ga:130989248';
  var todayISO           =   new Date().toISOString();
 
+//Function to combine n-json Arrays
+function combine() {
+	var ar = [];
+
+	return ar.concat.apply(ar, arguments).sort(function (a, b) {
+		var aName = a.NAME;
+		var bName = b.NAME;
+		if (aName < bName) {
+			return -1;
+		} else if (aName == bName) {
+			return 0;
+		} else {
+			return 1;
+		};
+	});
+};
+
 module.exports = {
 
     // Admin Login
@@ -727,19 +744,58 @@ console.log(values);
 
                         });
     },
+    getSettingsData:	function(req,res){
 
-getSettingsData:function(req,res){
+							var query = "SELECT * FROM settings";
+							Settings.query(query,function(err,result){
+								if(err){
+									  console.log("errrr",err);
+									  return res.json(200, {status: 2, error_details: err});
+								}else{
+									  console.log("success in settings", result);
+									  return res.json(200,{status:1,message:'success',result:result});
+								}
+						  });
+						},
 
-                      var query = "SELECT * FROM settings";
-                      Settings.query(query,function(err,result){
-                        if(err){
-                              console.log("errrr",err);
-                              return res.json(200, {status: 2, error_details: err});
-                        }else{
-                              console.log("success in settings", result);
-                              return res.json(200,{status:1,message:'success',result:result});
-                        }
-                      });
+	getSettingsDitherData:	function(req,res){
+						var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+						var collageImg_path             =     server_image_baseUrl + req.options.file_path.collageImg_path;
+						var collageImg_path_assets      =     req.options.file_path.collageImg_path_assets;
+						var collage_image;
+						var default_collage1_Array				=		JSON.parse(req.options.settingsKeyValue.DEFAULT_DITHER_ONE);
+						var default_collage2_Array       		= 		JSON.parse(req.options.settingsKeyValue.DEFAULT_DITHER_TWO);
+						var default_collage3_Array				=		JSON.parse(req.options.settingsKeyValue.DEFAULT_DITHER_THREE);
+						var default_collage4_Array				=		JSON.parse(req.options.settingsKeyValue.DEFAULT_DITHER_FOUR);
+						var TOKEN_EXPIRY_HOUR					=		req.options.settingsKeyValue.TOKEN_EXPIRY_HOUR;
+						var DITHER_EXPIRY_HOUR					=		req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
+						var image;
+						console.log(TOKEN_EXPIRY_HOUR);
+						console.log(DITHER_EXPIRY_HOUR);
+						default_collage1_Array.forEach(function(factor, index){
+							image				=	collageImg_path+factor.image;
+							factor.image		=	image;
+						});
+						default_collage2_Array.forEach(function(factor, index){
+							image				=	collageImg_path+factor.image;
+							factor.image		=	image;
+						});
+						default_collage3_Array.forEach(function(factor, index){
+							image				=	collageImg_path+factor.image;
+							factor.image		=	image;
+						});
+						default_collage4_Array.forEach(function(factor, index){
+							image				=	collageImg_path+factor.image;
+							factor.image		=	image;
+						});
+					 return res.json(200,{status:1,message:'success',
+											result1		:	default_collage1_Array,
+											result2		:	default_collage2_Array,
+											result3		:	default_collage3_Array,
+											result4		:	default_collage4_Array,
+											result5		:	TOKEN_EXPIRY_HOUR,
+											result6		:	DITHER_EXPIRY_HOUR
+											});
 
 },
 
@@ -925,6 +981,22 @@ updateTokenExpiryTime:function(req,res){
                                     });
                             }
     },
+	changeDefaultDither	:	function(req,res){
+							 var imageUploadDirectoryPath =  '../../assets/images/test';
+							console.log(req.params.all());
+							req.file('acoconut').upload({dirname:imageUploadDirectoryPath, maxBytes: 10000000},function (err, files) {
+								if (err){
+									console.log("cannot upload not"+err);
+									//callback();
+								}
+								else{
+								   console.log("Uploaded"+files);
+								   return res.json({message: files.length + ' file(s) uploaded successfully!',files: files});
+								}
+							});
+
+	},
+	
 
 };
 

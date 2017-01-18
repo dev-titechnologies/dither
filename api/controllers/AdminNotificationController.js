@@ -43,7 +43,7 @@ module.exports = {
 					}else{
 							var imageSrc                    =     factor.profilePic;
 							var ext                         =     imageSrc.split('.');
-							profile_image                   =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
+							profile_image                   =     ext[0] + "_70x70" + "." +ext[1];
 					}
 					
 					if(factor.dither_image == null || factor.dither_image == ""){
@@ -51,11 +51,11 @@ module.exports = {
 					}else{
 							var imageSrc                    =     factor.dither_image;
 							var ext                         =     imageSrc.split('.');
-							collage_image           		=     collageImg_path + ext[0] + "_70x70." +ext[1];
+							collage_image           		=     ext[0] + "_70x70." +ext[1];
 					}
 
-					factor.profilePic       	=    profile_image;
-					factor.dither_image       	=    collage_image;
+					factor.profilePic       	=    profilePic_path + profile_image;
+					factor.dither_image       	=    collageImg_path + collage_image;
 				});
 				console.log("-----------------Notification Result--------------------------")
                 console.log(result)

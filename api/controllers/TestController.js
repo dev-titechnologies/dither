@@ -225,33 +225,36 @@ module.exports = {
                SMS TEST USING TWILIO
      ==================================================================================================================================== */
         sendSms:  function (req, res) {
-                var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
-                var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
-                var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
-                var twilio 			  = require('twilio');
-				var client 			  = twilio(smsAccountSid, smsAuthToken);
-                var username		  = req.param("username");
-                var mobile			  = req.param("mobile");
+                //var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                //var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                //var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
+                var smsAccountSid     = "AC834e9d9c31bd1e8a5965f7f25f2b1250";
+                var smsAuthToken      = "29f2e106b68b5aa5b7f2c2e9dcf935e5";
+                var smsFrom           = "+15005550006";
+                var twilio            = require('twilio');
+                var client            = twilio(smsAccountSid, smsAuthToken);
+                var username          = req.param("username");
+                var mobile            = req.param("mobile");
                 client.sendMessage({
-					//to:mobile, // Any number Twilio can deliver to
-					to: mobile ,
-					from: smsFrom, // A number you bought from Twilio and can use for outbound communications
-					body: username+' has invited you on Dither,Click on the link to download the app' // body of the SMS message
+                    //to:mobile, // Any number Twilio can deliver to
+                    to: mobile ,
+                    from: smsFrom, // A number you bought from Twilio and can use for outbound communications
+                    body: username+' has invited you on Dither,Click on the link to download the app' // body of the SMS message
 
-				 }, function(err, message) {
-					if (err) {
-								console.log(err);
-								console.error('Text failed because: '+err);
-								return res.json(200, {status: 2, status_type: 'Failure' , message: 'Sending Failed'});
-					} else {
-								console.log("sms sending sucess")
-								console.log(message)
-								return res.json(200, {status: 1, status_type: 'Success' , message: 'SMS Sending Success'});
-								
-						   }
-				});
+                 }, function(err, message) {
+                    if (err) {
+                                console.log(err);
+                                console.error('Text failed because: '+err);
+                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Sending Failed'});
+                    } else {
+                                console.log("sms sending sucess")
+                                console.log(message)
+                                return res.json(200, {status: 1, status_type: 'Success' , message: 'SMS Sending Success'});
 
-               
+                           }
+                });
+
+
         },
 
 

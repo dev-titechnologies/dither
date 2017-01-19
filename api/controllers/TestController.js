@@ -222,25 +222,36 @@ module.exports = {
 
         },
 /* ==================================================================================================================================
-               SMS TEST
+               SMS TEST USING TWILIO
      ==================================================================================================================================== */
-        smsda:  function (req, res) {
+        sendSms:  function (req, res) {
                 var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
                 var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
                 var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
-                console.log(req.options.settingsKeyValue);
+                var twilio 			  = require('twilio');
+				var client 			  = twilio(smsAccountSid, smsAuthToken);
+                var username		  = req.param("username");
+                var mobile			  = req.param("mobile");
+                client.sendMessage({
+					//to:mobile, // Any number Twilio can deliver to
+					to: mobile ,
+					from: smsFrom, // A number you bought from Twilio and can use for outbound communications
+					body: username+' has invited you on Dither,Click on the link to download the app' // body of the SMS message
 
-                SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
-                        if(err)
-                        {
-                                console.log(err);
-                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                //callback();
-                        }else{
-                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                //callback();
-                        }
-                    });
+				 }, function(err, message) {
+					if (err) {
+								console.log(err);
+								console.error('Text failed because: '+err);
+								return res.json(200, {status: 2, status_type: 'Failure' , message: 'Sending Failed'});
+					} else {
+								console.log("sms sending sucess")
+								console.log(message)
+								return res.json(200, {status: 1, status_type: 'Success' , message: 'SMS Sending Success'});
+								
+						   }
+				});
+
+               
         },
 
 
@@ -266,7 +277,6 @@ module.exports = {
                 sails.sockets.join(req.socket, creator_roomName);
                 //console.log(req.socket);
                 //sails.sockets.blast('comment-dither', {msg: 'Hi! Comment ------11111111'});
-
                 //sails.sockets.blast('like-dither', {msg: 'Hi! Like ------2222222'});
                 //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
                 //sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
@@ -1483,7 +1493,7 @@ module.exports = {
 
 
         console.log("-----------Push Notification For Version Update-----------")
-        var query   =   "SELECT `deviceId` FROM `userToken`";
+        var query   =   "SELECT `deviceId` FROM `userToken` where userId=5";
         User_token.query(query, function(err, getDeviceId) {
 
             if(err){

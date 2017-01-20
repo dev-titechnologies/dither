@@ -1916,31 +1916,27 @@ module.exports = {
 
                                         console.log(imageSrc);
                                         console.log(imageDst);
-                                        fs.exists(imageSrc, function(exists) {
-                                            if (exists) {
-                                                ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
-                                                        if(err){
-                                                                console.log(err);
-                                                                console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                callback();
-                                                        }else{
+                                        ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                if(err){
+                                                        console.log(err);
+                                                        console.log("Error in image resize 160 in collagedetails!!!!");
+                                                        callback();
+                                                }else{
 
-                                                                console.log("Loop success");
-                                                                //collage-Details images
-                                                                console.log("imageResizeResults =====================================")
-                                                                console.log(imageResizeResults)
-                                                                if(imageResizeResults.status = 1){
-                                                                    console.log("11111111111111 ============ SUCCESS");
-                                                                    callback();
-                                                                }else if(imageResizeResults.status = 2){
-                                                                    console.log("22222222 ======================= FAILURE");
-                                                                    callback();
-                                                                }
+                                                        console.log("Loop success");
+                                                        //collage-Details images
+                                                        console.log("imageResizeResults =====================================")
+                                                        console.log(imageResizeResults)
+                                                        if(imageResizeResults.status = 1){
+                                                            console.log("11111111111111 ============ SUCCESS");
+                                                            callback();
+                                                        }else if(imageResizeResults.status = 2){
+                                                            console.log("22222222 ======================= FAILURE");
+                                                            callback();
                                                         }
-                                                });
-                                            }else{
-                                                callback();
-                                            }
+                                                }
+                                        });
+
                                         });
                                     }
                             ],function(err){

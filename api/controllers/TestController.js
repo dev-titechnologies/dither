@@ -1883,6 +1883,89 @@ module.exports = {
     },
 
  /* ==================================================================================================================================
+               Resize Single user image
+     ==================================================================================================================================== */
+
+
+        //   List all users based on limit(12 rows per call)
+        resizeSIngleUser: function(req, res){
+
+                        console.log("resizeUser ============== Test");
+                        console.log(req.params.all());
+                        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                        var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                        var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+                        var results             =       [];
+                        if(!req.param("profileImage")){
+                                return res.json(200, {status: 2, message: "Failure - Please send  profileImage"
+                                                            });
+                        }else{
+
+                                    console.log("INSIDE user foreach callback........");
+                                    //var count = 0;
+                                    //console.log(results);
+                                    //results.forEach(function(factor, index){
+                                            //count++;
+                                           // var imageSrc                    =     profilePic_path_assets + factor.profilePic;
+                            var imageSrc                    =     req.param("profileImage");
+                            var ext                         =     imageSrc.split('/');
+                            ext                             =     ext[ext.length-1].split('.');
+                            var imgWidth,
+                                imgHeight,
+                                imageDst;
+
+                            async.series([
+                                    function(callback) {
+
+                                            imgWidth                    =    200;
+                                            imgHeight                   =    200;
+                                            imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+
+                                            console.log(imageSrc);
+                                            console.log(imageDst);
+                                            fs.exists(imageSrc, function(exists) {
+                                                    if (exists) {
+                                                        ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                                if(err){
+                                                                        console.log(err);
+                                                                        console.log("Error in image resize 160 in collagedetails!!!!");
+                                                                        callback();
+                                                                }else{
+
+                                                                        console.log("Loop success");
+                                                                        //collage-Details images
+                                                                        console.log("imageResizeResults =====================================")
+                                                                        console.log(imageResizeResults)
+                                                                        if(imageResizeResults.status = 1){
+                                                                            console.log("11111111111111");
+                                                                        }
+                                                                        callback();
+                                                                }
+                                                        });
+                                                    }else{
+                                                        callback();
+                                                    }
+                                            });
+                                    }
+                            ],function(err){
+                                        if(err){
+                                            console.log(err);
+                                            //callback();
+                                            return res.json(200, {status: 2, message: "Failure "
+                                            });
+                                        }else{
+                                            console.log("Last Loooooooopp success =====");
+                                            return res.json(200, {status: 1, message: "Success"
+                                            });
+                                        }
+                            });
+                        },
+
+                    }
+
+    },
+
+ /* ==================================================================================================================================
                Resize all collage image
      ==================================================================================================================================== */
 

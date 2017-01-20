@@ -1901,7 +1901,7 @@ module.exports = {
                                                             });
                         }else{
 
-                            var imageSrc                    =     req.param("profileImage");
+                            var imageSrc                    =     profilePic_path_assets + req.param("profileImage");
                             var ext                         =     imageSrc.split('/');
                             ext                             =     ext[ext.length-1].split('.');
                             var imgWidth,

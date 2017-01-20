@@ -1896,7 +1896,7 @@ module.exports = {
                         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                         var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                         var results             =       [];
-                        if(!req.param("profileImage") && !req.param("width") && !req.param("height")){
+                        if(!req.param("profileImage") || !req.param("width") || !req.param("height")){
                                 return res.json(200, {status: 2, message: "Failure - Please send  profileImage, width, height"
                                                             });
                         }else{

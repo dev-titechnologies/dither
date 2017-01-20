@@ -1937,7 +1937,7 @@ module.exports = {
                                                 }
                                         });
 
-                                        });
+
                                     }
                             ],function(err){
                                     if(err){

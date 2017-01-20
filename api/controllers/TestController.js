@@ -1896,8 +1896,8 @@ module.exports = {
                         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
                         var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                         var results             =       [];
-                        if(!req.param("profileImage")){
-                                return res.json(200, {status: 2, message: "Failure - Please send  profileImage"
+                        if(!req.param("profileImage") && !req.param("width") && !req.param("height")){
+                                return res.json(200, {status: 2, message: "Failure - Please send  profileImage, width, height"
                                                             });
                         }else{
 
@@ -1917,8 +1917,8 @@ module.exports = {
                             async.series([
                                     function(callback) {
 
-                                            imgWidth                    =    200;
-                                            imgHeight                   =    200;
+                                            imgWidth                    =    req.param("width");
+                                            imgHeight                   =    req.param("height");
                                             imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
 
                                             console.log(imageSrc);

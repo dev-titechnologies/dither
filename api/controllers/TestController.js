@@ -1910,8 +1910,8 @@ module.exports = {
 
                             async.series([
                                     function(callback) {
-                                        imgWidth                    =    req.param("width");
-                                        imgHeight                   =    req.param("height");
+                                        imgWidth                    =    parseInt(req.param("width"));
+                                        imgHeight                   =    parseInt(req.param("height"));
                                         imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
 
                                         console.log(imageSrc);
@@ -1947,8 +1947,8 @@ module.exports = {
                                         });
                                     }else{
                                         console.log("Last Loooooooopp success =====");
-                                        return res.json(200, {status: 1, message: "Success"
-                                        });
+                                        //return res.json(200, {status: 1, message: "Success"
+                                        //});`
                                     }
                             });
                         }

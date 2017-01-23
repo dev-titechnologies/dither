@@ -404,7 +404,7 @@ module.exports = {
                                                                                             imageDst;
                                                                                         var cdResize_1, cdResize_2;
 
-                                                                                        async.series([
+                                                                                        async.parallel([
                                                                                                 function(callback) {
                                                                                                             imgWidth                    =    160;
                                                                                                             imgHeight                   =    160;
@@ -430,7 +430,7 @@ module.exports = {
                                                                                                                     if(err){
                                                                                                                             console.log(err);
                                                                                                                             console.log("Error in image resize 70 collageDetails !!!!");
-                                                                                                                            callback();
+                                                                                                                            //callback();
                                                                                                                     }else{
                                                                                                                             console.log("70 - Image ressize *****************");
                                                                                                                             cdResize_2 = imageResizeResults;

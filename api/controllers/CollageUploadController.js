@@ -138,10 +138,10 @@ module.exports = {
                             var expiry_date                         =     new Date(new Date().getTime() + (dither_expiry_hour*1000*60*60));
                             var tokenCheck                          =     req.options.tokenCheck;
                             var userId                              =     tokenCheck.tokenDetails.userId;
-                            var username							=	  tokenCheck.tokenDetails.name;
-                            var smsAccountSid       				= 	  req.options.settingsKeyValue.SMS_ACCOUNT_SID;
-							var smsAuthToken       		    		= 	  req.options.settingsKeyValue.SMS_AUTH_TOKEN;
-							var smsFrom             				= 	  req.options.settingsKeyValue.SMS_FROM;
+                            var username                            =     tokenCheck.tokenDetails.name;
+                            var smsAccountSid                       =     req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                            var smsAuthToken                        =     req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                            var smsFrom                             =     req.options.settingsKeyValue.SMS_FROM;
                             //var profilePic_path                     =     server_image_baseUrl + req.options.file_path.profilePic_path;
                             //var collageImg_path                     =     server_image_baseUrl + req.options.file_path.collageImg_path;
                             var collageImg_path_assets              =     req.options.file_path.collageImg_path_assets;
@@ -170,7 +170,7 @@ module.exports = {
                             var collage_results                     =     "";
                             var reportUserResults_Array             =     [];
                             var reportUserResults_JSON_Array        =     [];
-                            var sms_arr								=	  [];
+                            var sms_arr                             =     [];
                             /*var loggedUser_JSON_Array               =     [{
                                                                             name        :    tokenCheck.tokenDetails.name,
                                                                             userId      :    tokenCheck.tokenDetails.userId
@@ -393,7 +393,7 @@ module.exports = {
                                                                             }else{
                                                                                 callback();
                                                                                 //collage-Details images -- STARTS
-                                                                                /*var count = 0;
+                                                                                var count = 0;
                                                                                 collageDetails_results.forEach(function(factor, index){
                                                                                         count++;
                                                                                         var imageSrc                    =     collageImg_path_assets + factor.image;
@@ -413,10 +413,11 @@ module.exports = {
                                                                                                                     if(err){
                                                                                                                             console.log(err);
                                                                                                                             console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                                                            callback();
+                                                                                                                            //callback();
                                                                                                                     }else{
+                                                                                                                            console.log("160 - Image ressize *****************");
                                                                                                                             cdResize_1 = imageResizeResults;
-                                                                                                                            callback();
+                                                                                                                            //callback();
                                                                                                                     }
                                                                                                             });
 
@@ -431,8 +432,9 @@ module.exports = {
                                                                                                                             console.log("Error in image resize 70 collageDetails !!!!");
                                                                                                                             callback();
                                                                                                                     }else{
+                                                                                                                            console.log("70 - Image ressize *****************");
                                                                                                                             cdResize_2 = imageResizeResults;
-                                                                                                                            callback();
+                                                                                                                            //callback();
                                                                                                                     }
                                                                                                             });
                                                                                                 },
@@ -445,16 +447,17 @@ module.exports = {
                                                                                                         //collage-Details images
                                                                                                         //callback();
                                                                                                         if(count == collageDetails_results.length){
-                                                                                                                if(cdResize_1.status == 1 && cdResize_2.status == 1){
+                                                                                                                //if(cdResize_1.status == 1 && cdResize_2.status == 1){
+                                                                                                                        console.log(" Image ressize Last Loop SUCCESS*****************");
                                                                                                                         callback();
-                                                                                                                }
+                                                                                                                //}
                                                                                                         }
 
                                                                                                     }
                                                                                         });
                                                                                 //collage-Details images -- ENDS
 
-                                                                                });*/
+                                                                                });
                                                                             }
                                                                 });
                                                         },
@@ -627,30 +630,30 @@ module.exports = {
                                                                     }
                                                         },
                                                         function(callback){
-																	console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK --5---SMS TO INVITED FRNDS ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-																	if(inviteFriends.length){
-																		inviteFriends.forEach(function(factor, index){
-																			sms_arr.push(factor.phone_number);
-																		});
-																		console.log(sms_arr)
-																		//-----------------sms-send--------------------------------
-																		SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom,sms_arr,username, function(err,sendSmsResults)  {
-																				if(err){
-																						console.log("mobile resulttttttttttttt")
-																						console.log(err);
-																						callback();
-																				}else{
-																						sails.log(req.param("mobile"))
-																						callback();
-																				}
-																			});
-																		
-																	}
-																	else{
-																		callback();
-																	}
-												
-														},
+                                                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^CALL BACK --5---SMS TO INVITED FRNDS ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                                                                    if(inviteFriends.length){
+                                                                        inviteFriends.forEach(function(factor, index){
+                                                                            sms_arr.push(factor.phone_number);
+                                                                        });
+                                                                        console.log(sms_arr)
+                                                                        //-----------------sms-send--------------------------------
+                                                                        SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom,sms_arr,username, function(err,sendSmsResults)  {
+                                                                                if(err){
+                                                                                        console.log("mobile resulttttttttttttt")
+                                                                                        console.log(err);
+                                                                                        callback();
+                                                                                }else{
+                                                                                        sails.log(req.param("mobile"))
+                                                                                        callback();
+                                                                                }
+                                                                            });
+
+                                                                    }
+                                                                    else{
+                                                                        callback();
+                                                                    }
+
+                                                        },
                                                 ],function(err){ //This function gets called after the two tasks have called their "task callbacks"
                                                             if(err){
                                                                 console.log(err);

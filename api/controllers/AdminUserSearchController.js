@@ -42,7 +42,7 @@ module.exports = {
                               query         =       outerSelect+
                                                     " (SELECT COUNT(user.id) from user) as length,"+
                                                     " (SELECT COUNT( clg.id ) FROM user usr INNER JOIN collage clg ON usr.id = clg.userId WHERE usr.id = user.id) as ditherCount"+
-                                                    " FROM user"+
+                                                    " FROM user WHERE type != 1"+
                                                     outerOrderBy;
 
                         }else if(name && email && mobile){
@@ -50,7 +50,7 @@ module.exports = {
                               query         =       outerSelect+
                                                     " (SELECT COUNT(user.id) FROM user WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length"+
                                                     " FROM user"+
-                                                    " WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')"+
+                                                    " WHERE type != 1 AND name LIKE '"+name+"%' AND email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')"+
                                                     outerOrderBy;
 
                         }else if(name && email && !mobile){
@@ -58,7 +58,7 @@ module.exports = {
                               query         =       outerSelect+
                                                     " (SELECT COUNT(user.id) FROM user WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%') as length"+
                                                     " FROM user"+
-                                                    " WHERE name LIKE '"+name+"%' AND email LIKE '"+email+"%'"+
+                                                    " WHERE type != 1 AND name LIKE '"+name+"%' AND email LIKE '"+email+"%'"+
                                                     outerOrderBy;
 
                         }else if(name && !email && mobile){
@@ -66,7 +66,7 @@ module.exports = {
                               query         =       outerSelect+
                                                     " (SELECT COUNT(user.id) FROM user WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length"+
                                                     " FROM user"+
-                                                    " WHERE name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')"+
+                                                    " WHERE type != 1 AND name LIKE '"+name+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')"+
                                                     outerOrderBy;
 
                         }else if(!name && email && mobile){
@@ -74,7 +74,7 @@ module.exports = {
                               query         =       outerSelect+
                                                     " (SELECT COUNT(user.id) FROM user WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%')) as length"+
                                                     " FROM user"+
-                                                    " WHERE email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') "+
+                                                    " WHERE type != 1 AND email LIKE '"+email+"%' AND (phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') "+
                                                     outerOrderBy;
 
                         }else if(name && !email && !mobile){
@@ -82,7 +82,7 @@ module.exports = {
                               query         =       outerSelect+
                                                     " (SELECT COUNT(user.id) FROM user WHERE name LIKE '"+name+"%') as length"+
                                                     " FROM user"+
-                                                    " WHERE name LIKE '"+name+"%'"+
+                                                    " WHERE type != 1 AND name LIKE '"+name+"%'"+
                                                     outerOrderBy;
 
                         }else if(email && !name && !mobile){
@@ -90,7 +90,7 @@ module.exports = {
                               query         =       outerSelect+
                                                     "(SELECT COUNT(user.id) FROM user WHERE email LIKE '"+email+"%') as length"+
                                                     " FROM user"+
-                                                    " WHERE email LIKE '"+email+"%'"+
+                                                    " WHERE type != 1 AND email LIKE '"+email+"%'"+
                                                     outerOrderBy;
 
                         }else if(mobile && !name && !email){
@@ -98,7 +98,7 @@ module.exports = {
                               query         =       outerSelect+
                                                     "(SELECT COUNT(user.id) FROM user WHERE phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%') as length"+
                                                     " FROM user"+
-                                                    " WHERE phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%'"+
+                                                    " WHERE type != 1 AND phoneNumber LIKE '"+mobile+"%' OR phoneNumber LIKE '%"+mobile+"%'"+
                                                     outerOrderBy;
 
                         }

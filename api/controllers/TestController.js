@@ -2225,7 +2225,7 @@ module.exports = {
                                                             imgHeight,
                                                             imageDst;
 
-                                                        async.series([
+                                                        async.parallel([
                                                                 function(callback) {
                                                                             if(factor.image == "" || factor.image == null){
                                                                                 callback();
@@ -2241,13 +2241,14 @@ module.exports = {
                                                                                         ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
                                                                                                 if(err){
                                                                                                         console.log(err);
+                                                                                                        console.log("Loop ***** 70 ***** Error");
                                                                                                         //console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                                        callback();
+                                                                                                        //callback();
                                                                                                 }else{
 
-                                                                                                        console.log("Loop success");
+                                                                                                        console.log("Loop ***** 70 ***** success");
                                                                                                         //collage-Details images
-                                                                                                        callback();
+                                                                                                        //callback();
                                                                                                 }
                                                                                         });
                                                                                     }else{
@@ -2270,13 +2271,14 @@ module.exports = {
                                                                                             ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
                                                                                                     if(err){
                                                                                                             console.log(err);
+                                                                                                            console.log("Loop ***** 160 ***** Error");
                                                                                                             //console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                                            callback();
+                                                                                                            //callback();
                                                                                                     }else{
 
-                                                                                                            console.log("Loop success");
+                                                                                                            console.log("Loop ***** 160 ***** success");
                                                                                                             //collage-Details images
-                                                                                                            callback();
+                                                                                                            //callback();
                                                                                                     }
                                                                                             });
                                                                                             //callback();
@@ -2308,7 +2310,7 @@ module.exports = {
                                                                             console.log(factor.profilePic_70x70);*/
                                                                             if(count == results.length){
                                                                                     console.log("Last Loooooooopp");
-                                                                                    //callback();
+                                                                                    callback();
 
                                                                             }
                                                                     }

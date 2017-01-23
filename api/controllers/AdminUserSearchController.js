@@ -30,10 +30,10 @@ module.exports = {
                         var order                       =       req.param("order");
                         var outerSelect                 =      " SELECT id, name, email, profilePic as profileImage, phoneNumber, status, createdAt, ";
                         var innerOrderBy;
-                        if(order == 1){
-                            innerOrderBy                =       " DESC";
-                        }else{
+                        if(order == 2){
                             innerOrderBy                =       " ASC";
+                        }else{
+                            innerOrderBy                =       " DESC";
                         }
                         var outerOrderBy                =      " ORDER BY createdAt "+innerOrderBy+ " LIMIT "+start+","+count;
 

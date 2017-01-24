@@ -91,21 +91,22 @@ module.exports = {
 
                                                                                                                                 console.log("----------------SERIES 3 Success ----------------------");
                                                                                                                                 if(phonecontacts.length == count){
-                                                                                                                                        callback();
+                                                                                                                                        //callback();
+                                                                                                                                        console.log("LAST ----- CONTACT");
                                                                                                                                 }
                                                                                                                         }
                                                                                                                 });
 
                                                                                                         }else{
                                                                                                             if(phonecontacts.length == count){
-                                                                                                                    callback();
+                                                                                                                    //callback();
                                                                                                             }
                                                                                                         }
                                                                                                 }
                                                                                         });
                                                                                     }else{
                                                                                         if(phonecontacts.length == count){
-                                                                                                callback();
+                                                                                                //callback();
                                                                                         }
                                                                                     }
                                                                                 //}, callback());
@@ -168,14 +169,15 @@ module.exports = {
                                                                                                             }else{
                                                                                                                 console.log("update recordsssss in fbbbbb");
                                                                                                                 if(fbUser.length == count){
-                                                                                                                        callback();
+                                                                                                                        //callback();
+                                                                                                                        console.log("LAST ----- FB-FRIEND");
                                                                                                                 }
                                                                                                                 //console.log("----------------SERIES 6 Success ----------------------");
                                                                                                             }
                                                                                                         });
                                                                                                     }else{
                                                                                                         if(fbUser.length == count){
-                                                                                                                callback();
+                                                                                                                //callback();
                                                                                                         }
                                                                                                     }
                                                                                             }

@@ -66,6 +66,7 @@ module.exports = {
                                                                                 console.log("-------------------------------- PARALLEL-3 -----------------------------")
                                                                                 console.log("Address book updation")
                                                                                 //async.forEach(phonecontacts, function (factor, callback){
+                                                                                var count = 0;
                                                                                 phonecontacts.forEach(function(factor, index){
                                                                                     if(factor.number){
                                                                                         var query = "SELECT *"+

@@ -1099,9 +1099,9 @@ updateTokenExpiryTime:function(req,res){
  changeDefaultDither	:	function(req,res){
 								var imageUploadDirectoryPath =  '../../assets/images/collage';
 								//console.log(req);
-								console.log(req.params.all());
+								//console.log(req.params.all());
 								//console.log(req.params.SubmitIdentity);
-								var SubmitIdentity = req.param("SubmitIdentity");
+								//var SubmitIdentity = req.param("SubmitIdentity");
 								
 								//console.log(req.file('Multiplefile')._files[0].stream);
 								//console.log(req.body.file2);
@@ -1118,7 +1118,7 @@ updateTokenExpiryTime:function(req,res){
 									}
 									else{
 										//console.log("file1111111111111111111111111111111");
-										console.log(files);
+										//console.log(files);
 										//console.log(JSON.parse(file1));
 										//console.log("file10000000000000000000000000000000");
 
@@ -1140,17 +1140,17 @@ updateTokenExpiryTime:function(req,res){
 																}*/
 										  switch(SubmitIdentity){
 																		case "1":  criteria = {		key	:	"DEFAULT_DITHER_FOUR"	}
-																					console.log("inside case 1******************")
+																					//console.log("inside case 1******************")
 																					break;
 																		case "2":
 																					criteria = {		key	:	"DEFAULT_DITHER_THREE"	}
-																					console.log("inside case 2******************")
+																					//console.log("inside case 2******************")
 																					break;
 																		case "3":   criteria = {		key	:	"DEFAULT_DITHER_TWO"	}
-																					console.log("inside case 3******************")
+																					//console.log("inside case 3******************")
 																					break;
 																		case "4":  criteria = {	key	:	"DEFAULT_DITHER_ONE"	}
-																					console.log("inside case 4******************")
+																					//console.log("inside case 4******************")
 																					break;
 																}
 										var data            =   {
@@ -1158,21 +1158,21 @@ updateTokenExpiryTime:function(req,res){
 																}
 											//console.log("criteria")
 											//console.log(criteria)
-											console.log("SubmitIdentity")
-											console.log(SubmitIdentity)
-											console.log("SubmitIdentity")
+											//console.log("SubmitIdentity")
+											//console.log(SubmitIdentity)
+											//console.log("SubmitIdentity")
 											//console.log("data")
 											//console.log(data)
 											Settings.update(criteria,data).exec(function(err,updatedData){
 												if(err)
 												{
-													 console.log("collage Images can not inserted into table");
+													 console.log("collage Images can not inserted into table",err);
 													 return res.json(200, {status: 2, error_details: err});
 												}
 												else
 												{
-													console.log("collage Images inserted into table");
-													console.log(updatedData);
+													//console.log("collage Images inserted into table");
+													//console.log(updatedData);
 													return res.json(200,{status:1,message:'success',result:updatedData});
 												}
 											});

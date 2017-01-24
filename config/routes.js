@@ -66,7 +66,8 @@ module.exports.routes = {
    '/adminUserSearch/*'                   :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
    '/adminDitherSearch/*'                 :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
    '/adminReport/*'                       :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
-   '/adminNotification/*'                       :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
+   '/adminNotification/*'                 :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
+   '/adminSettings/*'                     :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
  /* 'GET /user/join': {
                     controller: "UserController",
                     action:"join"

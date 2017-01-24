@@ -65,9 +65,9 @@ module.exports = {
                                                                                 console.log("----------------PARALLEL 2 Success ----------------------");
                                                                                 console.log("-------------------------------- PARALLEL-3 -----------------------------")
                                                                                 console.log("Address book updation")
-                                                                                //async.forEach(phonecontacts, function (factor, callback){
+                                                                                async.forEach(phonecontacts, function (factor, callback){
                                                                                 var count = 0;
-                                                                                phonecontacts.forEach(function(factor, index){
+                                                                                //phonecontacts.forEach(function(factor, index){
                                                                                     if(factor.number){
                                                                                         var query = "SELECT *"+
                                                                                                     " FROM user"+
@@ -77,7 +77,7 @@ module.exports = {
                                                                                         User.query(query, function(err, selectDContacts) {
                                                                                                 if(err){
                                                                                                         console.log(err)
-                                                                                                        callback();
+                                                                                                        //callback();
                                                                                                 }else{
                                                                                                         if(selectDContacts.length){
                                                                                                                 //updation
@@ -110,8 +110,8 @@ module.exports = {
                                                                                                 //callback();
                                                                                         }
                                                                                     }
-                                                                                //}, callback());
-                                                                                });
+                                                                                }, callback());
+                                                                                //});
                                                                             }
                                                                     });
                                                                 }else{
@@ -151,14 +151,14 @@ module.exports = {
                                                                             }else{
                                                                                     console.log("----------------PARALLEL 5 Success ----------------------");
                                                                                     console.log("-------------------------- PARALLEL-6 --------------------------");
-                                                                                    //async.forEach(fbUser, function (factor, callback){
+                                                                                    async.forEach(fbUser, function (factor, callback){
                                                                                     var count = 0;
-                                                                                    fbUser.forEach(function(factor, index){
+                                                                                    //fbUser.forEach(function(factor, index){
                                                                                         count++;
                                                                                         User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
                                                                                             if(err){
                                                                                                 console.log("insertion fbfriends error"+err);
-                                                                                                callback();
+                                                                                                //callback();
                                                                                             }else{
                                                                                                     if(selectFBContacts.length){
                                                                                                         var data     = {ditherUserId:selectFBContacts[0].id};
@@ -166,7 +166,7 @@ module.exports = {
                                                                                                         FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
                                                                                                             if(err){
                                                                                                                 console.log(err);
-                                                                                                                callback();
+                                                                                                                //callback();
                                                                                                             }else{
                                                                                                                 console.log("update recordsssss in fbbbbb");
                                                                                                                 if(fbUser.length == count){
@@ -183,8 +183,8 @@ module.exports = {
                                                                                                     }
                                                                                             }
                                                                                         });
-                                                                                    //},callback());
-                                                                                    });
+                                                                                    },callback());
+                                                                                    //});
                                                                             }
                                                                     });
 

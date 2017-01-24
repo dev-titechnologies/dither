@@ -222,25 +222,39 @@ module.exports = {
 
         },
 /* ==================================================================================================================================
-               SMS TEST
+               SMS TEST USING TWILIO
      ==================================================================================================================================== */
-        smsda:  function (req, res) {
-                var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
-                var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
-                var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
-                console.log(req.options.settingsKeyValue);
+        sendSms:  function (req, res) {
+                //var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
+                //var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
+                //var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
+                var smsAccountSid     = "AC834e9d9c31bd1e8a5965f7f25f2b1250";
+                var smsAuthToken      = "29f2e106b68b5aa5b7f2c2e9dcf935e5";
+                var smsFrom           = "+15005550006";
+                var twilio            = require('twilio');
+                var client            = twilio(smsAccountSid, smsAuthToken);
+                var username          = req.param("username");
+                var mobile            = req.param("mobile");
+                client.sendMessage({
+                    //to:mobile, // Any number Twilio can deliver to
+                    to: mobile ,
+                    from: smsFrom, // A number you bought from Twilio and can use for outbound communications
+                    body: username+' has invited you on Dither,Click on the link to download the app' // body of the SMS message
 
-                SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
-                        if(err)
-                        {
+                 }, function(err, message) {
+                    if (err) {
                                 console.log(err);
-                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in Sms Send on signup', error_details: sendSmsResults});
-                                //callback();
-                        }else{
-                                return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully completed the signup'});
-                                //callback();
-                        }
-                    });
+                                console.error('Text failed because: '+err);
+                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Sending Failed'});
+                    } else {
+                                console.log("sms sending sucess")
+                                console.log(message)
+                                return res.json(200, {status: 1, status_type: 'Success' , message: 'SMS Sending Success'});
+
+                           }
+                });
+
+
         },
 
 
@@ -266,7 +280,6 @@ module.exports = {
                 sails.sockets.join(req.socket, creator_roomName);
                 //console.log(req.socket);
                 //sails.sockets.blast('comment-dither', {msg: 'Hi! Comment ------11111111'});
-
                 //sails.sockets.blast('like-dither', {msg: 'Hi! Like ------2222222'});
                 //sails.sockets.blast('createInSignUp', {msg: 'Hi!'});
                 //sails.sockets.blast('message', {msg: 'Hi! Message ------11111111'});
@@ -1483,7 +1496,7 @@ module.exports = {
 
 
         console.log("-----------Push Notification For Version Update-----------")
-        var query   =   "SELECT `deviceId` FROM `userToken`";
+        var query   =   "SELECT `deviceId` FROM `userToken` where userId=5";
         User_token.query(query, function(err, getDeviceId) {
 
             if(err){
@@ -1870,6 +1883,78 @@ module.exports = {
     },
 
  /* ==================================================================================================================================
+               Resize Single user image
+     ==================================================================================================================================== */
+
+
+        //   List all users based on limit(12 rows per call)
+        resizeSIngleUser: function(req, res){
+
+                        console.log("resizeUser ============== Test");
+                        console.log(req.params.all());
+                        var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
+                        var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                        var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
+                        var results             =       [];
+                        if(!req.param("profileImage") || !req.param("width") || !req.param("height")){
+                                return res.json(200, {status: 2, message: "Failure - Please send  profileImage, width, height"
+                                                            });
+                        }else{
+
+                            var imageSrc                    =     profilePic_path_assets + req.param("profileImage");
+                            var ext                         =     imageSrc.split('/');
+                            ext                             =     ext[ext.length-1].split('.');
+                            var imgWidth,
+                                imgHeight,
+                                imageDst;
+
+                            async.series([
+                                    function(callback) {
+                                        imgWidth                    =    parseInt(req.param("width"));
+                                        imgHeight                   =    parseInt(req.param("height"));
+                                        imageDst                    =     profilePic_path_assets + ext[0] + "_"+imgWidth+"x"+imgHeight+"." +ext[1];
+
+                                        console.log(imageSrc);
+                                        console.log(imageDst);
+                                        ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
+                                                if(err){
+                                                        console.log(err);
+                                                        console.log("Error in image resize 160 in collagedetails!!!!");
+                                                        callback();
+                                                }else{
+
+                                                        console.log("Loop success");
+                                                        //collage-Details images
+                                                        console.log("imageResizeResults =====================================")
+                                                        console.log(imageResizeResults)
+                                                        if(imageResizeResults.status = 1){
+                                                            console.log("11111111111111 ============ SUCCESS");
+                                                            callback();
+                                                        }else if(imageResizeResults.status = 2){
+                                                            console.log("22222222 ======================= FAILURE");
+                                                            callback();
+                                                        }
+                                                }
+                                        });
+
+
+                                    }
+                            ],function(err){
+                                    if(err){
+                                        console.log(err);
+                                        //callback();
+                                        return res.json(200, {status: 2, message: "Failure "
+                                        });
+                                    }else{
+                                        console.log("Last Loooooooopp success =====");
+                                        //return res.json(200, {status: 1, message: "Success"
+                                        //});`
+                                    }
+                            });
+                        }
+    },
+
+ /* ==================================================================================================================================
                Resize all collage image
      ==================================================================================================================================== */
 
@@ -1934,7 +2019,7 @@ module.exports = {
                                                             imgHeight,
                                                             imageDst;
 
-                                                        async.series([
+                                                        async.parallel([
                                                                 function(callback) {
                                                                             if(factor.image == "" || factor.image == null){
                                                                                 callback();
@@ -1950,13 +2035,14 @@ module.exports = {
                                                                                             ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
                                                                                                     if(err){
                                                                                                             console.log(err);
+                                                                                                            console.log("Loop Error %%%%%%%%%70 %%%%%%%%%% ");
                                                                                                             //console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                                            callback();
+                                                                                                            //callback();
                                                                                                     }else{
 
-                                                                                                            console.log("Loop success");
+                                                                                                            console.log("Loop success %%%%%%%%%70 %%%%%%%%%% ");
                                                                                                             //collage-Details images
-                                                                                                            callback();
+                                                                                                            //callback();
                                                                                                     }
                                                                                             });
                                                                                             //callback();
@@ -1979,14 +2065,14 @@ module.exports = {
                                                                                         if (exists) {
                                                                                             ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
                                                                                                     if(err){
-                                                                                                            console.log(err);
+                                                                                                            console.log("Loop Error %%%%%%%%%242 %%%%%%%%%% ");
                                                                                                             //console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                                            callback();
+                                                                                                            //callback();
                                                                                                     }else{
 
-                                                                                                            console.log("Loop success");
+                                                                                                            console.log("Loop success %%%%%%%%%242 %%%%%%%%%% ");
                                                                                                             //collage-Details images
-                                                                                                            callback();
+                                                                                                            //callback();
                                                                                                     }
                                                                                             });
                                                                                             //callback();
@@ -2009,13 +2095,14 @@ module.exports = {
                                                                                         ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
                                                                                                 if(err){
                                                                                                         console.log(err);
+                                                                                                        console.log("Loop Error %%%%%%%%%350 %%%%%%%%%% ");
                                                                                                         //console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                                        callback();
+                                                                                                        //callback();
                                                                                                 }else{
 
-                                                                                                        console.log("Loop success");
+                                                                                                        console.log("Loop success %%%%%%%%%350 %%%%%%%%%% ");
                                                                                                         //collage-Details images
-                                                                                                        callback();
+                                                                                                        //callback();
                                                                                                 }
                                                                                         });
                                                                                         //callback();
@@ -2046,7 +2133,7 @@ module.exports = {
                                                                             console.log(factor.profilePic_70x70);*/
                                                                             if(count == results.length){
                                                                                     console.log("Last Loooooooopp");
-                                                                                    //callback();
+                                                                                    callback();
 
                                                                             }
                                                                     }
@@ -2140,7 +2227,7 @@ module.exports = {
                                                             imgHeight,
                                                             imageDst;
 
-                                                        async.series([
+                                                        async.parallel([
                                                                 function(callback) {
                                                                             if(factor.image == "" || factor.image == null){
                                                                                 callback();
@@ -2156,13 +2243,14 @@ module.exports = {
                                                                                         ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
                                                                                                 if(err){
                                                                                                         console.log(err);
+                                                                                                        console.log("Loop ***** 70 ***** Error");
                                                                                                         //console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                                        callback();
+                                                                                                        //callback();
                                                                                                 }else{
 
-                                                                                                        console.log("Loop success");
+                                                                                                        console.log("Loop ***** 70 ***** success");
                                                                                                         //collage-Details images
-                                                                                                        callback();
+                                                                                                        //callback();
                                                                                                 }
                                                                                         });
                                                                                     }else{
@@ -2185,13 +2273,14 @@ module.exports = {
                                                                                             ImgResizeService.imageResizeWH(imgWidth, imgHeight, imageSrc, imageDst, function(err, imageResizeResults) {
                                                                                                     if(err){
                                                                                                             console.log(err);
+                                                                                                            console.log("Loop ***** 160 ***** Error");
                                                                                                             //console.log("Error in image resize 160 in collagedetails!!!!");
-                                                                                                            callback();
+                                                                                                            //callback();
                                                                                                     }else{
 
-                                                                                                            console.log("Loop success");
+                                                                                                            console.log("Loop ***** 160 ***** success");
                                                                                                             //collage-Details images
-                                                                                                            callback();
+                                                                                                            //callback();
                                                                                                     }
                                                                                             });
                                                                                             //callback();
@@ -2223,7 +2312,7 @@ module.exports = {
                                                                             console.log(factor.profilePic_70x70);*/
                                                                             if(count == results.length){
                                                                                     console.log("Last Loooooooopp");
-                                                                                    //callback();
+                                                                                    callback();
 
                                                                             }
                                                                     }
@@ -2253,6 +2342,5 @@ module.exports = {
         },
 
 };
-
 
 

@@ -233,6 +233,12 @@ module.exports = {
                 //var smsFrom           = "+15005550006";
                 var smsFrom           = req.param("smsFrom");
                 var twilio            = require('twilio');
+                if(req.param("smsAccountSid")){
+					smsAccountSid	=	req.param("smsAccountSid");
+				}
+				if(req.param("smsAuthToken")){
+					smsAuthToken	=	req.param("smsAuthToken");
+					}
                 var client            = twilio(smsAccountSid, smsAuthToken);
                 var username          = req.param("username");
                 var mobile            = req.param("mobile");

@@ -98,7 +98,9 @@ module.exports = {
                                                                                                                 });
 
                                                                                                         }else{
-                                                                                                                callback();
+                                                                                                                if(count === phonecontacts.length){
+                                                                                                                    callback();
+                                                                                                                }
                                                                                                         }
                                                                                                 }
                                                                                         });
@@ -153,7 +155,7 @@ module.exports = {
                                                                                                 console.log("insertion fbfriends error"+err);
                                                                                                 //callback();
                                                                                             }else{
-                                                                                                    if(selectFBContacts.length){
+                                                                                                    if(selectFBContacts.length == 0){
                                                                                                         var data     = {ditherUserId:selectFBContacts[0].id};
                                                                                                         var criteria = {fbId:factor.fb_userid};
                                                                                                         FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
@@ -169,7 +171,9 @@ module.exports = {
                                                                                                             }
                                                                                                         });
                                                                                                     }else{
-                                                                                                            callback();
+                                                                                                            if(count === selectFBContacts.length){
+                                                                                                                        callback();
+                                                                                                            }
                                                                                                     }
                                                                                             }
                                                                                         });

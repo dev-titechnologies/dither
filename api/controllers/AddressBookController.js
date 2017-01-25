@@ -34,6 +34,7 @@ module.exports = {
                 async.parallel([
                             function(callback) {
                                             console.log("----------------PARALLEL addressBook - I ----------------------");
+                                            if(phoneContactsArray.length){
                                                     phonecontacts.forEach(function(factor, index){
                                                         if(index){
                                                             var contact_name = factor.name;
@@ -50,7 +51,6 @@ module.exports = {
                                                             }else{
                                                                 console.log("----------------PARALLEL 1 Succes----------------------")
                                                                 //console.log(phoneContactsArray)
-                                                                if(phoneContactsArray.length){
                                                                     console.log("------------------- PARALLEL 2 ----------------------------------");
                                                                     var query = "INSERT INTO addressBook"+
                                                                                 " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
@@ -68,6 +68,7 @@ module.exports = {
                                                                                 async.forEach(phonecontacts, function (factor, callback){
                                                                                 var count = 0;
                                                                                 //phonecontacts.forEach(function(factor, index){
+                                                                                    count++;
                                                                                     if(factor.number){
                                                                                         var query = "SELECT *"+
                                                                                                     " FROM user"+
@@ -89,36 +90,30 @@ module.exports = {
                                                                                                                                 console.log(err)
                                                                                                                         }else{
                                                                                                                                 console.log("update recordsssss in contacts")
-
                                                                                                                                 console.log("----------------SERIES 3 Success ----------------------");
-                                                                                                                                if(phonecontacts.length == count){
-                                                                                                                                        //callback();
-                                                                                                                                        console.log("LAST ----- CONTACT");
-                                                                                                                                }
+                                                                                                                                //if(count === phonecontacts.length){
+                                                                                                                                    //callback();
+                                                                                                                                //}
                                                                                                                         }
                                                                                                                 });
 
-                                                                                                        }else{
-                                                                                                            if(phonecontacts.length == count){
-                                                                                                                    //callback();
-                                                                                                            }
+                                                                                                        //}else{
+                                                                                                                //if(count === phonecontacts.length){
+                                                                                                                   // callback();
+                                                                                                                //}
                                                                                                         }
                                                                                                 }
                                                                                         });
-                                                                                    }else{
-                                                                                        if(phonecontacts.length == count){
-                                                                                                //callback();
-                                                                                        }
                                                                                     }
                                                                                 }, callback());
                                                                                 //});
                                                                             }
                                                                     });
-                                                                }else{
-                                                                    callback();
-                                                                }
                                                             }
                                                     });
+                                            }else{
+                                                callback();
+                                            }
 
                             },
                             function(callback) {
@@ -169,17 +164,16 @@ module.exports = {
                                                                                                                 //callback();
                                                                                                             }else{
                                                                                                                 console.log("update recordsssss in fbbbbb");
-                                                                                                                if(fbUser.length == count){
-                                                                                                                        //callback();
-                                                                                                                        console.log("LAST ----- FB-FRIEND");
-                                                                                                                }
                                                                                                                 //console.log("----------------SERIES 6 Success ----------------------");
+                                                                                                                //if(count === selectFBContacts.length){
+                                                                                                                        //callback();
+                                                                                                                //}
                                                                                                             }
                                                                                                         });
-                                                                                                    }else{
-                                                                                                        if(fbUser.length == count){
-                                                                                                                //callback();
-                                                                                                        }
+                                                                                                    //}else{
+                                                                                                           // if(count === selectFBContacts.length){
+                                                                                                                //       callback();
+                                                                                                            //}
                                                                                                     }
                                                                                             }
                                                                                         });

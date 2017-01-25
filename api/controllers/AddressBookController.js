@@ -97,10 +97,10 @@ module.exports = {
                                                                                                                         }
                                                                                                                 });
 
-                                                                                                        }else{
-                                                                                                                if(count === phonecontacts.length){
-                                                                                                                    callback();
-                                                                                                                }
+                                                                                                        //}else{
+                                                                                                                //if(count === phonecontacts.length){
+                                                                                                                   // callback();
+                                                                                                                //}
                                                                                                         }
                                                                                                 }
                                                                                         });
@@ -170,10 +170,10 @@ module.exports = {
                                                                                                                 }
                                                                                                             }
                                                                                                         });
-                                                                                                    }else{
-                                                                                                            if(count === selectFBContacts.length){
-                                                                                                                        callback();
-                                                                                                            }
+                                                                                                    //}else{
+                                                                                                           // if(count === selectFBContacts.length){
+                                                                                                                //       callback();
+                                                                                                            //}
                                                                                                     }
                                                                                             }
                                                                                         });

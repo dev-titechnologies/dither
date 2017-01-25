@@ -34,6 +34,7 @@ module.exports = {
                 async.parallel([
                             function(callback) {
                                             console.log("----------------PARALLEL addressBook - I ----------------------");
+                                            if(phoneContactsArray.length){
                                                     phonecontacts.forEach(function(factor, index){
                                                         if(index){
                                                             var contact_name = factor.name;
@@ -50,7 +51,6 @@ module.exports = {
                                                             }else{
                                                                 console.log("----------------PARALLEL 1 Succes----------------------")
                                                                 //console.log(phoneContactsArray)
-                                                                if(phoneContactsArray.length){
                                                                     console.log("------------------- PARALLEL 2 ----------------------------------");
                                                                     var query = "INSERT INTO addressBook"+
                                                                                 " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
@@ -65,9 +65,10 @@ module.exports = {
                                                                                 console.log("----------------PARALLEL 2 Success ----------------------");
                                                                                 console.log("-------------------------------- PARALLEL-3 -----------------------------")
                                                                                 console.log("Address book updation")
-                                                                                async.forEach(phonecontacts, function (factor, callback){
+                                                                                //async.forEach(phonecontacts, function (factor, callback){
                                                                                 var count = 0;
-                                                                                //phonecontacts.forEach(function(factor, index){
+                                                                                phonecontacts.forEach(function(factor, index){
+                                                                                    count++;
                                                                                     if(factor.number){
                                                                                         var query = "SELECT *"+
                                                                                                     " FROM user"+
@@ -90,22 +91,27 @@ module.exports = {
                                                                                                                         }else{
                                                                                                                                 console.log("update recordsssss in contacts")
                                                                                                                                 console.log("----------------SERIES 3 Success ----------------------");
+                                                                                                                                if(count === phonecontacts.length){
+                                                                                                                                    callback();
+                                                                                                                                }
                                                                                                                         }
                                                                                                                 });
 
+                                                                                                        }else{
+                                                                                                                callback();
                                                                                                         }
                                                                                                 }
                                                                                         });
                                                                                     }
-                                                                                }, callback());
-                                                                                //});
+                                                                                //}, callback());
+                                                                                });
                                                                             }
                                                                     });
-                                                                }else{
-                                                                    callback();
-                                                                }
                                                             }
                                                     });
+                                            }else{
+                                                callback();
+                                            }
 
                             },
                             function(callback) {

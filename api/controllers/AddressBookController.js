@@ -31,9 +31,9 @@ module.exports = {
                 console.log("fb_array ---------------------->>>>>>>>>>>>>>>>>>>");
                 console.log(req.param('fb_array'));
 
-                async.series([
+                async.parallel([
                             function(callback) {
-                                            console.log("----------------SERIES MAIN - I ----------------------");
+                                            console.log("----------------PARALLEL addressBook - I ----------------------");
                                                     phonecontacts.forEach(function(factor, index){
                                                         if(index){
                                                             var contact_name = factor.name;
@@ -42,16 +42,16 @@ module.exports = {
 
                                                         }
                                                     });
-                                                    console.log("----------------SERIES 1 ----------------------")
+                                                    console.log("----------------PARALLEL 1 ----------------------")
                                                     AddressBook.destroy({userId: userId}).exec(function (err, deleteAddressBook) {
                                                             if(err){
                                                                 console.log("delete address"+err);
                                                                 callback();
                                                             }else{
-                                                                console.log("----------------SERIES 1 Succes----------------------")
+                                                                console.log("----------------PARALLEL 1 Succes----------------------")
                                                                 //console.log(phoneContactsArray)
                                                                 if(phoneContactsArray.length){
-                                                                    console.log("------------------- SERIES 2 ----------------------------------");
+                                                                    console.log("------------------- PARALLEL 2 ----------------------------------");
                                                                     var query = "INSERT INTO addressBook"+
                                                                                 " (userId,ditherUserName, ditherUserPhoneNumber, createdAt, updatedAt)"+
                                                                                 " VALUES"+phoneContactsArray;
@@ -62,11 +62,12 @@ module.exports = {
                                                                                 callback();
                                                                             }else{
                                                                                 data_check1 = createdAddressBook;
-                                                                                console.log("----------------SERIES 2 Success ----------------------");
-                                                                                console.log("-------------------------------- SERIES-3 -----------------------------")
+                                                                                console.log("----------------PARALLEL 2 Success ----------------------");
+                                                                                console.log("-------------------------------- PARALLEL-3 -----------------------------")
                                                                                 console.log("Address book updation")
                                                                                 async.forEach(phonecontacts, function (factor, callback){
-
+                                                                                var count = 0;
+                                                                                //phonecontacts.forEach(function(factor, index){
                                                                                     if(factor.number){
                                                                                         var query = "SELECT *"+
                                                                                                     " FROM user"+
@@ -76,7 +77,7 @@ module.exports = {
                                                                                         User.query(query, function(err, selectDContacts) {
                                                                                                 if(err){
                                                                                                         console.log(err)
-                                                                                                        callback();
+                                                                                                        //callback();
                                                                                                 }else{
                                                                                                         if(selectDContacts.length){
                                                                                                                 //updation
@@ -90,14 +91,27 @@ module.exports = {
                                                                                                                                 console.log("update recordsssss in contacts")
 
                                                                                                                                 console.log("----------------SERIES 3 Success ----------------------");
+                                                                                                                                if(phonecontacts.length == count){
+                                                                                                                                        //callback();
+                                                                                                                                        console.log("LAST ----- CONTACT");
+                                                                                                                                }
                                                                                                                         }
                                                                                                                 });
 
+                                                                                                        }else{
+                                                                                                            if(phonecontacts.length == count){
+                                                                                                                    //callback();
+                                                                                                            }
                                                                                                         }
                                                                                                 }
                                                                                         });
+                                                                                    }else{
+                                                                                        if(phonecontacts.length == count){
+                                                                                                //callback();
+                                                                                        }
                                                                                     }
                                                                                 }, callback());
+                                                                                //});
                                                                             }
                                                                     });
                                                                 }else{
@@ -108,7 +122,7 @@ module.exports = {
 
                             },
                             function(callback) {
-                                            console.log("----------------SERIES MAIN - II ----------------------");
+                                            console.log("----------------PARALLEL fbContacts - II ----------------------");
                                             if(fbUser.length){
                                                     fbUser.forEach(function(factor, index){
                                                                     var contact_name = factor.fb_name;
@@ -117,15 +131,15 @@ module.exports = {
                                                             //}
                                                     });
 
-                                                    console.log("-------------------------- SERIES-4 --------------------------");
+                                                    console.log("-------------------------- PARALLEL-4 --------------------------");
                                                     FbFriends.destroy({userId: userId}).exec(function (err, deleteFBFriends) {
                                                             if(err){
                                                                 console.log("fb friends deletion"+err);
                                                                 callback();
                                                             }else{
-                                                                console.log("----------------SERIES 4 Success ----------------------");
+                                                                console.log("----------------PARALLEL 4 Success ----------------------");
 
-                                                                    console.log("-------------------------- SERIES-5 --------------------------");
+                                                                    console.log("-------------------------- PARALLEL-5 --------------------------");
                                                                     var query = "INSERT INTO fbFriends"+
                                                                                 " (userId,ditherUserName, fbId, createdAt, updatedAt)"+
                                                                                 " VALUES"+fbUserArray;
@@ -135,13 +149,16 @@ module.exports = {
                                                                                 console.log("insertion fbfriends error"+err);
                                                                                 callback();
                                                                             }else{
-                                                                                    console.log("----------------SERIES 5 Success ----------------------");
-                                                                                    console.log("-------------------------- SERIES-6 --------------------------");
+                                                                                    console.log("----------------PARALLEL 5 Success ----------------------");
+                                                                                    console.log("-------------------------- PARALLEL-6 --------------------------");
                                                                                     async.forEach(fbUser, function (factor, callback){
+                                                                                    var count = 0;
+                                                                                    //fbUser.forEach(function(factor, index){
+                                                                                        count++;
                                                                                         User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
                                                                                             if(err){
                                                                                                 console.log("insertion fbfriends error"+err);
-                                                                                                callback();
+                                                                                                //callback();
                                                                                             }else{
                                                                                                     if(selectFBContacts.length){
                                                                                                         var data     = {ditherUserId:selectFBContacts[0].id};
@@ -149,16 +166,25 @@ module.exports = {
                                                                                                         FbFriends.update(criteria,data).exec(function(err, updatedRecords) {
                                                                                                             if(err){
                                                                                                                 console.log(err);
-                                                                                                                callback();
+                                                                                                                //callback();
                                                                                                             }else{
                                                                                                                 console.log("update recordsssss in fbbbbb");
+                                                                                                                if(fbUser.length == count){
+                                                                                                                        //callback();
+                                                                                                                        console.log("LAST ----- FB-FRIEND");
+                                                                                                                }
                                                                                                                 //console.log("----------------SERIES 6 Success ----------------------");
                                                                                                             }
                                                                                                         });
+                                                                                                    }else{
+                                                                                                        if(fbUser.length == count){
+                                                                                                                //callback();
+                                                                                                        }
                                                                                                     }
                                                                                             }
                                                                                         });
                                                                                     },callback());
+                                                                                    //});
                                                                             }
                                                                     });
 
@@ -273,65 +299,65 @@ module.exports = {
                                         }
                     });
         },
-        
-        
+
+
        /* ==================================================================================================================================
                To Select Contacts
        ==================================================================================================================================== */
         getFbFriends: function (req, res) {
-			
-			console.log("==========================  Fetching FbFriends Api =-=============");
-			var tokenCheck                  =     req.options.tokenCheck;
-            var userId                      =     tokenCheck.tokenDetails.userId;    
-            var fbId						=	  tokenCheck.tokenDetails.fbId;
-            var frnd_arr					= 	  [];
-            
+
+            console.log("==========================  Fetching FbFriends Api =-=============");
+            var tokenCheck                  =     req.options.tokenCheck;
+            var userId                      =     tokenCheck.tokenDetails.userId;
+            var fbId                        =     tokenCheck.tokenDetails.fbId;
+            var frnd_arr                    =     [];
+
             var query = "SELECT T.userId,U.name,U.fbId from TempFbFriends T LEFT JOIN user U ON T.userId = U.id where T.fbId = '"+fbId+"'";
-			TempFbFriends.query(query, function(err,getNewFbfrnds){
-            
+            TempFbFriends.query(query, function(err,getNewFbfrnds){
+
            // TempFbFriends.find({fbId:fbId}).exec(function (err, getNewFbfrnds){
-				if(err){
-					console.log(err)
-					return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends'});
-				}
-				else{
-					console.log(getNewFbfrnds)
-					
-					if(!getNewFbfrnds.length){
-						return res.json(200, {status: 2, status_type: 'Failure' , message: 'No Friends Found!'});
-					}
-					else{
-						    console.log(getNewFbfrnds)
-							getNewFbfrnds.forEach(function(factor, index){
-								frnd_arr.push({
-																id 	 : factor.userId,
-																name   : factor.name,
-																fbId   : factor.fbId 	
-												});
-								
-							});
-							console.log(frnd_arr)
-								
-							var query	= "DELETE FROM TempFbFriends where fbId = '"+fbId+"'";
-							TempFbFriends.query(query, function(err,deleteNewFrnds){
-								
-								if(err){
-									console.log(err)
-									return res.json(200, {status: 2, status_type: 'Failure' , message: 'error!'});
-									
-								}else{
-									
-									console.log(deleteNewFrnds)
-									return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
-								}
-								
-							});	
-							
-					}
-					
-				}
-			});
-		} 
+                if(err){
+                    console.log(err)
+                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends'});
+                }
+                else{
+                    console.log(getNewFbfrnds)
+
+                    if(!getNewFbfrnds.length){
+                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'No Friends Found!'});
+                    }
+                    else{
+                            console.log(getNewFbfrnds)
+                            getNewFbfrnds.forEach(function(factor, index){
+                                frnd_arr.push({
+                                                                id   : factor.userId,
+                                                                name   : factor.name,
+                                                                fbId   : factor.fbId
+                                                });
+
+                            });
+                            console.log(frnd_arr)
+
+                            var query   = "DELETE FROM TempFbFriends where fbId = '"+fbId+"'";
+                            TempFbFriends.query(query, function(err,deleteNewFrnds){
+
+                                if(err){
+                                    console.log(err)
+                                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'error!'});
+
+                                }else{
+
+                                    console.log(deleteNewFrnds)
+                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
+                                }
+
+                            });
+
+                    }
+
+                }
+            });
+        }
 
 };
 

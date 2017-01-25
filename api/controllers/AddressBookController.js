@@ -15,6 +15,7 @@ module.exports = {
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var userPhoneNumber             =     tokenCheck.tokenDetails.phoneNumber;
+                var userFbId					=	  tokenCheck.tokenDetails.fbId;
                 var phoneContactsArray          =     [];
                 var fbUserArray                 =     [];
                 var query,
@@ -150,7 +151,13 @@ module.exports = {
                                                                                     var count = 0;
                                                                                     //fbUser.forEach(function(factor, index){
                                                                                         count++;
-                                                                                        User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
+                                                                                        var query = "SELECT *"+
+                                                                                                    " FROM user"+
+                                                                                                    " WHERE fbId =  '"+factor.fb_userid+"'"+
+                                                                                                    " AND fbId !=  '"+userFbId+"'";
+                                                                                         //console.log(query)
+                                                                                        User.query(query, function(err, selectFBContacts) {
+                                                                                        //User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
                                                                                             if(err){
                                                                                                 console.log("insertion fbfriends error"+err);
                                                                                                 //callback();

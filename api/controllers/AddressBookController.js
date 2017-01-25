@@ -15,7 +15,7 @@ module.exports = {
                 var tokenCheck                  =     req.options.tokenCheck;
                 var userId                      =     tokenCheck.tokenDetails.userId;
                 var userPhoneNumber             =     tokenCheck.tokenDetails.phoneNumber;
-                var userFbId					=	  tokenCheck.tokenDetails.fbId;
+                var userFbId                    =     tokenCheck.tokenDetails.fbId;
                 var phoneContactsArray          =     [];
                 var fbUserArray                 =     [];
                 var query,
@@ -32,7 +32,7 @@ module.exports = {
                 console.log("fb_array ---------------------->>>>>>>>>>>>>>>>>>>");
                 console.log(req.param('fb_array'));
 
-                async.parallel([
+                async.series([
                             function(callback) {
                                             console.log("----------------PARALLEL addressBook - I ----------------------");
                                             if(phoneContactsArray.length){
@@ -200,10 +200,14 @@ module.exports = {
                                             console.log(err);
                                             return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in address book creation or in fbFriend creation or getting fbfriends or grtting contacts', error_details: err}); //If an error occured, we let express/connect handle it by calling the "next" function
                                         }else{
-                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends',
-                                                                  //ditherPhoneContact: ditherUserInAddressBook,
-                                                                  //ditherFBuser: ditherUserInFbFriends
-                                                                  });
+
+                                            setTimeout(function () {
+                                                    console.log("Entered to TIME OUT *********************************************");
+                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Successfully added phone contact list to addressBook and fbcontacts to fbFriends',
+                                                                          //ditherPhoneContact: ditherUserInAddressBook,
+                                                                          //ditherFBuser: ditherUserInFbFriends
+                                                                          });
+                                            }, 5000);
                                         }
                         });
 

@@ -65,9 +65,9 @@ module.exports = {
                                                                                 console.log("----------------PARALLEL 2 Success ----------------------");
                                                                                 console.log("-------------------------------- PARALLEL-3 -----------------------------")
                                                                                 console.log("Address book updation")
-                                                                                //async.forEach(phonecontacts, function (factor, callback){
+                                                                                async.forEach(phonecontacts, function (factor, callback){
                                                                                 var count = 0;
-                                                                                phonecontacts.forEach(function(factor, index){
+                                                                                //phonecontacts.forEach(function(factor, index){
                                                                                     count++;
                                                                                     if(factor.number){
                                                                                         var query = "SELECT *"+
@@ -91,9 +91,9 @@ module.exports = {
                                                                                                                         }else{
                                                                                                                                 console.log("update recordsssss in contacts")
                                                                                                                                 console.log("----------------SERIES 3 Success ----------------------");
-                                                                                                                                if(count === phonecontacts.length){
-                                                                                                                                    callback();
-                                                                                                                                }
+                                                                                                                                //if(count === phonecontacts.length){
+                                                                                                                                    //callback();
+                                                                                                                                //}
                                                                                                                         }
                                                                                                                 });
 
@@ -105,8 +105,8 @@ module.exports = {
                                                                                                 }
                                                                                         });
                                                                                     }
-                                                                                //}, callback());
-                                                                                });
+                                                                                }, callback());
+                                                                                //});
                                                                             }
                                                                     });
                                                             }
@@ -146,9 +146,9 @@ module.exports = {
                                                                             }else{
                                                                                     console.log("----------------PARALLEL 5 Success ----------------------");
                                                                                     console.log("-------------------------- PARALLEL-6 --------------------------");
-                                                                                    //async.forEach(fbUser, function (factor, callback){
+                                                                                    async.forEach(fbUser, function (factor, callback){
                                                                                     var count = 0;
-                                                                                    fbUser.forEach(function(factor, index){
+                                                                                    //fbUser.forEach(function(factor, index){
                                                                                         count++;
                                                                                         User.find({fbId:factor.fb_userid}).exec(function (err, selectFBContacts){
                                                                                             if(err){
@@ -165,9 +165,9 @@ module.exports = {
                                                                                                             }else{
                                                                                                                 console.log("update recordsssss in fbbbbb");
                                                                                                                 //console.log("----------------SERIES 6 Success ----------------------");
-                                                                                                                if(count === selectFBContacts.length){
-                                                                                                                        callback();
-                                                                                                                }
+                                                                                                                //if(count === selectFBContacts.length){
+                                                                                                                        //callback();
+                                                                                                                //}
                                                                                                             }
                                                                                                         });
                                                                                                     //}else{
@@ -177,8 +177,8 @@ module.exports = {
                                                                                                     }
                                                                                             }
                                                                                         });
-                                                                                    //},callback());
-                                                                                    });
+                                                                                    },callback());
+                                                                                    //});
                                                                             }
                                                                     });
 

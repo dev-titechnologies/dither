@@ -93,7 +93,7 @@ module.exports = {
                                                                                                             commentCreatorId            :    foundComment.userId,
                                                                                                             notificationSettingsType    :    "notifyCommentLike",
                                                                                                             message                     :    "comment like notification",
-                                                                                                            ntfn_body                   :    userName + " liked on your comment",
+                                                                                                            ntfn_body                   :    userName + " likes your comment",
                                                                                                             totalLikeCount              :    foundComment.likeCount,
                                                                                                             };
                                                                                         NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){

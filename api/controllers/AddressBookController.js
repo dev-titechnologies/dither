@@ -155,7 +155,7 @@ module.exports = {
                                                                                                 console.log("insertion fbfriends error"+err);
                                                                                                 //callback();
                                                                                             }else{
-                                                                                                    if(selectFBContacts.length == 0){
+                                                                                                    if(selectFBContacts.length){
                                                                                                         var data     = {ditherUserId:selectFBContacts[0].id};
                                                                                                         var criteria = {fbId:factor.fb_userid};
                                                                                                         FbFriends.update(criteria,data).exec(function(err, updatedRecords) {

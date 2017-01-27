@@ -4,31 +4,13 @@
  * @description :: Server-side logic for managing users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+
 //var io = require('sails.io.js')( require('socket.io-client') );
  var fs          = require('fs');
  var request     = require('request');
  var path        = require('path');
 
  var profilePic_unlink_path         =      "assets/images/profilePics/";
-
-//Function to combine n-json Arrays
-function combine() {
-    var ar = [];
-
-    return ar.concat.apply(ar, arguments).sort(function (a, b) {
-        var aName = a.NAME;
-        var bName = b.NAME;
-        if (aName < bName) {
-            return -1;
-        } else if (aName == bName) {
-            return 0;
-        } else {
-            return 1;
-        };
-    });
-};
-
-
 module.exports = {
 
  /* ==================================================================================================================================
@@ -40,7 +22,6 @@ module.exports = {
         var profilePic_path             =     req.options.file_path.profilePic_path;
         var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
         console.log("signup---------------- api")
-        console.log(req.params.all());
         var imgUrl                      =     req.param('profilepic');
         var OTPCode                     =     req.param('otp');
         var deviceId                    =     req.get('device_id');
@@ -59,7 +40,7 @@ module.exports = {
         if(!req.param('mobile_number')  || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
                 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
         }else{
-                if(imgUrl){
+            if(imgUrl){
                     var filename            =    "image.png";
                     var imagename           =    new Date().getTime() + filename;
                 }
@@ -208,7 +189,6 @@ module.exports = {
                                                                             },
 
                                                                             function(callback){
-                                                                                    //callback();
                                                                                     console.log("parallel 2")
                                                                                     console.log("async parallel in Mailpart ===============================================");
                                                                                     var global_settingsKeyValue     =   req.options.settingsKeyValue;
@@ -234,7 +214,7 @@ module.exports = {
                                                                                     var smsAccountSid     = req.options.settingsKeyValue.SMS_ACCOUNT_SID;
                                                                                     var smsAuthToken      = req.options.settingsKeyValue.SMS_AUTH_TOKEN;
                                                                                     var smsFrom           = req.options.settingsKeyValue.SMS_FROM;
-                                                                                    //console.log(req.options.settingsKeyValue);
+                                                                                    console.log(req.options.settingsKeyValue);
                                                                                     /*SmsService.sendSms(smsAccountSid, smsAuthToken, smsFrom, function(err, sendSmsResults) {
                                                                                         if(err)
                                                                                         {
@@ -250,7 +230,6 @@ module.exports = {
                                                                             },
 
                                                                             function(callback){
-                                                                                     //callback();
                                                                                     //-----------------INvitation table ---Tag editing----------------------
                                                                                     console.log("parallel 4")
                                                                                     console.log(req.param('mobile_number'))
@@ -299,7 +278,6 @@ module.exports = {
                                                                             },
 
                                                                             function(callback){
-                                                                                //callback();
                                                                                 console.log("---------------fbb-----------------------------")
                                                                                 console.log(sendStatus)
                                                                                 if(!fbUser){
@@ -312,9 +290,15 @@ module.exports = {
                                                                                     var fbUserArray     =    [];
 
                                                                                     fbUser.forEach(function(factor, index){
+
                                                                                          contactArr.push(factor.fb_userid)
                                                                                          //fbUserArray.push("("+factor.fb_userid+",'"+factor.fb_userid+"', now(), now())");
                                                                                     });
+
+                                                                                    /*var query =  "INSERT INTO tempFbfriends"+
+                                                                                                 " (userId, fbId, createdAt, updatedAt)"+
+                                                                                                 " VALUES"+fbUserArray;*/
+
                                                                                     var data    =   {
                                                                                                         userId      :   results.id,
                                                                                                         fbId        :   results.fbId,
@@ -342,6 +326,21 @@ module.exports = {
                                                                                                 //fbUserArray.push("("+factor.id+","+results.id+",'"+factor.name+"', '"+factor.fbId+"', now(), now())");
 
                                                                                             });
+
+                                                                                            /*var query =  "INSERT INTO tempFbfriends"+
+                                                                                                 " (userId, fbId, createdAt, updatedAt)"+
+                                                                                                 " VALUES"+fbUserArray;
+
+                                                                                                TempFbFriends.query(query,function(err, createdFbFriends){
+                                                                                                    if(err){
+                                                                                                        callback();
+                                                                                                     }
+                                                                                                     else{
+                                                                                                            console.log(createdFbFriends);
+                                                                                                      }
+                                                                                                });*/
+
+
                                                                                                 if(notifyArr){
                                                                                                         var values ={
                                                                                                             notificationTypeId  :   5,
@@ -390,6 +389,10 @@ module.exports = {
                                                                                                                                     console.log("Push notification result")
                                                                                                                                     console.log(ntfnSend)
                                                                                                                                     console.log("Push Notification sended")
+                                                                                                                                    /*var query = "INSERT INTO fbFriends"+
+                                                                                                                                                " (userId,ditherUserId,ditherUserName, fbId, createdAt, updatedAt)"+
+                                                                                                                                                " VALUES"+fbUserArray;*/
+
                                                                                                                                     var query =  "INSERT INTO TempFbFriends"+
                                                                                                                                                  " (userId,fbName,fbId, createdAt, updatedAt)"+
                                                                                                                                                  " VALUES"+fbUserArray;
@@ -429,7 +432,9 @@ module.exports = {
 
                                                                             function (callback)
                                                                             {
-                                                                                //callback();
+
+
+
                                                                                 console.log("parallel 5")
                                                                                 console.log(sendStatus)
                                                                                 var number            = req.param('mobile_number');
@@ -536,92 +541,122 @@ module.exports = {
                                                                                           }
                                                                                       }
                                                                                  });
+
                                                                             },
+
+
                                                                             function (callback){
                                                                                 console.log("parallel 7 == Default dither creation");
-                                                                                var default_collage                     =       JSON.parse(req.options.settingsKeyValue.DEFAULT_DITHER);
                                                                                 User.findOne({type: 1}).exec(function (err, getSuperUser){
                                                                                     if(err){
                                                                                             console.log(err);
                                                                                             callback();
                                                                                     }else{
                                                                                         var today;
-                                                                                        var count = 0;
-                                                                                        default_collage.forEach(function(factor_1, index_1){
-                                                                                            count ++;
-                                                                                            var expiryDate      =       new Date(new Date().setFullYear(2200));
+                                                                                        [1,2,3,4].forEach(function(factor, index){
+                                                                                            var expiryDate      =       new Date(new Date().setFullYear(2020));
                                                                                             var imgTitle,
                                                                                                 collageImage;
-                                                                                            today               =       new Date(new Date().setSeconds(13)).toISOString();
-                                                                                            //console.log("factor_1 ------------------");
-                                                                                            //console.log(factor_1);
-                                                                                            //console.log("factor_1 ------------------");
-                                                                                            var filteredArray_1 = factor_1.filter(
-                                                                                               function (obj) {
-                                                                                                    return obj.position == 0;
-                                                                                            });
-                                                                                            filteredArray_1.forEach(function(factor, index){
-                                                                                                collageImage    =  factor.image;
-                                                                                            });
-                                                                                            console.log("filteredArray-----------");
-                                                                                            console.log(filteredArray_1);
-
-                                                                                            var values_1 = {
-                                                                                                    imgTitle        : "Share your opinion",
-                                                                                                    image           : collageImage,
-                                                                                                    location        : '39,Albemarle Gate,Cheltenham,Cheltenham',
-                                                                                                    //latitude        : '',
-                                                                                                    //longitude       : '',
-                                                                                                    userId          : getSuperUser.id,
-                                                                                                    expiryDate      : expiryDate,
-                                                                                                    createdAt       : today,
+                                                                                            switch(index){
+                                                                                                case 0 :
+                                                                                                        imgTitle         = "Share your opinion";
+                                                                                                        collageImage     = "default_collage_4.jpg";
+                                                                                                        today            = new Date(new Date().setSeconds(11)).toISOString();
+                                                                                                break;
+                                                                                                case 1 :
+                                                                                                        imgTitle         = "Share your opinion";
+                                                                                                        collageImage     = "default_collage_3.jpg";
+                                                                                                        today            = new Date(new Date().setSeconds(12)).toISOString();
+                                                                                                break;
+                                                                                                case 2 :
+                                                                                                        imgTitle         = "Share your opinion";
+                                                                                                        collageImage     = "default_collage_2.jpg";
+                                                                                                        today            = new Date(new Date().setSeconds(13)).toISOString();
+                                                                                                break;
+                                                                                                case 3 :
+                                                                                                        imgTitle         = "Share your opinion";
+                                                                                                        collageImage     = "default_collage_1.jpg";
+                                                                                                        today            = new Date(new Date().setSeconds(14)).toISOString();
+                                                                                                break;
+                                                                                            }
+                                                                                            var values = {
+                                                                                                imgTitle        : imgTitle,
+                                                                                                image           : collageImage,
+                                                                                                location        : '39,Albemarle Gate,Cheltenham,Cheltenham',
+                                                                                                //latitude        : '',
+                                                                                                //longitude       : '',
+                                                                                                userId          : getSuperUser.id,
+                                                                                                expiryDate      : expiryDate,
+                                                                                                createdAt       : today,
                                                                                             };
-                                                                                            Collage.create(values_1).exec(function(err, createCollage){
+                                                                                            Collage.create(values).exec(function(err, createCollage){
                                                                                                 if(err){
-                                                                                                    console.log(err);
-                                                                                                    callback();
-                                                                                                    //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
+                                                                                                        console.log(err);
+                                                                                                        callback();
+                                                                                                        //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage creation', error_details: err});
                                                                                                 }else{
-                                                                                                    console.log("++++++++++++++++++++++++inserted"+index_1);
-                                                                                                    var filteredArray_2 = factor_1.filter(
-                                                                                                        function (obj) {
-                                                                                                        return obj.position != 0;
-                                                                                                    });
-                                                                                                    console.log(filteredArray_2);
-                                                                                                    var switchKey           =    filteredArray_2.length;
-                                                                                                    //var values_2_Array      =    [];
-                                                                                                    filteredArray_2.forEach(function(factor, index){
-                                                                                                            factor.collageId   =   createCollage.id;
-                                                                                                    });
-                                                                                                    var values_2  =  filteredArray_2;
                                                                                                     if(!createCollage){
-                                                                                                            //callback();
+                                                                                                            callback();
                                                                                                     }else{
-                                                                                                        CollageDetails.create(values_2).exec(function(err, createdCollageDetails){
+                                                                                                        var values;
+                                                                                                        switch(index){
+                                                                                                            case 0 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_4_1.jpg",position    : 1,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 1 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_3_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_3_2.jpg",position    : 2,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 2 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_2_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_2_2.jpg",position    : 2,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_2_3.jpg",position    : 3,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                            case 3 :
+                                                                                                                    values = [
+                                                                                                                        {image       : "default_collageDetail_1_1.jpg",position    : 1,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_2.jpg",position    : 2,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_3.jpg",position    : 3,collageId   : createCollage.id},
+                                                                                                                        {image       : "default_collageDetail_1_4.jpg",position    : 4,collageId   : createCollage.id}
+                                                                                                                        ];
+                                                                                                            break;
+                                                                                                        }
+                                                                                                        /*var values = {
+                                                                                                            image       : image,
+                                                                                                            position    : 1,
+                                                                                                            collageId   : createCollage.id,
+                                                                                                        }*/
+                                                                                                        CollageDetails.create(values).exec(function(err, createdCollageDetails){
                                                                                                             if(err){
                                                                                                                 console.log(err);
                                                                                                                 callback();
                                                                                                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in collage Detail creation', error_details: err});
                                                                                                             }else{
-                                                                                                                //callback();
+                                                                                                                    //callback();
                                                                                                                 var values = {
                                                                                                                     collageId   : createCollage.id,
                                                                                                                     userId      : results.id,
                                                                                                                 }
                                                                                                                 Tags.create(values).exec(function(err, createdCollageTags){
-                                                                                                                    if(err){
-                                                                                                                        console.log(err);
-                                                                                                                        callback();
-                                                                                                                    }else{
-                                                                                                                            console.log("Tagged User insertion");
-                                                                                                                    }
+                                                                                                                        if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            callback();
+                                                                                                                        }else{
+                                                                                                                                //callback();
+                                                                                                                        }
                                                                                                                 });
                                                                                                             }
                                                                                                         });
                                                                                                     }
                                                                                                 }
                                                                                             });
-                                                                                        });
+                                                                                        },callback());
                                                                                     }
                                                                                 });
                                                                             },

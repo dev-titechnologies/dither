@@ -58,7 +58,7 @@ module.exports = {
 					factor.dither_image       	=    collageImg_path + collage_image;
 				});
 				console.log("-----------------Notification Result--------------------------")
-                console.log(result)
+                //console.log(result)
                 return res.json(200,{status:1,message:'success',data:result});
             }
         });

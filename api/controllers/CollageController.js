@@ -593,9 +593,11 @@ module.exports = {
                                                     if(err){
                                                        console.log(err)
                                                     }else{
-                                                        if(notifySettings.notifyOpinion){
-                                                            tagNtfyPush.push(factor);
-                                                        }
+														 if(notifySettings){
+															if(notifySettings.notifyOpinion){
+																tagNtfyPush.push(factor);
+															}
+														}
                                                     }
                                                 });
                                             }

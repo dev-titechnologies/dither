@@ -35,6 +35,7 @@ module.exports = {
 								var TOKEN_EXPIRY_HOUR					=		req.options.settingsKeyValue.TOKEN_EXPIRY_HOUR;
 								var DITHER_EXPIRY_HOUR					=		req.options.settingsKeyValue.DITHER_EXPIRY_HOUR;
 								var image;
+								var default_collage5_Array				=		JSON.parse(req.options.settingsKeyValue.DEFAULT_DITHER);
 								//console.log(TOKEN_EXPIRY_HOUR);
 								//console.log(DITHER_EXPIRY_HOUR);
 								console.log(default_collage1_Array);
@@ -57,13 +58,37 @@ module.exports = {
 									image				=	collageImg_path+factor.image;
 									factor.image		=	image;
 								});
+								//console.log(default_collage3_Array);
+								console.log("default_collage5_Array");
+								console.log(default_collage5_Array);	console.log("default_collage5_Array length");	console.log(default_collage5_Array.length);
+								var count =0;
+								default_collage5_Array.forEach(function(factor, index){
+									count	=	count	+	1;
+									console.log(count);console.log(index)
+									for(var i = 0;	i < default_collage5_Array[index].length;	i++){
+										//console.log(default_collage5_Array[index].length)
+										//console.log("default_collage5_Array[i]")
+										console.log(default_collage5_Array[index][i].image)
+										console.log("default_collage5_Array[i].image")
+										image				=	collageImg_path+default_collage5_Array[index][i].image;
+										//factor.image		=	image;
+										//console.log("image")
+										//console.log(image)
+										default_collage5_Array[index][i].image		=	image;
+									}	
+								});
+								//console.log("default_collage3_Array");
+								//console.log(default_collage3_Array);
+								//console.log("default_collage5_Array");
+								console.log(default_collage5_Array);
 								 return res.json(200,{status:1,message:'success',
 														result1		:	default_collage1_Array,
 														result2		:	default_collage2_Array,
 														result3		:	default_collage3_Array,
 														result4		:	default_collage4_Array,
 														result5		:	TOKEN_EXPIRY_HOUR,
-														result6		:	DITHER_EXPIRY_HOUR
+														result6		:	DITHER_EXPIRY_HOUR,
+														result7		:	default_collage5_Array
 														});
 
 	},
@@ -115,6 +140,14 @@ module.exports = {
 										//console.log(JSON.parse(file1));
 										//console.log("file10000000000000000000000000000000");
 
+										var default_collage_Array				=		JSON.parse(req.options.settingsKeyValue.DEFAULT_DITHER);
+									    console.log("default_collage_Array length");
+									    console.log(default_collage_Array.length);
+									    console.log("default_collage_Array");
+										console.log(default_collage_Array);
+										var default_collage1_Array				=		req.options.settingsKeyValue.DEFAULT_DITHER_ONE;
+										console.log("default_collage1_Array length");
+									    console.log(default_collage1_Array.length);
 										files.forEach(function(factor, index){
 											 var uploadedfilename                   =    factor.fd.split('/');
                                              uploadedfilename                       =    uploadedfilename[uploadedfilename.length-1];
@@ -125,37 +158,53 @@ module.exports = {
 																	});
 											});
 											//console.log(collageArray);
-											var data		=	JSON.stringify(collageArray);
-											//console.log(data);
+											
+											//var data		=	JSON.stringify(collageArray);
+											
+											/*if(SubmitIdentity	==	4){
+												default_collage_Array.splice(3, 1,collageArray);//default_collage_Array is parsed and collageArray not stringified before saving it need to stringify
+												 console.log("default_collage_Array");
+												console.log(default_collage_Array)
+												var Data		=	default_collage_Array;
+												 console.log("Data")
+												 console.log(Data)
+											}*/
+										
 										//if()
-										/*var criteria		=	{
-																	key	:	"DEFAULT_DITHER_FOUR"
-																}*/
-										  switch(SubmitIdentity){
-																		case "1":  criteria = {		key	:	"DEFAULT_DITHER_FOUR"	}
+										var criteria		=	{
+																	key	:	"DEFAULT_DITHER"
+																}
+											var stringifiedData;
+											switch(SubmitIdentity){
+																		case "1":  
+																					default_collage_Array.splice(0, 1,collageArray);
 																					console.log("inside case 1******************")
+																					stringifiedData  		=	JSON.stringify(default_collage_Array);
 																					break;
 																		case "2":
-																					criteria = {		key	:	"DEFAULT_DITHER_THREE"	}
+																					default_collage_Array.splice(1, 1,collageArray);
 																					console.log("inside case 2******************")
+																					stringifiedData  		=	JSON.stringify(default_collage_Array);
 																					break;
-																		case "3":   criteria = {		key	:	"DEFAULT_DITHER_TWO"	}
+																		case "3":
+																					default_collage_Array.splice(2, 1,collageArray);
 																					console.log("inside case 3******************")
+																					stringifiedData  		=	JSON.stringify(default_collage_Array);
 																					break;
-																		case "4":  criteria = {	key	:	"DEFAULT_DITHER_ONE"	}
+																		case "4":
+																					default_collage_Array.splice(3, 1,collageArray);
 																					console.log("inside case 4******************")
+																					stringifiedData  		=	JSON.stringify(default_collage_Array);
 																					break;
 																}
+											console.log("stringifiedData")
+											console.log(stringifiedData)
 										var data            =   {
-																	value:	data
+																	value:	stringifiedData
 																}
-											//console.log("criteria")
-											//console.log(criteria)
 											console.log("SubmitIdentity")
 											console.log(SubmitIdentity)
 											console.log("SubmitIdentity")
-											//console.log("data")
-											//console.log(data)
 											Settings.update(criteria,data).exec(function(err,updatedData){
 												if(err)
 												{

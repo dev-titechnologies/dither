@@ -555,8 +555,10 @@ module.exports = {
                                                                                         }else{
                                                                                             var today;
                                                                                             var count = 0;
+                                                                                            var count_Array = [];
                                                                                             default_collage.forEach(function(factor_1, index_1){
                                                                                                 count ++;
+                                                                                                count_Array.push(count);
                                                                                                 var expiryDate      =       new Date(new Date().setFullYear(2200));
                                                                                                 var imgTitle,
                                                                                                     collageImage;
@@ -622,9 +624,6 @@ module.exports = {
                                                                                                                             callback();
                                                                                                                         }else{
                                                                                                                                 console.log("Tagged User insertion");
-                                                                                                                                if(parseInt(count) === parseInt(default_collage.length)){
-                                                                                                                                        callback();
-                                                                                                                                }
                                                                                                                         }
                                                                                                                     });
                                                                                                                 }
@@ -633,6 +632,10 @@ module.exports = {
                                                                                                     }
                                                                                                 });
                                                                                             });
+
+                                                                                            if(parseInt(count_Array.length) === parseInt(default_collage.length)){
+                                                                                                    callback();
+                                                                                            }
                                                                                         }
                                                                                     });
                                                                             },

@@ -562,7 +562,6 @@ module.exports = {
                                                                                                 var expiryDate      =       new Date(new Date().setFullYear(2200));
                                                                                                 var imgTitle,
                                                                                                     collageImage;
-                                                                                                today               =       new Date(new Date().setSeconds(13)).toISOString();
                                                                                                 //console.log("factor_1 ------------------");
                                                                                                 //console.log(factor_1);
                                                                                                 //console.log("factor_1 ------------------");
@@ -576,6 +575,20 @@ module.exports = {
                                                                                                 console.log("filteredArray-----------");
                                                                                                 console.log(filteredArray_1);
 
+                                                                                                switch(index_1){
+                                                                                                    case 0 :
+                                                                                                            today            = new Date(new Date().setSeconds(11)).toISOString();
+                                                                                                    break;
+                                                                                                    case 1 :
+                                                                                                            today            = new Date(new Date().setSeconds(12)).toISOString();
+                                                                                                    break;
+                                                                                                    case 2 :
+                                                                                                            today            = new Date(new Date().setSeconds(13)).toISOString();
+                                                                                                    break;
+                                                                                                    case 3 :
+                                                                                                            today            = new Date(new Date().setSeconds(14)).toISOString();
+                                                                                                    break;
+                                                                                                }
                                                                                                 var values_1 = {
                                                                                                         imgTitle        : "Share your opinion",
                                                                                                         image           : collageImage,

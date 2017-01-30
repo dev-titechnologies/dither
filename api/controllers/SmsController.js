@@ -36,16 +36,23 @@
                                     console.log(getResult);
                                     if(getResult.length){
                                         if(getResult[0].email == email){
+											console.log("1")
                                             message = "Email already exists";
                                         }else if(getResult[0].mentionId == mention_id){
+											console.log("2")
                                             message = "Username already exists";
                                         }else if(getResult[0].phoneNumber == mobile){
+											console.log("3")
                                             message = "Phone number already exits";
                                         }
+                                        else{
+											console.log("4")
+											message = "null";
+										}
                                         console.log(getResult);
                                         //var msg=0;
                                         console.log(message)
-                                        return res.json(200, {'status': 2, 'status_type': 'Failure' , 'message': message,'test':'msg'});
+                                        return res.json(200, {status: 2, status_type: 'Failure' , message: message});
                                     }else{
                                         //---------SMS SENDING-------------
                                         var possible              = "0123456789";

@@ -622,6 +622,9 @@ module.exports = {
                                                                                                                             callback();
                                                                                                                         }else{
                                                                                                                                 console.log("Tagged User insertion");
+                                                                                                                                if(parseInt(count) === parseInt(default_collage.length)){
+                                                                                                                                        callback();
+                                                                                                                                }
                                                                                                                         }
                                                                                                                     });
                                                                                                                 }

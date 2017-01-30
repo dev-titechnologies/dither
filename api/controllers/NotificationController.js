@@ -680,7 +680,8 @@ module.exports = {
                                                                 }
 
                                                                 ntfn_body               =   notification;
-
+                                                                console.log("-------notification---------------")
+																console.log(ntfn_body)
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
                                                                                       id                    :   notificationId,
                                                                                       userId                :   results[0].userId,

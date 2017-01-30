@@ -34,20 +34,21 @@
                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'error occured while checking!'});
                                 }else{
                                     console.log(getResult);
-                                    mention_id 			= 	mention_id.toLowerCase();
-                                    email	   			= 	email.toLowerCase();
-                                    var resEmail 		= 	getResult[0].email;
-                                    resEmail			= 	resEmail.toLowerCase();
-                                    
-                                    var resMentionId 	= 	getResult[0].mentionId;
-                                    resMentionId		= 	resMentionId.toLowerCase();
+                                   if(getResult.length) {
+										mention_id 			= 	mention_id.toLowerCase();
+										email	   			= 	email.toLowerCase();
+										var resEmail 		= 	getResult[0].email;
+										resEmail			= 	resEmail.toLowerCase();
+										
+										var resMentionId 	= 	getResult[0].mentionId;
+										resMentionId		= 	resMentionId.toLowerCase();
                                     
                                     console.log(mention_id)
                                     console.log(resMentionId)
                                     console.log(email)
                                     console.log(resEmail)
                                     
-                                    if(getResult.length){
+                                    
                                         if(resEmail == email){
 											console.log("1")
                                             message = "Email already exists";

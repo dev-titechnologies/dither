@@ -43,7 +43,9 @@
                                             message = "Phone number already exits";
                                         }
                                         console.log(getResult);
-                                        return res.json(200, {status: 2, status_type: 'Failure' , message: message});
+                                        //var msg=0;
+                                        console.log(message)
+                                        return res.json(200, {'status': 2, 'status_type': 'Failure' , 'message': message,'test':'msg'});
                                     }else{
                                         //---------SMS SENDING-------------
                                         var possible              = "0123456789";

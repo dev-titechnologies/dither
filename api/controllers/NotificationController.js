@@ -586,9 +586,9 @@ module.exports = {
                                     " usr.name, usr.profilePic,"+
                                     " clg.image as collageImage"+
                                     " FROM notificationLog ntlg"+
-                                    " INNER JOIN user usr ON usr.id = ntlg.userId"+
+                                    " INNER JOIN user usr ON (usr.id = ntlg.userId"+
                                     " OR"+
-                                    " FIND_IN_SET(usr.id, ntlg.tagged_users)"+
+                                    " FIND_IN_SET(usr.id, ntlg.tagged_users))"+
                                     " LEFT JOIN collage clg ON clg.id = ntlg.collage_id"+
                                     " WHERE"+
                                     " ntlg.id = "+notificationId;

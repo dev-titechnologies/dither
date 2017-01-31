@@ -580,6 +580,10 @@ module.exports = {
         var device_Type                 =     req.get('device_type');
         var mobile_no                   =     req.param('mobile_number');
         var fbId                        =     req.param('fb_uid');
+        console.log(req.headers)
+        console.log(req.get('device_imei'))
+        console.log(req.get('device_type'))
+        
         if(req.param('fb_uid') || req.get('device_id') || req.param('mobile_number'))
             {
 

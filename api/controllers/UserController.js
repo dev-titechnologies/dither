@@ -587,6 +587,7 @@ module.exports = {
                 console.log("device-----------idddddddd")
                 console.log(req.get('device_id'))
                 var query       = "SELECT * from user where fbId = '"+fbId+"' OR phoneNumber = '"+mobile_no+"'";
+                console.log(query)
                 User.query(query, function(err, results) {
                 //User.findOne({fbId: req.param('fb_uid')}).exec(function (err, results){
                         if (err) {

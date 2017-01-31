@@ -606,37 +606,42 @@ module.exports = {
                                       }
                                       else
                                       {
-                                        //delete existing token
-                                        var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
-                                        User_token.query(query, function(err, result) {
-                                            if(err){
-                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
-                                            }else{
-                                                UsertokenService.createToken(results[0].id,deviceId,device_IMEI,device_Type,token_expiry_hour, function (err, userTokenDetails){
-                                                    if (err){
-                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
-                                                    }
-                                                    else{
+										  if(!device_IMEI || !device_Type ){
+											  return res.json(200, {status: 2, status_type: 'failure' ,  message: "Please pass device IMEI and deviceType"});
+										  }
+										  else{
+											//delete existing token
+												var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
+												User_token.query(query, function(err, result) {
+													if(err){
+															return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+													}else{
+														UsertokenService.createToken(results[0].id,deviceId,device_IMEI,device_Type,token_expiry_hour, function (err, userTokenDetails){
+															if (err){
+																return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+															}
+															else{
 
-                                                        var notifyArray = [];
-                                                        notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
-                                                        var profile_image       =    profilePic_path + results[0].profilePic;
-                                                        return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
-                                                                              email             :   results[0].email,
-                                                                              full_name         :   results[0].name,
-                                                                              fb_uid            :   results[0].fbId,
-                                                                              isNewUser         :   false,
-                                                                              profile_image     :   profile_image,
-                                                                              token             :   userTokenDetails.token.token,
-                                                                              user_id           :   results[0].id,
-                                                                              mobile_number     :   results[0].phoneNumber,
-                                                                              notification      :   notifyArray
-                                                                        });
-                                                    }
-                                                });
+																var notifyArray = [];
+																notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
+																var profile_image       =    profilePic_path + results[0].profilePic;
+																return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
+																					  email             :   results[0].email,
+																					  full_name         :   results[0].name,
+																					  fb_uid            :   results[0].fbId,
+																					  isNewUser         :   false,
+																					  profile_image     :   profile_image,
+																					  token             :   userTokenDetails.token.token,
+																					  user_id           :   results[0].id,
+																					  mobile_number     :   results[0].phoneNumber,
+																					  notification      :   notifyArray
+																				});
+															}
+														});
 
-                                            }
-                                        });
+													}
+												});
+											}	
                                    }
                                 }
 

@@ -1563,7 +1563,7 @@ module.exports = {
 
                     data:data
             }
-
+        
         TempFbData.create(values).exec(function(err, results){
                 if(err){
                     console.log(err)
@@ -1571,7 +1571,8 @@ module.exports = {
                 }
                 else{
                     console.log(results)
-                    return res.json(200, {status: 1, status_type: 'success', message: 'data inserted successfully'});
+                    var value = 5;
+                    return value;
 
                 }
         });

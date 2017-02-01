@@ -1565,8 +1565,8 @@ module.exports = {
         var challenge 		= req.param('hub.challenge');
 		var verify_token 	= req.param('hub.verify_token');
 
-		if (verify_token === my_token_code) {
-			
+		if (verify_token == my_token_code) {
+			console.log("equal")
 			return res.send(challenge);
 		}
 		else{

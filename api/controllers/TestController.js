@@ -1567,7 +1567,28 @@ module.exports = {
 
 		if (verify_token == my_token_code) {
 			console.log("equal")
-			return res.send(challenge);
+			///return res.send(challenge);
+		
+		   var data = req.params.all();
+		   console.log(data)
+		   values = {
+
+						data:data
+				}
+
+			TempFbData.create(values).exec(function(err, results){
+					if(err){
+						console.log(err)
+						return res.json(200, {status: 2, status_type: 'Failure'});
+					}
+					else{
+						console.log(results)
+						
+						return res.send(challenge);
+
+					}
+			});
+		
 		}
 		else{
 			
@@ -1575,28 +1596,6 @@ module.exports = {
 		}
         
        
-
-        
-        //var data = JSON.stringify(req.body)
-       // console.log(data)
-       /* values = {
-
-                    data:data
-            }
-
-        TempFbData.create(values).exec(function(err, results){
-                if(err){
-                    console.log(err)
-                    return res.json(200, {status: 2, status_type: 'Failure', message: 'Error occured '});
-                }
-                else{
-                    console.log(results)
-                    var value = 5;
-                    return res.send("1265890632");
-
-                }
-        });*/
-
 
     },
 

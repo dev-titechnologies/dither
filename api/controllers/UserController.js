@@ -582,6 +582,8 @@ module.exports = {
         var mobile_no                   =     req.param('mobile_number');
         var fbId                        =     req.param('fb_uid');
         //console.log(req.headers)
+        console.log(req.get("device_id"));
+        console.log(req.get("token"));
         console.log(device_IMEI)
         console.log(device_Type)
         console.log(deviceId)

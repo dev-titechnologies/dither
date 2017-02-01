@@ -1565,7 +1565,6 @@ module.exports = {
         var challenge 		= req.param('hub.challenge');
 		var verify_token 	= req.param('hub.verify_token');
 
-		if (verify_token == my_token_code) {
 			console.log("equal")
 			///return res.send(challenge);
 		
@@ -1583,19 +1582,17 @@ module.exports = {
 					}
 					else{
 						console.log(results)
-						
-						return res.send(challenge);
+					   if (verify_token == my_token_code) {
 
+							return res.send(challenge);
+                       }
+                       else{
+			
+								return res.json(200, {status: 2, status_type: 'Failure'});
+							}
 					}
 			});
 		
-		}
-		else{
-			
-			 return res.json(200, {status: 2, status_type: 'Failure'});
-		}
-        
-       
 
     },
 

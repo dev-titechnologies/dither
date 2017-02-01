@@ -75,6 +75,6 @@ module.exports.cors = {
 
 
     //headers: 'content-type'
-	headers: 'content-type, access-control-allow-origin'
+    headers: 'content-type, access-control-allow-origin, token, device_id, device_imei, device_type'
 
 };

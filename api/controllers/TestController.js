@@ -1557,7 +1557,7 @@ module.exports = {
     fbcallback: function (req, res){
 
         console.log("--------------GET FBCALLBACK---------------")
-        console.log(req.body)
+        console.log(req)
         var data = JSON.stringify(req.body)
         console.log(data)
         values = {

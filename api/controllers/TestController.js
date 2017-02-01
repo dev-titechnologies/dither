@@ -1561,9 +1561,25 @@ module.exports = {
         console.log(req.body)
         console.log(req.headers)
         console.log(req.hub_challenge)
-        var data = JSON.stringify(req.body)
-        console.log(data)
-        values = {
+        var my_token_code	= 5;
+        var challenge 		= req.param('hub.challenge');
+		var verify_token 	= req.param('hub.verify_token');
+
+		if (verify_token === my_token_code) {
+			
+			return res.send(challenge);
+		}
+		else{
+			
+			 return res.json(200, {status: 2, status_type: 'Failure'});
+		}
+        
+       
+
+        
+        //var data = JSON.stringify(req.body)
+       // console.log(data)
+       /* values = {
 
                     data:data
             }
@@ -1579,7 +1595,7 @@ module.exports = {
                     return res.send("1265890632");
 
                 }
-        });
+        });*/
 
 
     },

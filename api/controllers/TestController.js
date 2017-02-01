@@ -1556,43 +1556,42 @@ module.exports = {
     ================================================================================================================================== */
     fbcallback: function (req, res){
 
-        console.log("--------------GET FBCALLBACK---------------")
-        console.log(req.params.all())
-        console.log(req.body)
-        console.log(req.headers)
-        console.log(req.hub_challenge)
-        var my_token_code	= 5;
-        var challenge 		= req.param('hub.challenge');
-		var verify_token 	= req.param('hub.verify_token');
+          console.log("--------------GET FBCALLBACK---------------")
+          console.log(req.params.all())
+          console.log(req.body)
+          console.log(req.headers)
+          console.log(req.hub_challenge)
+          var my_token_code	= 5;
+          var challenge 	= req.param('hub.challenge');
+		  var verify_token 	= req.param('hub.verify_token');
+		  var data 			= req.params.all();
+		  console.log(data)
+		  if(data.length){
+			   console.log(data)
+			   values = {
+							data:data
+						}
+				TempFbData.create(values).exec(function(err, results){
+						if(err){
+							console.log(err)
+							return res.json(200, {status: 2, status_type: 'Failure'});
+						}
+						else{
+							console.log(results)
+						    if (verify_token == my_token_code) {
 
-			console.log("equal")
-			///return res.send(challenge);
-		
-		   var data = req.params.all();
-		   console.log(data)
-		   values = {
-
-						data:data
-				}
-
-			TempFbData.create(values).exec(function(err, results){
-					if(err){
-						console.log(err)
-						return res.json(200, {status: 2, status_type: 'Failure'});
-					}
-					else{
-						console.log(results)
-					   if (verify_token == my_token_code) {
-
-							return res.send(challenge);
-                       }
-                       else{
-			
-								return res.json(200, {status: 2, status_type: 'Failure'});
-							}
-					}
-			});
-		
+								 return res.send(challenge);
+						    }
+						    else{
+				
+								  return res.json(200, {status: 2, status_type: 'Failure'});
+								}
+						}
+				});
+		  }
+		  else{
+			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
+		  }
 
     },
 

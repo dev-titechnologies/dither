@@ -234,37 +234,37 @@ module.exports = {
                 var smsFrom           = req.param("smsFrom");
                 var twilio            = require('twilio');
                 if(req.param("smsAccountSid")){
-					smsAccountSid	=	req.param("smsAccountSid");
-				}
-				if(req.param("smsAuthToken")){
-					smsAuthToken	=	req.param("smsAuthToken");
-					}
+                    smsAccountSid   =   req.param("smsAccountSid");
+                }
+                if(req.param("smsAuthToken")){
+                    smsAuthToken    =   req.param("smsAuthToken");
+                    }
                 var client            = twilio(smsAccountSid, smsAuthToken);
                 var username          = req.param("username");
                 var mobile            = req.param("mobile");
                 if(!smsFrom || !username || !mobile){
-					 return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please Pass smsFrom,username,mobile'});
-				}else{
-						client.sendMessage({
-							//to:mobile, // Any number Twilio can deliver to
-							to: mobile ,
-							from: smsFrom, // A number you bought from Twilio and can use for outbound communications
-							body: username+' has invited you on Dither,Click on the link to download the app' // body of the SMS message
+                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please Pass smsFrom,username,mobile'});
+                }else{
+                        client.sendMessage({
+                            //to:mobile, // Any number Twilio can deliver to
+                            to: mobile ,
+                            from: smsFrom, // A number you bought from Twilio and can use for outbound communications
+                            body: username+' has invited you on Dither,Click on the link to download the app' // body of the SMS message
 
-						 }, function(err, message) {
-							if (err) {
-										console.log(err);
-										console.error('Text failed because: '+err);
-										return res.json(200, {status: 2, status_type: 'Failure' , message: 'Sending Failed', Err: err});
-							} else {
-										console.log("sms sending sucess")
-										console.log(message)
-										return res.json(200, {status: 1, status_type: 'Success' , message: 'SMS Sending Success'});
+                         }, function(err, message) {
+                            if (err) {
+                                        console.log(err);
+                                        console.error('Text failed because: '+err);
+                                        return res.json(200, {status: 2, status_type: 'Failure' , message: 'Sending Failed', Err: err});
+                            } else {
+                                        console.log("sms sending sucess")
+                                        console.log(message)
+                                        return res.json(200, {status: 1, status_type: 'Success' , message: 'SMS Sending Success'});
 
-								   }
-						});
+                                   }
+                        });
 
-				}
+                }
         },
 
 
@@ -1492,6 +1492,7 @@ module.exports = {
 
                 console.log(req.headers['user-agent']);
                 console.log(req.headers);
+                console.log(req.get("token"));
                 console.log(req.params.all());
                 return res.json(200, {status: 1, status_type: 'Success', message: 'userAgent success',results : ["One", "Two", "Three", "Four"]});
 
@@ -1563,7 +1564,7 @@ module.exports = {
 
                     data:data
             }
-        
+
         TempFbData.create(values).exec(function(err, results){
                 if(err){
                     console.log(err)

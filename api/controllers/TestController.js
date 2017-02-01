@@ -1572,7 +1572,7 @@ module.exports = {
                 else{
                     console.log(results)
                     var value = 5;
-                    return value;
+                    return res.send("5");
 
                 }
         });

@@ -578,18 +578,22 @@ module.exports = {
         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
+        var deviceId                    =     req.get('device_id');
         var mobile_no                   =     req.param('mobile_number');
         var fbId                        =     req.param('fb_uid');
-        console.log(req.headers)
-        console.log(req.get('device_imei'))
-        console.log(req.get('device_type'))
-        
-        if(req.param('fb_uid') || req.get('device_id') || req.param('mobile_number'))
-            {
+        //console.log(req.headers)
+        console.log(req.get("device_id"));
+        console.log(req.get("token"));
+        console.log(device_IMEI)
+        console.log(device_Type)
+        console.log(deviceId)
+        console.log(mobile_no)
+        console.log(fbId)
 
-                var deviceId    = req.get('device_id');
-                console.log("device-----------idddddddd")
-                console.log(req.get('device_id'))
+        if( (!deviceId && !fbId && !mobile_no) || (deviceId && !fbId && !mobile_no) || (!deviceId && fbId && mobile_no) || (!deviceId && fbId && !mobile_no) || (!deviceId && !fbId && mobile_no)  ){
+                    return res.json(200, {status: 2, status_type: 'Failure' , message: 'please pass (fb_uid & device_id) OR (mobile_number & device_id)'});
+                     //If an error occured, we let express/connect handle it by calling the "next" function
+        }else{
                 var query       = "SELECT * from user where fbId = '"+fbId+"' OR phoneNumber = '"+mobile_no+"'";
                 console.log(query)
                 User.query(query, function(err, results) {
@@ -610,42 +614,42 @@ module.exports = {
                                       }
                                       else
                                       {
-										  if(!device_IMEI || !device_Type ){
-											  return res.json(200, {status: 2, status_type: 'failure' ,  message: "Please pass device IMEI and deviceType"});
-										  }
-										  else{
-											//delete existing token
-												var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
-												User_token.query(query, function(err, result) {
-													if(err){
-															return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
-													}else{
-														UsertokenService.createToken(results[0].id,deviceId,device_IMEI,device_Type,token_expiry_hour, function (err, userTokenDetails){
-															if (err){
-																return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
-															}
-															else{
+                                          if(!device_IMEI || !device_Type ){
+                                              return res.json(200, {status: 2, status_type: 'failure' ,  message: "Please pass device IMEI and deviceType"});
+                                          }
+                                          else{
+                                            //delete existing token
+                                                var query   =   "DELETE FROM userToken where device_IMEI='"+device_IMEI+"'";
+                                                User_token.query(query, function(err, result) {
+                                                    if(err){
+                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+                                                    }else{
+                                                        UsertokenService.createToken(results[0].id,deviceId,device_IMEI,device_Type,token_expiry_hour, function (err, userTokenDetails){
+                                                            if (err){
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
+                                                            }
+                                                            else{
 
-																var notifyArray = [];
-																notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
-																var profile_image       =    profilePic_path + results[0].profilePic;
-																return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
-																					  email             :   results[0].email,
-																					  full_name         :   results[0].name,
-																					  fb_uid            :   results[0].fbId,
-																					  isNewUser         :   false,
-																					  profile_image     :   profile_image,
-																					  token             :   userTokenDetails.token.token,
-																					  user_id           :   results[0].id,
-																					  mobile_number     :   results[0].phoneNumber,
-																					  notification      :   notifyArray
-																				});
-															}
-														});
+                                                                var notifyArray = [];
+                                                                notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
+                                                                var profile_image       =    profilePic_path + results[0].profilePic;
+                                                                return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
+                                                                                      email             :   results[0].email,
+                                                                                      full_name         :   results[0].name,
+                                                                                      fb_uid            :   results[0].fbId,
+                                                                                      isNewUser         :   false,
+                                                                                      profile_image     :   profile_image,
+                                                                                      token             :   userTokenDetails.token.token,
+                                                                                      user_id           :   results[0].id,
+                                                                                      mobile_number     :   results[0].phoneNumber,
+                                                                                      notification      :   notifyArray
+                                                                                });
+                                                            }
+                                                        });
 
-													}
-												});
-											}	
+                                                    }
+                                                });
+                                            }
                                    }
                                 }
 
@@ -653,11 +657,7 @@ module.exports = {
 
                 });
         }
-        else
-        {
-            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Parameter missing'}); //If an error occured, we let express/connect handle it by calling the "next" function
 
-        }
 
     },
 

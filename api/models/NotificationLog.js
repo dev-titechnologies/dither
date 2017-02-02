@@ -31,6 +31,10 @@ module.exports = {
                 type: 'integer',
                 defaultsTo: 0
             },
+        collageCommentId   : {
+                type: 'integer',
+                defaultsTo: 0
+            },
        image_id : {
                 type: 'integer',
                 defaultsTo: 0

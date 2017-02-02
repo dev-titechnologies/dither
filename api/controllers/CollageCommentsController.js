@@ -219,14 +219,14 @@ module.exports = {
                                                                                                 });
 
                                                                                         }
-                                                                                   }); 
+                                                                                   });
                                                                             }
                                                                         });
                                                                 }else{
                                                                     callback();
                                                                 }
                                                         },
-                                                        
+
                                                         function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 3");
                                                             var query = "SELECT DISTINCT(`userId`) FROM `collageComments` WHERE `collageId`='"+collageId+"'";
@@ -494,6 +494,23 @@ module.exports = {
                     var collageId                   =     req.param("dither_id");
                     var commentId                   =     req.param("comment_id");
                     console.log(req.params.all());
+
+                    function commentLikeSuccess(){
+                            var roomName  = "socket_dither_"+collageId;
+                            sails.sockets.broadcast(roomName,{
+                                                            type            :   "update",
+                                                            id              :   collageId,
+                                                            user_id         :   userId,
+                                                            message         :   "Delete Comment - Room Broadcast",
+                                                            //roomName        :   roomName,
+                                                            //subscribers     :   sails.sockets.subscribers(roomName),
+                                                            //socket          :   sails.sockets.rooms()
+                                                            });
+
+                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',
+                                                comment_id : commentId
+                                });
+                    }
                     if(!collageId || !commentId){
                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass dither_id and comment_id'});
                     }else{
@@ -519,55 +536,47 @@ module.exports = {
                                                                         CollageComments.destroy({id: commentId}).exec(function (err, deleteComment){
                                                                             if(err){
                                                                                     console.log(err);
-                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting commentLikes', error_details: err});
                                                                             }else{
 
-                                                                                CommentImages.find({commentId: commentId}).exec(function (err, foundCommentImages){
+                                                                                CommentLikes.destroy({commentId: commentId}).exec(function (err, deleteCommentLike){
                                                                                     if(err){
                                                                                             console.log(err);
-                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
                                                                                     }else{
-                                                                                        console.log(foundCommentImages);
-                                                                                            if(!foundCommentImages.length){
-                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',
-                                                                                                                comment_id : commentId
+
+                                                                                            CommentImages.find({commentId: commentId}).exec(function (err, foundCommentImages){
+                                                                                                if(err){
+                                                                                                        console.log(err);
+                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                                                                                }else{
+                                                                                                        console.log(foundCommentImages);
+                                                                                                        if(!foundCommentImages.length){
+                                                                                                                        commentLikeSuccess();
+                                                                                                        }else{
+                                                                                                            //Unlinking comment image
+                                                                                                            foundCommentImages.forEach(function(factor, index){
+                                                                                                                if(factor.image == null || factor.image == ""){
+                                                                                                                }else{
+                                                                                                                        console.log("Unlinking comment image======");
+                                                                                                                        //var resize_comment_image  = factor.image;
+                                                                                                                        //var ext                   = resize_comment_image.split('.');
+                                                                                                                        //fs.unlink(comment_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
+                                                                                                                        fs.unlink(comment_unlink_path + factor.image);
+                                                                                                                }
                                                                                                             });
-                                                                                            }else{
-                                                                                                //Unlinking comment image
-                                                                                                foundCommentImages.forEach(function(factor, index){
-                                                                                                    if(factor.image == null || factor.image == ""){
-                                                                                                    }else{
-                                                                                                            console.log("Unlinking comment image======");
-                                                                                                            //var resize_comment_image  = factor.image;
-                                                                                                            //var ext                   = resize_comment_image.split('.');
-                                                                                                            //fs.unlink(comment_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
-                                                                                                            fs.unlink(comment_unlink_path + factor.image);
-                                                                                                    }
-                                                                                                });
 
-                                                                                                CommentImages.destroy({commentId: commentId}).exec(function (err, deleteCommentImages){
-                                                                                                    if(err){
-                                                                                                            console.log(err);
-                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
-                                                                                                    }else{
-
-                                                                                                            var roomName  = "socket_dither_"+collageId;
-                                                                                                            sails.sockets.broadcast(roomName,{
-                                                                                                                                            type            :   "update",
-                                                                                                                                            id              :   collageId,
-                                                                                                                                            user_id         :   userId,
-                                                                                                                                            message         :   "Delete Comment - Room Broadcast",
-                                                                                                                                            //roomName        :   roomName,
-                                                                                                                                            //subscribers     :   sails.sockets.subscribers(roomName),
-                                                                                                                                            //socket          :   sails.sockets.rooms()
-                                                                                                                                            });
-
-                                                                                                            return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully deleted the comment',
-                                                                                                                                comment_id : commentId
-                                                                                                                });
-                                                                                                    }
-                                                                                                });
-                                                                                            }
+                                                                                                            CommentImages.destroy({commentId: commentId}).exec(function (err, deleteCommentImages){
+                                                                                                                if(err){
+                                                                                                                        console.log(err);
+                                                                                                                        return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                                                                }else{
+                                                                                                                        commentLikeSuccess();
+                                                                                                                }
+                                                                                                            });
+                                                                                                        }
+                                                                                                }
+                                                                                            });
                                                                                     }
                                                                                 });
                                                                             }

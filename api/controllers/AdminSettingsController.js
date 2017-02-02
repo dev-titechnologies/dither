@@ -7,7 +7,9 @@
 
 module.exports = {
 
-    //Get settings table details
+    /* ==================================================================================================================================
+               Get settings table details
+   ==================================================================================================================================== */
     getSettingsData:        function(req,res){
                                 console.log("Inside AdminSETTINGS CONTROLLER");
                                 var query = "SELECT * FROM settings";
@@ -28,7 +30,10 @@ module.exports = {
                                                         });*/
     },
 
-    //Get default Dither array
+
+ /* ==================================================================================================================================
+               Get default Dither array
+   ==================================================================================================================================== */
     getDefaultDitherData:  function(req,res){
                                 console.log(req.options.settingsKeyValue);
                                 var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -55,26 +60,43 @@ module.exports = {
 
     },
 
-    //Update token expiry time
-    updateTokenExpiryTime:  function(req,res){
-                            var data =    {
-                                         value:req.body.value
-                                       };
-                            var criteria = {
-                                            id:req.body.id
-                                        };
-                            Settings.update(criteria,data).exec(function(err,updatedData){
+
+    /* ==================================================================================================================================
+               Update Settings table
+   ==================================================================================================================================== */
+    updateSettingsValue:  function(req,res){
+                console.log(req.params.all());
+                console.log("req.params.all() +++++++++++++++++++++++++++++");
+                var data = req.param("data");
+                if(!data.length){
+                        return res.json(200,{status:2,message:'Please pass the values',
+                                                    result      :   []
+                                            });
+                }else{
+                        var updateArray   =  [];
+                        data.forEach(function(factor, index){
+                            updateArray.push("("+factor.id+",'"+factor.value+"')");
+                        });
+
+                        var query = "INSERT INTO settings (id,value) VALUES"+updateArray+
+                                    " ON"+
+                                    " DUPLICATE KEY"+
+                                    " UPDATE value=VALUES(value)";
+                        console.log(query);
+                        Settings.query(query, function(err, updatedData){
                                 if(err){
-                                     console.log("update token expiry time fail");
-                                     return res.json(200, {status: 2, error_details: err});
+                                    console.log(err);
+                                    return res.json(200, {status: 2, error_details: err});
                                 }else{
-                                    console.log("token expiry time updated");
-                                    return res.json(200,{status:1,message:'success',result:updatedData});
+                                    return res.json(200,{status:1,message:'success',
+                                                result      :   updatedData
+                                        });
                                 }
-                            });
+                        });
+                }
     },
 
-    //Update dither close time
+   /* //Update dither close time
     updateDitherCloseTime:function(req,res){
 
                     var data    =    {
@@ -94,9 +116,12 @@ module.exports = {
                             return res.json(200,{status:1,message:'success',result:updatedData});
                         }
                     });
-    },
+    },*/
 
-    //Change and Save default dithers
+ /* ==================================================================================================================================
+              Change and Save default dithers
+   ==================================================================================================================================== */
+
     changeDefaultDither :   function(req,res){
                                 console.log(req.params.all());
                                 var imageUploadDirectoryPath    =  '../../assets/images/collage';

@@ -86,15 +86,16 @@ module.exports = {
                                                                                                     });
                                                                                 }else{
                                                                                         var data        =   {
-                                                                                                            collageId                   :    collageId,
-                                                                                                            notificationTypeId          :    9,
-                                                                                                            userId                      :    userId,
-                                                                                                            //collageCreatorId            :    foundCollage.userId,
-                                                                                                            commentCreatorId            :    foundComment.userId,
-                                                                                                            notificationSettingsType    :    "notifyCommentLike",
-                                                                                                            message                     :    "comment like notification",
-                                                                                                            ntfn_body                   :    userName + " likes your comment",
-                                                                                                            totalLikeCount              :    foundComment.likeCount,
+																												collageId                   :    collageId,
+																												notificationTypeId          :    9,
+																												userId                      :    userId,
+																												//collageCreatorId            :    foundCollage.userId,
+																												commentCreatorId            :    foundComment.userId,
+																												notificationSettingsType    :    "notifyCommentLike",
+																												message                     :    "comment like notification",
+																												ntfn_body                   :    userName + " likes your comment",
+																												totalLikeCount              :    foundComment.likeCount,
+																												commentId					:    results.id
                                                                                                             };
                                                                                         NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
                                                                                             if(err){

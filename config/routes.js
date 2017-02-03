@@ -60,23 +60,19 @@ module.exports.routes = {
   '/collageRecent/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/collageClosed/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/ditherConfig/*'                       :           ['auth.authenticate', 'helper.global'],
-  '/commentLikes/*'                        :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
+  '/commentLikes/*'                       :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
 
+
+//ADMIN URLS
    '/admin/*'                             :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
    '/adminUserSearch/*'                   :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
    '/adminDitherSearch/*'                 :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
    '/adminReport/*'                       :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
    '/adminNotification/*'                 :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
    '/adminSettings/*'                     :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
- /* 'GET /user/join': {
-                    controller: "UserController",
-                    action:"join"
-                    },*/
-
-
-
-
-
+   '/adminUser/*'                         :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
+   '/adminDither/*'                       :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
+   '/adminCommentDither/*'                :           ['settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path'],
 
   /***************************************************************************
   *                                                                          *

@@ -1577,13 +1577,14 @@ module.exports = {
 							return res.json(200, {status: 2, status_type: 'Failure'});
 						}
 						else{
+							console.log("data inserted")
 							console.log(results)
 						    if (verify_token == my_token_code) {
 
 								 return res.send(challenge);
 						    }
 						    else{
-				
+								
 								  return res.json(200, {status: 2, status_type: 'Failure'});
 								}
 						}

@@ -148,14 +148,10 @@ module.exports = {
                     criteria={id: req.body.userId};
                     data= {status: 'delete'};
                 User.update(criteria, data).exec(function (err, result) {
-                    if(err)
-                    {
+                    if(err){
                         // console.log(err);
                         return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
-
+                    }else{
                         //console.log(result);
                         return res.json(200, {status: 1, message: "success", data: result});
                     }
@@ -171,18 +167,13 @@ module.exports = {
                     //key=req.body.key;
                     criteria={id: req.body.userId};
                     data= {status: req.body.status};
-
                 User.update(criteria, data).exec(function (err, result) {
-                    if(err)
-                    {
+                    if(err){
                          console.log(err);
                         return res.json(200, { status: 2, error_details: 'db error' });
-                    }
-                    else
-                    {
-
+                    }else{
                         console.log(result);
-                        return res.json(200, {status: 1, message: "success", data: result});
+                        return res.json(200, {status: 1, message: "success", data: result[0]});
                     }
                 });
 

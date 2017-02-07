@@ -1566,10 +1566,10 @@ module.exports = {
 		  var verify_token 	= req.param('hub.verify_token');
 		  var data 			= req.params.all();
 		  console.log(data)
-		  if(data.length){
+		  if(data){
 			   console.log(data)
 			   values = {
-							data:data
+							data:JSON.stringify(data)
 						}
 				TempFbData.create(values).exec(function(err, results){
 						if(err){

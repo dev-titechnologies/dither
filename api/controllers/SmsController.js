@@ -34,15 +34,38 @@
                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'error occured while checking!'});
                                 }else{
                                     console.log(getResult);
-                                    if(getResult.length){
-                                        if(getResult[0].email == email){
+                                   if(getResult.length) {
+										mention_id 			= 	mention_id.toLowerCase();
+										email	   			= 	email.toLowerCase();
+										var resEmail 		= 	getResult[0].email;
+										resEmail			= 	resEmail.toLowerCase();
+										
+										var resMentionId 	= 	getResult[0].mentionId;
+										resMentionId		= 	resMentionId.toLowerCase();
+                                    
+                                    console.log(mention_id)
+                                    console.log(resMentionId)
+                                    console.log(email)
+                                    console.log(resEmail)
+                                    
+                                    
+                                        if(resEmail == email){
+											console.log("1")
                                             message = "Email already exists";
-                                        }else if(getResult[0].mentionId == mention_id){
+                                        }else if(resMentionId == mention_id){
+											console.log("2")
                                             message = "Username already exists";
                                         }else if(getResult[0].phoneNumber == mobile){
+											console.log("3")
                                             message = "Phone number already exits";
                                         }
+                                        else{
+											console.log("4")
+											message = "null";
+										}
                                         console.log(getResult);
+                                        //var msg=0;
+                                        console.log(message)
                                         return res.json(200, {status: 2, status_type: 'Failure' , message: message});
                                     }else{
                                         //---------SMS SENDING-------------

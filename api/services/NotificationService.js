@@ -247,6 +247,7 @@ module.exports = {
                                     collage_id          :   params.collageId,
                                     image_id            :   likedImageId,
                                     description         :   description,
+                                    collageCommentId	:	params.commentId,	
                             }
                             NotificationLog.create(values).exec(function(err, createdNotificationTags){
                                 if(err){

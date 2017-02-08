@@ -103,7 +103,6 @@ module.exports = {
                                                 " WHERE"+
                                                 //" U.status = 'active'"+
                                                 " N.ditherUserId="+user_id+
-                                                " AND(N.notificationTypeId=1 OR N.notificationTypeId=2 OR N.notificationTypeId=3 OR N.notificationTypeId=4 OR N.notificationTypeId=5 OR N.notificationTypeId=7 OR N.notificationTypeId=8 OR N.notificationTypeId=9)"+
                                                 " OR "+
                                                 " FIND_IN_SET("+user_id+", N.tagged_users) ORDER BY N.updatedAt DESC LIMIT "+data_view_limit;
 
@@ -680,7 +679,7 @@ module.exports = {
                                                                 }
 
                                                                 ntfn_body               =   notification;
-
+																console.log(ntfn_body)
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
                                                                                       id                    :   notificationId,
                                                                                       userId                :   results[0].userId,

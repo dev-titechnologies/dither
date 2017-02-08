@@ -35,7 +35,7 @@ module.exports = {
                 async.series([
                             function(callback) {
                                             console.log("----------------PARALLEL addressBook - I ----------------------");
-                                            if(phoneContactsArray.length){
+                                            if(phonecontacts.length){
                                                     phonecontacts.forEach(function(factor, index){
                                                         if(index){
                                                             var contact_name = factor.name;

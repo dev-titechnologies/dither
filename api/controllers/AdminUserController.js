@@ -1,50 +1,16 @@
-
 /**
- * AdminController
+ * AdminUserController
  *
- * @description :: Server-side logic for managing Admin
+ * @description :: Server-side logic for managing adminusers
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-var crypto          =       require('crypto');
+
 var todayISO           =   new Date().toISOString();
-
-
 module.exports = {
 
     /* ==================================================================================================================================
-               Admin Login
+               View Details of every single User
    ==================================================================================================================================== */
-    adminLogin: function (req, res){
-                        console.log("userLogin  .....");
-                        var password = crypto.createHash('md5').update(req.body.password).digest("hex");
-                        console.log(password);
-                        //var password = req.body.password;
-                        var values = {
-                            username    : req.body.email,
-                            password    : password
-                        };
-                        console.log(values);
-                        // Get Admin details
-                        Admin.findOne(values).exec(function (err, result){
-                            if(err){
-                                sails.log.debug('Some error occured ' + err);
-                                return res.json(200, {status: 2, message: 'some error occured', error: err});
-                            }else{
-                                if(typeof result == "undefined"){
-                                        sails.log.debug({message: 'No admin found'});
-                                        return res.json(200, {status: 2, message: 'No admin found', data: result});
-                                }else{
-                                        return res.json(200, {status: 1, message: 'success', data: result.id });
-                                }
-                            }
-                        });
-    },
-    
-    
-    /* ==================================================================================================================================
-              View Details of every single User
-   ==================================================================================================================================== */
-
     getUserDetails: function(req, res){
                     console.log("getUserDetails ============== ADMIN");
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
@@ -166,53 +132,51 @@ module.exports = {
                                         //console.log("Results ---------- >>>>>>>>>");
                                         //console.log(results);
                                          return res.json(200, {status: 1, message: "success",
-                                                                data: results
+                                                                data: results[0]
                                                     });
                                 }
 
                     });
 
     },
-    
-/* ==================================================================================================================================
-              Edit Details of every single User
+
+    /* ==================================================================================================================================
+               Delete a particular User
    ==================================================================================================================================== */
 
-   
-	saveUserDetail		:	function(req,res){
-		console.log(req.params.all());
-		var name		=	req.param("name");
-		var email		=	req.param("email");
-		var phoneNumber	=	req.param("phoneNumber");
-		var id			=	req.param("userId");
-		var criteria;
-		var Query;
+    deleteUser: function(req, res){
+                    criteria={id: req.body.userId};
+                    data= {status: 'delete'};
+                User.update(criteria, data).exec(function (err, result) {
+                    if(err){
+                        // console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }else{
+                        //console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result});
+                    }
+                });
 
-		criteria		=	{
-								id		:	id
-							}
+    },
 
-		var data		=	{
-								name	:	name,
-								email	:	email,
-								phoneNumber:phoneNumber
-							}
+    /* ==================================================================================================================================
+               Activate Deactivate User
+   ==================================================================================================================================== */
 
-		User.update(criteria,data).exec(function(err,updatedData){
-				if(err){
-					 console.log("can not update user details",err);
-					 return res.json(200, {status: 2, error_details: err});
-				}else{
-					console.log("updated user details");
-					//console.log(updatedData);
-					return res.json(200, {status: 1,message:'success', data: updatedData});
-				}
+    userStatus: function(req, res){
+                    //key=req.body.key;
+                    criteria={id: req.body.userId};
+                    data= {status: req.body.status};
+                User.update(criteria, data).exec(function (err, result) {
+                    if(err){
+                         console.log(err);
+                        return res.json(200, { status: 2, error_details: 'db error' });
+                    }else{
+                        console.log(result);
+                        return res.json(200, {status: 1, message: "success", data: result[0]});
+                    }
+                });
 
-		})
-	},
-
-
-}
-
-
+    },
+};
 

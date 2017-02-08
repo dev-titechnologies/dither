@@ -20,12 +20,12 @@ module.exports = {
                     var collageId                   =     req.param("dither_id");
                     var comment                     =     req.param("comment_msg");
                     var mention_user_id             =     [];
-                   var mention_arr                 =     req.param("mentions");
+                    var mention_arr                 =     req.param("mentions");
                     var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                    //var   mention_arr             =    ['dqsalman.ti'];
+                    //var   mention_arr             =    [];
                     var commentImage_path           =     server_image_baseUrl + req.options.file_path.commentImage_path;
                     var comment_images              =     req.param("comment_img_arr");
                     var old_id                      =     '';
@@ -155,7 +155,7 @@ module.exports = {
 																		   console.log(mentionPushArr)
 																			  taggedUsers.forEach(function(factor, index){
 																				  if(userId!=factor.userId){
-																				   if(mentionPushArr){   
+																				   if(mentionPushArr.length){   
 																						 for(var i=0;i<mentionPushArr.length;i++){
 																							
 																							 if(factor.userId!=mentionPushArr[i]){
@@ -220,11 +220,6 @@ module.exports = {
 																      
 																    }
                                                                  
-																	/*if(userId   !=  collageDetails.userId){
-																		
-																		
-																	}
-																	*/
                                                             });
                                                             
                                                             

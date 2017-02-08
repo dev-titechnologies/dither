@@ -45,7 +45,8 @@ module.exports.cron = {
 																					NtfnBody            :   ntfn_body,
 																					NtfnType            :   8,
 																					id                  :   factor.id,
-																					notification_id     :   createdNotificationTags.id
+																					notification_id     :   createdNotificationTags.id,
+																					old_id 				:   ''
 																					};
 																	NotificationService.NotificationPush(data, function(err, ntfnSend){
 																			if(err){

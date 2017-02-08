@@ -11,7 +11,7 @@ var crypto = require('crypto');
  var path        = require('path');
 
  var  googleapis = require('googleapis');
- var  key        = require('service-account-credentials.json');
+ //var  key        = require('service-account-credentials.json');
  const VIEW_ID   = 'ga:130989248';
  var todayISO           =   new Date().toISOString();
 
@@ -1182,6 +1182,37 @@ updateTokenExpiryTime:function(req,res){
 
 								});
 							},
+	saveUserDetail		:	function(req,res){
+		console.log(req.params.all());
+		var name		=	req.param("name");
+		var email		=	req.param("email");
+		var phoneNumber	=	req.param("phoneNumber");
+		var id			=	req.param("userId");
+		var criteria;
+		var Query;
+
+		criteria		=	{
+								id		:	id
+							}
+
+		var data		=	{
+								name	:	name,
+								email	:	email,
+								phoneNumber:phoneNumber
+							}
+
+		User.update(criteria,data).exec(function(err,updatedData){
+				if(err){
+					 console.log("can not update user details",err);
+					 return res.json(200, {status: 2, error_details: err});
+				}else{
+					console.log("updated user details");
+					//console.log(updatedData);
+					return res.json(200, {status: 1,message:'success', data: updatedData});
+				}
+
+		})
+	},
 	
 
 }

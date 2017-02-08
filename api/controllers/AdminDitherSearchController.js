@@ -28,12 +28,17 @@ module.exports = {
                         var query;
                         var userIdCheck;
                         var innerOrderBy;
+                        var outerOrderBy  
                         if(orderby == 1){
                                 innerOrderBy            =   " DESC ";
                         }else{
                                 innerOrderBy            =   " ASC ";
                         }
-                        var outerOrderBy                =    " ORDER BY c.createdAt" +innerOrderBy+ "LIMIT "+start+" , "+count;
+                        if(start && count){
+							outerOrderBy                =    " ORDER BY c.createdAt" +innerOrderBy+ "LIMIT "+start+" , "+count;
+						}else{
+							outerOrderBy				=	 " ORDER BY c.createdAt" +innerOrderBy+ "LIMIT 0 , 48";
+						}
                         if(received_userId){
                             userIdCheck = " AND u.id = "+received_userId;
                         }else{

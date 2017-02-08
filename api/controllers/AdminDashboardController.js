@@ -6,7 +6,7 @@
  */
 
 var  googleapis             =   require('googleapis');
-var  key                    =   require('service-account-credentials.json');
+var  key                    =   require('../.././google-analytic-key/service-account-credentials.json');
 const VIEW_ID               =   'ga:130989248';
 module.exports = {
 

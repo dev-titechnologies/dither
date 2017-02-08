@@ -20,12 +20,12 @@ module.exports = {
                     var collageId                   =     req.param("dither_id");
                     var comment                     =     req.param("comment_msg");
                     var mention_user_id             =     [];
-                    var mention_arr                 =     req.param("mentions");
+                   var mention_arr                 =     req.param("mentions");
                     var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
                     var server_baseUrl              =     req.options.server_baseUrl;
                     var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                     var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
-                    //var   mention_arr             =    ['test_user','anu_r'];
+                    //var   mention_arr             =    ['dqsalman.ti'];
                     var commentImage_path           =     server_image_baseUrl + req.options.file_path.commentImage_path;
                     var comment_images              =     req.param("comment_img_arr");
                     var old_id                      =     '';
@@ -38,7 +38,7 @@ module.exports = {
                     console.log(comment_images)
                     console.log("comment image")
                     console.log(req.params.all());
-
+					
                     /*var status;
                     if(!comment_images){
                         if(!collageId || !comment){
@@ -120,8 +120,26 @@ module.exports = {
                                                     }else{
 
                                                         async.series([
+                                                        
 														 function(callback) {
                                                             console.log("COMMENT SERIES ----------NEW COMMENT FOR ALL-------- ");
+                                                            var mentionPushArr = [];
+                                                             if(mention_arr){
+                                                              
+																		User.find({mentionId: mention_arr}).exec(function (err, getUserId){
+																			if(err){
+																				console.log("mention")
+																				callback();
+																			}else{
+																				
+																				getUserId.forEach(function(factor, index){
+																					
+																					mentionPushArr.push(factor.id)
+																					
+																				});
+																			 }
+																		 });    
+															  }
                                                              Tags.find({collageId:collageId}).exec(function(err, taggedUsers){
                                                                   
                                                                   if(err){
@@ -131,15 +149,35 @@ module.exports = {
 																  else{
 																	  console.log("Tagged User")
 																	  console.log(taggedUsers)
+																	  
 																	   if(taggedUsers){
+																		   console.log("1")
+																		   console.log(mentionPushArr)
 																			  taggedUsers.forEach(function(factor, index){
 																				  if(userId!=factor.userId){
-																					tagged_users.push(factor.userId)
+																				   if(mentionPushArr){   
+																						 for(var i=0;i<mentionPushArr.length;i++){
+																							
+																							 if(factor.userId!=mentionPushArr[i]){
+																								 console.log(factor.userId)
+																								 tagged_users.push(factor.userId)
+																							 }
+																					 	 } 
+																					}
+																					else{
+																						tagged_users.push(factor.userId)
+																					}
 																				  }
 																			  });
 																		 }
 																		if(tagged_users.length){
-																		  User_token.find({userId: tagged_users}).exec(function (err, getDeviceId) {
+																			console.log("2")
+																			
+																			console.log(tagged_users) 
+																			
+																		
+																	     	
+																		User_token.find({userId: tagged_users}).exec(function (err, getDeviceId) {
 																				//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
 																					if(err){
 																						  console.log(err);
@@ -158,7 +196,7 @@ module.exports = {
 																												message             :   message,
 																												device_id           :   cmnt_deviceId_arr,
 																												NtfnBody            :   ntfn_body,
-																												NtfnType            :   3,
+																												NtfnType            :   11,
 																												id                  :   collageId
 																												};
 																								NotificationService.NotificationPush(data, function(err, ntfnSend){
@@ -173,6 +211,7 @@ module.exports = {
 																						}
 																					}
 																			});
+																		  
 																		 }
 																		 else{
 																			 callback();

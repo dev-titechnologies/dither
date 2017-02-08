@@ -196,8 +196,10 @@ module.exports = {
 																												message             :   message,
 																												device_id           :   cmnt_deviceId_arr,
 																												NtfnBody            :   ntfn_body,
-																												NtfnType            :   11,
-																												id                  :   collageId
+																												NtfnType            :   3,
+																												id                  :   collageId,
+																												notification_id     :   '',
+                                                                                                                old_id              :   ''
 																												};
 																								NotificationService.NotificationPush(data, function(err, ntfnSend){
 																										if(err){

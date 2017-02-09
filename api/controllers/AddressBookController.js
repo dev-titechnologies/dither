@@ -238,6 +238,7 @@ module.exports = {
                                                 " INNER JOIN user usr ON usr.id = adb.ditherUserId"+
                                                 " WHERE adb.userId = "+userId+
                                                 " AND adb.ditherUserId IS NOT NULL"+
+                                                " AND usr.status = 'active'"+
                                                 " GROUP BY usr.id"+
                                                 " ORDER BY usr.name";
                                         console.log(query);
@@ -267,6 +268,7 @@ module.exports = {
                                                     " INNER JOIN user usr ON usr.id = fbf.ditherUserId"+
                                                     " WHERE fbf.userId = "+userId+
                                                     " AND fbf.ditherUserId IS NOT NULL"+
+                                                    " AND usr.status = 'active'"+
                                                     " GROUP BY usr.id"+
                                                     " ORDER BY usr.name";
                                         console.log(query);
@@ -307,31 +309,31 @@ module.exports = {
 
 
        /* ==================================================================================================================================
-               To Select Contacts
+               To get Fb Friends (including new joinees)
        ==================================================================================================================================== */
         getFbFriends: function (req, res) {
-
             console.log("==========================  Fetching FbFriends Api =-=============");
             var tokenCheck                  =     req.options.tokenCheck;
             var userId                      =     tokenCheck.tokenDetails.userId;
             var fbId                        =     tokenCheck.tokenDetails.fbId;
             var frnd_arr                    =     [];
-
-            var query = "SELECT T.userId,U.name,U.fbId from TempFbFriends T LEFT JOIN user U ON T.userId = U.id where T.fbId = '"+fbId+"'";
+            var query = " SELECT"+
+                        " T.userId,U.name,U.fbId"+
+                        " FROM TempFbFriends T"+
+                        " INNER JOIN user U ON T.userId = U.id"+
+                        " WHERE"+
+                        " T.fbId = '"+fbId+"'"+
+                        " AND U.status = 'active'";
             TempFbFriends.query(query, function(err,getNewFbfrnds){
-
            // TempFbFriends.find({fbId:fbId}).exec(function (err, getNewFbfrnds){
                 if(err){
                     console.log(err)
                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'Some error occured in fetching FB Friends'});
-                }
-                else{
+                }else{
                     console.log(getNewFbfrnds)
-
                     if(!getNewFbfrnds.length){
                         return res.json(200, {status: 2, status_type: 'Failure' , message: 'No Friends Found!'});
-                    }
-                    else{
+                    }else{
                             console.log(getNewFbfrnds)
                             getNewFbfrnds.forEach(function(factor, index){
                                 frnd_arr.push({
@@ -342,24 +344,17 @@ module.exports = {
 
                             });
                             console.log(frnd_arr)
-
                             var query   = "DELETE FROM TempFbFriends where fbId = '"+fbId+"'";
                             TempFbFriends.query(query, function(err,deleteNewFrnds){
-
                                 if(err){
                                     console.log(err)
                                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'error!'});
-
                                 }else{
-
                                     console.log(deleteNewFrnds)
                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'successfully completed',frndList:frnd_arr});
                                 }
-
                             });
-
                     }
-
                 }
             });
         }

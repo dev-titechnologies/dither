@@ -275,11 +275,22 @@ module.exports = {
                                                                                 console.log(err);
                                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in getting closedDitherCount', error_details: err});
                                                                             }else{
+                                                                                    var closedDitherCount, opinionCount;
+                                                                                    if(results[0].closedDitherCount == null || results[0].closedDitherCount == '' || results[0].closedDitherCount == 0){
+                                                                                        closedDitherCount = 0;
+                                                                                    }else{
+                                                                                        closedDitherCount  = results[0].closedDitherCount;
+                                                                                    }
+                                                                                    if(results[0].opinionCount == null || results[0].opinionCount == '' || results[0].opinionCount == 0){
+                                                                                        opinionCount = 0;
+                                                                                    }else{
+                                                                                        opinionCount  = results[0].opinionCount;
+                                                                                    }
                                                                                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'No collage Found by the user',
                                                                                                             username                : foundUserDetails.name,
                                                                                                             user_profile_image      : user_profile_image,
-                                                                                                            total_opinion           : results[0].opinionCount,
-                                                                                                            closed_dither_count     : results[0].closedDitherCount,
+                                                                                                            total_opinion           : opinionCount,
+                                                                                                            closed_dither_count     : closedDitherCount,
                                                                                                             recent_dithers          : [],
                                                                                                             popular_dithers         : [],
                                                                                         });
@@ -339,11 +350,22 @@ module.exports = {
                                                                             }else{
                                                                                     console.log(query);
                                                                                     console.log(results);
+                                                                                    var closedDitherCount, opinionCount;
+                                                                                    if(results[0].closedDitherCount == null || results[0].closedDitherCount == '' || results[0].closedDitherCount == 0){
+                                                                                        closedDitherCount = 0;
+                                                                                    }else{
+                                                                                        closedDitherCount  = results[0].closedDitherCount;
+                                                                                    }
+                                                                                    if(results[0].opinionCount == null || results[0].opinionCount == '' || results[0].opinionCount == 0){
+                                                                                        opinionCount = 0;
+                                                                                    }else{
+                                                                                        opinionCount  = results[0].opinionCount;
+                                                                                    }
                                                                                     return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully get the Dithers',
                                                                                                             username                : foundUserDetails.name,
                                                                                                             user_profile_image      : user_profile_image,
-                                                                                                            total_opinion           : results[0].opinionCount,
-                                                                                                            closed_dither_count     : results[0].closedDitherCount,
+                                                                                                            total_opinion           : opinionCount,
+                                                                                                            closed_dither_count     : closedDitherCount,
                                                                                                             recent_dithers          : recent_dithers,
                                                                                                             popular_dithers         : popular_dithers,
                                                                                                         });
@@ -593,11 +615,11 @@ module.exports = {
                                                     if(err){
                                                        console.log(err)
                                                     }else{
-														 if(notifySettings){
-															if(notifySettings.notifyOpinion){
-																tagNtfyPush.push(factor);
-															}
-														}
+                                                         if(notifySettings){
+                                                            if(notifySettings.notifyOpinion){
+                                                                tagNtfyPush.push(factor);
+                                                            }
+                                                        }
                                                     }
                                                 });
                                             }

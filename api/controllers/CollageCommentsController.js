@@ -198,8 +198,8 @@ module.exports = {
 																												NtfnBody            :   ntfn_body,
 																												NtfnType            :   3,
 																												id                  :   collageId,
-																												notification_id     :   '',
-                                                                                                                old_id              :   ''
+																												notification_id     :   0,
+                                                                                                                old_id              :   0
 																												};
 																								NotificationService.NotificationPush(data, function(err, ntfnSend){
 																										if(err){

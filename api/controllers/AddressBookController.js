@@ -324,6 +324,7 @@ module.exports = {
                         " WHERE"+
                         " T.fbId = '"+fbId+"'"+
                         " AND U.status = 'active'";
+             console.log(query)           
             TempFbFriends.query(query, function(err,getNewFbfrnds){
            // TempFbFriends.find({fbId:fbId}).exec(function (err, getNewFbfrnds){
                 if(err){

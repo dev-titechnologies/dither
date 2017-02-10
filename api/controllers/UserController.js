@@ -219,7 +219,7 @@ module.exports = {
                                             function(callback){
                                                 console.log("---------------fbb-----------------------------")
                                                 console.log(sendStatus)
-                                                if(!fbUser){
+                                                if(!fbUser.length){
                                                     console.log("nofb user")
                                                     callback();
                                                 }else{
@@ -265,7 +265,7 @@ module.exports = {
                                                                         console.log(createdFbFriends);
                                                                   }
                                                             });*/
-                                                            if(notifyArr){
+                                                            if(notifyArr.length){
                                                                 var values ={
                                                                     notificationTypeId  :   5,
                                                                     userId              :   data.userId,

@@ -38,7 +38,7 @@ module.exports = {
                     console.log(comment_images)
                     console.log("comment image")
                     console.log(req.params.all());
-					
+
                     /*var status;
                     if(!comment_images){
                         if(!collageId || !comment){
@@ -54,7 +54,7 @@ module.exports = {
                         }
                     }*/
 
-                    if(!collageId || typeof(comment) == 'undefined' || !comment_images){
+                    if(!collageId || typeof(comment) == 'undefined' || !comment_images || (!comment_images.length && !comment)){
                                 //return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please pass the dither_id , comment_msg and comment_images'});
                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'commenting failed !'});
                     }else{
@@ -120,112 +120,112 @@ module.exports = {
                                                     }else{
 
                                                         async.series([
-                                                        
-														 function(callback) {
+
+                                                         function(callback) {
                                                             console.log("COMMENT SERIES ----------NEW COMMENT FOR ALL-------- ");
                                                             var mentionPushArr = [];
                                                              if(mention_arr){
-                                                              
-																		User.find({mentionId: mention_arr}).exec(function (err, getUserId){
-																			if(err){
-																				console.log("mention")
-																				callback();
-																			}else{
-																				
-																				getUserId.forEach(function(factor, index){
-																					
-																					mentionPushArr.push(factor.id)
-																					
-																				});
-																			 }
-																		 });    
-															  }
+
+                                                                        User.find({mentionId: mention_arr}).exec(function (err, getUserId){
+                                                                            if(err){
+                                                                                console.log("mention")
+                                                                                callback();
+                                                                            }else{
+
+                                                                                getUserId.forEach(function(factor, index){
+
+                                                                                    mentionPushArr.push(factor.id)
+
+                                                                                });
+                                                                             }
+                                                                         });
+                                                              }
                                                              Tags.find({collageId:collageId}).exec(function(err, taggedUsers){
-                                                                  
+
                                                                   if(err){
-																	  console.log(err)
-																	  callback();
-																  }
-																  else{
-																	  console.log("Tagged User")
-																	  console.log(taggedUsers)
-																	  
-																	   if(taggedUsers){
-																		   console.log("1")
-																		   console.log(mentionPushArr)
-																			  taggedUsers.forEach(function(factor, index){
-																				  if(userId!=factor.userId){
-																				   if(mentionPushArr.length){   
-																						 for(var i=0;i<mentionPushArr.length;i++){
-																							
-																							 if(factor.userId!=mentionPushArr[i]){
-																								 console.log(factor.userId)
-																								 tagged_users.push(factor.userId)
-																							 }
-																					 	 } 
-																					}
-																					else{
-																						tagged_users.push(factor.userId)
-																					}
-																				  }
-																			  });
-																		 }
-																		if(tagged_users.length){
-																			console.log("2")
-																			
-																			console.log(tagged_users) 
-																			
-																		
-																	     	
-																		User_token.find({userId: tagged_users}).exec(function (err, getDeviceId) {
-																				//User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
-																					if(err){
-																						  console.log(err);
-																						  callback();
-																					}else{
-																						var message     =  'New Comment Notification';
-																						var ntfn_body   =   "New Comment";
-																						var cmnt_deviceId_arr = [];
-																						getDeviceId.forEach(function(factor, index){
-																							cmnt_deviceId_arr.push(factor.deviceId);
-																						});
-																						if(!cmnt_deviceId_arr.length){
-																								callback();
-																						}else{
-																								var data        =  {
-																												message             :   message,
-																												device_id           :   cmnt_deviceId_arr,
-																												NtfnBody            :   ntfn_body,
-																												NtfnType            :   3,
-																												id                  :   collageId,
-																												notification_id     :   0,
+                                                                      console.log(err)
+                                                                      callback();
+                                                                  }
+                                                                  else{
+                                                                      console.log("Tagged User")
+                                                                      console.log(taggedUsers)
+
+                                                                       if(taggedUsers){
+                                                                           console.log("1")
+                                                                           console.log(mentionPushArr)
+                                                                              taggedUsers.forEach(function(factor, index){
+                                                                                  if(userId!=factor.userId){
+                                                                                   if(mentionPushArr.length){
+                                                                                         for(var i=0;i<mentionPushArr.length;i++){
+
+                                                                                             if(factor.userId!=mentionPushArr[i]){
+                                                                                                 console.log(factor.userId)
+                                                                                                 tagged_users.push(factor.userId)
+                                                                                             }
+                                                                                         }
+                                                                                    }
+                                                                                    else{
+                                                                                        tagged_users.push(factor.userId)
+                                                                                    }
+                                                                                  }
+                                                                              });
+                                                                         }
+                                                                        if(tagged_users.length){
+                                                                            console.log("2")
+
+                                                                            console.log(tagged_users)
+
+
+
+                                                                        User_token.find({userId: tagged_users}).exec(function (err, getDeviceId) {
+                                                                                //User_token.find({userId:selectContacts[0].userId }).exec(function (err, getDeviceId){
+                                                                                    if(err){
+                                                                                          console.log(err);
+                                                                                          callback();
+                                                                                    }else{
+                                                                                        var message     =  'New Comment Notification';
+                                                                                        var ntfn_body   =   "New Comment";
+                                                                                        var cmnt_deviceId_arr = [];
+                                                                                        getDeviceId.forEach(function(factor, index){
+                                                                                            cmnt_deviceId_arr.push(factor.deviceId);
+                                                                                        });
+                                                                                        if(!cmnt_deviceId_arr.length){
+                                                                                                callback();
+                                                                                        }else{
+                                                                                                var data        =  {
+                                                                                                                message             :   message,
+                                                                                                                device_id           :   cmnt_deviceId_arr,
+                                                                                                                NtfnBody            :   ntfn_body,
+                                                                                                                NtfnType            :   3,
+                                                                                                                id                  :   collageId,
+                                                                                                                notification_id     :   0,
                                                                                                                 old_id              :   0
-																												};
-																								NotificationService.NotificationPush(data, function(err, ntfnSend){
-																										if(err){
-																											console.log("Error in Push Notification Sending")
-																											console.log(err)
-																											callback();
-																										}else{
-																											callback();
-																										}
-																								});
-																						}
-																					}
-																			});
-																		  
-																		 }
-																		 else{
-																			 callback();
-																		 }
-																      
-																      
-																    }
-                                                                 
+                                                                                                                };
+                                                                                                NotificationService.NotificationPush(data, function(err, ntfnSend){
+                                                                                                        if(err){
+                                                                                                            console.log("Error in Push Notification Sending")
+                                                                                                            console.log(err)
+                                                                                                            callback();
+                                                                                                        }else{
+                                                                                                            callback();
+                                                                                                        }
+                                                                                                });
+                                                                                        }
+                                                                                    }
+                                                                            });
+
+                                                                         }
+                                                                         else{
+                                                                             callback();
+                                                                         }
+
+
+                                                                    }
+
                                                             });
-                                                            
-                                                            
-														},
+
+
+                                                        },
                                                         function(callback) {
                                                                 console.log("COMMENT SERIES ------------------ 1");
                                                                 if(mention_arr){
@@ -365,14 +365,14 @@ module.exports = {
                                                                                 }
                                                                             });
 
-                                                                           
+
                                                                     }else{
                                                                                 callback();
                                                                     }
                                                                 }
                                                             });
                                                         },
-                                                       
+
                                                         function(callback) {
                                                             console.log("COMMENT SERIES ------------------ 5");
                                                             User.findOne({id:userId}).exec(function (err, getUseDetails){
@@ -564,47 +564,47 @@ module.exports = {
                                                                                             console.log(err);
                                                                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
                                                                                     }else{
-																						
-																						NotificationLog.destroy({collageCommentId: commentId}).exec(function (err, deleteNotification){
-																							if(err){
-																									console.log(err);
-																									return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
-																							}else{
-																						
-																								CommentImages.find({commentId: commentId}).exec(function (err, foundCommentImages){
-																									if(err){
-																											console.log(err);
-																											return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
-																									}else{
-																											console.log(foundCommentImages);
-																											if(!foundCommentImages.length){
-																															commentLikeSuccess();
-																											}else{
-																												//Unlinking comment image
-																												foundCommentImages.forEach(function(factor, index){
-																													if(factor.image == null || factor.image == ""){
-																													}else{
-																															console.log("Unlinking comment image======");
-																															//var resize_comment_image  = factor.image;
-																															//var ext                   = resize_comment_image.split('.');
-																															//fs.unlink(comment_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
-																															fs.unlink(comment_unlink_path + factor.image);
-																													}
-																												});
 
-																												CommentImages.destroy({commentId: commentId}).exec(function (err, deleteCommentImages){
-																													if(err){
-																															console.log(err);
-																															return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
-																													}else{
-																															commentLikeSuccess();
-																													}
-																												});
-																											}
-																									}
-																								});
-																							}	
-																					  	});		
+                                                                                        NotificationLog.destroy({collageCommentId: commentId}).exec(function (err, deleteNotification){
+                                                                                            if(err){
+                                                                                                    console.log(err);
+                                                                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                                            }else{
+
+                                                                                                CommentImages.find({commentId: commentId}).exec(function (err, foundCommentImages){
+                                                                                                    if(err){
+                                                                                                            console.log(err);
+                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Finding the comment', error_details: err});
+                                                                                                    }else{
+                                                                                                            console.log(foundCommentImages);
+                                                                                                            if(!foundCommentImages.length){
+                                                                                                                            commentLikeSuccess();
+                                                                                                            }else{
+                                                                                                                //Unlinking comment image
+                                                                                                                foundCommentImages.forEach(function(factor, index){
+                                                                                                                    if(factor.image == null || factor.image == ""){
+                                                                                                                    }else{
+                                                                                                                            console.log("Unlinking comment image======");
+                                                                                                                            //var resize_comment_image  = factor.image;
+                                                                                                                            //var ext                   = resize_comment_image.split('.');
+                                                                                                                            //fs.unlink(comment_unlink_path + ext[0] + "_50x50" + "." +ext[1]);
+                                                                                                                            fs.unlink(comment_unlink_path + factor.image);
+                                                                                                                    }
+                                                                                                                });
+
+                                                                                                                CommentImages.destroy({commentId: commentId}).exec(function (err, deleteCommentImages){
+                                                                                                                    if(err){
+                                                                                                                            console.log(err);
+                                                                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Deleting the Dither', error_details: err});
+                                                                                                                    }else{
+                                                                                                                            commentLikeSuccess();
+                                                                                                                    }
+                                                                                                                });
+                                                                                                            }
+                                                                                                    }
+                                                                                                });
+                                                                                            }
+                                                                                        });
                                                                                     }
                                                                                 });
                                                                             }

@@ -18,21 +18,20 @@
                                         <!-- content -->
                                         <tr>
                                             <td style="font-family:  Arial, Helvetica, sans-serif; font-size: 13px; color: #a3a0a0; text-align: justify; line-height: 20px;  font-weight:400;">
-                                                <p>
-                                                    <p>
-                                                        Dear   {{receiverName}},
-                                                    </p>
-                                                    <p>
-                                                        Your Dither has been expired and you have {{ Vote }} opinion for this Dither!.
-                                                    </p>
-                                                    <p>
-                                                        <img src="{{ ditherImage }}" style="width:242px;height: auto">
-                                                    </p>
-                                                    <p>
-                                                        Cheers,<br/>
-                                                        Team Dither
-                                                    </p>
-                                                </p>
+                                                    <table width="560" cellpadding="8">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td> Dear   {{receiverName}}, </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>  Your Dither has been expired and you have {{ Vote }} opinion for this Dither!. </td>
+                                                                <td> <img src="{{ ditherImage }}" style="width:242px;height: auto"> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> Cheers, <br/> Team Dither</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                             </td>
                                         </tr>
                                         <!-- End of content -->

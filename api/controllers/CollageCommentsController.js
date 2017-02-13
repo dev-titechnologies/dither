@@ -187,19 +187,7 @@ module.exports = {
                                                                                         var ntfn_body   =   "New Comment";
                                                                                         var cmnt_deviceId_arr = [];
                                                                                         getDeviceId.forEach(function(factor, index){
-																						  User.findOne({id:factor.id}).exec(function (err, notifySettings){
-																								if(err){
-																								   console.log(err)
-																								}else{
-																									if(notifySettings){
-																										if(notifySettings.notifyComment){
-																												cmnt_deviceId_arr.push(factor.deviceId);
-																										}
-																									}
-																								}
-																							});	
-																							
-                                                                                            //cmnt_deviceId_arr.push(factor.deviceId);
+                                                                                            cmnt_deviceId_arr.push(factor.deviceId);
                                                                                         });
                                                                                         if(!cmnt_deviceId_arr.length){
                                                                                                 callback();
@@ -213,9 +201,6 @@ module.exports = {
                                                                                                                 notification_id     :   0,
                                                                                                                 old_id              :   0
                                                                                                                 };
-                                                                                                                
-                                                                                                                
-                                                                                                                
                                                                                                 NotificationService.NotificationPush(data, function(err, ntfnSend){
                                                                                                         if(err){
                                                                                                             console.log("Error in Push Notification Sending")

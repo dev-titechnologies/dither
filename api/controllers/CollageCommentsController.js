@@ -155,18 +155,32 @@ module.exports = {
                                                                            console.log(mentionPushArr)
                                                                               taggedUsers.forEach(function(factor, index){
                                                                                   if(userId!=factor.userId){
-                                                                                   if(mentionPushArr.length){
-                                                                                         for(var i=0;i<mentionPushArr.length;i++){
+																					 User.findOne({id:factor.userId}).exec(function (err, notifySettings){
+                                                                                        if(err){
+                                                                                           console.log(err)
+                                                                                        }else{
+                                                                                            if(notifySettings){
+                                                                                                if(notifySettings.notifyComment){
+                                                                                                        
+																								   if(mentionPushArr.length){
+																										 for(var i=0;i<mentionPushArr.length;i++){
 
-                                                                                             if(factor.userId!=mentionPushArr[i]){
-                                                                                                 console.log(factor.userId)
-                                                                                                 tagged_users.push(factor.userId)
-                                                                                             }
-                                                                                         }
-                                                                                    }
-                                                                                    else{
-                                                                                        tagged_users.push(factor.userId)
-                                                                                    }
+																											 if(factor.userId!=mentionPushArr[i]){
+																												 console.log(factor.userId)
+																												 tagged_users.push(factor.userId)
+																											 }
+																										 }
+																									}
+																									else{
+																										tagged_users.push(factor.userId)
+																									}
+                                                                                    
+																								}
+                                                                                            }
+                                                                                        }
+                                                                                    });
+                                                                                    
+                                                                                    
                                                                                   }
                                                                               });
                                                                          }

@@ -75,10 +75,10 @@ module.exports = {
                 }else{
                         var updateArray   =  [];
                         data.forEach(function(factor, index){
-                            updateArray.push("("+factor.id+",'"+factor.value+"')");
+                            updateArray.push("("+factor.id+",'"+factor.value+"', NOW(), NOW())");
                         });
 
-                        var query = "INSERT INTO settings (id,value) VALUES"+updateArray+
+                        var query = "INSERT INTO settings (id,value,createdAt,updatedAt) VALUES"+updateArray+
                                     " ON"+
                                     " DUPLICATE KEY"+
                                     " UPDATE value=VALUES(value)";

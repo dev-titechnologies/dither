@@ -579,6 +579,7 @@ module.exports = {
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
         var deviceId                    =     req.get('device_id');
+        var accessToken					=     req.get('accessToken');
         var mobile_no                   =     req.param('mobile_number');
         var fbId                        =     req.param('fb_uid');
         //console.log(req.headers)
@@ -589,7 +590,7 @@ module.exports = {
         console.log(deviceId)
         console.log(mobile_no)
         console.log(fbId)
-
+        console.log(accessToken)
         if( (!deviceId && !fbId && !mobile_no) || (deviceId && !fbId && !mobile_no) || (!deviceId && fbId && mobile_no) || (!deviceId && fbId && !mobile_no) || (!deviceId && !fbId && mobile_no)  ){
                     return res.json(200, {status: 2, status_type: 'Failure' , message: 'please pass (fb_uid & device_id) OR (mobile_number & device_id)'});
                      //If an error occured, we let express/connect handle it by calling the "next" function
@@ -629,21 +630,53 @@ module.exports = {
                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation', error_details: err});
                                                             }
                                                             else{
-
-                                                                var notifyArray = [];
-                                                                notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
-                                                                var profile_image       =    profilePic_path + results[0].profilePic;
-                                                                return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
-                                                                                      email             :   results[0].email,
-                                                                                      full_name         :   results[0].name,
-                                                                                      fb_uid            :   results[0].fbId,
-                                                                                      isNewUser         :   false,
-                                                                                      profile_image     :   profile_image,
-                                                                                      token             :   userTokenDetails.token.token,
-                                                                                      user_id           :   results[0].id,
-                                                                                      mobile_number     :   results[0].phoneNumber,
-                                                                                      notification      :   notifyArray
-                                                                                });
+																 if(!accessToken ){
+																		//return res.json(200, {status: 2, status_type: 'failure' ,  message: "Please pass accessToken"});
+																	 
+																		var notifyArray = [];
+																		notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
+																		var profile_image       =    profilePic_path + results[0].profilePic;
+																		return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
+																							  email             :   results[0].email,
+																							  full_name         :   results[0].name,
+																							  fb_uid            :   results[0].fbId,
+																							  isNewUser         :   false,
+																							  profile_image     :   profile_image,
+																							  token             :   userTokenDetails.token.token,
+																							  user_id           :   results[0].id,
+																							  mobile_number     :   results[0].phoneNumber,
+																							  notification      :   notifyArray
+																						});
+																 }
+															     else{
+																	var data     = {accessToken:accessToken};
+																	var criteria = {id: results[0].id};
+																	User.update(criteria,data).exec(function(err, data){
+																	  if(err){
+																		  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in access token updation', error_details: err});
+																	  }else{
+																		  
+																	  
+																			var notifyArray = [];
+																			notifyArray.push({comment:results[0].notifyComment,contact:results[0].notifyContact,vote:results[0].notifyVote,opinion:results[0].notifyOpinion,mention:results[0].notifyMention});
+																			var profile_image       =    profilePic_path + results[0].profilePic;
+																			return res.json(200, {status: 1, status_type: 'Success' ,  message: "This user already have an account in dither",
+																								  email             :   results[0].email,
+																								  full_name         :   results[0].name,
+																								  fb_uid            :   results[0].fbId,
+																								  isNewUser         :   false,
+																								  profile_image     :   profile_image,
+																								  token             :   userTokenDetails.token.token,
+																								  user_id           :   results[0].id,
+																								  mobile_number     :   results[0].phoneNumber,
+																								  notification      :   notifyArray
+																							});
+																							
+																		}
+																	 
+																    });					
+																							
+																}						
                                                             }
                                                         });
 

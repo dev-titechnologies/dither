@@ -1555,8 +1555,8 @@ module.exports = {
              FB CALLBACK
     ================================================================================================================================== */
     fbcallback: function (req, res){
-
-          console.log("--------------GET FBCALLBACK---------------")
+		
+		console.log("--------------GET FBCALLBACK---------------")
           console.log(req.params.all())
           console.log(req.body)
           console.log(req.headers)
@@ -1593,6 +1593,45 @@ module.exports = {
 		  else{
 			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
 		  }
+
+        /*  console.log("--------------GET FBCALLBACK---------------")
+          var   request 	= require('request');
+          var my_token_code	= 5;
+          var challenge 	= req.param('hub.challenge');
+		  var verify_token 	= req.param('hub.verify_token');
+		  var data 			= req.params.all();
+		  var frnds	 	    = [];
+		  var frnds_arr		= [];
+		 
+				
+		  request.get({
+					url: 'https://graph.facebook.com/v2.8/me/friends?access_token=EAAD8nuUh7j0BAOoei2dH4h2tlBFXltP3zKnsJYfqKblNKqgZANwseb5uSei2oj2jN7eZCqoeZAbeKshjz5CXfLmIwnmdOWsO6z4ZCA2qBMyZCrZBobxHAomHWu0BXpTmYBZArg78a4gE6jCkBXwSEZBmA6iEoZCeixsNQ5ZC4UyzZAqb7FGb9ZBbD0asTY0kBaZBZC9gEZD&debug=all&format=json&method=get&pretty=0&suppress_http_code=1'
+				}, function(error, response, body) {
+					if (error) {
+						console.log(error)
+						return res.json(200, {status: 2, status_type: 'Failure'});
+					}
+					else {
+						//sails.log.info(response);
+						console.log("-----------Response-----------------")
+						
+						frnds			=	JSON.parse(response.body);
+						frnds_arr		=	frnds.data;
+						console.log("frnds list")
+						console.log(frnds_arr)
+						
+						frnds_arr.forEach(function(factor, index){
+							
+							console.log("frnddd")
+							console.log(factor)
+							
+						});
+						
+					
+					}
+				});	*/	
+		  
+		  
 
     },
 

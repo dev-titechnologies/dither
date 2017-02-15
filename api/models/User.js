@@ -45,6 +45,10 @@ module.exports = {
                 type: 'string',
                 unique: true
             },
+        accessToken: {
+                type: 'string',
+                unique: true
+            },
         status: {
                 type: 'string',
                 enum: ['active', 'inactive', 'delete'],

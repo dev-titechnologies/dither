@@ -23,7 +23,9 @@ module.exports = {
 		  var frnds	 	    	= [];
 		  var frnds_arr			= [];
 		  var params 			= req.params.all();
+		  console.log("rececive dataaaaaaaaaaaaa")
 		  console.log(params)
+		  console.log(params.length)
 		 // var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
 		
 		  if(!params.length){

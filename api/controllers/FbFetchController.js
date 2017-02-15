@@ -32,8 +32,8 @@ module.exports = {
 			            console.log(req.params.all())
 			  console.log("nodataaaaaaaaa "+params+" kooi");
 			 // return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
-			  //return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
-			   return res.send(challenge);
+			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
+			   //return res.send(challenge);
 		  }else{ 
 			   console.log("dataaaaaaaaaaa")
 			   var data				= JSON.stringify(params);

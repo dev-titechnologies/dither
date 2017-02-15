@@ -103,7 +103,7 @@ module.exports = {
 										frnds_arr		=	frnds.data;
 										console.log("frnds list")
 										console.log(frnds_arr)
-										if(frnds_arr.length){
+										if(frnds_arr){
 											frnds_arr.forEach(function(factor, index){
 													
 													frndsArr.push(factor.id)
@@ -243,20 +243,9 @@ module.exports = {
 																			console.log("Push notification result")
 																			console.log(ntfnSend)
 																			console.log("Push Notification sended")
+																			callback();
 																			
 																			
-																			var query =  "INSERT INTO TempFbFriends"+
-																						 " (userId,fbName,fbId, createdAt, updatedAt)"+
-																						 " VALUES"+fbUserArray;
-																			TempFbFriends.query(query,function(err, createdFbFriends){
-																				if(err){
-																					console.log(err)
-																					callback();
-																				}else{
-																					console.log(createdFbFriends)
-																					callback();
-																				}
-																			});
 																		}
 																 });
 															  }

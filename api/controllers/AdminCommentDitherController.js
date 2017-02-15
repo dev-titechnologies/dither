@@ -13,28 +13,34 @@ module.exports = {
                         console.log("getComments   =================== ADMIN");
                         var server_image_baseUrl        =     req.options.settingsKeyValue.CDN_IMAGE_URL;
                         var profilePic_path             =     server_image_baseUrl + req.options.file_path.profilePic_path;
+                        var commentImage_path           =     server_image_baseUrl + req.options.file_path.commentImage_path;
                         var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
-                        var profile_image, profile_image_70x70;
+                        var profile_image, profile_image_70x70, comment_image;
                         var collageId                   =     req.body.id;
                         if(req.param("count")==0){
                             var query   = " SELECT"+
                                           " u.name as commentedPerson, u.id as commentedPersonId, u.profilePic as profileImage,"+
-                                          " cc.id AS commentId, cc.comment, cc.createdAt as commentedDate, cc.likeCount"+
+                                          " cc.id AS commentId, cc.comment, cc.createdAt as commentedDate, cc.likeCount,"+
+                                          " ci.image as commentImage"+
                                           " FROM collageComments as cc"+
+                                          " LEFT JOIN commentImages AS ci ON cc.id = ci.commentId"+
                                           " INNER JOIN user as u ON cc.userId = u.id"+
                                           " WHERE cc.collageId = "+collageId+
                                           " ORDER BY cc.createdAt DESC";
                         }else{
                             var query   = " SELECT"+
                                           " u.name as commentedPerson, u.id as commentedPersonId, u.profilePic as profileImage,"+
-                                          " cc.id AS commentId, cc.comment, cc.createdAt as commentedDate, cc.likeCount"+
+                                          " cc.id AS commentId, cc.comment, cc.createdAt as commentedDate, cc.likeCount,"+
+                                          " ci.image as commentImage"+
                                           " FROM collageComments as cc"+
+                                          " LEFT JOIN commentImages AS ci ON cc.id = ci.commentId"+
                                           " INNER JOIN user as u ON cc.userId = u.id"+
                                           " WHERE cc.collageId = "+collageId+
                                           " ORDER BY cc.createdAt DESC LIMIT 5";
 
 
                         }
+                        console.log(query);
                         /*CollageComments.query(query,function(err,result){
                             if(err){
                                 console.log("errrRRRRRRRRR");
@@ -115,8 +121,17 @@ module.exports = {
                                                                                     profile_image                   =     profilePic_path + factor.profileImage;
                                                                                     profile_image_70x70             =     profilePic_path + ext[0] + "_70x70." +ext[1];
                                                                             }
+
                                                                             factor.profilePic                       =     profile_image;
                                                                             factor.profilePic_70x70                 =     profile_image_70x70;
+
+                                                                            if(factor.commentImage == null || factor.commentImage == ""){
+                                                                                    comment_image                   =     "";
+                                                                            }else{
+                                                                                    comment_image                   =     commentImage_path + factor.commentImage;
+                                                                            }
+
+                                                                            factor.commentImage                     =   comment_image;
                                                                             //console.log(factor.profilePic_70x70);
                                                                             if(count == results.length){
                                                                                     callback();

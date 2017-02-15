@@ -26,10 +26,12 @@ module.exports = {
 
         createdAt: {
             type: 'datetime',
+            defaultsTo : new Date(),
         },
 
         updatedAt: {
             type: 'datetime',
+            defaultsTo : new Date(),
         },
 
   }

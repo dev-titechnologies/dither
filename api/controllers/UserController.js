@@ -22,33 +22,72 @@ module.exports = {
         var token_expiry_hour           =     req.options.settingsKeyValue.TOKEN_EXPIRY_HOUR;
         var profilePic_path             =     req.options.file_path.profilePic_path;
         var profilePic_path_assets      =     req.options.file_path.profilePic_path_assets;
-        var imgUrl                      =     req.param('profilepic');
-        var OTPCode                     =     req.param('otp');
-        var deviceId                    =     req.get('device_id');
+
+        var device_Id                   =     req.get('device_id');
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
+
         var fbUser                      =     req.param('fb_array');
+        var phoneNumber                 =     req.param('mobile_number');
+        var fbId                        =     req.param('fb_uid');
+        var emailId                     =     req.param('email_id');
+        var userName                    =     req.param('username');
+        var mentionId                   =     req.param('mention_id');
+        var imgUrl                      =     req.param('profilepic');
+        var OTPCode                     =     req.param('otp');
+
         var sendStatus                  =     false;
-        console.log(fbUser)
-        if(!req.param('mobile_number')  || !req.param('fb_uid') || !req.get('device_id') || !req.param('email_id') || !req.param('username') || !req.param('mention_id') || !req.get('device_imei')|| !req.get('device_type')){
-                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid and device_id and profilepic and mobile_number and email_id and username and otp and mention_id and device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
+
+        console.log(req.params.all());
+        console.log("device_Id ====================");
+        console.log(device_Id);
+        console.log("device_IMEI ====================");
+        console.log(device_IMEI);
+        console.log("deviceType ====================");
+        console.log(device_Type);
+
+        //if(!phoneNumber || !fbId || !device_Id || !emailId || !userName || !mentionId || !device_IMEI || !device_Type || typeof(imgUrl) == "undefined"){
+                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid, device_id, profilepic, mobile_number, email_id, username, otp, mention_id, device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
+        //}
+        if(!device_Id){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass device_id'});
+        }else if(!device_IMEI){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass device_imei'});
+        }else if(!device_Type){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass device_type'});
+        }else if(typeof(fbUser) == "undefined"){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_array'});
+        }else if(!phoneNumber){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass mobile_number'});
+        }else if(!fbId){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid'});
+        }else if(!emailId){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass email_id'});
+        }else if(!userName){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass username'});
+        }else if(!mentionId){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass mention_id'});
+        }else if(typeof(imgUrl) == "undefined"){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass profilepic'});
+        }else if(!OTPCode){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass otp'});
         }else{
             if(imgUrl){
                 var filename            =    "image.png";
                 var imagename           =    new Date().getTime() + filename;
             }
             var values              =    {
-                                            name        : req.param('username'),
-                                            email       : req.param('email_id'),
-                                            fbId        : req.param('fb_uid'),
-                                            mentionId   : req.param('mention_id'),
-                                            phoneNumber : req.param('mobile_number'),
+                                            name        : userName,
+                                            email       : emailId,
+                                            fbId        : fbId,
+                                            mentionId   : mentionId,
+                                            phoneNumber : phoneNumber,
                                             profilePic  : imagename,
                                          };
             var deviceId_arr        =    [];
             var contact_arr         =    [];
             var newFrnds            =    [];
-            User.findOne({fbId:req.param('fb_uid')}).exec(function (err, resultData){
+            User.findOne({fbId  :  fbId}).exec(function (err, resultData){
                 if(err){
                         console.log(err)
                         return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Error Occured in finding userDetails'});
@@ -62,7 +101,7 @@ module.exports = {
                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in user creation', error_details: err});
                             }else{
                                 // Create new access token on login
-                                UsertokenService.createToken(results.id, deviceId,device_IMEI,device_Type,token_expiry_hour, function (err, userTokenDetails) {
+                                UsertokenService.createToken(results.id, device_Id,device_IMEI,device_Type,token_expiry_hour, function (err, userTokenDetails) {
                                     if(err){
                                             sails.log(userTokenDetails)
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in token creation',error_details: err});
@@ -175,10 +214,8 @@ module.exports = {
                                             function(callback){
                                                 //-----------------INvitation table ---Tag editing----------------------
                                                 console.log("parallel 4")
-                                                console.log(req.param('mobile_number'))
-                                                var mobile_number  = req.param('mobile_number');
-
-                                                Invitation.find({phoneNumber : mobile_number}).exec(function (err, selectContacts){
+                                                console.log(phoneNumber)
+                                                Invitation.find({phoneNumber : phoneNumber}).exec(function (err, selectContacts){
                                                     if(err){
                                                         console.log(err);
                                                         callback();
@@ -191,7 +228,7 @@ module.exports = {
 
                                                                 invited_collage_Array.push("("+factor.collageId+",'"+results.id+"', now(), now())");
                                                             });
-                                                            Invitation.destroy({phoneNumber: req.param('mobile_number')}).exec(function (err, deleteInvitation) {
+                                                            Invitation.destroy({phoneNumber: phoneNumber}).exec(function (err, deleteInvitation) {
                                                                 if(err){
                                                                     console.log(err);
                                                                     callback();
@@ -346,9 +383,9 @@ module.exports = {
                                             function (callback){
                                                 console.log("parallel 5")
                                                 console.log(sendStatus)
-                                                var number            = req.param('mobile_number');
+                                                //var number            = req.param('mobile_number');
                                                 var phoneContactsArray    = [];
-                                                var query   =   "SELECT userId FROM addressBook where ditherUserPhoneNumber='"+number+"' group by userId";
+                                                var query   =   "SELECT userId FROM addressBook where ditherUserPhoneNumber='"+phoneNumber+"' group by userId";
                                                 AddressBook.query(query, function(err,UserContacts){
                                                     if(err){
                                                         callback();
@@ -409,7 +446,16 @@ module.exports = {
                                                                                 if(!deviceId_arr.length){
                                                                                         callback();
                                                                                 }else{
-                                                                                    var data        =  {message:message,device_id:deviceId_arr,NtfnBody:ntfn_body,NtfnType:4,id:results.id,notification_id:createdNotification.id,old_id:'',number:results.phoneNumber};
+                                                                                    var data        =  {
+                                                                                                        message             :   message,
+                                                                                                        device_id           :   device_Id_arr,
+                                                                                                        NtfnBody            :   ntfn_body,
+                                                                                                        NtfnType            :   4,
+                                                                                                        id                  :   results.id,
+                                                                                                        notification_id     :   createdNotification.id,
+                                                                                                        old_id              :   '',
+                                                                                                        number              :   results.phoneNumber
+                                                                                                    };
                                                                                     NotificationService.NotificationPush(data, function(err, ntfnSend){
                                                                                         if(err){
                                                                                             console.log(err)

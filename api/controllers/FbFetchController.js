@@ -27,13 +27,15 @@ module.exports = {
 		  var params 			= req.params.all();
 		  var data				= JSON.stringify(params);
 		 // var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
+		 var data = {};
 		  console.log(data)
-		 
-		  if(!data.length){
+		 var fbData 	 	= JSON.parse(data);
+		  if(!data){
 			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
 			  
 		  }else{ 
-			  var fbData 	 	= JSON.parse(data);
+			 if(fbData.length){ 
+			  
 			  var change_arr 	= [];
 			  change_arr	 	=	fbData.entry[0].changed_fields;
 			  var fbId		 	=	fbData.entry[0].id;
@@ -288,7 +290,10 @@ module.exports = {
 				  return res.json(200, {status: 2, status_type: 'Failure'});
 			  }
 			  
-						 
+			  
+			}else{
+				return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
+			}			 
 		  }
 		 
     },

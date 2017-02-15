@@ -15,9 +15,7 @@ module.exports = {
 
           console.log("--------------GET FBCALLBACK---------------")
           console.log(req.params.all())
-          console.log(req.body)
-          console.log(req.headers)
-          console.log(req.hub_challenge)
+          
           var request			= require('request');
           var my_token_code		= 5;
           var challenge 		= req.param('hub.challenge');
@@ -25,20 +23,18 @@ module.exports = {
 		  var frnds	 	    	= [];
 		  var frnds_arr			= [];
 		  var params 			= req.params.all();
-		 //co
+		  console.log(params)
 		 // var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
 		
 		  if(!params.length){
-			            console.log(req.params.all())
-			  console.log("nodataaaaaaaaa "+params+" kooi");
-			 // return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
+			            
 			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
 			   //return res.send(challenge);
 		  }else{ 
-			   console.log("dataaaaaaaaaaa")
-			   var data				= JSON.stringify(params);
-				console.log(data)
-				var fbData 	 	= JSON.parse(data);
+		     console.log("dataaaaaaaaaaa")
+			 var data			= JSON.stringify(params);
+			 console.log(data)
+			 var fbData 	 	= JSON.parse(data);
 			 if(fbData.length){ 
 			  
 			  var change_arr 	= [];

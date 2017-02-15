@@ -29,6 +29,7 @@ module.exports = {
 		 // var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
 		
 		  if(!params.length){
+			            console.log(req.params.all())
 			  console.log("nodataaaaaaaaa "+params+" kooi");
 			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
 			  //return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});

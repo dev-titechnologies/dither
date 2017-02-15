@@ -26,7 +26,8 @@ module.exports = {
         var device_Id                   =     req.get('device_id');
         var device_IMEI                 =     req.get('device_imei');
         var device_Type                 =     req.get('device_type');
-
+		var accessToken					=     req.get('accessToken');
+		
         var fbUser                      =     req.param('fb_array');
         var phoneNumber                 =     req.param('mobile_number');
         var fbId                        =     req.param('fb_uid');
@@ -35,7 +36,7 @@ module.exports = {
         var mentionId                   =     req.param('mention_id');
         var imgUrl                      =     req.param('profilepic');
         var OTPCode                     =     req.param('otp');
-
+		
         var sendStatus                  =     false;
 
         console.log(req.params.all());
@@ -83,6 +84,7 @@ module.exports = {
                                             mentionId   : mentionId,
                                             phoneNumber : phoneNumber,
                                             profilePic  : imagename,
+                                            accessToken	: accessToken
                                          };
             var deviceId_arr        =    [];
             var contact_arr         =    [];

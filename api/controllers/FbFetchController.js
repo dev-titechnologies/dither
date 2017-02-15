@@ -29,7 +29,10 @@ module.exports = {
 		 // var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
 		  console.log(data)
 		 
-		  if(data){ 
+		  if(!data.length){
+			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
+			  
+		  }else{ 
 			  var fbData 	 	= JSON.parse(data);
 			  var change_arr 	= [];
 			  change_arr	 	=	fbData.entry[0].changed_fields;
@@ -287,10 +290,7 @@ module.exports = {
 			  
 						 
 		  }
-		  else{
-			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
-		  }
-
+		 
     },
     /* ===================================================================================================================================
              FB CALLBACK

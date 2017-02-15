@@ -28,7 +28,7 @@ module.exports = {
 		  console.log(params.length)
 		 // var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
 		
-		  if(!params.length){
+		  if(!params){
 			            
 			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
 			   //return res.send(challenge);
@@ -37,7 +37,7 @@ module.exports = {
 			 var data			= JSON.stringify(params);
 			 console.log(data)
 			 var fbData 	 	= JSON.parse(data);
-			 if(fbData.length){ 
+			 if(fbData.entry.length){ 
 			  
 			  var change_arr 	= [];
 			  change_arr	 	=	fbData.entry[0].changed_fields;

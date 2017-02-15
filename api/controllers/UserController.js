@@ -46,8 +46,31 @@ module.exports = {
         console.log("deviceType ====================");
         console.log(device_Type);
 
-        if(!phoneNumber || !fbId || !device_Id || !emailId || !userName || !mentionId || !device_IMEI || !device_Type || typeof(imgUrl) == "undefined"){
-                return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid, device_id, profilepic, mobile_number, email_id, username, otp, mention_id, device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
+        //if(!phoneNumber || !fbId || !device_Id || !emailId || !userName || !mentionId || !device_IMEI || !device_Type || typeof(imgUrl) == "undefined"){
+                //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid, device_id, profilepic, mobile_number, email_id, username, otp, mention_id, device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
+        //}
+        if(!device_Id){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass device_id'});
+        }else if(!device_IMEI){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass device_imei'});
+        }else if(!device_Type){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass device_type'});
+        }else if(typeof(fbUser) == "undefined"){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_array'});
+        }else if(!phoneNumber){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass mobile_number'});
+        }else if(!fbId){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid'});
+        }else if(!emailId){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass email_id'});
+        }else if(!userName){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass username'});
+        }else if(!mentionId){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass mention_id'});
+        }else if(typeof(imgUrl) == "undefined"){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass profilepic'});
+        }else if(!OTPCode){
+            return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass otp'});
         }else{
             if(imgUrl){
                 var filename            =    "image.png";

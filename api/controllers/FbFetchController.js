@@ -30,7 +30,7 @@ module.exports = {
 		
 		  if(!params.length){
 			  console.log("nodataaaaaaaaa")
-			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
+			  return res.json(200, {status: 1, status_type: 'Failure',message:'no data found'});
 			  
 		  }else{ 
 			   console.log("dataaaaaaaaaaa")

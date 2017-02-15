@@ -1566,7 +1566,7 @@ module.exports = {
 		  var verify_token 	= req.param('hub.verify_token');
 		  var data 			= req.params.all();
 		  console.log(data)
-		  if(data){
+		  if(data.length){
 			   console.log(data)
 			   values = {
 							data:JSON.stringify(data)

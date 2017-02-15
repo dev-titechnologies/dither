@@ -1556,15 +1556,15 @@ module.exports = {
     ================================================================================================================================== */
     fbcallback: function (req, res){
 		
-		console.log("--------------GET FBCALLBACK---------------")
+		console.log("--------------GET TEST FBCALLBACK---------------")
           console.log(req.params.all())
           
           var my_token_code	= 5;
           var challenge 	= req.param('hub.challenge');
 		  var verify_token 	= req.param('hub.verify_token');
 		  var data 			= req.params.all();
-		  console.log(data.length)
-		  if(data.length){
+		  console.log(data)
+		  if(data){
 			   console.log(data)
 			   values = {
 							data:JSON.stringify(data)

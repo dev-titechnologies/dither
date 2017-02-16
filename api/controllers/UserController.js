@@ -84,7 +84,7 @@ module.exports = {
                                             mentionId   : mentionId,
                                             phoneNumber : phoneNumber,
                                             profilePic  : imagename,
-                                            accessToken	: accessToken
+                                            //accessToken	: accessToken
                                          };
             var deviceId_arr        =    [];
             var contact_arr         =    [];

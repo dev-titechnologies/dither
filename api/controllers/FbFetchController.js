@@ -23,14 +23,14 @@ module.exports = {
 		  var frnds	 	    	= [];
 		  var frnds_arr			= [];
 		  var fbUserArray 		= [];
-		  var params 			= { entry: [ { time: 1487224915,id: '119124805202604', changed_fields: [Object],uid: '119124805202604' } ],object: 'user' };
+		  var params 			= req.params.all();
 		 // var params = {};
 		  console.log("rececive dataaaaaaaaaaaaa")
 		  console.log(params)
 		  var data			= JSON.stringify(params);
 		  console.log(data)
 		  console.log(data.length)
-		  //var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
+		  
 		  //var data  = {};
 		  if(data.length==undefined){
 			            

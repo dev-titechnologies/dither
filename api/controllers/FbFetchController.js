@@ -65,6 +65,8 @@ module.exports = {
 						userId   = result.id;
 						username = result.name;
 						accessToken = result.accessToken;
+						console.log("-----------accesss tokennnnnnnnn--------")
+						console.log(accessToken)
 						//userId   = 4;
 						//username = 'DQsalman';
 						//accessToken = 'EAAD8nuUh7j0BAOoei2dH4h2tlBFXltP3zKnsJYfqKblNKqgZANwseb5uSei2oj2jN7eZCqoeZAbeKshjz5CXfLmIwnmdOWsO6z4ZCA2qBMyZCrZBobxHAomHWu0BXpTmYBZArg78a4gE6jCkBXwSEZBmA6iEoZCeixsNQ5ZC4UyzZAqb7FGb9ZBbD0asTY0kBaZBZC9gEZD';
@@ -125,7 +127,7 @@ module.exports = {
 												callback();
 											}
 											else{
-												console.log(resultData)
+												//console.log(resultData)
 												var res_arr = [];
 												if(resultData.length){
 													
@@ -176,7 +178,7 @@ module.exports = {
 										 // callback();
 									}else{
 										console.log("-----------------6----------------------")
-										console.log(getDeviceId)
+										//console.log(getDeviceId)
 										if(getDeviceId){
 											getDeviceId.forEach(function(factor, index){
 												deviceId_arr.push(factor.deviceId);

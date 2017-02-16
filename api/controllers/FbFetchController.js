@@ -181,7 +181,7 @@ module.exports = {
 										 // callback();
 									}else{
 										console.log("-----------------6----------------------")
-										console.log(getDeviceId.length)
+										console.log(getDeviceId)
 										
 										getDeviceId.forEach(function(factor, index){
 											deviceId_arr.push(factor.deviceId);

@@ -293,7 +293,8 @@ module.exports = {
 										return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured ', error_details: err});
 									}else{
 										console.log("Lasttttttttttttttttttttt");
-										if(push_arr.length){
+										console.log(fbUserArray)
+										if(fbUserArray.length==0){
 											var query =  "INSERT INTO TempFbFriends"+
 														 " (userId,fbName,fbId, createdAt, updatedAt)"+
 														 " VALUES"+fbUserArray;

@@ -304,7 +304,7 @@ module.exports = {
 									}else{
 										console.log("Lasttttttttttttttttttttt");
 										console.log(fbUserArray.length)
-										if(fbUserArray.length==0){
+										if(fbUserArray.length!=0){
 											var query =  "INSERT INTO TempFbFriends"+
 														 " (userId,fbName,fbId, createdAt, updatedAt)"+
 														 " VALUES"+fbUserArray;

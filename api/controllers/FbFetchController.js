@@ -22,13 +22,14 @@ module.exports = {
 		  var verify_token 		= req.param('hub.verify_token');
 		  var frnds	 	    	= [];
 		  var frnds_arr			= [];
+		  var fbUserArray 		= [];
 		  var params 			= req.params.all();
 		  console.log("rececive dataaaaaaaaaaaaa")
 		  console.log(params)
 		  console.log(params.length)
-		 // var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
-		
-		  if(!params){
+		  //var data	=	'{"entry":[{"time":1487051631,"id":"129701107473387","changed_fields":["friends"],"uid":"129701107473387"}],"object":"user"}';
+		  //var data  = {};
+		  if(params.length==undefined){
 			            
 			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
 			   //return res.send(challenge);
@@ -123,6 +124,9 @@ module.exports = {
 												console.log(resultData)
 												var res_arr = [];
 												if(resultData.length){
+													
+													
+													
 													resultData.forEach(function(factor, index){
 											
 															res_arr.push(factor.fbId)
@@ -143,19 +147,7 @@ module.exports = {
 														  callback();
 														  
 													 } 
-													 else if(frndsArr.length < res_arr.length){
-														 
-															res_arr.forEach(function(factor, index){
-															  console.log("unfrienddddd")
-																if(frndsArr.indexOf(factor)<0){
-																	console.log(factor)
-																	push_arr.push(factor)
-																}
-															  });
-															  
-															callback();
-														 
-														 }else{
+													else{
 														 callback();
 													 }
 													 
@@ -179,7 +171,20 @@ module.exports = {
 								console.log(push_arr)
 								var userId_arr = [];
 								var deviceId_arr = [];
-								var fbUserArray = [];
+								
+								User_token.find({userId: userId}).exec(function (err, getDeviceId){
+									if(err){
+										  console.log(err);
+										 // callback();
+									}else{
+										console.log("-----------------6----------------------")
+										console.log(getDeviceId.length)
+										
+										getDeviceId.forEach(function(factor, index){
+											deviceId_arr.push(factor.deviceId);
+										});
+								    }
+								});
 								if(push_arr.length){
 									
 									User.find({fbId: push_arr}).exec(function (err, getUserId){
@@ -187,72 +192,86 @@ module.exports = {
 										if(err){
 											callback();
 										}else{
-											
+											console.log()
 											getUserId.forEach(function(factor, index){
-												fbUserArray.push("("+userId+",'"+factor.name+"','"+factor.fbId+"', now(), now())");
+												fbUserArray.push("("+factor.id+",'"+result.name+"','"+result.fbId+"', now(), now())");
 												if(factor.notifyContact){
-													userId_arr.push(factor.id);
+													//userId_arr.push(factor.id)
+													userId_arr.push({
+                                                                id   : factor.id,
+                                                                name   : factor.name,
+                                                                fbId   : factor.fbId
+													});
 												}
 											});
-											
-											if(userId_arr.length){
-											var values ={
-												notificationTypeId  :   5,
-												userId              :   userId,
-												tagged_users        :   userId_arr
-											}
-											console.log("valuessssssssssss")
-											console.log(values)
-											NotificationLog.create(values).exec(function(err, createdNotification){
-												if(err){
-													console.log(err);
-													//callback();
-												}else{
-													User_token.find({userId: userId_arr}).exec(function (err, getDeviceId){
-														if(err){
-															  console.log(err);
-															  callback();
-														}else{
-															console.log("-----------------6----------------------")
-															var message     =  'FBsignup Notification';
-															var ntfn_body   =   "Your facebook friend "+username+" is now on Dither";
-															getDeviceId.forEach(function(factor, index){
-																deviceId_arr.push(factor.deviceId);
-															});
-															if(!deviceId_arr.length){
-																console.log("deviceeee")
-																callback();
+											console.log(userId_arr)
+											if(userId_arr){
+												console.log("useriddddddddddddd")
+												userId_arr.forEach(function(factor, index){
+													console.log(factor)
+														var values ={
+															notificationTypeId  :   5,
+															userId              :   factor.id,
+															ditherUserId        :   userId
+														}
+														console.log("valuessssssssssss")
+														console.log(values)
+														NotificationLog.create(values).exec(function(err, createdNotification){
+															if(err){
+																console.log(err);
+																//callback();
 															}else{
-																console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
-																console.log(deviceId_arr)
-																var data        =  {
-																						message         :   message,
-																						device_id       :   deviceId_arr,
-																						NtfnBody        :   ntfn_body,
-																						NtfnType:5,id   :   userId,
-																						notification_id :   createdNotification.id,
-																						old_id          :   '',
-																						name            :   username
-																					};
-																NotificationService.NotificationPush(data, function(err, ntfnSend){
+																/*User_token.find({userId: userId}).exec(function (err, getDeviceId){
 																	if(err){
-																		console.log("Error in Push Notification Sending")
-																		console.log(err)
-																		callback();
+																		  console.log(err);
+																		 // callback();
 																	}else{
-																			console.log("Push notification result")
-																			console.log(ntfnSend)
-																			console.log("Push Notification sended")
-																			callback();
-																			
-																			
-																		}
-																 });
-															  }
-															}
-														});
-													}
-												});
+																		console.log("-----------------6----------------------")
+																		console.log(getDeviceId.length)
+																		var message     =  'FBsignup Notification';
+																		var ntfn_body   =   "Your facebook friend "+factor.name+" is now on Dither";
+																		getDeviceId.forEach(function(factor, index){
+																			deviceId_arr.push(factor.deviceId);
+																		});*/
+																		var message     =  'FBsignup Notification';
+																		var ntfn_body   =   "Your facebook friend "+factor.name+" is now on Dither";
+																		if(!deviceId_arr.length){
+																			console.log("deviceeee")
+																			//callback();
+																		}else{
+																			console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+																			console.log(deviceId_arr)
+																			var data        =  {
+																									message         :   message,
+																									device_id       :   deviceId_arr,
+																									NtfnBody        :   ntfn_body,
+																									NtfnType:5,id   :   userId,
+																									notification_id :   createdNotification.id,
+																									old_id          :   '',
+																									name            :   factor.name
+																								};
+																			NotificationService.NotificationPush(data, function(err, ntfnSend){
+																				if(err){
+																					console.log("Error in Push Notification Sending")
+																					console.log(err)
+																					//callback();
+																				}else{
+																						console.log("Push notification result")
+																						console.log(ntfnSend)
+																						console.log("Push Notification sended")
+																						
+																					 }
+																			 });
+																		  }
+																		//}
+																	//});
+																}
+															});
+													});	
+												callback();	
+											}
+											else{
+												callback();
 											}
 										
 										}
@@ -263,7 +282,7 @@ module.exports = {
 									callback();
 								}
 								
-							},	
+							},
 							], function(err) { //This function gets called after the two tasks have called their "task callbacks"
 									if(err){
 										console.log("Lasttttttttttttttttttttt   ERROR");
@@ -271,7 +290,24 @@ module.exports = {
 										return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured ', error_details: err});
 									}else{
 										console.log("Lasttttttttttttttttttttt");
-										return res.json(200, {status: 1, status_type: 'success'});	
+										if(push_arr.length){
+											var query =  "INSERT INTO TempFbFriends"+
+														 " (userId,fbName,fbId, createdAt, updatedAt)"+
+														 " VALUES"+fbUserArray;
+											TempFbFriends.query(query,function(err, createdFbFriends){
+												if(err){
+													console.log(err)
+													return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured '});
+												}else{
+													console.log(createdFbFriends)
+													return res.json(200, {status: 1, status_type: 'success'});
+												}
+											});
+										}else{
+											
+											return res.json(200, {status: 1, status_type: 'success'});
+										}	
+											
 									}
 							});
 						}

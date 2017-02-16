@@ -46,6 +46,8 @@ module.exports = {
         console.log(device_IMEI);
         console.log("deviceType ====================");
         console.log(device_Type);
+        console.log("Access Token ====================");
+        console.log(accessToken);
 
         //if(!phoneNumber || !fbId || !device_Id || !emailId || !userName || !mentionId || !device_IMEI || !device_Type || typeof(imgUrl) == "undefined"){
                 //return res.json(200, {status: 2, status_type: 'Failure' , message: 'Please pass fb_uid, device_id, profilepic, mobile_number, email_id, username, otp, mention_id, device_imei and device_type'}); //If an error occured, we let express/connect handle it by calling the "next" function
@@ -84,7 +86,7 @@ module.exports = {
                                             mentionId   : mentionId,
                                             phoneNumber : phoneNumber,
                                             profilePic  : imagename,
-                                            //accessToken	: accessToken
+                                            accessToken	: accessToken
                                          };
             var deviceId_arr        =    [];
             var contact_arr         =    [];

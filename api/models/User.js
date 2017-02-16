@@ -47,7 +47,8 @@ module.exports = {
             },
         accessToken: {
                 type: 'string',
-                unique: true
+                unique: true,
+                defaultsTo: 'null'
             },
         status: {
                 type: 'string',

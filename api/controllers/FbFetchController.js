@@ -23,6 +23,7 @@ module.exports = {
 		  var frnds	 	    	= [];
 		  var frnds_arr			= [];
 		  var fbUserArray 		= [];
+		  var deviceId_arr 		= [];
 		  var params 			= req.params.all();
 		 // var params = {};
 		  console.log("rececive dataaaaaaaaaaaaa")
@@ -167,14 +168,8 @@ module.exports = {
 									}
 								});	
 							},
-							function(callback) {
-								
-								//-----------push------------------------
-								 console.log("===========================3==Push to update frndsssss===================")
-								console.log(push_arr)
-								var userId_arr = [];
-								var deviceId_arr = [];
-								
+							function (callback){
+								 console.log("===========================device arr===================")
 								User_token.find({userId: userId}).exec(function (err, getDeviceId){
 									if(err){
 										  console.log(err);
@@ -182,12 +177,27 @@ module.exports = {
 									}else{
 										console.log("-----------------6----------------------")
 										console.log(getDeviceId)
-										
-										getDeviceId.forEach(function(factor, index){
-											deviceId_arr.push(factor.deviceId);
-										});
+										if(getDeviceId){
+											getDeviceId.forEach(function(factor, index){
+												deviceId_arr.push(factor.deviceId);
+											});
+											callback();
+										}else{
+											callback();
+										}	
 								    }
 								});
+								
+							},
+							function(callback) {
+								
+								//-----------push------------------------
+								 console.log("===========================3==Push to update frndsssss===================")
+								 console.log("device array")
+								 console.log(deviceId_arr)
+								console.log(push_arr)
+								var userId_arr = [];
+								
 								if(push_arr.length){
 									
 									User.find({fbId: push_arr}).exec(function (err, getUserId){

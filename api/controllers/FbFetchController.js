@@ -25,14 +25,13 @@ module.exports = {
 		  var fbUserArray 		= [];
 		  var deviceId_arr 		= [];
 		  var params 			= req.params.all();
-		 // var params = {};
+
 		  console.log("rececive dataaaaaaaaaaaaa")
 		  console.log(params)
 		  var data			= JSON.stringify(params);
 		  console.log(data)
 		  console.log(data.length)
-		  
-		  //var data  = {};
+
 		  if(data.length==undefined){
 			            
 			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
@@ -58,18 +57,14 @@ module.exports = {
 				  User.findOne({fbId:fbId}).exec(function (err, result){
 					if(err){
 						console.log(error)
-						//return res.json(200, {status: 2, status_type: 'Failure'});
 						callback();
 					}
 					else{
+						console.log("----------------Fetching User Details-----------------")
+						console.log(result)
 						userId   = result.id;
 						username = result.name;
 						accessToken = result.accessToken;
-						console.log("-----------accesss tokennnnnnnnn--------")
-						console.log(accessToken)
-						//userId   = 4;
-						//username = 'DQsalman';
-						//accessToken = 'EAAD8nuUh7j0BAOoei2dH4h2tlBFXltP3zKnsJYfqKblNKqgZANwseb5uSei2oj2jN7eZCqoeZAbeKshjz5CXfLmIwnmdOWsO6z4ZCA2qBMyZCrZBobxHAomHWu0BXpTmYBZArg78a4gE6jCkBXwSEZBmA6iEoZCeixsNQ5ZC4UyzZAqb7FGb9ZBbD0asTY0kBaZBZC9gEZD';
 						console.log('https://graph.facebook.com/v2.8/me/friends?access_token='+accessToken+'&debug=all&format=json&method=get&pretty=0&suppress_http_code=1')
 						async.series([
 						  function(callback) {
@@ -130,15 +125,16 @@ module.exports = {
 												//console.log(resultData)
 												var res_arr = [];
 												if(resultData.length){
-													
-													
-													
+												
 													resultData.forEach(function(factor, index){
 											
-															res_arr.push(factor.fbId)
+														res_arr.push(factor.fbId)
 															
 													});
 												 }
+												 console.log(res_arr.length)
+												 console.log(frndsArr.length)
+												 
 												 if(res_arr.length!=frndsArr.length){
 													 
 													 if(frndsArr.length > res_arr.length){
@@ -151,12 +147,10 @@ module.exports = {
 															}
 														  });
 														  callback();
-														  
 													 } 
 													else{
 														 callback();
 													 }
-													 
 												 }
 												 else
 												 {
@@ -171,14 +165,14 @@ module.exports = {
 								});	
 							},
 							function (callback){
-								 console.log("===========================device arr===================")
+								console.log("========================3------===device arr===================")
+							 if(push_arr.length){	
 								User_token.find({userId: userId}).exec(function (err, getDeviceId){
 									if(err){
 										  console.log(err);
 										 // callback();
 									}else{
-										console.log("-----------------6----------------------")
-										//console.log(getDeviceId)
+										
 										if(getDeviceId){
 											getDeviceId.forEach(function(factor, index){
 												deviceId_arr.push(factor.deviceId);
@@ -189,14 +183,16 @@ module.exports = {
 										}	
 								    }
 								});
+							  }else{
+								  callback();
+							  }	
 								
 							},
 							function(callback) {
 								
 								//-----------push------------------------
-								 console.log("===========================3==Push to update frndsssss===================")
-								 console.log("device array")
-								 console.log(deviceId_arr)
+								console.log("===========================4==Push Notification===================")
+								console.log("--------Push Notification Array--------")
 								console.log(push_arr)
 								var userId_arr = [];
 								
@@ -207,11 +203,10 @@ module.exports = {
 										if(err){
 											callback();
 										}else{
-											console.log()
+											
 											getUserId.forEach(function(factor, index){
 												fbUserArray.push("("+factor.id+",'"+result.name+"','"+result.fbId+"', now(), now())");
 												if(factor.notifyContact){
-													//userId_arr.push(factor.id)
 													userId_arr.push({
                                                                 id   : factor.id,
                                                                 name   : factor.name,
@@ -219,7 +214,7 @@ module.exports = {
 													});
 												}
 											});
-											console.log(userId_arr)
+											
 											if(userId_arr){
 												console.log("useriddddddddddddd")
 												userId_arr.forEach(function(factor, index){
@@ -236,54 +231,41 @@ module.exports = {
 																console.log(err);
 																//callback();
 															}else{
-																/*User_token.find({userId: userId}).exec(function (err, getDeviceId){
-																	if(err){
-																		  console.log(err);
-																		 // callback();
-																	}else{
-																		console.log("-----------------6----------------------")
-																		console.log(getDeviceId.length)
-																		var message     =  'FBsignup Notification';
-																		var ntfn_body   =   "Your facebook friend "+factor.name+" is now on Dither";
-																		getDeviceId.forEach(function(factor, index){
-																			deviceId_arr.push(factor.deviceId);
-																		});*/
-																		var message     =  'FBsignup Notification';
-																		var ntfn_body   =   "Your facebook friend "+factor.name+" is now on Dither";
-																		if(!deviceId_arr.length){
-																			console.log("deviceeee")
+																
+																var message     =  'FBsignup Notification';
+																var ntfn_body   =   "Your facebook friend "+factor.name+" is now on Dither";
+																if(!deviceId_arr.length){
+																	console.log("deviceeee")
+																	//callback();
+																}else{
+																	console.log("----------Device Array---------------")
+																	console.log(deviceId_arr)
+																	var data        =  {
+																							message         :   message,
+																							device_id       :   deviceId_arr,
+																							NtfnBody        :   ntfn_body,
+																							NtfnType:5,id   :   userId,
+																							notification_id :   createdNotification.id,
+																							old_id          :   '',
+																							name            :   factor.name
+																						};
+																	NotificationService.NotificationPush(data, function(err, ntfnSend){
+																		if(err){
+																			console.log("Error in Push Notification Sending")
+																			console.log(err)
 																			//callback();
 																		}else{
-																			console.log("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
-																			console.log(deviceId_arr)
-																			var data        =  {
-																									message         :   message,
-																									device_id       :   deviceId_arr,
-																									NtfnBody        :   ntfn_body,
-																									NtfnType:5,id   :   userId,
-																									notification_id :   createdNotification.id,
-																									old_id          :   '',
-																									name            :   factor.name
-																								};
-																			NotificationService.NotificationPush(data, function(err, ntfnSend){
-																				if(err){
-																					console.log("Error in Push Notification Sending")
-																					console.log(err)
-																					//callback();
-																				}else{
-																						console.log("Push notification result")
-																						console.log(ntfnSend)
-																						console.log("Push Notification sended")
-																						
-																					 }
-																			 });
-																		  }
-																		//}
-																	//});
-																}
-															});
-													});	
-												callback();	
+																				console.log("Push notification result")
+																				console.log(ntfnSend)
+																				console.log("Push Notification sended")
+																			 }
+																	 });
+																  }
+																		
+															  }
+														});
+												});	
+											 callback();	
 											}
 											else{
 												callback();

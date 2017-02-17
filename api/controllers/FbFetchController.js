@@ -117,7 +117,6 @@ module.exports = {
 										//FbFriends.find({userId:4}).exec(function (err, resultData){
 											if(err){
 												console.log(error)
-												//return res.json(200, {status: 2, status_type: 'Failure'});
 												callback();
 											}
 											else{
@@ -136,7 +135,7 @@ module.exports = {
 												 
 												 if(res_arr.length!=frndsArr.length){
 													 
-													 if(frndsArr.length > res_arr.length){
+													 if(frndsArr.length > res_arr.length){ // add a friend
 														 
 														 frndsArr.forEach(function(factor, index){
 															  console.log("add a frienddddddddd")
@@ -146,7 +145,17 @@ module.exports = {
 															}
 														  });
 														  callback();
-													 } 
+													 } //unfriend
+													 else if(frndsArr.length < res_arr.length){
+														 res_arr.forEach(function(factor, index){
+															  console.log("----Unfriendddddddddddd---")
+															if(frndsArr.indexOf(factor)<0){
+																console.log(factor)
+																push_arr.push(factor)
+															}
+														  });
+														  callback();
+													 }
 													else{
 														 callback();
 													 }
@@ -234,7 +243,7 @@ module.exports = {
 																var message     =  'FBsignup Notification';
 																var ntfn_body   =   "Your facebook friend "+factor.name+" is now on Dither";
 																if(!deviceId_arr.length){
-																	console.log("deviceeee")
+																	console.log("deviceeee array empty")
 																	//callback();
 																}else{
 																	console.log("----------Device Array---------------")

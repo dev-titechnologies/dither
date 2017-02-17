@@ -15,7 +15,6 @@ module.exports = {
 
           console.log("--------------GET FBCALLBACK---------------")
           console.log(req.params.all())
-          
           var request			= require('request');
           var my_token_code		= 5;
           var challenge 		= req.param('hub.challenge');
@@ -112,7 +111,7 @@ module.exports = {
 													
 											});
 										}
-										var query = "SELECT  ditherUserName,fbId FROM fbFriends where userId='"+userId+"' and ditherUserId!='NULL'";
+										var query = "SELECT  ditherUserName,fbId FROM fbFriends where userId='"+userId+"'";
 										console.log(query)
 										FbFriends.query(query, function(err, resultData){
 										//FbFriends.find({userId:4}).exec(function (err, resultData){

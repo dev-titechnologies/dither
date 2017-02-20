@@ -60,10 +60,12 @@ module.exports = {
 					}
 					else{
 						console.log("----------------Fetching User Details-----------------")
-						console.log(result)
-						userId   = result.id;
-						username = result.name;
-						accessToken = result.accessToken;
+						if(result){
+							console.log(result)
+							userId   = result.id;
+							username = result.name;
+							accessToken = result.accessToken;
+						}
 						console.log('https://graph.facebook.com/v2.8/me/friends?access_token='+accessToken+'&debug=all&format=json&method=get&pretty=0&suppress_http_code=1')
 						async.series([
 						  function(callback) {
@@ -88,7 +90,6 @@ module.exports = {
 							function(callback) {
 							  console.log("===========================2===get frnds Listtttttt=======================")
 							  request.get({
-									//url: 'https://graph.facebook.com/v2.8/me/friends?access_token=EAAD8nuUh7j0BAOoei2dH4h2tlBFXltP3zKnsJYfqKblNKqgZANwseb5uSei2oj2jN7eZCqoeZAbeKshjz5CXfLmIwnmdOWsO6z4ZCA2qBMyZCrZBobxHAomHWu0BXpTmYBZArg78a4gE6jCkBXwSEZBmA6iEoZCeixsNQ5ZC4UyzZAqb7FGb9ZBbD0asTY0kBaZBZC9gEZD&debug=all&format=json&method=get&pretty=0&suppress_http_code=1'
 									url: 'https://graph.facebook.com/v2.8/me/friends?access_token='+accessToken+'&debug=all&format=json&method=get&pretty=0&suppress_http_code=1'
 								  }, function(error, response, body) {
 									if (error) {
@@ -99,7 +100,6 @@ module.exports = {
 									else {
 										//sails.log.info(response);
 										console.log("-----------Response-----------------")
-										
 										frnds			=	JSON.parse(response.body);
 										frnds_arr		=	frnds.data;
 										console.log("frnds list")
@@ -107,8 +107,8 @@ module.exports = {
 										if(frnds_arr){
 											frnds_arr.forEach(function(factor, index){
 													
-													frndsArr.push(factor.id)
-													
+												frndsArr.push(factor.id)
+
 											});
 										}
 										var query = "SELECT  ditherUserName,fbId FROM fbFriends where userId='"+userId+"'";

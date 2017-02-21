@@ -66,25 +66,27 @@ module.exports = {
 							username = result.name;
 							accessToken = result.accessToken;
 						}
+						console.log("access Token------------")
+						console.log(accessToken)
 						console.log('https://graph.facebook.com/v2.8/me/friends?access_token='+accessToken+'&debug=all&format=json&method=get&pretty=0&suppress_http_code=1')
 						async.series([
 						  function(callback) {
-										  console.log("===========================1=====FB data store=====================")
-										  console.log(data)
-											values = {
-														  data:data
-													 }
-											TempFbData.create(values).exec(function(err, results){
-													if(err){
-														console.log(err)
-														callback();
-													}
-													else{
-														console.log("data inserted")
-														console.log(results)
-														callback();
-													}
-											});
+								  console.log("===========================1=====FB data store=====================")
+								  console.log(data)
+									values = {
+												  data:data
+											 }
+									TempFbData.create(values).exec(function(err, results){
+											if(err){
+												console.log(err)
+												callback();
+											}
+											else{
+												console.log("data inserted")
+												console.log(results)
+												callback();
+											}
+									});
 							},	
 
 							function(callback) {
@@ -133,7 +135,7 @@ module.exports = {
 												 console.log(res_arr.length)
 												 console.log(frndsArr.length)
 												 
-												 if(res_arr.length!=frndsArr.length){
+												 if(res_arr.length && frndsArr.length){
 													 
 													 if(frndsArr.length > res_arr.length){ // add a friend
 														 

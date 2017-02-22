@@ -31,7 +31,7 @@ module.exports = {
 		  console.log(data)
 		  console.log(data.length)
 
-		  if(data.length==undefined){
+		  if(data.length==undefined || data.length=={}){
 			            
 			  return res.json(200, {status: 2, status_type: 'Failure',message:'no data found'});
 			   //return res.send(challenge);

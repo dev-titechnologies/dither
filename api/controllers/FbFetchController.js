@@ -40,7 +40,7 @@ module.exports = {
 			 
 			 console.log(data)
 			 var fbData 	 	= JSON.parse(data);
-			 if(fbData.entry.length){ 
+			 if(fbData.entry){ 
 			  
 			  var change_arr 	= [];
 			  change_arr	 	=	fbData.entry[0].changed_fields;

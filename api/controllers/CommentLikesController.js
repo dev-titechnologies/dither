@@ -94,7 +94,7 @@ module.exports = {
 																					   
 																					   console.log("---------------------taggedusersss---------------")
 																					   console.log(taggedUser)
-																					  if(!taggedUser){
+																					  if(!taggedUser.length){
 																							return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
 																													total_like_count  :    total_like_count,
 																											});

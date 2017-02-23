@@ -85,8 +85,8 @@ module.exports = {
                                                                                                             total_like_count  :    total_like_count,
                                                                                                     });
                                                                                 }else{
-																					
-																				  Tags.findOne({userId:foundComment.userId }).exec(function (err, taggedUser){
+																				  var query = "SELECT * FROM tags where userId='"+foundComment.userId+"' and collageId='"+collageId+"'";	
+																				  Tags.query(query, function (err, taggedUser) {
 																				   if(err){
 																					   return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in tag users checking' , error_details: err});
 																					   

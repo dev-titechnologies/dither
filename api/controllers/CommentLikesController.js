@@ -85,33 +85,50 @@ module.exports = {
                                                                                                             total_like_count  :    total_like_count,
                                                                                                     });
                                                                                 }else{
-                                                                                        var data        =   {
-																												collageId                   :    collageId,
-																												notificationTypeId          :    9,
-																												userId                      :    userId,
-																												//collageCreatorId            :    foundCollage.userId,
-																												commentCreatorId            :    foundComment.userId,
-																												notificationSettingsType    :    "notifyCommentLike",
-																												message                     :    "comment like notification",
-																												ntfn_body                   :    userName + " likes your comment",
-																												totalLikeCount              :    foundComment.likeCount,
-																												commentId					:    commentId
-                                                                                                            };
-                                                                                        NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
-                                                                                            if(err){
-                                                                                                return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in notificationLogCreation' , error_details: err});
-                                                                                            }else{
-                                                                                                    /*if(createdNotification.notifySettings == 0 || createdNotification.notifySettings == ""){
-                                                                                                             return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment'});
-                                                                                                    }else{
+																					
+																				  Tags.findOne({userId:foundComment.userId }).exec(function (err, taggedUser){
+																				   if(err){
+																					   return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in tag users checking' , error_details: err});
+																					   
+																				   }else{
+																					  if(!taggedUser){
+																							return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
+																													total_like_count  :    total_like_count,
+																											});
+																						}else{
+																					
+																								var data        =   {
+																														collageId                   :    collageId,
+																														notificationTypeId          :    9,
+																														userId                      :    userId,
+																														//collageCreatorId            :    foundCollage.userId,
+																														commentCreatorId            :    foundComment.userId,
+																														notificationSettingsType    :    "notifyCommentLike",
+																														message                     :    "comment like notification",
+																														ntfn_body                   :    userName + " likes your comment",
+																														totalLikeCount              :    foundComment.likeCount,
+																														commentId					:    commentId
+																													};
+																								NotificationService.collageNotificationLogCreation(data, function(err, createdNotification){
+																									if(err){
+																										return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in notificationLogCreation' , error_details: err});
+																									}else{
+																											/*if(createdNotification.notifySettings == 0 || createdNotification.notifySettings == ""){
+																													 return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment'});
+																											}else{
 
-                                                                                                    }*/
+																											}*/
 
-                                                                                                    return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
-                                                                                                            total_like_count  :    total_like_count,
-                                                                                                    });
-                                                                                            }
-                                                                                        });
+																											return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
+																													total_like_count  :    total_like_count,
+																											});
+																									}
+																								});
+																								
+                                                                                        }
+                                                                                     }
+																				   }); 
+                                                                                        
                                                                                 }
 
                                                                         }

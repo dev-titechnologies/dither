@@ -91,6 +91,9 @@ module.exports = {
 																					   return res.json(200, { status: 2, status_type: 'Failure' , message: 'Some error occured in tag users checking' , error_details: err});
 																					   
 																				   }else{
+																					   
+																					   console.log("---------------------taggedusersss---------------")
+																					   console.log(taggedUser)
 																					  if(!taggedUser){
 																							return res.json(200, {status: 1, status_type: 'Success' , message: 'Succesfully like a comment',
 																													total_like_count  :    total_like_count,

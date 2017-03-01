@@ -388,7 +388,7 @@ module.exports = {
                                                                         }else{
                                                                                 var imageSrc                    =     getUseDetails.profilePic;
                                                                                 var ext                         =     imageSrc.split('.');
-                                                                                profile_image                   =     profilePic_path + ext[0] + "_50x50" + "." +ext[1];
+                                                                                profile_image                   =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                         }
 
                                                                         callback();

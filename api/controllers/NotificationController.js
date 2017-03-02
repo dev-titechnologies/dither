@@ -552,7 +552,7 @@ module.exports = {
                                                                         var collageImageSrc          =     collageImageToResize;
                                                                         var ext                      =     collageImageSrc.split('.');
                                                                         //item.dither_image            =     collageImg_path + ext[0] + "_70x70" + "." +ext[1];
-                                                                        item.dither_image                   =     collageImg_path + clgImgToResize;
+                                                                        item.dither_image                   =     collageImg_path + collageImageToResize;
                                                                     }
                                                                     callback();
                                                             }

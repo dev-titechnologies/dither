@@ -179,7 +179,9 @@ module.exports = {
                                                                 item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                             }
 
-                                                            var clgImgSrc                       =     collageImg_path_assets + clgImgToResize;
+                                                            item.dither_image                   =     collageImg_path + clgImgToResize;
+                                                            callback();
+                                                            /*var clgImgSrc                       =     collageImg_path_assets + clgImgToResize;
 
                                                                 fs.exists(clgImgSrc, function(exists){
                                                                         if(exists){
@@ -198,7 +200,7 @@ module.exports = {
                                                                         }else{
                                                                             callback();
                                                                         }
-                                                                });
+                                                                });*/
 
                                                     }
                                                 });
@@ -241,7 +243,9 @@ module.exports = {
                                                                 var ext                         =     imageSrc.split('.');
                                                                 item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                             }
-                                                                var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                            item.dither_image                   =     collageImg_path + clgImgToResize;
+                                                            callback();
+                                                                /*var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
                                                                     fs.exists(clgImgSrc, function(exists) {
                                                                         if (exists) {
@@ -260,7 +264,7 @@ module.exports = {
                                                                         }else{
                                                                                 callback();
                                                                         }
-                                                                    });
+                                                                    });*/
                                                         }
                                                     });
                                             }else if(item.notificationTypeId==4){
@@ -287,7 +291,9 @@ module.exports = {
                                                                 var ext                         =     imageSrc.split('.');
                                                                 item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                 }
-                                                                var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                                item.dither_image                   =     collageImg_path + clgImgToResize;
+                                                                callback();
+                                                                /*var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
                                                                     fs.exists(clgImgSrc, function(exists){
                                                                         if(exists){
@@ -310,7 +316,7 @@ module.exports = {
                                                                         }else{
                                                                             callback();
                                                                         }
-                                                                    });
+                                                                    });*/
                                                         }
                                                     });
                                             }else if(item.notificationTypeId==5){
@@ -337,7 +343,9 @@ module.exports = {
                                                                 var ext                         =     imageSrc.split('.');
                                                                 item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                                 }
-                                                                var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                                item.dither_image                   =     collageImg_path + clgImgToResize;
+                                                                callback();
+                                                                /*var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
                                                                     fs.exists(clgImgSrc, function(exists){
                                                                         if(exists){
@@ -360,7 +368,7 @@ module.exports = {
                                                                         }else{
                                                                             callback();
                                                                         }
-                                                                    });
+                                                                    });*/
                                                         }
                                                     });
                                             }
@@ -386,7 +394,9 @@ module.exports = {
                                                             var ext                         =     imageSrc.split('.');
                                                             item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                         }
-                                                        var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                        item.dither_image                   =     collageImg_path + clgImgToResize;
+                                                        callback();
+                                                        /*var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
                                                         fs.exists(clgImgSrc, function(exists) {
                                                             if(exists){
                                                                 var ext                         =     clgImgSrc.split('/');
@@ -404,7 +414,7 @@ module.exports = {
                                                             }else{
                                                                 callback();
                                                             }
-                                                        });
+                                                        });*/
 
                                                     }
                                                 });
@@ -431,7 +441,9 @@ module.exports = {
                                                                 var ext                         =     imageSrc.split('.');
                                                                 item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                             }
-                                                                var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
+                                                            item.dither_image                   =     collageImg_path + clgImgToResize;
+                                                            callback();
+                                                            /*    var clgImgSrc                   =     collageImg_path_assets + clgImgToResize;
 
                                                                     fs.exists(clgImgSrc, function(exists) {
                                                                         if(exists){
@@ -450,7 +462,7 @@ module.exports = {
                                                                         }else{
                                                                             callback();
                                                                         }
-                                                                    });
+                                                                    });*/
                                                         }
                                                 });
                                             }else if(item.notificationTypeId==8){
@@ -478,7 +490,9 @@ module.exports = {
                                                             var ext                         =     imageSrc.split('.');
                                                             item.profile_image              =     profilePic_path + ext[0] + "_70x70" + "." +ext[1];
                                                         }
-                                                        var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
+                                                        item.dither_image                   =     collageImg_path + clgImgToResize;
+                                                        callback();
+                                                        /*var clgImgSrc       =   collageImg_path_assets + clgImgToResize;
                                                         fs.exists(clgImgSrc, function(exists) {
                                                             if(exists){
                                                                 var ext                         =     clgImgSrc.split('/');
@@ -496,7 +510,7 @@ module.exports = {
                                                             }else{
                                                                 callback();
                                                             }
-                                                        });
+                                                        });*/
                                                     }
                                                 });
                                             }else if(item.notificationTypeId == 9){
@@ -537,7 +551,8 @@ module.exports = {
                                                                     if(collageImageToResize){
                                                                         var collageImageSrc          =     collageImageToResize;
                                                                         var ext                      =     collageImageSrc.split('.');
-                                                                        item.dither_image            =     collageImg_path + ext[0] + "_70x70" + "." +ext[1];
+                                                                        //item.dither_image            =     collageImg_path + ext[0] + "_70x70" + "." +ext[1];
+                                                                        item.dither_image                   =     collageImg_path + clgImgToResize;
                                                                     }
                                                                     callback();
                                                             }
@@ -615,7 +630,7 @@ module.exports = {
 
                                                                     case 1:
                                                                             tagged_users            =   results[0].tagged_users;
-                                                                            notification			=	" is asking for your opinion";
+                                                                            notification            =   " is asking for your opinion";
 
                                                                     break;
 
@@ -679,7 +694,7 @@ module.exports = {
                                                                 }
 
                                                                 ntfn_body               =   notification;
-																console.log(ntfn_body)
+                                                                console.log(ntfn_body)
                                                                 return res.json(200, {status: 1, status_type: 'Success' , message: 'Type Notification api success',
                                                                                       id                    :   notificationId,
                                                                                       userId                :   results[0].userId,

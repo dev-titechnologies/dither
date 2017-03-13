@@ -840,6 +840,8 @@ module.exports = {
                                     sails.sockets.blast('edit-dither', {status : 1, status_type: 'Success', message : "editDither Blasted successfully",
                                                                         dither_id:collageId,
                                                                         dither_type:'details'});
+                                    console.log('taggedUserArrayFinal ===================>>>>>>');
+                                    console.log(taggedUserArrayFinal);
                                     return res.json(200, {status: 1, status_type: 'Success', message: 'Succesfully updated the Dither',
                                                           taggedUsers           : taggedUserArrayFinal,
                                                           invite_friends_NUM    : invitedFriends_NUM_Final,

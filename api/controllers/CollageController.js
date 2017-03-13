@@ -518,7 +518,11 @@ module.exports = {
                                                                                 console.log(err);
                                                                                 callback();
                                                                             }else{
-                                                                                console.log(query);
+                                                                                // console.log(query);
+                                                                                console.log('taggedUserArrayFinal ------------BEFORE PUSH->>>>>>>>');
+                                                                                console.log(taggedUserArrayFinal);
+                                                                                 console.log('taggedUserArrayFinal ------------DB result ->>>>>>>>');
+                                                                                console.log(taggedUsersFinalResults);
                                                                                 if(taggedUsersFinalResults.length){
                                                                                     taggedUsersFinalResults.forEach(function(factor, index){
                                                                                             taggedUserArrayFinal.push({
@@ -526,6 +530,8 @@ module.exports = {
                                                                                                                     userId      : factor.userId
                                                                                                                     });
                                                                                     });
+                                                                                    console.log('taggedUserArrayFinal ------------BEFORE PUSH->>>>>>>>');
+                                                                                    console.log(taggedUserArrayFinal);
                                                                                     callback();
                                                                                 }else{
                                                                                     callback();

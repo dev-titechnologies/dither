@@ -511,6 +511,7 @@ module.exports = {
                                                                             " WHERE"+
                                                                             " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
                                                                             " GROUP BY fbf.userId";
+                                                                    console.log('taggedUserArray Query ---- IFFFFFFFFFFFFF');
                                                                     console.log(query);
                                                                     AddressBook.query(query, function(err, taggedUsersFinalResults){
                                                                             if(err){
@@ -525,8 +526,10 @@ module.exports = {
                                                                                                                     userId      : factor.userId
                                                                                                                     });
                                                                                     });
+                                                                                    callback();
+                                                                                }else{
+                                                                                    callback();
                                                                                 }
-                                                                                callback();
                                                                             }
 
                                                                     });
@@ -557,6 +560,8 @@ module.exports = {
                                             " WHERE"+
                                             " tg.collageId = "+collage_results.id+" AND clg.userId = "+userId+
                                             " GROUP BY fbf.userId";
+
+                                    console.log('taggedUserArray Query ---- ELSEEEEEE');
                                     console.log(query);
                                     AddressBook.query(query, function(err, taggedUsersFinalResults) {
                                             if(err){

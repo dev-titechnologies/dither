@@ -476,7 +476,7 @@ module.exports = {
                                                                                         console.log(err);
                                                                                         callback();
                                                                                     }else{
-                                                                                            query = " SELECT temp.*"+
+                                                                                            /* query = " SELECT temp.*"+
                                                                                                     " FROM ("+
                                                                                                     " SELECT adb.ditherUserId, adb.ditherUsername, usr.name"+
                                                                                                     " FROM tags tg"+
@@ -509,7 +509,7 @@ module.exports = {
                                                                                                                                         });
                                                                                                             });
                                                                                                             //total_taggedUser_Array  =  taggedUserArrayFinal.concat(loggedUser_JSON_Array);
-                                                                                                        }
+                                                                                                        } */
                                                                                                         final_tagged_users_Array.forEach(function(factor, index){
                                                                                                                 //tagNotifyArray.push({id:factor.user_id});
                                                                                                                 tagNotifyArray.push(factor);
@@ -595,9 +595,9 @@ module.exports = {
                                                                                                             }
                                                                                                         });
 
-                                                                                                    }
+                                                                                            /*        }
 
-                                                                                            });
+                                                                                            }); */
                                                                                     }
                                                                             });
 

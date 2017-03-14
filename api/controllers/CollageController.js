@@ -491,7 +491,8 @@ module.exports = {
                                                                     console.log(err);
                                                                     callback();
                                                             }else{
-                                                                    //Query to get tagged users from both addressBook and fbFriends
+                                                                callback();
+                                                                    /* //Query to get tagged users from both addressBook and fbFriends
                                                                     query = " SELECT"+
                                                                             " adb.userId, adb.ditherUsername, usr.name"+
                                                                             " FROM addressBook adb"+
@@ -538,7 +539,7 @@ module.exports = {
                                                                                 }
                                                                             }
 
-                                                                    });
+                                                                    });*/
                                                             }
                                                     });
                                                 }
@@ -546,7 +547,7 @@ module.exports = {
 
                                 }else{
 
-                                    //Query to get tagged users from both addressBook and fbFriends
+                                    /* //Query to get tagged users from both addressBook and fbFriends
                                     query = " SELECT"+
                                             " adb.userId, adb.ditherUsername, usr.name"+
                                             " FROM addressBook adb"+
@@ -587,7 +588,8 @@ module.exports = {
                                                 }
 
                                             }
-                                    });
+                                    }); */
+                                    callback();
                                 }
                                 //callback();
                     },

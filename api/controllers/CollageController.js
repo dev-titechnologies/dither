@@ -977,48 +977,80 @@ module.exports = {
      ==================================================================================================================================== */
         untagUser:  function (req, res) {
                     console.log("untag user==== api");
-                     var tokenCheck                  =     req.options.tokenCheck;
-                     var userId                      =     tokenCheck.tokenDetails.userId;
-                     var untagId                     =     req.param("user_id");
-                     var ditherId                    =     req.param("dither_id");
+                    var tokenCheck                  =     req.options.tokenCheck;
+                    var userId                      =     tokenCheck.tokenDetails.userId;
+                    var untagId                     =     req.param("user_id");
+                    var ditherId                    =     req.param("dither_id");
 
-                     console.log("request params")
-                     console.log(req.params.all());
+                    console.log("request params")
+                    console.log(req.params.all());
 
-                     if(!untagId || !ditherId){
+                    if(!untagId || !ditherId) {
                          console.log("params missing")
                          return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and user_id'});
-                     }
-                     else{
-
-                         User.find({id: untagId}).exec(function (err, getUserId){
-                             if(err){
+                    }else {
+                        User.find({id: untagId}).exec(function (err, getUserId) {
+                            if(err) {
                                  console.log(err)
                                  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'error in find user!'});
-                             }
-                             else{
-                                 if(!getUserId){
-                                    return res.json(200, {status: 3, status_type: 'Failure' ,message: 'Not a valid user!'});
-                                 }
-                                 else{
-                                     var query  =   "DELETE FROM tags where collageId='"+ditherId+"' and userId='"+untagId+"'";
-                                     Tags.query(query, function(err, deleteTags) {
+                            }else {
+                                if(!getUserId) {
+                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Not a valid user!'});
+                                }else {
+                                    var query  =   "DELETE FROM tags where collageId='"+ditherId+"' and userId='"+untagId+"'";
+                                    Tags.query(query, function(err, deleteTags) {
+                                        if(err) {
+                                            console.log(err)
+                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Deletion Failed!'});
+                                        }else {
+                                            CollageLikes.find({collageId: ditherId, userId: untagId}).exec(function (err, getCollageLike) {
+                                                if(err) {
+                                                    console.log(err)
+                                                    return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in CollageLike found'});
+                                                }else {
+                                                    if(!getCollageLikeId){
+                                                        return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
+                                                    }else {
+                                                        Collage.find({id: ditherId}).exec(function (err, getCollage) {
+                                                            if(err) {
+                                                                console.log(err)
+                                                                return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Collage found'});
+                                                            }else {
+                                                                if(!getCollage){
+                                                                    return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged'});
+                                                                }else {
+                                                                    var currentTotalvote = parseInt(getCollage.totalVote - 1 );
+                                                                    var criteria    =   {id: ditherId};
+                                                                    var values      =   {
+                                                                                            totalVote   : currentTotalvote
+                                                                                        };
+                                                                    Collage.update(criteria, values).exec(function(err, updatedCollage) {
+                                                                        if(err){
+                                                                            console.log(err)
+                                                                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Collage Update'});
+                                                                        }else {
+                                                                            return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged'});
+                                                                        }
+                                                                    });
+                                                                }
 
-                                         if(err){
-                                             console.log(err)
-                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Deletion Failed!'});
-                                         }
-                                         else{
-                                             console.log(deleteTags)
-                                             return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
-                                         }
+                                                            }
+                                                        });
+                                                    }
+                                                }
 
-                                     });
+                                            });
+                                            /*Collage.find({id: ditherId}).exec(function (err, getCollageId) {
+
+                                            });*/
+                                            console.log(deleteTags)
+                                            // return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
+                                        }
+                                    });
                                 }
                             }
                         });
-
-                     }
+                    }
         }
 
 };

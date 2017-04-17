@@ -989,7 +989,7 @@ module.exports = {
                          console.log("params missing")
                          return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Please Pass dither_id and user_id'});
                     }else {
-                        User.find({id: untagId}).exec(function (err, getUserId) {
+                        User.findOne({id: untagId}).exec(function (err, getUserId) {
                             if(err) {
                                  console.log(err)
                                  return res.json(200, {status: 2, status_type: 'Failure' ,message: 'error in find user!'});
@@ -1003,7 +1003,7 @@ module.exports = {
                                             console.log(err)
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Deletion Failed!'});
                                         }else {
-                                            CollageLikes.find({collageId: ditherId, userId: untagId}).exec(function (err, getCollageLike) {
+                                            CollageLikes.findOne({collageId: ditherId, userId: untagId}).exec(function (err, getCollageLike) {
                                                 if(err) {
                                                     console.log(err)
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in CollageLike found'});
@@ -1011,7 +1011,7 @@ module.exports = {
                                                     if(!getCollageLike){
                                                         return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
                                                     }else {
-                                                        Collage.find({id: ditherId}).exec(function (err, getCollage) {
+                                                        Collage.findOne({id: ditherId}).exec(function (err, getCollage) {
                                                             if(err) {
                                                                 console.log(err)
                                                                 return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in Collage found'});

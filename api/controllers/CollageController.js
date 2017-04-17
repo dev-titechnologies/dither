@@ -1003,7 +1003,7 @@ module.exports = {
                                             console.log(err)
                                             return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Deletion Failed!'});
                                         }else {
-                                            CollageLikes.findOne({collageId: ditherId, userId: untagId}).exec(function (err, getCollageLike) {
+                                            /*CollageLikes.findOne({collageId: ditherId, userId: untagId}).exec(function (err, getCollageLike) {
                                                 if(err) {
                                                     console.log(err)
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in CollageLike found'});
@@ -1040,12 +1040,8 @@ module.exports = {
                                                     }
                                                 }
 
-                                            });
-                                            /*Collage.find({id: ditherId}).exec(function (err, getCollageId) {
-
                                             });*/
-                                            console.log(deleteTags)
-                                            // return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
+                                            return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
                                         }
                                     });
                                 }

@@ -1019,7 +1019,8 @@ module.exports = {
                                                                 if(!getCollage){
                                                                     return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged'});
                                                                 }else {
-                                                                    var currentTotalvote = parseInt(getCollage.totalVote - 1 );
+                                                                    console.log(getCollage);
+                                                                    var currentTotalvote = getCollage.totalVote - 1;
                                                                     var criteria    =   {id: ditherId};
                                                                     var values      =   {
                                                                                             totalVote   : currentTotalvote

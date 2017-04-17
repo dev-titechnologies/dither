@@ -1008,7 +1008,7 @@ module.exports = {
                                                     console.log(err)
                                                     return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in CollageLike found'});
                                                 }else {
-                                                    if(!getCollageLikeId){
+                                                    if(!getCollageLike){
                                                         return res.json(200, {status: 1, status_type: 'success' ,message: 'Succesfully untagged!'});
                                                     }else {
                                                         Collage.find({id: ditherId}).exec(function (err, getCollage) {

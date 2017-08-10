@@ -13,13 +13,14 @@ module.exports = {
 
                 var global_settingsKeyValue     =   req.options.settingsKeyValue;
                 var email_to                    =   req.param("email_to");
-                if(!email_to){
-                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'please pass email_to'});
+                var receiver_name               =   req.param("receiver_name");
+                if(!email_to || !receiver_name){
+                                return res.json(200, {status: 2, status_type: 'Failure' , message: 'please pass email_to(Email addres) and receiver_name(Your name)'});
                 }else{
                         var email_subject               =   'Welcome to Email Test';
                         var email_template              =   'email-test';
                         var email_context               =   {
-                                                                receiverName    :   "Titto xavier",
+                                                                receiverName    :   receiver_name,
                                                                 pic             :   global_settingsKeyValue.CDN_IMAGE_URL + "images/profilePics/31db73cf-8305-4351-b075-ffe287dd7dab.jpg",
                                                                 email_img_url   :   global_settingsKeyValue.CDN_IMAGE_URL + 'images/email/'
                                                             };

@@ -61,6 +61,7 @@ module.exports.routes = {
   '/collageClosed/*'                      :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
   '/ditherConfig/*'                       :           ['auth.authenticate', 'helper.global'],
   '/commentLikes/*'                       :           ['auth.authenticate', 'settings.settingsKeyValue', 'helper.server_baseUrl', 'helper.file_path', 'helper.global'],
+  '/testing/*'                            :           ['settings.settingsKeyValue'],
 
 
 //ADMIN URLS

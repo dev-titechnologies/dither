@@ -12,8 +12,7 @@ module.exports = {
                 var query = "SELECT * FROM settings";
                 Settings.query(query, function (err, results) {
                         if (err) {
-                            callback(true, err);
-                            callback(true, {status: 2, status_type: 'Failure' ,message: 'Some error occured in select Settings values'});
+                            return res.json(200, {status: 2, status_type: 'Failure' ,message: 'Some error occured in select Settings values', error_details: err});
                         }
                         else {
                                 //console.log(results);
